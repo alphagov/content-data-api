@@ -14,4 +14,15 @@ describe ContentItem do
   it "belongs to an organisation" do
     expect(subject).to belong_to(:organisation)
   end
+
+  context "import from Search API" do
+    it "imports content items" do
+      create(:organisation, slug: "hm-revenue-customs")
+      VCR.use_cassette("import_content_items", record: :new_episodes) do
+        ContentItem.import
+      end
+      content_item = ContentItem.first.as_json
+      expect(content_item).to have_key("content_id")
+    end
+  end
 end

@@ -16,6 +16,19 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'vcr'
+
+VCR.configure do |config|
+  config.default_cassette_options = {
+    record: :new_episodes,
+    serialize_with: :yaml
+  }
+  config.cassette_library_dir = 'spec/fixtures/cassettes'
+  config.hook_into :webmock
+  config.ignore_hosts '127.0.0.1'
+end
+
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
