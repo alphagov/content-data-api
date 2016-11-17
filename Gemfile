@@ -36,6 +36,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails', '~>3.5'
   gem 'pry-rails'
+  gem 'shoulda-matchers'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
 end

@@ -168,6 +168,8 @@ GEM
     scss_lint (0.50.3)
       rake (>= 0.9, < 12)
       sass (~> 3.4.20)
+    shoulda-matchers (3.1.1)
+      activesupport (>= 4.0.0)
     slop (3.6.0)
     spring (2.0.0)
       activesupport (>= 4.2)
@@ -219,6 +221,7 @@ DEPENDENCIES
   rails (~> 5.0.0, >= 5.0.0.1)
   rspec-rails (~> 3.5)
   sass-rails (~> 5.0)
+  shoulda-matchers
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
