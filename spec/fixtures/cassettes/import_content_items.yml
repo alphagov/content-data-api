@@ -1,0 +1,64 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://www.gov.uk/api/search.json?count=10&fields=content_id&filter_organisations=hm-revenue-customs&start=0
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - rest-client/2.0.0 (darwin15.6.0 x86_64) ruby/2.3.1p112
+      Host:
+      - www.gov.uk
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Content-Type:
+      - application/json
+      Cache-Control:
+      - max-age=1800
+      Expires:
+      - Mon, 21 Nov 2016 15:06:35 GMT
+      Strict-Transport-Security:
+      - max-age=31536000
+      Via:
+      - 1.1 router
+      - 1.1 varnish
+      - 1.1 varnish
+      X-Content-Type-Options:
+      - nosniff
+      Fastly-Backend-Name:
+      - origin
+      Content-Length:
+      - '1644'
+      Accept-Ranges:
+      - bytes
+      Date:
+      - Mon, 21 Nov 2016 14:36:35 GMT
+      Age:
+      - '0'
+      Connection:
+      - keep-alive
+      X-Served-By:
+      - cache-lcy1146-LCY
+      X-Cache:
+      - MISS, MISS
+      X-Cache-Hits:
+      - '0'
+      X-Timer:
+      - S1479738995.515054,VS0,VE29
+    body:
+      encoding: UTF-8
+      string: '{"results":[{"content_id":"6667cce2-e809-4e21-ae09-cb0bdc1ddda3","index":"government","es_score":null,"_id":"/government/organisations/hm-revenue-customs","document_type":"edition"},{"content_id":"632d1ae0-0340-4a23-87b0-595bb596e5f4","index":"mainstream","es_score":null,"_id":"/log-in-register-hmrc-online-services","document_type":"edition"},{"content_id":"2cba8c94-666b-4edb-b9f5-73172968a65e","index":"mainstream","es_score":null,"_id":"/marriage-allowance","document_type":"edition"},{"content_id":"7a61b192-8edf-4204-8ead-705e5f115c81","index":"mainstream","es_score":null,"_id":"/tax-credits-calculator","document_type":"edition"},{"content_id":"e2048d9b-fae4-45fd-810c-16e5fdb866cb","index":"mainstream","es_score":null,"_id":"/manage-your-tax-credits","document_type":"edition"},{"content_id":"6a2bf66e-2313-4204-afd5-9940de5e1d66","index":"mainstream","es_score":null,"_id":"/log-in-file-self-assessment-tax-return","document_type":"edition"},{"index":"mainstream","es_score":null,"_id":"government/organisations/hm-revenue-customs/contact/income-tax-enquiries-for-individuals-pensioners-and-employees","document_type":"contact"},{"content_id":"1ff456ee-52a5-4032-8872-953f553d5f33","index":"mainstream","es_score":null,"_id":"/send-vat-return","document_type":"edition"},{"content_id":"f4f2c99e-6d0a-4f2f-b3d0-ff2d00e33887","index":"mainstream","es_score":null,"_id":"/personal-tax-account","document_type":"edition"},{"content_id":"f29ca4a8-8ed9-4b0f-bb6a-11e373095dee","index":"mainstream","es_score":null,"_id":"/self-assessment-tax-returns","document_type":"edition"}],"total":81674,"start":0,"facets":{},"suggested_queries":[]}'
+    http_version: 
+  recorded_at: Mon, 21 Nov 2016 14:36:35 GMT
+recorded_with: VCR 3.0.3
