@@ -9,9 +9,7 @@ RSpec.describe "Organisations", type: :request do
     end
 
     it 'returns a JSON with the ids of the organisation and the number of content_items' do
-      content_item1 = ContentItem.new
-      content_item2 = ContentItem.new
-      Organisation.create!(slug: 'a_slug', content_items: [content_item1, content_item2])
+      FactoryGirl.create(:organisation_with_content_items, slug: 'a_slug', content_items_count: 2)
 
       get organisations_path
       expect(response.body).to eq([{slug: 'a_slug', total_content_items: 2}].to_json)
