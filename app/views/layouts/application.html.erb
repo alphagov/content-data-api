@@ -1,14 +1,17 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>ComPrototype</title>
-    <%= csrf_meta_tags %>
+<% content_for :page_title do %>
+  ComPrototype
+<% end %>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+<% content_for :head do %>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<% end %>
 
-  <body>
-    <%= yield %>
-  </body>
-</html>
+<% content_for :content do %>
+  <main id="content" tabindex="-1">
+    <%= content_for?(:main) ? yield(:main) : yield %>
+  </main>
+<% end %>
+
+<%= render file: 'layouts/govuk_template' %>
