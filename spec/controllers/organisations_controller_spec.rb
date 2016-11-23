@@ -12,8 +12,5 @@ RSpec.describe OrganisationsController, type: :controller do
       get :index
       expect(response.content_type).to eq('application/json')
     end
-
-
   end
-
 end
