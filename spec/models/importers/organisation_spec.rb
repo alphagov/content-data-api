@@ -70,4 +70,27 @@ RSpec.describe Importers::Organisation do
 
     expect { Importers::Organisation.run("none-existing-org") }.to raise_error("No result for slug")
   end
+
+  it 'paginates through all the content items for an organisation' do
+    response1 = double(body: {
+      results: [
+        {
+          content_id: "number-1",
+        },
+        {
+          content_id: "number-2",
+        }
+      ]}.to_json)
+    response2 = double(body: {
+      results: [
+        {
+          content_id: "number-3",
+        },
+      ]}.to_json)
+    expect(HTTParty).to receive(:get).twice.and_return(response1, response2)
+    Importers::Organisation.run("a-slug", batch: 2)
+    organisation = Organisation.find_by(slug: "a-slug")
+
+    expect(organisation.content_items.count).to eq(3)
+  end
 end
