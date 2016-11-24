@@ -93,4 +93,21 @@ RSpec.describe Importers::Organisation do
 
     expect(organisation.content_items.count).to eq(3)
   end
+
+  it 'handles last page with 0 results' do
+    response1 = double(body: {
+      results: [
+        {
+          content_id: "number-1",
+        },
+      ]}.to_json)
+    response2 = double(body: {
+      results: [
+      ]}.to_json)
+    expect(HTTParty).to receive(:get).twice.and_return(response1, response2)
+    Importers::Organisation.run("a-slug", batch: 1)
+    organisation = Organisation.find_by(slug: "a-slug")
+
+    expect(organisation.content_items.count).to eq(1)
+  end
 end

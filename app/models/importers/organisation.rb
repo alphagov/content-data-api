@@ -5,7 +5,7 @@ class Importers::Organisation
       response = HTTParty.get "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=content_id&start=#{start}"
       results = JSON.parse(response.body).fetch('results')
 
-      raise "No result for slug" if results.empty?
+      raise "No result for slug" if results.empty? && organisation.content_items.empty?
 
       results.each do |result|
         attributes = result.slice('content_id')
