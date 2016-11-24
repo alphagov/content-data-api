@@ -63,4 +63,11 @@ RSpec.describe Importers::Organisation do
     content_ids = organisation.content_items.pluck(:content_id)
     expect(content_ids).to eq(%w(number-1 number-2))
   end
+
+  it 'raises an exception with an organisation that does not exist' do
+    response = double(body: { results: [] }.to_json)
+    allow(HTTParty).to receive(:get).and_return(response)
+
+    expect { Importers::Organisation.run("none-existing-org") }.to raise_error("No result for slug")
+  end
 end
