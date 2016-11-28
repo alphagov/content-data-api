@@ -11,7 +11,7 @@ RSpec.describe 'Import organisation rake task' do
     before do
       Rake::Task['import:organisation'].reenable
     end
-    
+
     it 'runs the process to import the organisations' do
       importer = double('importer')
       expect(Importers::Organisation).to receive(:new).with('a_slug').and_return(importer)
@@ -20,7 +20,7 @@ RSpec.describe 'Import organisation rake task' do
       Rake::Task['import:organisation'].invoke('a_slug')
     end
 
-    it 'raise an error if a slug is not provided' do
+    it 'raise an error if a slug parameter is not present' do
       expect { Rake::Task['import:organisation'].invoke }.to raise_error('Missing slug parameter')
     end
   end

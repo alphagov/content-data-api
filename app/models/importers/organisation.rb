@@ -1,5 +1,4 @@
 class Importers::Organisation
-
   attr_reader :slug, :batch, :start
   attr_writer :start
 
@@ -25,7 +24,7 @@ class Importers::Organisation
     raise 'No result for slug' if organisation.content_items.empty?
   end
 
-  private
+private
 
   def last_page?(results)
     results.length < batch
@@ -44,4 +43,3 @@ class Importers::Organisation
     "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=content_id&start=#{start}"
   end
 end
-

@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Importers::Organisation do
   let(:one_content_item_response) { build_seach_api_response [content_id: 'content-id-1'] }
-  let(:two_content_items_response) { build_seach_api_response [{content_id: 'content-id-1'}, {content_id: 'content-id-2'}] }
+  let(:two_content_items_response) { build_seach_api_response [{ content_id: 'content-id-1' }, { content_id: 'content-id-2' }] }
 
-  it 'queries the search API with the organisation\'s slug' do
+  it "queries the search API with the organisation's slug" do
     expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id&start=0'
     expect(HTTParty).to receive(:get).with(expected_url).and_return(one_content_item_response)
 
@@ -23,7 +23,7 @@ RSpec.describe Importers::Organisation do
     end
 
     it 'raises an exception with an organisation that does not exist' do
-      response = double(body: {results: []}.to_json)
+      response = double(body: { results: [] }.to_json)
       allow(HTTParty).to receive(:get).and_return(response)
 
       expect { Importers::Organisation.new('none-existing-org').run }.to raise_error('No result for slug')
@@ -72,5 +72,4 @@ RSpec.describe Importers::Organisation do
       results: payload
     }.to_json)
   end
-
 end
