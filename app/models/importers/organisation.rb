@@ -1,5 +1,14 @@
 class Importers::Organisation
-  def self.run(slug, batch: 10, start: 0)
+
+  attr_reader :slug, :batch, :start
+
+  def initialize(slug, batch: 10, start: 0)
+    @slug = slug
+    @batch = batch
+    @start = start
+  end
+
+  def run
     organisation = ::Organisation.create!(slug: slug)
     loop do
       response = HTTParty.get "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=content_id&start=#{start}"
