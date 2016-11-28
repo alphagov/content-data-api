@@ -11,7 +11,7 @@ RSpec.describe 'Import organisation rake task' do
     before do
       Rake::Task['import:organisation'].reenable
     end
-    
+
     it 'runs the process to import the organisations' do
       importer = double('importer')
       expect(Importers::Organisation).to receive(:new).with('a_slug').and_return(importer)
