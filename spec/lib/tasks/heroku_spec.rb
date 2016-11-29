@@ -3,41 +3,41 @@ require 'rake'
 
 RSpec.describe 'Import organisation rake task' do
   describe 'heroku:prepare' do
-    before do
-      Rake::Task['heroku:prepare'].reenable
-    end
+    subject { Rake::Task['heroku:prepare'] }
+
+    before { subject.reenable }
 
     it 'adds the remote repo for Heroku' do
-      prepare_command = 'git remote add heroku https://git.heroku.com/content-performance-manager.git'
-      expect(Kernel).to receive(:system).with(prepare_command)
+      command = 'git remote add heroku https://git.heroku.com/content-performance-manager.git'
+      expect(Kernel).to receive(:system).with(command)
 
-      Rake::Task['heroku:prepare'].invoke
+      subject.invoke
     end
   end
 
   describe 'heroku:deploy' do
-    before do
-      Rake::Task['heroku:deploy'].reenable
-    end
+    subject { Rake::Task['heroku:deploy'] }
+
+    before { subject.reenable }
 
     it 'deploys the application to Heroku' do
-      prepare_command = 'git push heroku master'
-      expect(Kernel).to receive(:system).with(prepare_command)
+      command = 'git push heroku master'
+      expect(Kernel).to receive(:system).with(command)
 
-      Rake::Task['heroku:deploy'].invoke
+      subject.invoke
     end
   end
 
   describe 'heroku:db:migrate' do
-    before do
-      Rake::Task['heroku:db:migrate'].reenable
-    end
+    subject { Rake::Task['heroku:db:migrate'] }
+
+    before { subject.reenable }
 
     it 'run pending migrations in Heroku' do
-      prepare_command = 'heroku rake db:migrate'
-      expect(Kernel).to receive(:system).with(prepare_command)
+      command = 'heroku rake db:migrate'
+      expect(Kernel).to receive(:system).with(command)
 
-      Rake::Task['heroku:db:migrate'].invoke
+      subject.invoke
     end
   end
 end
