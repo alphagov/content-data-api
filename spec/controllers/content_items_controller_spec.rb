@@ -2,9 +2,18 @@ require 'rails_helper'
 
 RSpec.describe ContentItemsController, type: :controller do
   describe "GET #index" do
+    let(:organisation) { FactoryGirl.create(:organisation_with_content_items) }
+
+    before do
+      get :index, params: { organisation_id: organisation }
+    end
+
     it "returns http success" do
-      get :index, organisation_id: 1
       expect(response).to have_http_status(:success)
+    end
+
+    it "assigns list of content items" do
+      expect(assigns(:content_items)).to eq(organisation.content_items)
     end
   end
 end
