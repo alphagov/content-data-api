@@ -14,4 +14,17 @@ RSpec.describe 'Import organisation rake task' do
       Rake::Task['heroku:prepare'].invoke
     end
   end
+
+  describe 'heroku:deploy' do
+    before do
+      Rake::Task['heroku:deploy'].reenable
+    end
+
+    it 'deploys the application to Heroku' do
+      prepare_command = 'git push heroku master'
+      expect(Kernel).to receive(:system).with(prepare_command)
+
+      Rake::Task['heroku:deploy'].invoke
+    end
+  end
 end
