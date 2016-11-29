@@ -8,4 +8,11 @@ namespace :heroku do
   task :deploy do |_task|
     Kernel.system 'git push heroku master'
   end
+
+  namespace :db do
+    desc 'Run pending migrations in Heroku'
+    task :migrate do
+      Kernel.system 'heroku rake db:migrate'
+    end
+  end
 end

@@ -27,4 +27,17 @@ RSpec.describe 'Import organisation rake task' do
       Rake::Task['heroku:deploy'].invoke
     end
   end
+
+  describe 'heroku:db:migrate' do
+    before do
+      Rake::Task['heroku:db:migrate'].reenable
+    end
+
+    it 'run pending migrations in Heroku' do
+      prepare_command = 'heroku rake db:migrate'
+      expect(Kernel).to receive(:system).with(prepare_command)
+
+      Rake::Task['heroku:db:migrate'].invoke
+    end
+  end
 end
