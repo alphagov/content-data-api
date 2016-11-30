@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'content_items/index.html.erb', type: :view do
-  let(:content_items) { FactoryGirl.build_list(:content_item, 2) }
+  let(:content_items) { build_list(:content_item, 2) }
 
   before { assign(:content_items, content_items) }
 
