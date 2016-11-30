@@ -21,21 +21,8 @@ RSpec.describe 'Import organisation rake task' do
     before { subject.reenable }
 
     it 'deploys the application to Heroku' do
-      command = 'git push heroku master'
-      expect(Kernel).to receive(:system).with(command)
-
-      subject.invoke
-    end
-  end
-
-  describe 'heroku:db:migrate' do
-    subject { Rake::Task['heroku:db:migrate'] }
-
-    before { subject.reenable }
-
-    it 'run pending migrations in Heroku' do
-      command = 'heroku rake db:migrate'
-      expect(Kernel).to receive(:system).with(command)
+      expect(Kernel).to receive(:system).with('heroku rake db:migrate')
+      expect(Kernel).to receive(:system).with('git push heroku master')
 
       subject.invoke
     end
