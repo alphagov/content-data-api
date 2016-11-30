@@ -1,0 +1,15 @@
+<h1>List Content Items</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Content Ids</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @content_items.each do |content_item| %>
+      <tr>
+        <td><%= content_item.content_id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
