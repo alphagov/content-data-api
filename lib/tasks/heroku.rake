@@ -6,13 +6,7 @@ namespace :heroku do
 
   desc 'Deploys the application to Heroku'
   task :deploy do |_task|
+    Bundler.with_clean_env { Kernel.system 'heroku rake db:migrate' }
     Kernel.system 'git push heroku master'
-  end
-
-  namespace :db do
-    desc 'Run pending migrations in Heroku'
-    task :migrate do
-      Kernel.system 'heroku rake db:migrate'
-    end
   end
 end

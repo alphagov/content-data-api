@@ -1,8 +1,17 @@
-### Important
 
-The name of this repo is temporary, and will change in a few weeks.
+### Deployment to Heroku
 
+1\. Setup the environment to deploy to Heroku
 
+```bash
+$ rake heroku:prepare # Only need to be done once
+````
+
+2\. Deploy to Heroku
+
+```bash
+$ rake heroku:deploy
+```
 
 ### App development
 
