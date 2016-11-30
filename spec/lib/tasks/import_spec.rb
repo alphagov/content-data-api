@@ -3,10 +3,6 @@ require 'rake'
 
 
 RSpec.describe 'Import organisation rake task' do
-  before(:all) do
-    Rails.application.load_tasks
-  end
-
   describe 'import:organisation' do
     before do
       Rake::Task['import:organisation'].reenable
