@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ContentItemsController, type: :controller do
   describe "GET #index" do
-    let(:organisation) { FactoryGirl.create(:organisation_with_content_items) }
+    let(:organisation) { create(:organisation_with_content_items) }
 
     before do
       get :index, params: { organisation_id: organisation }
