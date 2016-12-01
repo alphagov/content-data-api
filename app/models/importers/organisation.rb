@@ -13,7 +13,7 @@ class Importers::Organisation
     loop do
       result = search_content_items_for_organisation
       result.each do |content_item_attributes|
-        attributes = content_item_attributes.slice('content_id')
+        attributes = content_item_attributes.slice('content_id', 'link')
         organisation.content_items << ContentItem.new(attributes)
       end
 
@@ -40,6 +40,6 @@ private
   end
 
   def search_api_end_point
-    "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=content_id&start=#{start}"
+    "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=content_id,link&start=#{start}"
   end
 end
