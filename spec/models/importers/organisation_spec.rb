@@ -31,28 +31,22 @@ RSpec.describe Importers::Organisation do
   end
 
   context 'Content Items' do
-    it 'imports all content items for the organisation' do
-      allow(HTTParty).to receive(:get).and_return(two_content_items_response)
-      Importers::Organisation.new('a-slug').run
-      organisation = Organisation.find_by(slug: 'a-slug')
+    before { allow(HTTParty).to receive(:get).and_return(two_content_items_response) }
+    let(:organisation) { Organisation.find_by(slug: 'a-slug') }
 
+    it 'imports all content items for the organisation' do
+      Importers::Organisation.new('a-slug').run
       expect(organisation.content_items.count).to eq(2)
     end
 
     it 'imports a `content_id` for every content item' do
-      allow(HTTParty).to receive(:get).and_return(two_content_items_response)
       Importers::Organisation.new('a-slug').run
-      organisation = Organisation.find_by(slug: 'a-slug')
-
       content_ids = organisation.content_items.pluck(:content_id)
       expect(content_ids).to eq(%w(content-id-1 content-id-2))
     end
 
     it 'imports a `link` for every content item' do
-      allow(HTTParty).to receive(:get).and_return(two_content_items_response)
       Importers::Organisation.new('a-slug').run
-      organisation = Organisation.find_by(slug: 'a-slug')
-
       links = organisation.content_items.pluck(:link)
       expect(links).to eq(%w(content/1/path content/2/path))
     end
