@@ -4,6 +4,7 @@
     <tr>
       <th>Content Ids</th>
       <th>Content URL</th>
+      <th>Title</th>
     </tr>
   </thead>
   <tbody>
@@ -11,6 +12,7 @@
       <tr>
         <td><%= content_item.content_id %></td>
         <td><a href="<%= content_item.url %>"> <%= content_item.url %> </a></td>
+        <td><%= content_item.title %></td>
       </tr>
     <% end %>
   </tbody>

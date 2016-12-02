@@ -10,6 +10,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
     expect(rendered).to have_selector('table thead tr:first-child', text: 'Content Ids')
     expect(rendered).to have_selector('table thead tr:nth(1)', text: 'Content URL')
+    expect(rendered).to have_selector('table thead', text: 'Title')
   end
 
   it 'renders a row per Content Item' do
@@ -31,6 +32,13 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       render
 
       expect(rendered).to have_selector('table tbody tr:first-child td:nth(2) a', text: 'https://gov.uk/content/1/path')
+    end
+
+    it 'includes the content item title' do
+      content_items[0].title = 'a-title'
+      render
+
+      expect(rendered).to have_selector('table tbody tr td', text: 'a-title')
     end
   end
 end
