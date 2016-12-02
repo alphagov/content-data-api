@@ -53,6 +53,24 @@ RSpec.describe Importers::Organisation do
       expect(organisation.content_items.count).to eq(2)
     end
 
+    it 'imports only content items where content_id is present' do
+      allow(HTTParty).to receive(:get).and_return(build_search_api_response([
+        {
+          content_id: 'content-id',
+          link: '/item/1/path',
+          title: 'title-1',
+        },
+        {
+          content_id: '',
+          link: '/item/2/path',
+          title: 'title-2',
+        }
+      ]))
+
+      Importers::Organisation.new('a-slug').run
+      expect(organisation.content_items.count).to eq(1)
+    end
+
     it 'imports a `content_id` for every content item' do
       Importers::Organisation.new('a-slug').run
       content_ids = organisation.content_items.pluck(:content_id)
