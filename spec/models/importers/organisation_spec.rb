@@ -5,7 +5,7 @@ RSpec.describe Importers::Organisation do
   let(:two_content_items_response) { build_search_api_response [{ content_id: 'content-id-1', link: 'content/1/path' }, { content_id: 'content-id-2', link: 'content/2/path' }] }
 
   it "queries the search API with the organisation's slug" do
-    expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link&start=0'
+    expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link,title&start=0'
     expect(HTTParty).to receive(:get).with(expected_url).and_return(one_content_item_response)
 
     Importers::Organisation.new('MY-SLUG', batch: 99).run

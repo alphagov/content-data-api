@@ -40,6 +40,6 @@ private
   end
 
   def search_api_end_point
-    "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=content_id,link&start=#{start}"
+    "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=content_id,link,title&start=#{start}"
   end
 end
