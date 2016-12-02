@@ -13,7 +13,7 @@ class Importers::Organisation
     loop do
       result = search_content_items_for_organisation
       result.each do |content_item_attributes|
-        attributes = content_item_attributes.slice('content_id', 'link')
+        attributes = content_item_attributes.slice('content_id', 'link', 'title')
         organisation.content_items << ContentItem.new(attributes)
       end
 
