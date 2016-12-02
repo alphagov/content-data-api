@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Importers::Organisation do
-  let(:one_content_item_response) { build_seach_api_response [content_id: 'content-id-1'] }
-  let(:two_content_items_response) { build_seach_api_response [{ content_id: 'content-id-1', link: 'content/1/path' }, { content_id: 'content-id-2', link: 'content/2/path' }] }
+  let(:one_content_item_response) { build_search_api_response [content_id: 'content-id-1'] }
+  let(:two_content_items_response) { build_search_api_response [{ content_id: 'content-id-1', link: 'content/1/path' }, { content_id: 'content-id-2', link: 'content/2/path' }] }
 
   it "queries the search API with the organisation's slug" do
     expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link&start=0'
@@ -62,7 +62,7 @@ RSpec.describe Importers::Organisation do
     end
 
     it 'handles last page with 0 results' do
-      expect(HTTParty).to receive(:get).twice.and_return(one_content_item_response, build_seach_api_response([]))
+      expect(HTTParty).to receive(:get).twice.and_return(one_content_item_response, build_search_api_response([]))
       Importers::Organisation.new('a-slug', batch: 1).run
       organisation = Organisation.find_by(slug: 'a-slug')
 
@@ -70,7 +70,7 @@ RSpec.describe Importers::Organisation do
     end
   end
 
-  def build_seach_api_response(payload)
+  def build_search_api_response(payload)
     double(body: {
       results: payload
     }.to_json)
