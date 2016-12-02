@@ -11,6 +11,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     expect(rendered).to have_selector('table thead tr:first-child', text: 'Content Ids')
     expect(rendered).to have_selector('table thead tr:nth(1)', text: 'Content URL')
     expect(rendered).to have_selector('table thead', text: 'Title')
+    expect(rendered).to have_selector('table thead', text: 'Last Updated')
   end
 
   it 'renders a row per Content Item' do
@@ -39,6 +40,12 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       render
 
       expect(rendered).to have_selector('table tbody tr td', text: 'a-title')
+    end
+
+    it 'includes the last time the content was updated' do
+      render
+
+      expect(rendered).to have_selector('table tbody tr td', text: '2016-11-01 11:20:45 UTC')
     end
   end
 end
