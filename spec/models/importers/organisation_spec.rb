@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Importers::Organisation do
   let(:one_content_item_response) { build_seach_api_response [content_id: 'content-id-1'] }
-  let(:two_content_items_response) { build_seach_api_response [{ content_id: 'content-id-1' }, { content_id: 'content-id-2' }] }
+  let(:two_content_items_response) { build_seach_api_response [{ content_id: 'content-id-1', link: 'content/1/path' }, { content_id: 'content-id-2', link: 'content/2/path' }] }
 
   it "queries the search API with the organisation's slug" do
-    expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id&start=0'
+    expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link&start=0'
     expect(HTTParty).to receive(:get).with(expected_url).and_return(one_content_item_response)
 
     Importers::Organisation.new('MY-SLUG', batch: 99).run
@@ -31,21 +31,24 @@ RSpec.describe Importers::Organisation do
   end
 
   context 'Content Items' do
-    it 'imports all content items for the organisation' do
-      allow(HTTParty).to receive(:get).and_return(two_content_items_response)
-      Importers::Organisation.new('a-slug').run
-      organisation = Organisation.find_by(slug: 'a-slug')
+    before { allow(HTTParty).to receive(:get).and_return(two_content_items_response) }
+    let(:organisation) { Organisation.find_by(slug: 'a-slug') }
 
+    it 'imports all content items for the organisation' do
+      Importers::Organisation.new('a-slug').run
       expect(organisation.content_items.count).to eq(2)
     end
 
     it 'imports a `content_id` for every content item' do
-      allow(HTTParty).to receive(:get).and_return(two_content_items_response)
       Importers::Organisation.new('a-slug').run
-      organisation = Organisation.find_by(slug: 'a-slug')
-
       content_ids = organisation.content_items.pluck(:content_id)
       expect(content_ids).to eq(%w(content-id-1 content-id-2))
+    end
+
+    it 'imports a `link` for every content item' do
+      Importers::Organisation.new('a-slug').run
+      links = organisation.content_items.pluck(:link)
+      expect(links).to eq(%w(content/1/path content/2/path))
     end
   end
 
