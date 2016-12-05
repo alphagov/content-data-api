@@ -1,11 +1,25 @@
 require 'rails_helper'
 
 RSpec.describe Importers::Organisation do
-  let(:one_content_item_response) { build_seach_api_response [content_id: 'content-id-1'] }
-  let(:two_content_items_response) { build_seach_api_response [{ content_id: 'content-id-1', link: 'content/1/path' }, { content_id: 'content-id-2', link: 'content/2/path' }] }
+  let(:one_content_item_response) { build_search_api_response [content_id: 'content-id-1'] }
+
+  let(:two_content_items_response) {
+    build_search_api_response [
+      {
+        content_id: 'content-id-1',
+        link: 'content/1/path',
+        title: 'title-1',
+      },
+      {
+        content_id: 'content-id-2',
+        link: 'content/2/path',
+        title: 'title-2'
+      }
+    ]
+  }
 
   it "queries the search API with the organisation's slug" do
-    expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link&start=0'
+    expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link,title&start=0'
     expect(HTTParty).to receive(:get).with(expected_url).and_return(one_content_item_response)
 
     Importers::Organisation.new('MY-SLUG', batch: 99).run
@@ -50,6 +64,16 @@ RSpec.describe Importers::Organisation do
       links = organisation.content_items.pluck(:link)
       expect(links).to eq(%w(content/1/path content/2/path))
     end
+
+    it 'imports a `title` for every content item' do
+      allow(HTTParty).to receive(:get).and_return(two_content_items_response)
+      Importers::Organisation.new('a-slug').run
+
+      organisation = Organisation.find_by(slug: 'a-slug')
+      titles = organisation.content_items.pluck(:title)
+
+      expect(titles).to eq(%w(title-1 title-2))
+    end
   end
 
   context 'Pagination' do
@@ -62,7 +86,7 @@ RSpec.describe Importers::Organisation do
     end
 
     it 'handles last page with 0 results' do
-      expect(HTTParty).to receive(:get).twice.and_return(one_content_item_response, build_seach_api_response([]))
+      expect(HTTParty).to receive(:get).twice.and_return(one_content_item_response, build_search_api_response([]))
       Importers::Organisation.new('a-slug', batch: 1).run
       organisation = Organisation.find_by(slug: 'a-slug')
 
@@ -70,7 +94,7 @@ RSpec.describe Importers::Organisation do
     end
   end
 
-  def build_seach_api_response(payload)
+  def build_search_api_response(payload)
     double(body: {
       results: payload
     }.to_json)

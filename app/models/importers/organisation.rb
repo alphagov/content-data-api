@@ -13,7 +13,7 @@ class Importers::Organisation
     loop do
       result = search_content_items_for_organisation
       result.each do |content_item_attributes|
-        attributes = content_item_attributes.slice('content_id', 'link')
+        attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
         organisation.content_items << ContentItem.new(attributes)
       end
 
@@ -25,6 +25,10 @@ class Importers::Organisation
   end
 
 private
+
+  CONTENT_ITEM_FIELDS = %w(content_id link title).freeze
+
+  private_constant :CONTENT_ITEM_FIELDS
 
   def last_page?(results)
     results.length < batch
@@ -40,6 +44,6 @@ private
   end
 
   def search_api_end_point
-    "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=content_id,link&start=#{start}"
+    "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=#{CONTENT_ITEM_FIELDS.join(',')}&start=#{start}"
   end
 end
