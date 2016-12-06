@@ -13,8 +13,17 @@ class Importers::Organisation
     loop do
       result = search_content_items_for_organisation
       result.each do |content_item_attributes|
-        attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
-        organisation.content_items << ContentItem.new(attributes)
+        content_id = content_item_attributes['content_id']
+        link = content_item_attributes['link']
+
+        if content_id.present?
+          content_store_item = content_item_store(link)
+          attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
+            .merge(content_store_item.slice('public_updated_at'))
+          organisation.content_items << ContentItem.new(attributes)
+        else
+          log("There is not content_id for #{slug}")
+        end
       end
 
       break if last_page?(result)
@@ -45,5 +54,21 @@ private
 
   def search_api_end_point
     "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=#{CONTENT_ITEM_FIELDS.join(',')}&start=#{start}"
+  end
+
+  def content_item_store(base_path)
+    endpoint = content_item_end_point(base_path)
+    response = HTTParty.get(endpoint)
+    JSON.parse(response.body)
+  end
+
+  def content_item_end_point(base_path)
+    "https://www.gov.uk/api/content#{base_path}"
+  end
+
+  def log(message)
+    unless Rails.env.test?
+      Logger.new(STDOUT).warn(message)
+    end
   end
 end
