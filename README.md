@@ -1,18 +1,3 @@
-
-### Deployment to Heroku
-
-1\. Setup the environment to deploy to Heroku
-
-```bash
-$ rake heroku:prepare # Only need to be done once
-````
-
-2\. Deploy to Heroku
-
-```bash
-$ rake heroku:deploy
-```
-
 ### Setting up the local environment
 
 Create the test and development databases:
@@ -49,6 +34,26 @@ In the browser navigate to:
 
  ```bash
  $ rake import:organisation[{department-slug}]
+ ```
+
+ ### Deployment to Heroku
+
+ 1\. Setup the environment to deploy to Heroku
+
+ ```bash
+ $ rake heroku:prepare # Only need to be done once
+ ````
+
+ 2\. Deploy to Heroku
+
+ ```bash
+ $ rake heroku:deploy
+ ```
+
+ To see updated (or data in new fields) data on heroku, you need to run:
+
+ ```bash
+ $ heroku rake import:organisation[{department-slug}]
  ```
 
  ### App development
