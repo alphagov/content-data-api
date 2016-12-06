@@ -30,32 +30,34 @@ In the browser navigate to:
  $ bundle exec rake
  ```
 
- ### Importing data
+### Importing data
 
- ```bash
- $ rake import:organisation[{department-slug}]
- ```
+```bash
+$ rake import:organisation[{department-slug}]
+```
 
- ### Deployment to Heroku
+Every time you add a new field to the database, you need to delete the existing organisations, and then re-import them.
 
- 1\. Setup the environment to deploy to Heroku
+### Deployment to Heroku
 
- ```bash
- $ rake heroku:prepare # Only need to be done once
- ````
+1\. Setup the environment to deploy to Heroku
 
- 2\. Deploy to Heroku
+```bash
+$ rake heroku:prepare # Only need to be done once
+````
 
- ```bash
- $ rake heroku:deploy
- ```
+2\. Deploy to Heroku
 
- To see updated (or data in new fields) data on heroku, you need to run:
+```bash
+$ rake heroku:deploy
+```
 
- ```bash
- $ heroku rake import:organisation[{department-slug}]
- ```
+To see updated (or data in new fields) data on heroku, you need to run:
 
- ### App development
+```bash
+$ heroku rake import:organisation[{department-slug}]
+```
 
- * [GOVUK-LINT-RUBY](doc/govuk-lint.md)
+### App development
+
+* [GOVUK-LINT-RUBY](doc/govuk-lint.md)
