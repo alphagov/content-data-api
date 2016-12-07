@@ -67,8 +67,6 @@ private
   end
 
   def log(message)
-    unless Rails.env.test?
-      Logger.new(STDOUT).warn(message)
-    end
+    Rails.logger.warn(message)
   end
 end
