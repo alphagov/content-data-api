@@ -8,7 +8,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   it 'renders the table header with the right headings' do
     render
 
-    expect(rendered).to have_selector('table thead', text: 'Content URL')
     expect(rendered).to have_selector('table thead', text: 'Title')
     expect(rendered).to have_selector('table thead', text: 'Last Updated')
   end
@@ -20,18 +19,12 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   end
 
   describe 'row content' do
-    it 'contains the content\'s url' do
-      content_items[0].link = '/content/1/path'
-      render
-
-      expect(rendered).to have_selector('table tbody td a', text: 'https://gov.uk/content/1/path')
-    end
-
     it 'includes the content item title' do
+      content_items[0].link = '/content/1/path'
       content_items[0].title = 'a-title'
       render
 
-      expect(rendered).to have_selector('table tbody tr td', text: 'a-title')
+      expect(rendered).to have_link('a-title', href: 'https://gov.uk/content/1/path')
     end
 
     it 'includes the last time the content was updated' do

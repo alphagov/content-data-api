@@ -2,7 +2,6 @@
 <table>
   <thead>
     <tr>
-      <th>Content URL</th>
       <th>Title</th>
       <th>Last Updated</th>
     </tr>
@@ -10,8 +9,7 @@
   <tbody>
     <% @content_items.each do |content_item| %>
       <tr>
-        <td><a href="<%= content_item.url %>"> <%= content_item.url %> </a></td>
-        <td><%= content_item.title %></td>
+        <td><a href="<%= content_item.url %>"> <%= content_item.title %> </a></td>
         <td><%= time_ago_in_words(content_item.public_updated_at) %> ago</td>
       </tr>
     <% end %>
