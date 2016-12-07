@@ -43,9 +43,12 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     end
 
     it 'includes the last time the content was updated' do
-      render
+      Timecop.freeze(Time.parse('2016-3-20')) do
+        content_items[0].public_updated_at = Time.parse('2016-1-20')
+        render
 
-      expect(rendered).to have_selector('table tbody tr td', text: '2016-11-01 11:20:45 UTC')
+        expect(rendered).to have_selector('table tbody tr td', text: '2 months ago')
+      end
     end
   end
 end

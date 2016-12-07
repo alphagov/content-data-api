@@ -14,7 +14,7 @@
         <td><%= content_item.content_id %></td>
         <td><a href="<%= content_item.url %>"> <%= content_item.url %> </a></td>
         <td><%= content_item.title %></td>
-        <td><%= content_item.public_updated_at %></td>
+        <td><%= time_ago_in_words(content_item.public_updated_at) %> ago</td>
       </tr>
     <% end %>
   </tbody>
