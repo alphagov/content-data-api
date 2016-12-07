@@ -10,4 +10,10 @@ RSpec.describe Organisation, type: :model do
       expect(organisation.total_content_items).to eq(2)
     end
   end
+
+  it 'returns the organisation name' do
+    organisation = build(:organisation, slug: 'a-name')
+
+    expect(organisation.name).to eq('A Name')
+  end
 end
