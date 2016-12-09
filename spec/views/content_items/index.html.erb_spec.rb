@@ -1,9 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe 'content_items/index.html.erb', type: :view do
+  let(:organisation) { build(:organisation) }
   let(:content_items) { build_list(:content_item, 2) }
 
-  before { assign(:content_items, content_items) }
+  before do
+    assign(:content_items, content_items)
+    assign(:organisation, organisation)
+  end
+
+  it 'renders the name of the organisation from the slug' do
+    allow(organisation).to receive(:name).and_return('A Name')
+    render
+
+    expect(rendered).to have_selector('h1', text: 'A Name')
+  end
 
   it 'renders the table header with the right headings' do
     render

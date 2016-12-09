@@ -16,6 +16,10 @@ RSpec.describe ContentItemsController, type: :controller do
       expect(assigns(:content_items)).to eq(organisation.content_items)
     end
 
+    it "assigns the organisation" do
+      expect(assigns(:organisation)).to eq(organisation)
+    end
+
     it "renders the :index template" do
       expect(subject).to render_template(:index)
     end
