@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :organisation do
+    sequence(:id) { |index| index }
     sequence(:slug) { |index| "slug-#{index}" }
 
     factory :organisation_with_content_items do
