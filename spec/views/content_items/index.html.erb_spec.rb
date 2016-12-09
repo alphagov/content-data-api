@@ -8,8 +8,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   it 'renders the table header with the right headings' do
     render
 
-    expect(rendered).to have_selector('table thead tr:first-child', text: 'Content Ids')
-    expect(rendered).to have_selector('table thead tr:nth(1)', text: 'Content URL')
     expect(rendered).to have_selector('table thead', text: 'Title')
     expect(rendered).to have_selector('table thead', text: 'Last Updated')
   end
@@ -21,31 +19,21 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   end
 
   describe 'row content' do
-    it 'contains the content-id in the first column' do
-      content_items[0].content_id = 'a-content-id'
-      render
-
-      expect(rendered).to have_selector('table tbody tr:first-child td', text: 'a-content-id')
-    end
-
-    it 'contains the content\'s url in the second column' do
-      content_items[0].link = '/content/1/path'
-      render
-
-      expect(rendered).to have_selector('table tbody tr:first-child td:nth(2) a', text: 'https://gov.uk/content/1/path')
-    end
-
     it 'includes the content item title' do
+      content_items[0].link = '/content/1/path'
       content_items[0].title = 'a-title'
       render
 
-      expect(rendered).to have_selector('table tbody tr td', text: 'a-title')
+      expect(rendered).to have_link('a-title', href: 'https://gov.uk/content/1/path')
     end
 
     it 'includes the last time the content was updated' do
-      render
+      Timecop.freeze(Time.parse('2016-3-20')) do
+        content_items[0].public_updated_at = Time.parse('2016-1-20')
+        render
 
-      expect(rendered).to have_selector('table tbody tr td', text: '2016-11-01 11:20:45 UTC')
+        expect(rendered).to have_selector('table tbody tr td', text: '2 months ago')
+      end
     end
   end
 end

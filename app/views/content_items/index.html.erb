@@ -2,20 +2,11 @@
 <table>
   <thead>
     <tr>
-      <th>Content Ids</th>
-      <th>Content URL</th>
       <th>Title</th>
       <th>Last Updated</th>
     </tr>
   </thead>
   <tbody>
-    <% @content_items.each do |content_item| %>
-      <tr>
-        <td><%= content_item.content_id %></td>
-        <td><a href="<%= content_item.url %>"> <%= content_item.url %> </a></td>
-        <td><%= content_item.title %></td>
-        <td><%= content_item.public_updated_at %></td>
-      </tr>
-    <% end %>
+    <%= render @content_items %>
   </tbody>
 </table>
