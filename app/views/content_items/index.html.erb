@@ -7,11 +7,6 @@
     </tr>
   </thead>
   <tbody>
-    <% @content_items.each do |content_item| %>
-      <tr>
-        <td><%= link_to content_item.title, content_item.url %></td>
-        <td><%= time_ago_in_words(content_item.public_updated_at) %> ago</td>
-      </tr>
-    <% end %>
+    <%= render @content_items %>
   </tbody>
 </table>
