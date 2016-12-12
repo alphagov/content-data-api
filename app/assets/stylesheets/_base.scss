@@ -1,0 +1,55 @@
+/* sensible default styles for main elements */
+
+main {
+
+  h1 {
+    @extend .heading-xlarge;
+  }
+
+  h2 {
+    @extend .heading-large;
+  }
+
+  h3 {
+    @extend .heading-medium;
+  }
+
+  h4 {
+    @extend .heading-small;
+  }
+
+  ul,
+  ol {
+    @extend .list;
+  }
+
+  ul {
+    @extend .list-bullet;
+  }
+
+  ol {
+    @extend .list-number;
+  }
+
+  strong {
+    @extend .bold;
+  }
+
+  /* forms */
+
+  input,
+  select,
+  textarea {
+    @extend .form-control;
+  }
+
+  label {
+    @extend .form-label;
+  }
+
+  input[type=submit],
+  button {
+    @extend .button;
+  }
+
+} /* /main */
