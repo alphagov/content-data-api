@@ -1,11 +1,13 @@
 class Importers::Organisation
   attr_reader :slug, :batch, :start
   attr_writer :start
+  attr_accessor :logger
 
-  def initialize(slug, batch: 10, start: 0)
+  def initialize(slug, batch: 10, start: 0, logger: Rails.logger)
     @slug = slug
     @batch = batch
     @start = start
+    @logger = logger
   end
 
   def run
@@ -22,7 +24,7 @@ class Importers::Organisation
             .merge(content_store_item.slice('public_updated_at'))
           organisation.content_items << ContentItem.new(attributes)
         else
-          log("There is not content_id for #{slug}")
+          logger.warn("There is not content_id for #{slug}")
         end
       end
 
@@ -67,6 +69,6 @@ private
   end
 
   def log(message)
-    Rails.logger.warn(message)
+    @logger.warn(message)
   end
 end
