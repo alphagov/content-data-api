@@ -122,6 +122,20 @@ RSpec.describe Importers::Organisation do
 
       Importers::Organisation.new('a-slug').run
     end
+    
+    it 'does not add a new organisation if the organisation already exists' do
+      allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(one_content_item_response)
+      allow(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response)
+
+      slug = 'department-for-education'
+      # The first time the import runs for a slug, a new organisation should be created.
+      expect { Importers::Organisation.new(slug).run }.to change { Organisation.count }.by(1)
+      expect(Organisation.first.slug).to eq(slug)
+
+      # The second time the import runs for a slug, a new organisation should not be created.
+      Importers::Organisation.new(slug).run
+      expect(Organisation.count).to eq(1)
+    end
   end
 
   describe 'Content Items' do

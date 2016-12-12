@@ -9,7 +9,10 @@ class Importers::Organisation
   end
 
   def run
-    @organisation = ::Organisation.create!(slug: slug)
+    @organisation = ::Organisation.find_by(slug: slug)
+    if @organisation.blank?
+      @organisation = ::Organisation.create!(slug: slug)
+    end
 
     loop do
       result = search_content_items_for_organisation
