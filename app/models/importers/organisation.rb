@@ -29,9 +29,16 @@ class Importers::Organisation
 
         if content_id.present?
           content_store_item = content_item_store(link)
+
           attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
             .merge(content_store_item.slice(*CONTENT_STORE_FIELDS))
-          @organisation.content_items << ContentItem.new(attributes)
+          
+          content_item = @organisation.content_items.find_by(content_id: content_id)
+          if content_item.blank?
+            @organisation.content_items << ContentItem.new(attributes)
+          else
+            content_item.update!(attributes)
+          end
         else
           log("There is not content_id for #{slug}")
         end

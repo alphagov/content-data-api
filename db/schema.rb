@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20161215145222) do
     t.string   "link"
     t.string   "title"
     t.string   "document_type"
+    t.index ["content_id"], name: "index_content_items_on_content_id", unique: true, using: :btree
     t.index ["organisation_id"], name: "index_content_items_on_organisation_id", using: :btree
   end
 
