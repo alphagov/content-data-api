@@ -20,7 +20,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     render
 
     expect(rendered).to have_selector('table thead', text: 'Title')
-    expect(rendered).to have_selector('table thead', text: 'Last Updated')
+    expect(rendered).to have_selector('table thead tr:first-child th:nth(2)', text: 'Last Updated')
   end
 
   it 'renders a row per Content Item' do
@@ -45,6 +45,13 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
         expect(rendered).to have_selector('table tbody tr td', text: '2 months ago')
       end
+    end
+
+    it 'contains a descending and ascending links in table heading' do
+      render
+      href = organisation_content_items_path(organisation, order: :asc, sort: :public_updated_at)
+
+      expect(rendered).to have_link('Last Updated', href: href)
     end
   end
 end
