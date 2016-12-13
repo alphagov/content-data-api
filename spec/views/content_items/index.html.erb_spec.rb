@@ -6,6 +6,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
   before do
     allow(view).to receive(:paginate)
+    allow(view).to receive(:page_entries_info)
     assign(:content_items, content_items)
     assign(:organisation, organisation)
   end

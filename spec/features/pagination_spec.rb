@@ -47,5 +47,9 @@ RSpec.feature "Content Item's Pagination", type: :feature do
     end
   end
 
-  xscenario "sees the total number of pages"
+  scenario "The user can see information about the total number of content items" do
+    visit "organisations/#{organisation.id}/content_items"
+
+    expect(page).to have_selector('div#total-content-items', text: 'Displaying content items 1 - 2 of 3 in total')
+  end
 end
