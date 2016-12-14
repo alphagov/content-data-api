@@ -9,15 +9,21 @@ class Importers::Organisation
   end
 
   def run
-    organisation = ::Organisation.create!(slug: slug)
+    @organisation = ::Organisation.create!(slug: slug)
+
     loop do
       result = search_content_items_for_organisation
-      result.each do |content_item_attributes|
-        content_item_organisations = content_item_attributes['organisations']
-        if content_item_organisations.present?
-          organisation.update!(title: content_item_organisations.first['title'])
-        end
 
+      organisation_titles = result.map do |item|
+        organisations = item['organisations'].first
+        organisations['title'] if organisations.present?
+      end
+
+      if organisation_titles.any? && organisation_titles.first && @organisation.title.blank?
+        add_organisation_title(organisation_titles.first)
+      end
+
+      result.each do |content_item_attributes|
         content_id = content_item_attributes['content_id']
         link = content_item_attributes['link']
 
@@ -25,7 +31,7 @@ class Importers::Organisation
           content_store_item = content_item_store(link)
           attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
             .merge(content_store_item.slice(*CONTENT_STORE_FIELDS))
-          organisation.content_items << ContentItem.new(attributes)
+          @organisation.content_items << ContentItem.new(attributes)
         else
           log("There is not content_id for #{slug}")
         end
@@ -35,7 +41,11 @@ class Importers::Organisation
 
       next_page!
     end
-    raise 'No result for slug' if organisation.content_items.empty?
+    raise 'No result for slug' if @organisation.content_items.empty?
+  end
+
+  def add_organisation_title(title)
+    @organisation.update!(title: title)
   end
 
 private

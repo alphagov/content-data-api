@@ -10,6 +10,7 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-1',
         link: '/item/1/path',
         title: 'title-1',
+        organisations: [],
       }
     ]
   }
@@ -20,11 +21,13 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-1',
         link: '/item/1/path',
         title: 'title-1',
+        organisations: [],
       },
       {
         content_id: 'content-id-2',
         link: '/item/2/path',
-        title: 'title-2'
+        title: 'title-2',
+        organisations: [],
       }
     ]
   }
@@ -93,6 +96,32 @@ RSpec.describe Importers::Organisation do
       organisation = Organisation.find_by(slug: 'a-slug')
       expect(organisation.title).to eq('An organisation title')
     end
+
+    it 'only imports the organisation title once' do
+      allow(HTTParty).to receive(:get).and_return(build_search_api_response([
+        {
+          content_id: 'content-id-1',
+          link: '/item/1/path',
+          title: 'title-1',
+          organisations: [{
+            title: 'An organisation title',
+            slug: 'a-slug'
+          }]
+        },
+        {
+          content_id: 'content-id-2',
+          link: '/item/2/path',
+          title: 'title-2',
+          organisations: [{
+            title: 'An organisation title',
+            slug: 'a-slug'
+          }]
+        }.with_indifferent_access
+      ]))
+      expect_any_instance_of(Importers::Organisation).to receive(:add_organisation_title).once
+
+      Importers::Organisation.new('a-slug').run
+    end
   end
 
   describe 'Content Items' do
@@ -112,11 +141,13 @@ RSpec.describe Importers::Organisation do
           content_id: 'content-id',
           link: '/item/1/path',
           title: 'title-1',
+          organisations: [],
         },
         {
           content_id: '',
           link: '/item/2/path',
           title: 'title-2',
+          organisations: [],
         }
       ]))
 
