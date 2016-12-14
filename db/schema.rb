@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20161215145222) do
     t.string   "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "title"
   end
 
   add_foreign_key "content_items", "organisations"

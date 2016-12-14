@@ -13,6 +13,11 @@ class Importers::Organisation
     loop do
       result = search_content_items_for_organisation
       result.each do |content_item_attributes|
+        content_item_organisations = content_item_attributes['organisations']
+        if content_item_organisations.present?
+          organisation.update!(title: content_item_organisations.first['title'])
+        end
+
         content_id = content_item_attributes['content_id']
         link = content_item_attributes['link']
 
@@ -37,8 +42,9 @@ private
 
   CONTENT_ITEM_FIELDS = %w(content_id link title).freeze
   CONTENT_STORE_FIELDS = %w(public_updated_at document_type).freeze
+  SEARCH_API_FIELDS = CONTENT_ITEM_FIELDS + %w(organisations)
 
-  private_constant :CONTENT_ITEM_FIELDS
+  private_constant :CONTENT_ITEM_FIELDS, :SEARCH_API_FIELDS
 
   def last_page?(results)
     results.length < batch
@@ -54,7 +60,7 @@ private
   end
 
   def search_api_end_point
-    "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=#{CONTENT_ITEM_FIELDS.join(',')}&start=#{start}"
+    "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=#{SEARCH_API_FIELDS.join(',')}&start=#{start}"
   end
 
   def content_item_store(base_path)
