@@ -1,4 +1,5 @@
 <tr>
   <td><%= link_to content_item.title, content_item.url %></td>
+  <td><%= content_item.document_type %></td>
   <td><%= time_ago_in_words(content_item.public_updated_at) %> ago</td>
 </tr>

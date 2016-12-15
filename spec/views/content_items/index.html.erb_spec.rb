@@ -22,7 +22,8 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     render
 
     expect(rendered).to have_selector('table thead', text: 'Title')
-    expect(rendered).to have_selector('table thead tr:first-child th:nth(2)', text: 'Last Updated')
+    expect(rendered).to have_selector('table thead tr:first-child th:nth(2)', text: 'Type of Document')
+    expect(rendered).to have_selector('table thead tr:first-child th:nth(3)', text: 'Last Updated')
   end
 
   it 'renders a row per Content Item' do
