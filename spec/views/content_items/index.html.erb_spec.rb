@@ -5,6 +5,8 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   let(:content_items) { build_list(:content_item, 2) }
 
   before do
+    allow(view).to receive(:paginate)
+    allow(view).to receive(:page_entries_info)
     assign(:content_items, content_items)
     assign(:organisation, organisation)
   end
@@ -27,6 +29,18 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     render
 
     expect(rendered).to have_selector('table tbody tr', count: 2)
+  end
+
+  describe 'Kaminari' do
+    it 'uses Kaminari to paginate the pages' do
+      expect(view).to receive(:paginate)
+      render
+    end
+
+    it 'returns the max page size number of content items per page' do
+      render
+      expect(rendered).to have_selector("table tbody tr", count: 2)
+    end
   end
 
   describe 'row content' do
