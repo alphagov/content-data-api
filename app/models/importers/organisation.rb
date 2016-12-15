@@ -14,10 +14,7 @@ class Importers::Organisation
     loop do
       result = search_content_items_for_organisation
 
-      organisation_titles = result.map do |item|
-        organisations = item['organisations'].first
-        organisations['title'] if organisations.present?
-      end
+      organisation_titles = get_organisation_titles(result)
 
       if organisation_titles.any? && organisation_titles.first && @organisation.title.blank?
         add_organisation_title(organisation_titles.first)
@@ -87,5 +84,13 @@ private
     unless Rails.env.test?
       Logger.new(STDOUT).warn(message)
     end
+  end
+
+  def get_organisation_titles(content_items)
+    titles = content_items.map do |content_item|
+      organisations = content_item['organisations'].first
+      organisations['title'] if organisations.present?
+    end
+    titles
   end
 end
