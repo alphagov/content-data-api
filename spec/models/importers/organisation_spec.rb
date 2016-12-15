@@ -32,6 +32,7 @@ RSpec.describe Importers::Organisation do
     double(
       body: {
         public_updated_at: "2016-11-01 11:20:45.481868000 +0000",
+        document_type: "guidance",
       }.to_json
     )
   }
@@ -141,6 +142,14 @@ RSpec.describe Importers::Organisation do
 
         expect(content_item.content_id).to eq('content-id-1')
         expect(content_item.public_updated_at).to eq(Time.parse('2016-11-01 11:20:45.481868'))
+      end
+
+      it 'imports a `document_type` for every content item' do
+        Importers::Organisation.new('a-slug').run
+        content_items = Organisation.find_by(slug: 'a-slug').content_items
+        document_type = content_items.pluck(:document_type).first
+
+        expect(document_type).to eq('guidance')
       end
     end
   end

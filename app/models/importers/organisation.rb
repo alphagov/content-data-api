@@ -19,7 +19,7 @@ class Importers::Organisation
         if content_id.present?
           content_store_item = content_item_store(link)
           attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
-            .merge(content_store_item.slice('public_updated_at'))
+            .merge(content_store_item.slice(*CONTENT_STORE_FIELDS))
           organisation.content_items << ContentItem.new(attributes)
         else
           log("There is not content_id for #{slug}")
@@ -36,6 +36,7 @@ class Importers::Organisation
 private
 
   CONTENT_ITEM_FIELDS = %w(content_id link title).freeze
+  CONTENT_STORE_FIELDS = %w(public_updated_at document_type).freeze
 
   private_constant :CONTENT_ITEM_FIELDS
 
