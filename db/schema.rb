@@ -10,18 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161130153206) do
+ActiveRecord::Schema.define(version: 20161215145222) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "content_items", force: :cascade do |t|
     t.string   "content_id"
     t.integer  "organisation_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.datetime "public_updated_at"
     t.string   "link"
     t.string   "title"
-    t.datetime "public_updated_at"
+    t.string   "document_type"
     t.index ["organisation_id"], name: "index_content_items_on_organisation_id", using: :btree
   end
 
