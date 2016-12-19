@@ -11,11 +11,11 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     assign(:organisation, organisation)
   end
 
-  it 'renders the name of the organisation from the slug' do
-    allow(organisation).to receive(:name).and_return('A Name')
+  it 'renders the title of the organisation' do
+    allow(organisation).to receive(:title).and_return('A Title')
     render
 
-    expect(rendered).to have_selector('h1', text: 'A Name')
+    expect(rendered).to have_selector('h1', text: 'A Title')
   end
 
   it 'renders the table header with the right headings' do

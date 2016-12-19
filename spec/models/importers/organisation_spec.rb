@@ -10,6 +10,7 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-1',
         link: '/item/1/path',
         title: 'title-1',
+        organisations: [],
       }
     ]
   }
@@ -20,11 +21,13 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-1',
         link: '/item/1/path',
         title: 'title-1',
+        organisations: [],
       },
       {
         content_id: 'content-id-2',
         link: '/item/2/path',
-        title: 'title-2'
+        title: 'title-2',
+        organisations: [],
       }
     ]
   }
@@ -39,7 +42,7 @@ RSpec.describe Importers::Organisation do
 
   describe 'making API calls with HTTParty' do
     it 'queries the search API with the organisation\'s slug' do
-      expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link,title&start=0'
+      expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link,title,organisations&start=0'
       allow(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response)
       expect(HTTParty).to receive(:get).once.with(expected_url).and_return(two_content_items_response)
 
@@ -75,6 +78,50 @@ RSpec.describe Importers::Organisation do
 
       expect { Importers::Organisation.new('none-existing-org').run }.to raise_error('No result for slug')
     end
+
+    it 'imports the organisation title' do
+      allow(HTTParty).to receive(:get).and_return(build_search_api_response([
+        {
+          content_id: 'content-id',
+          link: '/item/1/path',
+          title: 'title-1',
+          organisations: [{
+            title: 'An organisation title',
+            slug: 'a-slug'
+          }]
+        }
+      ]))
+
+      Importers::Organisation.new('a-slug').run
+      organisation = Organisation.find_by(slug: 'a-slug')
+      expect(organisation.title).to eq('An organisation title')
+    end
+
+    it 'only imports the organisation title once' do
+      allow(HTTParty).to receive(:get).and_return(build_search_api_response([
+        {
+          content_id: 'content-id-1',
+          link: '/item/1/path',
+          title: 'title-1',
+          organisations: [{
+            title: 'An organisation title',
+            slug: 'a-slug'
+          }]
+        },
+        {
+          content_id: 'content-id-2',
+          link: '/item/2/path',
+          title: 'title-2',
+          organisations: [{
+            title: 'An organisation title',
+            slug: 'a-slug'
+          }]
+        }.with_indifferent_access
+      ]))
+      expect_any_instance_of(Importers::Organisation).to receive(:add_organisation_title).once
+
+      Importers::Organisation.new('a-slug').run
+    end
   end
 
   describe 'Content Items' do
@@ -94,11 +141,13 @@ RSpec.describe Importers::Organisation do
           content_id: 'content-id',
           link: '/item/1/path',
           title: 'title-1',
+          organisations: [],
         },
         {
           content_id: '',
           link: '/item/2/path',
           title: 'title-2',
+          organisations: [],
         }
       ]))
 
