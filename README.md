@@ -48,8 +48,22 @@ $ rake heroku:prepare # Only need to be done once
 
 2\. Deploy to Heroku
 
+Try one of the following methods:
+
+##### Use the deploy script
 ```bash
 $ rake heroku:deploy
+```
+
+##### Use the heroku deploy commands
+```bash
+$ git push heroku master
+```
+
+followed by:
+
+```bash
+$ heroku rake db:migrate
 ```
 
 To see updated (or data in new fields) data on heroku, you need to run:
