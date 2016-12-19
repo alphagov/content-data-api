@@ -1,0 +1,37 @@
+[aria-sort] > * {
+  position: relative;
+
+  &:after {
+    font-size: 14px;
+    line-height: 1;
+    position: absolute;
+    right: -14px; // arrow width
+    top: 50%;
+    margin-top: -7px; // 1/2 arrow height
+  }
+
+  &:visited {
+    color: $link-colour;
+  }
+
+  &:hover {
+    color: $link-hover-colour;
+  }
+}
+
+[aria-sort=descending],
+[aria-sort=ascending] {
+  padding-right: em(34, 19); // Increase padding to fit arrow
+}
+
+[aria-sort=descending] > * {
+  &:after {
+    content: '\25B2'; // Up arrow
+  }
+}
+
+[aria-sort=ascending] > * {
+  &:after {
+    content: '\25BC'; // Down arrow
+  }
+}
