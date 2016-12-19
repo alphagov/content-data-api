@@ -122,6 +122,20 @@ RSpec.describe Importers::Organisation do
 
       Importers::Organisation.new('a-slug').run
     end
+
+    it 'does not add a new organisation if the organisation already exists' do
+      allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(one_content_item_response)
+      allow(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response)
+
+      slug = 'department-for-education'
+      # The first time the import runs for a slug, a new organisation should be created.
+      expect { Importers::Organisation.new(slug).run }.to change { Organisation.count }.by(1)
+      expect(Organisation.first.slug).to eq(slug)
+
+      # The second time the import runs for a slug, a new organisation should not be created.
+      Importers::Organisation.new(slug).run
+      expect(Organisation.count).to eq(1)
+    end
   end
 
   describe 'Content Items' do
@@ -154,6 +168,44 @@ RSpec.describe Importers::Organisation do
       Importers::Organisation.new('a-slug').run
       organisation = Organisation.find_by(slug: 'a-slug')
       expect(organisation.content_items.count).to eq(1)
+    end
+
+    it 'does not add a new content item if the content item already exists' do
+      allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(two_content_items_response)
+
+      # The first time the import runs, two content items should be created.
+      Importers::Organisation.new('a-slug').run
+      organisation = Organisation.find_by(slug: 'a-slug')
+      expect(organisation.content_items.count).to eq(2)
+
+      # The second time the import runs, no new content items should be created.
+      Importers::Organisation.new('a-slug').run
+      organisation = Organisation.find_by(slug: 'a-slug')
+      expect(organisation.content_items.count).to eq(2)
+    end
+
+    it 'does update content item attributes if they have changed' do
+      allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(one_content_item_response)
+      Importers::Organisation.new('a-slug').run
+      organisation = Organisation.find_by(slug: 'a-slug')
+      expect(organisation.content_items.count).to eq(1)
+
+      content_item = organisation.content_items.first
+      expect(content_item.title).to eq('title-1')
+
+      updated_one_content_item_response = {
+        content_id: 'content-id-1',
+        link: '/item/1/path',
+        title: 'updated-title-1',
+        organisations: [],
+      }
+
+      allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(build_search_api_response([updated_one_content_item_response]))
+
+      Importers::Organisation.new('a-slug').run
+      organisation = Organisation.find_by(slug: 'a-slug')
+      content_item = organisation.content_items.first
+      expect(content_item.title).to eq('updated-title-1')
     end
 
     describe 'Fields ' do
@@ -207,7 +259,13 @@ RSpec.describe Importers::Organisation do
     before { allow(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response) }
 
     it 'paginates through all the content items for an organisation' do
-      expect(HTTParty).to receive(:get).twice.with(search_api_url_pattern).and_return(two_content_items_response, one_content_item_response)
+      another_content_item = {
+        content_id: 'content-id-3',
+        link: '/item/3/path',
+        title: 'title-3',
+        organisations: [],
+      }
+      expect(HTTParty).to receive(:get).twice.with(search_api_url_pattern).and_return(two_content_items_response, build_search_api_response([another_content_item]))
 
       Importers::Organisation.new('a-slug', batch: 2).run
       organisation = Organisation.find_by(slug: 'a-slug')

@@ -9,7 +9,7 @@ class Importers::Organisation
   end
 
   def run
-    @organisation = ::Organisation.create!(slug: slug)
+    @organisation = ::Organisation.find_or_create_by(slug: slug)
 
     loop do
       result = search_content_items_for_organisation
@@ -26,9 +26,11 @@ class Importers::Organisation
 
         if content_id.present?
           content_store_item = content_item_store(link)
+
           attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
             .merge(content_store_item.slice(*CONTENT_STORE_FIELDS))
-          @organisation.content_items << ContentItem.new(attributes)
+
+          create_or_update_content_item(content_id, attributes)
         else
           log("There is not content_id for #{slug}")
         end
@@ -92,5 +94,23 @@ private
       organisations['title'] if organisations.present?
     end
     titles
+  end
+
+  def create_or_update_content_item(content_id, attributes)
+    content_item = @organisation.content_items.find_by(content_id: content_id)
+
+    if content_item.blank?
+      create_content_item(attributes)
+    else
+      update_content_item(content_item, attributes)
+    end
+  end
+
+  def create_content_item(attributes)
+    @organisation.content_items << ContentItem.new(attributes)
+  end
+
+  def update_content_item(content_item, attributes)
+    content_item.update!(attributes)
   end
 end
