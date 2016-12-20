@@ -28,5 +28,13 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_text('guidance')
   end
 
-  xit 'renders the last updated date of the content item'
+  it 'renders the last updated date of the content item' do
+    Timecop.freeze('2016-3-20')
+    assign(:content_item, content_item)
+    content_item.public_updated_at = Date.parse('2016-1-20')
+    render
+
+    expect(rendered).to have_text('Last updated')
+    expect(rendered).to have_text('2 months ago')
+  end
 end
