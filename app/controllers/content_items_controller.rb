@@ -5,6 +5,6 @@ class ContentItemsController < ApplicationController
   end
 
   def show
-    head :ok
+    @content_item = ContentItem.find(params[:id])
   end
 end
