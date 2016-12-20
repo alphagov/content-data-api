@@ -5,4 +5,9 @@ namespace :import do
 
     Importers::Organisation.new(args.slug).run
   end
+
+  desc 'Import all organisations'
+  task all_organisations: :environment do
+    Importers::Organisations.new.import_all
+  end
 end
