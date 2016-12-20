@@ -10,7 +10,7 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-1',
         link: '/item/1/path',
         title: 'title-1',
-        organisations: [],
+        organisations: [{ title: 'a-title' }],
       }
     ]
   }
@@ -21,13 +21,13 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-1',
         link: '/item/1/path',
         title: 'title-1',
-        organisations: [],
+        organisations: [{ title: 'a-title' }],
       },
       {
         content_id: 'content-id-2',
         link: '/item/2/path',
         title: 'title-2',
-        organisations: [],
+        organisations: [{ title: 'a-title' }],
       }
     ]
   }
@@ -97,32 +97,6 @@ RSpec.describe Importers::Organisation do
       expect(organisation.title).to eq('An organisation title')
     end
 
-    it 'only imports the organisation title once' do
-      allow(HTTParty).to receive(:get).and_return(build_search_api_response([
-        {
-          content_id: 'content-id-1',
-          link: '/item/1/path',
-          title: 'title-1',
-          organisations: [{
-            title: 'An organisation title',
-            slug: 'a-slug'
-          }]
-        },
-        {
-          content_id: 'content-id-2',
-          link: '/item/2/path',
-          title: 'title-2',
-          organisations: [{
-            title: 'An organisation title',
-            slug: 'a-slug'
-          }]
-        }.with_indifferent_access
-      ]))
-      expect_any_instance_of(Importers::Organisation).to receive(:add_organisation_title).once
-
-      Importers::Organisation.new('a-slug').run
-    end
-
     it 'does not add a new organisation if the organisation already exists' do
       allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(one_content_item_response)
       allow(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response)
@@ -155,13 +129,13 @@ RSpec.describe Importers::Organisation do
           content_id: 'content-id',
           link: '/item/1/path',
           title: 'title-1',
-          organisations: [],
+          organisations: [{ title: 'a-title' }],
         },
         {
           content_id: '',
           link: '/item/2/path',
           title: 'title-2',
-          organisations: [],
+          organisations: [{ title: 'a-title' }],
         }
       ]))
 
@@ -197,7 +171,7 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-1',
         link: '/item/1/path',
         title: 'updated-title-1',
-        organisations: [],
+        organisations: [{ title: 'a-title' }],
       }
 
       allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(build_search_api_response([updated_one_content_item_response]))
@@ -263,7 +237,7 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-3',
         link: '/item/3/path',
         title: 'title-3',
-        organisations: [],
+        organisations: [{ title: 'a-title' }],
       }
       expect(HTTParty).to receive(:get).twice.with(search_api_url_pattern).and_return(two_content_items_response, build_search_api_response([another_content_item]))
 
