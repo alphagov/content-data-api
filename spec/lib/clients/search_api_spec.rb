@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Clients::SearchAPI do
-  subject { Clients::SearchAPI }
-
   let(:two_content_items) {
     double(body: {
       results: [
