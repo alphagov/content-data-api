@@ -1,9 +1,7 @@
 module Clients
   class SearchAPI
-    mattr_accessor :start
-
-    def fetch(slug, batch: 10, start: 0)
-      self.start = 0
+    def fetch(slug, batch: 10)
+      start = 0
 
       loop do
         response = HTTParty.get(search_api_end_point(slug, batch, start))
@@ -13,7 +11,7 @@ module Clients
 
         break if last_page?(results, batch)
 
-        next_page!(batch)
+        start += batch
       end
     end
 
@@ -24,10 +22,6 @@ module Clients
 
     def last_page?(results, batch)
       results.length < batch
-    end
-
-    def next_page!(batch)
-      self.start = batch
     end
 
     def search_api_end_point(slug, batch, start)

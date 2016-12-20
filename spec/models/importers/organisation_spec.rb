@@ -41,14 +41,6 @@ RSpec.describe Importers::Organisation do
   }
 
   describe 'making API calls with HTTParty' do
-    it 'queries the search API with the organisation\'s slug' do
-      expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link,title,organisations&start=0'
-      allow(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response)
-      expect(HTTParty).to receive(:get).once.with(expected_url).and_return(two_content_items_response)
-
-      Importers::Organisation.new('MY-SLUG', batch: 99).run
-    end
-
     it 'queries the content item API with base path' do
       content_api_url_with_base_path_1 = 'https://www.gov.uk/api/content/item/1/path'
       content_api_url_with_base_path_2 = 'https://www.gov.uk/api/content/item/2/path'
@@ -58,7 +50,7 @@ RSpec.describe Importers::Organisation do
       expect(HTTParty).to receive(:get).once.with(content_api_url_with_base_path_1).and_return(content_item_response)
       expect(HTTParty).to receive(:get).once.with(content_api_url_with_base_path_2).and_return(content_item_response)
 
-      Importers::Organisation.new('MY-SLUG', batch: 99).run
+      Importers::Organisation.new('MY-SLUG').run
     end
   end
 
@@ -226,33 +218,6 @@ RSpec.describe Importers::Organisation do
 
         expect(document_type).to eq('guidance')
       end
-    end
-  end
-
-  context 'Pagination' do
-    before { allow(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response) }
-
-    it 'paginates through all the content items for an organisation' do
-      another_content_item = {
-        content_id: 'content-id-3',
-        link: '/item/3/path',
-        title: 'title-3',
-        organisations: [{ title: 'a-title' }],
-      }
-      expect(HTTParty).to receive(:get).twice.with(search_api_url_pattern).and_return(two_content_items_response, build_search_api_response([another_content_item]))
-
-      Importers::Organisation.new('a-slug', batch: 2).run
-      organisation = Organisation.find_by(slug: 'a-slug')
-
-      expect(organisation.content_items.count).to eq(3)
-    end
-
-    it 'handles last page with 0 results when organisation already has content items' do
-      expect(HTTParty).to receive(:get).exactly(3).times.and_return(one_content_item_response, build_search_api_response([]))
-      Importers::Organisation.new('a-slug', batch: 1).run
-      organisation = Organisation.find_by(slug: 'a-slug')
-
-      expect(organisation.content_items.count).to eq(1)
     end
   end
 

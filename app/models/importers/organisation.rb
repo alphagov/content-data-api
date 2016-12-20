@@ -1,17 +1,14 @@
 class Importers::Organisation
-  attr_reader :slug, :batch, :start
-  attr_writer :start
+  attr_reader :slug
 
-  def initialize(slug, batch: 10, start: 0)
+  def initialize(slug)
     @slug = slug
-    @batch = batch
-    @start = start
   end
 
   def run
     @organisation = ::Organisation.find_or_create_by(slug: slug)
 
-    Clients::SearchAPI.new.fetch(slug, batch: batch, start: start) do |content_item_attributes|
+    Clients::SearchAPI.new.fetch(slug) do |content_item_attributes|
       organisation_title = get_organisation_titles(content_item_attributes)
 
       if @organisation.title.blank?
