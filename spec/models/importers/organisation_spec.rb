@@ -243,7 +243,7 @@ RSpec.describe Importers::Organisation do
         content_item = organisation.content_items.first
 
         expect(content_item.content_id).to eq('content-id-1')
-        expect(content_item.public_updated_at).to eq(Time.parse('2016-11-01 11:20:45.481868'))
+        expect(content_item.public_updated_at).to eq(Time.zone.parse('2016-11-01 11:20:45.481868'))
       end
 
       it 'imports a `document_type` for every content item' do
