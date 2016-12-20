@@ -68,5 +68,14 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
       expect(rendered).to have_link('Last Updated', href: href)
     end
+
+    it 'has a link to the content item details page' do
+      render
+
+      expect(rendered).to have_link('View detail', href: organisation_content_item_path(
+        organisation_id: organisation.id,
+        id: content_items.first.id,
+        ))
+    end
   end
 end
