@@ -53,4 +53,17 @@ RSpec.describe ContentItemsController, type: :controller do
       end
     end
   end
+
+  describe "GET #show" do
+    context "find by content item" do
+      let(:organisation) { create(:organisation_with_content_items, content_items_count: 2) }
+      let(:content_item) { build(:content_item, id: 1) }
+
+      it "returns http success" do
+        get :show, params: { organisation_id: organisation, id: content_item.id }
+
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
 end
