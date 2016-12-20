@@ -11,7 +11,13 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_selector('h1', text: 'A Title')
   end
 
-  xit 'renders the url of the content item'
+  it 'renders the url of the content item' do
+    content_item.link = '/content/1/path'
+    assign(:content_item, content_item)
+    render
+
+    expect(rendered).to have_link("Page on GOV.UK", href: 'https://gov.uk/content/1/path')
+  end
 
   xit 'renders the document type of the content item'
 
