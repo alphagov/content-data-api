@@ -25,10 +25,10 @@ class Importers::Organisation
         link = content_item_attributes['link']
 
         if content_id.present?
-          content_store_item = content_item_store(link)
+          content_store_attributes = Clients::ContentStore.new.fetch(link, CONTENT_STORE_FIELDS)
 
           attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
-            .merge(content_store_item.slice(*CONTENT_STORE_FIELDS))
+            .merge(content_store_attributes)
 
           create_or_update_content_item(content_id, attributes)
         else
@@ -72,11 +72,6 @@ private
     "https://www.gov.uk/api/search.json?filter_organisations=#{slug}&count=#{batch}&fields=#{SEARCH_API_FIELDS.join(',')}&start=#{start}"
   end
 
-  def content_item_store(base_path)
-    endpoint = content_item_end_point(base_path)
-    response = HTTParty.get(endpoint)
-    JSON.parse(response.body)
-  end
 
   def content_item_end_point(base_path)
     "https://www.gov.uk/api/content#{base_path}"
