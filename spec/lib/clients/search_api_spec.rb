@@ -39,7 +39,8 @@ RSpec.describe Clients::SearchAPI do
       expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,description,link,title,organisations&start=0'
       expect(HTTParty).to receive(:get).once.with(expected_url).and_return(empty_response)
 
-      subject.fetch('MY-SLUG', batch: 99) {}
+      allow(subject).to receive(:batch_size).and_return(99)
+      subject.find_each('MY-SLUG') {}
     end
   end
 
@@ -56,14 +57,16 @@ RSpec.describe Clients::SearchAPI do
       }.to_json)
 
       expect(HTTParty).to receive(:get).twice.and_return(two_content_items, another_content_item)
+      allow(subject).to receive(:batch_size).and_return(2)
 
-      expect { |b| subject.fetch('a-slug', batch: 2, &b) }.to yield_control.exactly(3).times
+      expect { |b| subject.find_each('a-slug', &b) }.to yield_control.exactly(3).times
     end
 
     it 'handles last page with 0 results when organisation already has content items' do
       expect(HTTParty).to receive(:get).exactly(2).times.and_return(one_content_item, empty_response)
+      allow(subject).to receive(:batch_size).and_return(1)
 
-      expect { |b| subject.fetch('a-slug', batch: 1, &b) }.to yield_control.exactly(1).times
+      expect { |b| subject.find_each('a-slug', &b) }.to yield_control.exactly(1).times
     end
   end
 end

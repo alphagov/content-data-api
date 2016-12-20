@@ -8,7 +8,7 @@ class Importers::Organisation
   def run
     @organisation = ::Organisation.find_or_create_by(slug: slug)
 
-    Clients::SearchAPI.new.fetch(slug) do |content_item_attributes|
+    Collectors::ContentItems.new.find_each(slug) do |content_item_attributes|
       organisation_title = get_organisation_titles(content_item_attributes)
 
       if @organisation.title.blank?
