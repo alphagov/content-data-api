@@ -21,7 +21,13 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_link("Page on GOV.UK", href: 'https://gov.uk/content/1/path')
   end
 
-  xit 'renders the document type'
+  it 'renders the document type' do
+    content_item.document_type = 'guidance'
+    render
+
+    expect(rendered).to have_text('Document type')
+    expect(rendered).to have_text('guidance')
+  end
 
   xit 'renders the last updated date'
 end
