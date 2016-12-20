@@ -37,9 +37,9 @@ RSpec.describe Clients::SearchAPI do
   describe 'making API calls with HTTParty' do
     it 'queries the search API with the organisation\'s slug' do
       expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,description,link,title,organisations&start=0'
-      expect(HTTParty).to receive(:get).once.with(expected_url).and_return(two_content_items)
+      expect(HTTParty).to receive(:get).once.with(expected_url).and_return(empty_response)
 
-      subject.fetch('MY-SLUG', batch: 99, start: 0) {}
+      subject.fetch('MY-SLUG', batch: 99) {}
     end
   end
 
@@ -57,13 +57,13 @@ RSpec.describe Clients::SearchAPI do
 
       expect(HTTParty).to receive(:get).twice.and_return(two_content_items, another_content_item)
 
-      expect { |b| subject.fetch('a-slug', batch: 2, start: 0, &b) }.to yield_control.exactly(3).times
+      expect { |b| subject.fetch('a-slug', batch: 2, &b) }.to yield_control.exactly(3).times
     end
 
     it 'handles last page with 0 results when organisation already has content items' do
       expect(HTTParty).to receive(:get).exactly(2).times.and_return(one_content_item, empty_response)
 
-      expect { |b| subject.fetch('a-slug', batch: 1, start: 0, &b) }.to yield_control.exactly(1).times
+      expect { |b| subject.fetch('a-slug', batch: 1, &b) }.to yield_control.exactly(1).times
     end
   end
 end
