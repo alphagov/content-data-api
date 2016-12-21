@@ -49,4 +49,12 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_text('Organisation')
     expect(rendered).to have_text('An Organisation')
   end
+
+  it 'renders the description of the content item' do
+    content_item.description = 'The description of a content item'
+    render
+
+    expect(rendered).to have_text('Description')
+    expect(rendered).to have_text('The description of a content item')
+  end
 end
