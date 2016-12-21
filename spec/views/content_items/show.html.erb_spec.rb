@@ -18,7 +18,8 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     content_item.link = '/content/1/path'
     render
 
-    expect(rendered).to have_link("Page on GOV.UK", href: 'https://gov.uk/content/1/path')
+    expect(rendered).to have_text('Page on GOV.UK')
+    expect(rendered).to have_link('https://gov.uk/content/1/path', href: 'https://gov.uk/content/1/path')
   end
 
   it 'renders the document type' do
