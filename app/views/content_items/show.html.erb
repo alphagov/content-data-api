@@ -1,7 +1,22 @@
 <h1><%= @content_item.title %></h1>
 
-<%= link_to "Page on GOV.UK", @content_item.url %>
-<br>
-Document type: <%= @content_item.document_type %>
-<br>
-Last updated:  <%= time_ago_in_words(@content_item.public_updated_at) %> ago
+<div class="data">
+   <span class="data-item bold-medium">Page on GOV.UK</span>
+   <span class="data-item font-medium"><%= link_to @content_item.url, @content_item.url %></span>
+</div>
+
+<p>
+<div class="grid-row">
+  <div class="column-one-half">
+    <div class="data">
+       <span class="data-item bold-medium">Document type</span>
+       <span class="data-item font-large"><%= @content_item.document_type %></span>
+    </div>
+  </div>
+  <div class="column-one-half">
+    <div class="data">
+     <span class="data-item bold-medium">Last updated</span>
+     <span class="data-item font-large"><%= time_ago_in_words(@content_item.public_updated_at) %> ago</span>
+    </div>
+  </div>
+</div>
