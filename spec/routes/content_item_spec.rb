@@ -11,5 +11,16 @@ RSpec.describe ContentItemsController, type: :routing do
           organisation_id: '1'
         )
     end
+
+    it 'routes to #show' do
+      expect(get: organisation_content_item_path(organisation_id: 1, id: 1)).to be_routable
+      expect(get: organisation_content_item_path(organisation_id: 1, id: 1))
+        .to route_to(
+          controller: 'content_items',
+          action: 'show',
+          organisation_id: '1',
+          id: '1',
+        )
+    end
   end
 end
