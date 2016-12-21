@@ -1,6 +1,11 @@
 <h1><%= @content_item.title %></h1>
 
 <div class="data">
+   <span class="data-item bold-medium">Description</span>
+   <span class="data-item font-medium"><%= @content_item.description %></span>
+</div>
+
+<div class="data">
    <span class="data-item bold-medium">Page on GOV.UK</span>
    <span class="data-item font-medium"><%= link_to @content_item.url, @content_item.url %></span>
 </div>

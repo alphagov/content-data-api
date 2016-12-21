@@ -38,4 +38,13 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_text('Last updated')
     expect(rendered).to have_text('2 months ago')
   end
+
+  it 'renders the description of the content item' do
+    content_item.description = 'The description of a content item'
+    assign(:content_item, content_item)
+    render
+
+    expect(rendered).to have_text('Description')
+    expect(rendered).to have_text('The description of a content item')
+  end
 end
