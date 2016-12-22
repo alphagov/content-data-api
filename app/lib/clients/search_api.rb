@@ -7,7 +7,7 @@ module Clients
         response = HTTParty.get(search_api_end_point(query_params, fields, start))
         results = JSON.parse(response.body).fetch('results')
 
-        results.each { |result| yield result }
+        results.each { |result| yield result.slice(*fields).symbolize_keys }
 
         break if last_page?(results)
 
