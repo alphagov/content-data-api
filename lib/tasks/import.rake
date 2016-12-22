@@ -8,6 +8,6 @@ namespace :import do
 
   desc 'Import all organisations'
   task all_organisations: :environment do
-    Importers::Organisations.new.import_all
+    Importers::AllOrganisations.new.run
   end
 end

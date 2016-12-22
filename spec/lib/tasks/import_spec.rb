@@ -26,7 +26,7 @@ RSpec.describe 'Import organisation rake task' do
     end
 
     it 'runs the process to import all organisations' do
-      expect_any_instance_of(Importers::Organisations).to receive(:import_all)
+      expect_any_instance_of(Importers::AllOrganisations).to receive(:run)
 
       Rake::Task['import:all_organisations'].invoke('a_slug')
     end
