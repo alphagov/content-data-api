@@ -2,9 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'content_items/show.html.erb', type: :view do
   let(:content_item) { build(:content_item) }
+  let(:organisation) { build(:organisation) }
 
   before do
     assign(:content_item, content_item)
+    assign(:organisation, organisation)
   end
 
   it 'renders the title' do
@@ -38,5 +40,13 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
 
     expect(rendered).to have_text('Last updated')
     expect(rendered).to have_text('2 months ago')
+  end
+
+  it 'renders the organisation name' do
+    organisation.title = 'An Organisation'
+    render
+
+    expect(rendered).to have_text('Organisation')
+    expect(rendered).to have_text('An Organisation')
   end
 end

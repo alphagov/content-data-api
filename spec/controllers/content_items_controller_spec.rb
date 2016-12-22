@@ -70,6 +70,10 @@ RSpec.describe ContentItemsController, type: :controller do
         expect(assigns(:content_item)).to eq(organisation.content_items.first)
       end
 
+      it "assigns current organisation" do
+        expect(assigns(:organisation)).to eq(organisation)
+      end
+
       it "renders the :show template" do
         expect(subject).to render_template(:show)
       end

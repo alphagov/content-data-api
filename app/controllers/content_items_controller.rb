@@ -6,5 +6,6 @@ class ContentItemsController < ApplicationController
 
   def show
     @content_item = ContentItem.find(params[:id])
+    @organisation = Organisation.find(params[:organisation_id])
   end
 end
