@@ -15,6 +15,13 @@ module Services
       @client
     end
 
+    def page_views(base_path)
+      request_body = build_page_views_body(base_path)
+      response = client.batch_get_reports(request_body)
+
+      response.reports[0].data.rows[0].metrics[0].values[0].to_i
+    end
+
     def build_page_views_body(base_path, start_date: "7daysAgo", end_date: "today")
       GetReportsRequest.new.tap do |reports|
         reports.report_requests = Array.new.push(
