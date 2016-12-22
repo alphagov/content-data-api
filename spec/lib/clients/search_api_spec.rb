@@ -34,6 +34,18 @@ RSpec.describe Clients::SearchAPI do
     double(body: { results: [] }.to_json)
   }
 
+  describe 'symbolized attributes' do
+    let(:response) { double(body: { results: [{ 'title' => 'title-1', 'link' => 'a-link' }] }.to_json) }
+
+    it 'return the requested attributes symbolized' do
+      allow(HTTParty).to receive(:get).and_return(response)
+
+      subject.find_each({ param: :value1 }, %w(title)) do |attributes|
+        expect(attributes).to eq(title: 'title-1')
+      end
+    end
+  end
+
   describe 'making API calls with HTTParty' do
     it 'queries the search API with the organisation\'s slug' do
       expected_url = 'https://www.gov.uk/api/search.json?param=value1&fields=field1%2Cfield2&count=99&start=0'

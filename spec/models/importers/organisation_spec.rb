@@ -176,7 +176,10 @@ RSpec.describe Importers::Organisation do
     end
 
     describe 'Fields ' do
-      before { allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(one_content_item_response) }
+      before do
+        allow(HTTParty).to receive(:get).with(search_api_url_pattern).and_return(one_content_item_response)
+        expect(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response)
+      end
 
       it 'imports a `content_id` for every content item' do
         Importers::Organisation.new('a-slug').run

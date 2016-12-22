@@ -15,8 +15,8 @@ class Importers::Organisation
         add_organisation_title(organisation_title)
       end
 
-      content_id = content_item_attributes['content_id']
-      link = content_item_attributes['link']
+      content_id = content_item_attributes[:content_id]
+      link = content_item_attributes[:link]
 
       if content_id.present?
         content_store_attributes = Clients::ContentStore.new.fetch(link, CONTENT_STORE_FIELDS)
@@ -38,8 +38,8 @@ class Importers::Organisation
 
 private
 
-  CONTENT_ITEM_FIELDS = %w(content_id description link title).freeze
-  CONTENT_STORE_FIELDS = %w(public_updated_at document_type).freeze
+  CONTENT_ITEM_FIELDS = %i(content_id description link title).freeze
+  CONTENT_STORE_FIELDS = %i(public_updated_at document_type).freeze
 
   private_constant :CONTENT_ITEM_FIELDS
 
@@ -54,7 +54,7 @@ private
   end
 
   def get_organisation_titles(attributes)
-    attributes['organisations'].first['title']
+    attributes[:organisations].first['title']
   end
 
   def create_or_update_content_item(content_id, attributes)

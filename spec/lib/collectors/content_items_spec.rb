@@ -9,7 +9,7 @@ RSpec.describe Collectors::ContentItems do
       subject.find_each('organisation-slug') {}
     end
     it 'queries the search API by organisation' do
-      expected_fields = %w(content_id link title organisations)
+      expected_fields = %w(content_id description link title organisations)
       expect_any_instance_of(Clients::SearchAPI).to receive(:find_each).with(an_instance_of(Hash), expected_fields)
 
       subject.find_each('organisation-slug') {}
