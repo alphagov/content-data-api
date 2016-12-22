@@ -75,6 +75,28 @@ RSpec.describe Services::GoogleAnalytics do
         }.with_indifferent_access
       end
 
+      let(:page_views_response) do
+        Google::Apis::AnalyticsreportingV4::GetReportsResponse.new(
+          reports: [
+            Google::Apis::AnalyticsreportingV4::Report.new(
+              data: Google::Apis::AnalyticsreportingV4::ReportData.new(
+                rows: [
+                  Google::Apis::AnalyticsreportingV4::ReportRow.new(
+                    metrics: [
+                      Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
+                        values: [
+                          "400"
+                        ]
+                      )
+                    ]
+                  )
+                ]
+              )
+            )
+          ]
+        )
+      end
+
       before do
         @cpm_govuk_view_id = ENV["CPM_GOVUK_VIEW_ID"]
         ENV["CPM_GOVUK_VIEW_ID"] = "12345678"
@@ -85,6 +107,14 @@ RSpec.describe Services::GoogleAnalytics do
       end
 
       subject { Services::GoogleAnalytics.new }
+
+      it "returns the number of page views for a content item" do
+        allow(subject.client)
+          .to receive(:batch_get_reports).and_return(page_views_response)
+        page_views = subject.page_views("/check-uk-visa")
+
+        expect(page_views).to eq(400)
+      end
 
       it "builds the requests body with default arguments" do
         built_request = subject.
