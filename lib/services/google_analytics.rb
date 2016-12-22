@@ -14,5 +14,25 @@ module Services
       )
       @client
     end
+
+    def build_page_views_body(base_path, start_date: "7daysAgo", end_date: "today")
+      GetReportsRequest.new.tap do |reports|
+        reports.report_requests = Array.new.push(
+          ReportRequest.new.tap do |request|
+            request.metrics = Array.new.push(
+              Metric.new.tap { |metric| metric.expression = "ga:pageViews" }
+            )
+            request.view_id = ENV["CPM_GOVUK_VIEW_ID"]
+            request.filters_expression = "ga:pagePath==#{base_path}"
+            request.date_ranges = Array.new.push(
+              DateRange.new.tap do |date_range|
+                date_range.start_date = start_date
+                date_range.end_date = end_date
+              end
+            )
+          end
+        )
+      end
+    end
   end
 end
