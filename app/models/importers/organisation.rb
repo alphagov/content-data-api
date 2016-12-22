@@ -9,12 +9,6 @@ class Importers::Organisation
     @organisation = ::Organisation.find_or_create_by(slug: slug)
 
     Collectors::ContentItems.new.find_each(slug) do |content_item_attributes|
-      organisation_title = get_organisation_titles(content_item_attributes)
-
-      if @organisation.title.blank?
-        add_organisation_title(organisation_title)
-      end
-
       content_id = content_item_attributes[:content_id]
       link = content_item_attributes[:link]
 
@@ -53,13 +47,8 @@ private
     end
   end
 
-  def get_organisation_titles(attributes)
-    attributes[:organisations].first['title']
-  end
-
   def create_or_update_content_item(content_id, attributes)
     content_item = @organisation.content_items.find_by(content_id: content_id)
-
     if content_item.blank?
       create_content_item(attributes)
     else
