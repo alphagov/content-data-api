@@ -38,6 +38,7 @@ gem 'govuk_elements_rails'
 
 gem 'httparty'
 gem 'kaminari', '~> 0.17.0'
+gem 'google-api-client', '~> 0.9'
 
 
 group :development, :test do
