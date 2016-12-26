@@ -13,6 +13,6 @@ RSpec.describe Clients::ContentStore do
     response = double(body: { param1: :value1, param2: :value2 }.to_json)
     expect(HTTParty).to receive(:get).and_return(response)
 
-    expect(subject.fetch('/the-path', ['param2'])).to eq('param2' => 'value2')
+    expect(subject.fetch('/the-path', %i(param2))).to eq(param2: 'value2')
   end
 end

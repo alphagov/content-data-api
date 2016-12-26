@@ -2,7 +2,7 @@ module Clients
   class ContentStore
     def fetch(path, attributes)
       response = HTTParty.get(end_point(path))
-      content_item = JSON.parse(response.body).with_indifferent_access
+      content_item = JSON.parse(response.body).symbolize_keys
 
       content_item.slice(*attributes)
     end
