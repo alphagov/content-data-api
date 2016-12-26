@@ -6,7 +6,7 @@ module Collectors
       query_params = { filter_organisations: organisation_slug }
       fields = %w(link)
 
-      Clients::SearchAPI.new.find_each(query_params, fields) do |attributes|
+      Clients::SearchAPI.find_each(query_params, fields) do |attributes|
         link = attributes.fetch(:link)
         content_item_attributes = %i(content_id title public_updated_at document_type link)
 
