@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Collectors::ContentItems do
+RSpec.describe ContentItemsService do
   describe '#find_each' do
     before do
       allow(Clients::ContentStore).to receive(:find)

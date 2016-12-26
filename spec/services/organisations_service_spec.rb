@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Collectors::Organisations do
+RSpec.describe OrganisationsService do
   describe '#find_each' do
     it 'queries the search API by organisation' do
       expected_params = { filter_format: 'organisation' }
