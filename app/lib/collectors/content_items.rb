@@ -10,7 +10,7 @@ module Collectors
         link = attributes.fetch(:link)
         content_item_attributes = %i(content_id title public_updated_at document_type link)
 
-        yield Clients::ContentStore.new.fetch(link, content_item_attributes)
+        yield Clients::ContentStore.find(link, content_item_attributes)
       end
     end
   end

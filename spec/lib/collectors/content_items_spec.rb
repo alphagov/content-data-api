@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Collectors::ContentItems do
   describe '#find_each' do
     before do
-      allow_any_instance_of(Clients::ContentStore).to receive(:fetch)
+      allow(Clients::ContentStore).to receive(:find)
       allow_any_instance_of(Clients::SearchAPI).to receive(:find_each)
     end
 
@@ -22,7 +22,7 @@ RSpec.describe Collectors::ContentItems do
     it 'yields the content items' do
       result = []
       allow_any_instance_of(Clients::SearchAPI).to receive(:find_each).and_yield(link: :link1)
-      allow_any_instance_of(Clients::ContentStore).to receive(:fetch).and_return(:a)
+      allow(Clients::ContentStore).to receive(:find).and_return(:a)
       subject.find_each('organisation-slug') { |value| result << value }
 
       expect(result).to eq([:a])
@@ -30,7 +30,7 @@ RSpec.describe Collectors::ContentItems do
     it 'retrieves attributes from the content store' do
       allow_any_instance_of(Clients::SearchAPI).to receive(:find_each).and_yield(link: :link1)
       expected_attributes = %i(content_id title public_updated_at document_type link)
-      expect_any_instance_of(Clients::ContentStore).to receive(:fetch).with(:link1, expected_attributes).and_return(:a)
+      expect(Clients::ContentStore).to receive(:find).with(:link1, expected_attributes).and_return(:a)
 
       subject.find_each('organisation-slug') {}
     end
