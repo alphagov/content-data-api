@@ -8,14 +8,14 @@ RSpec.describe Importers::ContentItemsByOrganisation do
       it 'creates a content item per attribute group from collector' do
         attrs1 = FactoryGirl.attributes_for(:content_item)
         attrs2 = FactoryGirl.attributes_for(:content_item)
-        allow_any_instance_of(Collectors::ContentItems).to receive(:find_each).with('the-slug').and_yield(attrs1).and_yield(attrs2)
+        allow_any_instance_of(ContentItemsService).to receive(:find_each).with('the-slug').and_yield(attrs1).and_yield(attrs2)
 
         expect { subject.run('the-slug') }.to change { ContentItem.count }.by(2)
       end
 
       it 'assign the new attributes' do
         attrs1 = FactoryGirl.attributes_for(:content_item, link: 'the-link-value', title: 'the-title')
-        allow_any_instance_of(Collectors::ContentItems).to receive(:find_each).and_yield(attrs1)
+        allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attrs1)
         subject.run('the-slug')
 
         attributes = ContentItem.find_by(link: 'the-link-value').attributes.symbolize_keys
@@ -28,7 +28,7 @@ RSpec.describe Importers::ContentItemsByOrganisation do
 
       it 'does not create a new one' do
         attributes = { content_id: content_item.content_id, link: 'the-link' }
-        allow_any_instance_of(Collectors::ContentItems).to receive(:find_each).and_yield(attributes)
+        allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
 
         expect { subject.run('the-slug') }.to change { ContentItem.count }.by(0)
       end
@@ -36,7 +36,7 @@ RSpec.describe Importers::ContentItemsByOrganisation do
       it 'update the attributes' do
         content_item.update(title: 'old-title')
         attributes = { content_id: content_item.content_id, title: 'the-new-title' }
-        allow_any_instance_of(Collectors::ContentItems).to receive(:find_each).and_yield(attributes)
+        allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
 
         subject.run('the-slug')
 
