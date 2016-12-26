@@ -1,9 +1,9 @@
 namespace :import do
-  desc 'Import an organisation\'s details and content items'
-  task :organisation, [:slug] => :environment do |_, args|
+  desc 'Import all the content items belonging to an organisation'
+  task :content_items_by_organisation, [:slug] => :environment do |_, args|
     raise 'Missing slug parameter' unless args.slug
 
-    Importers::Organisation.new(args.slug).run
+    Importers::ContentItemsByOrganisation.new.run(args.slug)
   end
 
   desc 'Import all organisations'

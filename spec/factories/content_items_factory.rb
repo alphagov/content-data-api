@@ -1,6 +1,8 @@
 FactoryGirl.define do
   factory :content_item do
-    sequence(:content_id) { |index| "7776ddf3-f918-5f32-bf18-dc1ced2eeeb#{index}" }
+    sequence(:content_id) { |index| "content-id-#{index}" }
+    sequence(:title) { |index| "title-#{index}" }
+    sequence(:document_type) { |index| "document_type-#{index}" }
     link "api/content/item/path"
     public_updated_at { Time.now }
   end

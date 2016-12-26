@@ -4,10 +4,13 @@ module Collectors
       raise 'missing block!' unless block_given?
 
       query_params = { filter_organisations: organisation_slug }
-      fields = %w(content_id link title organisations)
+      fields = %w(link)
 
       Clients::SearchAPI.new.find_each(query_params, fields) do |attributes|
-        yield attributes
+        link = attributes.fetch(:link)
+        content_item_attributes = %i(content_id title public_updated_at document_type link)
+
+        yield Clients::ContentStore.new.fetch(link, content_item_attributes)
       end
     end
   end
