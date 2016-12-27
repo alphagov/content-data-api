@@ -7,7 +7,7 @@ class ContentItemsService
 
     Clients::SearchAPI.find_each(query_params, fields) do |attributes|
       link = attributes.fetch(:link)
-      content_item_attributes = %i(content_id title public_updated_at document_type link)
+      content_item_attributes = %i(content_id description title public_updated_at document_type link)
 
       yield Clients::ContentStore.find(link, content_item_attributes)
     end
