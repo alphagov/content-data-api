@@ -1,17 +1,16 @@
 module Clients
   class SearchAPI
     class << self
-      def find_each(query_params, fields)
+      def find_each(query, fields)
         start = 0
 
         loop do
-          response = HTTParty.get(search_api_end_point(query_params, fields, start))
-          results = JSON.parse(response.body).fetch('results')
+          response = HTTParty.get(end_point(query, fields, start)).body
+          results = JSON.parse(response).fetch('results')
 
           results.each { |result| yield result.slice(*fields).symbolize_keys }
 
           break if last_page?(results)
-
           start += batch_size
         end
       end
@@ -26,15 +25,16 @@ module Clients
         results.length < batch_size
       end
 
-      def search_api_end_point(query, fields, start)
-        query.merge!(
-          fields: fields.join(','),
-          count: batch_size,
-          start: start,
-        )
-        params = Rack::Utils.build_query(query)
+      def end_point(query, fields, start)
+        "https://www.gov.uk/api/search.json?#{query_string(fields, query, start)}"
+      end
 
-        "https://www.gov.uk/api/search.json?#{params}"
+      def query_string(fields, query, start)
+        query[:fields] = fields.join(',')
+        query[:count] = batch_size
+        query[:start] = start
+
+        Rack::Utils.build_query(query)
       end
     end
   end
