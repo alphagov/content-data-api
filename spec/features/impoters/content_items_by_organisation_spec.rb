@@ -1,42 +1,30 @@
 require 'rails_helper'
 
-RSpec.feature "Import all the content items for an organisation", type: :feature do
-  let!(:organisation) { create(:organisation, slug: 'a_slug') }
-
-  let(:two_content_items_for_an_organisation) {
-    double(body: {
-      results: [
-        {
-          link: '/link-1',
-        },
-        {
-          link: '/link-2',
-        }
-      ]
-    }.to_json)
-  }
-
+RSpec.feature 'rake import:organisation[{department-slug}]', type: :feature do
+  let(:search_api_response) { double(body: { results: [{ link: '/link-1' }, { link: '/link-2' }] }.to_json) }
   let(:content_item_1) { double(body: attributes_for(:content_item, link: '/link-1').to_json) }
   let(:content_item_2) { double(body: attributes_for(:content_item, link: '/link-2').to_json) }
 
   before do
     Rake::Task['import:content_items_by_organisation'].reenable
 
-    allow(HTTParty).to receive(:get).with(/https:\/\/www.gov.uk\/api\/search/).and_return(two_content_items_for_an_organisation)
-    allow(HTTParty).to receive(:get).with('https://www.gov.uk/api/content/link-1').and_return(content_item_1)
-    allow(HTTParty).to receive(:get).with('https://www.gov.uk/api/content/link-2').and_return(content_item_2)
+    create(:organisation, slug: 'the-organisation-slug')
   end
 
-  it 'creates two organisations' do
-    expect { Rake::Task['import:content_items_by_organisation'].invoke('a_slug') }.to change { ContentItem.count }.by(2)
+  subject { Rake::Task['import:content_items_by_organisation'].invoke('the-organisation-slug') }
+
+  it 'creates all the content items belonging to an organisation' do
+    allow(HTTParty).to receive(:get).and_return(search_api_response, content_item_1, content_item_2)
+
+    expect { subject }.to change { ContentItem.count }.by(2)
   end
 
-  it 'updates the attributes' do
-    Rake::Task['import:content_items_by_organisation'].invoke('a_slug')
+  it 'saves the content item attributes' do
+    content_item_1 = double(body: attributes_for(:content_item, link: '/link-1', title: 'new-title').to_json)
+    allow(HTTParty).to receive(:get).and_return(search_api_response, content_item_1)
+    subject
 
-    content_item = ContentItem.first
-    expected_attributes = JSON.parse(content_item_1.body)
-    expect(content_item.title).to include(expected_attributes['title'])
-    expect(content_item.link).to include(expected_attributes['link'])
+    content_item = ContentItem.find_by(link: '/link-1')
+    expect(content_item.title).to include('new-title')
   end
 end

@@ -1,17 +1,11 @@
 require 'rails_helper'
 
-RSpec.feature "Import all organisations", type: :feature do
+RSpec.feature 'rake import:all_organisations', type: :feature do
   let(:two_organisations) {
     double(body: {
       results: [
-        {
-          slug: 'slug-1',
-          title: 'title-1',
-        },
-        {
-          slug: 'slug-2',
-          title: 'title-2',
-        }
+        { slug: 'slug-1', title: 'title-1' },
+        { slug: 'slug-2', title: 'title-2' }
       ]
     }.to_json)
   }
@@ -22,14 +16,14 @@ RSpec.feature "Import all organisations", type: :feature do
     allow(HTTParty).to receive(:get).and_return(two_organisations)
   end
 
-  it 'creates two organisations' do
+  it 'creates all organisations' do
     expect { Rake::Task['import:all_organisations'].invoke('a_slug') }.to change { Organisation.count }.by(2)
   end
 
-  it 'import the organisation attributes' do
-    Rake::Task['import:all_organisations'].invoke('a_slug')
+  it 'saves an organisation attributes' do
+    Rake::Task['import:all_organisations'].invoke
 
-    organisation = Organisation.first
+    organisation = Organisation.find_by(slug: 'slug-1')
     expect(organisation.title).to eq('title-1')
     expect(organisation.slug).to eq('slug-1')
   end
