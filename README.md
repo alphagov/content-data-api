@@ -32,11 +32,17 @@ In the browser navigate to:
 
 ### Importing data
 
+* To import all organisations:
+
 ```bash
-$ rake import:organisation[{department-slug}]
+$ rake import:all_organisations
 ```
 
-Every time you add a new field to the database, you need to delete the existing organisations, and then re-import them.
+* To create or update the content items for an existing organisation:
+
+```bash
+$ rake import:content_items_by_organisation[{department-slug}]
+```
 
 ### Deployment to Heroku
 
