@@ -1,7 +1,7 @@
 module Clients
   class SearchAPI
     class << self
-      def find_each(query, fields)
+      def find_each(query:, fields:)
         start = 0
 
         loop do
