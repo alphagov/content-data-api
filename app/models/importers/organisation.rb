@@ -29,6 +29,7 @@ class Importers::Organisation
 
           attributes = content_item_attributes.slice(*CONTENT_ITEM_FIELDS)
             .merge(content_store_item.slice(*CONTENT_STORE_FIELDS))
+            .merge(number_of_views(link))
 
           create_or_update_content_item(content_id, attributes)
         else
@@ -112,5 +113,10 @@ private
 
   def update_content_item(content_item, attributes)
     content_item.update!(attributes)
+  end
+
+  def number_of_views(base_path)
+    response = Services::GoogleAnalytics.new.page_views([base_path])
+    { number_of_views: response[base_path] }
   end
 end

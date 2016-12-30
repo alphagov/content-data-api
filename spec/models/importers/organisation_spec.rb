@@ -40,6 +40,16 @@ RSpec.describe Importers::Organisation do
     )
   }
 
+  before do
+    allow_any_instance_of(Services::GoogleAnalytics).to receive(:page_views)
+      .and_return(
+        {
+          '/item/1/path' => 1,
+          '/item/2/path' => 2
+        }.with_indifferent_access
+      )
+  end
+
   describe 'making API calls with HTTParty' do
     it 'queries the search API with the organisation\'s slug' do
       expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link,title,organisations&start=0'
@@ -251,6 +261,14 @@ RSpec.describe Importers::Organisation do
         document_type = content_items.pluck(:document_type).first
 
         expect(document_type).to eq('guidance')
+      end
+
+      it 'imports a `number_of_views` for every content item' do
+        Importers::Organisation.new('a-slug').run
+        content_items = Organisation.find_by(slug: 'a-slug').content_items
+        number_of_views = content_items.pluck(:number_of_views).first
+
+        expect(number_of_views).to eq(1)
       end
     end
   end
