@@ -10,6 +10,7 @@ RSpec.describe Importers::Organisation do
         content_id: 'content-id-1',
         link: '/item/1/path',
         title: 'title-1',
+        description: 'The description of a content item',
         organisations: [],
       }
     ]
@@ -42,7 +43,7 @@ RSpec.describe Importers::Organisation do
 
   describe 'making API calls with HTTParty' do
     it 'queries the search API with the organisation\'s slug' do
-      expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,link,title,organisations&start=0'
+      expected_url = 'https://www.gov.uk/api/search.json?filter_organisations=MY-SLUG&count=99&fields=content_id,description,link,title,organisations&start=0'
       allow(HTTParty).to receive(:get).with(content_items_api_url_pattern).and_return(content_item_response)
       expect(HTTParty).to receive(:get).once.with(expected_url).and_return(two_content_items_response)
 
@@ -251,6 +252,15 @@ RSpec.describe Importers::Organisation do
         document_type = content_items.pluck(:document_type).first
 
         expect(document_type).to eq('guidance')
+      end
+
+      it 'imports a `description` for every content item' do
+        Importers::Organisation.new('a-slug').run
+        organisation = Organisation.find_by(slug: 'a-slug')
+
+        description = organisation.content_items.pluck(:description)
+
+        expect(description).to eq(["The description of a content item"])
       end
     end
   end

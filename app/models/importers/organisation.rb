@@ -49,7 +49,7 @@ class Importers::Organisation
 
 private
 
-  CONTENT_ITEM_FIELDS = %w(content_id link title).freeze
+  CONTENT_ITEM_FIELDS = %w(content_id description link title).freeze
   CONTENT_STORE_FIELDS = %w(public_updated_at document_type).freeze
   SEARCH_API_FIELDS = CONTENT_ITEM_FIELDS + %w(organisations)
 
