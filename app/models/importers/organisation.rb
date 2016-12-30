@@ -1,11 +1,13 @@
 class Importers::Organisation
   attr_reader :slug, :batch, :start
   attr_writer :start
+  attr_accessor :logger
 
-  def initialize(slug, batch: 10, start: 0)
+  def initialize(slug, batch: 10, start: 0, logger: Rails.logger)
     @slug = slug
     @batch = batch
     @start = start
+    @logger = logger
   end
 
   def run
@@ -32,7 +34,7 @@ class Importers::Organisation
 
           create_or_update_content_item(content_id, attributes)
         else
-          log("There is not content_id for #{slug}")
+          logger.warn("There is not content_id for #{slug}")
         end
       end
 
@@ -83,9 +85,7 @@ private
   end
 
   def log(message)
-    unless Rails.env.test?
-      Logger.new(STDOUT).warn(message)
-    end
+    @logger.warn(message)
   end
 
   def get_organisation_titles(content_items)
