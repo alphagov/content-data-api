@@ -23,7 +23,7 @@ RSpec.describe ContentItemsService do
       allow(Clients::ContentStore).to receive(:find).and_return(:a)
       subject.find_each('organisation-slug') { |value| result << value }
 
-      expect(result).to eq([:a])
+      expect(result).to match_array([:a])
     end
 
     it 'raises an exception if no block is passed' do
