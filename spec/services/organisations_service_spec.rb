@@ -17,7 +17,7 @@ RSpec.describe OrganisationsService do
       allow(Clients::SearchAPI).to receive(:find_each).and_yield(:a).and_yield(:b)
       subject.find_each { |value| result << value }
 
-      expect(result).to eq([:a, :b])
+      expect(result).to match_array([:a, :b])
     end
 
     it 'raises an exception if no block passed' do
