@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Importers::AllOrganisations do
-  describe '#import_all' do
+  describe '#run' do
     context 'when the organisation does not exist' do
       it 'creates an organisation per attribute group' do
         attrs1 = { slug: 'a-slug-1', title: 'a-title-1' }
