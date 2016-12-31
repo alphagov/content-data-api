@@ -38,7 +38,7 @@ In the browser navigate to:
 $ rake import:all_organisations
 ```
 
-* To create or update the content items for an organisation:
+* To create or update the content items for an existing organisation:
 
 ```bash
 $ rake import:content_items_by_organisation[{department-slug}]
