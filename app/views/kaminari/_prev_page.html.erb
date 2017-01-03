@@ -6,6 +6,10 @@
     per_page:      number of items to fetch per page
     remote:        data-remote
 -%>
-<span class="prev">
-  <%= link_to_unless current_page.first?, t('views.pagination.previous').html_safe, url, :rel => 'prev', :remote => remote %> (<%= current_page - 1 %> of <%= total_pages %></span>)
-</span>
+
+<li class="previous-page">
+  <%= link_to url, :rel => 'prev', :remote => remote do %>
+    <span class="pagination-part-title">Previous</span>
+    <span class="pagination-label"><%= current_page - 1 %> of <%= total_pages %></span>
+  <% end %>
+</li>

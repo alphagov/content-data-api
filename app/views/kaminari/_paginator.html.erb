@@ -6,9 +6,21 @@
     remote:        data-remote
     paginator:     the paginator that renders the pagination tags inside
 -%>
-<%= paginator.render do -%>
-  <nav class="pagination">
-    <%= prev_page_tag unless current_page.first? %>
-    <%= next_page_tag unless current_page.last? %>
-  </nav>
-<% end -%>
+
+<%#
+when this app gets moved to slimmer,
+please use the ERB partial from Components instead of this markup and its associated files
+(see further comment in _previous-and-next-navigation.scss) */
+%>
+
+<nav
+  class="govuk-previous-and-next-navigation"
+  role="navigation"
+  aria-label="Pagination">
+  <%= paginator.render do -%>
+    <ul class="group">
+      <%= prev_page_tag unless current_page.first? %>
+      <%= next_page_tag unless current_page.last? %>
+    </ul>
+  <% end -%>
+</nav>
