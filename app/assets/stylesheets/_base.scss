@@ -31,6 +31,10 @@ main {
     @extend .list-number;
   }
 
+  table {
+    margin-bottom: $gutter;
+  }
+
   strong {
     @extend .bold;
   }
