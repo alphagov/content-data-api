@@ -17,7 +17,7 @@ RSpec.feature 'rake import:all_organisations', type: :feature do
   end
 
   it 'creates all organisations' do
-    expect { Rake::Task['import:all_organisations'].invoke('a_slug') }.to change { Organisation.count }.by(2)
+    expect { Rake::Task['import:all_organisations'].invoke }.to change { Organisation.count }.by(2)
   end
 
   it 'saves an organisation attributes' do
