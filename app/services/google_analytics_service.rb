@@ -5,13 +5,8 @@ class GoogleAnalyticsService
   include Google::Apis::AnalyticsreportingV4
   include Google::Auth
 
-  def client(scope: "https://www.googleapis.com/auth/analytics.readonly")
-    @client ||= AnalyticsReportingService.new
-    @client.authorization ||= ServiceAccountCredentials.make_creds(
-      json_key_io: File.open(ENV["GOOGLE_AUTH_CREDENTIALS"]),
-      scope: scope
-    )
-    @client
+  def client
+    @client ||= GoogleAnalytics::Client.new.build
   end
 
   def page_views(base_paths)

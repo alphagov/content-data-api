@@ -17,41 +17,6 @@ RSpec.describe GoogleAnalyticsService do
       ENV["GOOGLE_AUTH_CREDENTIALS"] = @google_auth_credentials
     end
 
-    it "uses version 4" do
-      expect(Google::Apis::AnalyticsreportingV4::VERSION).to eq("V4")
-    end
-
-    context "api client" do
-      subject { GoogleAnalyticsService.new.client }
-
-      it "is an instance of AnalyticsReportingService" do
-        expect(subject).to be_kind_of(Google::Apis::AnalyticsreportingV4::AnalyticsReportingService)
-      end
-    end
-
-    context "when setting up authorization" do
-      subject { GoogleAnalyticsService.new.client.authorization }
-
-      it "uses the given client email from the json key" do
-        expect(subject.issuer).to eq(json_key[:client_email])
-      end
-
-      it "uses the given private key the json key" do
-        expect(subject.signing_key).to eq(json_key[:private_key])
-      end
-
-      it "uses the given scope" do
-        options = { scope: "https://scope.com/analytics" }
-        auth = GoogleAnalyticsService.new.client(options).authorization
-
-        expect(auth.scope).to include("https://scope.com/analytics")
-      end
-
-      it "uses read only scope as default, when none is provided" do
-        expect(subject.scope).to include("https://www.googleapis.com/auth/analytics.readonly")
-      end
-    end
-
     context "pageViews report" do
       let(:page_views_request) do
         {
