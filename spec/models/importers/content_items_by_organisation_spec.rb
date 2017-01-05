@@ -3,6 +3,16 @@ require 'rails_helper'
 RSpec.describe Importers::ContentItemsByOrganisation do
   describe '#run' do
     let!(:organisation) { create(:organisation, slug: 'the-slug') }
+    let(:content_item) { create(:content_item, base_path: 'the-link', organisation: organisation) }
+
+    before do
+      allow_any_instance_of(Services::GoogleAnalytics).to receive(:page_views).and_return(
+        {
+          'the-link': 3,
+          'the-link/second': 2
+        }.with_indifferent_access
+      )
+    end
 
     context 'when the content item does not exist' do
       it 'creates a content item per attribute group' do
@@ -35,12 +45,23 @@ RSpec.describe Importers::ContentItemsByOrganisation do
 
       it 'updates the attributes' do
         content_item.update(title: 'old-title')
-        attributes = { content_id: content_item.content_id, title: 'the-new-title' }
+        attributes = { content_id: content_item.content_id, title: 'the-new-title', base_path: 'the-link' }
         allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
 
         subject.run('the-slug')
 
         expect(ContentItem.first.title).to eq('the-new-title')
+      end
+    end
+
+    context 'number of page views' do
+      it 'imports the `number_of_views` for every content item' do
+        attributes = { content_id: content_item.content_id, base_path: 'the-link' }
+        allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
+
+        subject.run('the-slug')
+
+        expect(ContentItem.first.number_of_views).to eq(3)
       end
     end
   end
