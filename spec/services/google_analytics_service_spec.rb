@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Services::GoogleAnalytics do
+RSpec.describe GoogleAnalyticsService do
   describe "interacting with Google Analytics Reporting API" do
     let(:json_key) { { client_email: "test@test.com", private_key: "key" } }
 
@@ -22,7 +22,7 @@ RSpec.describe Services::GoogleAnalytics do
     end
 
     context "api client" do
-      subject { Services::GoogleAnalytics.new.client }
+      subject { GoogleAnalyticsService.new.client }
 
       it "is an instance of AnalyticsReportingService" do
         expect(subject).to be_kind_of(Google::Apis::AnalyticsreportingV4::AnalyticsReportingService)
@@ -30,7 +30,7 @@ RSpec.describe Services::GoogleAnalytics do
     end
 
     context "when setting up authorization" do
-      subject { Services::GoogleAnalytics.new.client.authorization }
+      subject { GoogleAnalyticsService.new.client.authorization }
 
       it "uses the given client email from the json key" do
         expect(subject.issuer).to eq(json_key[:client_email])
@@ -42,7 +42,7 @@ RSpec.describe Services::GoogleAnalytics do
 
       it "uses the given scope" do
         options = { scope: "https://scope.com/analytics" }
-        auth = Services::GoogleAnalytics.new.client(options).authorization
+        auth = GoogleAnalyticsService.new.client(options).authorization
 
         expect(auth.scope).to include("https://scope.com/analytics")
       end
@@ -155,7 +155,7 @@ RSpec.describe Services::GoogleAnalytics do
         ENV["CPM_GOVUK_VIEW_ID"] = @cpm_govuk_view_id
       end
 
-      subject { Services::GoogleAnalytics.new }
+      subject { GoogleAnalyticsService.new }
 
       it "returns the number of page views for a content item" do
         base_path_views = { "/check-uk-visa" => 400 }.with_indifferent_access

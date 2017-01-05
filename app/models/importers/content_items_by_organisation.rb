@@ -19,7 +19,7 @@ module Importers
     end
 
     def number_of_views(base_path)
-      response = Services::GoogleAnalytics.new.page_views([base_path])
+      response = GoogleAnalyticsService.new.page_views([base_path])
       { number_of_views: response[base_path] }
     end
   end

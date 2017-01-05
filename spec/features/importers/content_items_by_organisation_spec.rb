@@ -6,7 +6,7 @@ RSpec.feature 'rake import:organisation[{department-slug}]', type: :feature do
   let(:content_item_2) { double(body: attributes_for(:content_item, base_path: '/link-2').to_json) }
 
   before do
-    allow_any_instance_of(Services::GoogleAnalytics).to receive(:page_views).and_return(
+    allow_any_instance_of(GoogleAnalyticsService).to receive(:page_views).and_return(
       {
         '/item/1/path': 1,
         '/item/2/path': 2

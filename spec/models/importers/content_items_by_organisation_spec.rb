@@ -6,7 +6,7 @@ RSpec.describe Importers::ContentItemsByOrganisation do
     let(:content_item) { create(:content_item, base_path: 'the-link', organisation: organisation) }
 
     before do
-      allow_any_instance_of(Services::GoogleAnalytics).to receive(:page_views).and_return(
+      allow_any_instance_of(GoogleAnalyticsService).to receive(:page_views).and_return(
         {
           'the-link': 3,
           'the-link/second': 2
