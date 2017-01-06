@@ -7,10 +7,16 @@ RSpec.describe Importers::ContentItemsByOrganisation do
 
     before do
       allow_any_instance_of(GoogleAnalyticsService).to receive(:page_views).and_return(
-        {
-          'the-link': 3,
-          'the-link/second': 2
-        }.with_indifferent_access
+        [
+          {
+            base_path: 'the-link',
+            page_views: 3,
+          },
+          {
+            base_path: 'the-link/second',
+            page_views: 2,
+          },
+        ]
       )
     end
 

@@ -7,10 +7,16 @@ RSpec.feature 'rake import:organisation[{department-slug}]', type: :feature do
 
   before do
     allow_any_instance_of(GoogleAnalyticsService).to receive(:page_views).and_return(
-      {
-        '/item/1/path': 1,
-        '/item/2/path': 2
-      }.with_indifferent_access
+      [
+        {
+          base_path: '/link-1',
+          page_views: 1,
+        },
+        {
+          base_path: '/link-2',
+          page_views: 2,
+        },
+      ]
     )
 
     Rake::Task['import:content_items_by_organisation'].reenable
