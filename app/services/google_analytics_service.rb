@@ -1,10 +1,4 @@
-require 'google/apis/analyticsreporting_v4'
-require 'googleauth'
-
 class GoogleAnalyticsService
-  include Google::Apis::AnalyticsreportingV4
-  include Google::Auth
-
   def client
     @client ||= GoogleAnalytics::Client.new.build
   end
