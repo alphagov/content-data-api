@@ -18,43 +18,6 @@ RSpec.describe GoogleAnalyticsService do
     end
 
     context "pageViews report" do
-      let(:page_views_request) do
-        {
-          report_requests: [
-            {
-              metrics: [
-                {
-                  expression: "ga:pageViews"
-                }
-              ],
-              view_id: "12345678",
-              dimension_filter_clauses: [
-                {
-                  filters: [
-                    {
-                      expressions: ["/check-uk-visa"],
-                      dimension_name: "ga:pagePath",
-                      operator: "EXACT"
-                    }
-                  ]
-                }
-              ],
-              dimensions: [
-                {
-                  name: "ga:pagePath"
-                }
-              ],
-              date_ranges: [
-                {
-                  start_date: "7daysAgo",
-                  end_date: "today"
-                }
-              ]
-            }
-          ]
-        }.with_indifferent_access
-      end
-
       let(:page_views_response) do
         Google::Apis::AnalyticsreportingV4::GetReportsResponse.new(
           reports: [
@@ -147,25 +110,6 @@ RSpec.describe GoogleAnalyticsService do
           .to receive(:batch_get_reports).and_return(two_page_views_response)
 
         expect { subject.page_views("/marriage-abroad") }.to raise_error("base_paths isn't an array")
-      end
-
-      it "builds the requests body with default arguments" do
-        built_request = subject.
-          build_page_views_body(["/check-uk-visa"]).as_json
-
-        expect(built_request).to include(page_views_request)
-      end
-
-      it "builds the requests body with supplied arguments" do
-        page_views_request[:report_requests][0][:date_ranges][0][:start_date] = "2016/11/22"
-        page_views_request[:report_requests][0][:date_ranges][0][:end_date] = "2016/12/22"
-
-        built_request = subject.build_page_views_body(
-          ["/check-uk-visa"],
-          start_date: "2016/11/22",
-          end_date: "2016/12/22").as_json
-
-        expect(built_request).to include(page_views_request)
       end
     end
   end
