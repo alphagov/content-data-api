@@ -46,9 +46,11 @@ group :development, :test do
   gem 'rspec-rails', '~>3.5'
   gem 'rails-controller-testing', '~>1.0.1'
   gem 'capybara'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', require: false
   gem 'factory_girl_rails'
   gem 'timecop'
+  gem 'guard-rspec', require: false
+  gem 'spring-commands-rspec'
 end
 
 group :development do
