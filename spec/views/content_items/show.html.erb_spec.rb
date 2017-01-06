@@ -9,6 +9,13 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     assign(:organisation, organisation)
   end
 
+  it 'renders the table header with the right headings' do
+    render
+
+    expect(rendered).to have_selector('table th:first-child', text: 'Content item attribute')
+    expect(rendered).to have_selector('table th:nth(2)', text: 'Value')
+  end
+
   it 'renders the title' do
     content_item.title = 'A Title'
     render
@@ -18,18 +25,19 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
 
   it 'renders the url' do
     content_item.base_path = '/content/1/path'
+    content_item.title = 'A Title'
     render
 
-    expect(rendered).to have_text('Page on GOV.UK')
-    expect(rendered).to have_link('https://gov.uk/content/1/path', href: 'https://gov.uk/content/1/path')
+    expect(rendered).to have_selector('td', text: 'Page on GOV.UK')
+    expect(rendered).to have_selector('td + td a[href="https://gov.uk/content/1/path"]', text: 'A Title')
   end
 
   it 'renders the document type' do
     content_item.document_type = 'guidance'
     render
 
-    expect(rendered).to have_text('Document type')
-    expect(rendered).to have_text('guidance')
+    expect(rendered).to have_selector('td', text: 'Document type')
+    expect(rendered).to have_selector('td + td', 'text': 'guidance')
   end
 
   it 'renders the last updated date' do
@@ -38,23 +46,23 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
       render
     end
 
-    expect(rendered).to have_text('Last updated')
-    expect(rendered).to have_text('2 months ago')
+    expect(rendered).to have_selector('td', text: 'Last updated')
+    expect(rendered).to have_selector('td + td', text: '2 months ago')
   end
 
   it 'renders the organisation name' do
     organisation.title = 'An Organisation'
     render
 
-    expect(rendered).to have_text('Organisation')
-    expect(rendered).to have_text('An Organisation')
+    expect(rendered).to have_selector('td', text: 'Organisation')
+    expect(rendered).to have_selector('td + td', text: 'An Organisation')
   end
 
   it 'renders the description of the content item' do
     content_item.description = 'The description of a content item'
     render
 
-    expect(rendered).to have_text('Description')
-    expect(rendered).to have_text('The description of a content item')
+    expect(rendered).to have_selector('td', text: 'Description')
+    expect(rendered).to have_selector('td + td', text: 'The description of a content item')
   end
 end
