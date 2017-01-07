@@ -2,5 +2,5 @@
   <td><%= link_to content_item.title, content_item.url %></td>
   <td><%= content_item.document_type %></td>
   <td><%= time_ago_in_words(content_item.public_updated_at) %> ago</td>
-  <td><%= link_to "View detail", organisation_content_item_path(organisation_id: @organisation.id, id: content_item.id) %>
+  <td><%= link_to "View detail", organisation_content_item_path(organisation_slug: @organisation.slug, id: content_item.id) %>
 </tr>

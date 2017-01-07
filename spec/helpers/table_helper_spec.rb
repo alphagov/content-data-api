@@ -5,8 +5,8 @@ RSpec.describe TableHelper, type: :helper do
     let(:organisation) { build(:organisation) }
     before { assign(:organisation, organisation) }
 
-    let(:params_asc) { { order: 'asc', sort: attribute_name, organisation_id: organisation } }
-    let(:params_desc) { { order: 'desc', sort: attribute_name, organisation_id: organisation } }
+    let(:params_asc) { { order: 'asc', sort: attribute_name, organisation_slug: organisation.slug } }
+    let(:params_desc) { { order: 'desc', sort: attribute_name, organisation_slug: organisation.slug } }
 
     let(:heading) { 'Last Updated' }
     let(:attribute_name) { 'public_updated_at' }
