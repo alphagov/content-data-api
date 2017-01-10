@@ -5,7 +5,7 @@ RSpec.feature "Content Item Details", type: :feature do
 
   scenario "the user clicks on the view content item link and is redirected to the content item show page" do
     visit "organisations/#{organisation.slug}/content_items"
-    click_on "View detail"
+    click_on organisation.content_items.first.title
 
     expected_path = "/organisations/#{organisation.slug}/content_items/#{organisation.content_items.first.id}"
 

@@ -46,11 +46,13 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
   describe 'row content' do
     it 'includes the content item title' do
-      content_items[0].base_path = '/content/1/path'
       content_items[0].title = 'a-title'
       render
 
-      expect(rendered).to have_link('a-title', href: 'https://gov.uk/content/1/path')
+      expect(rendered).to have_link('a-title', href: organisation_content_item_path(
+        organisation_slug: organisation.slug,
+        id: content_items.first.id,
+        ))
     end
 
     it 'includes the last time the content was updated' do
@@ -67,15 +69,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       href = organisation_content_items_path(organisation.slug, order: :asc, sort: :public_updated_at)
 
       expect(rendered).to have_link('Last Updated', href: href)
-    end
-
-    it 'has a link to the content item details page' do
-      render
-
-      expect(rendered).to have_link('View detail', href: organisation_content_item_path(
-        organisation_slug: organisation.slug,
-        id: content_items.first.id,
-        ))
     end
   end
 end
