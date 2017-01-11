@@ -17,7 +17,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
   end
 
   it 'renders the url' do
-    content_item.link = '/content/1/path'
+    content_item.base_path = '/content/1/path'
     render
 
     expect(rendered).to have_text('Page on GOV.UK')

@@ -4,7 +4,7 @@ FactoryGirl.define do
     sequence(:content_id) { |index| "content-id-#{index}" }
     sequence(:title) { |index| "title-#{index}" }
     sequence(:document_type) { |index| "document_type-#{index}" }
-    link "api/content/item/path"
+    base_path "api/content/item/path"
     public_updated_at { Time.now }
   end
 end

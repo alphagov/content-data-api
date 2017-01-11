@@ -46,7 +46,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
   describe 'row content' do
     it 'includes the content item title' do
-      content_items[0].link = '/content/1/path'
+      content_items[0].base_path = '/content/1/path'
       content_items[0].title = 'a-title'
       render
 
