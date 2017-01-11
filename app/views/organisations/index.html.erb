@@ -1,0 +1,15 @@
+<h1>Organisations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Number of content items</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render @organisations %>
+  </tbody>
+</table>
+
+<%= paginate @organisations %>
