@@ -7,10 +7,10 @@ module Collectors
       fields = %w(link)
 
       Clients::SearchAPI.find_each(query_params, fields) do |attributes|
-        link = attributes.fetch(:link)
-        content_item_attributes = %i(content_id description title public_updated_at document_type link)
+        base_path = attributes.fetch(:link)
+        content_item_attributes = %i(content_id description title public_updated_at document_type base_path)
 
-        yield Clients::ContentStore.find(link, content_item_attributes)
+        yield Clients::ContentStore.find(base_path, content_item_attributes)
       end
     end
   end

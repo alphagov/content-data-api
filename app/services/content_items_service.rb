@@ -6,15 +6,15 @@ class ContentItemsService
     fields = %w(link)
 
     Clients::SearchAPI.find_each(query: query, fields: fields) do |response|
-      link = response.fetch(:link)
+      base_path = response.fetch(:link)
 
-      yield Clients::ContentStore.find(link, attribute_names)
+      yield Clients::ContentStore.find(base_path, attribute_names)
     end
   end
 
 private
 
   def attribute_names
-    @names ||= %i(content_id description title public_updated_at document_type link)
+    @names ||= %i(content_id description title public_updated_at document_type base_path)
   end
 end
