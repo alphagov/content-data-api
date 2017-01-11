@@ -6,7 +6,7 @@ RSpec.describe ContentItemsController, type: :controller do
       let(:organisation) { create(:organisation_with_content_items, content_items_count: 2) }
 
       before do
-        get :index, params: { organisation_id: organisation }
+        get :index, params: { organisation_slug: organisation.slug }
       end
 
       it "returns http success" do
@@ -37,7 +37,7 @@ RSpec.describe ContentItemsController, type: :controller do
 
       context "in ascending order" do
         it "returns content_items based on supplied params" do
-          get :index, params: { organisation_id: organisation, order: :asc, sort: :public_updated_at }
+          get :index, params: { organisation_slug: organisation.slug, order: :asc, sort: :public_updated_at }
 
           expect(assigns(:content_items).pluck(:id)).to match_array([2, 1])
         end
@@ -47,7 +47,7 @@ RSpec.describe ContentItemsController, type: :controller do
       end
 
       it "returns content_items based on supplied params" do
-        get :index, params: { organisation_id: organisation, order: :desc, sort: :public_updated_at }
+        get :index, params: { organisation_slug: organisation.slug, order: :desc, sort: :public_updated_at }
 
         expect(assigns(:content_items).pluck(:id)).to match_array([1, 2])
       end
@@ -59,7 +59,7 @@ RSpec.describe ContentItemsController, type: :controller do
       let(:organisation) { create(:organisation_with_content_items, content_items_count: 1) }
 
       before do
-        get :show, params: { organisation_id: organisation, id: organisation.content_items.first.id }
+        get :show, params: { organisation_slug: organisation.slug, id: organisation.content_items.first.id }
       end
 
       it "returns http success" do

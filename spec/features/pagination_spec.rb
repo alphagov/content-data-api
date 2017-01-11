@@ -18,20 +18,20 @@ RSpec.feature "Content Item's Pagination", type: :feature do
 
   context "When user navigates to" do
     scenario "the first page, the current page number is 1" do
-      visit "organisations/#{organisation.id}/content_items"
+      visit "organisations/#{organisation.slug}/content_items"
 
       expect(page).to have_selector('nav.pagination .current', text: 1)
     end
 
     scenario "the previous page from page 2, the current page number is 1" do
-      visit "organisations/#{organisation.id}/content_items?page=2"
+      visit "organisations/#{organisation.slug}/content_items?page=2"
       click_on "Prev"
 
       expect(page).to have_selector('nav.pagination .current', text: 1)
     end
 
     scenario "the last page, the current page number is 2" do
-      visit "organisations/#{organisation.id}/content_items"
+      visit "organisations/#{organisation.slug}/content_items"
       within("nav.pagination") do
         click_on "Last"
       end
@@ -40,7 +40,7 @@ RSpec.feature "Content Item's Pagination", type: :feature do
     end
 
     scenario "the next page, the current page number is 2" do
-      visit "organisations/#{organisation.id}/content_items"
+      visit "organisations/#{organisation.slug}/content_items"
       click_on "Next"
 
       expect(page).to have_selector('nav.pagination .current', text: 2)
@@ -48,7 +48,7 @@ RSpec.feature "Content Item's Pagination", type: :feature do
   end
 
   scenario "The user can see information about the total number of content items" do
-    visit "organisations/#{organisation.id}/content_items"
+    visit "organisations/#{organisation.slug}/content_items"
 
     expect(page).to have_selector('div#total-content-items', text: 'Displaying content items 1 - 2 of 3 in total')
   end
