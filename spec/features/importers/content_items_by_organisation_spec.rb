@@ -6,19 +6,6 @@ RSpec.feature 'rake import:content_items_by_organisation[{department-slug}]', ty
   let(:content_item_2) { double(body: attributes_for(:content_item, base_path: '/link-2').to_json) }
 
   before do
-    allow_any_instance_of(GoogleAnalyticsService).to receive(:page_views).and_return(
-      [
-        {
-          base_path: '/link-1',
-          page_views: 1,
-        },
-        {
-          base_path: '/link-2',
-          page_views: 2,
-        },
-      ]
-    )
-
     Rake::Task['import:content_items_by_organisation'].reenable
 
     create(:organisation, slug: 'the-organisation-slug')

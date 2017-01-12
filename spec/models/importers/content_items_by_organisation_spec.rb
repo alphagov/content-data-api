@@ -5,21 +5,6 @@ RSpec.describe Importers::ContentItemsByOrganisation do
     let!(:organisation) { create(:organisation, slug: 'the-slug') }
     let(:content_item) { create(:content_item, base_path: 'the-link', organisation: organisation) }
 
-    before do
-      allow_any_instance_of(GoogleAnalyticsService).to receive(:page_views).and_return(
-        [
-          {
-            base_path: 'the-link',
-            page_views: 3,
-          },
-          {
-            base_path: 'the-link/second',
-            page_views: 2,
-          },
-        ]
-      )
-    end
-
     context 'when the content item does not exist' do
       it 'creates a content item per attribute group' do
         attrs1 = attributes_for(:content_item)
@@ -57,17 +42,6 @@ RSpec.describe Importers::ContentItemsByOrganisation do
         subject.run('the-slug')
 
         expect(ContentItem.first.title).to eq('the-new-title')
-      end
-    end
-
-    context 'number of page views' do
-      it 'imports the `number_of_views` for every content item' do
-        attributes = { content_id: content_item.content_id, base_path: 'the-link' }
-        allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
-
-        subject.run('the-slug')
-
-        expect(ContentItem.first.number_of_views).to eq(3)
       end
     end
   end
