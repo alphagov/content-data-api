@@ -44,6 +44,12 @@ $ rake import:all_organisations
 $ rake import:content_items_by_organisation[{department-slug}]
 ```
 
+* To get the number of page views for all content items belonging to an organisation:
+
+```bash
+$ rake import:number_of_views_by_organisation[{department-slug}]
+```
+
 ### Deployment to Heroku
 
 1\. Setup the environment to deploy to Heroku
@@ -72,10 +78,12 @@ followed by:
 $ heroku rake db:migrate
 ```
 
-To see updated (or data in new fields) data on heroku, you need to run:
+To see updated (or data in new fields) data on heroku, you need to run all of the import tasks:
 
 ```bash
-$ heroku rake import:organisation[{department-slug}]
+$ heroku rake import:all_organisations
+$ heroku rake import:content_items_by_organisation[{department-slug}]
+$ heroku rake import:number_of_views_by_organisation[{department-slug}]
 ```
 
 ### Set up Google Analytics credentials in development
