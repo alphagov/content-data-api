@@ -47,7 +47,7 @@ module GoogleAnalytics
                 ]
               }
             ]
-          }.with_indifferent_access
+          }.deep_stringify_keys!
         end
 
         it "builds the requests body with default arguments" do
@@ -57,8 +57,9 @@ module GoogleAnalytics
         end
 
         it "builds the requests body with supplied arguments" do
-          page_views_request[:report_requests][0][:date_ranges][0][:start_date] = "2016/11/22"
-          page_views_request[:report_requests][0][:date_ranges][0][:end_date] = "2016/12/22"
+          date_range = page_views_request["report_requests"][0]["date_ranges"][0]
+          date_range["start_date"] = "2016/11/22"
+          date_range["end_date"] = "2016/12/22"
 
           request = PageViewsRequest.new.build(
             ["/check-uk-visa"],
