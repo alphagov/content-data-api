@@ -4,12 +4,12 @@ module GoogleAnalytics
   module Requests
     RSpec.describe PageViewsRequest do
       before do
-        @cpm_govuk_view_id = ENV["CPM_GOVUK_VIEW_ID"]
-        ENV["CPM_GOVUK_VIEW_ID"] = "12345678"
+        @google_analytics_govuk_view_id = ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"]
+        ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"] = "12345678"
       end
 
       after do
-        ENV["CPM_GOVUK_VIEW_ID"] = @cpm_govuk_view_id
+        ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"] = @google_analytics_govuk_view_id
       end
 
       context "Get number of page views from the Google Analytics Reporting API" do

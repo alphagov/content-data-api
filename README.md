@@ -100,18 +100,18 @@ N.B. This file has been added to `.gitignore`, so you don't need to worry about 
 
 2) Add an entry to `config/local_env.yml` for each of the following:
 
-* `CPM_GOVUK_VIEW_ID`
 * `GOOGLE_PRIVATE_KEY`
 * `GOOGLE_CLIENT_EMAIL`
+* `GOOGLE_ANALYTICS_GOVUK_VIEW_ID`
 
 e.g.
 ```bash
-CPM_GOVUK_VIEW_ID: "1234567"
+GOOGLE_ANALYTICS_GOVUK_VIEW_ID: "1234567"
 ```
 
-This will make "1234567" available as `ENV["CPM_GOVUK_VIEW_ID"]`
+This will make "1234567" available as `ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"]`
 
-`CPM_GOVUK_VIEW_ID` is the view id on Google Analytics for `www.gov.uk`
+`GOOGLE_ANALYTICS_GOVUK_VIEW_ID` is the view id on Google Analytics for `www.gov.uk`
 
 See "Option Three" in [Rails Environment Variables](http://railsapps.github.io/rails-environment-variables.html) for more information
 

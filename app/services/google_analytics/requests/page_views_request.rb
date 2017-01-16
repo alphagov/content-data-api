@@ -66,7 +66,7 @@ module GoogleAnalytics
       end
 
       def view_id
-        @view_id ||= ENV["CPM_GOVUK_VIEW_ID"]
+        @view_id ||= ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"]
       end
     end
   end
