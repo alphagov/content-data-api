@@ -44,12 +44,11 @@ RSpec.describe ContentItemsController, type: :controller do
       end
 
       context "in descending order" do
-      end
+        it "returns content_items based on supplied params" do
+          get :index, params: { organisation_slug: organisation.slug, order: :desc, sort: :public_updated_at }
 
-      it "returns content_items based on supplied params" do
-        get :index, params: { organisation_slug: organisation.slug, order: :desc, sort: :public_updated_at }
-
-        expect(assigns(:content_items).pluck(:id)).to match_array([1, 2])
+          expect(assigns(:content_items).pluck(:id)).to match_array([1, 2])
+        end
       end
     end
   end
