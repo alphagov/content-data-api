@@ -21,6 +21,10 @@
       <td><%= @content_item.document_type %></td>
     </tr>
     <tr>
+      <td>Number of views</td>
+      <td><%= @content_item.number_of_views %></td>
+    </tr>
+    <tr>
       <td>Last updated</td>
       <td><%= time_ago_in_words(@content_item.public_updated_at) %> ago</td>
     </tr>
