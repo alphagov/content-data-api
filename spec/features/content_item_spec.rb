@@ -1,14 +1,23 @@
 require 'rails_helper'
+require 'features/pagination_spec_helper'
 
 RSpec.feature "Content Item Details", type: :feature do
-  let(:organisation) { create(:organisation_with_content_items, content_items_count: 1) }
-
   scenario "the user clicks on the view content item link and is redirected to the content item show page" do
-    visit "organisations/#{organisation.slug}/content_items"
-    click_on organisation.content_items.first.title
+    organisation = create :organisation, slug: "the-slug"
+    create :content_item, id: 1, title: "content item title", organisation: organisation
 
-    expected_path = "/organisations/#{organisation.slug}/content_items/#{organisation.content_items.first.id}"
+    visit "organisations/the-slug/content_items"
+    click_on "content item title"
 
+    expected_path = "/organisations/the-slug/content_items/1"
     expect(current_path).to eq(expected_path)
+  end
+
+  describe 'The user can navigate paged lists of content items' do
+    before do
+      create :organisation_with_content_items, slug: "the-slug", content_items_count: 3
+    end
+
+    it_behaves_like "a paginated list", "organisations/the-slug/content_items"
   end
 end

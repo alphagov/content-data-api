@@ -2,14 +2,22 @@ require 'rails_helper'
 
 RSpec.describe OrganisationsController, type: :controller do
   describe 'GET #index' do
-    it 'returns http success' do
+    let(:organisation) { create(:organisation) }
+
+    before do
       get :index
+    end
+
+    it 'returns http success' do
       expect(response).to have_http_status(:success)
     end
 
-    it 'returns JSON as content type' do
-      get :index
-      expect(response.content_type).to eq('application/json')
+    it 'assigns @organisations' do
+      expect(assigns(:organisations)).to eq([organisation])
+    end
+
+    it "renders the index template" do
+      expect(response).to render_template("index")
     end
   end
 end
