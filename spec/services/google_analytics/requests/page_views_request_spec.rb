@@ -19,7 +19,7 @@ module GoogleAnalytics
               {
                 metrics: [
                   {
-                    expression: "ga:pageViews"
+                    expression: "ga:uniquePageviews"
                   }
                 ],
                 view_id: "12345678",
