@@ -23,7 +23,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
     expect(rendered).to have_selector('table thead', text: 'Title')
     expect(rendered).to have_selector('table thead tr:first-child th:nth(2)', text: 'Type of Document')
-    expect(rendered).to have_selector('table thead tr:first-child th:nth(3)', text: 'Page Views')
+    expect(rendered).to have_selector('table thead tr:first-child th:nth(3)', text: 'Number of Views')
     expect(rendered).to have_selector('table thead tr:first-child th:nth(4)', text: 'Last Updated')
   end
 
