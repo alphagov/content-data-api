@@ -40,6 +40,14 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_selector('td + td', 'text': 'guidance')
   end
 
+  it 'renders the number of views' do
+    content_item.number_of_views = 10
+    render
+
+    expect(rendered).to have_selector('td', text: 'Number of views')
+    expect(rendered).to have_selector('td + td', 'text': 10)
+  end
+
   it 'renders the last updated date' do
     Timecop.freeze('2016-3-20') do
       content_item.public_updated_at = Date.parse('2016-1-20')
