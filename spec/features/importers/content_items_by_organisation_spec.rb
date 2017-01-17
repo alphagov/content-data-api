@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'rake import:organisation[{department-slug}]', type: :feature do
+RSpec.feature 'rake import:content_items_by_organisation[{department-slug}]', type: :feature do
   let(:search_api_response) { double(body: { results: [{ link: '/link-1' }, { link: '/link-2' }] }.to_json) }
   let(:content_item_1) { double(body: attributes_for(:content_item, base_path: '/link-1').to_json) }
   let(:content_item_2) { double(body: attributes_for(:content_item, base_path: '/link-2').to_json) }

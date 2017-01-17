@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111104312) do
+ActiveRecord::Schema.define(version: 20170112173524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,13 +18,14 @@ ActiveRecord::Schema.define(version: 20170111104312) do
   create_table "content_items", force: :cascade do |t|
     t.string   "content_id"
     t.integer  "organisation_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.datetime "public_updated_at"
     t.string   "base_path"
     t.string   "title"
     t.string   "document_type"
     t.string   "description"
+    t.integer  "number_of_views",   default: 0
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true, using: :btree
     t.index ["organisation_id"], name: "index_content_items_on_organisation_id", using: :btree
   end

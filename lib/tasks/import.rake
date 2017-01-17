@@ -10,4 +10,11 @@ namespace :import do
   task all_organisations: :environment do
     Importers::AllOrganisations.new.run
   end
+
+  desc 'Update the number of page views for all content items belonging to an organisation'
+  task :number_of_views_by_organisation, [:slug] => :environment do |_, args|
+    raise 'Missing slug parameter' unless args.slug
+
+    Importers::NumberOfViewsByOrganisation.new.run(args.slug)
+  end
 end
