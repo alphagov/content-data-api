@@ -36,7 +36,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     content_item.document_type = 'guidance'
     render
 
-    expect(rendered).to have_selector('td', text: 'Document type')
+    expect(rendered).to have_selector('td', text: 'Type of document')
     expect(rendered).to have_selector('td + td', 'text': 'guidance')
   end
 
@@ -44,7 +44,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     content_item.unique_page_views = 10
     render
 
-    expect(rendered).to have_selector('td', text: 'Number of unique views')
+    expect(rendered).to have_selector('td', text: 'Unique page views (last 7 days)')
     expect(rendered).to have_selector('td + td', 'text': 10)
   end
 
