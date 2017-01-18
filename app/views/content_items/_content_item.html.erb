@@ -1,6 +1,6 @@
 <tr>
   <td><%= link_to content_item.title, organisation_content_item_path(organisation_slug: @organisation.slug, id: content_item.id) %></td>
   <td><%= content_item.document_type %></td>
-  <td><%= content_item.number_of_views %></td>
+  <td><%= content_item.unique_page_views %></td>
   <td><%= time_ago_in_words(content_item.public_updated_at) %> ago</td>
 </tr>

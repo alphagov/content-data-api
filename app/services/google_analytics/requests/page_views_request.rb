@@ -10,7 +10,7 @@ module GoogleAnalytics
         GetReportsRequest.new.tap do |reports|
           reports.report_requests = Array.new.push(
             ReportRequest.new.tap do |request|
-              request.metrics = metrics(page_views)
+              request.metrics = metrics(unique_page_views)
               request.view_id = view_id
               request.dimension_filter_clauses = filters(base_paths, page_path)
               request.dimensions = dimensions(page_path)
@@ -61,8 +61,8 @@ module GoogleAnalytics
         "ga:pagePath"
       end
 
-      def page_views
-        "ga:pageViews"
+      def unique_page_views
+        "ga:uniquePageviews"
       end
 
       def view_id
