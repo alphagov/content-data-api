@@ -12,7 +12,7 @@ RSpec.feature 'rake import:all_organisations', type: :feature do
 
   before do
     Rake::Task['import:all_organisations'].reenable
-    stub_request(:get, %r{.*}).to_return(:status => 200, :body => two_organisations)
+    stub_request(:get, %r{.*}).to_return(status: 200, body:  two_organisations)
   end
 
   it 'creates all organisations' do

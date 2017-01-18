@@ -3,9 +3,13 @@ module Clients
     class << self
       def find(path, attributes)
         response = HTTParty.get(end_point(path))
-        content_item = JSON.parse(response.body).symbolize_keys
-
-        content_item.slice(*attributes)
+        case response.code
+        when 200
+          content_item = JSON.parse(response.body).symbolize_keys
+          content_item.slice(*attributes)
+        when 404
+          nil
+        end
       end
 
     private

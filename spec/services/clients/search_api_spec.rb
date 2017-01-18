@@ -15,7 +15,7 @@ RSpec.describe Clients::SearchAPI do
 
   it 'returns symbolized attributes' do
     response = { results: [{ 'title' => 'title-1' }] }.to_json
-    stub_request(:get, %r{.*}).to_return(:status => 200, :body => response)
+    stub_request(:get, %r{.*}).to_return(status: 200, body:  response)
 
     subject.find_each(query: { param: :value1 }, fields: %w(title)) do |attributes|
       expect(attributes).to eq(title: 'title-1')
@@ -24,7 +24,7 @@ RSpec.describe Clients::SearchAPI do
 
   it 'builds the SearchAPI query' do
     stub_request(:get, "https://www.gov.uk/api/search.json?count=1000&fields=field1,field2&param=value1&start=0")
-      .to_return(:status => 200, :body => { results: [] }.to_json)
+      .to_return(status: 200, body:  { results: [] }.to_json)
 
     subject.find_each(query: { param: :value1 }, fields: %w(field1 field2)) {}
 
@@ -35,10 +35,10 @@ RSpec.describe Clients::SearchAPI do
     it 'iterates through the pages' do
       another_content_item = { results: [{ content_id: 'content-id-3' }] }.to_json
 
-      stub_request(:get, %r{.*}).to_return(
-        { :status => 200, :body => two_content_items },
-        { :status => 200, :body => another_content_item }
-      )
+      stub_request(:get, %r{.*}).to_return([
+        { status: 200, body:  two_content_items },
+        { status: 200, body:  another_content_item }
+      ])
 
       allow(subject).to receive(:batch_size).and_return(2)
 
@@ -46,10 +46,10 @@ RSpec.describe Clients::SearchAPI do
     end
 
     it 'does not fail when last page size is equal to batch size' do
-      stub_request(:get, %r{.*}).to_return(
-        { :status => 200, :body => one_content_item },
-        { :status => 200, :body => empty_response }
-      )
+      stub_request(:get, %r{.*}).to_return([
+        { status: 200, body:  one_content_item },
+        { status: 200, body:  empty_response }
+      ])
 
       allow(subject).to receive(:batch_size).and_return(1)
 

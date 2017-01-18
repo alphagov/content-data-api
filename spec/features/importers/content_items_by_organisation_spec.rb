@@ -14,21 +14,21 @@ RSpec.feature 'rake import:content_items_by_organisation[{department-slug}]', ty
   subject { Rake::Task['import:content_items_by_organisation'].invoke('the-organisation-slug') }
 
   it 'creates all the content items belonging to an organisation' do
-    stub_request(:get, %r{.*}).to_return(
-      { :status => 200, :body => search_api_response },
-      { :status => 200, :body => content_item_1 },
-      { :status => 200, :body => content_item_2 }      
-    )
+    stub_request(:get, %r{.*}).to_return([
+      { status: 200, body:  search_api_response },
+      { status: 200, body:  content_item_1 },
+      { status: 200, body:  content_item_2 }
+    ])
 
     expect { subject }.to change { ContentItem.count }.by(2)
   end
 
   it 'saves the content item attributes' do
     content_item_1 = attributes_for(:content_item, base_path: '/link-1', title: 'new-title').to_json
-    stub_request(:get, %r{.*}).to_return(
-      { :status => 200, :body => search_api_response },
-      { :status => 200, :body => content_item_1 }
-    )
+    stub_request(:get, %r{.*}).to_return([
+      { status: 200, body:  search_api_response },
+      { status: 200, body:  content_item_1 }
+    ])
 
     subject
 
