@@ -50,6 +50,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'factory_girl_rails'
   gem 'timecop'
+  gem 'webmock'
 end
 
 group :development do
