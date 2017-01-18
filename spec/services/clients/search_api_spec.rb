@@ -4,18 +4,18 @@ RSpec.describe Clients::SearchAPI do
   subject { Clients::SearchAPI }
 
   let(:two_content_items) {
-    double(body: { results: [
+    { results: [
       { content_id: 'content-id-1' },
       { content_id: 'content-id-2' },
-    ] }.to_json)
+    ] }.to_json
   }
 
-  let(:one_content_item) { double(body: { results: [{ content_id: 'content-id-1' }] }.to_json) }
-  let(:empty_response) { double(body: { results: [] }.to_json) }
+  let(:one_content_item) { { results: [{ content_id: 'content-id-1' }] }.to_json }
+  let(:empty_response) { { results: [] }.to_json }
 
   it 'returns symbolized attributes' do
-    response = double(body: { results: [{ 'title' => 'title-1' }] }.to_json)
-    allow(HTTParty).to receive(:get).and_return(response)
+    response = { results: [{ 'title' => 'title-1' }] }.to_json
+    stub_request(:get, %r{.*}).to_return(:status => 200, :body => response)
 
     subject.find_each(query: { param: :value1 }, fields: %w(title)) do |attributes|
       expect(attributes).to eq(title: 'title-1')
@@ -23,24 +23,34 @@ RSpec.describe Clients::SearchAPI do
   end
 
   it 'builds the SearchAPI query' do
-    expected_url = 'https://www.gov.uk/api/search.json?param=value1&fields=field1%2Cfield2&count=1000&start=0'
-    expect(HTTParty).to receive(:get).with(expected_url).and_return(empty_response)
+    stub_request(:get, "https://www.gov.uk/api/search.json?count=1000&fields=field1,field2&param=value1&start=0")
+      .to_return(:status => 200, :body => { results: [] }.to_json)
 
     subject.find_each(query: { param: :value1 }, fields: %w(field1 field2)) {}
+
+    expect(WebMock).to have_requested(:get, "https://www.gov.uk/api/search.json?count=1000&fields=field1,field2&param=value1&start=0")
   end
 
   context 'when multiples pages' do
     it 'iterates through the pages' do
-      another_content_item = double(body: { results: [{ content_id: 'content-id-3' }] }.to_json)
+      another_content_item = { results: [{ content_id: 'content-id-3' }] }.to_json
 
-      expect(HTTParty).to receive(:get).twice.and_return(two_content_items, another_content_item)
+      stub_request(:get, %r{.*}).to_return(
+        { :status => 200, :body => two_content_items },
+        { :status => 200, :body => another_content_item }
+      )
+
       allow(subject).to receive(:batch_size).and_return(2)
 
       expect { |b| subject.find_each(query: {}, fields: [], &b) }.to yield_control.exactly(3).times
     end
 
     it 'does not fail when last page size is equal to batch size' do
-      expect(HTTParty).to receive(:get).exactly(2).times.and_return(one_content_item, empty_response)
+      stub_request(:get, %r{.*}).to_return(
+        { :status => 200, :body => one_content_item },
+        { :status => 200, :body => empty_response }
+      )
+
       allow(subject).to receive(:batch_size).and_return(1)
 
       expect { |b| subject.find_each(query: {}, fields: [], &b) }.to yield_control.exactly(1).times

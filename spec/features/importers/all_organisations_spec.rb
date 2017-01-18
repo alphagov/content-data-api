@@ -2,18 +2,17 @@ require 'rails_helper'
 
 RSpec.feature 'rake import:all_organisations', type: :feature do
   let(:two_organisations) {
-    double(body: {
+    {
       results: [
         { slug: 'slug-1', title: 'title-1' },
         { slug: 'slug-2', title: 'title-2' }
       ]
-    }.to_json)
+    }.to_json
   }
 
   before do
     Rake::Task['import:all_organisations'].reenable
-
-    allow(HTTParty).to receive(:get).and_return(two_organisations)
+    stub_request(:get, %r{.*}).to_return(:status => 200, :body => two_organisations)
   end
 
   it 'creates all organisations' do
