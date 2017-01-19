@@ -227,8 +227,8 @@ GEM
     scss_lint (0.52.0)
       rake (>= 0.9, < 13)
       sass (~> 3.4.20)
-    shoulda-matchers (3.1.1)
-      activesupport (>= 4.0.0)
+    shoulda-matchers (2.8.0)
+      activesupport (>= 3.0.0)
     signet (0.7.3)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -299,7 +299,7 @@ DEPENDENCIES
   rails-controller-testing (~> 1.0.1)
   rspec-rails (~> 3.5)
   sass-rails (~> 5.0)
-  shoulda-matchers
+  shoulda-matchers (~> 2.8)
   spring
   spring-watcher-listen (~> 2.0.0)
   timecop
