@@ -7,8 +7,8 @@ class ContentItemsService
 
     Clients::SearchAPI.find_each(query: query, fields: fields) do |response|
       base_path = response.fetch(:link)
-
-      yield Clients::ContentStore.find(base_path, attribute_names)
+      content_item = Clients::ContentStore.find(base_path, attribute_names)
+      yield content_item if content_item
     end
   end
 
