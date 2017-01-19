@@ -24,7 +24,7 @@ module TableHelper
 
     def link(label, order)
       link_to organisation_content_items_path(organisation_slug: view.instance_variable_get(:@organisation).slug, sort: attribute_name, order: order) do
-        "#{heading}#{content_tag :span, label, class: 'visually-hidden'}".html_safe
+        "#{heading}#{content_tag :span, label, class: 'rm'}".html_safe
       end
     end
 
