@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: content-performance-manager_production
-  username: content-performance-manager
+  database: content_performance_manager_production
+  username: content_performance_manager
   password: <%= ENV['CONTENT-PERFORMANCE-MANAGER_DATABASE_PASSWORD'] %>
