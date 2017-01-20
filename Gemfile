@@ -40,6 +40,7 @@ gem 'httparty'
 gem 'kaminari', '~> 0.17.0'
 gem 'google-api-client', '~> 0.9'
 
+gem 'unicorn', '~> 5.1.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
