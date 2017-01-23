@@ -13,6 +13,25 @@ $ rake db:migrate
 ```
 
 ### Running the application
+#### Using the GDS development VM
+
+In the development VM, go to:
+
+```bash
+cd /var/govuk/development
+```
+
+Then run:
+
+ ```bash
+ bowl content-performance-manager
+ ```
+
+The application can be accessed from:
+
+http://content-performance-manager.dev.gov.uk
+
+#### From the local machine
 
 The application can be started with:
 
@@ -20,10 +39,7 @@ The application can be started with:
 $ ./startup.sh
 ```
 
-In the browser navigate to:
- `http://localhost:3333`
-
- or `http://10.1.1.254:3333` if running from the GOV.UK Dev VM.
+In the browser navigate to: http://localhost:3206
 
 ### Running the tests
  ```bash
