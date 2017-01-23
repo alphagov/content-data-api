@@ -66,41 +66,10 @@ $ rake import:content_items_by_organisation[{department-slug}]
 $ rake import:number_of_views_by_organisation[{department-slug}]
 ```
 
-### Deployment to Heroku
+### Deploying the application
+* [Heroku](doc/deploying.md#heroku)
+* [Integration](doc/deploying#integration)
 
-1\. Setup the environment to deploy to Heroku
-
-```bash
-$ rake heroku:prepare # Only need to be done once
-````
-
-2\. Deploy to Heroku
-
-Try one of the following methods:
-
-##### Use the deploy script
-```bash
-$ rake heroku:deploy
-```
-
-##### Use the heroku deploy commands
-```bash
-$ git push heroku master
-```
-
-followed by:
-
-```bash
-$ heroku rake db:migrate
-```
-
-To see updated (or data in new fields) data on heroku, you need to run all of the import tasks:
-
-```bash
-$ heroku rake import:all_organisations
-$ heroku rake import:content_items_by_organisation[{department-slug}]
-$ heroku rake import:number_of_views_by_organisation[{department-slug}]
-```
 
 ### Set up Google Analytics credentials in development
 
@@ -110,8 +79,8 @@ To be able to import data from Google Analytics, a few environment variables nee
 
 N.B. This file has been added to `.gitignore`, so you don't need to worry about accidentally checking it in.
 
-`local_env.yml` is used to 
-* Create the environment variables required to connect to and query the Google API for Google Analytics 
+`local_env.yml` is used to
+* Create the environment variables required to connect to and query the Google API for Google Analytics
 * Store your Google API credentials. They can either be downloaded from the [google developers console](https://console.developers.google.com/apis/credentials) or from another team member.
 
 2) Add an entry to `config/local_env.yml` for each of the following:
