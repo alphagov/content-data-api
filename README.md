@@ -48,23 +48,8 @@ In the browser navigate to: http://localhost:3206
 
 ### Importing data
 
-* To import all organisations:
-
-```bash
-$ rake import:all_organisations
-```
-
-* To create or update the content items for an existing organisation:
-
-```bash
-$ rake import:content_items_by_organisation[{department-slug}]
-```
-
-* To get the number of page views for all content items belonging to an organisation:
-
-```bash
-$ rake import:number_of_views_by_organisation[{department-slug}]
-```
+* [On the local environment](doc/importing_data#Local_environment)
+* [On GOV.UK environments](doc/importing_data#jenkins)
 
 ### Deploying the application
 * [Heroku](doc/deploying.md#heroku)
