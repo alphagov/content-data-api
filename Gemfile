@@ -51,9 +51,12 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'factory_girl_rails'
   gem 'timecop'
-  gem 'webmock'
   gem 'govuk-lint'
   gem 'listen', '~> 3.0.5'
+end
+
+group :test do
+  gem 'webmock'
 end
 
 group :development do
