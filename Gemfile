@@ -45,10 +45,6 @@ gem 'unicorn', '~> 5.1.0'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
-  gem 'rspec-rails', '~>3.5'
-  gem 'rails-controller-testing', '~>1.0.1'
-  gem 'capybara'
-  gem 'shoulda-matchers'
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'govuk-lint'
@@ -56,6 +52,10 @@ group :development, :test do
 end
 
 group :test do
+  gem 'rspec-rails', '~>3.5'
+  gem 'rails-controller-testing', '~>1.0.1'
+  gem 'capybara'
+  gem 'shoulda-matchers'
   gem 'webmock'
 end
 
