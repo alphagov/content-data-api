@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ContentItem, type: :model do
-  it { should belong_to(:organisation) }
+  it { should have_and_belong_to_many(:organisations) }
 
   describe '#url' do
     it 'returns a url to a content item on gov.uk' do

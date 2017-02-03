@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117171347) do
+ActiveRecord::Schema.define(version: 20170206153437) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "content_items", force: :cascade do |t|
     t.string   "content_id"
-    t.integer  "organisation_id"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.datetime "public_updated_at"
@@ -27,7 +26,11 @@ ActiveRecord::Schema.define(version: 20170117171347) do
     t.string   "description"
     t.integer  "unique_page_views", default: 0
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true, using: :btree
-    t.index ["organisation_id"], name: "index_content_items_on_organisation_id", using: :btree
+  end
+
+  create_table "content_items_organisations", id: false, force: :cascade do |t|
+    t.integer "content_item_id", null: false
+    t.integer "organisation_id", null: false
   end
 
   create_table "organisations", force: :cascade do |t|
@@ -38,5 +41,4 @@ ActiveRecord::Schema.define(version: 20170117171347) do
     t.index ["slug"], name: "index_organisations_on_slug", unique: true, using: :btree
   end
 
-  add_foreign_key "content_items", "organisations"
 end

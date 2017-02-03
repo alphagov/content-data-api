@@ -4,7 +4,7 @@ require 'features/pagination_spec_helper'
 RSpec.feature "Content Item Details", type: :feature do
   scenario "the user clicks on the view content item link and is redirected to the content item show page" do
     organisation = create :organisation, slug: "the-slug"
-    create :content_item, id: 1, title: "content item title", organisation: organisation
+    create :content_item, id: 1, title: "content item title", organisations: [organisation]
 
     visit "organisations/the-slug/content_items"
     click_on "content item title"

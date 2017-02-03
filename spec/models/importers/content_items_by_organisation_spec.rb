@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Importers::ContentItemsByOrganisation do
   describe '#run' do
     let!(:organisation) { create(:organisation, slug: 'the-slug') }
-    let(:content_item) { create(:content_item, base_path: 'the-link', organisation: organisation) }
+    let(:content_item) { create(:content_item, base_path: 'the-link', organisations: [organisation]) }
 
     context 'when the content item does not exist' do
       it 'creates a content item per attribute group' do
@@ -25,7 +25,7 @@ RSpec.describe Importers::ContentItemsByOrganisation do
     end
 
     context 'when the content item already exists' do
-      let(:content_item) { create(:content_item, base_path: 'the-link', organisation: organisation) }
+      let(:content_item) { create(:content_item, base_path: 'the-link', organisations: [organisation]) }
 
       it 'does not create a new one' do
         attributes = { content_id: content_item.content_id, base_path: 'the-link' }
