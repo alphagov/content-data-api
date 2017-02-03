@@ -24,11 +24,11 @@ node {
     }
 
     stage('Database') {
-      govuk.setupDb()
+      govuk.setEnvar('RAILS_ENV', 'test')
+      govuk.runRakeTask('db:environment:set db:drop db:create db:schema:load')
     }
 
     stage('Tests') {
-      govuk.setEnvar('RAILS_ENV', 'test')
       govuk.runTests()
     }
 
