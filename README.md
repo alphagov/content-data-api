@@ -15,6 +15,8 @@ $ rake db:migrate
 ### Running the application
 #### Using the GDS development VM
 
+See the READMEs in the [govuk-puppet](https://github.com/alphagov/govuk-puppet/tree/master/development-vm) and [development](https://github.gds/gds/development) repos for instructions about setting up and running your development VM.
+
 In the development VM, go to:
 
 ```bash
