@@ -40,4 +40,4 @@ $ heroku rake import:number_of_views_by_organisation[{department-slug}]
 
 This happens automatically as post build action when the `master` branch is successfully builds on the Jenkins CI environment.
 
-The application can also be deployed manually via the `Deploy_App` job.
+The application can also be deployed manually via the `Deploy_App` job in Jenkins.
