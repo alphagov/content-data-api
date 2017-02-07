@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Importers::NumberOfViewsByOrganisation do
   describe '#run' do
     let!(:organisation) { create(:organisation, slug: 'the-slug') }
-    let!(:content_item_first) { create(:content_item, base_path: 'the-link/first', organisation: organisation) }
-    let!(:content_item_second) { create(:content_item, base_path: 'the-link/second', organisation: organisation) }
+    let!(:content_item_first) { create(:content_item, base_path: 'the-link/first', organisations: [organisation]) }
+    let!(:content_item_second) { create(:content_item, base_path: 'the-link/second', organisations: [organisation]) }
 
     before do
       allow_any_instance_of(GoogleAnalyticsService).to receive(:page_views).and_return(

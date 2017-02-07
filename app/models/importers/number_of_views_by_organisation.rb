@@ -3,8 +3,7 @@ module Importers
     def run(slug)
       organisation = ::Organisation.find_by(slug: slug)
 
-      content_items = ::ContentItem.where(organisation_id: organisation.id)
-      base_paths = content_items.pluck(:base_path)
+      base_paths = organisation.content_items.pluck(:base_path)
 
       results = GoogleAnalyticsService.new.page_views(base_paths)
       results.each do |result|

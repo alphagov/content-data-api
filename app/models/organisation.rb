@@ -1,3 +1,3 @@
 class Organisation < ApplicationRecord
-  has_many :content_items
+  has_and_belongs_to_many :content_items
 end

@@ -9,7 +9,7 @@ FactoryGirl.define do
         content_items_count 1
       end
       after(:create) do |organisation, evaluator|
-        create_list(:content_item, evaluator.content_items_count, organisation: organisation)
+        create_list(:content_item, evaluator.content_items_count, organisations: [organisation])
       end
     end
   end
