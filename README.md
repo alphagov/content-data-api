@@ -50,12 +50,12 @@ In the browser navigate to: http://localhost:3206
 
 ### Importing data
 
-* [On the local environment](doc/importing_data#Local_environment)
-* [On GOV.UK environments](doc/importing_data#jenkins)
+* [On the local environment](doc/importing_data.md#Local_environment)
+* [On GOV.UK environments](doc/importing_data.md#jenkins)
 
 ### Deploying the application
 * [Heroku](doc/deploying.md#heroku)
-* [Integration](doc/deploying#integration)
+* [Integration](doc/deploying.md#integration)
 
 ### App development
 
