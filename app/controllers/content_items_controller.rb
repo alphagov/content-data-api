@@ -6,6 +6,5 @@ class ContentItemsController < ApplicationController
 
   def show
     @content_item = ContentItem.find(params[:id])
-    @organisation = Organisation.find_by_slug(params[:organisation_slug])
   end
 end

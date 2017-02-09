@@ -9,7 +9,7 @@ RSpec.feature "Content Item Details", type: :feature do
     visit "organisations/the-slug/content_items"
     click_on "content item title"
 
-    expected_path = "/organisations/the-slug/content_items/1"
+    expected_path = "/content_items/1"
     expect(current_path).to eq(expected_path)
   end
 

@@ -50,8 +50,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       content_items[0].title = 'a-title'
       render
 
-      expect(rendered).to have_link('a-title', href: organisation_content_item_path(
-        organisation_slug: organisation.slug,
+      expect(rendered).to have_link('a-title', href: content_item_path(
         id: content_items.first.id,
         ))
     end
