@@ -1,8 +1,8 @@
 <h1>Organisations</h1>
 
-<table>
+<table class="table table-bordered table-hover">
   <thead>
-    <tr>
+    <tr class="table-header">
       <th>Name</th>
       <th>Number of content items</th>
     </tr>
@@ -12,4 +12,4 @@
   </tbody>
 </table>
 
-<%= paginate @organisations %>
+<%= paginate @organisations, :window => 2 %>

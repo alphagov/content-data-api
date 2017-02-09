@@ -18,25 +18,25 @@ shared_examples "a paginated list" do |page_url|
     it "on the first page, there is no previous link" do
       visit page_url
 
-      expect(page).not_to have_selector('.govuk-previous-and-next-navigation [rel=prev]')
-      expect(page).to have_selector('.govuk-previous-and-next-navigation [rel=next]', text: '2 of 3')
+      expect(page).not_to have_selector('.pagination [rel=prev]')
+      expect(page).to have_selector('.pagination [rel=next]')
     end
 
     it "navigates to the next page" do
       visit page_url
 
-      page.find('.govuk-previous-and-next-navigation a[rel=next]').click
-      expect(page).to have_selector('.govuk-previous-and-next-navigation [rel=prev]', text: '1 of 3')
-      expect(page).to have_selector('.govuk-previous-and-next-navigation [rel=next]', text: '3 of 3')
+      page.find('.pagination a[rel=next]').click
+      expect(page).to have_selector('.pagination [rel=prev]')
+      expect(page).to have_selector('.pagination [rel=next]')
     end
 
     it "navigates to the previous page" do
       visit page_url
-      page.find('.govuk-previous-and-next-navigation a[rel=next]').click
-      page.find('.govuk-previous-and-next-navigation a[rel=prev]').click
+      page.find('.pagination a[rel=next]').click
+      page.find('.pagination a[rel=prev]').click
 
-      expect(page).not_to have_selector('.govuk-previous-and-next-navigation [rel=prev]')
-      expect(page).to have_selector('.govuk-previous-and-next-navigation [rel=next]', text: '2 of 3')
+      expect(page).not_to have_selector('.pagination [rel=prev]')
+      expect(page).to have_selector('.pagination [rel=next]')
     end
   end
 end

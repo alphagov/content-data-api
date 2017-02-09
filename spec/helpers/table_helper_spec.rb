@@ -20,7 +20,7 @@ RSpec.describe TableHelper, type: :helper do
         end
 
         it 'sets screenreader text to sort asc' do
-          expect(subject).to have_selector('.visually-hidden', text: ', sort ascending'.downcase)
+          expect(subject).to have_selector('.rm', text: ', sort ascending'.downcase)
         end
       end
 
@@ -32,7 +32,7 @@ RSpec.describe TableHelper, type: :helper do
         end
 
         it 'sets screenreader text to sort desc' do
-          expect(subject).to have_selector('.visually-hidden', text: ', sort descending'.downcase)
+          expect(subject).to have_selector('.rm', text: ', sort descending'.downcase)
         end
       end
 
@@ -44,7 +44,7 @@ RSpec.describe TableHelper, type: :helper do
         end
 
         it 'sets screenreader text to sort asc' do
-          expect(subject).to have_selector('.visually-hidden', text: ', sort ascending'.downcase)
+          expect(subject).to have_selector('.rm', text: ', sort ascending'.downcase)
         end
       end
     end

@@ -13,7 +13,6 @@
  *= require_self
  */
 
-@import 'govuk-elements';
-@import 'base';
+@import 'govuk_admin_template';
 @import 'tables';
-@import "previous-and-next-navigation";
+@import 'pagination';

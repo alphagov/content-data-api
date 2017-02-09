@@ -1,5 +1,9 @@
 <% content_for :page_title do %>
-  ContentPerformanceManager
+  Content Performance Manager
+<% end %>
+
+<% content_for :app_title do %>
+  Content Performance Manager
 <% end %>
 
 <% content_for :head do %>
@@ -9,9 +13,7 @@
 <% end %>
 
 <% content_for :content do %>
-  <main id="content" tabindex="-1">
-    <%= content_for?(:main) ? yield(:main) : yield %>
-  </main>
+  <%= content_for?(:main) ? yield(:main) : yield %>
 <% end %>
 
-<%= render file: 'layouts/govuk_template' %>
+<%= render file: 'layouts/govuk_admin_template' %>

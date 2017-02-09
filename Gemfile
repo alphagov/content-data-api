@@ -29,9 +29,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 # gov.uk frontend gems
-gem 'govuk_template'
-gem 'govuk_frontend_toolkit'
-gem 'govuk_elements_rails'
+gem 'govuk_admin_template', '~> 5.0'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -55,7 +53,7 @@ group :test do
   gem 'rspec-rails', '~>3.5'
   gem 'rails-controller-testing', '~>1.0.1'
   gem 'capybara'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 2.8'
   gem 'webmock'
 end
 

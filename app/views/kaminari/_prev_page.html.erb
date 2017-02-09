@@ -7,9 +7,8 @@
     remote:        data-remote
 -%>
 
-<li class="previous-page">
+<li class="previous">
   <%= link_to url, :rel => 'prev', :remote => remote do %>
-    <span class="pagination-part-title">Previous</span>
-    <span class="pagination-label"><%= current_page - 1 %> of <%= total_pages %></span>
+    <span class="pagination-part-title">&larr; Previous</span>
   <% end %>
 </li>
