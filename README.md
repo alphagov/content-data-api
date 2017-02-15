@@ -1,3 +1,9 @@
+# Content Performance Manager
+
+`Provide content designers across all of government with the data and tooling they need to measure and improve ‘their’ GOV.UK content.`
+
+This is an app that aggregates metrics from multiple sources to give easy view of content performance measurements.
+
 ### Setting up the local environment
 
 Create the test and development databases:
