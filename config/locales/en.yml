@@ -20,6 +20,4 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  content_items:
-    index:
-      title: "GOV.UK"
+  hello: "Hello world"

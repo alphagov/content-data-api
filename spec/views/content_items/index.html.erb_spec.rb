@@ -9,6 +9,12 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       assign(:content_items, content_items)
     end
 
+    it 'renders a page title' do
+      render
+
+      expect(rendered).to have_selector('h1', text: 'GOV.UK')
+    end
+
     it 'renders the table header with the right headings' do
       render
 
@@ -48,7 +54,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
     it 'renders the title of the organisation' do
       allow(organisation).to receive(:title).and_return('A Title')
-      assign(:title, organisation.title)
       render
 
       expect(rendered).to have_selector('h1', text: 'A Title')
