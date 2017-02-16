@@ -1,10 +1,22 @@
 class ContentItemsController < ApplicationController
+  before_action :set_organisation, only: :index
+
   def index
-    @organisation = Organisation.find_by_slug(params[:organisation_slug])
-    @content_items = @organisation.content_items.order("#{params[:sort]} #{params[:order]}").page(params[:page])
+    @content_items = ContentItemsQuery.build(
+      sort: params[:sort],
+      order: params[:order],
+      page: params[:page],
+      organisation: @organisation
+    )
   end
 
   def show
     @content_item = ContentItem.find(params[:id])
+  end
+
+private
+
+  def set_organisation
+    @organisation = Organisation.find_by_slug(params[:organisation_slug]) if params[:organisation_slug]
   end
 end
