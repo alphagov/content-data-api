@@ -1,8 +1,11 @@
-<h1><%= @organisation.title %></h1>
+<h1><%= @title %></h1>
 <table class="table table-bordered table-hover">
   <thead>
     <tr class="table-header">
       <%= sort_table_header "Title", "title" %>
+      <% if @organisation.blank? %>
+        <th>Organisation</th>
+      <% end %>
       <%= sort_table_header "Type of Document", "document_type" %>
       <%= sort_table_header "Unique page views (last 1 month)", "unique_page_views" %>
       <%= sort_table_header "Last Updated", "public_updated_at" %>

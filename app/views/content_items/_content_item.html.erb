@@ -1,5 +1,12 @@
 <tr>
   <td><%= link_to content_item.title, content_item_path(id: content_item.id) %></td>
+  <% if @organisation.blank? %>
+    <td>
+      <% content_item.organisations.each do |organisation| %>
+        <%= link_to organisation.title, organisation_content_items_path(organisation_slug: organisation.slug) %>
+      <% end %>
+    </td>
+  <% end %>
   <td><%= content_item.document_type %></td>
   <td><%= content_item.unique_page_views %></td>
   <td><%= time_ago_in_words(content_item.public_updated_at) %> ago</td>
