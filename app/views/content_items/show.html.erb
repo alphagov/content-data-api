@@ -30,7 +30,9 @@
     </tr>
     <tr>
       <td>Organisation</td>
-      <td><%= @organisation.title %></td>
+      <td>
+        <%= stringify_organisations @content_item.organisations %>
+      </td>
     </tr>
   </tbody>
 </table>

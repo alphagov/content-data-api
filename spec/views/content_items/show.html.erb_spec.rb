@@ -7,6 +7,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
   before do
     assign(:content_item, content_item)
     assign(:organisation, organisation)
+    content_item.organisations << organisation
   end
 
   it 'renders the table header with the right headings' do
@@ -58,19 +59,24 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_selector('td + td', text: '2 months ago')
   end
 
-  it 'renders the organisation name' do
-    organisation.title = 'An Organisation'
-    render
-
-    expect(rendered).to have_selector('td', text: 'Organisation')
-    expect(rendered).to have_selector('td + td', text: 'An Organisation')
-  end
-
   it 'renders the description of the content item' do
     content_item.description = 'The description of a content item'
     render
 
     expect(rendered).to have_selector('td', text: 'Description')
     expect(rendered).to have_selector('td + td', text: 'The description of a content item')
+  end
+
+  context "content items belong to multiple organisations" do
+    let(:content_item) { create(:content_item_with_organisations, organisations_count: 2) }
+
+    it 'renders the organisations names' do
+      content_item.organisations[0].title = 'An Organisation'
+      content_item.organisations[1].title = 'Another Organisation'
+      render
+
+      expect(rendered).to have_selector('td', text: 'Organisation')
+      expect(rendered).to have_selector('td + td', text: 'An Organisation, Another Organisation')
+    end
   end
 end
