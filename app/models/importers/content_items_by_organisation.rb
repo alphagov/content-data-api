@@ -1,7 +1,7 @@
 module Importers
   class ContentItemsByOrganisation
     def run(slug)
-      organisation = ::Organisation.find_by(slug: slug)
+      organisation = Organisation.find_by(slug: slug)
       ContentItemsService.new.find_each(slug) do |attributes|
         create_or_update!(attributes, organisation)
       end
