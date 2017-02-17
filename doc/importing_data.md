@@ -14,6 +14,12 @@ $ rake import:all_organisations
 $ rake import:content_items_by_organisation[{department-slug}]
 ```
 
+* To import all content items for all known organisations:
+
+```bash
+$ rake import:all_content_items
+```
+
 * To get the number of page views for all content items belonging to an organisation:
 
 ```bash
@@ -34,4 +40,5 @@ There is a Jenkins job, `Run rake task` that can be used to import data.
   * RAKE_TASK:
      * `import:all_organisations`
      * `import:content_items_by_organisation[{department-slug}]`
+     * `import:all_content_items`
      * `import:number_of_views_by_organisation[{department-slug}]`
