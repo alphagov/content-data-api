@@ -1,10 +1,12 @@
 module Importers
   class NumberOfViewsByOrganisation
+    BATCH_SIZE = 3000
+
     def run(slug)
       organisation = Organisation.find_by(slug: slug)
       google_analytics_service = GoogleAnalyticsService.new
 
-      organisation.content_items.find_in_batches(batch_size: 1) do |content_items|
+      organisation.content_items.find_in_batches(batch_size: BATCH_SIZE) do |content_items|
         base_paths = content_items.pluck(:base_path)
 
         results = google_analytics_service.page_views(base_paths)

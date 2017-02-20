@@ -19,6 +19,9 @@ RSpec.describe Importers::NumberOfViewsByOrganisation do
           },
         ]
       )
+
+      stub_const("Importers::NumberOfViewsByOrganisation::BATCH_SIZE", 1)
+
       subject.run('the-slug')
 
       content_item_one = ContentItem.find_by(base_path: 'the-link/first')
@@ -28,10 +31,22 @@ RSpec.describe Importers::NumberOfViewsByOrganisation do
       expect(content_item_two.unique_page_views).to eq(2)
     end
 
-    it "perform the requests in batches" do
-      expect_any_instance_of(GoogleAnalyticsService).to receive(:page_views).twice.and_return([])
+    context "performs the request to google api in batches" do
+      it "makes two requests when the batch size is one" do
+        expect_any_instance_of(GoogleAnalyticsService).to receive(:page_views).twice.and_return([])
 
-      subject.run('the-slug')
+        stub_const("Importers::NumberOfViewsByOrganisation::BATCH_SIZE", 1)
+
+        subject.run('the-slug')
+      end
+
+      it "makes one request when the batch size is two" do
+        expect_any_instance_of(GoogleAnalyticsService).to receive(:page_views).once.and_return([])
+
+        stub_const("Importers::NumberOfViewsByOrganisation::BATCH_SIZE", 2)
+
+        subject.run('the-slug')
+      end
     end
   end
 end
