@@ -47,6 +47,7 @@ group :development, :test do
   gem 'timecop'
   gem 'govuk-lint'
   gem 'listen', '~> 3.0.5'
+  gem 'guard-rspec', require: false
 end
 
 group :test do
