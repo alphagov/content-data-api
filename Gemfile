@@ -47,14 +47,16 @@ group :development, :test do
   gem 'timecop'
   gem 'govuk-lint'
   gem 'listen', '~> 3.0.5'
+  gem 'guard-rspec', require: false
 end
 
 group :test do
   gem 'rspec-rails', '~>3.5'
   gem 'rails-controller-testing', '~>1.0.1'
   gem 'capybara'
-  gem 'shoulda-matchers', '~> 2.8'
+  gem 'shoulda-matchers', '~> 2.8', require: false
   gem 'webmock'
+  gem 'spring-commands-rspec'
 end
 
 group :development do
