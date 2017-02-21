@@ -16,6 +16,11 @@ namespace :import do
     Importers::AllContentItems.new.run
   end
 
+  desc 'Import all taxons (without content items)'
+  task all_taxons: :environment do
+    Importers::AllTaxons.new.run
+  end
+
   desc 'Update the number of page views for all content items belonging to an organisation'
   task :number_of_views_by_organisation, [:slug] => :environment do |_, args|
     raise 'Missing slug parameter' unless args.slug
