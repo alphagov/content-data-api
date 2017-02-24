@@ -16,7 +16,7 @@ RSpec.describe OrganisationsHelper, type: :helper do
     end
 
     context 'linkify organisations' do
-      subject { helper.stringify_organisations(organisations, linkify: true) }
+      subject { helper.stringify_organisations(organisations) }
 
       it "turns each organisation name into a link" do
         link_href = organisation_content_items_path(organisation_slug: organisations[0].slug)
