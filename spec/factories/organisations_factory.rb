@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :organisation do
     sequence(:id) { |index| index }
     sequence(:slug) { |index| "slug-#{index}" }
-    sequence(:title) { |index| "title-#{index}" }
+    sequence(:title) { |index| "organisation-title-#{index}" }
 
     factory :organisation_with_content_items do
       transient do

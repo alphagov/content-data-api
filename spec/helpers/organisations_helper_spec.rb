@@ -14,5 +14,15 @@ RSpec.describe OrganisationsHelper, type: :helper do
     it 'has a comma between names' do
       expect(subject).to have_text('An Organisation, Another Organisation')
     end
+
+    context 'linkify organisations' do
+      subject { helper.stringify_organisations(organisations) }
+
+      it "turns each organisation name into a link" do
+        link_href = organisation_content_items_path(organisation_slug: organisations[0].slug)
+
+        expect(subject).to have_link(href: link_href)
+      end
+    end
   end
 end
