@@ -78,5 +78,14 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
       expect(rendered).to have_selector('td', text: 'Organisation')
       expect(rendered).to have_selector('td + td', text: 'An Organisation, Another Organisation')
     end
+
+    context 'item has never been published' do
+      it 'renders for no last updated value' do
+        content_item.public_updated_at = nil
+        render
+
+        expect(rendered).to have_selector('table tbody tr:nth(5) td:nth(2)', text: 'Never')
+      end
+    end
   end
 end
