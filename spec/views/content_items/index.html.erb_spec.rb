@@ -31,6 +31,15 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       expect(rendered).to have_selector('table tbody tr', count: 2)
     end
 
+    context 'items that have never been published' do
+      it 'renders for no last updated value' do
+        content_items[0].public_updated_at = nil
+        render
+
+        expect(rendered).to have_selector('table tr td:nth(5)', text: 'Never')
+      end
+    end
+
     describe 'row content' do
       it 'items depict the Organisations they each belong to' do
         content_items[0].organisations.build(title: 'An organisation', slug: 'organisation-slug ')
@@ -113,6 +122,15 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
         href = organisation_content_items_path(organisation.slug, order: :asc, sort: :public_updated_at)
 
         expect(rendered).to have_link('Last Updated', href: href)
+      end
+
+      context 'items that have never been published' do
+        it 'renders for no last updated value' do
+          content_items[0].public_updated_at = nil
+          render
+
+          expect(rendered).to have_selector('table tr td:nth(4)', text: 'Never')
+        end
       end
     end
   end
