@@ -7,5 +7,11 @@
   <% end %>
   <td><%= content_item.document_type %></td>
   <td><%= content_item.unique_page_views %></td>
-  <td><%= time_ago_in_words(content_item.public_updated_at) %> ago</td>
+  <td>
+    <% if content_item.public_updated_at %>
+      <%= time_ago_in_words(content_item.public_updated_at) %> ago
+    <% else %>
+      Never
+    <% end %>
+  </td>
 </tr>
