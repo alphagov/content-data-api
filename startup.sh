@@ -2,4 +2,4 @@
 
 bundle install
 
-rails s -b 0.0.0.0 -p 3206
+bundle exec rails s -b 0.0.0.0 -p 3206
