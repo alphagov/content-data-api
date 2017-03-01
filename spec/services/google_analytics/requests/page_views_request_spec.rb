@@ -63,7 +63,7 @@ module GoogleAnalytics
 
           request = PageViewsRequest.new.build(
             ["/check-uk-visa"],
-            start_date: "2016/11/22",
+            start_dates: ["2016/11/22"],
             end_date: "2016/12/22")
 
           expect(request.as_json).to include(page_views_request)
