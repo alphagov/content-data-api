@@ -12,7 +12,8 @@ module GoogleAnalytics
           {
             base_path: row.dimensions.first,
             page_views: {
-              one_month: row.metrics.first.values.first.to_i
+              one_month: row.metrics.first.values.first.to_i,
+              six_months: row.metrics.second.values.first.to_i
             },
           }
         end
