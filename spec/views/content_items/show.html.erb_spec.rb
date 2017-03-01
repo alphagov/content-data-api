@@ -43,7 +43,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
   end
 
   it 'renders the number of views' do
-    content_item.unique_page_views = 10
+    content_item.one_month_page_views = 10
     render
 
     expect(rendered).to have_selector('td', text: 'Unique page views (last 1 month)')
