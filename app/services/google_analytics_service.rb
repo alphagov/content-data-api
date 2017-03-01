@@ -8,7 +8,7 @@ class GoogleAnalyticsService
 
     request = GoogleAnalytics::Requests::PageViewsRequest.new.build(
       base_paths,
-      start_dates: [1.month.ago.strftime("%Y-%m-%d")]
+      start_dates: [1.month.ago.strftime("%Y-%m-%d"), 6.months.ago.strftime("%Y-%m-%d")]
     )
     response = client.batch_get_reports(request)
     GoogleAnalytics::Responses::PageViewsResponse.new.parse(response)

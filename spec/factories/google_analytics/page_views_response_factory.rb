@@ -16,6 +16,11 @@ module GoogleAnalytics
                         values: [
                           response.fetch(:page_views, {}).fetch(:one_month, nil)
                         ]
+                      ),
+                      Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
+                        values: [
+                          response.fetch(:page_views, {}).fetch(:six_months, nil)
+                        ]
                       )
                     ]
                   )
