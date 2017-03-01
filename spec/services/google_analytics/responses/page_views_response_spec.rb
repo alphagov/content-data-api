@@ -9,12 +9,14 @@ module GoogleAnalytics
             base_path: "/check-uk-visa",
             page_views: {
               one_month: 400,
+              six_months: 4800,
             },
           },
           {
             base_path: "/marriage-abroad",
             page_views: {
               one_month: 500,
+              six_months: 6000,
             },
           }
         ])
@@ -27,12 +29,14 @@ module GoogleAnalytics
             base_path: "/check-uk-visa",
             page_views: {
               one_month: 400,
+              six_months: 4800,
             },
           },
           {
             base_path: "/marriage-abroad",
             page_views: {
               one_month: 500,
+              six_months: 6000,
             },
           }
         ]
