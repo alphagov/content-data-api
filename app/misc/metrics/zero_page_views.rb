@@ -7,7 +7,7 @@ module Metrics
     end
 
     def run
-      { zero_page_views: { value: content_items.where("unique_page_views = 0").count } }
+      { zero_page_views: { value: content_items.where("one_month_page_views = 0").count } }
     end
   end
 end

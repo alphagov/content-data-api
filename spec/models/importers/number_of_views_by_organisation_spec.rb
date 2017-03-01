@@ -31,8 +31,8 @@ RSpec.describe Importers::NumberOfViewsByOrganisation do
       content_item_one = ContentItem.find_by(base_path: 'the-link/first')
       content_item_two = ContentItem.find_by(base_path: 'the-link/second')
 
-      expect(content_item_one.unique_page_views).to eq(3)
-      expect(content_item_two.unique_page_views).to eq(2)
+      expect(content_item_one.one_month_page_views).to eq(3)
+      expect(content_item_two.one_month_page_views).to eq(2)
     end
 
     context "performs the request to google api in batches" do

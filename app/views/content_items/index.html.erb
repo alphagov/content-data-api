@@ -1,5 +1,5 @@
 <% content_for :sidebar do %>
-  <%= render 'application/sidebar' %>  
+  <%= render 'application/sidebar' %>
 <% end %>
 
 <h1><%= @content_items.header organisation: @organisation, taxonomy: @taxonomy %></h1>
@@ -11,7 +11,7 @@
     <tr class="table-header">
       <%= sort_table_header heading: "Title", attribute: "title", filter_options: @filter_options %>
       <%= sort_table_header heading: "Doc type", attribute: "document_type", filter_options: @filter_options %>
-      <%= sort_table_header heading: "Page views (1mth)", attribute: "unique_page_views", filter_options: @filter_options %>
+      <%= sort_table_header heading: "Page views (1mth)", attribute: "one_month_page_views", filter_options: @filter_options %>
       <%= sort_table_header heading: "Last Updated", attribute: "public_updated_at", filter_options: @filter_options %>
     </tr>
   </thead>
