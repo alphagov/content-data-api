@@ -67,6 +67,14 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_selector('td + td', text: 'The description of a content item')
   end
 
+  it 'renders the number of pdfs the content item has' do
+    content_item.number_of_pdfs = 10
+    render
+
+    expect(rendered).to have_selector('td', text: 'Number of pdfs')
+    expect(rendered).to have_selector('td + td', text: 10)
+  end
+
   context "content items belong to multiple organisations" do
     let(:content_item) { create(:content_item_with_organisations, organisations_count: 2) }
 
