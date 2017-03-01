@@ -7,11 +7,15 @@ module GoogleAnalytics
         GoogleAnalytics::PageViewsResponseFactory.build([
           {
             base_path: "/check-uk-visa",
-            page_views: 400
+            page_views: {
+              one_month: 400,
+            },
           },
           {
             base_path: "/marriage-abroad",
-            page_views: 500
+            page_views: {
+              one_month: 500,
+            },
           }
         ])
       end
@@ -21,11 +25,15 @@ module GoogleAnalytics
         expected_response = [
           {
             base_path: "/check-uk-visa",
-            page_views: 400
+            page_views: {
+              one_month: 400,
+            },
           },
           {
             base_path: "/marriage-abroad",
-            page_views: 500
+            page_views: {
+              one_month: 500,
+            },
           }
         ]
 

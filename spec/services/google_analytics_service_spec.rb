@@ -14,14 +14,25 @@ RSpec.describe GoogleAnalyticsService do
     end
 
     it 'returns a hash containing the page views' do
-      google_response = GoogleAnalytics::PageViewsResponseFactory.build([{ base_path: '/path-1', page_views: 5 }])
+      google_response = GoogleAnalytics::PageViewsResponseFactory.build(
+        [
+          {
+            base_path: '/path-1',
+            page_views: {
+              one_month: 5,
+            },
+          }
+        ]
+      )
       allow(google_client).to receive(:batch_get_reports).and_return(google_response)
 
       response = subject.page_views(%w(/path-1))
       expect(response).to eq([
         {
           base_path: '/path-1',
-          page_views: 5
+          page_views: {
+            one_month: 5,
+          },
         }
       ])
     end
