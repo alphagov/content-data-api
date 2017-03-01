@@ -11,11 +11,15 @@ RSpec.describe Importers::NumberOfViewsByOrganisation do
         [
           {
             base_path: 'the-link/first',
-            page_views: 3,
+            page_views: {
+              one_month: 3,
+            },
           },
           {
             base_path: 'the-link/second',
-            page_views: 2,
+            page_views: {
+              one_month: 2,
+            },
           },
         ]
       )
