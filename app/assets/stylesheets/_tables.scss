@@ -23,12 +23,12 @@
 
 [aria-sort=descending] > * {
   &:after {
-    content: '\25B2'; // Up arrow
+    content: '\25BC'; // Down arrow
   }
 }
 
 [aria-sort=ascending] > * {
   &:after {
-    content: '\25BC'; // Down arrow
+    content: '\25B2'; // Up arrow
   }
 }
