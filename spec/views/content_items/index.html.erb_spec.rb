@@ -41,7 +41,8 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       expect(rendered).to have_selector('table thead tr:first-child th:nth(2)', text: 'Organisation')
       expect(rendered).to have_selector('table thead tr:first-child th:nth(3)', text: 'Type of Document')
       expect(rendered).to have_selector('table thead tr:first-child th:nth(4)', text: 'Unique page views (last 1 month)')
-      expect(rendered).to have_selector('table thead tr:first-child th:nth(5)', text: 'Last Updated')
+      expect(rendered).to have_selector('table thead tr:first-child th:nth(5)', text: 'Unique page views (last 6 months)')
+      expect(rendered).to have_selector('table thead tr:first-child th:nth(6)', text: 'Last Updated')
     end
 
     it 'renders a row per Content Item' do
@@ -55,7 +56,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
         content_items[0].public_updated_at = nil
         render
 
-        expect(rendered).to have_selector('table tr td:nth(5)', text: 'Never')
+        expect(rendered).to have_selector('table tr td:nth(6)', text: 'Never')
       end
     end
 
@@ -93,7 +94,8 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       expect(rendered).to have_selector('table thead', text: 'Title')
       expect(rendered).to have_selector('table thead tr:first-child th:nth(2)', text: 'Type of Document')
       expect(rendered).to have_selector('table thead tr:first-child th:nth(3)', text: 'Unique page views (last 1 month)')
-      expect(rendered).to have_selector('table thead tr:first-child th:nth(4)', text: 'Last Updated')
+      expect(rendered).to have_selector('table thead tr:first-child th:nth(4)', text: 'Unique page views (last 6 months)')
+      expect(rendered).to have_selector('table thead tr:first-child th:nth(5)', text: 'Last Updated')
     end
 
     it 'renders a row per Content Item' do
@@ -148,7 +150,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
           content_items[0].public_updated_at = nil
           render
 
-          expect(rendered).to have_selector('table tr td:nth(4)', text: 'Never')
+          expect(rendered).to have_selector('table tr td:nth(5)', text: 'Never')
         end
       end
     end
