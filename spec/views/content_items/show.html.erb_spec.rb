@@ -42,12 +42,20 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_selector('td + td', 'text': 'guidance')
   end
 
-  it 'renders the number of views' do
+  it 'renders the number of views for one month' do
     content_item.one_month_page_views = 10
     render
 
     expect(rendered).to have_selector('td', text: 'Unique page views (last 1 month)')
     expect(rendered).to have_selector('td + td', 'text': 10)
+  end
+
+  it 'renders the number of views for six months' do
+    content_item.six_months_page_views = 20
+    render
+
+    expect(rendered).to have_selector('td', text: 'Unique page views (last 6 months)')
+    expect(rendered).to have_selector('td + td', 'text': 20)
   end
 
   it 'renders the last updated date' do
@@ -101,7 +109,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
         content_item.public_updated_at = nil
         render
 
-        expect(rendered).to have_selector('table tbody tr:nth(5) td:nth(2)', text: 'Never')
+        expect(rendered).to have_selector('table tbody tr:nth(6) td:nth(2)', text: 'Never')
       end
     end
   end
