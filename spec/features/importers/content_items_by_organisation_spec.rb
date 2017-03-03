@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.feature 'rake import:content_items_by_organisation[{department-slug}]', type: :feature do
   let(:search_api_response) { { results: [{ link: '/link-1' }, { link: '/link-2' }] }.to_json }
-  let(:content_item_1) { attributes_for(:content_item, base_path: '/link-1', details: {}).to_json }
-  let(:content_item_2) { attributes_for(:content_item, base_path: '/link-2', details: {}).to_json }
+  let(:content_item_1) { attributes_for(:content_item, base_path: '/link-1', details: {}, links: {}).to_json }
+  let(:content_item_2) { attributes_for(:content_item, base_path: '/link-2', details: {}, links: {}).to_json }
 
   before do
     Rake::Task['import:content_items_by_organisation'].reenable
@@ -24,7 +24,7 @@ RSpec.feature 'rake import:content_items_by_organisation[{department-slug}]', ty
   end
 
   it 'saves the content item attributes' do
-    content_item_1 = attributes_for(:content_item, base_path: '/link-1', title: 'new-title').to_json
+    content_item_1 = attributes_for(:content_item, base_path: '/link-1', title: 'new-title', links: {}).to_json
     stub_request(:get, %r{.*}).to_return([
       { status: 200, body:  search_api_response },
       { status: 200, body:  content_item_1 }

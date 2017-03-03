@@ -8,13 +8,16 @@ class ContentItemsService
     Clients::SearchAPI.find_each(query: query, fields: fields) do |response|
       base_path = response.fetch(:link)
       content_item = Clients::ContentStore.find(base_path, attribute_names)
-      yield content_item if content_item
+      if content_item
+        content_item[:taxons] = TaxonomyParser.parse(content_item)
+        yield content_item
+      end
     end
   end
 
 private
 
   def attribute_names
-    @names ||= %i(content_id description title public_updated_at document_type base_path details)
+    @names ||= %i(content_id description title public_updated_at document_type base_path details links)
   end
 end

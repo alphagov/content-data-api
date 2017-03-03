@@ -20,10 +20,10 @@ RSpec.describe ContentItemsService do
     it 'yields the response' do
       result = []
       allow(Clients::SearchAPI).to receive(:find_each).and_yield(link: :link1)
-      allow(Clients::ContentStore).to receive(:find).and_return(:a)
+      allow(Clients::ContentStore).to receive(:find).and_return({})
       subject.find_each('organisation-slug') { |value| result << value }
 
-      expect(result).to match_array([:a])
+      expect(result).to match_array([{ taxons: [] }])
     end
 
     it "does not yield nil responses from the content store" do
