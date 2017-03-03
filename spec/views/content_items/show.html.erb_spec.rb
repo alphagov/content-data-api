@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe 'content_items/show.html.erb', type: :view do
   let(:content_item) { build(:content_item).decorate }
   let(:organisation) { build(:organisation) }
+  let(:taxonomy) { build(:taxonomy, title: "taxon title") }
 
   before do
     assign(:content_item, content_item)
@@ -73,6 +74,14 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
 
     expect(rendered).to have_selector('td', text: 'Number of pdfs')
     expect(rendered).to have_selector('td + td', text: 10)
+  end
+
+  it 'renders the taxonomies' do
+    content_item.taxonomies = [taxonomy]
+    render
+
+    expect(rendered).to have_selector('td', text: 'Taxonomies')
+    expect(rendered).to have_selector('td + td', text: "taxon title")
   end
 
   context "content items belong to multiple organisations" do
