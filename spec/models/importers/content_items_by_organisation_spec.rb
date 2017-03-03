@@ -8,7 +8,7 @@ RSpec.describe Importers::ContentItemsByOrganisation do
     it 'update the metrics of the content item' do
       subject.metric_builder = double(run_all: { number_of_pdfs: 10 })
       subject.content_items_service = double
-      attrs1 = { content_id: 'the-content-id' }
+      attrs1 = { content_id: 'the-content-id', taxons: [] }
       allow(subject.content_items_service).to receive(:find_each).with('the-slug').and_yield(attrs1)
 
       subject.run('the-slug')
@@ -19,8 +19,8 @@ RSpec.describe Importers::ContentItemsByOrganisation do
     it 'creates a new content item and updates an existing one in the same import' do
       subject.metric_builder = double(run_all: {})
       subject.content_items_service = double
-      attrs1 = { content_id: 'the-content-id' }
-      attrs2 = { content_id: 'the-content-id2' }
+      attrs1 = { content_id: 'the-content-id', taxons: [] }
+      attrs2 = { content_id: 'the-content-id2', taxons: [] }
       allow(subject.content_items_service).to receive(:find_each).with('the-slug').and_yield(attrs1).and_yield(attrs2)
 
       expect { subject.run('the-slug') }.to change { ContentItem.count }.by(1)

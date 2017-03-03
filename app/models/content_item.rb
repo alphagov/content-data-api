@@ -10,9 +10,25 @@ class ContentItem < ApplicationRecord
     content_id = attributes.fetch(:content_id)
     content_item = self.find_or_create_by(content_id: content_id)
 
-    attributes = attributes.slice(*content_item.attributes.symbolize_keys.keys)
+    content_item.add_organisation(organisation)
+    content_item.add_taxonomies(attributes.fetch(:taxons))
 
+    attributes = content_item.existing_attributes(attributes)
     content_item.update!(attributes)
-    content_item.organisations << organisation unless content_item.organisations.include?(organisation)
+  end
+
+  def add_organisation(organisation)
+    self.organisations << organisation unless self.organisations.include?(organisation)
+  end
+
+  def add_taxonomies(taxon_ids)
+    taxon_ids.each do |taxon_id|
+      taxon = Taxonomy.find_by(content_id: taxon_id)
+      taxonomies << taxon unless taxon.nil? || taxonomies.include?(taxon)
+    end
+  end
+
+  def existing_attributes(attributes)
+    attributes.slice(*self.attributes.symbolize_keys.keys)
   end
 end
