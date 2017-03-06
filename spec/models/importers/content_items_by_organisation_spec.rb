@@ -9,14 +9,21 @@ RSpec.describe Importers::ContentItemsByOrganisation do
       it 'creates a content item per attribute group' do
         attrs1 = attributes_for(:content_item)
         attrs2 = attributes_for(:content_item)
+        subject.metric_builder = double()
+
         allow_any_instance_of(ContentItemsService).to receive(:find_each).with('the-slug').and_yield(attrs1).and_yield(attrs2)
+        allow(subject.metric_builder).to receive(:run_all).and_return({})
 
         expect { subject.run('the-slug') }.to change { ContentItem.count }.by(2)
       end
 
       it 'updates the attributes' do
         attrs1 = attributes_for(:content_item, base_path: 'the-link-value', title: 'the-title')
+        subject.metric_builder = double()
+
         allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attrs1)
+        allow(subject.metric_builder).to receive(:run_all).and_return({})
+
         subject.run('the-slug')
 
         attributes = ContentItem.find_by(base_path: 'the-link-value').attributes.symbolize_keys
@@ -29,7 +36,10 @@ RSpec.describe Importers::ContentItemsByOrganisation do
 
       it 'does not create a new one' do
         attributes = { content_id: content_item.content_id, base_path: 'the-link' }
+        subject.metric_builder = double()
+
         allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
+        allow(subject.metric_builder).to receive(:run_all).and_return({})
 
         expect { subject.run('the-slug') }.to change { ContentItem.count }.by(0)
       end
@@ -37,7 +47,10 @@ RSpec.describe Importers::ContentItemsByOrganisation do
       it 'updates the attributes' do
         content_item.update(title: 'old-title')
         attributes = { content_id: content_item.content_id, title: 'the-new-title', base_path: 'the-link' }
+        subject.metric_builder = double()
+
         allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
+        allow(subject.metric_builder).to receive(:run_all).and_return({})
 
         subject.run('the-slug')
 
@@ -53,7 +66,8 @@ RSpec.describe Importers::ContentItemsByOrganisation do
       subject.metric_builder = double()
 
       allow_any_instance_of(ContentItemsService).to receive(:find_each).with('the-slug').and_yield(attrs1).and_yield(attrs2)
-
+      allow(subject.metric_builder).to receive(:run_all).and_return({})
+      
       expect(subject.metric_builder).to receive(:run_all).twice
 
       subject.run('the-slug')
