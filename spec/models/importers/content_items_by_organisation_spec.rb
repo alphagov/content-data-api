@@ -44,5 +44,19 @@ RSpec.describe Importers::ContentItemsByOrganisation do
         expect(ContentItem.first.title).to eq('the-new-title')
       end
     end
+
+
+
+    it 'calls the metric builder for each content item' do
+      attrs1 = attributes_for(:content_item)
+      attrs2 = attributes_for(:content_item)
+      subject.metric_builder = double()
+
+      allow_any_instance_of(ContentItemsService).to receive(:find_each).with('the-slug').and_yield(attrs1).and_yield(attrs2)
+
+      expect(subject.metric_builder).to receive(:run_all).twice
+
+      subject.run('the-slug')
+    end
   end
 end
