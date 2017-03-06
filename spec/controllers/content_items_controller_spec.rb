@@ -2,6 +2,13 @@ require 'rails_helper'
 
 RSpec.describe ContentItemsController, type: :controller do
   describe "GET #index" do
+    it "returns the content items filtered by text" do
+      expect(ContentItemsQuery).to receive(:build).with(hash_including(query: 'a title')).and_return(:the_results)
+
+      get :index, params: { query: 'a title' }
+      expect(assigns(:content_items)).to eq(:the_results)
+    end
+
     context "unfiltered" do
       let(:content_items) { create_list(:content_item_with_organisations, 3) }
 

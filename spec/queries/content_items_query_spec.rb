@@ -3,6 +3,22 @@ require 'rails_helper'
 RSpec.describe ContentItemsQuery, type: :query do
   subject { described_class }
 
+  context "search title" do
+    let!(:content_items) do
+      [
+        create(:content_item, title: 'title 1'),
+        create(:content_item, title: 'title 2')
+      ]
+    end
+
+    it "returns content_items" do
+      results = subject.build(query: 'title 1')
+
+      expect(results.count).to eq(1)
+      expect(results.first.title).to eq('title 1')
+    end
+  end
+
   context "sorts with parameters" do
     let!(:content_items) do
       [
