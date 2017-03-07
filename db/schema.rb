@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170206153437) do
+ActiveRecord::Schema.define(version: 20170307151842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20170206153437) do
     t.string   "description"
     t.integer  "unique_page_views", default: 0
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true, using: :btree
+    t.index ["title"], name: "index_content_items_on_title", using: :btree
   end
 
   create_table "content_items_organisations", id: false, force: :cascade do |t|
