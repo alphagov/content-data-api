@@ -23,4 +23,12 @@ RSpec.feature "Search in content items", type: :feature do
     click_on "Search"
     expect(page).to have_selector('main tbody tr:first', text: 'title - b')
   end
+
+  scenario "show the query entered by the user after searching" do
+    visit "/content_items"
+    fill_in 'query', with: 'a search value'
+
+    click_on "Search"
+    expect(page).to have_field(:query, with: 'a search value')
+  end
 end

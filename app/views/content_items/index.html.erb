@@ -1,5 +1,5 @@
 <%= form_tag content_items_path, method: :get do %>
-    <%= text_field_tag 'query', nil, placeholder: 'Enter search term...' %>
+    <%= text_field_tag 'query', params[:query], placeholder: 'Enter search term...' %>
     <%= submit_tag 'Search' %>
 
     <%= hidden_field_tag :sort, params[:sort] %>
