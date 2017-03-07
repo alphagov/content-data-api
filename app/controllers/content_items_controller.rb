@@ -5,6 +5,7 @@ class ContentItemsController < ApplicationController
     @content_items = ContentItemsQuery.build(
       sort: params[:sort],
       order: params[:order],
+      query: params[:query],
       page: params[:page],
       organisation: @organisation
     )

@@ -1,6 +1,25 @@
 require 'rails_helper'
 
 RSpec.describe 'content_items/index.html.erb', type: :view do
+  describe 'Search form' do
+    before do
+      allow(view).to receive(:paginate)
+      assign(:content_items, [])
+    end
+
+    it 'has an input to enter the query' do
+      render
+
+      expect(rendered).to have_selector('form input[name=query]')
+    end
+
+    it 'has a button to perform the query' do
+      render
+
+      expect(rendered).to have_selector('form input[type=submit]')
+    end
+  end
+
   context 'unfiltered' do
     let(:content_items) { build_list(:content_item, 2) }
 
