@@ -77,6 +77,16 @@ RSpec.describe TableHelper, type: :helper do
           expect(subject).to have_link(href: link_href)
         end
       end
+
+      context 'search parameter' do
+        before { controller.params = params_desc.merge(query: 'a query value') }
+
+        it 'has a link with the query string' do
+          link_href = organisation_content_items_path(params_asc.merge!(query: 'a query value'))
+
+          expect(subject).to have_link(href: link_href)
+        end
+      end
     end
   end
 end
