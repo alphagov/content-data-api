@@ -1,10 +1,15 @@
-<%= form_tag content_items_path, method: :get do %>
-    <%= text_field_tag 'query', params[:query], placeholder: 'Enter search term...' %>
-    <%= submit_tag 'Search' %>
-
+<%= form_tag content_items_path, method: :get, class: 'row' do %>
+    <div class="col-xs-10">
+      <%= label_tag 'query', 'Your search term', class: 'rm' %>
+      <%= text_field_tag 'query', params[:query], placeholder: 'Enter search term...', class: 'form-control input-lg' %>
+    </div>
+    <div class="col-xs-2">
+      <%= submit_tag 'Search', class: "btn btn-default btn-lg btn-block" %>
+    </div>
     <%= hidden_field_tag :sort, params[:sort] %>
     <%= hidden_field_tag :order, params[:order] %>
 <% end %>
+</tr>
 
 <h1><%= content_items_header %></h1>
 
