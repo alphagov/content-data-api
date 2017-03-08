@@ -17,17 +17,4 @@ RSpec.feature "Content Items List", type: :feature do
       it_behaves_like 'a paginated list', 'content_items'
     end
   end
-
-  context "navigation to organisation pages" do
-    scenario "clicks through to an organisation" do
-      first_content_item = @content_items.first
-      first_content_item.organisations << create(:organisation, title: 'the-organisation-title', slug: 'organisation-slug')
-
-      visit 'content_items'
-      click_on 'the-organisation-title'
-
-      expected_path = "/organisations/organisation-slug/content_items"
-      expect(current_path).to eq(expected_path)
-    end
-  end
 end
