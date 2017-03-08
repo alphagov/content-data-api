@@ -52,7 +52,7 @@ RSpec.describe TableHelper, type: :helper do
     describe 'Sorting' do
       context 'When the column is unsorted' do
         it 'has a link to sort asc' do
-          link_href = organisation_content_items_path(params_asc)
+          link_href = content_items_path(params_asc)
 
           expect(subject).to have_link(href: link_href)
         end
@@ -62,7 +62,7 @@ RSpec.describe TableHelper, type: :helper do
         before { controller.params = params_asc }
 
         it 'has a link to sort desc' do
-          link_href = organisation_content_items_path(params_desc)
+          link_href = content_items_path(params_desc)
 
           expect(subject).to have_link(href: link_href)
         end
@@ -72,7 +72,7 @@ RSpec.describe TableHelper, type: :helper do
         before { controller.params = params_desc }
 
         it 'has a link to sort asc' do
-          link_href = organisation_content_items_path(params_asc)
+          link_href = content_items_path(params_asc)
 
           expect(subject).to have_link(href: link_href)
         end
@@ -82,7 +82,7 @@ RSpec.describe TableHelper, type: :helper do
         before { controller.params = params_desc.merge(query: 'a query value') }
 
         it 'has a link with the query string' do
-          link_href = organisation_content_items_path(params_asc.merge!(query: 'a query value'))
+          link_href = content_items_path(params_asc.merge!(query: 'a query value'))
 
           expect(subject).to have_link(href: link_href)
         end
