@@ -15,9 +15,9 @@ RSpec.feature "Content Item Details", type: :feature do
 
   describe 'The user can navigate paged lists of content items' do
     before do
-      create :organisation_with_content_items, slug: "the-slug", content_items_count: 3
+      create_list :content_item, 3
     end
 
-    it_behaves_like "a paginated list", "organisations/the-slug/content_items"
+    it_behaves_like "a paginated list", "/content_items"
   end
 end
