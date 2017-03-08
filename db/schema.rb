@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170307151842) do
     t.string   "document_type"
     t.string   "description"
     t.integer  "unique_page_views", default: 0
+    t.integer  "number_of_pdfs",    default: 0
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true, using: :btree
     t.index ["title"], name: "index_content_items_on_title", using: :btree
   end

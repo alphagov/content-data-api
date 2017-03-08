@@ -3,46 +3,27 @@ require 'rails_helper'
 RSpec.describe Importers::ContentItemsByOrganisation do
   describe '#run' do
     let!(:organisation) { create(:organisation, slug: 'the-slug') }
-    let(:content_item) { create(:content_item, base_path: 'the-link', organisations: [organisation]) }
+    let!(:content_item) { create(:content_item, content_id: 'the-content-id', organisations: [organisation]) }
 
-    context 'when the content item does not exist' do
-      it 'creates a content item per attribute group' do
-        attrs1 = attributes_for(:content_item)
-        attrs2 = attributes_for(:content_item)
-        allow_any_instance_of(ContentItemsService).to receive(:find_each).with('the-slug').and_yield(attrs1).and_yield(attrs2)
+    it 'update the metrics of the content item' do
+      subject.metric_builder = double(run_all: { number_of_pdfs: 10 })
+      subject.content_items_service = double
+      attrs1 = { content_id: 'the-content-id' }
+      allow(subject.content_items_service).to receive(:find_each).with('the-slug').and_yield(attrs1)
 
-        expect { subject.run('the-slug') }.to change { ContentItem.count }.by(2)
-      end
+      subject.run('the-slug')
 
-      it 'updates the attributes' do
-        attrs1 = attributes_for(:content_item, base_path: 'the-link-value', title: 'the-title')
-        allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attrs1)
-        subject.run('the-slug')
-
-        attributes = ContentItem.find_by(base_path: 'the-link-value').attributes.symbolize_keys
-        expect(attributes).to include(title: 'the-title')
-      end
+      expect(content_item.reload.number_of_pdfs).to eq(10)
     end
 
-    context 'when the content item already exists' do
-      let(:content_item) { create(:content_item, base_path: 'the-link', organisations: [organisation]) }
+    it 'creates a new content item and updates an existing one in the same import' do
+      subject.metric_builder = double(run_all: {})
+      subject.content_items_service = double
+      attrs1 = { content_id: 'the-content-id' }
+      attrs2 = { content_id: 'the-content-id2' }
+      allow(subject.content_items_service).to receive(:find_each).with('the-slug').and_yield(attrs1).and_yield(attrs2)
 
-      it 'does not create a new one' do
-        attributes = { content_id: content_item.content_id, base_path: 'the-link' }
-        allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
-
-        expect { subject.run('the-slug') }.to change { ContentItem.count }.by(0)
-      end
-
-      it 'updates the attributes' do
-        content_item.update(title: 'old-title')
-        attributes = { content_id: content_item.content_id, title: 'the-new-title', base_path: 'the-link' }
-        allow_any_instance_of(ContentItemsService).to receive(:find_each).and_yield(attributes)
-
-        subject.run('the-slug')
-
-        expect(ContentItem.first.title).to eq('the-new-title')
-      end
+      expect { subject.run('the-slug') }.to change { ContentItem.count }.by(1)
     end
   end
 end

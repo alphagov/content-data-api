@@ -15,6 +15,6 @@ class ContentItemsService
 private
 
   def attribute_names
-    @names ||= %i(content_id description title public_updated_at document_type base_path)
+    @names ||= %i(content_id description title public_updated_at document_type base_path details)
   end
 end

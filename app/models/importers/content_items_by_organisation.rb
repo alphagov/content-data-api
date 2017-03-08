@@ -1,20 +1,18 @@
 module Importers
   class ContentItemsByOrganisation
-    def run(slug)
-      organisation = Organisation.find_by(slug: slug)
-      ContentItemsService.new.find_each(slug) do |attributes|
-        create_or_update!(attributes, organisation)
-      end
+    attr_accessor :metric_builder, :content_items_service
+
+    def initialize
+      @metric_builder = MetricBuilder.new
+      @content_items_service = ContentItemsService.new
     end
 
-  private
-
-    def create_or_update!(attributes, organisation)
-      content_id = attributes.fetch(:content_id)
-      content_item = ContentItem.find_or_create_by(content_id: content_id)
-
-      content_item.update!(attributes)
-      content_item.organisations << organisation unless content_item.organisations.include?(organisation)
+    def run(slug)
+      organisation = Organisation.find_by(slug: slug)
+      content_items_service.find_each(slug) do |content_item_attributes|
+        metrics = metric_builder.run_all(content_item_attributes)
+        ContentItem.create_or_update!(metrics.merge(content_item_attributes), organisation)
+      end
     end
   end
 end
