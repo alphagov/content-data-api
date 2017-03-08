@@ -17,8 +17,8 @@ RSpec.feature "Organisations list", type: :feature do
     visit organisations_path
     click_on "organisation title"
 
-    expected_path = "/organisations/the-slug/content_items"
-    expect(current_path).to eq(expected_path)
+    expected_path = "/content_items?organisation_slug=the-slug"
+    expect(current_url).to include(expected_path)
   end
 
   describe 'The user can navigate paged lists of organisations' do
