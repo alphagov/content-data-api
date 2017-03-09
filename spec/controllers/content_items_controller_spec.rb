@@ -57,4 +57,26 @@ RSpec.describe ContentItemsController, type: :controller do
       end
     end
   end
+
+  describe "GET #filter" do
+    it "returns http success" do
+      get :filter
+
+      expect(response).to have_http_status(:success)
+    end
+
+    it "assigns a list of organisations" do
+      organisations = [build(:organisation), build(:organisation)]
+      allow(Organisation).to receive(:all).and_return(organisations)
+      get :filter
+
+      expect(assigns(:organisations)).to match_array(organisations)
+    end
+
+    it "renders the filter template" do
+      get :filter
+      
+      expect(response).to render_template("filter")
+    end
+  end
 end
