@@ -8,6 +8,12 @@
 $ rake import:all_organisations
 ```
 
+* To import all taxonomies:
+
+```bash
+$ rake import:all_taxons
+```
+
 * To create or update the content items for an existing organisation:
 
 ```bash
@@ -39,6 +45,7 @@ There is a Jenkins job, `Run rake task` that can be used to import data.
   * MACHINE_CLASS: `backend`
   * RAKE_TASK:
      * `import:all_organisations`
+     * `import:all_taxons`
      * `import:content_items_by_organisation[{department-slug}]`
      * `import:all_content_items`
      * `import:number_of_views_by_organisation[{department-slug}]`
