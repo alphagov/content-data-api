@@ -12,7 +12,7 @@ class ContentItemsController < ApplicationController
   end
 
   def show
-    @content_item = ContentItem.find(params[:id])
+    @content_item = ContentItem.find(params[:id]).decorate
   end
 
 private
