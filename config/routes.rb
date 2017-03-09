@@ -3,5 +3,5 @@ Rails.application.routes.draw do
 
   resources :organisations, only: %w(index)
 
-  resources :content_items
+  resources :content_items, only: %w(index show)
 end
