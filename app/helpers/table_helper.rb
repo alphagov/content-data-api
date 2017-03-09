@@ -6,7 +6,7 @@ module TableHelper
   class SortTable
     attr_accessor :view, :heading, :attribute_name
 
-    delegate :content_tag, :params, :link_to, :content_items_path, :content_items_path, to: :view
+    delegate :content_tag, :params, :link_to, :content_items_path, to: :view
 
     def initialize(view, heading, attribute_name)
       @view = view
