@@ -19,7 +19,7 @@ RSpec.describe OrganisationsHelper, type: :helper do
       subject { helper.stringify_organisations(organisations) }
 
       it "turns each organisation name into a link" do
-        link_href = organisation_content_items_path(organisation_slug: organisations[0].slug)
+        link_href = content_items_path(organisation_slug: organisations[0].slug)
 
         expect(subject).to have_link(href: link_href)
       end

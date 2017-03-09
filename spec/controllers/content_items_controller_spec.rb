@@ -2,58 +2,37 @@ require 'rails_helper'
 
 RSpec.describe ContentItemsController, type: :controller do
   describe "GET #index" do
-    it "returns the content items filtered by text" do
-      expect(ContentItemsQuery).to receive(:build).with(hash_including(query: 'a title')).and_return(:the_results)
+    it "returns http success" do
+      get :index
 
-      get :index, params: { query: 'a title' }
+      expect(response).to have_http_status(:success)
+    end
+
+    it "assigns list of content items" do
+      expect(ContentItemsQuery).to receive(:build).and_return(:the_results)
+      get :index
+
       expect(assigns(:content_items)).to eq(:the_results)
     end
 
-    context "unfiltered" do
-      let(:content_items) { create_list(:content_item_with_organisations, 3) }
+    it "build the query with the expected params" do
+      expected_params = { sort: 'title', order: 'asc', page: '1', organisation: nil, query: 'a title' }
+      expect(ContentItemsQuery).to receive(:build).with(expected_params).and_return(:the_results)
 
-      before do
-        get :index
-      end
-
-      it "returns http success" do
-        expect(response).to have_http_status(:success)
-      end
-
-      it "assigns list of content items" do
-        expect(assigns(:content_items)).to eq(content_items)
-      end
-
-      it "renders the :index template" do
-        expect(subject).to render_template(:index)
-      end
+      get :index, params: expected_params
     end
 
-    context "find by organisation" do
-      let(:organisation) { create(:organisation) }
+    it "assigns the organisation provided the slug" do
+      create(:organisation, slug: 'the-slug')
 
-      before do
-        get :index, params: { organisation_slug: organisation.slug }
-      end
-
-      it "returns http success" do
-        expect(response).to have_http_status(:success)
-      end
-
-      it "assigns current organisation" do
-        expect(assigns(:organisation)).to eq(organisation)
-      end
-
-      it "renders the :index template" do
-        expect(subject).to render_template(:index)
-      end
+      get :index, params: { organisation_slug: 'the-slug' }
+      expect(assigns(:organisation).slug).to eq('the-slug')
     end
 
-    context "content items fetched via ContentItemQuery" do
-      it "returns a list of content items" do
-        allow(ContentItemsQuery).to receive(:build).and_return(:content_items)
-        expect(ContentItemsQuery.build({})).to eq(:content_items)
-      end
+    it "renders the :index template" do
+      get :index
+
+      expect(subject).to render_template(:index)
     end
   end
 

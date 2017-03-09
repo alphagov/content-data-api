@@ -18,6 +18,6 @@ class ContentItemsController < ApplicationController
 private
 
   def set_organisation
-    @organisation = Organisation.find_by_slug(params[:organisation_slug]) if params[:organisation_slug]
+    @organisation = Organisation.find_by(slug: params[:organisation_slug]) if params[:organisation_slug]
   end
 end

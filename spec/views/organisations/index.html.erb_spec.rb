@@ -33,7 +33,7 @@ RSpec.describe 'organisations/index.html.erb', type: :view do
     it "should render a link for each organisation" do
       organisations.first.title = "Organisation 1"
       organisations.first.slug = "the-slug"
-      organisation_link = organisation_content_items_path(organisation_slug: "the-slug")
+      organisation_link = content_items_path(organisation_slug: "the-slug")
       render
 
       expect(rendered).to have_selector("a[href='#{organisation_link}']", text: "Organisation 1")
