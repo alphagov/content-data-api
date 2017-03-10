@@ -21,7 +21,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   end
 
   context 'unfiltered' do
-    let(:content_items) { build_list(:content_item, 2) }
+    let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 2)) }
 
     before do
       allow(view).to receive(:paginate)

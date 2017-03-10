@@ -8,7 +8,7 @@ class ContentItemsController < ApplicationController
       query: params[:query],
       page: params[:page],
       organisation: @organisation
-    )
+    ).decorate
   end
 
   def show
