@@ -81,7 +81,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     end
 
     it 'renders the title of the organisation' do
-      allow(organisation).to receive(:title).and_return('A Title')
+      allow(content_items).to receive(:header).and_return('A Title')
       render
 
       expect(rendered).to have_selector('h1', text: 'A Title')
