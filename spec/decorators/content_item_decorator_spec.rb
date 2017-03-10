@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe ContentItemDecorator, type: :decorator do
-
   describe '#organisation_links' do
     let(:organisations) do
       [
