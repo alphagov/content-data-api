@@ -37,6 +37,7 @@ gem 'govuk_admin_template', '~> 5.0'
 gem 'httparty'
 gem 'kaminari', '~> 0.17.0'
 gem 'google-api-client', '~> 0.9'
+gem 'draper', '3.0.0.pre1'
 
 gem 'unicorn', '~> 5.1.0'
 

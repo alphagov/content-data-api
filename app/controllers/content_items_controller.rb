@@ -8,11 +8,11 @@ class ContentItemsController < ApplicationController
       query: params[:query],
       page: params[:page],
       organisation: @organisation
-    )
+    ).decorate
   end
 
   def show
-    @content_item = ContentItem.find(params[:id])
+    @content_item = ContentItem.find(params[:id]).decorate
   end
 
 private

@@ -2,7 +2,7 @@
   <td><%= link_to content_item.title, content_item_path(id: content_item.id) %></td>
   <% if @organisation.blank? %>
     <td>
-      <%= stringify_organisations content_item.organisations %>
+      <%= content_item.organisation_links %>
     </td>
   <% end %>
   <td><%= content_item.document_type %></td>

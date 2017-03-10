@@ -4,7 +4,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   describe 'Search form' do
     before do
       allow(view).to receive(:paginate)
-      assign(:content_items, [])
+      assign(:content_items, ContentItemsDecorator.new([]))
     end
 
     it 'has an input to enter the query' do
@@ -21,7 +21,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   end
 
   context 'unfiltered' do
-    let(:content_items) { build_list(:content_item, 2) }
+    let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 2)) }
 
     before do
       allow(view).to receive(:paginate)
@@ -71,7 +71,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
   context "filter by org" do
     let(:organisation) { build(:organisation) }
-    let(:content_items) { build_list(:content_item, 2) }
+    let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 2)) }
 
     before do
       allow(view).to receive(:paginate)
@@ -81,7 +81,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     end
 
     it 'renders the title of the organisation' do
-      allow(organisation).to receive(:title).and_return('A Title')
+      allow(content_items).to receive(:header).and_return('A Title')
       render
 
       expect(rendered).to have_selector('h1', text: 'A Title')

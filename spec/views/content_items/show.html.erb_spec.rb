@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'content_items/show.html.erb', type: :view do
-  let(:content_item) { build(:content_item) }
+  let(:content_item) { build(:content_item).decorate }
   let(:organisation) { build(:organisation) }
 
   before do
@@ -76,7 +76,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
   end
 
   context "content items belong to multiple organisations" do
-    let(:content_item) { create(:content_item_with_organisations, organisations_count: 2) }
+    let(:content_item) { create(:content_item_with_organisations, organisations_count: 2).decorate }
 
     it 'renders the organisations names' do
       content_item.organisations[0].title = 'An Organisation'
