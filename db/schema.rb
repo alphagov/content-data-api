@@ -17,16 +17,16 @@ ActiveRecord::Schema.define(version: 20170327105838) do
 
   create_table "content_items", force: :cascade do |t|
     t.string   "content_id"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.datetime "public_updated_at"
     t.string   "base_path"
     t.string   "title"
     t.string   "document_type"
     t.string   "description"
     t.integer  "one_month_page_views",  default: 0
-    t.integer  "number_of_pdfs",        default: 0
     t.integer  "six_months_page_views", default: 0
+    t.integer  "number_of_pdfs",    default: 0
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true, using: :btree
     t.index ["title"], name: "index_content_items_on_title", using: :btree
   end
