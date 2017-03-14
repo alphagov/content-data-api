@@ -18,10 +18,8 @@ RSpec.describe GoogleAnalyticsService do
         [
           {
             base_path: '/path-1',
-            page_views: {
-              one_month: 5,
-              six_months: 60,
-            },
+            one_month_page_views: 5,
+            six_months_page_views: 60,
           }
         ]
       )
@@ -31,10 +29,8 @@ RSpec.describe GoogleAnalyticsService do
       expect(response).to eq([
         {
           base_path: '/path-1',
-          page_views: {
-            one_month: 5,
-            six_months: 60,
-          },
+          one_month_page_views: 5,
+          six_months_page_views: 60,
         }
       ])
     end
