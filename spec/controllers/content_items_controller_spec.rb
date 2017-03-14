@@ -75,7 +75,7 @@ RSpec.describe ContentItemsController, type: :controller do
 
     it "renders the filter template" do
       get :filter
-      
+
       expect(response).to render_template("filter")
     end
   end
