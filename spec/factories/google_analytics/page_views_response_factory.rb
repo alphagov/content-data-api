@@ -14,12 +14,12 @@ module GoogleAnalytics
                     metrics: [
                       Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
                         values: [
-                          response.fetch(:page_views, {}).fetch(:one_month, nil)
+                          response.fetch(:one_month_page_views)
                         ]
                       ),
                       Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
                         values: [
-                          response.fetch(:page_views, {}).fetch(:six_months, nil)
+                          response.fetch(:six_months_page_views)
                         ]
                       )
                     ]

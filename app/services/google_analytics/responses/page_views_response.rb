@@ -11,10 +11,8 @@ module GoogleAnalytics
         report.data.rows.map do |row|
           {
             base_path: row.dimensions.first,
-            page_views: {
-              one_month: row.metrics.first.values.first.to_i,
-              six_months: row.metrics.second.values.first.to_i
-            },
+            one_month_page_views: row.metrics.first.values.first.to_i,
+            six_months_page_views: row.metrics.second.values.first.to_i
           }
         end
       end
