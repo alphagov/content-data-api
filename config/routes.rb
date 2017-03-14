@@ -3,5 +3,7 @@ Rails.application.routes.draw do
 
   resources :organisations, only: %w(index)
 
-  resources :content_items, only: %w(index show)
+  resources :content_items, only: %w(index show) do
+    collection { get :filter }
+  end
 end

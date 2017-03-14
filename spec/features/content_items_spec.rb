@@ -17,4 +17,19 @@ RSpec.feature "Content Items List", type: :feature do
       it_behaves_like 'a paginated list', 'content_items'
     end
   end
+
+  context "Filtering content items by organisation" do
+    scenario "the user selects an organisation from the organisations select box, clicks the filter button and retrieves a filtered list of the organisation's content items" do
+      create :organisation, slug: "the-slug-1", title: "title 1"
+      create :organisation, slug: "the-slug-2", title: "title 2"
+
+      visit "/content_items/filter"
+      select "title 2", from: "organisation_slug"
+      click_on "Filter"
+
+      expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=the-slug-2"
+
+      expect(current_url).to include(expected_path)
+    end
+  end
 end

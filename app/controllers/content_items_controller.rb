@@ -15,6 +15,10 @@ class ContentItemsController < ApplicationController
     @content_item = ContentItem.find(params[:id]).decorate
   end
 
+  def filter
+    @organisations = Organisation.all
+  end
+
 private
 
   def set_organisation
