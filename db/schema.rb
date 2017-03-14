@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307151842) do
+ActiveRecord::Schema.define(version: 20170314110425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,12 +35,26 @@ ActiveRecord::Schema.define(version: 20170307151842) do
     t.integer "organisation_id", null: false
   end
 
+  create_table "content_items_taxonomies", id: false, force: :cascade do |t|
+    t.integer "content_item_id", null: false
+    t.integer "taxonomy_id",     null: false
+    t.index ["content_item_id"], name: "index_content_items_taxonomies_on_content_item_id", using: :btree
+    t.index ["taxonomy_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true, using: :btree
+  end
+
   create_table "organisations", force: :cascade do |t|
     t.string   "slug"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "title"
     t.index ["slug"], name: "index_organisations_on_slug", unique: true, using: :btree
+  end
+
+  create_table "taxonomies", force: :cascade do |t|
+    t.string   "content_id"
+    t.string   "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

@@ -52,6 +52,10 @@ RSpec.describe ContentItemsController, type: :controller do
         expect(assigns(:content_item)).to eq(organisation.content_items.first)
       end
 
+      it "decorates the content item" do
+        expect(assigns(:content_item)).to be_decorated
+      end
+
       it "renders the :show template" do
         expect(subject).to render_template(:show)
       end
