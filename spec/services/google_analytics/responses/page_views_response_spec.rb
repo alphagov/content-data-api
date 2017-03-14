@@ -7,17 +7,13 @@ module GoogleAnalytics
         GoogleAnalytics::PageViewsResponseFactory.build([
           {
             base_path: "/check-uk-visa",
-            page_views: {
-              one_month: 400,
-              six_months: 4800,
-            },
+            one_month_page_views: 400,
+            six_months_page_views: 4800,
           },
           {
             base_path: "/marriage-abroad",
-            page_views: {
-              one_month: 500,
-              six_months: 6000,
-            },
+            one_month_page_views: 500,
+            six_months_page_views: 6000,
           }
         ])
       end
@@ -27,17 +23,13 @@ module GoogleAnalytics
         expected_response = [
           {
             base_path: "/check-uk-visa",
-            page_views: {
-              one_month: 400,
-              six_months: 4800,
-            },
+            one_month_page_views: 400,
+            six_months_page_views: 4800,
           },
           {
             base_path: "/marriage-abroad",
-            page_views: {
-              one_month: 500,
-              six_months: 6000,
-            },
+            one_month_page_views: 500,
+            six_months_page_views: 6000,
           }
         ]
 
