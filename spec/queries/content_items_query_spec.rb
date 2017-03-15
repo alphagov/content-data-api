@@ -11,8 +11,8 @@ RSpec.describe ContentItemsQuery, type: :query do
       ]
     end
 
-    it "returns content_items" do
-      results = subject.build(query: 'title 1')
+    it "returns content_items case insensitively" do
+      results = subject.build(query: 'TITLE 1')
 
       expect(results.count).to eq(1)
       expect(results.first.title).to eq('title 1')

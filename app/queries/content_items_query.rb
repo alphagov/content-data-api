@@ -9,7 +9,7 @@ class ContentItemsQuery
                else
                  ContentItem.all
                end
-    relation = relation.where('title like ?', "%#{options[:query]}%") if options[:query].present?
+    relation = relation.where('title ilike ?', "%#{options[:query]}%") if options[:query].present?
     relation
       .order("#{options[:sort]} #{options[:order]}")
       .page(options[:page])
