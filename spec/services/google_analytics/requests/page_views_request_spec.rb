@@ -50,21 +50,16 @@ module GoogleAnalytics
           }.deep_stringify_keys!
         end
 
-        it "builds the requests body with default arguments" do
-          request = PageViewsRequest.new.build(["/check-uk-visa"])
-
-          expect(request.as_json).to include(page_views_request)
-        end
-
         it "builds the requests body with supplied arguments" do
           date_range = page_views_request["report_requests"][0]["date_ranges"][0]
           date_range["start_date"] = "2016/11/22"
           date_range["end_date"] = "2016/12/22"
 
           request = PageViewsRequest.new.build(
-            ["/check-uk-visa"],
-            start_date: "2016/11/22",
-            end_date: "2016/12/22")
+            base_paths: ["/check-uk-visa"],
+            start_dates: ["2016/11/22"],
+            end_date: "2016/12/22"
+            )
 
           expect(request.as_json).to include(page_views_request)
         end
