@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170314110425) do
+ActiveRecord::Schema.define(version: 20170316163752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,15 @@ ActiveRecord::Schema.define(version: 20170314110425) do
     t.integer "taxonomy_id",     null: false
     t.index ["content_item_id"], name: "index_content_items_taxonomies_on_content_item_id", using: :btree
     t.index ["taxonomy_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true, using: :btree
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "slug"
+    t.string   "name"
+    t.string   "group_type"
+    t.integer  "parent_group_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "organisations", force: :cascade do |t|
