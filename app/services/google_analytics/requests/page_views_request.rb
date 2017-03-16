@@ -6,7 +6,7 @@ module GoogleAnalytics
     class PageViewsRequest
       include Google::Apis::AnalyticsreportingV4
 
-      def build(base_paths, start_date: "7daysAgo", end_date: "today")
+      def build(base_paths, start_dates: ["7daysAgo"], end_date: "today")
         GetReportsRequest.new.tap do |reports|
           reports.report_requests = Array.new.push(
             ReportRequest.new.tap do |request|
@@ -14,7 +14,7 @@ module GoogleAnalytics
               request.view_id = view_id
               request.dimension_filter_clauses = filters(base_paths, page_path)
               request.dimensions = dimensions(page_path)
-              request.date_ranges = date_ranges(start_date, end_date)
+              request.date_ranges = date_ranges(start_dates, end_date)
             end
           )
         end
@@ -22,11 +22,14 @@ module GoogleAnalytics
 
     private
 
-      def date_ranges(start_date, end_date)
-        date_range = DateRange.new
-        date_range.start_date = start_date
-        date_range.end_date = end_date
-        [date_range]
+      def date_ranges(start_dates, end_date)
+        date_ranges = start_dates.map do |start_date|
+          date_range = DateRange.new
+          date_range.start_date = start_date
+          date_range.end_date = end_date
+          date_range
+        end
+        date_ranges
       end
 
       def dimensions(name)

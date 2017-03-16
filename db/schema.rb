@@ -17,14 +17,15 @@ ActiveRecord::Schema.define(version: 20170314110425) do
 
   create_table "content_items", force: :cascade do |t|
     t.string   "content_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.datetime "public_updated_at"
     t.string   "base_path"
     t.string   "title"
     t.string   "document_type"
     t.string   "description"
-    t.integer  "unique_page_views", default: 0
+    t.integer  "one_month_page_views",  default: 0
+    t.integer  "six_months_page_views", default: 0
     t.integer  "number_of_pdfs",    default: 0
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true, using: :btree
     t.index ["title"], name: "index_content_items_on_title", using: :btree
@@ -40,6 +41,21 @@ ActiveRecord::Schema.define(version: 20170314110425) do
     t.integer "taxonomy_id",     null: false
     t.index ["content_item_id"], name: "index_content_items_taxonomies_on_content_item_id", using: :btree
     t.index ["taxonomy_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true, using: :btree
+  end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
   create_table "organisations", force: :cascade do |t|
