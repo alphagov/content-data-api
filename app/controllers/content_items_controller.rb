@@ -18,8 +18,8 @@ class ContentItemsController < ApplicationController
   end
 
   def filter
-    @organisations = Organisation.all
-    @taxonomies = Taxonomy.all
+    @organisations = Organisation.order(:title)
+    @taxonomies = Taxonomy.order(:title)
   end
 
 private
