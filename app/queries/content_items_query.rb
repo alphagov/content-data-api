@@ -4,8 +4,12 @@ class ContentItemsQuery
   end
 
   def results(options = {})
-    relation = if options[:organisation]
+    relation = if options[:organisation].present? && options[:taxonomy].present?
+                 options[:organisation].content_items.merge(options[:taxonomy].content_items)
+               elsif options[:organisation].present?
                  options[:organisation].content_items
+               elsif options[:taxonomy].present?
+                 options[:taxonomy].content_items
                else
                  ContentItem.all
                end

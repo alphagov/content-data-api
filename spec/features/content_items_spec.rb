@@ -18,18 +18,34 @@ RSpec.feature "Content Items List", type: :feature do
     end
   end
 
-  context "Filtering content items by organisation" do
-    scenario "the user selects an organisation from the organisations select box, clicks the filter button and retrieves a filtered list of the organisation's content items" do
-      create :organisation, slug: "the-slug-1", title: "title 1"
-      create :organisation, slug: "the-slug-2", title: "title 2"
+  describe "Filtering content items" do
+    context "by organisation" do
+      scenario "the user selects an organisation from the organisations select box, clicks the filter button and retrieves a filtered list of the organisation's content items" do
+        create :organisation, slug: "the-slug-1", title: "title 1"
+        create :organisation, slug: "the-slug-2", title: "title 2"
 
-      visit "/content_items/filter"
-      select "title 2", from: "organisation_slug"
-      click_on "Filter"
+        visit "/content_items/filter"
+        select "title 2", from: "organisation_slug"
+        click_on "Filter"
 
-      expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=the-slug-2"
+        expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=the-slug-2"
 
-      expect(current_url).to include(expected_path)
+        expect(current_url).to include(expected_path)
+      end
+    end
+
+    context "by taxon" do
+      scenario "the user selects a taxon from the taxons box, clicks the filter button and retrieves the filtered list of taxon's content items" do
+        create :taxonomy, title: "Taxon A"
+
+        visit "/content_items/filter"
+        select "Taxon A", from: "taxonomy"
+        click_on "Filter"
+
+        expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=&taxonomy=Taxon+A"
+
+        expect(current_url).to include(expected_path)
+      end
     end
   end
 end

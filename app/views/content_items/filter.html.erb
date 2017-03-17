@@ -2,7 +2,10 @@
   <div class="form-group">
     <label for="organisation_slug" class="col-sm-2 control-label"></label>
     <div class="col-sm-10">
-      <%= select_tag :organisation_slug, options_from_collection_for_select(@organisations, :slug, :title), class: "form-control" %>
+      <%= label_tag 'Organisation' %>
+      <%= select_tag :organisation_slug, options_from_collection_for_select(@organisations, :slug, :title), include_blank: true, class: "form-control" %>
+      <%= label_tag 'Taxonomy' %>
+      <%= select_tag :taxonomy, options_from_collection_for_select(@taxonomies, :title, :title), include_blank: true, class: "form-control" %>
     </div>
   </div>
   <div class="form-group">
