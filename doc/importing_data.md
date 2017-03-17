@@ -2,31 +2,39 @@
 
 ## Local environment
 
-* To import all organisations:
+The application contains a number of `rake` tasks used to populate the database, these are listed below.
+Currently when importing `organisations` and `content_items` the live `search-api` and `content-store` are used respectively.
+
+The importing of taxonomies however uses the `publishing-api` therefore an additional step is required to run a local import (noted below).
+
+**All organisations:**
 
 ```bash
 $ rake import:all_organisations
 ```
 
-* To import all taxonomies:
+**All taxonomies:**
+
+**Note:** You will need to run the `publishing-api` via the [VM](https://github.com/alphagov/govuk-puppet/tree/master/development-vm) to import taxons locally else you will receive timeout errors.
+
 
 ```bash
 $ rake import:all_taxons
 ```
 
-* To create or update the content items for an existing organisation:
+**Create or update the content items for an existing organisation:**
 
 ```bash
 $ rake import:content_items_by_organisation[{department-slug}]
 ```
 
-* To import all content items for all known organisations:
+**All content items for all known organisations:**
 
 ```bash
 $ rake import:all_content_items
 ```
 
-* To get the number of page views for all content items belonging to an organisation:
+**Page views for all content items belonging to an organisation:**
 
 ```bash
 $ rake import:number_of_views_by_organisation[{department-slug}]
