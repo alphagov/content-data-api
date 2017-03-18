@@ -19,6 +19,23 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
+  describe "GET #index" do
+    it "assigns all groups as @groups" do
+      group = create(:group)
+      get :index, params: { api_token: 'a-token' }, format: :json
+
+      expect(assigns(:groups)).to eq([group])
+    end
+
+    it "filters by group type" do
+      create(:group)
+      group2 = create(:group, group_type: 'the-type')
+      get :index, params: { group_type: 'the-type', api_token: 'a-token' }, format: :json
+
+      expect(assigns(:groups)).to eq([group2])
+    end
+  end
+
   describe "GET #show" do
     it "assigns the requested group as @group" do
       group = create :group, slug: "the-slug"

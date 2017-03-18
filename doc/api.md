@@ -42,3 +42,10 @@ curl -X "POST" "http://content-performance-manager.dev.gov.uk/groups.json" \
 curl "http://content-performance-manager.dev.gov.uk/groups/the-slug.json?api_token=1234567" \
      -H "Content-Type: application/json"
 ```
+
+* List all groups
+
+```terminal
+curl "http://content-performance-manager.dev.gov.uk/groups.json?api_token=1234567" \
+     -H "Content-Type: application/json"
+```
