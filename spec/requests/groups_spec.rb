@@ -43,10 +43,22 @@ RSpec.describe "API::Groups", type: :request do
 
       context "when a list a content IDs is provided" do
         it "add the Content Items to the group" do
-          valid_params[:group].merge!(content_item_ids: ["content_id_1", "content_id_2"])
+          valid_params[:group][:content_item_ids] = %w(content_id_1 content_id_2)
 
           post groups_path params: valid_params, format: :json
-          expect(Group.first.content_item_ids).to eq(["content_id_1", "content_id_2"])
+          expect(Group.first.content_item_ids).to eq(%w(content_id_1 content_id_2))
+        end
+      end
+
+      context "when a parent_group is provided" do
+        it "creates an association with the parent" do
+          parent = create(:group, slug: "parent-slug")
+          valid_params[:group].merge!(parent_group_slug: "parent-slug", slug: "child-slug")
+
+          post groups_path params: valid_params, format: :json
+
+          child = Group.find_by(slug: "child-slug")
+          expect(child.parent).to eq(parent)
         end
       end
     end
