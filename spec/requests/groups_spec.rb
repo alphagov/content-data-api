@@ -40,6 +40,15 @@ RSpec.describe "API::Groups", type: :request do
           group_type: "the-group-type"
         )
       end
+
+      context "when a list a content IDs is provided" do
+        it "add the Content Items to the group" do
+          valid_params[:group].merge!(content_item_ids: ["content_id_1", "content_id_2"])
+
+          post groups_path params: valid_params, format: :json
+          expect(Group.first.content_item_ids).to eq(["content_id_1", "content_id_2"])
+        end
+      end
     end
 
     context "with invalid params" do

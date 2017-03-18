@@ -18,6 +18,6 @@ class GroupsController < ApplicationController
 private
 
   def group_params
-    params.require(:group).permit(:slug, :name, :parent_group_slug, :group_type)
+    params.require(:group).permit(:slug, :name, :parent_group_slug, :group_type, content_item_ids: [])
   end
 end
