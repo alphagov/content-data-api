@@ -49,3 +49,10 @@ curl "http://content-performance-manager.dev.gov.uk/groups/the-slug.json?api_tok
 curl "http://content-performance-manager.dev.gov.uk/groups.json?api_token=1234567" \
      -H "Content-Type: application/json"
 ```
+
+* Delete a group
+
+```terminal
+curl -X "DELETE" "content-performance-manager.dev.gov.uk/groups/the-slug.json?api_token=1234567" \
+     -H "Content-Type: application/json"
+```

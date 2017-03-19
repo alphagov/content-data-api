@@ -3,6 +3,7 @@ class GroupsController < ApplicationController
 
   before_action :ensure_valid_token
   before_action :set_parent_group, only: :create
+  before_action :set_group, only: %w(show destroy)
 
   def index
     @groups = if params[:group_type]
@@ -13,7 +14,6 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @group = Group.find_by(slug: params[:slug])
   end
 
   def create
@@ -26,6 +26,11 @@ class GroupsController < ApplicationController
     end
   end
 
+  def destroy
+    @group.destroy
+    head :ok
+  end
+
 private
 
   def set_parent_group
@@ -34,6 +39,10 @@ private
       parent = Group.find_by(slug: parent_group_slug)
       params[:group][:parent_group_id] = parent.id
     end
+  end
+
+  def set_group
+    @group = Group.find_by(slug: params[:slug])
   end
 
   def group_params

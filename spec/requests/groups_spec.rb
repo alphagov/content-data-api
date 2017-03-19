@@ -38,6 +38,22 @@ RSpec.describe "API::Groups", type: :request do
     end
   end
 
+  describe "DELETE /groups/{slug}" do
+    let!(:group) { create :group, slug: "the-slug" }
+
+    it "Deletes the group" do
+      expect {
+        delete "/groups/the-slug", params: { api_token: "a-token" }, headers: headers
+      }.to change(Group, :count).by(-1)
+    end
+
+    it "returns no content" do
+      delete "/groups/the-slug", params: { api_token: "a-token" }, headers: headers
+      expect(response.body).to be_empty
+      expect(response.status).to eq(200)
+    end
+  end
+
   describe "POST /groups" do
     context "with valid params" do
       let(:params) { { group: attributes_for(:group), api_token: "a-token" } }
