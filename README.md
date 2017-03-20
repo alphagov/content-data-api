@@ -65,6 +65,11 @@ In the browser navigate to: http://localhost:3206
 * [On the local environment](doc/importing_data.md#Local_environment)
 * [On GOV.UK environments](doc/importing_data.md#jenkins)
 
+### API 
+
+* [Configuration](doc/api.md#set_up_api)
+* [Samples](doc/api.md#samples)
+
 ### Deploying the application
 * [Heroku](doc/deploying.md#heroku)
 * [Integration](doc/deploying.md#integration)
