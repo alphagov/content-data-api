@@ -13,6 +13,7 @@
 <% end %>
 
 <% content_for :content do %>
+  <%= render 'application/phase_banner' %>
   <%= content_for?(:main) ? yield(:main) : yield %>
 <% end %>
 
