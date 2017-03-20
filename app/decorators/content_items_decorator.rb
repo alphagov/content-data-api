@@ -2,10 +2,10 @@ class ContentItemsDecorator < Draper::CollectionDecorator
   delegate :current_page, :total_pages, :limit_value, :entry_name, :total_count, :offset_value, :last_page?
 
   def header
-    if slug.present? && taxonomy.present?
-      "#{Organisation.find_by(slug: slug).title} + #{taxonomy}"
-    elsif slug.present?
-      Organisation.find_by(slug: slug).title
+    if organisation_slug.present? && taxonomy.present?
+      "#{Organisation.find_by(slug: organisation_slug).title} + #{taxonomy}"
+    elsif organisation_slug.present?
+      Organisation.find_by(slug: organisation_slug).title
     elsif taxonomy.present?
       taxonomy
     else
@@ -15,7 +15,7 @@ class ContentItemsDecorator < Draper::CollectionDecorator
 
 private
 
-  def slug
+  def organisation_slug
     helpers.params[:organisation_slug]
   end
 

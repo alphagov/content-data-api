@@ -32,7 +32,7 @@ RSpec.describe ContentItemsController, type: :controller do
     it "assigns the taxonomy provided by the taxonomy title" do
       create(:taxonomy, title: 'education')
 
-      get :index, params: { taxonomy: 'education' }
+      get :index, params: { taxonomy_title: 'education' }
       expect(assigns(:taxonomy).title).to eq('education')
     end
 

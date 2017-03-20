@@ -39,10 +39,10 @@ RSpec.feature "Content Items List", type: :feature do
         create :taxonomy, title: "Taxon A"
 
         visit "/content_items/filter"
-        select "Taxon A", from: "taxonomy"
+        select "Taxon A", from: "taxonomy_title"
         click_on "Filter"
 
-        expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=&taxonomy=Taxon+A"
+        expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=&taxonomy_title=Taxon+A"
 
         expect(current_url).to include(expected_path)
       end

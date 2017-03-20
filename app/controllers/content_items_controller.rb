@@ -29,6 +29,6 @@ private
   end
 
   def set_taxonomy
-    @taxonomy = Taxonomy.find_by(title: params[:taxonomy]) if params[:taxonomy]
+    @taxonomy = Taxonomy.find_by(title: params[:taxonomy_title]) if params[:taxonomy_title]
   end
 end

@@ -8,7 +8,7 @@ RSpec.describe "content_items/filter.html.erb", type: :view do
       render
 
       expect(rendered).to have_selector("form select[name=organisation_slug]")
-      expect(rendered).to have_selector("form select[name=taxonomy]")
+      expect(rendered).to have_selector("form select[name=taxonomy_title]")
       expect(rendered).to have_selector('form select option', count: 2)
     end
 

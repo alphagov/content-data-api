@@ -5,7 +5,7 @@
       <%= label_tag 'Organisation' %>
       <%= select_tag :organisation_slug, options_from_collection_for_select(@organisations, :slug, :title), include_blank: true, class: "form-control" %>
       <%= label_tag 'Taxonomy' %>
-      <%= select_tag :taxonomy, options_from_collection_for_select(@taxonomies, :title, :title), include_blank: true, class: "form-control" %>
+      <%= select_tag :taxonomy_title, options_from_collection_for_select(@taxonomies, :title, :title), include_blank: true, class: "form-control" %>
     </div>
   </div>
   <div class="form-group">
