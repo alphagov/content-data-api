@@ -6,14 +6,18 @@ class TaxonomiesService
   end
 
   def find_each
-    publishing_api.find_each(attribute_names) do |taxonomy|
+    publishing_api.find_each(query_fields, query_options) do |taxonomy|
       yield taxonomy
     end
   end
 
 private
 
-  def attribute_names
-    @names ||= %i(content_id title)
+  def query_options
+    @options ||= { document_type: "taxon" }
+  end
+
+  def query_fields
+    @fields ||= %i(content_id title)
   end
 end

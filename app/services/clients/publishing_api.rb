@@ -13,20 +13,16 @@ module Clients
       @per_page = 100
     end
 
-    def find_each(fields)
+    def find_each(fields, options = {})
       current_page = 1
-      loop do
-        response = publishing_api.get_content_items(
-          document_type: 'taxon',
-          order: '-public_updated_at',
-          q: '',
-          page: current_page,
-          per_page: per_page,
-          states: ['published'],
-        )
 
-        taxonomies = map_taxon_results(response['results'], fields)
-        taxonomies.each { |taxon| yield taxon }
+      query = build_base_query(fields, options)
+
+      loop do
+        query = build_current_page_query(query, current_page)
+        response = publishing_api.get_content_items(query)
+        response["results"].each { |result| yield result.symbolize_keys }
+
         break if last_page?(response)
         current_page = response["current_page"] + 1
       end
@@ -34,12 +30,24 @@ module Clients
 
   private
 
-    def last_page?(response)
-      response["pages"] == response["current_page"]
+    def build_base_query(fields, options)
+      {
+        document_type: options[:document_type],
+        order: options[:order] || '-public_updated_at',
+        q: options[:q] || '',
+        states: ['published'],
+        per_page: per_page,
+        fields: fields || []
+      }
     end
 
-    def map_taxon_results(taxon_results, fields)
-      taxon_results.map { |taxon_hash| taxon_hash.symbolize_keys.slice(*fields) }
+    def build_current_page_query(query, page)
+      query[:page] = page
+      query
+    end
+
+    def last_page?(response)
+      response["results"].empty? || response["pages"] == response["current_page"]
     end
   end
 end
