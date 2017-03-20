@@ -1,6 +1,7 @@
 class GroupsController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
+  before_action :ensure_valid_token
   before_action :set_parent_group, only: :create
 
   def show
@@ -29,5 +30,11 @@ private
 
   def group_params
     params.require(:group).permit(:slug, :name, :parent_group_id, :group_type, content_item_ids: [])
+  end
+
+  def ensure_valid_token
+    expected_token = ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN']
+
+    head 401 unless expected_token.present? && expected_token == params[:api_token]
   end
 end

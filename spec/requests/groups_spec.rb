@@ -3,11 +3,18 @@ require 'rails_helper'
 RSpec.describe "API::Groups", type: :request do
   let(:headers) { { "ACCEPT" => "application/json" } }
 
+  before do
+    @old_content_performance_manager_token = ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN']
+    ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN'] = 'a-token'
+  end
+
+  after { ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN'] = @old_content_performance_manager_token }
+
   describe "GET /groups/{id}" do
     let!(:group) { create :group, name: "a-name", slug: "the-slug" }
 
     before do
-      get "/groups/#{group.id}", params: {}, headers: headers
+      get "/groups/#{group.id}", params: { api_token: "a-token" }, headers: headers
     end
 
     it "returns JSON with the group " do
@@ -19,7 +26,7 @@ RSpec.describe "API::Groups", type: :request do
 
   describe "POST /groups" do
     context "with valid params" do
-      let(:params) { { group: attributes_for(:group) } }
+      let(:params) { { group: attributes_for(:group), api_token: "a-token" } }
 
       it "creates the group" do
         expect {
@@ -69,7 +76,7 @@ RSpec.describe "API::Groups", type: :request do
     end
 
     context "with invalid params" do
-      let(:invalid_params) { { group: { name: "a-name" } } }
+      let(:invalid_params) { { group: { name: "a-name" }, api_token: "a-token" } }
 
       before do
         post "/groups", params: invalid_params, headers: headers
