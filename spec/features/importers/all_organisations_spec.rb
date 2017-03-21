@@ -4,8 +4,8 @@ RSpec.feature 'rake import:all_organisations', type: :feature do
   let(:two_organisations) {
     {
       results: [
-        { slug: 'slug-1', title: 'title-1' },
-        { slug: 'slug-2', title: 'title-2' }
+        { base_path: 'slug-1', title: 'title-1' },
+        { base_path: 'slug-2', title: 'title-2' }
       ]
     }.to_json
   }
