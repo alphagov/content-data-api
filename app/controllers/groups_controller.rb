@@ -5,7 +5,7 @@ class GroupsController < ApplicationController
   before_action :set_parent_group, only: :create
 
   def show
-    @group = Group.find(params[:id])
+    @group = Group.find_by(slug: params[:slug])
   end
 
   def create

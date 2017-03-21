@@ -11,8 +11,8 @@ RSpec.describe GroupsController, type: :controller do
   describe "Authorisation" do
     context "When no API token is provided" do
       it "returns 401 status code" do
-        group = create :group
-        get :show, params: { id: group.to_param }, format: :json
+        create :group, slug: "the-slug"
+        get :show, params: { slug: "the-slug" }, format: :json
 
         expect(response.status).to eq(401)
       end
@@ -21,8 +21,8 @@ RSpec.describe GroupsController, type: :controller do
 
   describe "GET #show" do
     it "assigns the requested group as @group" do
-      group = create :group
-      get :show, format: :json, params: { id: group.to_param, api_token: 'a-token' }
+      group = create :group, slug: "the-slug"
+      get :show, format: :json, params: { slug: "the-slug", api_token: 'a-token' }
 
       expect(assigns(:group)).to eq(group)
     end
@@ -45,7 +45,7 @@ RSpec.describe GroupsController, type: :controller do
         expect(assigns(:group)).to be_persisted
       end
 
-      it "redirects to the created group" do
+      it "assigns :created (201) status code" do
         post :create, format: :json, params: { group: valid_attributes, api_token: 'a-token' }
         expect(response.status).to eq(201)
       end

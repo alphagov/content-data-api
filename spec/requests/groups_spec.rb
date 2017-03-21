@@ -10,11 +10,11 @@ RSpec.describe "API::Groups", type: :request do
 
   after { ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN'] = @old_content_performance_manager_token }
 
-  describe "GET /groups/{id}" do
+  describe "GET /groups/{slug}" do
     let!(:group) { create :group, name: "a-name", slug: "the-slug" }
 
     before do
-      get "/groups/#{group.id}", params: { api_token: "a-token" }, headers: headers
+      get "/groups/the-slug", params: { api_token: "a-token" }, headers: headers
     end
 
     it "returns JSON with the group " do

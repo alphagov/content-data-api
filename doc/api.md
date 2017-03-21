@@ -39,6 +39,6 @@ curl -X "POST" "http://content-performance-manager.dev.gov.uk/groups.json" \
 * Show a group
 
 ```terminal
-curl "http://content-performance-manager.dev.gov.uk/groups/3.json?api_token=1234567" \
+curl "http://content-performance-manager.dev.gov.uk/groups/the-slug.json?api_token=1234567" \
      -H "Content-Type: application/json"
 ```
