@@ -2,29 +2,32 @@ require "rails_helper"
 
 RSpec.describe "content_items/filter.html.erb", type: :view do
   describe "Form for filtering content items" do
-    it "will render an empty select box if supplied with no data" do
+    before do
       assign(:organisations, [])
       assign(:taxonomies, [])
-      render
-
-      expect(rendered).to have_selector("form select[name=organisation_slug]")
-      expect(rendered).to have_selector("form select[name=taxonomy_title]")
-      expect(rendered).to have_selector('form select option', count: 2)
     end
 
-    it "will render select boxes with organisations and taxonomies if supplied with lists of organisations and taxonomies" do
-      organisations = [build(:organisation), build(:organisation)]
-      taxonomies = [build(:taxonomy), build(:taxonomy)]
-      assign(:organisations, organisations)
-      assign(:taxonomies, taxonomies)
-      render
+    context "filtering organisations" do
+      it "will render select boxes with options for 2 organisations and 1 empty if supplied with list of 2 organisations" do
+        organisations = [build(:organisation), build(:organisation)]
+        assign(:organisations, organisations)
+        render
 
-      expect(rendered).to have_selector('form select option', count: 6)
+        expect(rendered).to have_selector('form select#organisation_slug option', count: 3)
+      end
+    end
+
+    context "filtering by taxonomies" do
+      it "will render select boxes with with options for 2 taxonomies and 1 empty if supplied with list of 2 taxonomies" do
+        taxonomies = [build(:taxonomy), build(:taxonomy)]
+        assign(:taxonomies, taxonomies)
+        render
+
+        expect(rendered).to have_selector('form select#taxonomy_title option', count: 3)
+      end
     end
 
     it "renders a button with the value of 'Filter' for executing the form action" do
-      assign(:organisations, [])
-      assign(:taxonomies, [])
       render
 
       expect(rendered).to have_selector("form input[type=submit][value=Filter]")
