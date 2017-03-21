@@ -36,13 +36,13 @@ RSpec.feature "Content Items List", type: :feature do
 
     context "by taxon" do
       scenario "the user selects a taxon from the taxons box, clicks the filter button and retrieves the filtered list of taxon's content items" do
-        create :taxonomy, title: "Taxon A"
+        create :taxonomy, title: "Taxon A", content_id: "123"
 
         visit "/content_items/filter"
-        select "Taxon A", from: "taxonomy_title"
+        select "Taxon A", from: "taxonomy_content_id"
         click_on "Filter"
 
-        expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=&taxonomy_title=Taxon+A"
+        expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=&taxonomy_content_id=123"
 
         expect(current_url).to include(expected_path)
       end

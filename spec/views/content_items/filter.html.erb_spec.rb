@@ -23,7 +23,7 @@ RSpec.describe "content_items/filter.html.erb", type: :view do
         assign(:taxonomies, taxonomies)
         render
 
-        expect(rendered).to have_selector('form select#taxonomy_title option', count: 3)
+        expect(rendered).to have_selector('form select#taxonomy_content_id option', count: 3)
       end
     end
 

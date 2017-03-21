@@ -29,11 +29,11 @@ RSpec.describe ContentItemsController, type: :controller do
       expect(assigns(:organisation).slug).to eq('the-slug')
     end
 
-    it "assigns the taxonomy provided by the taxonomy title" do
-      create(:taxonomy, title: 'education')
+    it "assigns the taxonomy provided by the taxonomy content id" do
+      create(:taxonomy, content_id: "123")
 
-      get :index, params: { taxonomy_title: 'education' }
-      expect(assigns(:taxonomy).title).to eq('education')
+      get :index, params: { taxonomy_content_id: "123" }
+      expect(assigns(:taxonomy).content_id).to eq("123")
     end
 
     it "renders the :index template" do
