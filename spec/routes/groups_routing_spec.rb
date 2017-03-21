@@ -8,5 +8,8 @@ RSpec.describe GroupsController, type: :routing do
     it "routes to #create" do
       expect(post: "/groups").to route_to("groups#create")
     end
+    it "routes to #index" do
+      expect(get: "/groups").to route_to("groups#index")
+    end
   end
 end
