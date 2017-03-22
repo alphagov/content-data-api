@@ -138,7 +138,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
       it 'contains a descending and ascending links in table heading' do
         render
-        href = content_items_path(organisation_slug: organisation.slug, order: :asc, sort: :public_updated_at)
+        href = content_items_path(organisation_id: organisation.content_id, order: :asc, sort: :public_updated_at)
 
         expect(rendered).to have_link('Last Updated', href: href)
       end

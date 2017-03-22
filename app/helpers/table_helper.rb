@@ -24,7 +24,7 @@ module TableHelper
 
     def link(label, order)
       if view.instance_variable_get(:@organisation).present?
-        link_to content_items_path(organisation_slug: view.instance_variable_get(:@organisation).slug, sort: attribute_name, order: order, query: params[:query]) do
+        link_to content_items_path(organisation_id: view.instance_variable_get(:@organisation).content_id, sort: attribute_name, order: order, query: params[:query]) do
           "#{heading}#{content_tag :span, label, class: 'rm'}".html_safe
         end
       else

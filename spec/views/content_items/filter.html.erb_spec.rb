@@ -13,7 +13,7 @@ RSpec.describe "content_items/filter.html.erb", type: :view do
         assign(:organisations, organisations)
         render
 
-        expect(rendered).to have_selector('form select#organisation_slug option', count: 3)
+        expect(rendered).to have_selector('form select#organisation_id option', count: 3)
       end
     end
 
