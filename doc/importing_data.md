@@ -3,9 +3,8 @@
 ## Local environment
 
 The application contains a number of `rake` tasks used to populate the database, these are listed below.
-Currently when importing `content_items` the live `content-store` is used.
 
-The importing of `organisations` and `taxonomies` uses the `publishing-api` therefore you will need to run the `publishing-api` via the [VM](https://github.com/alphagov/govuk-puppet/tree/master/development-vm) to import locally else you will receive timeout errors.
+The imports for `organisations`, `taxonomies` and `content_items` use the `publishing-api` therefore you will need to run the `publishing-api` via the [VM](https://github.com/alphagov/govuk-puppet/tree/master/development-vm) to import locally else you will receive timeout errors.
 
 **All organisations:**
 
@@ -19,13 +18,9 @@ $ rake import:all_organisations
 $ rake import:all_taxons
 ```
 
-**Create or update the content items for an existing organisation:**
+**All content items for all known document types:**
 
-```bash
-$ rake import:content_items_by_organisation[{department-slug}]
-```
-
-**All content items for all known organisations:**
+Note: see `config/document_types.yml` for the types currently processed.
 
 ```bash
 $ rake import:all_content_items
@@ -51,6 +46,5 @@ There is a Jenkins job, `Run rake task` that can be used to import data.
   * RAKE_TASK:
      * `import:all_organisations`
      * `import:all_taxons`
-     * `import:content_items_by_organisation[{department-slug}]`
      * `import:all_content_items`
      * `import:number_of_views_by_organisation[{department-slug}]`
