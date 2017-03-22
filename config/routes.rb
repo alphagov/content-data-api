@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :organisations, only: %w(index)
 
-  resources :content_items, only: %w(index show) do
+  resources :content_items, only: %w(index show), param: "content_id" do
     collection { get :filter }
   end
 end

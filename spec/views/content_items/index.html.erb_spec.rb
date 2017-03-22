@@ -99,7 +99,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     it 'renders a row per Content Item' do
       render
 
-      expect(rendered).to have_link(content_items.first.title, href: content_item_path(id: content_items.first.id))
+      expect(rendered).to have_link(content_items.first.title, href: content_item_path(content_id: content_items.first.content_id))
     end
 
     it 'returns the max page size number of content items per page' do
@@ -124,7 +124,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
         content_items[0].title = 'a-title'
         render
 
-        expect(rendered).to have_link('a-title', href: content_item_path(id: content_items.first.id))
+        expect(rendered).to have_link('a-title', href: content_item_path(content_id: content_items.first.content_id))
       end
 
       it 'includes the last time the content was updated' do

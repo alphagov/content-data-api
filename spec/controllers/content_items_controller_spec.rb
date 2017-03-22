@@ -48,7 +48,7 @@ RSpec.describe ContentItemsController, type: :controller do
       let(:organisation) { create(:organisation_with_content_items, content_items_count: 1) }
 
       before do
-        get :show, params: { organisation_slug: organisation.slug, id: organisation.content_items.first.id }
+        get :show, params: { organisation_slug: organisation.slug, content_id: organisation.content_items.first.content_id }
       end
 
       it "returns http success" do
