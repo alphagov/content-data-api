@@ -77,4 +77,20 @@ RSpec.describe GroupsController, type: :controller do
       end
     end
   end
+
+  describe "DELETE #destroy" do
+    let!(:group) { create :group, slug: "the-slug" }
+
+    it "destroys the requested group" do
+      expect {
+        delete :destroy, params: { slug: "the-slug", api_token: 'a-token' }, format: :json
+      }.to change(Group, :count).by(-1)
+    end
+
+    it "returns head: no_content" do
+      delete :destroy, params: { slug: "the-slug", api_token: 'a-token' }, format: :json
+
+      expect(response).to have_http_status(200)
+    end
+  end
 end

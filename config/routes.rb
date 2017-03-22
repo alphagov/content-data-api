@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root to: 'organisations#index'
 
-  resources :groups, only: %w(show create index), param: "slug"
+  resources :groups, only: %w(show create index destroy), param: "slug"
 
   resources :organisations, only: %w(index)
 

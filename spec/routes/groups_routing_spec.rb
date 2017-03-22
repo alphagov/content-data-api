@@ -11,5 +11,8 @@ RSpec.describe GroupsController, type: :routing do
     it "routes to #index" do
       expect(get: "/groups").to route_to("groups#index")
     end
+    it "routes to #destroy" do
+      expect(delete: "/groups/the-slug").to route_to("groups#destroy", slug: "the-slug")
+    end
   end
 end
