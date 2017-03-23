@@ -1,6 +1,14 @@
 require "rails_helper"
 
 RSpec.describe ContentItemDecorator, type: :decorator do
+  describe '#last_updated' do
+    let(:content_item) { build(:content_item, public_updated_at: nil).decorate }
+
+    it 'displays Never when content item has not been updated' do
+      expect(content_item.last_updated).to eq('Never')
+    end
+  end
+
   describe '#organisation_links' do
     let(:organisations) do
       [
