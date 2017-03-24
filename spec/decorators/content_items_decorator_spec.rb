@@ -18,31 +18,28 @@ RSpec.describe ContentItemsDecorator, type: :decorator do
 
   context "with organisation filter" do
     it "renders the organisation title as page title" do
-      allow(helpers).to receive(:params).and_return(organisation_slug: "the-slug")
       content_items = [build(:content_item, organisations: [organisation])]
       subject = ContentItemsDecorator.new(content_items)
 
-      expect(subject.header).to eq("Organisation title")
+      expect(subject.header(organisation: organisation)).to eq("Organisation title")
     end
   end
 
   context "with taxonomy filter" do
     it "renders the taxonomy title as page title" do
-      allow(helpers).to receive(:params).and_return(taxonomy_content_id: "content-id-for-taxon123")
       content_items = [build(:content_item, taxonomies: [taxonomy])]
       subject = ContentItemsDecorator.new(content_items)
 
-      expect(subject.header).to eq("taxonomy a")
+      expect(subject.header(taxonomy: taxonomy)).to eq("taxonomy a")
     end
   end
 
   context "with both organisation and taxonomy filters" do
     it "renders the organisation and taxonomy titles seperated by a '+'" do
-      allow(helpers).to receive(:params).and_return(organisation_slug: "the-slug", taxonomy_content_id: "content-id-for-taxon123")
       content_items = [build(:content_item, organisations: [organisation], taxonomies: [taxonomy])]
       subject = ContentItemsDecorator.new(content_items)
 
-      expect(subject.header).to eq("Organisation title + taxonomy a")
+      expect(subject.header(organisation: organisation, taxonomy: taxonomy)).to eq("Organisation title + taxonomy a")
     end
   end
 end
