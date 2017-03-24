@@ -65,7 +65,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     feedex_link = "https://support.publishing.service.gov.uk/anonymous_feedback?path=/the-base-path"
     render
 
-    expect(rendered).to have_link('Support contacts', href: feedex_link)
+    expect(rendered).to have_link('View feedback on FeedEx', href: feedex_link)
   end
 
   it 'renders the description of the content item' do

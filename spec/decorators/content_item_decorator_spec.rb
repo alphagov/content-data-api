@@ -1,11 +1,21 @@
 require "rails_helper"
 
 RSpec.describe ContentItemDecorator, type: :decorator do
+  include Capybara::RSpecMatchers
+
   describe "#last_updated" do
     let(:content_item) { build(:content_item, public_updated_at: nil).decorate }
 
-    it 'displays Never when content item has not been updated' do
+    it "displays Never when content item has not been updated" do
       expect(content_item.last_updated).to eq('Never')
+    end
+  end
+
+  describe "#feedex_link" do
+    let(:content_item) { build(:content_item, base_path: "/the-base-path").decorate }
+
+    it "has a link to FeedEx" do
+      expect(content_item.feedex_link).to have_link("View feedback on FeedEx", href: "https://support.publishing.service.gov.uk/anonymous_feedback?path=/the-base-path")
     end
   end
 

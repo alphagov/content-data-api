@@ -9,6 +9,10 @@ class ContentItemDecorator < Draper::Decorator
     end
   end
 
+  def feedex_link
+    helpers.link_to "View feedback on FeedEx", "https://support.publishing.service.gov.uk/anonymous_feedback?path=#{object.base_path}"
+  end
+
   def organisation_links
     names = object.organisations.collect do |organisation|
       helpers.link_to(organisation.title, helpers.content_items_path(organisation_slug: organisation.slug))
