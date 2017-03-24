@@ -1,25 +1,18 @@
 class ContentItemsDecorator < Draper::CollectionDecorator
   delegate :current_page, :total_pages, :limit_value, :entry_name, :total_count, :offset_value, :last_page?
 
-  def header
-    if organisation_slug.present? && taxonomy.present?
-      "#{Organisation.find_by(slug: organisation_slug).title} + #{taxonomy}"
-    elsif organisation_slug.present?
-      Organisation.find_by(slug: organisation_slug).title
+  def header(filters = {})
+    organisation = filters[:organisation]
+    taxonomy = filters[:taxonomy]
+
+    if organisation.present? && taxonomy.present?
+      "#{organisation.title} + #{taxonomy.title}"
+    elsif organisation.present?
+      organisation.title
     elsif taxonomy.present?
-      taxonomy
+      taxonomy.title
     else
       "GOV.UK"
     end
-  end
-
-private
-
-  def organisation_slug
-    helpers.params[:organisation_slug]
-  end
-
-  def taxonomy
-    helpers.params[:taxonomy]
   end
 end
