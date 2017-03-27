@@ -22,11 +22,11 @@ RSpec.describe ContentItemsController, type: :controller do
       get :index, params: expected_params
     end
 
-    it "assigns the organisation provided the slug" do
-      create(:organisation, slug: 'the-slug')
+    it "assigns the organisation provided the content_id" do
+      create(:organisation, content_id: 'the-organisation-id')
 
-      get :index, params: { organisation_slug: 'the-slug' }
-      expect(assigns(:organisation).slug).to eq('the-slug')
+      get :index, params: { organisation_id: 'the-organisation-id' }
+      expect(assigns(:organisation).content_id).to eq('the-organisation-id')
     end
 
     it "assigns the taxonomy provided by the taxonomy content id" do
@@ -48,7 +48,7 @@ RSpec.describe ContentItemsController, type: :controller do
       let(:organisation) { create(:organisation_with_content_items, content_items_count: 1) }
 
       before do
-        get :show, params: { organisation_slug: organisation.slug, id: organisation.content_items.first.id }
+        get :show, params: { id: organisation.content_items.first.id }
       end
 
       it "returns http success" do

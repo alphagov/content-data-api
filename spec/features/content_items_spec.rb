@@ -21,14 +21,14 @@ RSpec.feature "Content Items List", type: :feature do
   describe "Filtering content items" do
     context "by organisation" do
       scenario "the user selects an organisation from the organisations select box, clicks the filter button and retrieves a filtered list of the organisation's content items" do
-        create :organisation, slug: "the-slug-1", title: "title 1"
-        create :organisation, slug: "the-slug-2", title: "title 2"
+        create :organisation, content_id: "the-content-id-1", title: "title 1"
+        create :organisation, content_id: "the-content-id-2", title: "title 2"
 
         visit "/content_items/filter"
-        select "title 2", from: "organisation_slug"
+        select "title 2", from: "organisation_id"
         click_on "Filter"
 
-        expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=the-slug-2"
+        expected_path = URI.escape "/content_items?utf8=✓&organisation_id=the-content-id-2"
 
         expect(current_url).to include(expected_path)
       end
@@ -42,7 +42,7 @@ RSpec.feature "Content Items List", type: :feature do
         select "Taxon A", from: "taxonomy_content_id"
         click_on "Filter"
 
-        expected_path = URI.escape "/content_items?utf8=✓&organisation_slug=&taxonomy_content_id=123"
+        expected_path = URI.escape "/content_items?utf8=✓&organisation_id=&taxonomy_content_id=123"
 
         expect(current_url).to include(expected_path)
       end

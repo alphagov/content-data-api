@@ -4,15 +4,15 @@ RSpec.feature 'rake import:all_organisations', type: :feature do
   let(:two_organisations) {
     {
       results: [
-        { base_path: 'slug-1', title: 'title-1' },
-        { base_path: 'slug-2', title: 'title-2' }
+        { base_path: 'slug-1', title: 'title-1', content_id: 'content-id-1' },
+        { base_path: 'slug-2', title: 'title-2', content_id: 'content-id-2' }
       ]
     }.to_json
   }
 
   before do
     Rake::Task['import:all_organisations'].reenable
-    stub_request(:get, %r{.*}).to_return(status: 200, body:  two_organisations)
+    stub_request(:get, %r{.*}).to_return(status: 200, body: two_organisations)
   end
 
   it 'creates all organisations' do
@@ -25,5 +25,6 @@ RSpec.feature 'rake import:all_organisations', type: :feature do
     organisation = Organisation.find_by(slug: 'slug-1')
     expect(organisation.title).to eq('title-1')
     expect(organisation.slug).to eq('slug-1')
+    expect(organisation.content_id).to eq('content-id-1')
   end
 end

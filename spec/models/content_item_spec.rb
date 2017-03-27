@@ -21,7 +21,6 @@ RSpec.describe ContentItem, type: :model do
 
     it "updates a content item if it already exists" do
       create(:content_item, content_id: "the_id", title: "the title")
-
       content_item = { content_id: "the_id", title: "a new title", taxons: [], organisations: [] }
 
       expect { ContentItem.create_or_update!(content_item) }.to change { ContentItem.count }.by(0)

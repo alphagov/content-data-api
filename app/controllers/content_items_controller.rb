@@ -25,7 +25,7 @@ class ContentItemsController < ApplicationController
 private
 
   def set_organisation
-    @organisation = Organisation.find_by(slug: params[:organisation_slug]) if params[:organisation_slug]
+    @organisation = Organisation.find_by(content_id: params[:organisation_id]) if params[:organisation_id]
   end
 
   def set_taxonomy

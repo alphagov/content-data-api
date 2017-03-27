@@ -12,12 +12,12 @@ RSpec.feature "Organisations list", type: :feature do
   end
 
   scenario "The user can navigate to an organisation detail page" do
-    create :organisation, slug: "the-slug", title: "organisation title"
+    create :organisation, title: "organisation title", content_id: "the-content-id"
 
     visit organisations_path
     click_on "organisation title"
 
-    expected_path = "/content_items?organisation_slug=the-slug"
+    expected_path = "/content_items?organisation_id=the-content-id"
     expect(current_url).to include(expected_path)
   end
 
