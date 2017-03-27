@@ -6,24 +6,27 @@ class ContentItem < ApplicationRecord
     "https://gov.uk#{base_path}"
   end
 
-  def self.create_or_update!(attributes, organisation)
+  def self.create_or_update!(attributes)
     content_id = attributes.fetch(:content_id)
     content_item = self.find_or_create_by(content_id: content_id)
 
-    content_item.add_organisation(organisation)
-    content_item.add_taxonomies(attributes.fetch(:taxons))
+    content_item.add_organisations_by_id(attributes.fetch(:organisations))
+    content_item.add_taxonomies_by_id(attributes.fetch(:taxons))
 
     attributes = content_item.existing_attributes(attributes)
     content_item.update!(attributes)
   end
 
-  def add_organisation(organisation)
-    self.organisations << organisation unless self.organisations.include?(organisation)
+  def add_organisations_by_id(orgs)
+    orgs.each do |org|
+      organisation = Organisation.find_by(content_id: org)
+      organisations << organisation unless organisation.nil? || organisations.include?(organisation)
+    end
   end
 
-  def add_taxonomies(taxon_ids)
-    taxon_ids.each do |taxon_id|
-      taxon = Taxonomy.find_by(content_id: taxon_id)
+  def add_taxonomies_by_id(taxons)
+    taxons.each do |t|
+      taxon = Taxonomy.find_by(content_id: t)
       taxonomies << taxon unless taxon.nil? || taxonomies.include?(taxon)
     end
   end

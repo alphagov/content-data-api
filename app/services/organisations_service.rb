@@ -20,7 +20,7 @@ private
   end
 
   def query_fields
-    @fields ||= %i(base_path title)
+    @fields ||= %i(base_path title content_id)
   end
 
   def build_slug(organisation)
