@@ -1,4 +1,6 @@
 class ContentItemsController < ApplicationController
+  protect_from_forgery unless: -> { request.format.json? }
+
   before_action :set_organisation, only: :index
   before_action :set_taxonomy, only: :index
 
@@ -14,7 +16,7 @@ class ContentItemsController < ApplicationController
   end
 
   def show
-    @content_item = ContentItem.find(params[:id]).decorate
+    @content_item = ContentItem.find_by(content_id: params[:content_id]).decorate
   end
 
   def filter

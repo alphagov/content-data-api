@@ -16,6 +16,13 @@ Use this the token value in any API request
 
 # Samples
 
+* Fetch details for a content item given a content id
+
+```
+curl -X "GET" "http://content-performance-manager.dev.gov.uk/content_items/ebd15ade-73b2-4eaf-b1c3-43034a42eb37.json" \
+     -H "Content-Type: application/json"
+```
+
 * Create a group
 
 ```terminal
