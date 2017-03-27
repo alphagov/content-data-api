@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe OrganisationsService do
   describe '#find_each' do
     it 'queries the publishing API for all organisations' do
-      expected_field_params = %i(base_path title)
+      expected_field_params = %i(base_path title content_id)
       expected_query_params = { document_type: 'organisation' }
 
       subject.publishing_api = double
