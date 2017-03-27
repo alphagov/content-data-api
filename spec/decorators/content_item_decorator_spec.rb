@@ -15,7 +15,7 @@ RSpec.describe ContentItemDecorator, type: :decorator do
     let(:content_item) { build(:content_item, base_path: "/the-base-path").decorate }
 
     it "has a link to FeedEx" do
-      expect(content_item.feedex_link).to have_link("View feedback on FeedEx", href: "https://support.publishing.service.gov.uk/anonymous_feedback?path=/the-base-path")
+      expect(content_item.feedex_link).to have_link("View feedback on FeedEx", href: "#{Plek.find('support')}/anonymous_feedback?path=/the-base-path")
     end
   end
 

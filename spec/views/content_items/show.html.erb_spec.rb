@@ -62,7 +62,7 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
 
   it 'renders a link to FeedEx' do
     content_item.base_path = '/the-base-path'
-    feedex_link = "https://support.publishing.service.gov.uk/anonymous_feedback?path=/the-base-path"
+    feedex_link = "#{Plek.find('support')}/anonymous_feedback?path=/the-base-path"
     render
 
     expect(rendered).to have_link('View feedback on FeedEx', href: feedex_link)

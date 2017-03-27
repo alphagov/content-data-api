@@ -10,7 +10,7 @@ class ContentItemDecorator < Draper::Decorator
   end
 
   def feedex_link
-    helpers.link_to "View feedback on FeedEx", "https://support.publishing.service.gov.uk/anonymous_feedback?path=#{object.base_path}"
+    helpers.link_to "View feedback on FeedEx", "#{Plek.find('support')}/anonymous_feedback?path=#{object.base_path}"
   end
 
   def organisation_links
