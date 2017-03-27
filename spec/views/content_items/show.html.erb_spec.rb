@@ -60,6 +60,14 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_selector('td + td', text: '2 months ago')
   end
 
+  it 'renders a link to FeedEx' do
+    content_item.base_path = '/the-base-path'
+    feedex_link = "#{Plek.find('support')}/anonymous_feedback?path=/the-base-path"
+    render
+
+    expect(rendered).to have_link('View feedback on FeedEx', href: feedex_link)
+  end
+
   it 'renders the description of the content item' do
     content_item.description = 'The description of a content item'
     render
