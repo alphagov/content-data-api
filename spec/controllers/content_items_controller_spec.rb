@@ -82,32 +82,4 @@ RSpec.describe ContentItemsController, type: :controller do
       end
     end
   end
-
-  describe "GET #filter" do
-    it "returns http success" do
-      get :filter
-
-      expect(response).to have_http_status(:success)
-    end
-
-    it "assigns a list of organisations" do
-      organisations = create_list(:organisation, 2)
-      get :filter
-
-      expect(assigns(:organisations)).to match_array(organisations)
-    end
-
-    it "assigns a list of taxonomies" do
-      taxonomies = create_list(:taxonomy, 2)
-      get :filter
-
-      expect(assigns(:taxonomies)).to match_array(taxonomies)
-    end
-
-    it "renders the filter template" do
-      get :filter
-
-      expect(response).to render_template("filter")
-    end
-  end
 end

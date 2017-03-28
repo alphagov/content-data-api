@@ -19,11 +19,6 @@ class ContentItemsController < ApplicationController
     @content_item = ContentItem.find(params[:id]).decorate
   end
 
-  def filter
-    @organisations = Organisation.order(:title)
-    @taxonomies = Taxonomy.order(:title)
-  end
-
 private
 
   def set_all_organisations
