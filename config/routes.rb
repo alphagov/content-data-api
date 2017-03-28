@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'organisations#index'
+  root to: 'content_items#index'
 
   resources :groups, only: %w(show create index destroy), param: "slug"
 
