@@ -1,15 +1,6 @@
-<%= form_tag content_items_path, method: :get, class: 'row' do %>
-    <div class="col-xs-10">
-      <%= label_tag 'query', 'Your search term', class: 'rm' %>
-      <%= text_field_tag 'query', params[:query], placeholder: 'Enter search term...', class: 'form-control input-lg' %>
-    </div>
-    <div class="col-xs-2">
-      <%= submit_tag 'Search', class: "btn btn-default btn-lg btn-block" %>
-    </div>
-    <%= hidden_field_tag :sort, params[:sort] %>
-    <%= hidden_field_tag :order, params[:order] %>
+<% content_for :sidebar do %>
+  <%= render 'application/sidebar' %>  
 <% end %>
-</tr>
 
 <h1><%= @content_items.header organisation: @organisation, taxonomy: @taxonomy %></h1>
 
@@ -17,11 +8,8 @@
   <thead>
     <tr class="table-header">
       <%= sort_table_header "Title", "title" %>
-      <% if @organisation.blank? %>
-        <th>Organisation</th>
-      <% end %>
       <%= sort_table_header "Type of Document", "document_type" %>
-      <%= sort_table_header "Unique page views (last 1 month)", "unique_page_views" %>
+      <%= sort_table_header "Page views (1 month)", "unique_page_views" %>
       <%= sort_table_header "Last Updated", "public_updated_at" %>
     </tr>
   </thead>

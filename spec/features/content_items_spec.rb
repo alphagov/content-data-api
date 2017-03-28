@@ -17,35 +17,4 @@ RSpec.feature "Content Items List", type: :feature do
       it_behaves_like 'a paginated list', 'content_items'
     end
   end
-
-  describe "Filtering content items" do
-    context "by organisation" do
-      scenario "the user selects an organisation from the organisations select box, clicks the filter button and retrieves a filtered list of the organisation's content items" do
-        create :organisation, content_id: "the-content-id-1", title: "title 1"
-        create :organisation, content_id: "the-content-id-2", title: "title 2"
-
-        visit "/content_items/filter"
-        select "title 2", from: "organisation_id"
-        click_on "Filter"
-
-        expected_path = URI.escape "/content_items?utf8=✓&organisation_id=the-content-id-2"
-
-        expect(current_url).to include(expected_path)
-      end
-    end
-
-    context "by taxon" do
-      scenario "the user selects a taxon from the taxons box, clicks the filter button and retrieves the filtered list of taxon's content items" do
-        create :taxonomy, title: "Taxon A", content_id: "123"
-
-        visit "/content_items/filter"
-        select "Taxon A", from: "taxonomy_content_id"
-        click_on "Filter"
-
-        expected_path = URI.escape "/content_items?utf8=✓&organisation_id=&taxonomy_content_id=123"
-
-        expect(current_url).to include(expected_path)
-      end
-    end
-  end
 end

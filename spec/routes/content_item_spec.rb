@@ -20,14 +20,5 @@ RSpec.describe ContentItemsController, type: :routing do
           id: '1',
         )
     end
-
-    it 'routes to #filter' do
-      expect(get: filter_content_items_path).to be_routable
-      expect(get: filter_content_items_path)
-        .to route_to(
-          controller: 'content_items',
-          action: 'filter'
-        )
-    end
   end
 end
