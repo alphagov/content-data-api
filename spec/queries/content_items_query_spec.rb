@@ -77,5 +77,17 @@ RSpec.describe ContentItemsQuery, type: :query do
         expect(results).to match_array(content_items)
       end
     end
+
+    context "by organisation and taxonomy and search term" do
+      let(:content_item) { create(:content_item, title: "title 1") }
+      let(:organisation) { create(:organisation, content_items: [content_item]) }
+      let(:taxonomy) { create(:taxonomy, content_items: [content_item]) }
+
+      it "returns the content items belonging to the organisation and taxonomy" do
+        results = subject.build(organisation: organisation, taxonomy: taxonomy, query: "title 1")
+
+        expect(results).to match_array([content_item])
+      end
+    end
   end
 end

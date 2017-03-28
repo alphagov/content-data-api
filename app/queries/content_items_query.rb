@@ -27,6 +27,6 @@ private
 
   def filter_by_title(relation, query)
     return relation unless query
-    relation.where('title ilike ?', "%#{query}%")
+    relation.where('content_items.title ilike ?', "%#{query}%")
   end
 end
