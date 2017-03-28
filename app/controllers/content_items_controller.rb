@@ -1,6 +1,8 @@
 class ContentItemsController < ApplicationController
   before_action :set_organisation, only: :index
   before_action :set_taxonomy, only: :index
+  before_action :set_all_organisations, only: :index
+  before_action :set_all_taxonomies, only: :index
 
   def index
     @content_items = ContentItemsQuery.build(
@@ -23,6 +25,14 @@ class ContentItemsController < ApplicationController
   end
 
 private
+
+  def set_all_organisations
+    @organisations = Organisation.order(:title)
+  end
+
+  def set_all_taxonomies
+    @taxonomies = Taxonomy.order(:title)
+  end
 
   def set_organisation
     @organisation = Organisation.find_by(content_id: params[:organisation_id]) if params[:organisation_id]

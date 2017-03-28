@@ -1,22 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe 'content_items/index.html.erb', type: :view do
-  describe 'Search form' do
+  context "sidebar content" do
+    let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 1)) }
+
     before do
       allow(view).to receive(:paginate)
-      assign(:content_items, ContentItemsDecorator.new([]))
+      assign(:content_items, content_items)
+      assign(:organisations, [])
+      assign(:taxonomies, [])
     end
 
-    it 'has an input to enter the query' do
+    it "assigns the sidebar content block" do
+      expect(view).to receive(:content_for).with(:sidebar)
+
       render
-
-      expect(rendered).to have_selector('form input[name=query]')
-    end
-
-    it 'has a button to perform the query' do
-      render
-
-      expect(rendered).to have_selector('form input[type=submit]')
     end
   end
 
@@ -26,6 +24,8 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     before do
       allow(view).to receive(:paginate)
       assign(:content_items, content_items)
+      assign(:organisations, [])
+      assign(:taxonomies, [])
     end
 
     it 'renders a page title' do
@@ -78,6 +78,8 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       allow(view).to receive(:page_entries_info)
       assign(:content_items, content_items)
       assign(:organisation, organisation)
+      assign(:organisations, [])
+      assign(:taxonomies, [])
     end
 
     it 'renders the title of the organisation' do

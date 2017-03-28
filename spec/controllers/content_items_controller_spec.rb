@@ -41,6 +41,20 @@ RSpec.describe ContentItemsController, type: :controller do
 
       expect(subject).to render_template(:index)
     end
+
+    it "assigns the lists of taxonomies and organisations ordered ASC by title" do
+      create(:organisation, title: "Z")
+      create(:organisation, title: "A")
+      create(:taxonomy, title: "Z")
+      create(:taxonomy, title: "A")
+
+      get :index
+
+      expect(assigns(:organisations).count).to eq(2)
+      expect(assigns(:organisations).first.title).to eq("A")
+      expect(assigns(:taxonomies).count).to eq(2)
+      expect(assigns(:taxonomies).first.title).to eq("A")
+    end
   end
 
   describe "GET #show" do
