@@ -6,7 +6,7 @@ module Metrics
       @content_items = content_items
     end
 
-    def build
+    def run
       { total_pages: { value: content_items.count } }
     end
   end
