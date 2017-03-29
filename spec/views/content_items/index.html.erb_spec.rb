@@ -4,8 +4,17 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   before do
     assign(:organisations, [])
     assign(:taxonomies, [])
+    assign(:metrics, total_pages: {})
     assign(:content_items, ContentItemsDecorator.new(build_list(:content_item, 1)))
     allow(view).to receive(:paginate)
+  end
+
+  context "summary content" do
+    it "renders the summary partial" do
+      render
+
+      assert_template partial: "_summary"
+    end
   end
 
   context "sidebar content" do
