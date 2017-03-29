@@ -13,6 +13,15 @@ RSpec.describe ContentItemsQuery, type: :query do
       expect(results.count).to eq(1)
       expect(results.first.title).to eq('title 1')
     end
+
+    it "returns all content items if the query is empty and a title is nil" do
+      create(:content_item, title: 'title 1')
+      create(:content_item, title: nil)
+
+      results = subject.new(query: '').results
+
+      expect(results.count).to eq(2)
+    end
   end
 
   context "sorting with parameters" do
