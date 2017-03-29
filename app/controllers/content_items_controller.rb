@@ -8,6 +8,7 @@ class ContentItemsController < ApplicationController
   def index
     query = ContentItemsQuery.new(@query_options)
     @content_items = query.paginated_results.decorate
+    @metrics = MetricBuilder.new.run_collection(query.results)
   end
 
   def show
