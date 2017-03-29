@@ -9,7 +9,7 @@ RSpec.describe ContentItemsController, type: :controller do
     end
 
     it "assigns list of content items" do
-      expect(ContentItemsQuery).to receive(:build).and_return(double('collection', decorate: :the_results))
+      expect_any_instance_of(ContentItemsQuery).to receive(:paginated_results).and_return(double('collection', decorate: :the_results))
       get :index
 
       expect(assigns(:content_items)).to eq(:the_results)
@@ -17,7 +17,7 @@ RSpec.describe ContentItemsController, type: :controller do
 
     it "build the query with the expected params" do
       expected_params = { sort: 'title', order: 'asc', page: '1', taxonomy: nil, organisation: nil, query: 'a title' }
-      expect(ContentItemsQuery).to receive(:build).with(expected_params).and_return(double('collection', decorate: :the_results))
+      expect(ContentItemsQuery).to receive(:new).with(expected_params).and_return(double('collection', paginated_results: double(decorate: :the_results)))
 
       get :index, params: expected_params
     end

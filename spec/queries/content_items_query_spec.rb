@@ -8,7 +8,7 @@ RSpec.describe ContentItemsQuery, type: :query do
       create(:content_item, title: 'title 1')
       create(:content_item, title: 'title 2')
 
-      results = subject.build(query: 'TITLE 1')
+      results = subject.new(query: 'TITLE 1').results
 
       expect(results.count).to eq(1)
       expect(results.first.title).to eq('title 1')
@@ -22,13 +22,13 @@ RSpec.describe ContentItemsQuery, type: :query do
     end
 
     it "returns content_items sorted on a column ascending" do
-      results = subject.build(sort: :public_updated_at, order: :asc)
+      results = subject.new(sort: :public_updated_at, order: :asc).results
 
       expect(results.pluck(:id)).to eq([2, 1])
     end
 
     it "returns content_items sorted on a column descending" do
-      results = subject.build(sort: :public_updated_at, order: :desc)
+      results = subject.new(sort: :public_updated_at, order: :desc).results
 
       expect(results.pluck(:id)).to eq([1, 2])
     end
@@ -40,7 +40,7 @@ RSpec.describe ContentItemsQuery, type: :query do
       content_items = [create(:content_item)]
       organisation = create(:organisation, content_items: content_items)
 
-      results = subject.build(organisation: organisation)
+      results = subject.new(organisation: organisation).results
 
       expect(results).to match_array(content_items)
     end
@@ -50,7 +50,7 @@ RSpec.describe ContentItemsQuery, type: :query do
       content_items = [create(:content_item)]
       taxonomy = create(:taxonomy, content_items: content_items)
 
-      results = subject.build(taxonomy: taxonomy)
+      results = subject.new(taxonomy: taxonomy).results
 
       expect(results).to match_array(content_items)
     end
@@ -61,7 +61,7 @@ RSpec.describe ContentItemsQuery, type: :query do
       taxonomy = create(:taxonomy, content_items: content_items)
       organisation = create(:organisation, content_items: content_items)
 
-      results = subject.build(organisation: organisation, taxonomy: taxonomy)
+      results = subject.new(organisation: organisation, taxonomy: taxonomy).results
 
       expect(results).to match_array(content_items)
     end
@@ -71,9 +71,34 @@ RSpec.describe ContentItemsQuery, type: :query do
       taxonomy = create(:taxonomy, content_items: content_items)
       organisation = create(:organisation, content_items: content_items)
 
-      results = subject.build(organisation: organisation, taxonomy: taxonomy, query: "title 1")
+      results = subject.new(organisation: organisation, taxonomy: taxonomy, query: "title 1").results
 
       expect(results).to match_array(content_items)
+    end
+  end
+
+  describe "paging results" do
+    before do
+      Kaminari.configure do |config|
+        @default_per_page = config.default_per_page
+        config.default_per_page = 1
+      end
+    end
+
+    it "limits the number of items returned to the maximum per page" do
+      create_list(:content_item, 2)
+
+      results = subject.new({}).paginated_results
+
+      expect(results.count).to eq(1)
+    end
+
+    it "gives the correct page of the results" do
+      create_list(:content_item, 2)
+
+      results = subject.new(page: 2).paginated_results
+
+      expect(results.count).to eq(1)
     end
   end
 end
