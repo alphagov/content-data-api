@@ -9,15 +9,31 @@ RSpec.describe ContentItemsController, type: :controller do
     end
 
     it "assigns list of content items" do
-      expect(ContentItemsQuery).to receive(:build).and_return(double('collection', decorate: :the_results))
+      expect_any_instance_of(ContentItemsQuery).to receive(:paginated_results).and_return(double('collection', decorate: :the_results))
       get :index
 
       expect(assigns(:content_items)).to eq(:the_results)
     end
 
-    it "build the query with the expected params" do
+    it "assigns set of metrics" do
+      expect_any_instance_of(MetricBuilder).to receive(:run_collection).and_return(a: :b)
+      get :index
+
+      expect(assigns(:metrics)).to eq(a: :b)
+    end
+
+    it "build the paged query with the expected params" do
       expected_params = { sort: 'title', order: 'asc', page: '1', taxonomy: nil, organisation: nil, query: 'a title' }
-      expect(ContentItemsQuery).to receive(:build).with(expected_params).and_return(double('collection', decorate: :the_results))
+      result = double('collection', paginated_results: double(decorate: :the_results), results: [])
+
+      expect(ContentItemsQuery).to receive(:new).with(expected_params).and_return(result)
+
+      get :index, params: expected_params
+    end
+
+    it "build the unpaged query with the expected params" do
+      expected_params = { sort: 'title', order: 'asc', page: '1', taxonomy: nil, organisation: nil, query: 'a title' }
+      expect_any_instance_of(ContentItemsQuery).to receive(:results).and_return([])
 
       get :index, params: expected_params
     end

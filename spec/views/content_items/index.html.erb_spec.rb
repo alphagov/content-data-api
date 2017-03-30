@@ -1,13 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe 'content_items/index.html.erb', type: :view do
+  before do
+    assign(:organisations, [])
+    assign(:taxonomies, [])
+    assign(:metrics, total_pages: {})
+    assign(:content_items, ContentItemsDecorator.new(build_list(:content_item, 1)))
+    allow(view).to receive(:paginate)
+  end
+
+  context "summary content" do
+    it "renders the summary partial" do
+      render
+
+      assert_template partial: "_summary"
+    end
+  end
+
   context "sidebar content" do
     let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 1)) }
 
     before do
-      allow(view).to receive(:paginate)
-      assign(:organisations, [])
-      assign(:taxonomies, [])
       assign(:content_items, content_items)
     end
 
@@ -22,9 +35,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 2)) }
 
     before do
-      allow(view).to receive(:paginate)
-      assign(:organisations, [])
-      assign(:taxonomies, [])
       assign(:content_items, content_items)
     end
 
@@ -100,10 +110,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
 
     before do
       allow(view).to receive(:paginate)
-      allow(view).to receive(:page_entries_info)
       assign(:content_items, content_items)
-      assign(:organisations, [])
-      assign(:taxonomies, [])
     end
 
     it 'uses Kaminari to paginate the pages' do

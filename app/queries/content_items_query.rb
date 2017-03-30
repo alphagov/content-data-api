@@ -1,19 +1,28 @@
 class ContentItemsQuery
-  def self.build(options)
-    ContentItemsQuery.new.results(options)
+  attr_accessor :query, :page
+
+  def initialize(options)
+    @page = options.delete :page
+    @query = build_query(options)
   end
 
-  def results(options = {})
+  def results
+    query
+  end
+
+  def paginated_results
+    query.page(page)
+  end
+
+private
+
+  def build_query(options = {})
     relation = ContentItem.all
     relation = filter_by_taxonomy(relation, options[:taxonomy])
     relation = filter_by_organisations(relation, options[:organisation])
     relation = filter_by_title(relation, options[:query])
-    relation
-      .order("#{options[:sort]} #{options[:order]}")
-      .page(options[:page])
+    relation.order("#{options[:sort]} #{options[:order]}")
   end
-
-private
 
   def filter_by_taxonomy(relation, taxonomy)
     return relation unless taxonomy
@@ -26,7 +35,7 @@ private
   end
 
   def filter_by_title(relation, query)
-    return relation unless query
+    return relation if query.blank?
     relation.where('content_items.title ilike ?', "%#{query}%")
   end
 end

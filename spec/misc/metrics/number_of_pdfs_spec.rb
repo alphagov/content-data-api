@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Metrics::NumberOfPdfsMetric do
-  subject { Metrics::NumberOfPdfsMetric }
+RSpec.describe Metrics::NumberOfPdfs do
+  subject { Metrics::NumberOfPdfs }
 
   let(:content_with_pdfs) {
     {

@@ -1,18 +1,14 @@
 class ContentItemsController < ApplicationController
   before_action :set_organisation, only: :index
   before_action :set_taxonomy, only: :index
+  before_action :set_query_options, only: :index
   before_action :set_all_organisations, only: :index
   before_action :set_all_taxonomies, only: :index
 
   def index
-    @content_items = ContentItemsQuery.build(
-      sort: params[:sort],
-      order: params[:order],
-      query: params[:query],
-      page: params[:page],
-      taxonomy: @taxonomy,
-      organisation: @organisation
-    ).decorate
+    query = ContentItemsQuery.new(@query_options)
+    @content_items = query.paginated_results.decorate
+    @metrics = MetricBuilder.new.run_collection(query.results)
   end
 
   def show
@@ -20,6 +16,17 @@ class ContentItemsController < ApplicationController
   end
 
 private
+
+  def set_query_options
+    @query_options = {
+      sort: params[:sort],
+      order: params[:order],
+      query: params[:query],
+      page: params[:page],
+      taxonomy: @taxonomy,
+      organisation: @organisation
+    }
+  end
 
   def set_all_organisations
     @organisations = Organisation.order(:title)

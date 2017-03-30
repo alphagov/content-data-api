@@ -1,5 +1,5 @@
 module Metrics
-  class NumberOfPdfsMetric
+  class NumberOfPdfs
     attr_accessor :content_item
 
     PDF_XPATH = "//*[contains(@class, 'attachment-details')]//a[contains(@href, '.pdf')]".freeze
