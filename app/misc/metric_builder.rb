@@ -18,13 +18,13 @@ private
 
   def all_metrics
     [
-      Metrics::NumberOfPdfsMetric
+      Metrics::NumberOfPdfs
     ]
   end
 
   def collection_metrics
     [
-      Metrics::TotalPagesMetric
+      Metrics::TotalPages
     ]
   end
 end

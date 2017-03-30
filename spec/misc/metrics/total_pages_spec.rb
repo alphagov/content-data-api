@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe Metrics::TotalPagesMetric do
-  subject { Metrics::TotalPagesMetric }
+RSpec.describe Metrics::TotalPages do
+  subject { Metrics::TotalPages }
 
   let(:content_items) { build_list(:content_item, 5) }
 

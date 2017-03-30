@@ -1,5 +1,5 @@
 module Metrics
-  class TotalPagesMetric
+  class TotalPages
     attr_accessor :content_items
 
     def initialize(content_items)
