@@ -1,6 +1,6 @@
 class MetricBuilder
   def run_all(content_item_attributes)
-    run(all_metrics, content_item_attributes)
+    run(content_item_metrics, content_item_attributes)
   end
 
   def run_collection(content_items)
@@ -16,7 +16,7 @@ private
     metrics.reduce(:merge)
   end
 
-  def all_metrics
+  def content_item_metrics
     [
       Metrics::NumberOfPdfs
     ]
