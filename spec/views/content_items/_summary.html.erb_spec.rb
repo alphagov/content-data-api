@@ -5,7 +5,8 @@ RSpec.describe 'content_items/_summary.html.erb', type: :view do
     {
       total_pages: { value: 0 },
       zero_page_views: { value: 0 },
-      pages_not_updated: { value: 0 }
+      pages_not_updated: { value: 0 },
+      pages_with_pdfs: { value: 0, percentage: 0 }
     }
   }
 
@@ -37,5 +38,15 @@ RSpec.describe 'content_items/_summary.html.erb', type: :view do
 
     expect(rendered).to have_selector(".summary-item-label", text: "Pages not updated in 6 months")
     expect(rendered).to have_selector(".summary-item-value", text: "123")
+  end
+
+  it "renders the pages with pdfs metric" do
+    metrics[:pages_with_pdfs][:percentage] = 50
+    assign(:metrics, metrics)
+
+    render
+
+    expect(rendered).to have_selector(".summary-item-label", text: "Pages that contain PDF content")
+    expect(rendered).to have_selector(".summary-item-value", text: "50.0%")
   end
 end
