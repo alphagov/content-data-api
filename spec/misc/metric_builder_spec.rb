@@ -16,6 +16,7 @@ RSpec.describe MetricBuilder do
       expect_any_instance_of(Metrics::TotalPages).to receive(:run).exactly(1).times.and_return({})
       expect_any_instance_of(Metrics::ZeroPageViews).to receive(:run).exactly(1).times.and_return({})
       expect_any_instance_of(Metrics::PagesNotUpdated).to receive(:run).exactly(1).times.and_return({})
+      expect_any_instance_of(Metrics::PagesWithPdfs).to receive(:run).exactly(1).times.and_return({})
 
       subject.run_collection([])
     end

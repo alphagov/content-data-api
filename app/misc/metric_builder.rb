@@ -26,7 +26,8 @@ private
     [
       Metrics::TotalPages,
       Metrics::ZeroPageViews,
-      Metrics::PagesNotUpdated
+      Metrics::PagesNotUpdated,
+      Metrics::PagesWithPdfs
     ]
   end
 end
