@@ -1,6 +1,10 @@
-<div class="summary">
-  <div class="summary-item">
+<div class="summary row">
+  <div class="summary-item col-xs-4">
     <span class="summary-item-value"><%= @metrics[:total_pages][:value] %></span> 
     <span class="summary-item-label">Live pages</span>
+  </div>
+  <div class="summary-item col-xs-4">
+    <span class="summary-item-value"><%= @metrics[:zero_page_views][:value] %></span> 
+    <span class="summary-item-label">Pages with zero views</span>
   </div>
 </div>  
