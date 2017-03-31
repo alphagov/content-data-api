@@ -4,7 +4,7 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
   before do
     assign(:organisations, [])
     assign(:taxonomies, [])
-    assign(:metrics, total_pages: {}, zero_page_views: {})
+    assign(:metrics, total_pages: {}, zero_page_views: {}, pages_not_updated: {})
     assign(:content_items, ContentItemsDecorator.new(build_list(:content_item, 1)))
     allow(view).to receive(:paginate)
   end

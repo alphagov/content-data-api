@@ -17,4 +17,13 @@ RSpec.feature "Summary area", type: :feature do
 
     expect(page).to have_selector('.summary-item-value', text: 1)
   end
+
+  scenario "user can see the total number of pages not updated in the last 6 months" do
+    create :content_item, public_updated_at: 7.months.ago
+    create :content_item, public_updated_at: Date.today
+
+    visit 'content_items'
+
+    expect(page).to have_selector('.summary-item-value', text: 1)
+  end
 end

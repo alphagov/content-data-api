@@ -25,7 +25,8 @@ private
   def collection_metrics
     [
       Metrics::TotalPages,
-      Metrics::ZeroPageViews
+      Metrics::ZeroPageViews,
+      Metrics::PagesNotUpdated
     ]
   end
 end
