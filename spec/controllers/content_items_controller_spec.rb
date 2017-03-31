@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe ContentItemsController, type: :controller do
+  before do
+    allow_any_instance_of(MetricBuilder).to receive(:run_collection).and_return(a: :b)
+  end
+
   describe "GET #index" do
     it "returns http success" do
       get :index
