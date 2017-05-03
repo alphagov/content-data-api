@@ -26,7 +26,7 @@ RSpec.describe 'content_items/_summary.html.erb', type: :view do
 
     render
 
-    expect(rendered).to have_selector(".summary-item-label", text: "Pages with zero views")
+    expect(rendered).to have_selector(".summary-item-label", text: "Pages with zero views per month")
     expect(rendered).to have_selector(".summary-item-value", text: "123")
   end
 
