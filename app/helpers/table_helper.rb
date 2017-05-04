@@ -23,8 +23,19 @@ module TableHelper
   private
 
     def link(label, order)
-      if view.instance_variable_get(:@organisation).present?
-        link_to content_items_path(organisation_id: view.instance_variable_get(:@organisation).content_id, sort: attribute_name, order: order, query: params[:query]) do
+      org_id = view.instance_variable_get(:@organisation).content_id if view.instance_variable_get(:@organisation).present?
+      taxon_id = view.instance_variable_get(:@taxonomy).content_id if view.instance_variable_get(:@taxonomy).present?
+
+      if org_id && !taxon_id
+        link_to content_items_path(organisation_id: org_id, sort: attribute_name, order: order, query: params[:query]) do
+          "#{heading}#{content_tag :span, label, class: 'rm'}".html_safe
+        end
+      elsif taxon_id && !org_id
+        link_to content_items_path(taxonomy_content_id: taxon_id, sort: attribute_name, order: order, query: params[:query]) do
+          "#{heading}#{content_tag :span, label, class: 'rm'}".html_safe
+        end
+      elsif org_id && taxon_id
+        link_to content_items_path(organisation_id: org_id, taxonomy_content_id: taxon_id, sort: attribute_name, order: order, query: params[:query]) do
           "#{heading}#{content_tag :span, label, class: 'rm'}".html_safe
         end
       else
