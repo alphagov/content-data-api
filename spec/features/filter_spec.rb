@@ -39,10 +39,10 @@ RSpec.feature "Filter in content items", type: :feature do
       create :organisation, content_id: "the-content-id-1", title: "org 1"
 
       visit "/content_items"
-      select "org 1", from: "organisation_id"
+      select "org 1", from: "organisation_content_id"
       click_on "Filter"
 
-      expected_path = "organisation_id=the-content-id-1"
+      expected_path = "organisation_content_id=the-content-id-1"
 
       expect(current_url).to include(expected_path)
     end
@@ -51,10 +51,10 @@ RSpec.feature "Filter in content items", type: :feature do
       create :organisation, title: "org 1"
 
       visit "/content_items"
-      select "org 1", from: "organisation_id"
+      select "org 1", from: "organisation_content_id"
       click_on "Filter"
 
-      expect(page).to have_select(:organisation_id, selected: 'org 1')
+      expect(page).to have_select(:organisation_content_id, selected: 'org 1')
     end
   end
 

@@ -37,7 +37,7 @@ private
   end
 
   def set_organisation
-    @organisation = Organisation.find_by(content_id: params[:organisation_id]) if params[:organisation_id]
+    @organisation = Organisation.find_by(content_id: params[:organisation_content_id]) if params[:organisation_content_id]
   end
 
   def set_taxonomy

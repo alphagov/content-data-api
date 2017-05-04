@@ -29,7 +29,7 @@ module TableHelper
           query: params[:query]
       }
 
-      link_options[:organisation_id] = view.instance_variable_get(:@organisation).content_id if view.instance_variable_get(:@organisation).present?
+      link_options[:organisation_content_id] = view.instance_variable_get(:@organisation).content_id if view.instance_variable_get(:@organisation).present?
       link_options[:taxonomy_content_id] = view.instance_variable_get(:@taxonomy).content_id if view.instance_variable_get(:@taxonomy).present?
 
       link_to content_items_path(link_options) do
