@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'features/pagination_spec_helper'
+require "rails_helper"
+require "features/pagination_spec_helper"
 
 RSpec.feature "Content Items List", type: :feature do
   describe "User can navigate paged lists of content items" do
