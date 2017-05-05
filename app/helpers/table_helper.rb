@@ -1,17 +1,17 @@
 module TableHelper
-  def sort_table_header(heading, attribute_name)
-    SortTable.new(self, heading, attribute_name).render
+  def sort_table_header(heading, attribute)
+    SortTable.new(self, heading, attribute).render
   end
 
   class SortTable
-    attr_accessor :view, :heading, :attribute_name
+    attr_accessor :view, :heading, :attribute
 
     delegate :content_tag, :params, :link_to, :content_items_path, to: :view
 
-    def initialize(view, heading, attribute_name)
+    def initialize(view, heading, attribute)
       @view = view
       @heading = heading
-      @attribute_name = attribute_name
+      @attribute = attribute
     end
 
     def render
@@ -24,7 +24,7 @@ module TableHelper
 
     def link(label, order)
       link_options = {
-          sort: attribute_name,
+          sort: attribute,
           order: order,
           query: params[:query]
       }
@@ -38,7 +38,7 @@ module TableHelper
     end
 
     def currently_sorted_by?
-      params[:order].present? && params[:sort] == attribute_name
+      params[:order].present? && params[:sort] == attribute
     end
 
     def text_label
