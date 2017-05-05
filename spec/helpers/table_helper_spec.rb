@@ -5,13 +5,13 @@ RSpec.describe TableHelper, type: :helper do
     let(:organisation) { build(:organisation) }
     before { assign(:organisation, organisation) }
 
-    let(:params_asc) { { order: 'asc', sort: attribute_name, organisation_content_id: organisation.content_id } }
-    let(:params_desc) { { order: 'desc', sort: attribute_name, organisation_content_id: organisation.content_id } }
+    let(:params_asc) { {order: 'asc', sort: attribute, organisation_content_id: organisation.content_id } }
+    let(:params_desc) { {order: 'desc', sort: attribute, organisation_content_id: organisation.content_id } }
 
     let(:heading) { 'Last Updated' }
-    let(:attribute_name) { 'public_updated_at' }
+    let(:attribute) { 'public_updated_at' }
 
-    subject { helper.sort_table_header(heading, attribute_name) }
+    subject { helper.sort_table_header(heading: heading, attribute: attribute) }
 
     describe 'Accessibility' do
       context 'When the column is unsorted' do

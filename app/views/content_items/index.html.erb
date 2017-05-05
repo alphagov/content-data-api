@@ -9,10 +9,10 @@
 <table class="table table-bordered table-hover">
   <thead>
     <tr class="table-header">
-      <%= sort_table_header "Title", "title" %>
-      <%= sort_table_header "Doc type", "document_type" %>
-      <%= sort_table_header "Page views (1mth)", "unique_page_views" %>
-      <%= sort_table_header "Last Updated", "public_updated_at" %>
+      <%= sort_table_header heading: "Title", attribute: "title" %>
+      <%= sort_table_header heading: "Doc type", attribute: "document_type" %>
+      <%= sort_table_header heading: "Page views (1mth)", attribute: "unique_page_views" %>
+      <%= sort_table_header heading: "Last Updated", attribute: "public_updated_at" %>
     </tr>
   </thead>
   <tbody>

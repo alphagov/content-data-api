@@ -1,5 +1,5 @@
 module TableHelper
-  def sort_table_header(heading, attribute)
+  def sort_table_header(heading:, attribute:)
     SortTable.new(self, heading, attribute).render
   end
 
