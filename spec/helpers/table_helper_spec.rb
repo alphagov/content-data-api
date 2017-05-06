@@ -11,7 +11,7 @@ RSpec.describe TableHelper, type: :helper do
     let(:heading) { 'Last Updated' }
     let(:attribute) { 'public_updated_at' }
 
-    subject { helper.sort_table_header(heading: heading, attribute: attribute) }
+    subject { helper.sort_table_header(heading: heading, attribute: attribute, filter_options: {}) }
 
     describe 'Accessibility' do
       context 'When the column is unsorted' do
@@ -50,6 +50,7 @@ RSpec.describe TableHelper, type: :helper do
     end
 
     describe 'Sorting' do
+      subject { helper.sort_table_header(heading: heading, attribute: attribute, filter_options: params_asc) }
       context 'When the column is unsorted' do
         it 'has a link to sort asc' do
           link_href = content_items_path(params_asc)
@@ -59,6 +60,7 @@ RSpec.describe TableHelper, type: :helper do
       end
 
       context 'When the column is sorted asc' do
+        subject { helper.sort_table_header(heading: heading, attribute: attribute, filter_options: params_desc) }
         before { controller.params = params_asc }
 
         it 'has a link to sort desc' do

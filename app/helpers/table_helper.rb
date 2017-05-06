@@ -1,36 +1,34 @@
 module TableHelper
-  def sort_table_header(heading:, attribute:)
-    SortTable.new(self, heading, attribute).render
+  def sort_table_header(heading:, attribute:, filter_options:)
+    SortTable.new(self, heading, attribute, filter_options).render
   end
 
   class SortTable
-    attr_accessor :view, :heading, :attribute
+    attr_accessor :view, :heading, :attribute, :filter_options
 
     delegate :content_tag, :params, :link_to, :content_items_path, to: :view
 
-    def initialize(view, heading, attribute)
+    def initialize(view, heading, attribute, filter_options)
       @view = view
       @heading = heading
       @attribute = attribute
+      @filter_options = filter_options
     end
 
     def render
       content_tag :th, "aria-sort" => aria_label do
-        link text_label, order_param
+        link text_label, order_param, filter_options
       end
     end
 
   private
 
-    def link(label, order)
+    def link(label, order, filter_options)
       link_options = {
           sort: attribute,
-          order: order,
-          query: params[:query]
+          order: order
       }
-
-      link_options[:organisation_content_id] = view.instance_variable_get(:@organisation).content_id if view.instance_variable_get(:@organisation).present?
-      link_options[:taxonomy_content_id] = view.instance_variable_get(:@taxonomy).content_id if view.instance_variable_get(:@taxonomy).present?
+      link_options.merge!(filter_options)
 
       link_to content_items_path(link_options) do
         "#{heading}#{content_tag :span, label, class: 'rm'}".html_safe
