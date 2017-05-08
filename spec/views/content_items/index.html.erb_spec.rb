@@ -9,21 +9,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     allow(view).to receive(:paginate)
   end
 
-  context 'main content' do
-    let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 2)) }
-
-    before do
-      assign(:content_items, content_items)
-    end
-
-    it 'renders a row per Content Item' do
-      render
-
-      expect(rendered).to have_selector('table tbody tr', count: 2)
-    end
-
-  end
-
   describe 'Kaminari' do
     let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 2)) }
 

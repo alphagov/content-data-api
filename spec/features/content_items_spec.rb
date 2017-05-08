@@ -48,4 +48,12 @@ RSpec.feature "Content Items List", type: :feature do
     expect(page).to have_text("99")
     expect(page).to have_text("2 months ago")
   end
+
+  scenario "Renders all content items" do
+    create_list :content_item, 2
+
+    visit "/content_items"
+
+    expect(page).to have_selector('table tbody tr', count: 2)
+  end
 end
