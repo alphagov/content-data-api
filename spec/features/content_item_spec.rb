@@ -11,4 +11,14 @@ RSpec.feature "Content Item Details", type: :feature do
     expected_path = "/content_items/1"
     expect(current_path).to eq(expected_path)
   end
+
+  scenario "Renders the organisations belonging to a Content Item" do
+    content_item = create(:content_item).decorate
+    content_item.organisations << create(:organisation, title: 'An Organisation')
+    content_item.organisations << create(:organisation, title: 'Another Organisation')
+
+    visit "/content_items/#{content_item.id}"
+
+    expect(page).to have_text('An Organisation, Another Organisation')
+  end
 end

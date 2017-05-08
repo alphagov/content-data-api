@@ -100,18 +100,4 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
       expect(rendered).to have_selector('table tbody tr:nth(5) td:nth(2)', text: 'Never')
     end
   end
-
-  context "content items belong to multiple organisations" do
-    let(:content_item) { create(:content_item_with_organisations, organisations_count: 2).decorate }
-
-    it 'renders the organisations names' do
-      content_item.organisations[0].title = 'An Organisation'
-      content_item.organisations[1].title = 'Another Organisation'
-      render
-
-      expect(rendered).to have_selector('td', text: 'Organisation')
-      expect(rendered).to have_selector('td + td', text: 'An Organisation, Another Organisation')
-    end
-
-  end
 end
