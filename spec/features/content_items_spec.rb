@@ -2,20 +2,10 @@ require 'rails_helper'
 require 'features/pagination_spec_helper'
 
 RSpec.feature "Content Items List", type: :feature do
-  background do
-    @content_items = create_list :content_item, 3
-  end
+  describe "User can navigate paged lists of content items" do
+    before { create_list :content_item, 3 }
 
-  context "list the content items" do
-    scenario "the user sees a list of all unfiltered content items" do
-      visit 'content_items'
-
-      expect(page).to have_css('table tbody tr', count: 3)
-    end
-
-    describe "user can navigate paged lists of content items" do
-      it_behaves_like 'a paginated list', 'content_items'
-    end
+    it_behaves_like 'a paginated list', 'content_items'
   end
 
   scenario "Renders the page title" do
