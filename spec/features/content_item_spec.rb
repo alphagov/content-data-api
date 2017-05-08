@@ -11,12 +11,4 @@ RSpec.feature "Content Item Details", type: :feature do
     expected_path = "/content_items/1"
     expect(current_path).to eq(expected_path)
   end
-
-  describe 'The user can navigate paged lists of content items' do
-    before do
-      create_list :content_item, 3
-    end
-
-    it_behaves_like "a paginated list", "/content_items"
-  end
 end
