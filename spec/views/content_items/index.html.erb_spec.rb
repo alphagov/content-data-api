@@ -23,15 +23,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       expect(rendered).to have_selector('h1', text: 'A Title')
     end
 
-    it 'renders the table header with the right headings' do
-      render
-
-      expect(rendered).to have_selector('table thead', text: 'Title')
-      expect(rendered).to have_selector('table thead tr:first-child th', text: 'Doc type')
-      expect(rendered).to have_selector('table thead tr:first-child th', text: 'Page views (1mth)')
-      expect(rendered).to have_selector('table thead tr:first-child th', text: 'Last Updated')
-    end
-
     it 'renders a row per Content Item' do
       render
 

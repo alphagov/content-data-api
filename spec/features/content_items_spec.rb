@@ -17,4 +17,13 @@ RSpec.feature "Content Items List", type: :feature do
       it_behaves_like 'a paginated list', 'content_items'
     end
   end
+
+  scenario "Renders the table header" do
+    visit "/content_items"
+
+    expect(page).to have_selector('thead', text: 'Title')
+    expect(page).to have_selector('thead tr:first-child th', text: 'Doc type')
+    expect(page).to have_selector('thead tr:first-child th', text: 'Page views (1mth)')
+    expect(page).to have_selector('thead tr:first-child th', text: 'Last Updated')
+  end
 end
