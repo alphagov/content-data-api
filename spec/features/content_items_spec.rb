@@ -18,6 +18,12 @@ RSpec.feature "Content Items List", type: :feature do
     end
   end
 
+  scenario "Renders the page title" do
+    visit "/content_items"
+
+    expect(page).to have_selector('h1', text: 'GOV.UK')
+  end
+
   scenario "Renders the table header" do
     visit "/content_items"
 

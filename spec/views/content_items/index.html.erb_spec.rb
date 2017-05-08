@@ -16,13 +16,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       assign(:content_items, content_items)
     end
 
-    it 'renders a page title' do
-      allow(content_items).to receive(:header).and_return('A Title')
-      render
-
-      expect(rendered).to have_selector('h1', text: 'A Title')
-    end
-
     it 'renders a row per Content Item' do
       render
 
