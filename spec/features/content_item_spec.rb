@@ -73,4 +73,12 @@ RSpec.feature "Content Item Details", type: :feature do
 
     expect(page).to have_text('An Organisation, Another Organisation')
   end
+
+  scenario "Renders when an item has not been published" do
+    content_item = create :content_item, public_updated_at: nil
+
+    visit "/content_items/#{content_item.id}"
+
+    expect(page).to have_text("Never")
+  end
 end
