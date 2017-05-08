@@ -11,14 +11,6 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     content_item.organisations << organisation
   end
 
-  it 'renders the number of views' do
-    content_item.unique_page_views = 10
-    render
-
-    expect(rendered).to have_selector('td', text: 'Page views (1 month)')
-    expect(rendered).to have_selector('td + td', 'text': 10)
-  end
-
   it 'renders a link to FeedEx' do
     content_item.base_path = '/the-base-path'
     feedex_link = "#{Plek.find('support')}/anonymous_feedback?path=/the-base-path"

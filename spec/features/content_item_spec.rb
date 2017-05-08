@@ -37,6 +37,14 @@ RSpec.feature "Content Item Details", type: :feature do
     expect(page).to have_text("99")
   end
 
+  scenario "Renders stats for Google Analytics" do
+    content_item = create :content_item, unique_page_views: 77
+
+    visit "/content_items/#{content_item.id}"
+
+    expect(page).to have_text("77")
+  end
+
   scenario "Renders the organisations belonging to a Content Item" do
     content_item = create(:content_item).decorate
     content_item.organisations << create(:organisation, title: 'An Organisation')
