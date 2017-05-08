@@ -55,6 +55,15 @@ RSpec.feature "Content Item Details", type: :feature do
     expect(page).to have_text("77")
   end
 
+  scenario "Renders feedex details" do
+    content_item = create :content_item, base_path: '/the-base-path'
+
+    visit "/content_items/#{content_item.id}"
+
+    feedex_link = "http://support.dev.gov.uk/anonymous_feedback?path=/the-base-path"
+    expect(page).to have_link('View feedback on FeedEx', href: feedex_link)
+  end
+
   scenario "Renders the organisations belonging to a Content Item" do
     content_item = create(:content_item).decorate
     content_item.organisations << create(:organisation, title: 'An Organisation')
