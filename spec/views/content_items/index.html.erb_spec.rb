@@ -22,49 +22,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
       expect(rendered).to have_selector('table tbody tr', count: 2)
     end
 
-    describe 'row content' do
-      it "renders item title" do
-        allow(content_items[0]).to receive(:title).and_return("item title")
-
-        render
-
-        expect(rendered).to have_text('item title')
-      end
-
-      it "renders item document type" do
-        allow(content_items[0]).to receive(:document_type).and_return("a document type")
-
-        render
-
-        expect(rendered).to have_text('a document type')
-      end
-
-      it "renders item page views" do
-        allow(content_items[0]).to receive(:unique_page_views).and_return("1234")
-
-        render
-
-        expect(rendered).to have_text('1234')
-      end
-
-      it "renders item last updated" do
-        Timecop.freeze(Time.parse('2016-3-20')) do
-          allow(content_items[0]).to receive(:public_updated_at).and_return(Time.parse('2016-1-20'))
-
-          render
-
-          expect(rendered).to have_text('2 months ago')
-        end
-      end
-
-      it "renders 'never' if no item last updated" do
-        allow(content_items[0]).to receive(:public_updated_at).and_return(nil)
-
-        render
-
-        expect(rendered).to have_text('Never')
-      end
-    end
   end
 
   describe 'Kaminari' do

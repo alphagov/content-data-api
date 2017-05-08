@@ -32,4 +32,20 @@ RSpec.feature "Content Items List", type: :feature do
     expect(page).to have_selector('thead tr:first-child th', text: 'Page views (1mth)')
     expect(page).to have_selector('thead tr:first-child th', text: 'Last Updated')
   end
+
+  scenario "Renders content item details" do
+    create(:content_item,
+      title: "a-title",
+      document_type: "guide",
+      unique_page_views: "99",
+      public_updated_at: 2.months.ago
+    )
+
+    visit "/content_items"
+
+    expect(page).to have_text("a-title")
+    expect(page).to have_text("guide")
+    expect(page).to have_text("99")
+    expect(page).to have_text("2 months ago")
+  end
 end
