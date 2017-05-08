@@ -19,14 +19,6 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_link('View feedback on FeedEx', href: feedex_link)
   end
 
-  it 'renders the taxonomies' do
-    content_item.taxonomies = [taxonomy]
-    render
-
-    expect(rendered).to have_selector('td', text: 'Taxonomies')
-    expect(rendered).to have_selector('td + td', text: "taxon title")
-  end
-
   context 'item has never been published' do
     it 'renders for no last updated value' do
       content_item.public_updated_at = nil
