@@ -9,28 +9,6 @@ RSpec.describe 'content_items/index.html.erb', type: :view do
     allow(view).to receive(:paginate)
   end
 
-  context "summary content" do
-    it "renders the summary partial" do
-      render
-
-      assert_template partial: "_summary"
-    end
-  end
-
-  context "sidebar content" do
-    let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 1)) }
-
-    before do
-      assign(:content_items, content_items)
-    end
-
-    it "assigns the sidebar content block" do
-      expect(view).to receive(:content_for).with(:sidebar)
-
-      render
-    end
-  end
-
   context 'main content' do
     let(:content_items) { ContentItemsDecorator.new(build_list(:content_item, 2)) }
 
