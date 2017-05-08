@@ -12,6 +12,21 @@ RSpec.feature "Content Item Details", type: :feature do
     expect(current_path).to eq(expected_path)
   end
 
+  scenario "Renders core attributes from the Content Item" do
+    content_item = create(:content_item,
+      title: "a-title",
+      base_path: "/content/1/path",
+      document_type: "guidance",
+      description: "a-description",
+    )
+
+    visit "/content_items/#{content_item.id}"
+    expect(page).to have_text("a-title")
+    expect(page).to have_link("a-title", href: "https://gov.uk/content/1/path")
+    expect(page).to have_text("guidance")
+    expect(page).to have_text("a-description")
+  end
+
   scenario "Renders the organisations belonging to a Content Item" do
     content_item = create(:content_item).decorate
     content_item.organisations << create(:organisation, title: 'An Organisation')

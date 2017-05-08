@@ -11,37 +11,6 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     content_item.organisations << organisation
   end
 
-  it 'renders the table header with the right headings' do
-    render
-
-    expect(rendered).to have_selector('table th:first-child', text: 'Content item attribute')
-    expect(rendered).to have_selector('table th:nth(2)', text: 'Value')
-  end
-
-  it 'renders the title' do
-    content_item.title = 'A Title'
-    render
-
-    expect(rendered).to have_selector('h1', text: 'A Title')
-  end
-
-  it 'renders the url' do
-    content_item.base_path = '/content/1/path'
-    content_item.title = 'A Title'
-    render
-
-    expect(rendered).to have_selector('td', text: 'Page on GOV.UK')
-    expect(rendered).to have_selector('td + td a[href="https://gov.uk/content/1/path"]', text: 'A Title')
-  end
-
-  it 'renders the document type' do
-    content_item.document_type = 'guidance'
-    render
-
-    expect(rendered).to have_selector('td', text: 'Type of document')
-    expect(rendered).to have_selector('td + td', 'text': 'guidance')
-  end
-
   it 'renders the number of views' do
     content_item.unique_page_views = 10
     render
@@ -68,13 +37,6 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_link('View feedback on FeedEx', href: feedex_link)
   end
 
-  it 'renders the description of the content item' do
-    content_item.description = 'The description of a content item'
-    render
-
-    expect(rendered).to have_selector('td', text: 'Description')
-    expect(rendered).to have_selector('td + td', text: 'The description of a content item')
-  end
 
   it 'renders the number of pdfs the content item has' do
     content_item.number_of_pdfs = 10
