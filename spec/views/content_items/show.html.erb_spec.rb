@@ -37,15 +37,6 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_link('View feedback on FeedEx', href: feedex_link)
   end
 
-
-  it 'renders the number of pdfs the content item has' do
-    content_item.number_of_pdfs = 10
-    render
-
-    expect(rendered).to have_selector('td', text: 'Number of pdfs')
-    expect(rendered).to have_selector('td + td', text: 10)
-  end
-
   it 'renders the taxonomies' do
     content_item.taxonomies = [taxonomy]
     render

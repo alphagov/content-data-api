@@ -27,6 +27,14 @@ RSpec.feature "Content Item Details", type: :feature do
     expect(page).to have_text("a-description")
   end
 
+  scenario "Renders the number of PDFs" do
+    content_item = create :content_item, number_of_pdfs: 99
+
+    visit "/content_items/#{content_item.id}"
+
+    expect(page).to have_text("99")
+  end
+
   scenario "Renders the organisations belonging to a Content Item" do
     content_item = create(:content_item).decorate
     content_item.organisations << create(:organisation, title: 'An Organisation')
