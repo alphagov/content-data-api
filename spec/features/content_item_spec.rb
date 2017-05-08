@@ -18,6 +18,7 @@ RSpec.feature "Content Item Details", type: :feature do
       base_path: "/content/1/path",
       document_type: "guidance",
       description: "a-description",
+      public_updated_at: 2.months.ago,
     )
 
     visit "/content_items/#{content_item.id}"
@@ -25,6 +26,7 @@ RSpec.feature "Content Item Details", type: :feature do
     expect(page).to have_link("a-title", href: "https://gov.uk/content/1/path")
     expect(page).to have_text("guidance")
     expect(page).to have_text("a-description")
+    expect(page).to have_text("2 months ago")
   end
 
   scenario "Renders the number of PDFs" do

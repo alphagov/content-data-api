@@ -19,16 +19,6 @@ RSpec.describe 'content_items/show.html.erb', type: :view do
     expect(rendered).to have_selector('td + td', 'text': 10)
   end
 
-  it 'renders the last updated date' do
-    Timecop.freeze('2016-3-20') do
-      content_item.public_updated_at = Date.parse('2016-1-20')
-      render
-    end
-
-    expect(rendered).to have_selector('td', text: 'Last updated')
-    expect(rendered).to have_selector('td + td', text: '2 months ago')
-  end
-
   it 'renders a link to FeedEx' do
     content_item.base_path = '/the-base-path'
     feedex_link = "#{Plek.find('support')}/anonymous_feedback?path=/the-base-path"
