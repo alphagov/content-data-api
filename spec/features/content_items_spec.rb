@@ -27,7 +27,7 @@ RSpec.feature "Content Items List", type: :feature do
     create(:content_item,
       title: "a-title",
       document_type: "guide",
-      unique_page_views: "99",
+      one_month_page_views: "99",
       public_updated_at: 2.months.ago
     )
 

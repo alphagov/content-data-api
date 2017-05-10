@@ -5,9 +5,9 @@ RSpec.describe Metrics::ZeroPageViews do
 
   let!(:content_items) {
     [
-      create(:content_item, unique_page_views: 1),
-      create(:content_item, unique_page_views: 0),
-      create(:content_item, unique_page_views: 0)
+      create(:content_item, one_month_page_views: 1),
+      create(:content_item, one_month_page_views: 0),
+      create(:content_item, one_month_page_views: 0)
     ]
   }
 

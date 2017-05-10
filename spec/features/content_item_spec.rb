@@ -48,7 +48,7 @@ RSpec.feature "Content Item Details", type: :feature do
   end
 
   scenario "Renders stats for Google Analytics" do
-    content_item = create :content_item, unique_page_views: 77
+    content_item = create :content_item, one_month_page_views: 77
 
     visit "/content_items/#{content_item.id}"
 

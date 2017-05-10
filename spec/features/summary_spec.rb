@@ -10,8 +10,8 @@ RSpec.feature "Summary area", type: :feature do
   end
 
   scenario "user can see the total number of pages with zero views" do
-    create :content_item, unique_page_views: 1
-    create :content_item, unique_page_views: 0
+    create :content_item, one_month_page_views: 1
+    create :content_item, one_month_page_views: 0
 
     visit 'content_items'
 

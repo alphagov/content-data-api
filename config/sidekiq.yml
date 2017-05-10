@@ -1,0 +1,3 @@
+# config/sidekiq.yml
+---
+:concurrency:  3

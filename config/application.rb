@@ -22,5 +22,6 @@ module ContentPerformanceManager
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.document_types = config_for(:document_types)["types"]
+    config.active_job.queue_adapter = :sidekiq
   end
 end
