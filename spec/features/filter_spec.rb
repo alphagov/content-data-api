@@ -39,10 +39,10 @@ RSpec.feature "Filter in content items", type: :feature do
       create :organisation, content_id: "the-content-id-1", title: "org 1"
 
       visit "/content_items"
-      select "org 1", from: "organisation_id"
+      select "org 1", from: "organisation_content_id"
       click_on "Filter"
 
-      expected_path = "organisation_id=the-content-id-1"
+      expected_path = "organisation_content_id=the-content-id-1"
 
       expect(current_url).to include(expected_path)
     end
@@ -51,10 +51,10 @@ RSpec.feature "Filter in content items", type: :feature do
       create :organisation, title: "org 1"
 
       visit "/content_items"
-      select "org 1", from: "organisation_id"
+      select "org 1", from: "organisation_content_id"
       click_on "Filter"
 
-      expect(page).to have_select(:organisation_id, selected: 'org 1')
+      expect(page).to have_select(:organisation_content_id, selected: 'org 1')
     end
   end
 
@@ -79,6 +79,17 @@ RSpec.feature "Filter in content items", type: :feature do
       click_on "Filter"
 
       expect(page).to have_select(:taxonomy_content_id, selected: 'taxon 1')
+    end
+
+    scenario "the user's previously filtered taxonomy is selected after sorting" do
+      create :taxonomy, title: "taxon 1", content_id: "123"
+
+      visit "content_items"
+      page.select "taxon 1", from: "taxonomy_content_id"
+      click_on "Filter"
+
+      click_on "Title"
+      expect(page).to have_select(:taxonomy_content_id, selected: "taxon 1")
     end
   end
 end

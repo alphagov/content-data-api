@@ -1,6 +1,7 @@
 class ContentItemsController < ApplicationController
   before_action :set_organisation, only: :index
   before_action :set_taxonomy, only: :index
+  before_action :set_filter_options, only: :index
   before_action :set_query_options, only: :index
   before_action :set_all_organisations, only: :index
   before_action :set_all_taxonomies, only: :index
@@ -37,10 +38,17 @@ private
   end
 
   def set_organisation
-    @organisation = Organisation.find_by(content_id: params[:organisation_id]) if params[:organisation_id]
+    @organisation = Organisation.find_by(content_id: params[:organisation_content_id]) if params[:organisation_content_id]
   end
 
   def set_taxonomy
     @taxonomy = Taxonomy.find_by(content_id: params[:taxonomy_content_id]) if params[:taxonomy_content_id]
+  end
+
+  def set_filter_options
+    @filter_options = {}
+    @filter_options[:organisation_content_id] = params[:organisation_content_id]
+    @filter_options[:taxonomy_content_id] = params[:taxonomy_content_id]
+    @filter_options[:query] = params[:query]
   end
 end

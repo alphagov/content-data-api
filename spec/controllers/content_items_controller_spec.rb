@@ -45,7 +45,7 @@ RSpec.describe ContentItemsController, type: :controller do
     it "assigns the organisation provided the content_id" do
       create(:organisation, content_id: 'the-organisation-id')
 
-      get :index, params: { organisation_id: 'the-organisation-id' }
+      get :index, params: { organisation_content_id: 'the-organisation-id' }
       expect(assigns(:organisation).content_id).to eq('the-organisation-id')
     end
 
