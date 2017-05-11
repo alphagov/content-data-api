@@ -3,16 +3,16 @@
   <%= form_tag content_items_path, method: :get do %>
     <div class="form-group">
       <%= label_tag 'query', 'Search term:', class: '' %>
-      <%= text_field_tag 'query', params[:query], placeholder: 'Enter search term...', class: 'form-control' %>  
+      <%= text_field_tag 'query', params[:query], placeholder: 'Enter search term...', class: 'form-control' %>
     </div>
-    
+
     <div class="form-group">
       <%= label_tag 'Organisation:' %>
       <%= select_tag :organisation_content_id, options_from_collection_for_select(@organisations, :content_id, :title, params[:organisation_content_id]), include_blank: true, class: "form-control" %>
     </div>
-    
+
     <div class="form-group">
-      <%= label_tag 'Taxonomy:' %>
+      <%= label_tag 'Topics (new taxonomy):' %>
       <%= select_tag :taxonomy_content_id, options_from_collection_for_select(@taxonomies || [], :content_id, :title, params[:taxonomy_content_id]), include_blank: true, class: "form-control" %>  
     </div>
 
