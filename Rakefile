@@ -7,4 +7,8 @@ require "rspec/core/rake_task"
 Rails.application.load_tasks
 RSpec::Core::RakeTask.new(:spec)
 
-task default: :spec
+task :lint do
+  sh "bundle exec govuk-lint-ruby"
+end
+
+task default: [:spec, :lint]
