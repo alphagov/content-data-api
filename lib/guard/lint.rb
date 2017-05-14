@@ -2,7 +2,7 @@ require 'guard/compat/plugin'
 
 module Guard
   class Lint < Plugin
-    CMD = "bundle exec govuk-lint-ruby".freeze
+    CMD = "bundle exec govuk-lint-ruby -a".freeze
 
     def run_all
       system(CMD)
