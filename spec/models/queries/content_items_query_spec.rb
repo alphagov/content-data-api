@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ContentItemsQuery, type: :query do
+RSpec.describe Queries::ContentItemsQuery, type: :query do
   subject { described_class }
 
   context "searching by title" do
