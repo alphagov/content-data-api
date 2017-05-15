@@ -95,4 +95,20 @@ RSpec.feature "Filter in content items", type: :feature do
       expect(page).to have_select(:taxonomy_content_id, selected: "taxon 1")
     end
   end
+
+  context "additional filters" do
+    scenario "the user cannot see the additional filters by default", js: true do
+      visit "/content_items"
+
+      expect(page).to have_selector('#additionalFilters', visible: false)
+    end
+
+    scenario "the user can toggle the visibility of the additional filters", js: true do
+      visit "/content_items"
+
+      click_on "More filter options"
+
+      expect(page).to have_selector('#additionalFilters', visible: true)
+    end
+  end
 end
