@@ -110,5 +110,13 @@ RSpec.feature "Filter in content items", type: :feature do
 
       expect(page).to have_selector('#additionalFilters', visible: true)
     end
+
+    scenario "the user can see the additional filters if they are currently filtering by one of them", js: true do
+      create :taxonomy, title: "taxon 1", content_id: "123"
+
+      visit "/content_items?taxonomy_content_id=123"
+
+      expect(page).to have_selector('#additionalFilters', visible: true)
+    end
   end
 end
