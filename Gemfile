@@ -24,12 +24,12 @@ gem 'plek'
 
 group :development, :test do
   gem 'rspec-rails', '~>3.5'
-  gem 'byebug', platform: :mri
   gem 'factory_girl_rails'
   gem 'timecop'
   gem 'govuk-lint'
   gem 'listen', '~> 3.0.5'
   gem 'guard-rspec', require: false
+  gem 'pry-rails'
 end
 
 group :test do
