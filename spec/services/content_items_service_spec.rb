@@ -1,35 +1,52 @@
 require 'rails_helper'
 
 RSpec.describe ContentItemsService do
-  describe '#find_each' do
-    it 'queries the publishing API for all content items of a given type' do
-      subject.publishing_api = double
-      expected_field_params = %i(content_id description title public_updated_at document_type base_path details)
-      expected_query_params = { document_type: 'a_document_type', links: true }
+  include GdsApi::TestHelpers::PublishingApiV2
 
-      expect(subject.publishing_api).to receive(:find_each).with(expected_field_params, expected_query_params)
+  describe "#content_ids" do
+    let(:content_ids) { 1001.times.map { |i| "id-#{i}" } }
 
-      subject.find_each('a_document_type') {}
+    before do
+      1.upto(2) do |page|
+        publishing_api_has_content(
+          content_ids.map { |id| { content_id: id } },
+          fields: %w(content_id),
+          states: %w(published),
+          page: page,
+          per_page: 1_000,
+        )
+      end
     end
 
-    it 'yields the response with taxons and organisations' do
-      results = []
-      subject.publishing_api = double
-      response = { links: {
-          taxons: [:a],
-          organisations: [:b]
-        }
-      }
+    it "returns all the content ids" do
+      result = subject.content_ids
+      expect(result).to eq(content_ids)
+    end
+  end
 
-      allow(subject.publishing_api).to receive(:find_each).and_yield(response)
+  describe "#fetch" do
+    let(:content_item) { { content_id: "id-123", title: "title" } }
 
-      subject.find_each('a_document_type') { |value| results << value }
-
-      expect(results.first).to include(taxons: [:a], organisations: [:b])
+    before do
+      publishing_api_has_item(content_item)
     end
 
-    it 'raises an exception if no block is passed' do
-      expect { subject.find_each('organisation-slug') }.to raise_exception('missing block!')
+    it "fetches a content item by content id" do
+      result = subject.fetch("id-123")
+      expect(result).to eq(content_item)
+    end
+  end
+
+  describe "#links" do
+    let(:links) { { organisation: ["org-123"] } }
+
+    before do
+      publishing_api_has_links(content_id: "id-123", links: links)
+    end
+
+    it "gets the links for a content item" do
+      result = subject.links("id-123")
+      expect(result).to eq(links)
     end
   end
 end

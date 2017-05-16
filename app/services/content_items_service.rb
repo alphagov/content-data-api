@@ -1,27 +1,48 @@
 class ContentItemsService
-  attr_accessor :publishing_api
+  PER_PAGE = 1_000
 
-  def initialize
-    @publishing_api = Clients::PublishingAPI.new
+  def content_ids
+    results = paginate do |p|
+      publishing_api.get_content_items({
+        fields: %w(content_id),
+        states: %w(published),
+      }.merge(p))
+    end
+
+    results.map { |r| r.fetch(:content_id) }
   end
 
-  def find_each(document_type)
-    raise 'missing block!' unless block_given?
+  def fetch(content_id)
+    normalise(publishing_api.get_content(content_id))
+  end
 
-    publishing_api.find_each(query_fields, build_query_options(document_type)) do |content_item|
-      content_item[:taxons] = content_item[:links][:taxons] || []
-      content_item[:organisations] = content_item[:links][:organisations] || []
-      yield content_item
-    end
+  def links(content_id)
+    normalise(publishing_api.get_links(content_id)).fetch(:links)
   end
 
 private
 
-  def build_query_options(document_type)
-    { document_type: document_type, links: true }
+  def paginate
+    page = 1
+    results = []
+
+    loop do
+      response = yield(page: page, per_page: PER_PAGE)
+      results += normalise(response).fetch(:results)
+      return results if last_page?(response)
+      page += 1
+    end
   end
 
-  def query_fields
-    @fields ||= %i(content_id description title public_updated_at document_type base_path details)
+  def normalise(response)
+    response.to_hash.deep_symbolize_keys
+  end
+
+  def publishing_api
+    Services.publishing_api
+  end
+
+  def last_page?(response)
+    response["current_page"] == response["pages"]
   end
 end
