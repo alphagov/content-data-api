@@ -20,4 +20,9 @@ namespace :import do
 
     Importers::NumberOfViewsByOrganisation.new.run(args.slug)
   end
+
+  desc 'Import all the inventory'
+  task all_inventory: :environment do
+    Importers::AllInventory.new.run
+  end
 end
