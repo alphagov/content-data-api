@@ -25,4 +25,9 @@ namespace :import do
   task all_inventory: :environment do
     Importers::AllInventory.new.run
   end
+
+  desc 'Import GA metrics '
+  task all_ga_metrics: :environment do
+    Importers::AllGoogleAnalyticsMetrics.new.run
+  end
 end

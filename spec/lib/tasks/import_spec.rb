@@ -66,4 +66,16 @@ RSpec.describe 'Import organisation rake task' do
       Rake::Task['import:all_inventory'].invoke
     end
   end
+
+  describe 'import:all_ga_metrics' do
+    before do
+      Rake::Task['import:all_ga_metrics'].reenable
+    end
+
+    it 'runs the all_ga_metrics task' do
+      expect_any_instance_of(Importers::AllGoogleAnalyticsMetrics).to receive(:run)
+
+      Rake::Task['import:all_ga_metrics'].invoke
+    end
+  end
 end
