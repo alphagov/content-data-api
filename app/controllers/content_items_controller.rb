@@ -7,7 +7,7 @@ class ContentItemsController < ApplicationController
   before_action :set_all_taxonomies, only: :index
 
   def index
-    query = ContentItemsQuery.new(@query_options)
+    query = Queries::ContentItemsQuery.new(@query_options)
     @content_items = query.paginated_results.decorate
     @metrics = MetricBuilder.new.run_collection(query.results)
   end
