@@ -18,9 +18,7 @@ $ rake import:all_organisations
 $ rake import:all_taxons
 ```
 
-**All content items for all known document types:**
-
-Note: see `config/document_types.yml` for the types currently processed.
+**All content items:**
 
 ```bash
 $ rake import:all_content_items
