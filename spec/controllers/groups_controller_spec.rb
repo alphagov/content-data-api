@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
+  include AuthenticationControllerHelpers
+
   before do
     @old_content_performance_manager_token = ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN']
     ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN'] = 'a-token'
+    login_as_stub_user
   end
 
   after { ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN'] = @old_content_performance_manager_token }
