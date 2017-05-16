@@ -34,6 +34,9 @@ gem 'govuk_admin_template', '~> 5.0'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Use whenever for running scheduled jobs
+gem 'whenever'
+
 gem 'httparty'
 gem 'kaminari', '~> 0.17.0'
 gem 'google-api-client', '~> 0.9'
