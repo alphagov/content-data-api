@@ -14,27 +14,27 @@ RSpec.describe ContentItem, type: :model do
 
   describe "#create_or_update" do
     it "creates a content item if it does not exist" do
-      content_item = { content_id: "second_id", taxons: [], organisations: [] }
+      content_item = { content_id: "second_id" }
 
       expect { ContentItem.create_or_update!(content_item) }.to change { ContentItem.count }.by(1)
     end
 
     it "updates a content item if it already exists" do
       create(:content_item, content_id: "the_id", title: "the title")
-      content_item = { content_id: "the_id", title: "a new title", taxons: [], organisations: [] }
+      content_item = { content_id: "the_id", title: "a new title" }
 
       expect { ContentItem.create_or_update!(content_item) }.to change { ContentItem.count }.by(0)
       expect(ContentItem.find_by(content_id: "the_id").title).to eq("a new title")
     end
 
     it "creates a content item when the content item has attributes that don't exist on the model" do
-      content_item = { content_id: "the_id", extra_attr: "extra", taxons: [], organisations: [] }
+      content_item = { content_id: "the_id", extra_attr: "extra" }
 
       expect { ContentItem.create_or_update!(content_item) }.to change { ContentItem.count }.by(1)
     end
 
     it "adds the organisation to the content item" do
-      content_item = { content_id: "the_id", taxons: [], organisations: %w(org_1) }
+      content_item = { content_id: "the_id", organisations: %w(org_1) }
       organisation = create(:organisation, content_id: "org_1")
 
       ContentItem.create_or_update!(content_item)
@@ -47,7 +47,7 @@ RSpec.describe ContentItem, type: :model do
       create(:taxonomy, content_id: "taxon_1")
       create(:taxonomy, content_id: "taxon_2")
       taxons = %w(taxon_1 taxon_2)
-      content_item = { content_id: "the_id", taxons: taxons, organisations: [] }
+      content_item = { content_id: "the_id", taxons: taxons }
 
       ContentItem.create_or_update!(content_item)
 

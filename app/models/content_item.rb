@@ -10,8 +10,8 @@ class ContentItem < ApplicationRecord
     content_id = attributes.fetch(:content_id)
     content_item = self.find_or_create_by(content_id: content_id)
 
-    content_item.add_organisations_by_id(attributes.fetch(:organisations))
-    content_item.add_taxonomies_by_id(attributes.fetch(:taxons))
+    content_item.add_organisations_by_id(attributes.fetch(:organisations, []))
+    content_item.add_taxonomies_by_id(attributes.fetch(:taxons, []))
 
     attributes = content_item.existing_attributes(attributes)
     content_item.update!(attributes)
