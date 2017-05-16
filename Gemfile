@@ -42,6 +42,7 @@ gem 'draper', '3.0.0.pre1'
 gem 'unicorn', '~> 5.1.0'
 
 gem 'gds-api-adapters', '~> 41.0.0'
+gem 'gds-sso'
 gem 'airbrake', github: 'alphagov/airbrake', branch: 'silence-dep-warnings-for-rails-5'
 gem 'govuk_sidekiq', '~>1.0.3'
 
