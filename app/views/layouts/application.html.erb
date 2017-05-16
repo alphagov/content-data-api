@@ -15,9 +15,9 @@
 <% content_for :content do %>
   <%= render 'application/phase_banner' %>
   <div class="row">
-    <%= yield :sidebar %>  
+    <%= yield :sidebar %>
     <div class="<%= content_for?(:sidebar) ? 'col-sm-9' : ''%>">
-      <%= yield %>  
+      <%= yield %>
     </div>
   </div>
 <% end %>
