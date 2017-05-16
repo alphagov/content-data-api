@@ -13,7 +13,7 @@
 
     <div class="form-group">
       <%= label_tag 'Topics (new taxonomy):' %>
-      <%= select_tag :taxonomy_content_id, options_from_collection_for_select(@taxonomies || [], :content_id, :title, params[:taxonomy_content_id]), include_blank: true, class: "form-control" %>  
+      <%= select_tag :taxonomy_content_id, options_from_collection_for_select(@taxonomies || [], :content_id, :title, params[:taxonomy_content_id]), include_blank: true, class: "form-control" %>
     </div>
 
     <%= submit_tag 'Filter', name: 'filter', class: "btn btn-default btn-block" %>

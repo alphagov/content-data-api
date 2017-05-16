@@ -53,9 +53,9 @@ In the browser navigate to: http://localhost:3206
  ```bash
  $ bundle exec rake
  ```
- 
+
  or you can also use [Guard](https://github.com/guard/guard), see [list commands](https://github.com/guard/guard/wiki/List-of-Guard-Commands)
- 
+
  ```bash
  $ bundle exec guard
  ```
@@ -65,7 +65,7 @@ In the browser navigate to: http://localhost:3206
 * [On the local environment](doc/importing_data.md#Local_environment)
 * [On GOV.UK environments](doc/importing_data.md#jenkins)
 
-### API 
+### API
 
 * [Configuration](doc/api.md#set_up_api)
 * [Samples](doc/api.md#samples)

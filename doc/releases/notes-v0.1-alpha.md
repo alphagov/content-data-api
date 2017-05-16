@@ -1,9 +1,9 @@
 # Content Performance Manager (v0.1-alpha)
 
-- Tagged with `v0.1-alpha` 
+- Tagged with `v0.1-alpha`
 - This is the result of 3 sprints, 2 weeks each, run between November, December and January
 
-> Note: Department and Organisations are uses indistinctly. 
+> Note: Department and Organisations are uses indistinctly.
 
 ## Goals
 
@@ -19,11 +19,11 @@
 
 ## Information that belongs to a Department.
 
-We list the Content Items that belong to an Organisation; this is a complementary filter to Taxonomies (Themes). 
+We list the Content Items that belong to an Organisation; this is a complementary filter to Taxonomies (Themes).
 
 Steps to retrieve content belonging to a Department:
 
-1. [Query Search API for all the Content Items that belong to an Organisation](https://github.com/alphagov/content-performance-manager/blob/0a1faf2/app/services/content_items_service.rb#L5-L8). 
+1. [Query Search API for all the Content Items that belong to an Organisation](https://github.com/alphagov/content-performance-manager/blob/0a1faf2/app/services/content_items_service.rb#L5-L8).
 2. [Paginate through the Search API response yielding every Content Item](https://github.com/alphagov/content-performance-manager/blob/0a1faf2/app/services/content_items_service.rb#L8-L11).
 
 ### Next steps
@@ -38,12 +38,12 @@ We are **not going to replicate the information stored in the Content Store**, b
 
 Steps to retrieve additional attributes from a Content Item:
 
-1. We use the `base_path` from the Search API and query the Content Store to retrieve: `title`, `description`, `public_updated_at`, `content_id` and `document_type`. 
+1. We use the `base_path` from the Search API and query the Content Store to retrieve: `title`, `description`, `public_updated_at`, `content_id` and `document_type`.
 2. Some of these attributes could also be pulled from the Search API, [but it feels more consistent to get them from the `source of truth` for Content Items: the Content Store](https://github.com/alphagov/content-performance-manager/blob/0a1faf2/app/services/content_items_service.rb#L17-L19).
 
 ### Next steps
 
-1. Work out what is the best way to synchronise Content Store and the CPM. 
+1. Work out what is the best way to synchronise Content Store and the CPM.
 2. In a quick discussion with the Publishing Team, it seems sensible to have an endpoint in the Content Store that returns all the updates since a moment in time. This is the [Trello card to investigate][5] how to tackle this task.
 3. It would be also very interesting to explore if it is a better approach to get all attributes from the content store online (do not store anything but the `id` and `base_path` and render the remainder attributes by querying the Content Store endpoint)
 
@@ -58,7 +58,7 @@ How to retrieve metrics from GA:
 
 We have decided to query [Google API][7] directly for the following reasons:
 
-1. We could not find endpoints in the performance platform to retrieve GA stats for a particular URL. They seem to be more focused on aggregated data/stats. 
+1. We could not find endpoints in the performance platform to retrieve GA stats for a particular URL. They seem to be more focused on aggregated data/stats.
 2. Performance platform kindly offered us to use their infrastructure (collectors) to retrieve GA stats, but we would prefer a more simple approach as our requirements are quite simple as of today.
 
 ### Next step
@@ -74,14 +74,14 @@ Some Content Items have a `public_updated_at` older than 6 years. Although this 
 
 ## State of Content Items
 
-We are not considering state when listing Content Items for an Organisation. As a team, we still need to do more research about what happens when a Content Item is archived, created or drafted. 
+We are not considering state when listing Content Items for an Organisation. As a team, we still need to do more research about what happens when a Content Item is archived, created or drafted.
 
 We have not faced this piece of work yet in these three sprints because we wanted first to have an initial validation with our users of the tool we were building, and the state was not mandatory for this goal.
 
 We have created [this Trello card][6] to investigate how the State is mapped in the Content Store for a Content Item.
 
 ## Data migration
-We have built this version of the CPM while the Format migration was still in progress. 
+We have built this version of the CPM while the Format migration was still in progress.
 The whole migration is close to completion, so having Content Items that have not been fully migrated is not affecting the validation of our first delivery.
 Indeed, the existing metadata for the Content Items was enough for us because this information is not dependent of the full migration of the Content Item to the Publishing platform.
 
@@ -98,7 +98,7 @@ organisations GET  /organisations(.:format)
 
 2\. It also make sense to add Content Item slug to URL
 
-## API 
+## API
 
 1. CPM will expose an API so other apps can consume any information stored/calculated within the app
 2. In this version (v1.0-alpha) we have not built it yet, but this is something planned for the end of any major delivery of the app.
@@ -131,7 +131,7 @@ These would be interesting points to discuss:
 We have started very simple: storing the data in our database and querying it and start exploring requirements. These are the main reasons:
 
 1. Using a local database allow us to build quickly, and more importantly, it allows us to trash and rebuild even quicker.
-2. Using Content Store to save metrics would entail a big amount of work, and we would need to have a better understanding of our requirements. 
+2. Using Content Store to save metrics would entail a big amount of work, and we would need to have a better understanding of our requirements.
 
 [1]: https://trello.com/c/pLg019CM/109-3-create-a-many-to-many-association-between-contentitem-and-organisations
 [2]: https://trello.com/c/4IpIenPQ/118-use-gds-adapters-to-integrate-with-search-api-and-content-store
