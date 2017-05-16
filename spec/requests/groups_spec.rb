@@ -4,6 +4,7 @@ RSpec.describe "API::Groups", type: :request do
   let(:headers) { { "ACCEPT" => "application/json" } }
 
   before do
+    FactoryGirl.create(:user)
     @old_content_performance_manager_token = ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN']
     ENV['CONTENT-PERFORMANCE-MANAGER-TOKEN'] = 'a-token'
   end

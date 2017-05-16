@@ -2,6 +2,10 @@ require 'rails_helper'
 require 'features/pagination_spec_helper'
 
 RSpec.feature "Content Item Details", type: :feature do
+  before do
+    FactoryGirl.create(:user)
+  end
+
   scenario "the user clicks on the view content item link and is redirected to the content item show page" do
     create :content_item, id: 1, title: "content item title"
 
