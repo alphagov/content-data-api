@@ -7,12 +7,12 @@
     </div>
 
     <div class="form-group">
-      <%= label_tag 'Organisation:' %>
+      <%= label_tag :organisation_content_id, 'Organisation:' %>
       <%= select_tag :organisation_content_id, options_from_collection_for_select(@organisations, :content_id, :title, params[:organisation_content_id]), include_blank: true, class: "form-control" %>
     </div>
 
     <div class="form-group">
-      <%= label_tag 'Topics (new taxonomy):' %>
+      <%= label_tag :taxonomy_content_id, 'Topics (new taxonomy):' %>
       <%= select_tag :taxonomy_content_id, options_from_collection_for_select(@taxonomies || [], :content_id, :title, params[:taxonomy_content_id]), include_blank: true, class: "form-control" %>
     </div>
 
