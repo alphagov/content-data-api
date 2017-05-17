@@ -22,6 +22,7 @@ gem 'gds-sso'
 gem 'airbrake', github: 'alphagov/airbrake', branch: 'silence-dep-warnings-for-rails-5'
 gem 'govuk_sidekiq', '~>1.0.3'
 gem 'plek'
+gem 'web-console', group: :development
 
 group :development, :test do
   gem 'rspec-rails', '~>3.5'
@@ -31,18 +32,10 @@ group :development, :test do
   gem 'listen', '~> 3.0.5'
   gem 'guard-rspec', require: false
   gem 'pry-rails'
-end
-
-group :test do
-  gem 'rails-controller-testing', '~>1.0.1'
-  gem 'capybara'
-  gem 'webmock'
-  gem 'spring-commands-rspec'
-end
-
-group :development do
-  gem 'web-console'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'govuk-lint'
+  gem 'spring-commands-rspec'
+  gem 'capybara'
+  gem 'webmock'
+  gem 'rails-controller-testing', '~>1.0.1'
 end
