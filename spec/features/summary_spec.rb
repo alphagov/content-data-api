@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.feature "Summary area", type: :feature do
   before do
     FactoryGirl.create(:user)

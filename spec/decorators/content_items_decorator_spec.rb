@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ContentItemsDecorator, type: :decorator do
   let(:organisation) { build(:organisation, title: "Organisation title") }
   let(:taxonomy) { build(:taxonomy, title: "taxonomy a") }

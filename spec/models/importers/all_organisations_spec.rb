@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Importers::AllOrganisations do
   describe '#run' do
     context 'when the organisation does not exist' do

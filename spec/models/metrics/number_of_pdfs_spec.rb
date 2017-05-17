@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Metrics::NumberOfPdfs do
   subject { Metrics::NumberOfPdfs }
 

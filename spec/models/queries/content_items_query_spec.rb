@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Queries::ContentItemsQuery, type: :query do
   subject { described_class }
 

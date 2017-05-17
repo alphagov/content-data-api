@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Metrics::PagesNotUpdated do
   subject { Metrics::PagesNotUpdated }
 

@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Importers::AllTaxons do
   describe '#run' do
     it 'creates a new Taxonomy if not present' do

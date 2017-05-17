@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Importers::AllContentItems do
   before do
     allow(subject.content_items_service)

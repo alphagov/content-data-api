@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe ContentItemsController, type: :controller do
   include AuthenticationControllerHelpers
 

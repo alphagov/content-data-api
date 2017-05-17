@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 shared_examples "a paginated list" do |page_url|
   before do
     Kaminari.configure do |config|

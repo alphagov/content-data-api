@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Metrics::TotalPages do
   subject { Metrics::TotalPages }
 

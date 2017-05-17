@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Metrics::ZeroPageViews do
   subject { Metrics::ZeroPageViews }
 

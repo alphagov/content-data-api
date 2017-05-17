@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe "API::Groups", type: :request do
   let(:headers) { { "ACCEPT" => "application/json" } }
 

@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'rake'
 
 RSpec.describe 'Import organisation rake task' do

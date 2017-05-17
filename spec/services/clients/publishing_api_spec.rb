@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Clients::PublishingAPI do
   subject { Clients::PublishingAPI.new }
 

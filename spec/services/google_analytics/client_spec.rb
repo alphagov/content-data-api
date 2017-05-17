@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe GoogleAnalytics::Client do
   describe 'Connecting to the Google Analytics API' do
     let(:json_key) { { client_email: "test@test.com", private_key: "key" } }

@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe TaxonomiesService do
   describe '#find_each' do
     it 'queries the publishing API for the given fields of taxons' do
