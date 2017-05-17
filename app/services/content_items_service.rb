@@ -1,5 +1,5 @@
 class ContentItemsService
-  PER_PAGE = 1_000
+  PER_PAGE = Integer(ENV.fetch("PUBLISHING_API_BATCH_SIZE", 1_000))
 
   def content_ids
     results = paginate do |p|
