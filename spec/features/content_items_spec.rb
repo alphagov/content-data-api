@@ -2,6 +2,10 @@ require "rails_helper"
 require "features/pagination_spec_helper"
 
 RSpec.feature "Content Items List", type: :feature do
+  before do
+    FactoryGirl.create(:user)
+  end
+
   describe "User can navigate paged lists of content items" do
     before { create_list :content_item, 3 }
 

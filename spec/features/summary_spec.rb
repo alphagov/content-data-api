@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.feature "Summary area", type: :feature do
+  before do
+    FactoryGirl.create(:user)
+  end
+
   scenario "user can see the total number of pages" do
     create_list :content_item, 3
 

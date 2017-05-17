@@ -2,6 +2,10 @@ require 'rails_helper'
 require 'features/pagination_spec_helper'
 
 RSpec.feature "Filter in content items", type: :feature do
+  before do
+    FactoryGirl.create(:user)
+  end
+
   context "filtering by search term" do
     scenario "the user enters a text in the search box and retrieves a filtered list" do
       create :content_item, title: "some text"

@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ContentItemsController, type: :controller do
+  include AuthenticationControllerHelpers
+
   before do
     allow_any_instance_of(MetricBuilder).to receive(:run_collection).and_return(a: :b)
+    login_as_stub_user
   end
 
   describe "GET #index" do
