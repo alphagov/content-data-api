@@ -26,6 +26,7 @@ RSpec.configure do |config|
     Rails.application.load_tasks
   end
 
+  config.disable_monkey_patching!
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
