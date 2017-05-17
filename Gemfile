@@ -36,7 +36,6 @@ end
 group :test do
   gem 'rails-controller-testing', '~>1.0.1'
   gem 'capybara'
-  gem 'shoulda-matchers', '~> 2.8', require: false
   gem 'webmock'
   gem 'spring-commands-rspec'
 end

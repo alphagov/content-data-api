@@ -7,7 +7,6 @@ require "rspec/rails"
 require "support/authentication"
 require "support/factory_girl"
 require "webmock/rspec"
-require "shoulda/matchers"
 require "gds_api/test_helpers/publishing_api_v2"
 require "pry"
 
