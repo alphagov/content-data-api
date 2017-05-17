@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 module GoogleAnalytics
   module Responses
     RSpec.describe PageViewsResponse do

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe ContentItemDecorator, type: :decorator do
   include Capybara::RSpecMatchers
 

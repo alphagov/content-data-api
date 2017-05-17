@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'google/apis/analyticsreporting_v4'
 
 RSpec.describe GoogleAnalyticsService do

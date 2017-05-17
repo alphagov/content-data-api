@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'features/pagination_spec_helper'
 
 RSpec.feature "Content Item Details", type: :feature do

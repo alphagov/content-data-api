@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe ImportPageviewsJob, type: :job do
   it "updates the content items with pageviews" do
     content_item = create(:content_item, base_path: '/the-base-path')

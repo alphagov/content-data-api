@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe Importers::AllInventory do
   describe '#run' do
     it 'imports all the inventory' do

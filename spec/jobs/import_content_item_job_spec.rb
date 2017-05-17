@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe ImportContentItemJob, type: :job do
   let(:content_id) { "id-123" }
 

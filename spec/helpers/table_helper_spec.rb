@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe TableHelper, type: :helper do
   describe '#sort_table_header', :sort_table_header do
     let(:organisation) { build(:organisation) }

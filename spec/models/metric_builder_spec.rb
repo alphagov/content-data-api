@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe MetricBuilder do
   describe "#run_all" do
     let(:metrics) { { m1: 1 } }

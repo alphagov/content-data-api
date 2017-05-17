@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 RSpec.describe OrganisationsService do
   describe '#find_each' do
     it 'queries the publishing API for all organisations' do

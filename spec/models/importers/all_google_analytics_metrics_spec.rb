@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Importers::AllGoogleAnalyticsMetrics do
   describe "#run" do
     it "creates a job to import pageviews for content items" do

@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe Importers::NumberOfViewsByOrganisation do
   describe "#run" do
     let(:organisation) { create(:organisation, slug: "the-slug") }
