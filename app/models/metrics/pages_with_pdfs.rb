@@ -7,8 +7,11 @@ module Metrics
     end
 
     def run
+      percentage = 0
       total = content_items.where("number_of_pdfs > ?", 0).count
-      percentage = (total.to_f / content_items.count.to_f) * 100
+
+      percentage = (total.to_f / content_items.count.to_f) * 100 if total > 0
+
       {
         pages_with_pdfs: {
           value: total,
