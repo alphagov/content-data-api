@@ -1,12 +1,6 @@
 <h1><%= @content_item.title %></h1>
 
 <table class="table table-bordered">
-  <thead>
-    <tr class="table-header">
-      <th>Content item attribute</th>
-      <th>Value</th>
-    </tr>
-  </thead>
   <tbody>
     <tr>
       <td>Description</td>
@@ -21,7 +15,7 @@
       <td><%= @content_item.document_type %></td>
     </tr>
     <tr>
-      <td>Page views (1 month)</td>
+      <td>Page views (last month)</td>
       <td><%= number_with_delimiter @content_item.one_month_page_views %></td>
     </tr>
     <tr>
