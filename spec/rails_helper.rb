@@ -25,6 +25,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     Rails.application.load_tasks
+    QuestionCreator.create!
   end
 
   config.disable_monkey_patching!

@@ -24,5 +24,9 @@ module ContentPerformanceManager
     config.active_job.queue_adapter = :sidekiq
 
     config.autoload_paths += %W(#{config.root}/app/models/question)
+    additional_paths = %W(#{config.root}/lib)
+
+    config.autoload_paths += additional_paths
+    config.eager_load_paths += additional_paths
   end
 end
