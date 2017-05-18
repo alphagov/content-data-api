@@ -1,0 +1,2 @@
+class BooleanQuestion < Question
+end
