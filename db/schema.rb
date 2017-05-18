@@ -62,6 +62,12 @@ ActiveRecord::Schema.define(version: 20170518125955) do
     t.text     "content_item_ids", default: [],              array: true
   end
 
+  create_table "links", force: :cascade do |t|
+    t.string "source_content_id"
+    t.string "link_type"
+    t.string "target_content_id"
+  end
+
   create_table "organisations", force: :cascade do |t|
     t.string   "slug"
     t.datetime "created_at", null: false
