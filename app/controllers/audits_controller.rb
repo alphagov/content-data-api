@@ -7,7 +7,8 @@ class AuditsController < ApplicationController
     audit.user = current_user
     attributes = params.require(:audit).permit!
     audit.update!(attributes)
-    render :show
+    flash.notice = "Audit saved successfully."
+    redirect_to action: :show
   end
 
 private

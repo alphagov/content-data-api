@@ -1,0 +1,11 @@
+.flash {
+  margin-top: 1em;
+
+  &.notice {
+    color: green;
+  }
+
+  &.alert {
+    color: red;
+  }
+}

@@ -18,6 +18,7 @@
     <%= yield :sidebar %>
     <div class="<%= content_for?(:sidebar) ? 'col-sm-9' : ''%>">
       <%= yield %>
+      <div class="flash notice"><%= flash.notice %></div>
     </div>
   </div>
 <% end %>
