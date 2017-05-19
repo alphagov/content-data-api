@@ -1,6 +1,6 @@
 <h1>GOV.UK Content Audit</h1>
 
-<h2><%= @audit.content_item.title %></h2>
+<h2><%= link_to @content_item.title, @content_item.url, target: :_blank %></h2>
 
 <p><%= @audit.content_item.description %></p>
 

@@ -1,5 +1,13 @@
 RSpec.feature "Auditing a content item", type: :feature do
-  let!(:content_item) { FactoryGirl.create(:content_item) }
+  let!(:content_item) do
+    FactoryGirl.create(
+      :content_item,
+      title: "Flooding",
+      description: "All about flooding.",
+      base_path: "/flooding",
+    )
+  end
+
   let!(:user) { FactoryGirl.create(:user) }
 
   def chosen_radio_button
@@ -8,6 +16,8 @@ RSpec.feature "Auditing a content item", type: :feature do
 
   scenario "auditing a content item" do
     visit content_item_audit_path(content_item)
+    expect(page).to have_link("Flooding", href: "https://gov.uk/flooding")
+    expect(page).to have_content("All about flooding.")
     expect(page).to have_content("Audited by no one")
 
     within("#question-1") { choose "Yes" }
