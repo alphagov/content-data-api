@@ -1,20 +1,21 @@
 class AuditsController < ApplicationController
   def show
-    audit.questions = template.questions if audit.new_record?
+    audit.questions = audit.template.questions if audit.new_record?
   end
 
   def save
     audit.user = current_user
-    audit.update!(audit_params)
-    flash.notice = "Audit saved successfully."
-    redirect_to action: :show
+
+    if audit.update(audit_params)
+      flash.now.notice = "Audit saved successfully."
+    else
+      flash.now.alert = error_message
+    end
+
+    render :show
   end
 
 private
-
-  def template
-    @template ||= Template.new(audit)
-  end
 
   def audit
     @audit ||= Audit.find_or_initialize_by(content_item: content_item).decorate
@@ -28,5 +29,9 @@ private
     params
       .require(:audit)
       .permit(responses_attributes: [:id, :value, :question_id])
+  end
+
+  def error_message
+    "Audit failed to save: #{audit.errors.messages.values.join(', ')}"
   end
 end
