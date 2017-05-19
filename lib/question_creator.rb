@@ -8,5 +8,8 @@ module QuestionCreator
     BooleanQuestion.create!(text: "Is the page out of date?")
     BooleanQuestion.create!(text: "Is the page the right format?")
     BooleanQuestion.create!(text: "Are there similar pages? (Merge pages)")
+
+    FreeTextQuestion.create!(text: "Redirect or combine with URL")
+    FreeTextQuestion.create!(text: "Notes")
   end
 end

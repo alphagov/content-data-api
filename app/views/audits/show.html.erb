@@ -13,8 +13,10 @@
     <% response = builder.object %>
     <% question = response.question %>
 
-    <%= render partial: question, locals: { f: builder, response: response } %>
-    <%= builder.hidden_field :question_id, value: question.id %>
+    <div class="question" id="question-<%= question.id %>">
+      <%= render partial: question, locals: { f: builder, response: response } %>
+      <%= builder.hidden_field :question_id, value: question.id %>
+    </div>
   <% end %>
 
   <%= form.submit "Save" %>
