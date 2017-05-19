@@ -9,4 +9,8 @@ class Audit < ApplicationRecord
   validates :user, presence: true
 
   accepts_nested_attributes_for :responses
+
+  def template
+    @template ||= Template.new
+  end
 end

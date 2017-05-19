@@ -15,6 +15,27 @@ RSpec.describe Response do
       subject.question = nil
       expect(subject).to be_invalid
     end
+
+    context "when the question is mandatory" do
+      before { subject.question = FactoryGirl.build(:boolean_question) }
+
+      it "requires a value" do
+        subject.value = " "
+        expect(subject).to be_invalid
+
+        messages = subject.errors[:value]
+        expect(messages).to eq ["mandatory field missing"]
+      end
+    end
+
+    context "when the question is optional" do
+      before { subject.question = FactoryGirl.build(:free_text_question) }
+
+      it "does not require a value" do
+        subject.value = nil
+        expect(subject).to be_valid
+      end
+    end
   end
 
   describe "default scope" do

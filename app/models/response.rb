@@ -6,4 +6,7 @@ class Response < ApplicationRecord
 
   validates :audit, presence: true
   validates :question, presence: true
+
+  validates :value, presence: { message: "mandatory field missing" },
+    if: -> { audit && audit.template.mandatory?(question) }
 end
