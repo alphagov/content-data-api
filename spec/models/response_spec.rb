@@ -16,4 +16,16 @@ RSpec.describe Response do
       expect(subject).to be_invalid
     end
   end
+
+  describe "default scope" do
+    it "orders by id" do
+      a = FactoryGirl.create(:response)
+      b = FactoryGirl.create(:response)
+
+      a.touch
+      a.save!
+
+      expect(Response.all).to eq [a, b]
+    end
+  end
 end

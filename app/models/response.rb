@@ -1,4 +1,6 @@
 class Response < ApplicationRecord
+  default_scope { order(id: :asc) }
+
   belongs_to :audit
   belongs_to :question
 
