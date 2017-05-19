@@ -4,6 +4,10 @@
 
 <p><%= @audit.content_item.description %></p>
 
+<hr/>
+<p>Audited by <%= @audit.user_name %></p>
+<hr/>
+
 <%= form_for [@audit.content_item, @audit], url: content_item_audit_path do |form| %>
   <%= form.fields_for :responses do |builder| %>
     <% response = builder.object %>

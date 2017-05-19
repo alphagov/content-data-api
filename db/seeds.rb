@@ -1,3 +1,3 @@
 QuestionCreator.create!
 
-User.create!(uid: "user-1") if User.none?
+User.create!(uid: "user-1", name: "Test User") if User.none?

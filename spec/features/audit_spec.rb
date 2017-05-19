@@ -8,6 +8,7 @@ RSpec.feature "Auditing a content item", type: :feature do
 
   scenario "auditing a content item" do
     visit content_item_audit_path(content_item)
+    expect(page).to have_content("Audited by no one")
 
     within("#question-1") { choose "Yes" }
     within("#question-2") { choose "No" }
@@ -16,6 +17,7 @@ RSpec.feature "Auditing a content item", type: :feature do
 
     click_on "Save"
     expect(page).to have_content("Audit saved successfully.")
+    expect(page).to have_content("Audited by Test User")
 
     within("#question-1") { expect(chosen_radio_button.value).to eq("yes") }
     within("#question-2") { expect(chosen_radio_button.value).to eq("no") }

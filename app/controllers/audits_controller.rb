@@ -18,10 +18,10 @@ private
   end
 
   def audit
-    @audit ||= Audit.find_or_initialize_by(content_item: content_item)
+    @audit ||= Audit.find_or_initialize_by(content_item: content_item).decorate
   end
 
   def content_item
-    @content_item ||= ContentItem.find(params.fetch(:content_item_id))
+    @content_item ||= ContentItem.find(params.fetch(:content_item_id)).decorate
   end
 end
