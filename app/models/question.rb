@@ -5,4 +5,8 @@ class Question < ApplicationRecord
     fail NotImplementedError, "Abstract class" if self.class == Question
     super
   end
+
+  def to_partial_path
+    "audits/#{type.underscore}"
+  end
 end

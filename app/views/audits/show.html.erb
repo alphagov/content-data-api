@@ -1,0 +1,17 @@
+<h1>GOV.UK Content Audit</h1>
+
+<h2><%= @audit.content_item.title %></h2>
+
+<p><%= @audit.content_item.description %></p>
+
+<%= form_for [@audit.content_item, @audit], url: content_item_audit_path do |form| %>
+  <%= form.fields_for :responses do |builder| %>
+    <% response = builder.object %>
+    <% question = response.question %>
+
+    <%= render partial: question, locals: { f: builder, response: response } %>
+    <%= builder.hidden_field :question_id, value: question.id %>
+  <% end %>
+
+  <%= form.submit "Save" %>
+<% end %>
