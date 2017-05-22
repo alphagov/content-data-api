@@ -18,6 +18,7 @@ RSpec.describe ContentItemsService do
         content_id: "id-123",
         title: "title",
         description: "description",
+        content_store: "live",
       )
 
       content_item = subject.fetch("id-123")
