@@ -9,14 +9,25 @@ RSpec.describe Importers::SingleContentItem do
   let!(:taxon1) { FactoryGirl.create(:taxonomy, content_id: "taxon-1") }
   let!(:taxon2) { FactoryGirl.create(:taxonomy, content_id: "taxon-2") }
 
+  let(:content_item) { FactoryGirl.build(:content_item, content_id: content_id, title: "title") }
+
+  def links
+    [
+      FactoryGirl.build(:link, source_content_id: content_id, link_type: "organisations", target_content_id: "org-1"),
+      FactoryGirl.build(:link, source_content_id: content_id, link_type: "organisations", target_content_id: "org-2"),
+      FactoryGirl.build(:link, source_content_id: content_id, link_type: "taxons", target_content_id: "taxon-1"),
+      FactoryGirl.build(:link, source_content_id: content_id, link_type: "taxons", target_content_id: "taxon-2"),
+    ]
+  end
+
   before do
     allow(subject.content_items_service)
       .to receive(:fetch).with(content_id)
-      .and_return(content_id: content_id, title: "title")
+      .and_return(content_item)
 
     allow(subject.content_items_service)
-      .to receive(:links).with(content_id)
-      .and_return(organisations: %w(org-1 org-2), taxons: %w(taxon-1 taxon-2))
+      .to receive(:links).with(content_id) { links }
+
 
     allow(subject.metric_builder)
       .to receive(:run_all)
@@ -83,7 +94,7 @@ RSpec.describe Importers::SingleContentItem do
 
     it "doesn't create any additional links" do
       expect { subject.run(content_id) }
-      .to_not change(Link, :count)
+      .not_to change(Link, :count)
     end
   end
 end

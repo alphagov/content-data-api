@@ -12,34 +12,66 @@ module Importers
     end
 
     def run(content_id)
-      attributes = content_items_service.fetch(content_id)
+      content_item = content_items_service.fetch(content_id)
       links = content_items_service.links(content_id)
-      attributes = attributes.merge(links)
-      attributes = attributes.merge(metric_builder.run_all(attributes))
 
-      # Use a single transaction, so that the content change and links
-      # change is atomic with respect to other transactions.
+      set_organisations(content_item, links)
+      set_taxonomies(content_item, links)
+      set_metrics(content_item)
+
       ActiveRecord::Base.transaction do
-        ContentItem.create_or_update!(attributes)
-        create_links(content_id, links)
+        overwrite_content_item!(content_item)
+        overwrite_links!(links)
       end
     end
 
   private
 
-    def create_links(source_content_id, links)
-      new_links = links.flat_map do |type, content_ids|
-        content_ids.map do |content_id|
-          {
-            source_content_id: source_content_id,
-            link_type: type,
-            target_content_id: content_id,
-          }
-        end
-      end
+    def set_organisations(content_item, links)
+      org_ids = links
+        .select { |l| l.link_type == "organisations" }
+        .map(&:target_content_id)
 
-      Link.where(source_content_id: source_content_id).delete_all
-      Link.create(new_links)
+      content_item.add_organisations_by_id(org_ids)
+    end
+
+    def set_taxonomies(content_item, links)
+      taxon_ids = links
+        .select { |l| l.link_type == "taxons" }
+        .map(&:target_content_id)
+
+      content_item.add_taxonomies_by_id(taxon_ids)
+    end
+
+    def set_metrics(content_item)
+      metrics = metric_builder.run_all(content_item.attributes)
+      metrics.each { |k, v| content_item.public_send(:"#{k}=", v) }
+    end
+
+    def overwrite_content_item!(content_item)
+      existing = ContentItem.find_by(content_id: content_item.content_id)
+
+      if existing
+        attributes = content_item
+          .attributes
+          .symbolize_keys
+          .except(:id, :created_at, :updated_at)
+
+        existing.attributes = attributes
+        existing.organisations = content_item.organisations
+        existing.taxonomies = content_item.taxonomies
+
+        existing.save!
+      else
+        content_item.save!
+      end
+    end
+
+    def overwrite_links!(links)
+      content_id = links.first.source_content_id
+      Link.where(source_content_id: content_id).destroy_all
+
+      links.each(&:save!)
     end
   end
 end
