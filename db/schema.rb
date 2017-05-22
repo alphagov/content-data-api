@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 20170518125955) do
     t.string "source_content_id"
     t.string "link_type"
     t.string "target_content_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
   end
 
   create_table "organisations", force: :cascade do |t|
