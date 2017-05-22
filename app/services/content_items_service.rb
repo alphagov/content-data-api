@@ -1,48 +1,27 @@
 class ContentItemsService
-  PER_PAGE = Integer(ENV.fetch("PUBLISHING_API_BATCH_SIZE", 500))
+  attr_accessor :client
+
+  def initialize
+    self.client = Clients::PublishingAPI.new
+  end
 
   def content_ids
-    results = paginate do |p|
-      publishing_api.get_content_items({
-        fields: %w(content_id),
-        states: %w(published),
-      }.merge(p))
-    end
-
-    results.map { |r| r.fetch(:content_id) }
+    client.content_ids
   end
 
   def fetch(content_id)
-    normalise(publishing_api.get_content(content_id))
+    ContentItem.new(client.fetch(content_id))
   end
 
-  def links(content_id)
-    normalise(publishing_api.get_links(content_id)).fetch(:links)
-  end
-
-private
-
-  def paginate
-    page = 1
-    results = []
-
-    loop do
-      response = yield(page: page, per_page: PER_PAGE)
-      results += normalise(response).fetch(:results)
-      return results if last_page?(response)
-      page += 1
+  def links(source_content_id)
+    client.links(source_content_id).flat_map do |link_type, content_ids|
+      content_ids.map do |target_content_id|
+        Link.new(
+          source_content_id: source_content_id,
+          link_type: link_type,
+          target_content_id: target_content_id,
+        )
+      end
     end
-  end
-
-  def normalise(response)
-    response.to_hash.deep_symbolize_keys
-  end
-
-  def publishing_api
-    Services.publishing_api
-  end
-
-  def last_page?(response)
-    response["current_page"] == response["pages"]
   end
 end
