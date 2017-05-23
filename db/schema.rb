@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515134126) do
+ActiveRecord::Schema.define(version: 20170518125955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "audits", force: :cascade do |t|
+    t.string   "content_id", null: false
+    t.string   "uid",        null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_audits_on_content_id", unique: true, using: :btree
+    t.index ["uid"], name: "index_audits_on_uid", using: :btree
+  end
 
   create_table "content_items", force: :cascade do |t|
     t.string   "content_id"
@@ -60,6 +69,24 @@ ActiveRecord::Schema.define(version: 20170515134126) do
     t.string   "title"
     t.string   "content_id"
     t.index ["slug"], name: "index_organisations_on_slug", unique: true, using: :btree
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string   "type",       null: false
+    t.text     "text",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["type"], name: "index_questions_on_type", using: :btree
+  end
+
+  create_table "responses", force: :cascade do |t|
+    t.integer  "audit_id"
+    t.integer  "question_id"
+    t.text     "value"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["audit_id"], name: "index_responses_on_audit_id", using: :btree
+    t.index ["question_id"], name: "index_responses_on_question_id", using: :btree
   end
 
   create_table "taxonomies", force: :cascade do |t|
