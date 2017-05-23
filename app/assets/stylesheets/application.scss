@@ -18,3 +18,23 @@
 @import 'pagination';
 @import 'phase_banner';
 @import 'summary';
+
+// TODO: move any styles below to modules once more established
+
+[data-toggle] {
+
+  &[aria-expanded="true"] {
+
+    [data-close-label] {
+      display: inline;
+    }
+
+    [data-open-label] {
+      display: none;
+    }
+  }
+
+  [data-close-label] {
+    display: none;
+  }
+}
