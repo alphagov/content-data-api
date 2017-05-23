@@ -10,3 +10,5 @@ class Question < ApplicationRecord
     "audits/#{type.underscore}"
   end
 end
+
+fix_sti_reload_in_development(__FILE__)
