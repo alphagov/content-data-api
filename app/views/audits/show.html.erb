@@ -1,23 +1,33 @@
-<h1>GOV.UK Content Audit</h1>
-
-<h2><%= link_to @content_item.title, @content_item.url, target: :_blank %></h2>
-
-<p><%= @audit.content_item.description %></p>
-
-<hr/>
-<p>Audited by <%= @audit.user_name %></p>
-<hr/>
-
-<%= form_for [@audit.content_item, @audit], url: content_item_audit_path do |form| %>
-  <%= form.fields_for :responses do |builder| %>
-    <% response = builder.object %>
-    <% question = response.question %>
-
-    <div class="question" id="question-<%= question.id %>">
-      <%= render partial: question, locals: { f: builder, response: response } %>
-      <%= builder.hidden_field :question_id, value: question.id %>
-    </div>
+<div class="audit-questionnaire col-sm-7">
+  <% if flash.notice %>
+    <div class="flash notice highlight"><%= flash.notice %></div>
+  <% elsif flash.alert %>
+    <div class="flash alert highlight"><%= flash.alert %></div>
   <% end %>
 
-  <%= form.submit "Save" %>
-<% end %>
+  <h1>GOV.UK Content Audit</h1>
+
+  <h2><%= link_to @content_item.title, @content_item.url, target: :_blank %></h2>
+
+  <p class="description">
+    <%= @audit.content_item.description %>
+  </p>
+
+  <hr/>
+  <p>Audited by <%= @audit.user_name %></p>
+  <hr/>
+
+  <%= form_for [@audit.content_item, @audit], url: content_item_audit_path do |form| %>
+    <%= form.fields_for :responses do |builder| %>
+      <% response = builder.object %>
+      <% question = response.question %>
+
+      <div class="<%= question.css_class %>" id="<%= question.css_id %>">
+        <%= render partial: question, locals: { f: builder, response: response } %>
+        <%= builder.hidden_field :question_id, value: question.id %>
+      </div>
+    <% end %>
+
+    <%= form.submit "Save", class: "save-button btn-success" %>
+  <% end %>
+</div>

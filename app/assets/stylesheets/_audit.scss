@@ -1,24 +1,64 @@
-.field_with_errors {
-  display: inline;
-}
+.audit-questionnaire {
+  font-size: 18px;
 
-.question {
-  margin-top: 1em;
-}
+  .description {
+    margin-top: 2em;
+  }
 
-label {
-  font-weight: normal;
-}
+  label {
+    font-weight: normal;
+  }
 
-input[type="radio"] {
-  margin-left: 1em;
-}
+  .field_with_errors {
+    display: inline;
+    border: 1px solid red;
+    padding: 0.1em 0.3em;
+  }
 
-input[type="text"] {
-  display: block;
-  width: 30em;
-}
+  .question {
+    margin-top: 1em;
+  }
 
-input[type="submit"] {
-  margin-top: 2em;
+  .boolean-question {
+    .radio-buttons {
+      float: right;
+
+      label {
+        margin: 0 1em 0 0.2em;
+      }
+    }
+  }
+
+  .free-text-question {
+    margin-top: 1.5em;
+
+    textarea {
+      display: block;
+      margin-top: 0.5em;
+      width: 100%;
+      height: 2em;
+    }
+
+    &.notes {
+      textarea {
+        height: 5em;
+      }
+    }
+  }
+
+  .save-button {
+    margin-top: 2em;
+  }
+
+  .flash {
+    padding: 1em;
+
+    &.notice {
+      background: #53ad53;
+    }
+
+    &.alert {
+      background: #d34541;
+    }
+  }
 }
