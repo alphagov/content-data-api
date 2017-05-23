@@ -28,7 +28,6 @@ RSpec.describe Importers::SingleContentItem do
     allow(subject.content_items_service)
       .to receive(:links).with(content_id) { links }
 
-
     allow(subject.metric_builder)
       .to receive(:run_all)
       .and_return(number_of_pdfs: 10)
@@ -95,6 +94,18 @@ RSpec.describe Importers::SingleContentItem do
     it "doesn't create any additional links" do
       expect { subject.run(content_id) }
       .not_to change(Link, :count)
+    end
+
+    context "when all the links have been removed" do
+      before do
+        allow(subject.content_items_service)
+          .to receive(:links).with(content_id) { [] }
+      end
+
+      it "deletes non-existing links" do
+        expect { subject.run(content_id) }
+          .to change(Link, :count).by(-4)
+      end
     end
   end
 end

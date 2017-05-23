@@ -21,7 +21,7 @@ module Importers
 
       ActiveRecord::Base.transaction do
         overwrite_content_item!(content_item)
-        overwrite_links!(links)
+        overwrite_links!(content_id, links)
       end
     end
 
@@ -67,8 +67,7 @@ module Importers
       end
     end
 
-    def overwrite_links!(links)
-      content_id = links.first.source_content_id
+    def overwrite_links!(content_id, links)
       Link.where(source_content_id: content_id).destroy_all
 
       links.each(&:save!)
