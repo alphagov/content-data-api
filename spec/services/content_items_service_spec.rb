@@ -2,7 +2,8 @@ RSpec.describe ContentItemsService do
   include GdsApi::TestHelpers::PublishingApiV2
 
   describe "#content_ids" do
-    let(:content_ids) { 1001.times.map { |i| "id-#{i}" } }
+    let(:page_size) { described_class::PER_PAGE }
+    let(:content_ids) { (page_size + 1).times.map { |i| "id-#{i}" } }
 
     before do
       1.upto(2) do |page|
@@ -11,7 +12,7 @@ RSpec.describe ContentItemsService do
           fields: %w(content_id),
           states: %w(published),
           page: page,
-          per_page: 1_000,
+          per_page: page_size,
         )
       end
     end
