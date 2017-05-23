@@ -62,6 +62,17 @@ ActiveRecord::Schema.define(version: 20170518125955) do
     t.text     "content_item_ids", default: [],              array: true
   end
 
+  create_table "links", force: :cascade do |t|
+    t.string   "source_content_id"
+    t.string   "link_type"
+    t.string   "target_content_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["link_type"], name: "index_links_on_link_type", using: :btree
+    t.index ["source_content_id"], name: "index_links_on_source_content_id", using: :btree
+    t.index ["target_content_id"], name: "index_links_on_target_content_id", using: :btree
+  end
+
   create_table "organisations", force: :cascade do |t|
     t.string   "slug"
     t.datetime "created_at", null: false
