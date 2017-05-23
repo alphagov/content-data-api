@@ -9,7 +9,7 @@ RSpec.describe Template do
 
     context "when no questions exist" do
       before { Question.destroy_all }
-      after { QuestionCreator.create! }
+      after { Seeder.questions! }
 
       it "provides a helpful error" do
         expect { subject.questions }.to raise_error(/rake db:seed/)

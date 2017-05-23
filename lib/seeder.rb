@@ -1,5 +1,10 @@
-module QuestionCreator
-  def self.create!
+module Seeder
+  def self.seed!
+    questions!
+    user!
+  end
+
+  def self.questions!
     return if Question.any?
 
     BooleanQuestion.create!(text: "Is the title clear in isolation?")
@@ -11,5 +16,11 @@ module QuestionCreator
 
     FreeTextQuestion.create!(text: "Redirect or combine with URL")
     FreeTextQuestion.create!(text: "Notes")
+  end
+
+  def self.user!
+    return if User.any?
+
+    User.create!(uid: "user-1", name: "Test User")
   end
 end

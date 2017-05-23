@@ -25,7 +25,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     Rails.application.load_tasks
-    QuestionCreator.create!
+    Seeder.seed!
   end
 
   config.disable_monkey_patching!
@@ -53,6 +53,7 @@ RSpec.configure do |config|
       MSG
     end
     DatabaseCleaner.clean_with(:truncation)
+    Seeder.seed!
   end
 
   config.before(:each) do
@@ -78,5 +79,6 @@ RSpec.configure do |config|
 
   config.append_after(:each) do
     DatabaseCleaner.clean
+    Seeder.seed!
   end
 end
