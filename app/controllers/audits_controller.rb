@@ -1,6 +1,7 @@
 class AuditsController < ApplicationController
   def index
-    @content_items = ContentItem.limit(25)
+    query = Queries::ContentItemsQuery.new(query_options)
+    @content_items = query.paginated_results.decorate
   end
 
   def show
@@ -37,5 +38,14 @@ private
 
   def error_message
     audit.errors.messages.values.join(', ').capitalize
+  end
+
+  def query_options
+    {
+      sort: params[:sort],
+      order: params[:order],
+      query: params[:query],
+      page: params[:page]
+    }
   end
 end
