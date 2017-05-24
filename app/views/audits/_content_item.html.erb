@@ -1,4 +1,4 @@
 <tr>
-  <td><%= content_item.title %></td>
+  <td><%= link_to content_item.title, content_item_audit_path(content_item) %></td>
   <td><%= content_item.one_month_page_views %></td>
 </tr>

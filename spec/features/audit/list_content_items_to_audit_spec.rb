@@ -12,5 +12,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     expect(page).to have_content("All about flooding.")
     expect(page).to have_content("All about gardening.")
     expect(page).to have_content("1234")
+
+    expect(page).to have_link("All about floading.", href: "https://gov.uk/flooding")
   end
 end
