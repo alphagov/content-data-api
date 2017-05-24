@@ -1,68 +1,8 @@
-.audit-questionnaire {
-  font-size: 18px;
+.free-text-question {
 
-  .description {
-    margin-top: 2em;
-  }
-
-  label {
-    font-weight: normal;
-  }
-
-  .field_with_errors {
-    display: inline;
-    border: 1px solid red;
-    padding: 0.1em 0.3em;
-  }
-
-  .question {
-    margin-top: 1em;
-  }
-
-  .boolean-question {
-    .radio-buttons {
-      float: right;
-
-      label {
-        margin: 0 1em 0 0.2em;
-      }
-    }
-  }
-
-  .free-text-question {
-    margin-top: 1.5em;
-
+  &.redirect-or-combine-with-url {
     textarea {
-      display: block;
-      margin-top: 0.5em;
-      width: 100%;
       height: 2em;
     }
-
-    &.notes {
-      textarea {
-        height: 5em;
-      }
-    }
   }
-
-  .save-button {
-    margin-top: 2em;
-  }
-
-  .flash {
-    padding: 1em;
-
-    &.notice {
-      background: #53ad53;
-    }
-
-    &.alert {
-      background: #d34541;
-    }
-  }
-}
-
-.temporary-audit-link {
-  float: right;
 }
