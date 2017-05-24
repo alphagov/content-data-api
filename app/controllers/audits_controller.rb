@@ -7,7 +7,7 @@ class AuditsController < ApplicationController
     audit.user = current_user
 
     if audit.update(audit_params)
-      flash.now.notice = "Audit saved successfully."
+      flash.now.notice = "Saved successfully."
     else
       flash.now.alert = error_message
     end
@@ -32,6 +32,6 @@ private
   end
 
   def error_message
-    "Audit failed to save: #{audit.errors.messages.values.join(', ')}"
+    audit.errors.messages.values.join(', ').capitalize
   end
 end

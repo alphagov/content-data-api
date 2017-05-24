@@ -1,8 +1,18 @@
 <div class="audit-questionnaire col-sm-7">
   <% if flash.notice %>
-    <div class="flash notice highlight"><%= flash.notice %></div>
+    <div class="alert alert-success" role="alert">
+      <p>
+        <strong>Success:</strong>
+        <%= flash.notice %>
+      </p>
+    </div>
   <% elsif flash.alert %>
-    <div class="flash alert highlight"><%= flash.alert %></div>
+    <div class="alert alert-warning" role="alert">
+      <p>
+        <strong>Warning:</strong>
+        <%= flash.alert %>
+      </p>
+    </div>
   <% end %>
 
   <h1>GOV.UK Content Audit</h1>
@@ -22,12 +32,12 @@
       <% response = builder.object %>
       <% question = response.question %>
 
-      <div class="<%= question.css_class %>" id="<%= question.css_id %>">
+      <div class="<%= question.css_class %> form-group" id="<%= question.css_id %>">
         <%= render partial: question, locals: { f: builder, response: response } %>
         <%= builder.hidden_field :question_id, value: question.id %>
       </div>
     <% end %>
 
-    <%= form.submit "Save", class: "save-button btn-success" %>
+    <%= form.submit "Save", class: "btn btn-success" %>
   <% end %>
 </div>
