@@ -1,6 +1,18 @@
-<%= boolean_question.text %>
+<div class="row">
+  <div class="col-sm-8">
+    <p><%= boolean_question.text %></p>
+  </div>
+  <div class="col-sm-4">
+    <div class="pull-right">
+      <%= f.label :value_yes, class: "radio-inline" do %>
+        <%= f.radio_button :value, "yes" %>
+        Yes
+      <% end %>
 
-<%= f.radio_button :value, "yes" %>
-<%= f.label :value_yes, "Yes" %>
-<%= f.radio_button :value, "no" %>
-<%= f.label :value_no, "No" %>
+      <%= f.label :value_no, class: "radio-inline" do %>
+        <%= f.radio_button :value, "no" %>
+        No
+      <% end %>  
+    </div>
+  </div>
+</div>

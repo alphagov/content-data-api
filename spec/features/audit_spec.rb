@@ -26,14 +26,14 @@ RSpec.feature "Auditing a content item", type: :feature do
     within("#question-8") { fill_in "Notes", with: "something" }
 
     click_on "Save"
-    expect(page).to have_content("Audit failed to save: mandatory field missing")
+    expect(page).to have_content("Warning: Mandatory field missing")
 
     within("#question-4") { choose "No" }
     within("#question-5") { choose "Yes" }
     within("#question-6") { choose "No" }
 
     click_on "Save"
-    expect(page).to have_content("Audit saved successfully.")
+    expect(page).to have_content("Success: Saved successfully.")
     expect(page).to have_content("Audited by Test User")
 
     within("#question-1") { expect(chosen_radio_button.value).to eq("yes") }
@@ -49,7 +49,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     within("#question-6") { choose "Yes" }
 
     click_on "Save"
-    expect(page).to have_content("Audit saved successfully.")
+    expect(page).to have_content("Success: Saved successfully.")
 
     within("#question-1") { expect(chosen_radio_button.value).to eq("yes") }
     within("#question-2") { expect(chosen_radio_button.value).to eq("no") }
