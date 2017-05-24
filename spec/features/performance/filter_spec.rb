@@ -1,4 +1,4 @@
-require 'features/pagination_spec_helper'
+require 'features/common/pagination_spec_helper'
 
 RSpec.feature "Filter in content items", type: :feature do
   before do
