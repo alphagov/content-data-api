@@ -1,4 +1,8 @@
 class AuditsController < ApplicationController
+  def index
+    @content_items = ContentItem.limit(25)
+  end
+
   def show
     audit.questions = audit.template.questions if audit.new_record?
   end
