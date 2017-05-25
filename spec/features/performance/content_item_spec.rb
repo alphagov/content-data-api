@@ -1,4 +1,4 @@
-require 'features/pagination_spec_helper'
+require 'features/common/pagination_spec_helper'
 
 RSpec.feature "Content Item Details", type: :feature do
   before do
