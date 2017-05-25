@@ -1,4 +1,6 @@
 class AuditsController < ApplicationController
+  before_action :apply_default_ordering, only: %w(index)
+
   def index
     query = Queries::ContentItemsQuery.new(query_options)
     @content_items = query.paginated_results.decorate
@@ -20,7 +22,12 @@ class AuditsController < ApplicationController
     render :show
   end
 
-private
+  private
+
+  def apply_default_ordering
+    params[:order] ||= "desc"
+    params[:sort] ||= "six_months_page_views"
+  end
 
   def audit
     @audit ||= Audit.find_or_initialize_by(content_item: content_item).decorate
