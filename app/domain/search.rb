@@ -3,8 +3,12 @@ class Search
     self.query = Query.new
   end
 
-  def filter_by(link_type:, target_content_ids:)
-    query.filter_by(link_type: link_type, target_content_ids: target_content_ids)
+  def filter_by(link_type:, source_ids: nil, target_ids: nil)
+    query.filter_by(
+      link_type: link_type,
+      source_ids: source_ids,
+      target_ids: target_ids,
+    )
   end
 
   def execute

@@ -33,38 +33,60 @@ RSpec.describe Search do
   end
 
   it "can filter by a single type and single target" do
-    subject.filter_by(link_type: "organisations", target_content_ids: "org1")
+    subject.filter_by(link_type: "organisations", target_ids: "org1")
     expect(content_ids).to eq %w(id1 id3)
   end
 
   it "can filter by a single type and multiple targets" do
-    subject.filter_by(link_type: "organisations", target_content_ids: %w(org1 org2))
+    subject.filter_by(link_type: "organisations", target_ids: %w(org1 org2))
     expect(content_ids).to eq %w(id1 id2 id3)
   end
 
   it "can filter by multiple types for a single target" do
-    subject.filter_by(link_type: "organisations", target_content_ids: "org1")
-    subject.filter_by(link_type: "policies", target_content_ids: "policy1")
+    subject.filter_by(link_type: "organisations", target_ids: "org1")
+    subject.filter_by(link_type: "policies", target_ids: "policy1")
 
     expect(content_ids).to eq %w(id3)
   end
 
   it "can filter by multiple types and multiple targets" do
-    subject.filter_by(link_type: "organisations", target_content_ids: %w(org1 org2))
-    subject.filter_by(link_type: "policies", target_content_ids: "policy1")
+    subject.filter_by(link_type: "organisations", target_ids: %w(org1 org2))
+    subject.filter_by(link_type: "policies", target_ids: "policy1")
 
     expect(content_ids).to eq %w(id2 id3)
   end
 
+  it "can filter by source instead of target" do
+    subject.filter_by(link_type: "organisations", source_ids: "id2")
+    expect(content_ids).to eq %w(org2)
+  end
+
   it "returns no results if there is no target for the type" do
-    subject.filter_by(link_type: "policies", target_content_ids: "org1")
+    subject.filter_by(link_type: "policies", target_ids: "org1")
     expect(content_ids).to be_empty
   end
 
   it "raises an error if a filter already exists for a type" do
-    subject.filter_by(link_type: "organisations", target_content_ids: "org1")
+    subject.filter_by(link_type: "organisations", target_ids: "org1")
 
-    expect { subject.filter_by(link_type: "organisations", target_content_ids: "org1") }
-      .to raise_error(DuplicateFilterError)
+    expect { subject.filter_by(link_type: "organisations", target_ids: "org1") }
+      .to raise_error(FilterError, /duplicate/)
+  end
+
+  it "raises an error if filtering by both source and target" do
+    subject.filter_by(link_type: "organisations", target_ids: "org1")
+
+    expect { subject.filter_by(link_type: "policies", source_ids: "id2") }
+      .to raise_error(FilterError, /source and target/)
+  end
+
+  it "raises an error if constructing a filter with source and target" do
+    expect {
+      subject.filter_by(
+        link_type: "organisations",
+        source_ids: "id1",
+        target_ids: "org1",
+      )
+    }.to raise_error(FilterError, /source or target/)
   end
 end
