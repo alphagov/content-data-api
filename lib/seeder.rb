@@ -21,6 +21,10 @@ module Seeder
   def self.user!
     return if User.any?
 
-    User.create!(uid: "user-1", name: "Test User")
+    User.create!(
+      uid: "user-1",
+      name: "Test User",
+      organisation_slug: "government-digital-service",
+    )
   end
 end

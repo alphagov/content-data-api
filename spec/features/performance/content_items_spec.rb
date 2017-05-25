@@ -37,7 +37,7 @@ RSpec.feature "Content Items List", type: :feature do
     visit "/content_items"
 
     expect(page).to have_text("a-title")
-    expect(page).to have_text("guide")
+    expect(page).to have_text("Guide")
     expect(page).to have_text("99")
     expect(page).to have_text("2 months ago")
   end

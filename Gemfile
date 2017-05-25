@@ -39,6 +39,7 @@ group :development, :test do
   gem 'webmock'
   gem 'rails-controller-testing', '~>1.0.1'
   gem 'database_cleaner'
+  gem 'timecop'
 end
 
 gem 'web-console', group: :development

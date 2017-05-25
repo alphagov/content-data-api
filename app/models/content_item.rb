@@ -2,6 +2,26 @@ class ContentItem < ApplicationRecord
   has_and_belongs_to_many :organisations
   has_and_belongs_to_many :taxonomies
 
+  def topics
+    linked_content("topics")
+  end
+
+  def organisations_tmp
+    linked_content("organisations")
+  end
+
+  def policy_areas
+    linked_content("policy-areas")
+  end
+
+  def guidance?
+    document_type == "guidance"
+  end
+
+  def withdrawn?
+    false
+  end
+
   def url
     "https://gov.uk#{base_path}"
   end
@@ -18,5 +38,14 @@ class ContentItem < ApplicationRecord
       taxon = Taxonomy.find_by(content_id: t)
       taxonomies << taxon unless taxon.nil? || taxonomies.include?(taxon)
     end
+  end
+
+private
+
+  def linked_content(link_type)
+    search = Search.new
+    search.filter_by(link_type: link_type, source_ids: content_id)
+    search.execute
+    search.content_items
   end
 end

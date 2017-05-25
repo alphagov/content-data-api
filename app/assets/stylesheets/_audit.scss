@@ -1,8 +1,27 @@
-.free-text-question {
+.description {
+  margin: 2em 0 4em 0;
+}
 
+.free-text-question {
   &.redirect-or-combine-with-url {
     textarea {
       height: 2em;
     }
+  }
+}
+
+.btn-success {
+  margin-top: 1em;
+}
+
+.audit-metadata {
+  margin-left: 2em;
+
+  h4 {
+    margin-top: 2em;
+  }
+
+  p {
+    margin: 0;
   }
 }

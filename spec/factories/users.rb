@@ -4,5 +4,6 @@ FactoryGirl.define do
     name 'Test User'
     email 'user@example.com'
     permissions { ['signin'] }
+    organisation_slug "government-digital-service"
   end
 end

@@ -2,11 +2,7 @@ class ContentItemDecorator < Draper::Decorator
   delegate_all
 
   def last_updated
-    if object.public_updated_at
-      "#{helpers.time_ago_in_words(object.public_updated_at)} ago"
-    else
-      "Never"
-    end
+    h.format_datetime(public_updated_at)
   end
 
   def feedex_link
@@ -23,5 +19,43 @@ class ContentItemDecorator < Draper::Decorator
 
   def taxons_as_string
     object.taxonomies.map(&:title).join(', ')
+  end
+
+  def topics
+    titles(object.topics)
+  end
+
+  def organisations
+    titles(object.organisations_tmp)
+  end
+
+  def policy_areas
+    titles(object.policy_areas)
+  end
+
+  def guidance
+    h.format_boolean(guidance?)
+  end
+
+  def withdrawn
+    h.format_boolean(withdrawn?)
+  end
+
+  def one_month_page_views
+    h.format_number(object.one_month_page_views)
+  end
+
+  def six_months_page_views
+    h.format_number(object.six_months_page_views)
+  end
+
+  def document_type
+    object.document_type.titleize
+  end
+
+private
+
+  def titles(content_items)
+    h.format_array(content_items.map(&:title))
   end
 end

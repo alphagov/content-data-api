@@ -27,7 +27,7 @@ RSpec.feature "Content Item Details", type: :feature do
     visit "/content_items/#{content_item.id}"
     expect(page).to have_text("a-title")
     expect(page).to have_link("a-title", href: "https://gov.uk/content/1/path")
-    expect(page).to have_text("guidance")
+    expect(page).to have_text("Guidance")
     expect(page).to have_text("a-description")
     expect(page).to have_text("2 months ago")
   end
@@ -41,7 +41,7 @@ RSpec.feature "Content Item Details", type: :feature do
   end
 
   scenario "Renders the taxonomies" do
-    content_item = create(:content_item).decorate
+    content_item = create(:content_item)
     content_item.taxonomies << create(:taxonomy, title: 'A Taxonomy')
     content_item.taxonomies << create(:taxonomy, title: 'Another Taxonomy')
 
@@ -68,7 +68,7 @@ RSpec.feature "Content Item Details", type: :feature do
   end
 
   scenario "Renders the organisations belonging to a Content Item" do
-    content_item = create(:content_item).decorate
+    content_item = create(:content_item)
     content_item.organisations << create(:organisation, title: 'An Organisation')
     content_item.organisations << create(:organisation, title: 'Another Organisation')
 
