@@ -1,10 +1,10 @@
-require 'features/pagination_spec_helper'
+require 'features/common/pagination_spec_helper'
 
 RSpec.feature "List Content Items to Audit", type: :feature do
-  let!(:user) {FactoryGirl.create(:user)}
+  let!(:user) { FactoryGirl.create(:user) }
 
-  let!(:content_item_1) {FactoryGirl.create(:content_item, title: "All about flooding.")}
-  let!(:content_item_2) {FactoryGirl.create(:content_item, title: "All about gardening.")}
+  let!(:content_item_1) { FactoryGirl.create(:content_item, title: "All about flooding.") }
+  let!(:content_item_2) { FactoryGirl.create(:content_item, title: "All about gardening.") }
 
   scenario "List Content Items to Audit" do
     content_item_1.update(six_months_page_views: 1234)
@@ -28,7 +28,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
   end
 
   describe "User can navigate paged lists of content items" do
-    before {create_list :content_item, 3}
+    before { create_list :content_item, 3 }
 
     it_behaves_like 'a paginated list', 'content_items'
   end
