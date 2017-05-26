@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     patch :audit, to: "audits#save"
   end
 
+  resources :audits, only: %w(index)
+
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end

@@ -1,8 +1,27 @@
 class Search
   class Executor
     def self.execute(query)
-      scope = ContentItem.all
+      new(query).execute
+    end
 
+    attr_accessor :query, :scope
+
+    def initialize(query)
+      self.query = query
+      self.scope = ContentItem.all
+    end
+
+    def execute
+      apply_filters
+      apply_sort
+      apply_pagination
+
+      Result.new(scope)
+    end
+
+  private
+
+    def apply_filters
       query.filters.each do |filter|
         nested = Link.where(link_type: filter.link_type)
 
@@ -14,10 +33,18 @@ class Search
           nested = nested.select("source_content_id as content_id")
         end
 
-        scope = scope.where(content_id: nested)
+        self.scope = scope.where(content_id: nested)
       end
+    end
 
-      Result.new(scope)
+    def apply_sort
+      if query.sort == :page_views_desc
+        self.scope = scope.order("six_months_page_views desc")
+      end
+    end
+
+    def apply_pagination
+      self.scope = scope.page(query.page).per(query.per_page)
     end
   end
 end
