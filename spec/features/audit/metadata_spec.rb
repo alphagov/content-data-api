@@ -23,8 +23,8 @@ RSpec.feature "Audit metadata", type: :feature do
       expect(page).to have_selector("#topics", text: "None")
       expect(page).to have_selector("#policy-areas", text: "None")
       expect(page).to have_selector("#withdrawn", text: "No")
-      expect(page).to have_selector("#pageviews", text: "None in the last month")
-      expect(page).to have_selector("#pageviews", text: "None in the last six months")
+      expect(page).to have_selector("#pageviews", text: "0 in the last month")
+      expect(page).to have_selector("#pageviews", text: "0 in the last six months")
     end
   end
 
