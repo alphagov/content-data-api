@@ -56,6 +56,6 @@ class ContentItemDecorator < Draper::Decorator
 private
 
   def titles(content_items)
-    h.format_array(content_items.map(&:title))
+    h.format_array(content_items.map(&:title).sort)
   end
 end
