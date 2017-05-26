@@ -1,7 +1,5 @@
 module FormatHelper
   def format_number(n)
-    return "None" if n.zero?
-
     number_with_delimiter(n, delimiter: ",")
   end
 
