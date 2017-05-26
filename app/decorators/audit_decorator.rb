@@ -1,8 +1,13 @@
 class AuditDecorator < Draper::Decorator
-  delegate_all
-  decorates_association :responses
+  include ActionView::Helpers::NumberHelper
 
-  def user_name
-    user ? user.name : "no one"
+  delegate_all
+
+  decorates_association :responses
+  decorates_association :content_item
+  decorates_association :user
+
+  def last_updated
+    h.format_datetime(updated_at)
   end
 end
