@@ -27,13 +27,13 @@ class Search
     end
 
     def page=(value)
-      @page = value
-      @page = 1 if value <= 0
+      @page = value.to_i
+      @page = 1 if @page <= 0
     end
 
     def per_page=(value)
-      @per_page = value
-      @per_page = 100 if value > 100
+      @per_page = value.to_i
+      @per_page = 100 if @per_page > 100
     end
 
     def sort=(identifier)

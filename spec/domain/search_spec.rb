@@ -27,63 +27,29 @@ RSpec.describe Search do
     edge(from: "id3", to: "policy1", type: "policies")
   end
 
-  context "Pagination" do
-    it "returns a paginated list" do
-      subject.per_page = 5
-      subject.page = 2
-      subject.execute
-      results = subject.content_items
+  it "can paginate" do
+    subject.per_page = 5
+    subject.page = 2
+    subject.execute
+    results = subject.content_items
 
-      expect(results.total_pages).to eq(2)
-      expect(results.count).to eq(1)
-    end
-
-    it "defaults per page to 25" do
-      expect(subject.per_page).to eq(25)
-    end
-
-    it "defaults page to 1" do
-      expect(subject.page).to eq(1)
-    end
-
-    it "defaults to page 1 if page is <= 0" do
-      subject.page = 0
-      expect(subject.page).to eq(1)
-
-      subject.page = -123
-      expect(subject.page).to eq(1)
-    end
-
-    it "limits per page to 100" do
-      subject.per_page = 101
-      expect(subject.per_page).to eq(100)
-    end
+    expect(results.total_pages).to eq(2)
+    expect(results.count).to eq(1)
   end
 
-  context "Sorting" do
-    it "default to page_views_desc" do
-      expect(subject.sort).to eq(:page_views_desc)
-    end
+  it "can sort by page_views_desc" do
+    ContentItem.update_all(six_months_page_views: 100)
+    ContentItem.find_by!(content_id: "id1").update!(six_months_page_views: 999)
+    ContentItem.find_by!(content_id: "id3").update!(six_months_page_views: 0)
 
-    it "by number of views descending" do
-      ContentItem.update_all(six_months_page_views: 100)
-      ContentItem.find_by!(content_id: "id1").update!(six_months_page_views: 999)
-      ContentItem.find_by!(content_id: "id3").update!(six_months_page_views: 0)
+    subject.sort = :page_views_desc
+    subject.per_page = 100
+    subject.execute
 
-      subject.sort = :page_views_desc
-      subject.per_page = 100
-      subject.execute
+    results = subject.content_items
+    views = results.pluck(:six_months_page_views)
 
-      results = subject.content_items
-      views = results.pluck(:six_months_page_views)
-
-      expect(views).to eq [999, 100, 100, 100, 100, 0]
-    end
-
-    it "raises for an unrecognised sort" do
-      expect { subject.sort = :page_views_asc }
-        .to raise_error(SortError, /unrecognised/)
-    end
+    expect(views).to eq [999, 100, 100, 100, 100, 0]
   end
 
   let(:content_ids) do
@@ -128,14 +94,14 @@ RSpec.describe Search do
   it "raises an error if a filter already exists for a type" do
     subject.filter_by(link_type: "organisations", target_ids: "org1")
 
-    expect {subject.filter_by(link_type: "organisations", target_ids: "org1")}
+    expect { subject.filter_by(link_type: "organisations", target_ids: "org1") }
       .to raise_error(FilterError, /duplicate/)
   end
 
   it "raises an error if filtering by both source and target" do
     subject.filter_by(link_type: "organisations", target_ids: "org1")
 
-    expect {subject.filter_by(link_type: "policies", source_ids: "id2")}
+    expect { subject.filter_by(link_type: "policies", source_ids: "id2") }
       .to raise_error(FilterError, /source and target/)
   end
 

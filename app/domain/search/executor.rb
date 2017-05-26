@@ -44,9 +44,7 @@ class Search
     end
 
     def apply_pagination
-      if query.per_page && query.page
-        self.scope = scope.page(query.page).per(query.per_page)
-      end
+      self.scope = scope.page(query.page).per(query.per_page)
     end
   end
 end

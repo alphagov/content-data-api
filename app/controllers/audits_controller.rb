@@ -1,6 +1,7 @@
 class AuditsController < ApplicationController
   def index
     search = Search.new
+    search.page = params[:page]
     search.execute
 
     @content_items = search.content_items
