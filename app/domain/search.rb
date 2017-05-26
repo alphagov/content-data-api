@@ -19,6 +19,22 @@ class Search
     result.content_items
   end
 
+  def per_page=(value)
+    query.per_page = value
+  end
+
+  def per_page
+    query.per_page
+  end
+
+  def page
+    query.page
+  end
+
+  def page=(value)
+    query.page = value
+  end
+
 private
 
   attr_accessor :query, :result

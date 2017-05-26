@@ -27,6 +27,39 @@ RSpec.describe Search do
     edge(from: "id3", to: "policy1", type: "policies")
   end
 
+  context "Pagination" do
+    it "returns a paginated list" do
+      subject.per_page = 5
+      subject.page = 2
+      subject.execute
+      results = subject.content_items
+
+      expect(results.total_pages).to eq(2)
+      expect(results.count).to eq(1)
+    end
+
+    it "defaults per page to 25" do
+      expect(subject.per_page).to eq(25)
+    end
+
+    it "defaults page to 1" do
+      expect(subject.page).to eq(1)
+    end
+
+    it "defaults to page 1 if page is <= 0" do
+      subject.page = 0
+      expect(subject.page).to eq(1)
+
+      subject.page = -123
+      expect(subject.page).to eq(1)
+    end
+
+    it "limits per page to 100" do
+      subject.per_page = 101
+      expect(subject.per_page).to eq(100)
+    end
+  end
+
   let(:content_ids) do
     subject.execute
     subject.content_items.map(&:content_id)
@@ -69,14 +102,14 @@ RSpec.describe Search do
   it "raises an error if a filter already exists for a type" do
     subject.filter_by(link_type: "organisations", target_ids: "org1")
 
-    expect { subject.filter_by(link_type: "organisations", target_ids: "org1") }
+    expect {subject.filter_by(link_type: "organisations", target_ids: "org1")}
       .to raise_error(FilterError, /duplicate/)
   end
 
   it "raises an error if filtering by both source and target" do
     subject.filter_by(link_type: "organisations", target_ids: "org1")
 
-    expect { subject.filter_by(link_type: "policies", source_ids: "id2") }
+    expect {subject.filter_by(link_type: "policies", source_ids: "id2")}
       .to raise_error(FilterError, /source and target/)
   end
 

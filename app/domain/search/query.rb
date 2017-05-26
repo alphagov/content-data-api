@@ -1,9 +1,11 @@
 class Search
   class Query
-    attr_accessor :filters
+    attr_accessor :filters, :per_page, :page
 
     def initialize
       self.filters = []
+      self.page = 1
+      self.per_page = 25
     end
 
     def filter_by(link_type:, source_ids:, target_ids:)
@@ -17,6 +19,16 @@ class Search
       raise_if_mixing_source_and_target(filter)
 
       filters.push(filter)
+    end
+
+    def page=(value)
+      @page = value
+      @page = 1 if value <= 0
+    end
+
+    def per_page=(value)
+      @per_page = value
+      @per_page = 100 if value > 100
     end
 
   private
