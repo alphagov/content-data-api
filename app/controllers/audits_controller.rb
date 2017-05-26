@@ -4,7 +4,7 @@ class AuditsController < ApplicationController
     search.page = params[:page]
     search.execute
 
-    @content_items = search.content_items
+    @content_items = search.content_items.decorate
   end
 
   def show
