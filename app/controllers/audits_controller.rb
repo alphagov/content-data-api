@@ -1,9 +1,9 @@
 class AuditsController < ApplicationController
-  before_action :apply_default_ordering, only: %w(index)
-
   def index
-    query = Queries::ContentItemsQuery.new(query_options)
-    @content_items = query.paginated_results.decorate
+    search = Search.new
+    search.execute
+
+    @content_items = search.content_items
   end
 
   def show
@@ -22,12 +22,7 @@ class AuditsController < ApplicationController
     render :show
   end
 
-  private
-
-  def apply_default_ordering
-    params[:order] ||= "desc"
-    params[:sort] ||= "six_months_page_views"
-  end
+private
 
   def audit
     @audit ||= Audit.find_or_initialize_by(content_item: content_item).decorate
@@ -45,14 +40,5 @@ class AuditsController < ApplicationController
 
   def error_message
     audit.errors.messages.values.join(', ').capitalize
-  end
-
-  def query_options
-    {
-      sort: params[:sort],
-      order: params[:order],
-      query: params[:query],
-      page: params[:page]
-    }
   end
 end
