@@ -60,6 +60,32 @@ RSpec.describe Search do
     end
   end
 
+  context "Sorting" do
+    it "default to page_views_desc" do
+      expect(subject.sort).to eq(:page_views_desc)
+    end
+
+    it "by number of views descending" do
+      ContentItem.update_all(six_months_page_views: 100)
+      ContentItem.find_by!(content_id: "id1").update!(six_months_page_views: 999)
+      ContentItem.find_by!(content_id: "id3").update!(six_months_page_views: 0)
+
+      subject.sort = :page_views_desc
+      subject.per_page = 100
+      subject.execute
+
+      results = subject.content_items
+      views = results.pluck(:six_months_page_views)
+
+      expect(views).to eq [999, 100, 100, 100, 100, 0]
+    end
+
+    it "raises for an unrecognised sort" do
+      expect { subject.sort = :page_views_asc }
+        .to raise_error(SortError, /unrecognised/)
+    end
+  end
+
   let(:content_ids) do
     subject.execute
     subject.content_items.map(&:content_id)

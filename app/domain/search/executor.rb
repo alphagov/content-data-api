@@ -13,6 +13,7 @@ class Search
 
     def execute
       apply_filters
+      apply_sort
       apply_pagination
 
       Result.new(scope)
@@ -33,6 +34,12 @@ class Search
         end
 
         self.scope = scope.where(content_id: nested)
+      end
+    end
+
+    def apply_sort
+      if query.sort == :page_views_desc
+        self.scope = scope.order("six_months_page_views desc")
       end
     end
 

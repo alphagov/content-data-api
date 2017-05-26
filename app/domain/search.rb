@@ -13,6 +13,7 @@ class Search
 
   def execute
     self.result = Executor.execute(query)
+    nil
   end
 
   def content_items
@@ -33,6 +34,14 @@ class Search
 
   def page=(value)
     query.page = value
+  end
+
+  def sort=(identifier)
+    query.sort = identifier
+  end
+
+  def sort
+    query.sort
   end
 
 private
