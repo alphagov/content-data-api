@@ -1,5 +1,4 @@
-require_relative "../../app/models/question/boolean_question"
-require_relative "../../app/models/question/free_text_question"
+require_relative "../../app/models/question"
 
 FactoryGirl.define do
   factory :boolean_question, class: BooleanQuestion do

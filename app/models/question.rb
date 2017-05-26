@@ -11,4 +11,8 @@ class Question < ApplicationRecord
   end
 end
 
-fix_sti_reload_in_development(__FILE__)
+class BooleanQuestion < Question
+end
+
+class FreeTextQuestion < Question
+end
