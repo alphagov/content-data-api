@@ -33,7 +33,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'poltergeist'
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
   gem 'spring-commands-rspec'
   gem 'capybara'
   gem 'webmock'
