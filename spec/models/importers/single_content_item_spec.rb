@@ -56,13 +56,13 @@ RSpec.describe Importers::SingleContentItem do
       content_item_links.where(
         link_type: "organisations"
       ).pluck(:target_content_id)
-    ).to contain_exactly(*%w(org-1 org-2))
+    ).to contain_exactly('org-1', 'org-2')
 
     expect(
       content_item_links.where(
         link_type: "taxons"
       ).pluck(:target_content_id)
-    ).to contain_exactly(*%w(taxon-1 taxon-2))
+    ).to contain_exactly('taxon-1', 'taxon-2')
   end
 
   context "when the content item already exists" do

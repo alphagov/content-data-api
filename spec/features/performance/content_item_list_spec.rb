@@ -31,8 +31,7 @@ RSpec.feature "Content Items List", type: :feature do
       title: "a-title",
       document_type: "guide",
       one_month_page_views: "99",
-      public_updated_at: 2.months.ago
-    )
+      public_updated_at: 2.months.ago)
 
     visit "/content_items"
 
