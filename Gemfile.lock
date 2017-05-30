@@ -189,9 +189,10 @@ GEM
       activesupport (>= 3.0.0)
     kgio (2.11.0)
     link_header (0.0.8)
-    listen (3.0.8)
+    listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     little-plugger (1.1.4)
     logging (2.2.2)
       little-plugger (~> 1.1)
@@ -337,6 +338,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.8.1)
+    ruby_dep (1.5.0)
     safe_yaml (1.0.4)
     sass (3.4.24)
     sass-rails (5.0.6)
@@ -440,7 +442,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   kaminari (~> 0.17.0)
-  listen (~> 3.0.5)
+  listen
   pg (~> 0.18)
   plek
   poltergeist
