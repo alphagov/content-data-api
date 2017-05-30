@@ -4,7 +4,7 @@ ruby File.read(".ruby-version").chomp
 
 gem 'rails', '~> 5.1'
 gem 'pg', '~> 0.18'
-gem 'puma', '~> 3.0'
+gem 'puma'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'coffee-rails'
