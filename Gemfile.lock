@@ -445,7 +445,7 @@ DEPENDENCIES
   google-api-client (~> 0.9)
   govuk-lint
   govuk_admin_template (~> 5.0)
-  govuk_sidekiq (~> 1.0.3)
+  govuk_sidekiq
   guard-rspec
   httparty
   jbuilder (~> 2.5)
