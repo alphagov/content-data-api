@@ -452,7 +452,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen
-  pg (~> 0.18)
+  pg
   plek
   poltergeist
   pry-rails

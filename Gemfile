@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby File.read(".ruby-version").chomp
 
 gem 'rails', '~> 5.1'
-gem 'pg', '~> 0.18'
+gem 'pg'
 gem 'puma'
 gem 'sass-rails'
 gem 'uglifier'
