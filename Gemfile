@@ -41,5 +41,3 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'timecop'
 end
-
-gem 'web-console', group: :development
