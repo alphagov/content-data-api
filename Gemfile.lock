@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/alphagov/airbrake.git
+  remote: https://github.com/alphagov/airbrake
   revision: ad9c926a56535c48f95c33824a76e10bc8f91179
   branch: silence-dep-warnings-for-rails-5
   specs:

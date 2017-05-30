@@ -19,7 +19,7 @@ gem 'draper'
 gem 'gds-api-adapters'
 gem 'unicorn'
 gem 'gds-sso'
-gem 'airbrake', github: 'alphagov/airbrake', branch: 'silence-dep-warnings-for-rails-5'
+gem 'airbrake', git: 'https://github.com/alphagov/airbrake', branch: 'silence-dep-warnings-for-rails-5'
 gem 'govuk_sidekiq'
 gem 'plek'
 gem 'web-console', group: :development
