@@ -37,7 +37,7 @@ group :development, :test do
   gem 'spring-commands-rspec'
   gem 'capybara'
   gem 'webmock'
-  gem 'rails-controller-testing', '~>1.0.1'
+  gem 'rails-controller-testing'
   gem 'database_cleaner'
   gem 'timecop'
 end
