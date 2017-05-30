@@ -25,7 +25,7 @@ gem 'plek'
 gem 'web-console', group: :development
 
 group :development, :test do
-  gem 'rspec-rails', '~>3.5'
+  gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'govuk-lint'
   gem 'listen', '~> 3.0.5'
