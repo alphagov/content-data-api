@@ -91,7 +91,7 @@ GEM
     diff-lcs (1.3)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    draper (3.0.0.pre1)
+    draper (3.0.0)
       actionpack (~> 5.0)
       activemodel (~> 5.0)
       activemodel-serializers-xml (~> 1.0)
@@ -429,11 +429,11 @@ DEPENDENCIES
   capybara
   coffee-rails (~> 4.2)
   database_cleaner
-  draper (= 3.0.0.pre1)
+  draper
   factory_girl_rails
   gds-api-adapters (~> 41.0.0)
   gds-sso
-  google-api-client (~> 0.9)
+  google-api-client
   govuk-lint
   govuk_admin_template (~> 5.0)
   govuk_sidekiq (~> 1.0.3)
@@ -441,7 +441,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 2.5)
   jquery-rails
-  kaminari (~> 0.17.0)
+  kaminari
   listen
   pg (~> 0.18)
   plek
@@ -458,7 +458,7 @@ DEPENDENCIES
   timecop
   turbolinks (~> 5)
   uglifier (>= 1.3.0)
-  unicorn (~> 5.1.0)
+  unicorn
   web-console
   webmock
 
