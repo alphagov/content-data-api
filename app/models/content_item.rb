@@ -43,9 +43,8 @@ class ContentItem < ApplicationRecord
 private
 
   def linked_content(link_type)
-    search = Search.new
-    search.filter_by(link_type: link_type, source_ids: content_id)
-    search.execute
-    search.content_items
+    links = Link.where(link_type: link_type, source_content_id: content_id)
+
+    ContentItem.where(content_id: links.select(:target_content_id))
   end
 end
