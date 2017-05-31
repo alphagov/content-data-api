@@ -9,7 +9,7 @@ class Search
 
 
     def initialize(status)
-      self.status = status ? status.to_sym : nil
+      self.status = status.to_sym
 
       raise_if_unrecognised_audit_status
     end

@@ -10,8 +10,10 @@ class Search
     end
 
     def filter_by(filter)
-      raise_if_already_filtered_by_link_type(filter)
-      raise_if_mixing_source_and_target(filter)
+      if filter.is_a?(LinkFilter)
+        raise_if_already_filtered_by_link_type(filter)
+        raise_if_mixing_source_and_target(filter)
+      end
 
       filters.push(filter)
     end

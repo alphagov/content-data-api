@@ -2,7 +2,7 @@ class AuditsController < ApplicationController
   def index
     search = Search.new
     search.page = params[:page]
-    search.audit_status = params[:audit_status]
+    search.audit_status = params[:audit_status] if params[:audit_status]
     search.execute
 
     @content_items = search.content_items.decorate

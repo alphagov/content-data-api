@@ -97,4 +97,13 @@ RSpec.describe Search do
     subject.filter_by(link_type: "policies", target_ids: "org1")
     expect(content_ids).to be_empty
   end
+
+  it "returns audited content" do
+    subject.filter_by(link_type: "organisations", target_ids: %w(org1 org2))
+    subject.filter_by(link_type: "policies", target_ids: "policy1")
+    create(:audit, content_item: ContentItem.find_by!(content_id: "id2"))
+    subject.audit_status = "audited"
+
+    expect(content_ids).to eq %w(id2)
+  end
 end

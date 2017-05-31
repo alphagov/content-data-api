@@ -6,11 +6,6 @@ RSpec.describe Search::AuditFilter do
       .to raise_error(AuditStatusError, /unrecognised audit status/)
   end
 
-  it "does not raise exception with nil values" do
-    expect { subject.new(nil) }
-      .to_not raise_error
-  end
-
   it "symbolises the value" do
     expect(subject.new("audited").status).to eq(:audited)
   end
