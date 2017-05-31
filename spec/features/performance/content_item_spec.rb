@@ -21,8 +21,7 @@ RSpec.feature "Content Item Details", type: :feature do
       base_path: "/content/1/path",
       document_type: "guidance",
       description: "a-description",
-      public_updated_at: 2.months.ago,
-    )
+      public_updated_at: 2.months.ago,)
 
     visit "/content_items/#{content_item.id}"
     expect(page).to have_text("a-title")

@@ -25,7 +25,7 @@ RSpec.describe "API::Groups", type: :request do
 
   describe "GET /groups" do
     it "returns JSON with all the Groups and number of Content IDs" do
-      create :group, slug: "slug-1", content_item_ids: %w( 1 2)
+      create :group, slug: "slug-1", content_item_ids: %w(1 2)
       get "/groups", params: { api_token: "a-token" }, headers: headers
 
       json = JSON.parse(response.body).deep_symbolize_keys

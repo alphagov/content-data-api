@@ -54,10 +54,10 @@ RSpec.describe Clients::PublishingAPI do
   describe "#find_each" do
     it "loops through paged results from the gds publishing api" do
       subject.deprecated_publishing_api = double
-      page_1 = { "results" => [{}], "pages" => 2, "current_page" => 1 }
-      page_2 = { "results" => [{}], "pages" => 2, "current_page" => 2 }
+      page1 = { "results" => [{}], "pages" => 2, "current_page" => 1 }
+      page2 = { "results" => [{}], "pages" => 2, "current_page" => 2 }
 
-      expect(subject.deprecated_publishing_api).to receive(:get_content_items).exactly(2).times.and_return(page_1, page_2)
+      expect(subject.deprecated_publishing_api).to receive(:get_content_items).exactly(2).times.and_return(page1, page2)
 
       subject.find_each([]) {}
     end
