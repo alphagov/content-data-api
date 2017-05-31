@@ -2,7 +2,7 @@ require 'gds_api/publishing_api_v2'
 
 module Clients
   class PublishingAPI
-    PER_PAGE = 1_000
+    PER_PAGE = 100
 
     attr_accessor :deprecated_publishing_api, :per_page
 
