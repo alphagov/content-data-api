@@ -38,11 +38,6 @@ RSpec.describe Search::Query do
     it "defaults to page_views_desc" do
       expect(subject.sort).to eq(:page_views_desc)
     end
-
-    it "raises for an unrecognised sort" do
-      expect { subject.sort = :page_views_asc }
-        .to raise_error(SortError, /unrecognised/)
-    end
   end
 
   describe "#filter_by" do

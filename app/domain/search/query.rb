@@ -1,9 +1,5 @@
 class Search
   class Query
-    SORT_IDENTIFIERS = [
-      :page_views_desc,
-    ].freeze
-
     attr_accessor :filters, :per_page, :page, :sort
 
     def initialize
@@ -36,11 +32,6 @@ class Search
       @per_page = 100 if @per_page > 100
     end
 
-    def sort=(identifier)
-      @sort = identifier
-      raise_if_unrecognised_sort
-    end
-
   private
 
     def raise_if_already_filtered_by_link_type(filter)
@@ -53,10 +44,6 @@ class Search
       if filters.any? { |f| f.by_source? != filter.by_source? }
         raise FilterError, "attempting to filter by source and target"
       end
-    end
-
-    def raise_if_unrecognised_sort
-      raise SortError, "unrecognised sort" unless SORT_IDENTIFIERS.include?(sort)
     end
 
     class Filter
@@ -78,6 +65,5 @@ class Search
     end
 
     class ::FilterError < StandardError; end
-    class ::SortError < StandardError; end
   end
 end

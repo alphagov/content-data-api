@@ -37,19 +37,26 @@ RSpec.describe Search do
     expect(results.count).to eq(1)
   end
 
-  it "can sort by page_views_desc" do
-    ContentItem.update_all(six_months_page_views: 100)
-    ContentItem.find_by!(content_id: "id1").update!(six_months_page_views: 999)
-    ContentItem.find_by!(content_id: "id3").update!(six_months_page_views: 0)
+  context "sorting" do
+    it "can sort by page_views_desc" do
+      ContentItem.update_all(six_months_page_views: 100)
+      ContentItem.find_by!(content_id: "id1").update!(six_months_page_views: 999)
+      ContentItem.find_by!(content_id: "id3").update!(six_months_page_views: 0)
 
-    subject.sort = :page_views_desc
-    subject.per_page = 100
-    subject.execute
+      subject.sort = :page_views_desc
+      subject.per_page = 100
+      subject.execute
 
-    results = subject.content_items
-    views = results.pluck(:six_months_page_views)
+      results = subject.content_items
+      views = results.pluck(:six_months_page_views)
 
-    expect(views).to eq [999, 100, 100, 100, 100, 0]
+      expect(views).to eq [999, 100, 100, 100, 100, 0]
+    end
+
+    it "raises for an unrecognised sort" do
+      expect { subject.sort = :unknown_sort_value }
+        .to raise_error(SortError, /unrecognised/)
+    end
   end
 
   let(:content_ids) do
