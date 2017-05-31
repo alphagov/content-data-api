@@ -1,6 +1,8 @@
 class ContentItem < ApplicationRecord
   has_and_belongs_to_many :organisations
   has_and_belongs_to_many :taxonomies
+  has_one :audit, primary_key: :content_id, foreign_key: :content_id
+
 
   def topics
     linked_content("topics")
