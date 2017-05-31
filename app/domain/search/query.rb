@@ -9,13 +9,7 @@ class Search
       self.sort = :page_views_desc
     end
 
-    def filter_by(link_type:, source_ids: nil, target_ids: nil)
-      filter = Filter.new(
-        link_type: link_type,
-        source_ids: source_ids,
-        target_ids: target_ids,
-      )
-
+    def filter_by(filter)
       raise_if_already_filtered_by_link_type(filter)
       raise_if_mixing_source_and_target(filter)
 
@@ -43,24 +37,6 @@ class Search
     def raise_if_mixing_source_and_target(filter)
       if filters.any? { |f| f.by_source? != filter.by_source? }
         raise FilterError, "attempting to filter by source and target"
-      end
-    end
-
-    class Filter
-      attr_accessor :link_type, :source_ids, :target_ids
-
-      def initialize(link_type:, source_ids:, target_ids:)
-        self.link_type = link_type
-        self.source_ids = [source_ids].flatten.compact
-        self.target_ids = [target_ids].flatten.compact
-
-        if source_ids.present? && target_ids.present?
-          raise FilterError, "must filter by source or target"
-        end
-      end
-
-      def by_source?
-        source_ids.present?
       end
     end
 

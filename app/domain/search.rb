@@ -4,11 +4,13 @@ class Search
   end
 
   def filter_by(link_type:, source_ids: nil, target_ids: nil)
-    query.filter_by(
+    filter = LinkFilter.new(
       link_type: link_type,
       source_ids: source_ids,
       target_ids: target_ids,
     )
+
+    query.filter_by(filter)
   end
 
   def execute
@@ -55,8 +57,9 @@ private
   ].freeze
 
   def raise_if_unrecognised_sort
-    raise SortError, "unrecognised sort" unless SORT_IDENTIFIERS.include?(sort)
+    raise ::SortError, "unrecognised sort" unless SORT_IDENTIFIERS.include?(sort)
   end
 
-  class ::SortError < StandardError; end
+  class ::SortError < StandardError
+  end
 end

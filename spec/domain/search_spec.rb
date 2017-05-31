@@ -55,7 +55,7 @@ RSpec.describe Search do
 
     it "raises for an unrecognised sort" do
       expect { subject.sort = :unknown_sort_value }
-        .to raise_error(SortError, /unrecognised/)
+        .to raise_error(::SortError, /unrecognised/)
     end
   end
 

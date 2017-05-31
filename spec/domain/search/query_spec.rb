@@ -42,27 +42,25 @@ RSpec.describe Search::Query do
 
   describe "#filter_by" do
     it "raises an error if a filter already exists for a type" do
-      subject.filter_by(link_type: "organisations", target_ids: "org1")
+      filter = Search::LinkFilter.new(link_type: "organisations", target_ids: "org1")
+      subject.filter_by(filter)
 
-      expect { subject.filter_by(link_type: "organisations", target_ids: "org1") }
+      expect { subject.filter_by(filter) }
         .to raise_error(FilterError, /duplicate/)
     end
 
     it "raises an error if filtering by both source and target" do
-      subject.filter_by(link_type: "organisations", target_ids: "org1")
+      subject.filter_by(Search::LinkFilter.new(link_type: "organisations", target_ids: "org1"))
 
-      expect { subject.filter_by(link_type: "policies", source_ids: "id2") }
+      expect { subject.filter_by(Search::LinkFilter.new(link_type: "policies", source_ids: "id2")) }
         .to raise_error(FilterError, /source and target/)
     end
 
-    it "raises an error if constructing a filter with source and target" do
-      expect {
-        subject.filter_by(
-          link_type: "organisations",
-          source_ids: "id1",
-          target_ids: "org1",
-        )
-      }.to raise_error(FilterError, /source or target/)
+    it "stores the list of filters" do
+      subject.filter_by(Search::LinkFilter.new(link_type: "organisations", target_ids: "org1"))
+      subject.filter_by(Search::LinkFilter.new(link_type: "policies", target_ids: "org2"))
+
+      expect(subject.filters.count).to eq(2)
     end
   end
 end
