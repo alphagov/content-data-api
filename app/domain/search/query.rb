@@ -13,7 +13,7 @@ class Search
       self.sort = :page_views_desc
     end
 
-    def filter_by(link_type:, source_ids:, target_ids:)
+    def filter_by(link_type:, source_ids: nil, target_ids: nil)
       filter = Filter.new(
         link_type: link_type,
         source_ids: source_ids,

@@ -44,4 +44,30 @@ RSpec.describe Search::Query do
         .to raise_error(SortError, /unrecognised/)
     end
   end
+
+  describe "#filter_by" do
+    it "raises an error if a filter already exists for a type" do
+      subject.filter_by(link_type: "organisations", target_ids: "org1")
+
+      expect { subject.filter_by(link_type: "organisations", target_ids: "org1") }
+        .to raise_error(FilterError, /duplicate/)
+    end
+
+    it "raises an error if filtering by both source and target" do
+      subject.filter_by(link_type: "organisations", target_ids: "org1")
+
+      expect { subject.filter_by(link_type: "policies", source_ids: "id2") }
+        .to raise_error(FilterError, /source and target/)
+    end
+
+    it "raises an error if constructing a filter with source and target" do
+      expect {
+        subject.filter_by(
+          link_type: "organisations",
+          source_ids: "id1",
+          target_ids: "org1",
+        )
+      }.to raise_error(FilterError, /source or target/)
+    end
+  end
 end
