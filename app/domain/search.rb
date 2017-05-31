@@ -3,6 +3,10 @@ class Search
     self.query = Query.new
   end
 
+  def audit_status=(value)
+    query.filter_by(AuditFilter.new(value))
+  end
+
   def filter_by(link_type:, source_ids: nil, target_ids: nil)
     filter = LinkFilter.new(
       link_type: link_type,
@@ -47,10 +51,13 @@ class Search
     query.sort
   end
 
+  def self.all_audit_status
+    AuditFilter.all_status
+  end
+
 private
 
   attr_accessor :query, :result
-
 
   SORT_IDENTIFIERS = [
     :page_views_desc,
@@ -60,6 +67,5 @@ private
     raise ::SortError, "unrecognised sort" unless SORT_IDENTIFIERS.include?(sort)
   end
 
-  class ::SortError < StandardError
-  end
+  class ::SortError < StandardError; end
 end
