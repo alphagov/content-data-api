@@ -1,16 +1,16 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
-  let!(:user) { FactoryGirl.create(:user) }
+  let!(:user) { create(:user) }
 
-  let!(:content_item_audited) { FactoryGirl.create(:content_item, title: "Title of Audited content item") }
-  let!(:content_item_not_audited) { FactoryGirl.create(:content_item, title: "Title of Non-Audited content item") }
-
-  let!(:audit) { FactoryGirl.create(:audit, content_item: content_item_audited) }
+  before do
+    create(:audit, content_item: create(:content_item, title: "Audited content item"))
+    create(:content_item, title: "Non-audited content item")
+  end
 
   scenario "List all content items (audited and not audited)" do
     visit audits_path
 
-    expect(page).to have_content("Title of Audited content item")
-    expect(page).to have_content("Title of Non-Audited content item")
+    expect(page).to have_content("Audited content item")
+    expect(page).to have_content("Non-audited content item")
   end
 
   scenario "Filter audited content" do
@@ -19,8 +19,8 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
     click_on "Filter"
 
-    expect(page).to have_content("Title of Audited content item")
-    expect(page).to_not have_content("Title of Non-Audited content item")
+    expect(page).to have_content("Audited content item")
+    expect(page).to_not have_content("Non-audited content item")
     expect(page).to have_select("audit_status", selected: "Audited")
   end
 
@@ -30,8 +30,8 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
     click_on "Filter"
 
-    expect(page).to_not have_content("Title of Audited content item")
-    expect(page).to have_content("Title of Non-Audited content item")
+    expect(page).to_not have_content("Audited content item")
+    expect(page).to have_content("Non-audited content item")
     expect(page).to have_select("audit_status", selected: "Non Audited")
   end
 end
