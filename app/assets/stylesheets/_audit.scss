@@ -1,3 +1,21 @@
+.prev-next-links {
+  margin: 5em 0 3em 0;
+
+  a {
+    font-size: 16px;
+    color: black;
+    text-decoration: underline;
+
+    &:visited {
+      color: black;
+    }
+  }
+
+  .next-item {
+    float: right;
+  }
+}
+
 .description {
   margin: 2em 0 4em 0;
 }

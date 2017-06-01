@@ -17,6 +17,11 @@
 
   <h1>GOV.UK Content Audit</h1>
 
+  <nav class="prev-next-links">
+    <%= link_to "< All items", audits_path(filter_params), class: "all-items" %>
+    <%= link_to "Next", content_item_audit_path(@next_item, filter_params), class: "next-item" if @next_item %>
+  </nav>
+
   <h2><%= link_to @content_item.title, @content_item.url, target: :_blank %></h2>
 
   <p class="description">
