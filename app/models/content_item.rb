@@ -4,6 +4,12 @@ class ContentItem < ApplicationRecord
   has_one :audit, primary_key: :content_id, foreign_key: :content_id
 
 
+  def self.next_item(current_item)
+    ids = pluck(:id)
+    index = ids.index(current_item.id)
+    all[index + 1] if index
+  end
+
   def topics
     linked_content("topics")
   end
