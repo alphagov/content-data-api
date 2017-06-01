@@ -9,11 +9,24 @@ class Search
       self.sort = :page_views_desc
     end
 
-    def filter_by(filter)
-      if filter.is_a?(LinkFilter)
-        raise_if_already_filtered_by_link_type(filter)
-        raise_if_mixing_source_and_target(filter)
+    def audit_status=(identifier)
+      if identifier.present?
+        filter = AuditFilter.find(identifier.to_sym)
+        filters.push(filter)
+      else
+        filters.delete_if { |f| f.is_a?(AuditFilter) }
       end
+    end
+
+    def filter_by(link_type, source_ids, target_ids)
+      filter = LinkFilter.new(
+        link_type: link_type,
+        source_ids: source_ids,
+        target_ids: target_ids,
+      )
+
+      raise_if_already_filtered_by_link_type(filter)
+      raise_if_mixing_source_and_target(filter)
 
       filters.push(filter)
     end
@@ -29,7 +42,7 @@ class Search
     end
 
     def sort=(identifier)
-      @sort = Sort.find_by(identifier)
+      @sort = Sort.find(identifier)
     end
 
   private

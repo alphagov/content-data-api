@@ -40,25 +40,47 @@ RSpec.describe Search::Query do
     end
   end
 
+  describe "audit_status" do
+    it "defaults to not filter by audit status" do
+      expect(subject.filters).to be_empty
+    end
+
+    it "adds a filter when setting the audit status" do
+      subject.audit_status = :audited
+      expect(subject.filters).to be_present
+    end
+
+    it "does not add a filter if blank" do
+      subject.audit_status = nil
+      expect(subject.filters).to be_empty
+    end
+
+    it "removes the existing audit filter when blank" do
+      subject.audit_status = :audited
+      subject.audit_status = nil
+
+      expect(subject.filters).to be_empty
+    end
+  end
+
   describe "#filter_by" do
     it "raises an error if a filter already exists for a type" do
-      filter = Search::LinkFilter.new(link_type: "organisations", target_ids: "org1")
-      subject.filter_by(filter)
+      subject.filter_by("organisations", nil, "org1")
 
-      expect { subject.filter_by(filter) }
+      expect { subject.filter_by("organisations", nil, "org1") }
         .to raise_error(FilterError, /duplicate/)
     end
 
     it "raises an error if filtering by both source and target" do
-      subject.filter_by(Search::LinkFilter.new(link_type: "organisations", target_ids: "org1"))
+      subject.filter_by("organisations", nil, "org1")
 
-      expect { subject.filter_by(Search::LinkFilter.new(link_type: "policies", source_ids: "id2")) }
+      expect { subject.filter_by("policies", "id2", nil) }
         .to raise_error(FilterError, /source and target/)
     end
 
     it "stores the list of filters" do
-      subject.filter_by(Search::LinkFilter.new(link_type: "organisations", target_ids: "org1"))
-      subject.filter_by(Search::LinkFilter.new(link_type: "policies", target_ids: "org2"))
+      subject.filter_by("organisations", nil, "org1")
+      subject.filter_by("policies", nil, "org2")
 
       expect(subject.filters.count).to eq(2)
     end

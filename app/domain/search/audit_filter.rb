@@ -1,23 +1,25 @@
 class Search
   class AuditFilter
-    AUDIT_STATUSES_IDENTIFIERS = [
-      :audited,
-      :non_audited,
-    ].freeze
+    extend Findable
 
-    attr_accessor :status
+    def self.all
+      [
+        AuditFilter.new(:audited, "Audited"),
+        AuditFilter.new(:non_audited, "Non Audited"),
+      ]
+    end
 
+    attr_reader :identifier, :name
 
-    def initialize(status)
-      self.status = status.to_sym
-
-      raise_if_unrecognised_audit_status
+    def initialize(identifier, name)
+      @identifier = identifier.to_sym
+      @name = name
     end
 
     def apply(scope)
-      if self.status == :audited
+      if self.identifier == :audited
         scope.joins(:audit)
-      elsif self.status == :non_audited
+      elsif self.identifier == :non_audited
         scope.left_outer_joins(:audit).where("content_items.content_id not IN( select content_id from audits)")
       else
         scope
@@ -30,13 +32,8 @@ class Search
       end
     end
 
-    def self.all_status
-      [
-        OpenStruct.new(id: 'audited', name: "Audited"),
-        OpenStruct.new(id: 'non_audited', name: "Non Audited"),
-      ]
-    end
-  end
+  private
 
-  class ::AuditStatusError < StandardError; end
+    attr_writer :identifier
+  end
 end

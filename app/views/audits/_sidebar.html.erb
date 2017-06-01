@@ -5,7 +5,7 @@
     <div class="form-group">
       <%= label_tag :audit_status, 'Status:' %>
       <%= select_tag :audit_status,
-          options_from_collection_for_select(Search.all_audit_status, :id, :name, params[:audit_status]),
+          options_from_collection_for_select(Search.all_audit_status, :identifier, :name, params[:audit_status]),
           include_blank: true,
           class: "form-control" %>
     </div>

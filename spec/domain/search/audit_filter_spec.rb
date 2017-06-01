@@ -1,13 +1,7 @@
 RSpec.describe Search::AuditFilter do
-  subject { described_class }
-
-  it "raises for an unrecognised audit status" do
-    expect { subject.new(:invalid_audit_status) }
-      .to raise_error(AuditStatusError, /unrecognised audit status/)
-  end
-
-  it "symbolises the value" do
-    expect(subject.new("audited").status).to eq(:audited)
+  it "symbolises the identifier" do
+    filter = described_class.new("identifier", "name")
+    expect(filter.identifier).to eq(:identifier)
   end
 
   describe "#apply" do
@@ -17,13 +11,15 @@ RSpec.describe Search::AuditFilter do
     before { create(:audit, content_item: content_item_audited) }
 
     it "can filter audited content items" do
-      results = subject.new(:audited).apply(ContentItem.all)
+      filter = described_class.find(:audited)
+      results = filter.apply(ContentItem.all)
 
       expect(results).to match_array([content_item_audited])
     end
 
     it "can filter non-audited content items" do
-      results = subject.new(:non_audited).apply(ContentItem.all)
+      filter = described_class.find(:non_audited)
+      results = filter.apply(ContentItem.all)
 
       expect(results).to match_array([content_item_non_audited])
     end
