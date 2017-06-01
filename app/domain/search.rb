@@ -44,7 +44,6 @@ class Search
 
   def sort=(identifier)
     query.sort = identifier
-    raise_if_unrecognised_sort
   end
 
   def sort
@@ -58,14 +57,4 @@ class Search
 private
 
   attr_accessor :query, :result
-
-  SORT_IDENTIFIERS = [
-    :page_views_desc,
-  ].freeze
-
-  def raise_if_unrecognised_sort
-    raise ::SortError, "unrecognised sort" unless SORT_IDENTIFIERS.include?(sort)
-  end
-
-  class ::SortError < StandardError; end
 end

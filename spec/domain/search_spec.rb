@@ -52,11 +52,6 @@ RSpec.describe Search do
 
       expect(views).to eq [999, 100, 100, 100, 100, 0]
     end
-
-    it "raises for an unrecognised sort" do
-      expect { subject.sort = :unknown_sort_value }
-        .to raise_error(::SortError, /unrecognised/)
-    end
   end
 
   let(:content_ids) do

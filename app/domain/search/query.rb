@@ -28,6 +28,10 @@ class Search
       @per_page = 100 if @per_page > 100
     end
 
+    def sort=(identifier)
+      @sort = Sort.find_by(identifier)
+    end
+
   private
 
     def raise_if_already_filtered_by_link_type(filter)
