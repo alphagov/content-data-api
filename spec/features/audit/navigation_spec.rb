@@ -27,4 +27,12 @@ RSpec.feature "Navigation" do
     expected = audits_path(some_filter: "value")
     expect(current_url).to end_with(expected)
   end
+
+  scenario "returning to the first page of the index" do
+    visit content_item_audit_path(first, some_filter: "value", page: "123")
+    click_link "< All items"
+
+    expected = audits_path(some_filter: "value")
+    expect(current_url).to end_with(expected)
+  end
 end
