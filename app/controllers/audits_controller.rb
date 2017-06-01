@@ -1,4 +1,6 @@
 class AuditsController < ApplicationController
+  helper_method :filter_params
+
   def index
     content_items
   end
@@ -10,14 +12,18 @@ class AuditsController < ApplicationController
 
   def save
     audit.user = current_user
+    updated = audit.update(audit_params)
 
-    if audit.update(audit_params)
+    if next_item && updated
+      flash.notice = "Saved successfully and continued to next item."
+      redirect_to content_item_audit_path(next_item, filter_params)
+    elsif updated
       flash.now.notice = "Saved successfully."
+      render :show
     else
       flash.now.alert = error_message
+      render :show
     end
-
-    render :show
   end
 
 private
@@ -52,6 +58,12 @@ private
     params
       .require(:audit)
       .permit(responses_attributes: [:id, :value, :question_id])
+  end
+
+  def filter_params
+    request
+      .query_parameters
+      .deep_symbolize_keys
   end
 
   def error_message
