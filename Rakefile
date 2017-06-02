@@ -5,8 +5,4 @@ require_relative 'config/application'
 
 Rails.application.load_tasks
 
-task :lint do
-  sh "bundle exec govuk-lint-ruby"
-end
-
-task default: [:spec, :lint]
+task default: [:spec]
