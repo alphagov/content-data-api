@@ -1,9 +1,5 @@
 class Search
   class Query
-    SORT_IDENTIFIERS = [
-      :page_views_desc,
-    ].freeze
-
     attr_accessor :filters, :per_page, :page, :sort
 
     def initialize
@@ -13,8 +9,17 @@ class Search
       self.sort = :page_views_desc
     end
 
-    def filter_by(link_type:, source_ids:, target_ids:)
-      filter = Filter.new(
+    def audit_status=(identifier)
+      if identifier.present?
+        filter = AuditFilter.find(identifier.to_sym)
+        filters.push(filter)
+      else
+        filters.delete_if { |f| f.is_a?(AuditFilter) }
+      end
+    end
+
+    def filter_by(link_type, source_ids, target_ids)
+      filter = LinkFilter.new(
         link_type: link_type,
         source_ids: source_ids,
         target_ids: target_ids,
@@ -37,8 +42,7 @@ class Search
     end
 
     def sort=(identifier)
-      @sort = identifier
-      raise_if_unrecognised_sort
+      @sort = Sort.find(identifier)
     end
 
   private
@@ -55,29 +59,6 @@ class Search
       end
     end
 
-    def raise_if_unrecognised_sort
-      raise SortError, "unrecognised sort" unless SORT_IDENTIFIERS.include?(sort)
-    end
-
-    class Filter
-      attr_accessor :link_type, :source_ids, :target_ids
-
-      def initialize(link_type:, source_ids:, target_ids:)
-        self.link_type = link_type
-        self.source_ids = [source_ids].flatten.compact
-        self.target_ids = [target_ids].flatten.compact
-
-        if source_ids.present? && target_ids.present?
-          raise FilterError, "must filter by source or target"
-        end
-      end
-
-      def by_source?
-        source_ids.present?
-      end
-    end
-
     class ::FilterError < StandardError; end
-    class ::SortError < StandardError; end
   end
 end

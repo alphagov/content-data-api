@@ -36,12 +36,53 @@ RSpec.describe Search::Query do
 
   describe "sort" do
     it "defaults to page_views_desc" do
-      expect(subject.sort).to eq(:page_views_desc)
+      expect(subject.sort.identifier).to eq(:page_views_desc)
+    end
+  end
+
+  describe "audit_status" do
+    it "defaults to not filter by audit status" do
+      expect(subject.filters).to be_empty
     end
 
-    it "raises for an unrecognised sort" do
-      expect { subject.sort = :page_views_asc }
-        .to raise_error(SortError, /unrecognised/)
+    it "adds a filter when setting the audit status" do
+      subject.audit_status = :audited
+      expect(subject.filters).to be_present
+    end
+
+    it "does not add a filter if blank" do
+      subject.audit_status = nil
+      expect(subject.filters).to be_empty
+    end
+
+    it "removes the existing audit filter when blank" do
+      subject.audit_status = :audited
+      subject.audit_status = nil
+
+      expect(subject.filters).to be_empty
+    end
+  end
+
+  describe "#filter_by" do
+    it "raises an error if a filter already exists for a type" do
+      subject.filter_by("organisations", nil, "org1")
+
+      expect { subject.filter_by("organisations", nil, "org1") }
+        .to raise_error(FilterError, /duplicate/)
+    end
+
+    it "raises an error if filtering by both source and target" do
+      subject.filter_by("organisations", nil, "org1")
+
+      expect { subject.filter_by("policies", "id2", nil) }
+        .to raise_error(FilterError, /source and target/)
+    end
+
+    it "stores the list of filters" do
+      subject.filter_by("organisations", nil, "org1")
+      subject.filter_by("policies", nil, "org2")
+
+      expect(subject.filters.count).to eq(2)
     end
   end
 end

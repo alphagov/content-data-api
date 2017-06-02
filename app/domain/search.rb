@@ -3,12 +3,12 @@ class Search
     self.query = Query.new
   end
 
+  def audit_status=(identifier)
+    query.audit_status = identifier
+  end
+
   def filter_by(link_type:, source_ids: nil, target_ids: nil)
-    query.filter_by(
-      link_type: link_type,
-      source_ids: source_ids,
-      target_ids: target_ids,
-    )
+    query.filter_by(link_type, source_ids, target_ids)
   end
 
   def execute
@@ -42,6 +42,10 @@ class Search
 
   def sort
     query.sort
+  end
+
+  def self.all_audit_status
+    AuditFilter.all
   end
 
 private
