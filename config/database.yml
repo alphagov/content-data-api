@@ -5,11 +5,11 @@ default: &default
 
 development:
   <<: *default
-  database: content-performance-manager_development
+  database: content_performance_manager_development
 
 test:
   <<: *default
-  database: content-performance-manager_test
+  database: content_performance_manager_test
 
 production:
   <<: *default
