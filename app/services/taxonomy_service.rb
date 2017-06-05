@@ -1,4 +1,4 @@
-class TaxonomiesService
+class TaxonomyService
   attr_accessor :publishing_api
 
   def initialize
@@ -6,8 +6,8 @@ class TaxonomiesService
   end
 
   def find_each
-    publishing_api.find_each(query_fields, query_options) do |taxonomy|
-      yield taxonomy
+    publishing_api.find_each(query_fields, query_options) do |taxon|
+      yield taxon
     end
   end
 

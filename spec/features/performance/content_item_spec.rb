@@ -39,14 +39,14 @@ RSpec.feature "Content Item Details", type: :feature do
     expect(page).to have_text("99")
   end
 
-  scenario "Renders the taxonomies" do
+  scenario "Renders the taxons" do
     content_item = create(:content_item)
-    content_item.taxonomies << create(:taxonomy, title: 'A Taxonomy')
-    content_item.taxonomies << create(:taxonomy, title: 'Another Taxonomy')
+    content_item.taxons << create(:taxon, title: 'A Taxon')
+    content_item.taxons << create(:taxon, title: 'Another Taxon')
 
     visit "/content_items/#{content_item.id}"
 
-    expect(page).to have_text('A Taxonomy, Another Taxonomy')
+    expect(page).to have_text('A Taxon, Another Taxon')
   end
 
   scenario "Renders stats for Google Analytics" do

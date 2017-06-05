@@ -18,7 +18,7 @@ class ContentItemDecorator < Draper::Decorator
   end
 
   def taxons_as_string
-    object.taxonomies.map(&:title).join(', ')
+    object.taxons.map(&:title).join(', ')
   end
 
   def topics

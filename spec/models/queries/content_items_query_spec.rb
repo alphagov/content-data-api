@@ -52,33 +52,33 @@ RSpec.describe Queries::ContentItemsQuery, type: :query do
       expect(results).to match_array(content_items)
     end
 
-    it "returns the content items belonging to the taxonomy" do
+    it "returns the content items belonging to the taxon" do
       create(:content_item)
       content_items = [create(:content_item)]
-      taxonomy = create(:taxonomy, content_items: content_items)
+      taxon = create(:taxon, content_items: content_items)
 
-      results = subject.new(taxonomy: taxonomy).results
+      results = subject.new(taxon: taxon).results
 
       expect(results).to match_array(content_items)
     end
 
-    it "returns the content items belonging to the organisation and taxonomy" do
+    it "returns the content items belonging to the organisation and taxon" do
       create(:content_item)
       content_items = [create(:content_item)]
-      taxonomy = create(:taxonomy, content_items: content_items)
+      taxon = create(:taxon, content_items: content_items)
       organisation = create(:organisation, content_items: content_items)
 
-      results = subject.new(organisation: organisation, taxonomy: taxonomy).results
+      results = subject.new(organisation: organisation, taxon: taxon).results
 
       expect(results).to match_array(content_items)
     end
 
-    it "returns the content items belonging to the organisation and taxonomy where the title is like the query" do
+    it "returns the content items belonging to the organisation and taxon where the title is like the query" do
       content_items = [create(:content_item, title: "title 1")]
-      taxonomy = create(:taxonomy, content_items: content_items)
+      taxon = create(:taxon, content_items: content_items)
       organisation = create(:organisation, content_items: content_items)
 
-      results = subject.new(organisation: organisation, taxonomy: taxonomy, query: "title 1").results
+      results = subject.new(organisation: organisation, taxon: taxon, query: "title 1").results
 
       expect(results).to match_array(content_items)
     end

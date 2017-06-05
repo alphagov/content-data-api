@@ -29,26 +29,26 @@ RSpec.describe ContentItem, type: :model do
     end
   end
 
-  describe "#add_taxonomies_by_id" do
-    it "adds taxonomies to the content item by taxon content_id" do
+  describe "#add_taxons_by_id" do
+    it "adds taxons to the content item by taxon content_id" do
       content_item = create(:content_item)
       taxons = %w(taxon_1 taxon_2)
-      create(:taxonomy, content_id: "taxon_1")
-      create(:taxonomy, content_id: "taxon_2")
+      create(:taxon, content_id: "taxon_1")
+      create(:taxon, content_id: "taxon_2")
 
-      content_item.add_taxonomies_by_id(taxons)
+      content_item.add_taxons_by_id(taxons)
 
-      expect(content_item.taxonomies.count).to eq(2)
+      expect(content_item.taxons.count).to eq(2)
     end
 
-    it "does not add taxonomies already associated with the content item" do
+    it "does not add taxons already associated with the content item" do
       content_item = create(:content_item)
-      taxon = create(:taxonomy, content_id: "taxon_1")
-      content_item.taxonomies << taxon
+      taxon = create(:taxon, content_id: "taxon_1")
+      content_item.taxons << taxon
 
-      content_item.add_taxonomies_by_id(%w(taxon_1))
+      content_item.add_taxons_by_id(%w(taxon_1))
 
-      expect(content_item.taxonomies.count).to eq(1)
+      expect(content_item.taxons.count).to eq(1)
     end
   end
 

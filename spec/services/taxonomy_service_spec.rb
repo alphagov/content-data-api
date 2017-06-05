@@ -1,4 +1,4 @@
-RSpec.describe TaxonomiesService do
+RSpec.describe TaxonomyService do
   describe '#find_each' do
     it 'queries the publishing API for the given fields of taxons' do
       subject.publishing_api = double

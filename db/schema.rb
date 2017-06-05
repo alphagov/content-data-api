@@ -10,34 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170526095145) do
+ActiveRecord::Schema.define(version: 20170605161124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "audits", force: :cascade do |t|
-    t.string   "content_id", null: false
-    t.string   "uid",        null: false
+  create_table "audits", id: :serial, force: :cascade do |t|
+    t.string "content_id", null: false
+    t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["content_id"], name: "index_audits_on_content_id", unique: true, using: :btree
-    t.index ["uid"], name: "index_audits_on_uid", using: :btree
+    t.index ["content_id"], name: "index_audits_on_content_id", unique: true
+    t.index ["uid"], name: "index_audits_on_uid"
   end
 
-  create_table "content_items", force: :cascade do |t|
-    t.string   "content_id"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+  create_table "content_items", id: :serial, force: :cascade do |t|
+    t.string "content_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.datetime "public_updated_at"
-    t.string   "base_path"
-    t.string   "title"
-    t.string   "document_type"
-    t.string   "description"
-    t.integer  "one_month_page_views",  default: 0
-    t.integer  "number_of_pdfs",        default: 0
-    t.integer  "six_months_page_views", default: 0
-    t.index ["content_id"], name: "index_content_items_on_content_id", unique: true, using: :btree
-    t.index ["title"], name: "index_content_items_on_title", using: :btree
+    t.string "base_path"
+    t.string "title"
+    t.string "document_type"
+    t.string "description"
+    t.integer "one_month_page_views", default: 0
+    t.integer "number_of_pdfs", default: 0
+    t.integer "six_months_page_views", default: 0
+    t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
+    t.index ["title"], name: "index_content_items_on_title"
   end
 
   create_table "content_items_organisations", id: false, force: :cascade do |t|
@@ -45,79 +45,79 @@ ActiveRecord::Schema.define(version: 20170526095145) do
     t.integer "organisation_id", null: false
   end
 
-  create_table "content_items_taxonomies", id: false, force: :cascade do |t|
+  create_table "content_items_taxons", id: false, force: :cascade do |t|
     t.integer "content_item_id", null: false
-    t.integer "taxonomy_id",     null: false
-    t.index ["content_item_id"], name: "index_content_items_taxonomies_on_content_item_id", using: :btree
-    t.index ["taxonomy_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true, using: :btree
+    t.integer "taxon_id", null: false
+    t.index ["content_item_id"], name: "index_content_items_taxons_on_content_item_id"
+    t.index ["taxon_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true
   end
 
-  create_table "groups", force: :cascade do |t|
-    t.string   "slug"
-    t.string   "name"
-    t.string   "group_type"
-    t.integer  "parent_group_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.text     "content_item_ids", default: [],              array: true
-  end
-
-  create_table "links", force: :cascade do |t|
-    t.string   "source_content_id"
-    t.string   "link_type"
-    t.string   "target_content_id"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.index ["link_type"], name: "index_links_on_link_type", using: :btree
-    t.index ["source_content_id"], name: "index_links_on_source_content_id", using: :btree
-    t.index ["target_content_id"], name: "index_links_on_target_content_id", using: :btree
-  end
-
-  create_table "organisations", force: :cascade do |t|
-    t.string   "slug"
+  create_table "groups", id: :serial, force: :cascade do |t|
+    t.string "slug"
+    t.string "name"
+    t.string "group_type"
+    t.integer "parent_group_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "title"
-    t.string   "content_id"
-    t.index ["slug"], name: "index_organisations_on_slug", unique: true, using: :btree
+    t.text "content_item_ids", default: [], array: true
   end
 
-  create_table "questions", force: :cascade do |t|
-    t.string   "type",       null: false
-    t.text     "text",       null: false
+  create_table "links", id: :serial, force: :cascade do |t|
+    t.string "source_content_id"
+    t.string "link_type"
+    t.string "target_content_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["type"], name: "index_questions_on_type", using: :btree
+    t.index ["link_type"], name: "index_links_on_link_type"
+    t.index ["source_content_id"], name: "index_links_on_source_content_id"
+    t.index ["target_content_id"], name: "index_links_on_target_content_id"
   end
 
-  create_table "responses", force: :cascade do |t|
-    t.integer  "audit_id"
-    t.integer  "question_id"
-    t.text     "value"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.index ["audit_id"], name: "index_responses_on_audit_id", using: :btree
-    t.index ["question_id"], name: "index_responses_on_question_id", using: :btree
+  create_table "organisations", id: :serial, force: :cascade do |t|
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "title"
+    t.string "content_id"
+    t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
 
-  create_table "taxonomies", force: :cascade do |t|
-    t.string   "content_id"
-    t.string   "title"
+  create_table "questions", id: :serial, force: :cascade do |t|
+    t.string "type", null: false
+    t.text "text", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["type"], name: "index_questions_on_type"
+  end
+
+  create_table "responses", id: :serial, force: :cascade do |t|
+    t.integer "audit_id"
+    t.integer "question_id"
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["audit_id"], name: "index_responses_on_audit_id"
+    t.index ["question_id"], name: "index_responses_on_question_id"
+  end
+
+  create_table "taxons", id: :serial, force: :cascade do |t|
+    t.string "content_id"
+    t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "uid"
-    t.string   "organisation_slug"
-    t.string   "organisation_content_id"
-    t.text     "permissions"
-    t.boolean  "remotely_signed_out",     default: false
-    t.boolean  "disabled",                default: false
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "uid"
+    t.string "organisation_slug"
+    t.string "organisation_content_id"
+    t.text "permissions"
+    t.boolean "remotely_signed_out", default: false
+    t.boolean "disabled", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

@@ -63,36 +63,36 @@ RSpec.feature "Filter in content items", type: :feature do
 
   context "filtering by taxon" do
     scenario "the user selects a taxon from the taxons box, clicks the filter button and retrieves the filtered list of taxon's content items" do
-      create :taxonomy, title: "taxon 1", content_id: "123"
+      create :taxon, title: "taxon 1", content_id: "123"
 
       visit "/content_items"
-      select "taxon 1", from: "taxonomy_content_id"
+      select "taxon 1", from: "taxon_content_id"
       click_on "Filter"
 
-      expected_path = "taxonomy_content_id=123"
+      expected_path = "taxon_content_id=123"
 
       expect(current_url).to include(expected_path)
     end
 
-    scenario "the users previously filtered taxonomy is selected after filtering" do
-      create :taxonomy, title: "taxon 1"
+    scenario "the users previously filtered taxon is selected after filtering" do
+      create :taxon, title: "taxon 1"
 
       visit "/content_items"
-      select "taxon 1", from: "taxonomy_content_id"
+      select "taxon 1", from: "taxon_content_id"
       click_on "Filter"
 
-      expect(page).to have_select(:taxonomy_content_id, selected: 'taxon 1')
+      expect(page).to have_select(:taxon_content_id, selected: 'taxon 1')
     end
 
-    scenario "the user's previously filtered taxonomy is selected after sorting" do
-      create :taxonomy, title: "taxon 1", content_id: "123"
+    scenario "the user's previously filtered taxon is selected after sorting" do
+      create :taxon, title: "taxon 1", content_id: "123"
 
       visit "content_items"
-      page.select "taxon 1", from: "taxonomy_content_id"
+      page.select "taxon 1", from: "taxon_content_id"
       click_on "Filter"
 
       click_on "Title"
-      expect(page).to have_select(:taxonomy_content_id, selected: "taxon 1")
+      expect(page).to have_select(:taxon_content_id, selected: "taxon 1")
     end
   end
 
@@ -112,9 +112,9 @@ RSpec.feature "Filter in content items", type: :feature do
     end
 
     scenario "the user can see the additional filters if they are currently filtering by one of them", js: true do
-      create :taxonomy, title: "taxon 1", content_id: "123"
+      create :taxon, title: "taxon 1", content_id: "123"
 
-      visit "/content_items?taxonomy_content_id=123"
+      visit "/content_items?taxon_content_id=123"
 
       expect(page).to have_selector('#additionalFilters', visible: true)
     end
