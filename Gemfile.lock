@@ -199,6 +199,12 @@ GEM
     logging (2.2.2)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
+    logstash-event (1.2.02)
+    logstasher (1.1.0)
+      activerecord (>= 4.0)
+      activesupport (>= 4.0)
+      logstash-event (~> 1.2.0)
+      request_store
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lrucache (0.1.4)
@@ -444,6 +450,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen
+  logstasher
   pg
   plek
   poltergeist
