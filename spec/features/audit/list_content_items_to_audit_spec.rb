@@ -1,8 +1,6 @@
 require 'features/common/pagination_spec_helper'
 
 RSpec.feature "List Content Items to Audit", type: :feature do
-  let!(:user) { FactoryGirl.create(:user) }
-
   let!(:content_item_1) { FactoryGirl.create(:content_item, title: "All about flooding.") }
   let!(:content_item_2) { FactoryGirl.create(:content_item, title: "All about gardening.") }
 
