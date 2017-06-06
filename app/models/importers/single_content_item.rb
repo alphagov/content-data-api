@@ -16,7 +16,7 @@ module Importers
       links = content_items_service.links(content_id)
 
       set_organisations(content_item, links)
-      set_taxonomies(content_item, links)
+      set_taxons(content_item, links)
       set_metrics(content_item)
 
       ActiveRecord::Base.transaction do
@@ -35,12 +35,12 @@ module Importers
       content_item.add_organisations_by_id(org_ids)
     end
 
-    def set_taxonomies(content_item, links)
+    def set_taxons(content_item, links)
       taxon_ids = links
         .select { |l| l.link_type == "taxons" }
         .map(&:target_content_id)
 
-      content_item.add_taxonomies_by_id(taxon_ids)
+      content_item.add_taxons_by_id(taxon_ids)
     end
 
     def set_metrics(content_item)
@@ -59,7 +59,7 @@ module Importers
 
         existing.attributes = attributes
         existing.organisations = content_item.organisations
-        existing.taxonomies = content_item.taxonomies
+        existing.taxons = content_item.taxons
 
         existing.save!
       else

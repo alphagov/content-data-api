@@ -36,8 +36,8 @@ RSpec.describe ContentItemDecorator, type: :decorator do
   end
 
   describe "#list_taxons" do
-    let(:taxonomies) { [build(:taxonomy, title: "taxon 1"), build(:taxonomy, title: "taxon 2")] }
-    let(:content_item) { build(:content_item, taxonomies: taxonomies).decorate }
+    let(:taxons) { [build(:taxon, title: "taxon 1"), build(:taxon, title: "taxon 2")] }
+    let(:content_item) { build(:content_item, taxons: taxons).decorate }
 
     it "returns a string of taxons separated by a comma" do
       taxons = content_item.taxons_as_string

@@ -28,7 +28,7 @@ RSpec.describe ContentItemsController, type: :controller do
     end
 
     it "build the paged query with the expected params" do
-      expected_params = { sort: 'title', order: 'asc', page: '1', taxonomy: nil, organisation: nil, query: 'a title' }
+      expected_params = { sort: 'title', order: 'asc', page: '1', taxon: nil, organisation: nil, query: 'a title' }
       result = double('collection', paginated_results: double(decorate: :the_results), results: [])
 
       expect(Queries::ContentItemsQuery).to receive(:new).with(expected_params).and_return(result)
@@ -37,7 +37,7 @@ RSpec.describe ContentItemsController, type: :controller do
     end
 
     it "build the unpaged query with the expected params" do
-      expected_params = { sort: 'title', order: 'asc', page: '1', taxonomy: nil, organisation: nil, query: 'a title' }
+      expected_params = { sort: 'title', order: 'asc', page: '1', taxon: nil, organisation: nil, query: 'a title' }
       expect_any_instance_of(Queries::ContentItemsQuery).to receive(:results).and_return([])
 
       get :index, params: expected_params
@@ -50,11 +50,11 @@ RSpec.describe ContentItemsController, type: :controller do
       expect(assigns(:organisation).content_id).to eq('the-organisation-id')
     end
 
-    it "assigns the taxonomy provided by the taxonomy content id" do
-      create(:taxonomy, content_id: "123")
+    it "assigns the taxon provided by the taxon content id" do
+      create(:taxon, content_id: "123")
 
-      get :index, params: { taxonomy_content_id: "123" }
-      expect(assigns(:taxonomy).content_id).to eq("123")
+      get :index, params: { taxon_content_id: "123" }
+      expect(assigns(:taxon).content_id).to eq("123")
     end
 
     it "renders the :index template" do
@@ -63,18 +63,18 @@ RSpec.describe ContentItemsController, type: :controller do
       expect(subject).to render_template(:index)
     end
 
-    it "assigns the lists of taxonomies and organisations ordered ASC by title" do
+    it "assigns the lists of taxons and organisations ordered ASC by title" do
       create(:organisation, title: "Z")
       create(:organisation, title: "A")
-      create(:taxonomy, title: "Z")
-      create(:taxonomy, title: "A")
+      create(:taxon, title: "Z")
+      create(:taxon, title: "A")
 
       get :index
 
       expect(assigns(:organisations).count).to eq(2)
       expect(assigns(:organisations).first.title).to eq("A")
-      expect(assigns(:taxonomies).count).to eq(2)
-      expect(assigns(:taxonomies).first.title).to eq("A")
+      expect(assigns(:taxons).count).to eq(2)
+      expect(assigns(:taxons).first.title).to eq("A")
     end
   end
 

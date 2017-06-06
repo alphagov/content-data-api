@@ -4,7 +4,7 @@
 
 The application contains a number of `rake` tasks used to populate the database, these are listed below.
 
-The imports for `organisations`, `taxonomies` and `content_items` use the `publishing-api` therefore you will need to run the `publishing-api` via the [VM](https://github.com/alphagov/govuk-puppet/tree/master/development-vm) to import locally else you will receive timeout errors.
+The imports for `organisations`, `taxons` and `content_items` use the `publishing-api` therefore you will need to run the `publishing-api` via the [VM](https://github.com/alphagov/govuk-puppet/tree/master/development-vm) to import locally else you will receive timeout errors.
 
 **All organisations:**
 
@@ -12,7 +12,7 @@ The imports for `organisations`, `taxonomies` and `content_items` use the `publi
 $ rake import:all_organisations
 ```
 
-**All taxonomies:**
+**All taxons:**
 
 ```bash
 $ rake import:all_taxons

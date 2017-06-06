@@ -1,6 +1,6 @@
 class ContentItem < ApplicationRecord
   has_and_belongs_to_many :organisations
-  has_and_belongs_to_many :taxonomies
+  has_and_belongs_to_many :taxons
   has_one :audit, primary_key: :content_id, foreign_key: :content_id
 
 
@@ -35,10 +35,10 @@ class ContentItem < ApplicationRecord
     end
   end
 
-  def add_taxonomies_by_id(taxons)
-    taxons.each do |t|
-      taxon = Taxonomy.find_by(content_id: t)
-      taxonomies << taxon unless taxon.nil? || taxonomies.include?(taxon)
+  def add_taxons_by_id(taxon_ids)
+    taxon_ids.each do |taxon_id|
+      taxon = Taxon.find_by(content_id: taxon_id)
+      taxons << taxon unless taxon.nil? || taxons.include?(taxon)
     end
   end
 

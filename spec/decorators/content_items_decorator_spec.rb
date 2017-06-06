@@ -1,6 +1,6 @@
 RSpec.describe ContentItemsDecorator, type: :decorator do
   let(:organisation) { build(:organisation, title: "Organisation title") }
-  let(:taxonomy) { build(:taxonomy, title: "taxonomy a") }
+  let(:taxon) { build(:taxon, title: "taxon a") }
 
   context "without filter params" do
     it "renders the default page title" do
@@ -19,21 +19,21 @@ RSpec.describe ContentItemsDecorator, type: :decorator do
     end
   end
 
-  context "with taxonomy filter" do
-    it "renders the taxonomy title as page title" do
-      content_items = [build(:content_item, taxonomies: [taxonomy])]
+  context "with taxon filter" do
+    it "renders the taxon title as page title" do
+      content_items = [build(:content_item, taxons: [taxon])]
       subject = ContentItemsDecorator.new(content_items)
 
-      expect(subject.header(taxonomy: taxonomy)).to eq("taxonomy a")
+      expect(subject.header(taxon: taxon)).to eq("taxon a")
     end
   end
 
-  context "with both organisation and taxonomy filters" do
-    it "renders the organisation and taxonomy titles seperated by a '+'" do
-      content_items = [build(:content_item, organisations: [organisation], taxonomies: [taxonomy])]
+  context "with both organisation and taxon filters" do
+    it "renders the organisation and taxon titles seperated by a '+'" do
+      content_items = [build(:content_item, organisations: [organisation], taxons: [taxon])]
       subject = ContentItemsDecorator.new(content_items)
 
-      expect(subject.header(organisation: organisation, taxonomy: taxonomy)).to eq("Organisation title + taxonomy a")
+      expect(subject.header(organisation: organisation, taxon: taxon)).to eq("Organisation title + taxon a")
     end
   end
 end

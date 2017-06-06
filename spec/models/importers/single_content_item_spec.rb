@@ -6,8 +6,8 @@ RSpec.describe Importers::SingleContentItem do
   let!(:org1) { FactoryGirl.create(:organisation, content_id: "org-1") }
   let!(:org2) { FactoryGirl.create(:organisation, content_id: "org-2") }
 
-  let!(:taxon1) { FactoryGirl.create(:taxonomy, content_id: "taxon-1") }
-  let!(:taxon2) { FactoryGirl.create(:taxonomy, content_id: "taxon-2") }
+  let!(:taxon1) { FactoryGirl.create(:taxon, content_id: "taxon-1") }
+  let!(:taxon2) { FactoryGirl.create(:taxon, content_id: "taxon-2") }
 
   let(:content_item) { FactoryGirl.build(:content_item, content_id: content_id, title: "title") }
 
@@ -41,7 +41,7 @@ RSpec.describe Importers::SingleContentItem do
 
     expect(content_item.title).to eq("title")
     expect(content_item.organisations).to eq [org1, org2]
-    expect(content_item.taxonomies).to eq [taxon1, taxon2]
+    expect(content_item.taxons).to eq [taxon1, taxon2]
     expect(content_item.number_of_pdfs).to eq(10)
   end
 
@@ -72,7 +72,7 @@ RSpec.describe Importers::SingleContentItem do
         content_id: content_id,
         title: "old title",
         organisations: [org1],
-        taxonomies: [taxon2],
+        taxons: [taxon2],
         number_of_pdfs: 5,
       )
     end
@@ -81,7 +81,7 @@ RSpec.describe Importers::SingleContentItem do
       expect { subject.run(content_id) }
         .to  change { ContentItem.last.title }.from("old title").to("title")
         .and change { ContentItem.last.organisations.to_a }.from([org1]).to([org1, org2])
-        .and change { ContentItem.last.taxonomies.to_a }.from([taxon2]).to([taxon1, taxon2])
+        .and change { ContentItem.last.taxons.to_a }.from([taxon2]).to([taxon1, taxon2])
         .and change { ContentItem.last.number_of_pdfs }.from(5).to(10)
     end
   end

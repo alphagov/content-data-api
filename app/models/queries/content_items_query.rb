@@ -19,15 +19,15 @@ module Queries
 
     def build_query(options = {})
       relation = ContentItem.all
-      relation = filter_by_taxonomy(relation, options[:taxonomy])
+      relation = filter_by_taxon(relation, options[:taxon])
       relation = filter_by_organisations(relation, options[:organisation])
       relation = filter_by_title(relation, options[:query])
       relation.order("#{options[:sort]} #{options[:order]}")
     end
 
-    def filter_by_taxonomy(relation, taxonomy)
-      return relation unless taxonomy
-      relation.joins(:taxonomies).where('taxonomies.id = ?', taxonomy.id)
+    def filter_by_taxon(relation, taxon)
+      return relation unless taxon
+      relation.joins(:taxons).where('taxons.id = ?', taxon.id)
     end
 
     def filter_by_organisations(relation, organisation)
