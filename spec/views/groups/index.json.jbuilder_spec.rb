@@ -1,7 +1,7 @@
 RSpec.describe "groups/index.json.jbuilder", type: :view do
   it "renders JSON with all the Groups and number of Content IDs" do
-    group1 = build :group, id: 1, slug: "slug-1", content_item_ids: %w(1 2)
-    group2 = build :group, id: 2, slug: "slug-2", content_item_ids: %w(1)
+    group1 = create :group, :with_two_content_items, id: 1, slug: "slug-1"
+    group2 = create :group, :with_one_content_item, id: 2, slug: "slug-2"
     assign :groups, [group1, group2]
     render
 
