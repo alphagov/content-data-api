@@ -78,6 +78,14 @@ RSpec.describe Search::Query do
         .to raise_error(FilterError, /source and target/)
     end
 
+    it "raises errors correctly when other types of filters are set" do
+      subject.audit_status = :audited
+      subject.filter_by("organisations", nil, "org1")
+
+      expect { subject.filter_by("policies", "id2", nil) }
+        .to raise_error(FilterError, /source and target/)
+    end
+
     it "stores the list of filters" do
       subject.filter_by("organisations", nil, "org1")
       subject.filter_by("policies", nil, "org2")
