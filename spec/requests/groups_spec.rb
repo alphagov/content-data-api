@@ -25,7 +25,7 @@ RSpec.describe "API::Groups", type: :request do
 
   describe "GET /groups" do
     it "returns JSON with all the Groups and number of Content IDs" do
-      create :group, slug: "slug-1", content_item_ids: %w(1 2)
+      create :group, :with_two_content_items, slug: "slug-1"
       get "/groups", params: { api_token: "a-token" }, headers: headers
 
       json = JSON.parse(response.body).deep_symbolize_keys
@@ -83,10 +83,11 @@ RSpec.describe "API::Groups", type: :request do
 
       context "when a list of content IDs is provided" do
         it "adds the Content IDs to the group" do
-          params[:group][:content_item_ids] = %w(content_id_1 content_id_2)
+          content_item = create(:content_item)
+          params[:group][:content_item_ids] = [content_item.id]
 
           post "/groups", params: params, headers: headers
-          expect(Group.first.content_item_ids).to eq(%w(content_id_1 content_id_2))
+          expect(Group.first.content_items.first).to eq(content_item)
         end
       end
 

@@ -4,4 +4,6 @@ class Group < ApplicationRecord
 
   belongs_to :parent, class_name: 'Group', foreign_key: :parent_group_id, optional: true
   has_many :children, class_name: 'Group', foreign_key: :parent_group_id
+
+  has_and_belongs_to_many :content_items
 end
