@@ -11,7 +11,6 @@ gem 'govuk_sidekiq'
 gem 'plek'
 
 # third party gems
-gem 'coffee-rails'
 gem 'draper'
 gem 'google-api-client', '~> 0.9'
 gem 'httparty'
