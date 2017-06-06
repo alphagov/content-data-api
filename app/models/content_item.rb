@@ -29,6 +29,14 @@ class ContentItem < ApplicationRecord
     all[index + 1] if index
   end
 
+  def title_with_count
+    if respond_to?(:incoming_links_count)
+      "#{title} (#{incoming_links_count})"
+    else
+      title
+    end
+  end
+
   def topics
     linked_content(Link::TOPICS)
   end

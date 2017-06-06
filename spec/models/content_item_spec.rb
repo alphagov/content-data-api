@@ -83,6 +83,23 @@ RSpec.describe ContentItem, type: :model do
     end
   end
 
+  describe "#title_with_count" do
+    before do
+      item = FactoryGirl.create(:content_item, title: "Title")
+      FactoryGirl.create(:link, source: item, target: item, link_type: "type")
+    end
+
+    it "returns the title with the count of incoming links" do
+      item = described_class.targets_of(link_type: "type").first
+      expect(item.title_with_count).to eq("Title (1)")
+    end
+
+    it "returns the title if incoming_links_count isn't set" do
+      item = described_class.first
+      expect(item.title_with_count).to eq("Title")
+    end
+  end
+
   describe "#url" do
     it "returns a url to a content item on gov.uk" do
       content_item = build(:content_item, base_path: "/api/content/item/path/1")
