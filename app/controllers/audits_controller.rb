@@ -47,8 +47,9 @@ private
   def search
     @search ||= (
       search = Search.new
+      filter_by_audit_status!(search)
+      filter_by_link_types!(search)
       search.page = params[:page]
-      search.audit_status = params[:audit_status] if params[:audit_status]
       search.execute
       search
     )
@@ -68,5 +69,16 @@ private
 
   def error_message
     audit.errors.messages.values.join(', ').capitalize
+  end
+
+  def filter_by_audit_status!(search)
+    search.audit_status = params[:audit_status] if params[:audit_status]
+  end
+
+  def filter_by_link_types!(search)
+    params.slice(*Search::LINK_TYPE_FILTERS).each do |link_type, content_id|
+      next if content_id.blank?
+      search.filter_by(link_type: link_type, target_ids: content_id)
+    end
   end
 end

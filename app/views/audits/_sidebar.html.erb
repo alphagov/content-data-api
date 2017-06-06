@@ -6,9 +6,28 @@
       <%= label_tag :audit_status, 'Status:' %>
       <%= select_tag :audit_status,
           options_from_collection_for_select(Search.all_audit_status, :identifier, :name, params[:audit_status]),
-          include_blank: true,
+          include_blank: "All",
           class: "form-control" %>
     </div>
+
+    <% @search.link_type_filters.each do |link_type, options| %>
+      <% disabled_options = options.select { |o| o.incoming_links_count.zero? } %>
+
+      <div class="form-group">
+        <%= label_tag link_type, "#{link_type.titleize}:" %>
+        <%= select_tag(
+              link_type,
+              options_from_collection_for_select(
+                options.order(:title),
+                :content_id,
+                :title_with_count,
+                selected: params[link_type],
+                disabled: disabled_options.map(&:content_id),
+              ),
+              include_blank: "All",
+              class: "form-control") %>
+      </div>
+    <% end %>
 
     <div class="form-group">
       <%= submit_tag 'Filter', name: 'filter', class: "btn btn-default btn-block" %>
