@@ -30,15 +30,15 @@ class ContentItem < ApplicationRecord
   end
 
   def topics
-    linked_content("topics")
+    linked_content(Link::TOPICS)
   end
 
   def organisations_tmp
-    linked_content("organisations")
+    linked_content(Link::ALL_ORGS)
   end
 
   def policy_areas
-    linked_content("policy-areas")
+    linked_content(Link::POLICY_AREAS)
   end
 
   def guidance?

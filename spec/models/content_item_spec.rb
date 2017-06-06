@@ -160,7 +160,7 @@ RSpec.describe ContentItem, type: :model do
     describe "#policy_areas" do
       it "returns the topics linked to the Content Item" do
         policy_area = create(:content_item, content_id: "policy_area_1")
-        Link.create(link_type: "policy-areas", source_content_id: "cid1", target_content_id: "policy_area_1")
+        Link.create(link_type: "policy_areas", source_content_id: "cid1", target_content_id: "policy_area_1")
 
         expect(content_item.policy_areas).to match_array([policy_area])
       end

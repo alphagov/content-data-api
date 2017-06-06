@@ -52,7 +52,7 @@ RSpec.feature "Audit metadata", type: :feature do
     create_linked_content("organisations", "Home office")
     create_linked_content("topics", "Immigration")
     create_linked_content("topics", "Borders")
-    create_linked_content("policy-areas", "Borders and Immigration")
+    create_linked_content("policy_areas", "Borders and Immigration")
 
     visit content_item_audit_path(content_item)
 
