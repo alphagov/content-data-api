@@ -30,4 +30,10 @@ namespace :import do
   task all_ga_metrics: :environment do
     Importers::AllGoogleAnalyticsMetrics.new.run
   end
+
+  desc 'Import todos for taxonomy project'
+  task :todos_for_taxonomy_project, [:name, :csv_url] => :environment do |_, args|
+    csv = RemoteCsv.new(args.csv_url)
+    Importers::TodosForTaxonomyProject.new(args.name, csv).run
+  end
 end
