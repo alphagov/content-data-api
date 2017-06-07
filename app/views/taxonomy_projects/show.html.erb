@@ -11,7 +11,7 @@
   </thead>
 
   <tbody>
-  <% @project.terms.each do |term| %>
+  <% @project.terms.includes(:content_items).each do |term| %>
     <tr>
       <td><%= term.name %></td>
       <td><%= term.content_items.count %></td>
