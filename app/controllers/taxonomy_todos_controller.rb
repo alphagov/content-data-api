@@ -1,7 +1,7 @@
 class TaxonomyTodosController < ApplicationController
   def redirect_to_first
     taxonomy_project = TaxonomyProject.find(params[:taxonomy_project_id])
-    redirect_to taxonomy_project.taxonomy_todos.still_todo.first
+    redirect_to taxonomy_project.next_todo
   end
 
   def show
@@ -19,7 +19,7 @@ class TaxonomyTodosController < ApplicationController
     # add validations the errors should be shown on the `show` page.
     todo_form.save!
 
-    next_item = taxonomy_todo.taxonomy_project.taxonomy_todos.still_todo.first
+    next_item = taxonomy_todo.taxonomy_project.next_todo
 
     if next_item
       redirect_to next_item

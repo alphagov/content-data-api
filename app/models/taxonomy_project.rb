@@ -9,4 +9,8 @@
 class TaxonomyProject < ApplicationRecord
   has_many :taxonomy_todos
   has_many :terms
+
+  def next_todo
+    taxonomy_todos.still_todo.first
+  end
 end
