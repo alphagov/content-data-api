@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606110152) do
+ActiveRecord::Schema.define(version: 20170606163951) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,23 @@ ActiveRecord::Schema.define(version: 20170606110152) do
     t.index ["question_id"], name: "index_responses_on_question_id"
   end
 
+  create_table "taxonomy_projects", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "taxonomy_todos", force: :cascade do |t|
+    t.bigint "content_item_id"
+    t.bigint "taxonomy_project_id"
+    t.datetime "completed_at"
+    t.string "completed_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_item_id"], name: "index_taxonomy_todos_on_content_item_id"
+    t.index ["taxonomy_project_id"], name: "index_taxonomy_todos_on_taxonomy_project_id"
+  end
+
   create_table "taxons", id: :serial, force: :cascade do |t|
     t.string "content_id"
     t.string "title"
@@ -127,4 +144,6 @@ ActiveRecord::Schema.define(version: 20170606110152) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "taxonomy_todos", "content_items"
+  add_foreign_key "taxonomy_todos", "taxonomy_projects"
 end

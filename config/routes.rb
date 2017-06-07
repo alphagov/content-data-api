@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :audits, only: %w(index)
+  resources :taxonomy_projects, path: '/taxonomy-projects', only: %w(index show)
 
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
