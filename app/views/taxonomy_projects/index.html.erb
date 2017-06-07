@@ -1,0 +1,18 @@
+<h1>Taxonomy projects</h1>
+
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr class="table-header">
+    <td>Title</td>
+    <td>Items</td>
+  </tr>
+  </thead>
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= link_to project.name, project %></td>
+        <td><%= project.content_items.count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
