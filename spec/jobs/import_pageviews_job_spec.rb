@@ -2,7 +2,7 @@ RSpec.describe ImportPageviewsJob, type: :job do
   it "updates the content items with pageviews" do
     content_item = create(:content_item, base_path: '/the-base-path')
     service = double(:google_analytics_service)
-    allow(service).to receive(:page_views).with(['/the-base-path/*']).and_return(
+    allow(service).to receive(:page_views).with(['/the-base-path']).and_return(
       [
         {
           base_path: '/the-base-path',
