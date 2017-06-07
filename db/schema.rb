@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606110152) do
+ActiveRecord::Schema.define(version: 20170607102042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,16 @@ ActiveRecord::Schema.define(version: 20170606110152) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "inventory_rules", force: :cascade do |t|
+    t.bigint "subtheme_id"
+    t.string "link_type", null: false
+    t.string "target_content_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["subtheme_id", "link_type", "target_content_id"], name: "index_subtheme_link_type_content_id", unique: true
+    t.index ["subtheme_id"], name: "index_inventory_rules_on_subtheme_id"
+  end
+
   create_table "links", id: :serial, force: :cascade do |t|
     t.string "source_content_id"
     t.string "link_type"
@@ -107,11 +117,27 @@ ActiveRecord::Schema.define(version: 20170606110152) do
     t.index ["question_id"], name: "index_responses_on_question_id"
   end
 
+  create_table "subthemes", force: :cascade do |t|
+    t.bigint "theme_id"
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["theme_id", "name"], name: "index_subthemes_on_theme_id_and_name", unique: true
+    t.index ["theme_id"], name: "index_subthemes_on_theme_id"
+  end
+
   create_table "taxons", id: :serial, force: :cascade do |t|
     t.string "content_id"
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "themes", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_themes_on_name", unique: true
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
