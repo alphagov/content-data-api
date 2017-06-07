@@ -1,0 +1,16 @@
+<h1><%= @project.name %></h1>
+
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr class="table-header">
+    <td>Title</td>
+  </tr>
+  </thead>
+  <tbody>
+    <% @project.content_items.each do |content_item| %>
+      <tr>
+        <td><%= link_to content_item.title, content_item %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
