@@ -11,7 +11,7 @@ class TaxonomyTodosController < ApplicationController
 
   def update
     taxonomy_todo = TaxonomyTodo.find(params[:id])
-    todo_form = TaxonomyTodoForm.new(params.require(:taxonomy_todo_form).permit(:new_terms))
+    todo_form = TaxonomyTodoForm.new(todo_params)
     todo_form.taxonomy_todo = taxonomy_todo
     todo_form.user = current_user
     todo_form.save
@@ -23,5 +23,11 @@ class TaxonomyTodosController < ApplicationController
     else
       redirect_to taxonomy_todo.taxonomy_project, notice: "All done!"
     end
+  end
+
+private
+
+  def todo_params
+    params.require(:taxonomy_todo_form).permit(:new_terms)
   end
 end
