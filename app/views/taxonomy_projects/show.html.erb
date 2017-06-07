@@ -11,10 +11,10 @@
   </thead>
 
   <tbody>
-  <% @project.terms.includes(:taxonomy_todos).each do |term| %>
+  <% @project.terms.each do |term| %>
     <tr>
       <td><%= term.name %></td>
-      <td><%= term.taxonomy_todos.count %></td>
+      <td><%= term.content_items.count %></td>
     </tr>
   <% end %>
   </tbody>

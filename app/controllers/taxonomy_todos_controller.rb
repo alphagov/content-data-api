@@ -14,10 +14,7 @@ class TaxonomyTodosController < ApplicationController
     todo_form = TaxonomyTodoForm.new(todo_params)
     todo_form.taxonomy_todo = taxonomy_todo
     todo_form.user = current_user
-
-    # since there are no validations yet, we're fine with crashing here. If we
-    # add validations the errors should be shown on the `show` page.
-    todo_form.save!
+    todo_form.save
 
     next_item = taxonomy_todo.taxonomy_project.next_todo
 
