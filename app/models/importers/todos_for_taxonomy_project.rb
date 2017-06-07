@@ -6,12 +6,14 @@ module Importers
     end
 
     def run
-      @csv_parser.each_row do |row|
-        content_item = ContentItem.find_by(content_id: row['content_id'])
-        TaxonomyTodo.create(
-          taxonomy_project: project,
-          content_item: content_item
-        )
+      TaxonomyTodo.transaction do
+        @csv_parser.each_row do |row|
+          content_item = ContentItem.find_by(content_id: row['content_id'])
+          TaxonomyTodo.create(
+            taxonomy_project: project,
+            content_item: content_item
+          )
+        end
       end
     end
 
