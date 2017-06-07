@@ -23,7 +23,7 @@ RSpec.describe Importers::TodosForTaxonomyProject do
 
     it "links content items to the taxonomy project" do
       expect { subject.run }
-        .to change { TaxonomyProject.first&.content_items&.count }
+        .to change { TaxonomyProject.first&.taxonomy_todos&.count }
         .from(nil)
         .to(1)
     end

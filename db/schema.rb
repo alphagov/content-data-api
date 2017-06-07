@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606163951) do
+ActiveRecord::Schema.define(version: 20170706143916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,11 +124,27 @@ ActiveRecord::Schema.define(version: 20170606163951) do
     t.index ["taxonomy_project_id"], name: "index_taxonomy_todos_on_taxonomy_project_id"
   end
 
+  create_table "taxonomy_todos_terms", id: false, force: :cascade do |t|
+    t.bigint "term_id", null: false
+    t.bigint "taxonomy_todo_id", null: false
+    t.index ["taxonomy_todo_id"], name: "index_taxonomy_todos_terms_on_taxonomy_todo_id"
+    t.index ["term_id", "taxonomy_todo_id"], name: "index_terms_taxonomy_todos", unique: true
+    t.index ["term_id"], name: "index_taxonomy_todos_terms_on_term_id"
+  end
+
   create_table "taxons", id: :serial, force: :cascade do |t|
     t.string "content_id"
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "terms", force: :cascade do |t|
+    t.string "name"
+    t.bigint "taxonomy_project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["taxonomy_project_id"], name: "index_terms_on_taxonomy_project_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|

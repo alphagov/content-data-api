@@ -10,7 +10,12 @@ Rails.application.routes.draw do
   end
 
   resources :audits, only: %w(index)
-  resources :taxonomy_projects, path: '/taxonomy-projects', only: %w(index show)
+
+  resources :taxonomy_projects, path: '/taxonomy-projects', only: %w(index show) do
+    get 'next', on: :member
+  end
+
+  resources :taxonomy_todos, only: %w(show update)
 
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
