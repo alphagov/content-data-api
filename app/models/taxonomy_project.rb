@@ -8,5 +8,5 @@
 # todos will be created by a import script.
 class TaxonomyProject < ApplicationRecord
   has_many :taxonomy_todos
-  has_many :content_items, through: :taxonomy_todos
+  has_many :terms
 end

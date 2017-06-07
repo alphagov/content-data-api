@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170606163951) do
+ActiveRecord::Schema.define(version: 20170706143916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,15 +49,23 @@ ActiveRecord::Schema.define(version: 20170606163951) do
   end
 
   create_table "content_items_organisations", id: false, force: :cascade do |t|
-    t.integer "content_item_id", null: false
-    t.integer "organisation_id", null: false
+    t.bigint "content_item_id", null: false
+    t.bigint "organisation_id", null: false
   end
 
   create_table "content_items_taxons", id: false, force: :cascade do |t|
-    t.integer "content_item_id", null: false
-    t.integer "taxon_id", null: false
+    t.bigint "content_item_id", null: false
+    t.bigint "taxon_id", null: false
     t.index ["content_item_id"], name: "index_content_items_taxons_on_content_item_id"
     t.index ["taxon_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true
+  end
+
+  create_table "content_items_terms", id: false, force: :cascade do |t|
+    t.bigint "term_id", null: false
+    t.bigint "content_item_id", null: false
+    t.index ["content_item_id"], name: "index_content_items_terms_on_content_item_id"
+    t.index ["term_id", "content_item_id"], name: "index_terms_content_items", unique: true
+    t.index ["term_id"], name: "index_content_items_terms_on_term_id"
   end
 
   create_table "groups", id: :serial, force: :cascade do |t|
@@ -129,6 +137,14 @@ ActiveRecord::Schema.define(version: 20170606163951) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "terms", force: :cascade do |t|
+    t.string "name"
+    t.bigint "taxonomy_project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["taxonomy_project_id"], name: "index_terms_on_taxonomy_project_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|

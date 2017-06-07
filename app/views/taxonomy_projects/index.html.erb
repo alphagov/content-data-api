@@ -11,7 +11,8 @@
     <% @projects.each do |project| %>
       <tr>
         <td><%= link_to project.name, project %></td>
-        <td><%= project.content_items.count %></td>
+        <td><%= project.taxonomy_todos.count %></td>
+        <td><%= link_to 'Start tagging', taxonomy_project_start_path(project) %></td>
       </tr>
     <% end %>
   </tbody>

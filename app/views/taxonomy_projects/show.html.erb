@@ -1,5 +1,27 @@
 <h1><%= @project.name %></h1>
 
+<h2>Terms</h2>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr class="table-header">
+      <th>Term</th>
+      <th>Items</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @project.terms.each do |term| %>
+    <tr>
+      <td><%= term.name %></td>
+      <td><%= term.content_items.count %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<h2>Content items</h2>
+
 <table class="table table-bordered table-hover">
   <thead>
   <tr class="table-header">
@@ -7,9 +29,10 @@
   </tr>
   </thead>
   <tbody>
-    <% @project.content_items.each do |content_item| %>
+    <% @project.taxonomy_todos.each do |taxonomy_todo| %>
       <tr>
-        <td><%= link_to content_item.title, content_item %></td>
+        <td><%= link_to taxonomy_todo.content_item.title, taxonomy_todo %></td>
+        <td><%= taxonomy_todo.terms.map(&:name).join(', ') %></td>
       </tr>
     <% end %>
   </tbody>

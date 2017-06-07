@@ -1,0 +1,77 @@
+<div class="col-sm-7">
+  <% if flash.notice %>
+    <div class="alert alert-success" role="alert">
+      <p>
+        <strong>Success:</strong>
+        <%= flash.notice %>
+      </p>
+    </div>
+  <% elsif flash.alert %>
+    <div class="alert alert-warning" role="alert">
+      <p>
+        <strong>Warning:</strong>
+        <%= flash.alert %>
+      </p>
+    </div>
+  <% end %>
+
+  <h2><%= link_to @todo_form.content_item.title, '', target: :_blank %></h2>
+
+  <p class="description">
+    <%= @todo_form.content_item.description %>
+  </p>
+
+  <%= form_for @todo_form, url: taxonomy_todo_path(@todo_form.taxonomy_todo), method: 'put' do |f| %>
+    <div>
+      <%= f.label :new_terms, "New terms" %>
+      <%= f.text_field :new_terms %>
+    </div>
+
+    <%= f.submit "Save", class: "btn btn-success" %>
+  <% end %>
+</div>
+
+<div class="col-sm-4">
+  <div id="metadata" class="term_review-metadata">
+    <div id="organisations">
+      <h4>Organisations</h4>
+      <p><%= @todo_form.content_item.organisations %></p>
+    </div>
+
+    <div id="last-updated">
+      <h4>Last updated</h4>
+      <p><%= @todo_form.content_item.last_updated %></p>
+    </div>
+
+    <div id="content-type">
+      <h4>Content type</h4>
+      <p><%= @todo_form.content_item.document_type %></p>
+    </div>
+
+    <div id="guidance">
+      <h4>Guidance</h4>
+      <p><%= @todo_form.content_item.guidance %></p>
+    </div>
+
+    <div id="topics">
+      <h4>Topics</h4>
+      <p><%= @todo_form.content_item.topics %></p>
+    </div>
+
+    <div id="policy-areas">
+      <h4>Policy areas</h4>
+      <p><%= @todo_form.content_item.policy_areas %></p>
+    </div>
+
+    <div id="withdrawn">
+      <h4>Withdrawn</h4>
+      <p><%= @todo_form.content_item.withdrawn %></p>
+    </div>
+
+    <div id="pageviews">
+      <h4>Unique pageviews</h4>
+      <p><%= @todo_form.content_item.one_month_page_views %> in the last month</p>
+      <p><%= @todo_form.content_item.six_months_page_views %> in the last six months</p>
+    </div>
+  </div>
+</div>
