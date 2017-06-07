@@ -23,7 +23,7 @@
 
   <%= form_for @todo_form, url: taxonomy_todo_path(@todo_form.taxonomy_todo), method: 'put' do |f| %>
     <div>
-      <%= f.label :new_terms, "New terms:" %>
+      <%= f.label :new_terms, "New terms:", autofocus: true %>
       <%= f.text_field :new_terms %>
     </div>
 
