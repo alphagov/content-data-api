@@ -9,9 +9,8 @@ class ImportPageviewsJob < ApplicationJob
   def perform(*args)
     content_items = args[0]
     base_paths = content_items.pluck(:base_path)
-    base_paths_with_subpaths = base_paths.map { |path| path.concat("/*") }
 
-    results = google_analytics_service.page_views(base_paths_with_subpaths)
+    results = google_analytics_service.page_views(base_paths)
     results.each do |result|
       content_item = ContentItem.find_by(base_path: result[:base_path])
       content_item.update!(result.slice(:one_month_page_views, :six_months_page_views))
