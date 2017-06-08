@@ -40,6 +40,66 @@ RSpec.describe ContentItem, type: :model do
     end
   end
 
+  describe ".targets_of" do
+    let!(:a) { FactoryGirl.create(:content_item) }
+    let!(:b) { FactoryGirl.create(:content_item) }
+    let!(:c) { FactoryGirl.create(:content_item) }
+
+    before do
+      FactoryGirl.create(:link, source: a, target: b, link_type: "type1")
+      FactoryGirl.create(:link, source: b, target: a, link_type: "type1")
+
+      FactoryGirl.create(:link, source: a, target: c, link_type: "type2")
+      FactoryGirl.create(:link, source: b, target: c, link_type: "type2")
+    end
+
+    it "returns a scope of items that have links to them with the given type" do
+      results = described_class.targets_of(link_type: "type1")
+      expect(results).to match_array [a, b]
+
+      results = described_class.targets_of(link_type: "type2")
+      expect(results).to eq [c]
+
+      results = described_class.targets_of(link_type: "type3")
+      expect(results).to eq []
+    end
+
+    it "selects a count of the number of incoming links" do
+      results = described_class.targets_of(link_type: "type1")
+      expect(results.map(&:incoming_links_count)).to eq [1, 1]
+
+      results = described_class.targets_of(link_type: "type2")
+      expect(results.map(&:incoming_links_count)).to eq [2]
+    end
+
+    it "can count incoming links for a subset of content items" do
+      subset = described_class.where(id: [a])
+
+      results = described_class.targets_of(link_type: "type1", scope_to_count: subset)
+      expect(results.map(&:incoming_links_count)).to match_array [0, 1]
+
+      results = described_class.targets_of(link_type: "type2", scope_to_count: subset)
+      expect(results.map(&:incoming_links_count)).to eq [1]
+    end
+  end
+
+  describe "#title_with_count" do
+    before do
+      item = FactoryGirl.create(:content_item, title: "Title")
+      FactoryGirl.create(:link, source: item, target: item, link_type: "type")
+    end
+
+    it "returns the title with the count of incoming links" do
+      item = described_class.targets_of(link_type: "type").first
+      expect(item.title_with_count).to eq("Title (1)")
+    end
+
+    it "returns the title if incoming_links_count isn't set" do
+      item = described_class.first
+      expect(item.title_with_count).to eq("Title")
+    end
+  end
+
   describe "#url" do
     it "returns a url to a content item on gov.uk" do
       content_item = build(:content_item, base_path: "/api/content/item/path/1")
@@ -117,7 +177,7 @@ RSpec.describe ContentItem, type: :model do
     describe "#policy_areas" do
       it "returns the topics linked to the Content Item" do
         policy_area = create(:content_item, content_id: "policy_area_1")
-        Link.create(link_type: "policy-areas", source_content_id: "cid1", target_content_id: "policy_area_1")
+        Link.create(link_type: "policy_areas", source_content_id: "cid1", target_content_id: "policy_area_1")
 
         expect(content_item.policy_areas).to match_array([policy_area])
       end

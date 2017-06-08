@@ -37,6 +37,8 @@ group :development, :test do
   gem 'govuk-lint'
   gem 'guard-rspec', require: false
   gem 'listen'
+  gem 'pry-rails'
+  gem 'byebug'
   gem 'poltergeist'
   gem 'pry-rails'
   gem 'rails-controller-testing'

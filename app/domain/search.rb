@@ -1,4 +1,12 @@
 class Search
+  LINK_TYPE_FILTERS = [
+    Link::PRIMARY_ORG,
+    Link::ALL_ORGS,
+    Link::POLICY_AREAS,
+    Link::TOPICS,
+    Link::TAXONS,
+  ].freeze
+
   def initialize
     self.query = Query.new
   end
@@ -42,6 +50,12 @@ class Search
 
   def sort
     query.sort
+  end
+
+  def link_type_filters
+    LINK_TYPE_FILTERS.map do |link_type|
+      [link_type, result.options_for(link_type)]
+    end
   end
 
   def self.all_audit_status

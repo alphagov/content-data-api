@@ -48,15 +48,19 @@ class Search
   private
 
     def raise_if_already_filtered_by_link_type(filter)
-      if filters.any? { |f| f.link_type == filter.link_type }
+      if link_filters.any? { |f| f.link_type == filter.link_type }
         raise FilterError, "duplicate filter for #{filter.link_type}"
       end
     end
 
     def raise_if_mixing_source_and_target(filter)
-      if filters.any? { |f| f.by_source? != filter.by_source? }
+      if link_filters.any? { |f| f.by_source? != filter.by_source? }
         raise FilterError, "attempting to filter by source and target"
       end
+    end
+
+    def link_filters
+      filters.select { |f| f.is_a?(LinkFilter) }
     end
 
     class ::FilterError < StandardError; end

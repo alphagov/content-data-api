@@ -65,6 +65,7 @@ GEM
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
     builder (3.2.3)
+    byebug (9.0.6)
     capybara (2.14.0)
       addressable
       mime-types (>= 1.16)
@@ -434,6 +435,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake!
+  byebug
   capybara
   database_cleaner
   draper
