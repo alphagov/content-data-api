@@ -61,7 +61,7 @@ RSpec.describe Search do
 
   it "can filter by a single type and single target" do
     subject.filter_by(link_type: "organisations", target_ids: "org1")
-    expect(content_ids).to eq %w(id1 id3)
+    expect(content_ids).to match_array %w(id1 id3)
   end
 
   it "can filter by a single type and multiple targets" do

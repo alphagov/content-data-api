@@ -3,24 +3,18 @@ class ContentItem < ApplicationRecord
   has_and_belongs_to_many :taxons
   has_one :audit, primary_key: :content_id, foreign_key: :content_id
 
-  has_many :links,
-    primary_key: :content_id,
-    foreign_key: :source_content_id
-
-  has_many :reverse_links,
-    class_name: :Link,
-    primary_key: :content_id,
-    foreign_key: :target_content_id
-
   def self.targets_of(link_type:, scope_to_count: all)
     x = scope_to_count
 
-    joins(:reverse_links)
-      .where(links: { link_type: link_type })
-      .group(:id)
-      .select("content_items.*")
-      .joins("LEFT JOIN (#{x.to_sql}) x ON x.content_id = links.source_content_id")
-      .select("count(x.id) as incoming_links_count")
+    nested = Link
+      .select(:target_content_id, "count(x.id) as c")
+      .joins("left join (#{x.to_sql}) x on content_id = source_content_id")
+      .where(link_type: link_type)
+      .group(:target_content_id)
+
+    ContentItem
+      .select("*, c as incoming_links_count")
+      .joins("join (#{nested.to_sql}) x on target_content_id = content_id")
   end
 
   def self.next_item(current_item)
