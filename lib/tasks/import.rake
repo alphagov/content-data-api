@@ -34,6 +34,8 @@ namespace :import do
   desc 'Import todos for taxonomy project'
   task :todos_for_taxonomy_project, [:name, :csv_url] => :environment do |_, args|
     csv = RemoteCsv.new(args.csv_url)
-    Importers::TodosForTaxonomyProject.new(args.name, csv).run
+    importer = Importers::TodosForTaxonomyProject.new(args.name, csv)
+    importer.run
+    puts "Imported #{importer.completed.size} with #{importer.errors.size} errors"
   end
 end

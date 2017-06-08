@@ -27,5 +27,13 @@ RSpec.describe Importers::TodosForTaxonomyProject do
         .from(nil)
         .to(1)
     end
+
+    it "keeps track of errors" do
+      content_item.destroy
+      expect { subject.run }
+        .to change { subject.errors.size }
+        .from(0)
+        .to(1)
+    end
   end
 end
