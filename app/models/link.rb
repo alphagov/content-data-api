@@ -1,9 +1,10 @@
 class Link < ApplicationRecord
+  POLICY_AREAS = "policy_areas".freeze
+  POLICIES = "policies".freeze
   PRIMARY_ORG = "primary_publishing_organisation".freeze
   ALL_ORGS = "organisations".freeze
-  POLICY_AREAS = "policy_areas".freeze
+  MAINSTREAM = "mainstream_browse_pages".freeze
   TOPICS = "topics".freeze
-  TAXONS = "taxons".freeze
 
   belongs_to :source,
     class_name: :ContentItem,
