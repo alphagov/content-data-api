@@ -1,0 +1,71 @@
+<div class="inventory">
+  <h1>Inventory manager</h1>
+
+  <p>
+  This page lets you manage themes and subthemes. These are structures that help
+  users of the audit tool focus on content that's relevant to them.
+  </p>
+
+  <p>Here's how to use this tool:</p>
+
+  <ol>
+    <li>Select a theme and subtheme from the two left-hand columns</li>
+    <li>Select a criterion to be used for grouping content</li>
+    <li>Toggle which content items should appear in the subtheme</li>
+  </ol>
+
+  <p>
+  Changes are immediate and are reflected in the dropdowns on the
+  <%= link_to "listing page", audits_path %>.
+  </p>
+
+  <div class="tiered-menu">
+    <div class="themes">
+      <span class="row header" href="#">Theme</span>
+
+      <% Theme.all.each do |theme| %>
+        <%= link_to theme.name, set_param(:theme_id, theme.id), class: "row #{"active" if theme == @theme}" %>
+      <% end %>
+
+      <%= form_for @new_theme, url: inventory_themes_path(selection_params), html: { class: "row" } do |f| %>
+        <%= f.text_field :name %>
+        <%= f.submit "Add" %>
+      <% end %>
+    </div>
+
+    <div class="subthemes <%= "disabled" unless @theme %>">
+      <span class="row header" href="#">Subtheme</span>
+
+      <% (@theme ? @theme.subthemes : []).each do |subtheme| %>
+        <%= link_to subtheme.name, set_param(:subtheme_id, subtheme.id), class: "row #{"active" if subtheme == @subtheme }" %>
+      <% end %>
+
+      <%= form_for @new_subtheme, url: inventory_subthemes_path(selection_params), html: { class: "row" } do |f| %>
+        <%= f.text_field :name %>
+        <%= f.hidden_field :theme_id, value: @theme.id if @theme %>
+        <%= f.submit "Add" %>
+      <% end %>
+    </div>
+
+    <div class="criteria <%= "disabled" unless @theme && @subtheme %>">
+      <span class="row header" href="#">Grouping criterion</span>
+
+      <% @link_types.each do |link_type| %>
+        <%= link_to link_type.titleize, set_param(:link_type, link_type), class: "row #{"active" if link_type == @link_type }" %>
+      <% end %>
+    </div>
+
+    <div class="content <%= "disabled" unless @theme && @subtheme %>">
+      <span class="row header" href="#"><%= @link_type.titleize %></span>
+
+      <% @content_items.each do |content_item| %>
+        <%= link_to(
+          content_item.title_with_count,
+          inventory_toggle_path(selection_params.merge(content_id: content_item.content_id)),
+          class: "row #{"active" if rule_exists?(content_item)}",
+          remote: true
+        ) %>
+      <% end %>
+    </div>
+  </div>
+</div>
