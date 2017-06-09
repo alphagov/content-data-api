@@ -2,6 +2,8 @@ class TaxonomyTodoForm
   include ActiveModel::Model
   attr_accessor :taxonomy_todo, :new_terms, :user
 
+  delegate :title, :url, :description, to: :content_item
+
   def save
     TaxonomyTodo.transaction do
       update_todo

@@ -15,10 +15,10 @@
     </div>
   <% end %>
 
-  <h2><%= link_to @todo_form.content_item.title, '', target: :_blank %></h2>
+  <h2><%= link_to @todo_form.title, @todo_form.url, target: :_blank %></h2>
 
   <p class="description">
-    <%= @todo_form.content_item.description %>
+    <%= @todo_form.description %>
   </p>
 
   <%= form_for @todo_form, url: taxonomy_todo_path(@todo_form.taxonomy_todo), method: 'put' do |f| %>
