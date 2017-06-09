@@ -14,4 +14,4 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
-//= require vendor/bootstrap-tagsinput.js
+//= require bootstrap-tagsinput.js
