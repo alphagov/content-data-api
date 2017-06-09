@@ -23,8 +23,10 @@
 
   <%= form_for @todo_form, url: taxonomy_todo_path(@todo_form.taxonomy_todo), method: 'put' do |f| %>
     <div class='form-group'>
-      <%= f.label :new_terms, "New terms:" %>
-      <%= f.text_area :new_terms, class: 'form-control', autofocus: true %>
+      <%= f.label :new_terms, "New terms:", class: 'control-label' %>
+      <div class='form-wrapper'>
+        <%= f.text_field :new_terms, data: { role: "tagsinput" } %>
+      </div>
     </div>
 
     <%= f.submit "Save", class: "btn btn-success" %>
