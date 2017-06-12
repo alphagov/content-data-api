@@ -1,9 +1,4 @@
 namespace :import do
-  desc 'Import all organisations (without content items)'
-  task all_organisations: :environment do
-    Importers::AllOrganisations.new.run
-  end
-
   desc 'Import all content items for all organisations'
   task all_content_items: :environment do
     Importers::AllContentItems.new.run
