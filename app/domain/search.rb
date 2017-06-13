@@ -5,6 +5,7 @@ class Search
     Link::PRIMARY_ORG,
     Link::ALL_ORGS,
     Link::MAINSTREAM,
+    Link::TOPICS,
   ].freeze
 
   def initialize
