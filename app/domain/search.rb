@@ -16,6 +16,10 @@ class Search
     query.audit_status = identifier
   end
 
+  def subtheme=(id)
+    query.subtheme = id
+  end
+
   def filter_by(link_type:, source_ids: nil, target_ids: nil)
     query.filter_by(link_type, source_ids, target_ids)
   end
@@ -61,6 +65,10 @@ class Search
 
   def self.all_audit_status
     AuditFilter.all
+  end
+
+  def self.all_subthemes
+    Subtheme.all.order(:name)
   end
 
 private

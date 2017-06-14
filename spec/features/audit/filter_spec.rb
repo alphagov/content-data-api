@@ -10,6 +10,19 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
     dfe = FactoryGirl.create(:content_item, title: "DFE")
     FactoryGirl.create(:link, source: non_audited, target: dfe, link_type: "organisations")
+
+    FactoryGirl.create(:subtheme, name: "Environment")
+    travel = FactoryGirl.create(:subtheme, name: "Travel")
+
+    travel_insurance = FactoryGirl.create(:content_item, title: "Travel insurance advice for theme of flying abroad")
+    flying_abroad = FactoryGirl.create(:content_item, title: "Flying to countries abroad")
+    FactoryGirl.create(:link, source: travel_insurance, target: flying_abroad, link_type: "policies")
+    FactoryGirl.create(
+      :inventory_rule,
+      subtheme: travel,
+      link_type: "policies",
+      target_content_id: flying_abroad.content_id,
+    )
   end
 
   scenario "List all content items (audited and not audited)" do
@@ -58,6 +71,30 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     click_on "Filter"
     expect(page).to have_content("HMRC (1)")
     expect(page).to have_content("DFE (0)")
+  end
+
+  scenario "subthemes are in alphabetical order" do
+    visit audits_path
+
+    within("#subtheme") do
+      options = page.all("option")
+      subthemes = options.map(&:text)
+
+      expect(subthemes).to eq %w(All Environment Travel)
+    end
+  end
+
+  scenario "filtering by subtheme" do
+    visit audits_path
+    select "Travel", from: "subtheme"
+
+    click_on "Filter"
+
+    within("table") do
+      expect(page).to have_content("Travel insurance advice for theme of flying abroad")
+      expect(page).to have_no_content("Flying to countries abroad")
+      expect(page).to have_no_content("DFE")
+    end
   end
 
   scenario "Reseting page to 1 after filtering" do

@@ -49,6 +49,7 @@ private
       search = Search.new
       filter_by_audit_status!(search)
       filter_by_link_types!(search)
+      filter_by_subtheme!(search)
       search.page = params[:page]
       search.execute
       search
@@ -80,5 +81,9 @@ private
       next if content_id.blank?
       search.filter_by(link_type: link_type, target_ids: content_id)
     end
+  end
+
+  def filter_by_subtheme!(search)
+    search.subtheme = params[:subtheme] if params[:subtheme]
   end
 end
