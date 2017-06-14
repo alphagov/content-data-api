@@ -4,11 +4,12 @@ class ContentItem < ApplicationRecord
   has_one :audit, primary_key: :content_id, foreign_key: :content_id
 
   def self.targets_of(link_type:, scope_to_count: all)
-    x = scope_to_count
+    sql = scope_to_count.to_sql.presence
+    sql ||= "select * from content_items where id = -1"
 
     nested = Link
       .select(:target_content_id, "count(x.id) as c")
-      .joins("left join (#{x.to_sql}) x on content_id = source_content_id")
+      .joins("left join (#{sql}) x on content_id = source_content_id")
       .where(link_type: link_type)
       .group(:target_content_id)
 
