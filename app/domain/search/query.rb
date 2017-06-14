@@ -10,12 +10,13 @@ class Search
     end
 
     def audit_status=(identifier)
-      if identifier.present?
-        filter = AuditFilter.find(identifier.to_sym)
-        filters.push(filter)
-      else
-        filters.delete_if { |f| f.is_a?(AuditFilter) }
-      end
+      filter = AuditFilter.find(identifier.to_sym) if identifier.present?
+      set_filter_of_type(filter, type: AuditFilter)
+    end
+
+    def subtheme=(id)
+      filter = SubthemeFilter.new(subtheme: Subtheme.find(id)) if id.present?
+      set_filter_of_type(filter, type: SubthemeFilter)
     end
 
     def filter_by(link_type, source_ids, target_ids)
@@ -46,6 +47,14 @@ class Search
     end
 
   private
+
+    def set_filter_of_type(filter, type:)
+      if filter
+        filters.push(filter)
+      else
+        filters.delete_if { |f| f.is_a?(type) }
+      end
+    end
 
     def raise_if_already_filtered_by_link_type(filter)
       if link_filters.any? { |f| f.link_type == filter.link_type }
