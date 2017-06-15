@@ -3,17 +3,17 @@
   <%= form_tag audits_path, method: :get do %>
 
     <div class="form-group">
-      <%= label_tag :subtheme, 'Subthemes' %>
-      <%= select_tag :subtheme,
-          options_from_collection_for_select(Search.all_subthemes, :id, :name, params[:subtheme]),
+      <%= label_tag :audit_status, 'Audit status' %>
+      <%= select_tag :audit_status,
+          options_from_collection_for_select(Search.all_audit_status, :identifier, :name, params[:audit_status]),
           include_blank: "All",
           class: "form-control" %>
     </div>
 
     <div class="form-group">
-      <%= label_tag :audit_status, 'Status:' %>
-      <%= select_tag :audit_status,
-          options_from_collection_for_select(Search.all_audit_status, :identifier, :name, params[:audit_status]),
+      <%= label_tag :subtheme, 'Theme' %>
+      <%= select_tag :subtheme,
+          options_from_collection_for_select(Search.all_subthemes, :id, :name, params[:subtheme]),
           include_blank: "All",
           class: "form-control" %>
     </div>
@@ -22,7 +22,7 @@
       <% disabled_options = options.select { |o| o.incoming_links_count.zero? } %>
 
       <div class="form-group">
-        <%= label_tag link_type, "#{link_type.titleize}:" %>
+        <%= label_tag link_type, link_type.titleize.singularize %>
         <%= select_tag(
               link_type,
               options_from_collection_for_select(
