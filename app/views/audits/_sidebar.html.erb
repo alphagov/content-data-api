@@ -18,7 +18,7 @@
           class: "form-control" %>
     </div>
 
-    <% @search.link_type_filters.each do |link_type, options| %>
+    <% @search.options_for(Search::FILTERABLE_LINK_TYPES).each do |link_type, options| %>
       <% disabled_options = options.select { |o| o.incoming_links_count.zero? } %>
 
       <div class="form-group">
