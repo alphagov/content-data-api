@@ -173,4 +173,13 @@ RSpec.feature "Managing inventory" do
     click_on "Organisation 1 (2)"
     expect_active "Organisation 1 (2)"
   end
+
+  scenario "disallowing users without the inventory_management permission" do
+    User.last.update!(permissions: %w(signin))
+
+    visit inventory_root_path
+
+    expect(page).not_to have_content("This page lets you manage themes and subthemes.")
+    expect(page).to have_content("Sorry, you don't seem to have the inventory_management permission")
+  end
 end

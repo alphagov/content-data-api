@@ -2,6 +2,7 @@ class InventoryController < ApplicationController
   helper_method :set_param, :rule_exists?, :selection_params
 
   before_action(
+    :require_inventory_management_permission!,
     :assign_link_types,
     :lookup_theme,
     :lookup_subtheme,
@@ -31,6 +32,10 @@ class InventoryController < ApplicationController
   end
 
 private
+
+  def require_inventory_management_permission!
+    authorise_user!("inventory_management")
+  end
 
   def assign_link_types
     @link_types = Search::GROUPABLE_LINK_TYPES
