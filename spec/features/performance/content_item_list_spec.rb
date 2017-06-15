@@ -23,7 +23,7 @@ RSpec.feature "Content Items List", type: :feature do
     expect(page).to have_selector('thead', text: 'Title')
     expect(page).to have_selector('thead tr:first-child th', text: 'Doc type')
     expect(page).to have_selector('thead tr:first-child th', text: 'Page views (1mth)')
-    expect(page).to have_selector('thead tr:first-child th', text: 'Last Updated')
+    expect(page).to have_selector('thead tr:first-child th', text: 'Last major update')
   end
 
   scenario "Renders content item details" do
