@@ -21,8 +21,8 @@ class Search
     query.audit_status = identifier
   end
 
-  def subtheme=(id)
-    query.subtheme = id
+  def theme=(identifier)
+    query.theme = identifier
   end
 
   def filter_by(link_type:, source_ids: nil, target_ids: nil)
@@ -75,7 +75,17 @@ class Search
   end
 
   def self.all_subthemes
-    Subtheme.all.order(:name)
+    Subtheme.all
+  end
+
+  def self.all_themes_and_subthemes
+    Theme.all.map do |theme|
+      options = [theme, *theme.subthemes].map do |o|
+        [o.option_name, o.option_value]
+      end
+
+      [theme.name, options]
+    end
   end
 
 private

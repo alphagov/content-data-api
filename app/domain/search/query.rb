@@ -14,9 +14,15 @@ class Search
       set_filter_of_type(filter, type: AuditFilter)
     end
 
-    def subtheme=(id)
-      filter = SubthemeFilter.new(subtheme: Subtheme.find(id)) if id.present?
-      set_filter_of_type(filter, type: SubthemeFilter)
+    def theme=(identifier)
+      type, id = identifier.to_s.split("_")
+
+      if id.present? && %(Theme Subtheme).include?(type)
+        model = type.constantize.find(id)
+        filter = RulesFilter.new(rules: model.inventory_rules)
+      end
+
+      set_filter_of_type(filter, type: RulesFilter)
     end
 
     def filter_by(link_type, source_ids, target_ids)

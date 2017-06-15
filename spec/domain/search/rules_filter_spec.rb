@@ -1,5 +1,5 @@
-RSpec.describe Search::SubthemeFilter do
-  subject { described_class.new(subtheme: subtheme) }
+RSpec.describe Search::RulesFilter do
+  subject { described_class.new(rules: subtheme.inventory_rules) }
 
   let(:subtheme) { FactoryGirl.create(:subtheme) }
   let(:result) { subject.apply(ContentItem.all).map(&:title) }

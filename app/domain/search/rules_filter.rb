@@ -1,13 +1,12 @@
 class Search
-  class SubthemeFilter
-    attr_accessor :subtheme
+  class RulesFilter
+    attr_accessor :rules
 
-    def initialize(subtheme:)
-      self.subtheme = subtheme
+    def initialize(rules:)
+      self.rules = rules
     end
 
     def apply(scope)
-      rules = subtheme.inventory_rules
       groups = rules.group_by(&:link_type)
 
       groups.inject(ContentItem.none) do |filtered_scope, (link_type, group_rules)|
