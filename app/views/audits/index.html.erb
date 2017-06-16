@@ -1,9 +1,14 @@
 
 <% content_for :sidebar do %>
-    <%= render 'sidebar' %>
+  <%= render 'sidebar', submit_path: audits_path %>
 <% end %>
 
 <h1>GOV.UK Content Audit</h1>
+
+<ul class="tabs">
+  <li class="active">Content</li>
+  <li><%= link_to "Report", audits_report_path(filter_params) %></li>
+</ul>
 
 <table class="table table-bordered table-hover">
   <thead>

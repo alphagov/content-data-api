@@ -1,8 +1,8 @@
 class AuditsController < ApplicationController
   helper_method :filter_params
+  before_action :content_items, only: %i(index report export)
 
   def index
-    content_items
   end
 
   def show
@@ -26,10 +26,22 @@ class AuditsController < ApplicationController
     end
   end
 
+  def report
+  end
+
+  def export
+    csv = Report.generate(audits)
+    send_data(csv, filename: "report.csv")
+  end
+
 private
 
   def audit
     @audit ||= Audit.find_or_initialize_by(content_item: content_item).decorate
+  end
+
+  def audits
+    @audits ||= Audit.where(content_item: content_items.object)
   end
 
   def content_item
