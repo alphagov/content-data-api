@@ -1,3 +1,24 @@
+.tabs {
+  list-style-type: none;
+  padding-left: 0;
+  border-bottom: 1px solid gray;
+  margin: 2em 0;
+
+  li {
+    padding: 1em;
+    display: inline-block;
+
+    &.active {
+      border: 1px solid gray;
+      border-bottom: none;
+    }
+
+    a {
+      color: #337ab7;
+    }
+  }
+}
+
 .prev-next-links {
   margin: 5em 0 3em 0;
 

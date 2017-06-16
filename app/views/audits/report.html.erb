@@ -1,0 +1,12 @@
+<% content_for :sidebar do %>
+  <%= render 'sidebar', submit_path: audits_report_path %>
+<% end %>
+
+<h1>GOV.UK Content Audit</h1>
+
+<ul class="tabs">
+  <li><%= link_to "Content", audits_path(filter_params) %></li>
+  <li class="active">Report</li>
+</ul>
+
+<%= link_to "Export", audits_export_path(filter_params) %>
