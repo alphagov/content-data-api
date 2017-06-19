@@ -13,7 +13,7 @@
     <div class="form-group">
       <%= label_tag :theme, 'Theme' %>
       <%= select_tag :theme,
-          grouped_options_for_select(Search.all_themes_and_subthemes, params[:theme]),
+          grouped_options_for_select(grouped_themes_and_subthemes, params[:theme]),
           include_blank: "All",
           class: "form-control" %>
     </div>

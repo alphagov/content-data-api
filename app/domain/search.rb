@@ -78,16 +78,6 @@ class Search
     Subtheme.all
   end
 
-  def self.all_themes_and_subthemes
-    Theme.all.map do |theme|
-      options = [theme, *theme.subthemes].map do |o|
-        [o.option_name, o.option_value]
-      end
-
-      [theme.name, options]
-    end
-  end
-
 private
 
   attr_accessor :query, :result
