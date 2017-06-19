@@ -25,7 +25,7 @@ class Search
   private
 
     def build_filter_options
-      Search::LINK_TYPE_FILTERS.each do |link_type|
+      Search.all_link_types.each do |link_type|
         filter_options.merge!(
           link_type => ContentItem.targets_of(
             link_type: link_type,

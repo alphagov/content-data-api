@@ -77,7 +77,7 @@ private
   end
 
   def filter_by_link_types!(search)
-    params.slice(*Search::LINK_TYPE_FILTERS).each do |link_type, content_id|
+    params.slice(*Search::FILTERABLE_LINK_TYPES).each do |link_type, content_id|
       next if content_id.blank?
       search.filter_by(link_type: link_type, target_ids: content_id)
     end

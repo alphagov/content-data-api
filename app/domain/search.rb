@@ -1,5 +1,10 @@
 class Search
-  LINK_TYPE_FILTERS = [
+  FILTERABLE_LINK_TYPES = [
+    Link::PRIMARY_ORG,
+    Link::ALL_ORGS,
+  ].freeze
+
+  GROUPABLE_LINK_TYPES = [
     Link::POLICY_AREAS,
     Link::POLICIES,
     Link::PRIMARY_ORG,
@@ -57,10 +62,12 @@ class Search
     query.sort
   end
 
-  def link_type_filters
-    LINK_TYPE_FILTERS.map do |link_type|
-      [link_type, result.options_for(link_type)]
-    end
+  def options_for(link_types)
+    link_types.map { |t| [t, result.options_for(t)] }.to_h
+  end
+
+  def self.all_link_types
+    (FILTERABLE_LINK_TYPES + GROUPABLE_LINK_TYPES).uniq
   end
 
   def self.all_audit_status

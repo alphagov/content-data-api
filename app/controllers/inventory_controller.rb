@@ -33,14 +33,14 @@ class InventoryController < ApplicationController
 private
 
   def assign_link_types
-    @link_types = Search::LINK_TYPE_FILTERS
+    @link_types = Search::GROUPABLE_LINK_TYPES
   end
 
   def assign_content_items
     search = Search.new
     search.execute
-    filters = search.link_type_filters
-    @content_items = filters.to_h.fetch(@link_type).order(:title)
+    options = search.options_for(@link_types)
+    @content_items = options.fetch(@link_type).order(:title)
   end
 
   def lookup_link_type
