@@ -81,6 +81,13 @@ RSpec.describe ContentItem, type: :model do
       results = described_class.targets_of(link_type: "type2", scope_to_count: subset)
       expect(results.map(&:incoming_links_count)).to eq [1]
     end
+
+    it "can cope with empty content item scopes" do
+      subset = described_class.none
+      results = described_class.targets_of(link_type: "anything", scope_to_count: subset)
+
+      expect { results.first }.not_to raise_error
+    end
   end
 
   describe "#title_with_count" do

@@ -63,6 +63,35 @@ RSpec.describe Search::Query do
     end
   end
 
+  describe "subtheme" do
+    it "defaults to not filter by subtheme" do
+      expect(subject.filters).to be_empty
+    end
+
+    let(:subtheme) { FactoryGirl.create(:subtheme) }
+
+    it "adds a filter when setting the subtheme" do
+      subject.subtheme = subtheme.id
+      expect(subject.filters).to be_present
+    end
+
+    it "does not add a filter if blank" do
+      subject.subtheme = nil
+      expect(subject.filters).to be_empty
+    end
+
+    it "removes the existing subtheme filter when blank" do
+      subject.subtheme = subtheme.id
+      subject.subtheme = nil
+
+      expect(subject.filters).to be_empty
+    end
+
+    it "raises an error if subtheme doesn't exist" do
+      expect { subject.subtheme = 999 }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "#filter_by" do
     it "raises an error if a filter already exists for a type" do
       subject.filter_by("organisations", nil, "org1")
