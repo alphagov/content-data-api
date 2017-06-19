@@ -1,0 +1,79 @@
+.inventory {
+  h1 {
+    margin-bottom: 1em;
+  }
+
+  .tiered-menu {
+    display: inline-block;
+    border: 2px solid #444;
+    margin-top: 2em;
+  }
+
+  .themes, .subthemes, .criteria {
+    border-right: 1px solid #444;
+  }
+
+  .themes, .subthemes, .criteria, .content {
+    display: table-cell;
+    padding: 0;
+  }
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.3;
+
+    .active {
+      font-weight: normal !important;
+      background: inherit !important;
+    }
+  }
+
+  .row {
+    display: block;
+    border-bottom: 1px solid #ccc;
+    min-width: 12em;
+    margin: 0;
+    padding: 1em;
+    color: black;
+    text-decoration: none;
+
+    &.active {
+      font-weight: bold;
+    }
+
+    &.header {
+      color: black;
+      background: #ddd;
+      border-color: black;
+
+      &:hover {
+        background: #ddd;
+      }
+    }
+
+    &:hover {
+      background: #ffa;
+    }
+
+    input[type="text"] {
+      width: 6em;
+      margin-right: 0.5em;
+    }
+  }
+
+  .themes .row.active {
+    background: #8CEFFD;
+  }
+
+  .subthemes .row.active {
+    background: #A5FF8A;
+  }
+
+  .criteria .row.active {
+    background: #DBBFF7;
+  }
+
+  .content .row.active {
+    background: #FFFF99;
+  }
+}

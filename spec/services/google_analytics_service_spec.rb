@@ -13,7 +13,7 @@ RSpec.describe GoogleAnalyticsService do
     end
 
     it 'returns a hash containing the page views' do
-      google_response = GoogleAnalytics::PageViewsResponseFactory.build(
+      google_response = GoogleAnalyticsFactory.build_page_views_response(
         [
           {
             base_path: '/path-1',

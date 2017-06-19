@@ -5,7 +5,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require "rspec/rails"
 require "support/authentication"
-require "support/factory_girl"
+require "support/google_analytics_factory"
 require "webmock/rspec"
 require "capybara/poltergeist"
 require "gds_api/test_helpers/publishing_api_v2"
@@ -14,6 +14,7 @@ require "database_cleaner"
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
+  config.include FactoryGirl::Syntax::Methods
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.fixture_path = "#{Rails.root}/spec/fixtures"
   config.infer_spec_type_from_file_location!

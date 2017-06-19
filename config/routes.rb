@@ -11,6 +11,13 @@ Rails.application.routes.draw do
 
   resources :audits, only: %w(index)
 
+  namespace :inventory do
+    root action: "show"
+    get :toggle, action: "toggle"
+    post :themes, action: "add_theme"
+    post :subthemes, action: "add_subtheme"
+  end
+
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end

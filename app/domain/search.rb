@@ -1,10 +1,11 @@
 class Search
   LINK_TYPE_FILTERS = [
+    Link::POLICY_AREAS,
+    Link::POLICIES,
     Link::PRIMARY_ORG,
     Link::ALL_ORGS,
-    Link::POLICY_AREAS,
+    Link::MAINSTREAM,
     Link::TOPICS,
-    Link::TAXONS,
   ].freeze
 
   def initialize
