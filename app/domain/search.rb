@@ -21,8 +21,8 @@ class Search
     query.audit_status = identifier
   end
 
-  def subtheme=(id)
-    query.subtheme = id
+  def theme=(identifier)
+    query.theme = identifier
   end
 
   def filter_by(link_type:, source_ids: nil, target_ids: nil)
@@ -75,7 +75,7 @@ class Search
   end
 
   def self.all_subthemes
-    Subtheme.all.order(:name)
+    Subtheme.all
   end
 
 private

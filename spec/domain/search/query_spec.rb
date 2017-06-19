@@ -63,32 +63,67 @@ RSpec.describe Search::Query do
     end
   end
 
-  describe "subtheme" do
-    it "defaults to not filter by subtheme" do
+  describe "theme" do
+    it "defaults to not filter by theme" do
       expect(subject.filters).to be_empty
-    end
-
-    let(:subtheme) { FactoryGirl.create(:subtheme) }
-
-    it "adds a filter when setting the subtheme" do
-      subject.subtheme = subtheme.id
-      expect(subject.filters).to be_present
     end
 
     it "does not add a filter if blank" do
-      subject.subtheme = nil
+      subject.theme = nil
       expect(subject.filters).to be_empty
     end
 
-    it "removes the existing subtheme filter when blank" do
-      subject.subtheme = subtheme.id
-      subject.subtheme = nil
-
+    it "does not add a filter if an unrecognised type" do
+      subject.theme = "Unknown_123"
       expect(subject.filters).to be_empty
     end
 
-    it "raises an error if subtheme doesn't exist" do
-      expect { subject.subtheme = 999 }.to raise_error(ActiveRecord::RecordNotFound)
+    context "when filtering by theme" do
+      let(:theme) { FactoryGirl.create(:theme) }
+      let(:identifier) { "Theme_#{theme.id}" }
+
+      it "adds a rules filter when setting the theme" do
+        subject.theme = identifier
+
+        expect(subject.filters).to be_present
+        expect(subject.filters.first).to be_a(Search::RulesFilter)
+      end
+
+      it "removes the existing rules filter when blank" do
+        subject.theme = identifier
+        subject.theme = nil
+
+        expect(subject.filters).to be_empty
+      end
+
+      it "raises an error if theme doesn't exist" do
+        expect { subject.theme = "Theme_999" }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when filtering by subtheme" do
+      let(:subtheme) { FactoryGirl.create(:subtheme) }
+      let(:identifier) { "Subtheme_#{subtheme.id}" }
+
+      it "adds a rules filter when setting the theme" do
+        subject.theme = identifier
+
+        expect(subject.filters).to be_present
+        expect(subject.filters.first).to be_a(Search::RulesFilter)
+      end
+
+      it "removes the existing rules filter when blank" do
+        subject.theme = identifier
+        subject.theme = nil
+
+        expect(subject.filters).to be_empty
+      end
+
+      it "raises an error if subtheme doesn't exist" do
+        expect { subject.theme = "Subtheme_999" }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 

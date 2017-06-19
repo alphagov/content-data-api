@@ -11,9 +11,9 @@
     </div>
 
     <div class="form-group">
-      <%= label_tag :subtheme, 'Theme' %>
-      <%= select_tag :subtheme,
-          options_from_collection_for_select(Search.all_subthemes, :id, :name, params[:subtheme]),
+      <%= label_tag :theme, 'Theme' %>
+      <%= select_tag :theme,
+          grouped_options_for_select(grouped_themes_and_subthemes, params[:theme]),
           include_blank: "All",
           class: "form-control" %>
     </div>

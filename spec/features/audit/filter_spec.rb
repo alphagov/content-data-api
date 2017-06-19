@@ -1,56 +1,67 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
+  # Organisations:
+  let!(:hmrc) { FactoryGirl.create(:content_item, title: "HMRC") }
+  let!(:dfe) { FactoryGirl.create(:content_item, title: "DFE") }
+
+  # Policies:
+  let!(:flying) { FactoryGirl.create(:content_item, title: "Flying abroad") }
+  let!(:insurance) { FactoryGirl.create(:content_item, title: "Travel insurance") }
+
+  # Content:
+  let!(:felling) { FactoryGirl.create(:content_item, title: "Tree felling") }
+  let!(:management) { FactoryGirl.create(:content_item, title: "Forest management") }
+  let!(:vat) { FactoryGirl.create(:content_item, title: "VAT") }
+
+  # Audit:
+  let!(:audit) { FactoryGirl.create(:audit, content_item: felling) }
+
+  # Themes:
+  let!(:travel) { FactoryGirl.create(:theme, name: "Travel") }
+  let!(:environment) { FactoryGirl.create(:theme, name: "Environment") }
+
+  # Subthemes:
+  let!(:aviation) { FactoryGirl.create(:subtheme, theme: travel, name: "Aviation") }
+  let!(:forestry) { FactoryGirl.create(:subtheme, theme: environment, name: "Forestry") }
+  let!(:pollution) { FactoryGirl.create(:subtheme, theme: environment, name: "Air pollution") }
+
   before do
-    audited = FactoryGirl.create(:content_item, title: "Audited content item")
-    FactoryGirl.create(:audit, content_item: audited)
+    # Links:
+    FactoryGirl.create(:link, source: vat, target: hmrc, link_type: "organisations")
+    FactoryGirl.create(:link, source: felling, target: dfe, link_type: "organisations")
+    FactoryGirl.create(:link, source: insurance, target: flying, link_type: "policies")
+    FactoryGirl.create(:link, source: felling, target: management, link_type: "policies")
 
-    non_audited = FactoryGirl.create(:content_item, title: "Non-audited content item")
-
-    hmrc = FactoryGirl.create(:content_item, title: "HMRC")
-    FactoryGirl.create(:link, source: audited, target: hmrc, link_type: "organisations")
-
-    dfe = FactoryGirl.create(:content_item, title: "DFE")
-    FactoryGirl.create(:link, source: non_audited, target: dfe, link_type: "organisations")
-
-    FactoryGirl.create(:subtheme, name: "Environment")
-    travel = FactoryGirl.create(:subtheme, name: "Travel")
-
-    travel_insurance = FactoryGirl.create(:content_item, title: "Travel insurance advice for theme of flying abroad")
-    flying_abroad = FactoryGirl.create(:content_item, title: "Flying to countries abroad")
-    FactoryGirl.create(:link, source: travel_insurance, target: flying_abroad, link_type: "policies")
-    FactoryGirl.create(
-      :inventory_rule,
-      subtheme: travel,
-      link_type: "policies",
-      target_content_id: flying_abroad.content_id,
-    )
+    # Rules:
+    FactoryGirl.create(:inventory_rule, subtheme: aviation, link_type: "policies", target_content_id: flying.content_id)
+    FactoryGirl.create(:inventory_rule, subtheme: forestry, link_type: "policies", target_content_id: management.content_id)
   end
 
   scenario "List all content items (audited and not audited)" do
     visit audits_path
 
-    expect(page).to have_content("Audited content item")
-    expect(page).to have_content("Non-audited content item")
+    expect(page).to have_content("Tree felling")
+    expect(page).to have_content("Forest management")
   end
 
-  scenario "Filter audited content" do
+  scenario "filtering audited content" do
     visit audits_path
     select "Audited", from: "audit_status"
 
     click_on "Filter"
 
-    expect(page).to have_content("Audited content item")
-    expect(page).to have_no_content("Non-audited content item")
+    expect(page).to have_content("Tree felling")
+    expect(page).to have_no_content("Forest management")
     expect(page).to have_select("audit_status", selected: "Audited")
   end
 
-  scenario "Filter non-audited content" do
+  scenario "filtering non-audited content" do
     visit audits_path
     select "Non Audited", from: "audit_status"
 
     click_on "Filter"
 
-    expect(page).to have_no_content("Audited content item")
-    expect(page).to have_content("Non-audited content item")
+    expect(page).to have_no_content("Tree felling")
+    expect(page).to have_content("Forest management")
     expect(page).to have_select("audit_status", selected: "Non Audited")
   end
 
@@ -60,8 +71,8 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
     click_on "Filter"
 
-    expect(page).to have_content("Audited content item")
-    expect(page).to have_no_content("Non-audited content item")
+    expect(page).to have_content("VAT")
+    expect(page).to have_no_content("Tree felling")
 
     expect(page).to have_content("HMRC (1)")
     expect(page).to have_content("DFE (1)")
@@ -69,29 +80,48 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     select "Audited", from: "audit_status"
 
     click_on "Filter"
-    expect(page).to have_content("HMRC (1)")
-    expect(page).to have_content("DFE (0)")
+    expect(page).to have_content("HMRC (0)")
+    expect(page).to have_content("DFE (1)")
   end
 
-  scenario "subthemes are in alphabetical order" do
+  scenario "themes and subthemes are in alphabetical order" do
     visit audits_path
 
-    within("#subtheme") do
+    within("#theme") do
       options = page.all("option")
-      subthemes = options.map(&:text)
 
-      expect(subthemes).to eq %w(All Environment Travel)
+      expect(options.map(&:text)).to eq [
+        "All",
+        "All Environment",
+        "Air pollution",
+        "Forestry",
+        "All Travel",
+        "Aviation",
+      ]
+    end
+  end
+
+  scenario "filtering by theme" do
+    visit audits_path
+    select "All Environment", from: "theme"
+
+    click_on "Filter"
+
+    within("table") do
+      expect(page).to have_content("Tree felling")
+      expect(page).to have_no_content("Forest management")
+      expect(page).to have_no_content("DFE")
     end
   end
 
   scenario "filtering by subtheme" do
     visit audits_path
-    select "Travel", from: "subtheme"
+    select "Aviation", from: "theme"
 
     click_on "Filter"
 
     within("table") do
-      expect(page).to have_content("Travel insurance advice for theme of flying abroad")
+      expect(page).to have_content("Travel insurance")
       expect(page).to have_no_content("Flying to countries abroad")
       expect(page).to have_no_content("DFE")
     end
