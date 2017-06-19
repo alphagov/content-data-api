@@ -90,6 +90,25 @@ RSpec.describe ContentItem, type: :model do
     end
   end
 
+  describe ".document_type_counts" do
+    before do
+      FactoryGirl.create_list(:content_item, 2, document_type: "organisation")
+      FactoryGirl.create_list(:content_item, 3, document_type: "policy")
+    end
+
+    it "returns a hash of document_types to the count of items" do
+      result = described_class.document_type_counts
+      expect(result).to eq("organisation" => 2, "policy" => 3)
+    end
+
+    it "can be chained on scopes" do
+      scope = described_class.where(document_type: "organisation")
+
+      result = scope.document_type_counts
+      expect(result).to eq("organisation" => 2)
+    end
+  end
+
   describe "#title_with_count" do
     before do
       item = FactoryGirl.create(:content_item, title: "Title")

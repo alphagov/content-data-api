@@ -24,6 +24,14 @@ class ContentItem < ApplicationRecord
     all[index + 1] if index
   end
 
+  def self.document_type_counts
+    all
+      .select(:document_type, "count(1) as count")
+      .group(:document_type)
+      .map { |r| [r.document_type, r.count] }
+      .to_h
+  end
+
   def title_with_count
     if respond_to?(:incoming_links_count)
       "#{title} (#{incoming_links_count})"
