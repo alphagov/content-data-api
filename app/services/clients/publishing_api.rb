@@ -2,7 +2,7 @@ require 'gds_api/publishing_api_v2'
 
 module Clients
   class PublishingAPI
-    PER_PAGE = 100
+    PER_PAGE = 700
 
     attr_accessor :deprecated_publishing_api, :per_page
 
@@ -12,7 +12,7 @@ module Clients
         disable_cache: true,
         bearer_token: ENV['PUBLISHING_API_BEARER_TOKEN'] || 'example',
       )
-      @per_page = 100
+      @per_page = 700
     end
 
     def content_ids

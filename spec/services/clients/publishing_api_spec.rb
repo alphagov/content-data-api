@@ -4,7 +4,7 @@ RSpec.describe Clients::PublishingAPI do
   subject { Clients::PublishingAPI.new }
 
   describe "#content_ids" do
-    let(:page_size) { 100 }
+    let(:page_size) { 700 }
 
     let(:content_ids) { (page_size + 1).times.map { |i| "id-#{i}" } }
 
