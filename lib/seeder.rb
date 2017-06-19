@@ -25,6 +25,7 @@ module Seeder
       uid: "user-1",
       name: "Test User",
       organisation_slug: "government-digital-service",
+      permissions: %w(inventory_management),
     )
   end
 end
