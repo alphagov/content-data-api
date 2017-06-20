@@ -44,7 +44,7 @@ module Importers
     end
 
     def set_metrics(content_item)
-      metrics = metric_builder.run_all(content_item.attributes)
+      metrics = metric_builder.run_all(content_item)
       metrics.each { |k, v| content_item.public_send(:"#{k}=", v) }
     end
 
