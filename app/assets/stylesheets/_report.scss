@@ -2,3 +2,40 @@
   color: black;
   text-decoration: underline;
 }
+
+.report-section {
+  padding: 1em 0;
+
+  .statistic {
+    margin: 0;
+    line-height: 2em;
+    font-size: 1.2em;
+    clear: both;
+
+    span {
+      display: inline-block;
+      width: 20%;
+      float: left;
+      text-align: right;
+    }
+
+    .name {
+      width: 60%;
+      text-align: left;
+      max-width: 20em;
+    }
+  }
+
+  .bar {
+    background: #ddd;
+    width: 100%;
+    max-width: 50em;
+    height: 20px;
+    margin: 2em 0 1em 0;
+
+    .inner {
+      height: 100%;
+      background: #337ab7;
+    }
+  }
+}

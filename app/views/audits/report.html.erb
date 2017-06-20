@@ -11,6 +11,27 @@
 
 <%= link_to "Export filtered audit to CSV", audits_export_path(filter_params), class: "report-export" %>
 
-<h3><%= format_number(@content_items.total_count) %></h3>
-<p>Content items</p>
+<div class="report-section">
+  <h3><%= format_number(@content_items.total_count) %></h3>
+  <p>Content items</p>
+<div>
 
+<div class="report-section" id="progress">
+  <h3>Audit progress</h3>
+
+  <div class="bar">
+    <div class="inner" style="width: <%= format_percentage(audited_percentage, precision: 5) %>"></div>
+  </div>
+
+  <div class="statistic">
+    <span class="name">Items audited</span>
+    <span><%= format_number(audited_count) %></span>
+    <span><%= format_percentage(audited_percentage) %></span>
+  </div>
+
+  <div class="statistic">
+    <span class="name">Items still to audit</span>
+    <span><%= format_number(not_audited_count) %></span>
+    <span><%= format_percentage(not_audited_percentage) %></span>
+  </div>
+</div>
