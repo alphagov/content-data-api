@@ -4,6 +4,12 @@ RSpec.feature "List Content Items to Audit", type: :feature do
   let!(:content_item_1) { FactoryGirl.create(:content_item, title: "All about flooding.") }
   let!(:content_item_2) { FactoryGirl.create(:content_item, title: "All about gardening.") }
 
+  scenario "User does not see CPM feedback survey link in banner" do
+    visit audits_path
+
+    expect(page).to have_no_link("these quick questions")
+  end
+
   scenario "List Content Items to Audit" do
     content_item_1.update!(six_months_page_views: 1234)
 
