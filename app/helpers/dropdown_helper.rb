@@ -22,14 +22,12 @@ module DropdownHelper
 
   def link_type_options(link_type)
     options = @search.options_for(link_type)
-    disabled_options = options.select { |o| o.incoming_links_count.zero? }
 
     options_from_collection_for_select(
       options,
       :content_id,
       :title_with_count,
       selected: params[link_type],
-      disabled: disabled_options.map(&:content_id),
     )
   end
 

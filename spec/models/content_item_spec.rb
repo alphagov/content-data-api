@@ -76,7 +76,7 @@ RSpec.describe ContentItem, type: :model do
       subset = described_class.where(id: [a])
 
       results = described_class.targets_of(link_type: "type1", scope_to_count: subset)
-      expect(results.map(&:incoming_links_count)).to match_array [0, 1]
+      expect(results.map(&:incoming_links_count)).to eq [1]
 
       results = described_class.targets_of(link_type: "type2", scope_to_count: subset)
       expect(results.map(&:incoming_links_count)).to eq [1]

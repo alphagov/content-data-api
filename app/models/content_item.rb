@@ -9,7 +9,7 @@ class ContentItem < ApplicationRecord
 
     nested = Link
       .select(:target_content_id, "count(x.id) as c")
-      .joins("left join (#{sql}) x on content_id = source_content_id")
+      .joins("join (#{sql}) x on content_id = source_content_id")
       .where(link_type: link_type)
       .group(:target_content_id)
 

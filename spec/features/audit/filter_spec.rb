@@ -80,7 +80,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     select "Audited", from: "audit_status"
 
     click_on "Filter"
-    expect(page).to have_content("HMRC (0)")
+    expect(page).to have_no_content("HMRC (0)")
     expect(page).to have_content("DFE (1)")
   end
 
