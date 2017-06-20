@@ -107,6 +107,17 @@ RSpec.describe ContentItem, type: :model do
       result = scope.document_type_counts
       expect(result).to eq("organisation" => 2)
     end
+
+    it "orders alphabetically" do
+      FactoryGirl.create_list(:content_item, 4, document_type: "guide")
+
+      result = described_class.document_type_counts
+      expect(result.to_a).to eq [
+        ["guide", 4],
+        ["organisation", 2],
+        ["policy", 3],
+      ]
+    end
   end
 
   describe "#title_with_count" do

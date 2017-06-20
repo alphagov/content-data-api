@@ -29,6 +29,7 @@ class ContentItem < ApplicationRecord
       .select(:document_type, "count(1) as count")
       .group(:document_type)
       .map { |r| [r.document_type, r.count] }
+      .sort_by(&:first)
       .to_h
   end
 
