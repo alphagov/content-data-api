@@ -66,8 +66,8 @@ class Search
     query.sort
   end
 
-  def options_for(link_types)
-    link_types.map { |t| [t, result.options_for(t)] }.to_h
+  def options_for(identifier)
+    result.options_for(identifier)
   end
 
   def self.all_link_types
