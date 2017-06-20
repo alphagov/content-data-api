@@ -3,6 +3,8 @@ class ContentItem < ApplicationRecord
   has_and_belongs_to_many :taxons
   has_one :audit, primary_key: :content_id, foreign_key: :content_id
 
+  attr_accessor :details
+
   def self.targets_of(link_type:, scope_to_count: all)
     sql = scope_to_count.to_sql.presence
     sql ||= "select * from content_items where id = -1"

@@ -17,8 +17,8 @@ module Metrics
   private
 
     def extract_documents
-      if content_item[:details].is_a?(Hash)
-        details = content_item[:details].symbolize_keys
+      if content_item.details.is_a?(Hash)
+        details = content_item.details.symbolize_keys
         documents = document_keys.map do |k|
           details.fetch(k, nil)
         end
