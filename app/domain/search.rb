@@ -25,6 +25,10 @@ class Search
     query.theme = identifier
   end
 
+  def document_type=(document_type)
+    query.document_type = document_type
+  end
+
   def filter_by(link_type:, source_ids: nil, target_ids: nil)
     query.filter_by(link_type, source_ids, target_ids)
   end
