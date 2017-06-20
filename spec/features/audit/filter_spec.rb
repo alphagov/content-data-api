@@ -127,6 +127,20 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     end
   end
 
+  scenario "filtering by document type" do
+    hmrc.update!(document_type: "organisation")
+
+    visit audits_path
+    select "Organisation", from: "document_type"
+
+    click_on "Filter"
+
+    within("table") do
+      expect(page).to have_content("HMRC")
+      expect(page).to have_no_content("Flying to countries abroad")
+    end
+  end
+
   scenario "Reseting page to 1 after filtering" do
     FactoryGirl.create_list(:content_item, 25)
 

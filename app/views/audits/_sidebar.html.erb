@@ -5,7 +5,7 @@
     <div class="form-group">
       <%= label_tag :audit_status, 'Audit status' %>
       <%= select_tag :audit_status,
-          options_from_collection_for_select(Search.all_audit_status, :identifier, :name, params[:audit_status]),
+          audit_status_options,
           include_blank: "All",
           class: "form-control" %>
     </div>
@@ -13,36 +13,27 @@
     <div class="form-group">
       <%= label_tag :theme, 'Theme' %>
       <%= select_tag :theme,
-          grouped_options_for_select(grouped_themes_and_subthemes, params[:theme]),
+          theme_and_subtheme_options,
           include_blank: "All",
           class: "form-control" %>
     </div>
 
-    <% @search.options_for(Search::FILTERABLE_LINK_TYPES).each do |link_type, options| %>
-      <% disabled_options = options.select { |o| o.incoming_links_count.zero? } %>
-
+    <% Search::FILTERABLE_LINK_TYPES.each do |link_type| %>
       <div class="form-group">
         <%= label_tag link_type, link_type.titleize.singularize %>
-        <%= select_tag(
-              link_type,
-              options_from_collection_for_select(
-                options.order(:title),
-                :content_id,
-                :title_with_count,
-                selected: params[link_type],
-                disabled: disabled_options.map(&:content_id),
-              ),
-              include_blank: "All",
-              class: "form-control") %>
+        <%= select_tag link_type,
+            link_type_options(link_type),
+            include_blank: "All",
+            class: "form-control" %>
       </div>
     <% end %>
 
     <div class="form-group">
-      <%= label_tag :content_type, 'Content type' %>
-      <%= select_tag :content_type,
-          options_from_collection_for_select([], :TODO, :TODO, params[:TODO]),
-          include_blank: "This filter is not implemented yet",
-          class: "form-control", disabled: true %>
+      <%= label_tag :document_type, 'Content type' %>
+      <%= select_tag :document_type,
+          document_type_options,
+          include_blank: "All",
+          class: "form-control" %>
     </div>
 
     <div class="form-group">
