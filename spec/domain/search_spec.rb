@@ -108,4 +108,45 @@ RSpec.describe Search do
     subject.document_type = "travel_advice"
     expect(content_ids).to eq %w(id2)
   end
+
+  describe "#dimension" do
+    before do
+      content_item = ContentItem.find_by!(content_id: "id2")
+      FactoryGirl.create(:audit, content_item: content_item)
+    end
+
+    it "applies the block associated with the dimension" do
+      audited = subject.dimension(:audited)
+      content_ids = audited.content_items.map(&:content_id)
+      expect(content_ids).to eq %w(id2)
+    end
+
+    it "inherits query parameters" do
+      subject.page = 2
+
+      audited = subject.dimension(:audited)
+      expect(audited.page).to eq(2)
+    end
+
+    it "applies the block after query parameters have been set" do
+      subject.audit_status = :non_audited
+
+      audited = subject.dimension(:audited)
+      content_ids = audited.content_items.map(&:content_id)
+      expect(content_ids).to eq %w(id2)
+    end
+
+    it "does not mutate the existing Search" do
+      subject.dimension(:audited)
+      expect(content_ids).to eq %w(id1 id2 id3 org1 org2 policy1)
+    end
+
+    it "memoizes for each dimension" do
+      expect(Search::Executor).to receive(:execute).twice
+
+      subject.dimension(:audited)
+      subject.dimension(:not_audited)
+      subject.dimension(:audited)
+    end
+  end
 end

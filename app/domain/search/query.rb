@@ -60,11 +60,8 @@ class Search
   private
 
     def set_filter_of_type(filter, type:)
-      if filter
-        filters.push(filter)
-      else
-        filters.delete_if { |f| f.is_a?(type) }
-      end
+      filters.delete_if { |f| f.is_a?(type) }
+      filters.push(filter) if filter
     end
 
     def raise_if_already_filtered_by_link_type(filter)
