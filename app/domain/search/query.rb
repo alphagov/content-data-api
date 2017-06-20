@@ -25,6 +25,11 @@ class Search
       set_filter_of_type(filter, type: RulesFilter)
     end
 
+    def document_type=(document_type)
+      filter = DocumentTypeFilter.new(document_type) if document_type.present?
+      set_filter_of_type(filter, type: DocumentTypeFilter)
+    end
+
     def filter_by(link_type, source_ids, target_ids)
       filter = LinkFilter.new(
         link_type: link_type,

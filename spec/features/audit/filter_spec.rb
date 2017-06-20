@@ -80,7 +80,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     select "Audited", from: "audit_status"
 
     click_on "Filter"
-    expect(page).to have_content("HMRC (0)")
+    expect(page).to have_no_content("HMRC (0)")
     expect(page).to have_content("DFE (1)")
   end
 
@@ -124,6 +124,20 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
       expect(page).to have_content("Travel insurance")
       expect(page).to have_no_content("Flying to countries abroad")
       expect(page).to have_no_content("DFE")
+    end
+  end
+
+  scenario "filtering by document type" do
+    hmrc.update!(document_type: "organisation")
+
+    visit audits_path
+    select "Organisation", from: "document_type"
+
+    click_on "Filter"
+
+    within("table") do
+      expect(page).to have_content("HMRC")
+      expect(page).to have_no_content("Flying to countries abroad")
     end
   end
 

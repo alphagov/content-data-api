@@ -127,6 +127,29 @@ RSpec.describe Search::Query do
     end
   end
 
+  describe "document_type" do
+    it "defaults to not filter by document type" do
+      expect(subject.filters).to be_empty
+    end
+
+    it "adds a filter when setting the document type" do
+      subject.document_type = "organisation"
+      expect(subject.filters).to be_present
+    end
+
+    it "does not add a filter if blank" do
+      subject.document_type = nil
+      expect(subject.filters).to be_empty
+    end
+
+    it "removes the existing audit filter when blank" do
+      subject.document_type = "organisation"
+      subject.document_type = nil
+
+      expect(subject.filters).to be_empty
+    end
+  end
+
   describe "#filter_by" do
     it "raises an error if a filter already exists for a type" do
       subject.filter_by("organisations", nil, "org1")

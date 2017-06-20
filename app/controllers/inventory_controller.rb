@@ -44,8 +44,10 @@ private
   def assign_content_items
     search = Search.new
     search.execute
-    options = search.options_for(@link_types)
-    @content_items = options.fetch(@link_type).order(:title)
+
+    @content_items = search
+      .options_for(@link_type)
+      .order(:title)
   end
 
   def lookup_link_type

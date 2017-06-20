@@ -11,8 +11,8 @@ class Search
       scope
     end
 
-    def options_for(link_type)
-      filter_options.fetch(link_type)
+    def options_for(identifier)
+      filter_options.fetch(identifier)
     end
   end
 end

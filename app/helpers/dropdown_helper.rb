@@ -1,12 +1,46 @@
 module DropdownHelper
-  def grouped_themes_and_subthemes
-    Theme.all.map do |theme|
+  def theme_and_subtheme_options
+    groups = Theme.all.map do |theme|
       theme = ThemeOption.new(theme)
       subthemes = theme.subthemes.map { |s| SubthemeOption.new(s) }
       options = [theme, *subthemes].map { |o| [o.name, o.value] }
 
       [theme.name, options]
     end
+
+    grouped_options_for_select(groups, params[:theme])
+  end
+
+  def audit_status_options
+    options_from_collection_for_select(
+      Search.all_audit_status,
+      :identifier,
+      :name,
+      params[:audit_status],
+    )
+  end
+
+  def link_type_options(link_type)
+    options = @search.options_for(link_type)
+
+    options_from_collection_for_select(
+      options,
+      :content_id,
+      :title_with_count,
+      selected: params[link_type],
+    )
+  end
+
+  def document_type_options
+    options = @search.options_for(:document_type)
+    options = options.map { |o| DocumentTypeOption.new(o) }
+
+    options_from_collection_for_select(
+      options,
+      :value,
+      :name,
+      params[:document_type],
+    )
   end
 
   class ThemeOption < SimpleDelegator
@@ -22,6 +56,16 @@ module DropdownHelper
   class SubthemeOption < SimpleDelegator
     def value
       "Subtheme_#{id}"
+    end
+  end
+
+  class DocumentTypeOption < SimpleDelegator
+    def name
+      "#{first.titleize} (#{second})"
+    end
+
+    def value
+      first
     end
   end
 end

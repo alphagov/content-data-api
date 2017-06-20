@@ -50,6 +50,7 @@ private
       filter_by_audit_status!(search)
       filter_by_link_types!(search)
       filter_by_theme!(search)
+      filter_by_document_type!(search)
       search.page = params[:page]
       search.execute
       search
@@ -85,5 +86,9 @@ private
 
   def filter_by_theme!(search)
     search.theme = params[:theme] if params[:theme]
+  end
+
+  def filter_by_document_type!(search)
+    search.document_type = params[:document_type] if params[:document_type]
   end
 end

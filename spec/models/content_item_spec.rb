@@ -76,7 +76,7 @@ RSpec.describe ContentItem, type: :model do
       subset = described_class.where(id: [a])
 
       results = described_class.targets_of(link_type: "type1", scope_to_count: subset)
-      expect(results.map(&:incoming_links_count)).to match_array [0, 1]
+      expect(results.map(&:incoming_links_count)).to eq [1]
 
       results = described_class.targets_of(link_type: "type2", scope_to_count: subset)
       expect(results.map(&:incoming_links_count)).to eq [1]
@@ -87,6 +87,36 @@ RSpec.describe ContentItem, type: :model do
       results = described_class.targets_of(link_type: "anything", scope_to_count: subset)
 
       expect { results.first }.not_to raise_error
+    end
+  end
+
+  describe ".document_type_counts" do
+    before do
+      FactoryGirl.create_list(:content_item, 2, document_type: "organisation")
+      FactoryGirl.create_list(:content_item, 3, document_type: "policy")
+    end
+
+    it "returns a hash of document_types to the count of items" do
+      result = described_class.document_type_counts
+      expect(result).to eq("organisation" => 2, "policy" => 3)
+    end
+
+    it "can be chained on scopes" do
+      scope = described_class.where(document_type: "organisation")
+
+      result = scope.document_type_counts
+      expect(result).to eq("organisation" => 2)
+    end
+
+    it "orders alphabetically" do
+      FactoryGirl.create_list(:content_item, 4, document_type: "guide")
+
+      result = described_class.document_type_counts
+      expect(result.to_a).to eq [
+        ["guide", 4],
+        ["organisation", 2],
+        ["policy", 3],
+      ]
     end
   end
 

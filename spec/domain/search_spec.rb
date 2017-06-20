@@ -100,4 +100,12 @@ RSpec.describe Search do
     subject.audit_status = "audited"
     expect(content_ids).to eq %w(id2)
   end
+
+  it "can filter by document type" do
+    content_item = ContentItem.find_by!(content_id: "id2")
+    content_item.update!(document_type: "travel_advice")
+
+    subject.document_type = "travel_advice"
+    expect(content_ids).to eq %w(id2)
+  end
 end
