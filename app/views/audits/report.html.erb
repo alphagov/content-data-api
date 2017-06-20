@@ -9,4 +9,8 @@
   <li class="active">Report</li>
 </ul>
 
-<%= link_to "Export", audits_export_path(filter_params) %>
+<%= link_to "Export filtered audit to CSV", audits_export_path(filter_params), class: "report-export" %>
+
+<h3><%= format_number(@content_items.total_count) %></h3>
+<p>Content items</p>
+

@@ -14,7 +14,7 @@ RSpec.feature "Exporting a CSV from the report page" do
 
   scenario "Exporting a csv file as an attachment" do
     visit audits_report_path
-    click_link "Export"
+    click_link "Export filtered audit to CSV"
 
     expect(content_type).to eq("text/csv")
     expect(content_disposition).to start_with("attachment")
@@ -30,7 +30,7 @@ RSpec.feature "Exporting a CSV from the report page" do
     select "Non Audited", from: "audit_status"
     click_on "Filter"
 
-    click_link "Export"
+    click_link "Export filtered audit to CSV"
     expect(page).to have_no_content("Example,Test User")
   end
 end
