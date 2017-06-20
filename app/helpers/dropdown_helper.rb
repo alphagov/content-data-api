@@ -21,7 +21,7 @@ module DropdownHelper
   end
 
   def link_type_options(link_type)
-    options = @search.options_for(link_type)
+    options = @search.options_for(link_type).order(:title)
 
     options_from_collection_for_select(
       options,
