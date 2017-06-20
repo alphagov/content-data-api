@@ -110,6 +110,11 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
         "All Travel",
         "Aviation",
       ]
+
+      groups = page.all("optgroup")
+      labels = groups.map { |g| g[:label] }
+
+      expect(labels).to eq %w(Environment Travel)
     end
   end
 

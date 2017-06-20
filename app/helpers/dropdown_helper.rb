@@ -1,11 +1,10 @@
 module DropdownHelper
   def theme_and_subtheme_options
     groups = Theme.all.map do |theme|
-      theme = ThemeOption.new(theme)
-      subthemes = theme.subthemes.map { |s| SubthemeOption.new(s) }
-      options = [theme, *subthemes].map { |o| [o.name, o.value] }
+      options = [ThemeOption.new(theme)]
+      options += theme.subthemes.map { |s| SubthemeOption.new(s) }
 
-      [theme.name, options]
+      [theme.name, options.map { |o| [o.name, o.value] }]
     end
 
     grouped_options_for_select(groups, params[:theme])
