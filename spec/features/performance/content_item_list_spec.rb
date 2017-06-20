@@ -11,6 +11,12 @@ RSpec.feature "Content Items List", type: :feature do
     it_behaves_like 'a paginated list', 'content_items'
   end
 
+  scenario "User does can see CPM feedback survey link in banner" do
+    visit "/content_items"
+
+    expect(page).to have_link("these quick questions")
+  end
+
   scenario "Renders the page title" do
     visit "/content_items"
 
