@@ -4,11 +4,18 @@
 
 <h1>GOV.UK Content Audit</h1>
 
-<ul class="tabs">
-  <li><%= link_to "Content", audits_path(filter_params) %></li>
-  <li class="active">Report</li>
+<ul class="nav nav-tabs">
+  <li role="presentation">
+    <%= link_to "Content", audits_path(filter_params), aria_controls: "home", role: "tab" %>
+  </li>
+  <li role="presentation" class="active">
+    <%= link_to "Report", "#", aria_controls: "home", role: "tab" %>
+  </li>
 </ul>
 
+<div class="tab-content">
+
+<br>
 <%= link_to "Export filtered audit to CSV", audits_export_path(filter_params), class: "report-export" %>
 
 <div class="report-section">

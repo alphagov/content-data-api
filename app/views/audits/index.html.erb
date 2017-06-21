@@ -5,10 +5,16 @@
 
 <h1>GOV.UK Content Audit</h1>
 
-<ul class="tabs">
-  <li class="active">Content</li>
-  <li><%= link_to "Report", audits_report_path(filter_params) %></li>
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active">
+    <%= link_to "Content", "#", aria_controls: "home", role: "tab" %>
+  </li>
+  <li role="presentation">
+    <%= link_to "Report", audits_report_path(filter_params), aria_controls: "home", role: "tab" %>
+  </li>
 </ul>
+
+<div class="tab-content">
 
 <table class="table table-bordered table-hover">
   <thead>
@@ -23,3 +29,5 @@
 </table>
 
 <%= paginate @content_items, :window => 2 %>
+
+</div>
