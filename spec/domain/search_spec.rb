@@ -101,6 +101,34 @@ RSpec.describe Search do
     expect(content_ids).to eq %w(id2)
   end
 
+  it "can filter by passing status" do
+    content_item = ContentItem.find_by!(content_id: "id2")
+    audit = FactoryGirl.create(:audit, content_item: content_item)
+    FactoryGirl.create(
+      :response,
+      question: FactoryGirl.create(:boolean_question),
+      audit: audit,
+      value: "yes"
+    )
+
+    subject.passing = true
+    expect(content_ids).to eq %w(id2)
+  end
+
+  it "can filter by not passing status" do
+    content_item = ContentItem.find_by!(content_id: "id2")
+    audit = FactoryGirl.create(:audit, content_item: content_item)
+    FactoryGirl.create(
+      :response,
+      question: FactoryGirl.create(:boolean_question),
+      audit: audit,
+      value: "no"
+    )
+
+    subject.passing = false
+    expect(content_ids).to eq %w{id2}
+  end
+
   it "can filter by document type" do
     content_item = ContentItem.find_by!(content_id: "id2")
     content_item.update!(document_type: "travel_advice")

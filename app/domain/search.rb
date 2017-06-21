@@ -16,6 +16,8 @@ class Search
   DIMENSIONS = {
     audited: -> (s) { s.audit_status = :audited },
     not_audited: -> (s) { s.audit_status = :non_audited },
+    passing: -> (s) { s.passing = true },
+    not_passing: -> (s) { s.passing = false },
   }.freeze
 
   def initialize
@@ -24,6 +26,10 @@ class Search
 
   def audit_status=(identifier)
     query.audit_status = identifier
+  end
+
+  def passing=(bool)
+    query.passing = bool
   end
 
   def theme=(identifier)

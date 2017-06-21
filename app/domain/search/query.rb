@@ -14,6 +14,13 @@ class Search
       set_filter_of_type(filter, type: AuditFilter)
     end
 
+    def passing=(bool)
+      set_filter_of_type(
+        bool.nil? ? nil : PassingFilter.new(bool),
+        type: PassingFilter
+      )
+    end
+
     def theme=(identifier)
       type, id = identifier.to_s.split("_")
 
