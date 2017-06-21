@@ -7,7 +7,21 @@ RSpec.feature "Reporting on audit progress" do
   let!(:insurance) { FactoryGirl.create(:content_item, title: "Travel insurance", document_type: "policy") }
 
   before do
-    FactoryGirl.create(:audit, content_item: flying)
+    flying_audit = FactoryGirl.create(:audit, content_item: flying)
+    FactoryGirl.create(
+      :response,
+      question: FactoryGirl.create(:boolean_question),
+      audit: flying_audit,
+      value: "no"
+    )
+
+    insurance_audit = FactoryGirl.create(:audit, content_item: insurance)
+    FactoryGirl.create(
+      :response,
+      question: FactoryGirl.create(:boolean_question),
+      audit: insurance_audit,
+      value: "yes"
+    )
   end
 
   scenario "Displaying the number of items included in the audit" do
@@ -26,10 +40,20 @@ RSpec.feature "Reporting on audit progress" do
   scenario "Displaying the number of items audited/not audited" do
     visit audits_report_path
 
-    expect(page).to have_content("Items audited 1 33%")
-    expect(page).to have_content("Items still to audit 2 67%")
+    expect(page).to have_content("Items audited 2 67%")
+    expect(page).to have_content("Items still to audit 1 33%")
 
-    bar = page.find("#progress .bar .inner")
-    expect(bar[:style]).to eq("width: 33.33333%")
+    bar = page.find("#progress .progress .progress-bar")
+    expect(bar[:style]).to eq("width: 66.66667%;")
+  end
+
+  scenario "Displaying the number of items needing improvement/not needing improvement" do
+    visit audits_report_path
+
+    expect(page).to have_content("Items that need improvement 1 50%")
+    expect(page).to have_content("Items that don't need improvement 1 50%")
+
+    bar = page.find("#items-needing-improvement .progress .progress-bar")
+    expect(bar[:style]).to eq("width: 50%;")
   end
 end
