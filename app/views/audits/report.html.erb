@@ -46,9 +46,34 @@
   </table>
 </div>
 
-  <div class="statistic">
-    <span class="name">Items still to audit</span>
-    <span><%= format_number(not_audited_count) %></span>
-    <span><%= format_percentage(not_audited_percentage) %></span>
+<div id="items-needing-improvement">
+  <h3>Items needing improvement</h3>
+
+  <div class="progress">
+    <div class="progress-bar"
+         role="progressbar"
+         aria-valuenow="<%= passing_percentage %>"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         style="width: <%= format_percentage(passing_percentage, precision: 5) %>;">
+      <span class="sr-only">
+        <%= format_percentage(passing_percentage, precision: 5) %> Complete
+      </span>
+    </div>
   </div>
+
+  <table class="table">
+    <tr>
+      <td class="col-md-6">Items that need improvement</td>
+      <td class="col-md-3"><%= format_number(passing_count) %></td>
+      <td class="col-md-3"><%= format_percentage(passing_percentage) %></td>
+    </tr>
+    <tr>
+      <td class="col-md-6">Items that don't need improvement</td>
+      <td class="col-md-3"><%= format_number(not_passing_count) %></td>
+      <td class="col-md-3"><%= format_percentage(not_passing_percentage) %></td>
+    </tr>
+  </table>
+</div>
+
 </div>
