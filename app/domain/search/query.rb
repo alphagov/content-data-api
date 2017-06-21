@@ -10,35 +10,23 @@ class Search
     end
 
     def audit_status=(identifier)
-      set_filter_of_type(
-        identifier.blank? ? nil : AuditFilter.find(identifier.to_sym),
-        type: AuditFilter
-      )
+      filters.push(AuditFilter.find(identifier))
     end
 
     def passing=(bool)
-      set_filter_of_type(
-        bool.nil? ? nil : PassingFilter.new(bool),
-        type: PassingFilter
-      )
+      filters.push(PassingFilter.new(bool))
     end
 
     def theme=(identifier)
       type, id = identifier.to_s.split("_")
+      return unless %(Theme Subtheme).include?(type)
 
-      if id.present? && %(Theme Subtheme).include?(type)
-        model = type.constantize.find(id)
-        filter = RulesFilter.new(rules: model.inventory_rules)
-      end
-
-      set_filter_of_type(filter, type: RulesFilter)
+      model = type.constantize.find(id)
+      filters.push(RulesFilter.new(rules: model.inventory_rules))
     end
 
     def document_type=(document_type)
-      set_filter_of_type(
-        document_type.blank? ? nil : DocumentTypeFilter.new(document_type),
-        type: DocumentTypeFilter
-      )
+      filters.push(DocumentTypeFilter.new(document_type))
     end
 
     def filter_by(link_type, source_ids, target_ids)
@@ -69,11 +57,6 @@ class Search
     end
 
   private
-
-    def set_filter_of_type(filter, type:)
-      filters.delete_if { |f| f.is_a?(type) }
-      filters.push(filter) if filter
-    end
 
     def raise_if_already_filtered_by_link_type(filter)
       if link_filters.any? { |f| f.link_type == filter.link_type }

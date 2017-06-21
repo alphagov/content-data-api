@@ -97,7 +97,7 @@ RSpec.describe Search do
     content_item = ContentItem.find_by!(content_id: "id2")
     FactoryGirl.create(:audit, content_item: content_item)
 
-    subject.audit_status = "audited"
+    subject.audit_status = :audited
     expect(content_ids).to eq %w(id2)
   end
 
@@ -156,12 +156,14 @@ RSpec.describe Search do
       expect(audited.page).to eq(2)
     end
 
-    it "applies the block after query parameters have been set" do
-      subject.audit_status = :non_audited
+    it "returns no results if contradictory dimensions are set" do
+      search = subject
+        .dimension(:audited)
+        .dimension(:not_audited)
 
-      audited = subject.dimension(:audited)
-      content_ids = audited.content_items.map(&:content_id)
-      expect(content_ids).to eq %w(id2)
+
+      content_ids = search.content_items.map(&:content_id)
+      expect(content_ids).to be_empty
     end
 
     it "does not mutate the existing Search" do
