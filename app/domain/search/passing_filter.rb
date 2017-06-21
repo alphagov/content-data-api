@@ -1,19 +1,14 @@
 class Search
   class PassingFilter
-    attr_reader :identifier, :name
+    attr_accessor :passing
 
     def initialize(passing)
-      @passing = passing
+      self.passing = passing
     end
 
     def apply(scope)
-      things = Response.joins(:question).where(
-        "responses.audit_id = audits.id AND questions.type = 'BooleanQuestion' AND responses.value = 'no'"
-      )
-
-      scope.joins(:audit).where(
-        @passing ? things.exists.not : things.exists
-      )
+      nested = passing ? Audit.passing : Audit.failing
+      scope.where(content_id: nested.select(:content_id))
     end
   end
 end
