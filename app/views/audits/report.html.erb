@@ -26,18 +26,7 @@
 <div id="progress">
   <h3>Audit progress</h3>
 
-  <div class="progress">
-    <div class="progress-bar"
-         role="progressbar"
-         aria-valuenow="<%= audited_percentage %>"
-         aria-valuemin="0"
-         aria-valuemax="100"
-         style="width: <%= format_percentage(audited_percentage, precision: 5) %>;">
-      <span class="sr-only">
-        <%= format_percentage(audited_percentage, precision: 5) %> Complete
-      </span>
-    </div>
-  </div>
+  <%= render "progress_bar", percentage: audited_percentage %>
 
   <table class="table">
     <tr>
@@ -56,18 +45,7 @@
 <div id="items-needing-improvement">
   <h3>Items needing improvement</h3>
 
-  <div class="progress">
-    <div class="progress-bar"
-         role="progressbar"
-         aria-valuenow="<%= passing_percentage %>"
-         aria-valuemin="0"
-         aria-valuemax="100"
-         style="width: <%= format_percentage(passing_percentage, precision: 5) %>;">
-      <span class="sr-only">
-        <%= format_percentage(passing_percentage, precision: 5) %> Complete
-      </span>
-    </div>
-  </div>
+  <%= render "progress_bar", percentage: passing_percentage %>
 
   <table class="table">
     <tr>
