@@ -10,8 +10,10 @@ class Search
     end
 
     def audit_status=(identifier)
-      filter = AuditFilter.find(identifier.to_sym) if identifier.present?
-      set_filter_of_type(filter, type: AuditFilter)
+      set_filter_of_type(
+        identifier.blank? ? nil : AuditFilter.find(identifier.to_sym),
+        type: AuditFilter
+      )
     end
 
     def passing=(bool)
@@ -33,8 +35,10 @@ class Search
     end
 
     def document_type=(document_type)
-      filter = DocumentTypeFilter.new(document_type) if document_type.present?
-      set_filter_of_type(filter, type: DocumentTypeFilter)
+      set_filter_of_type(
+        document_type.blank? ? nil : DocumentTypeFilter.new(document_type),
+        type: DocumentTypeFilter
+      )
     end
 
     def filter_by(link_type, source_ids, target_ids)
