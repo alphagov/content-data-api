@@ -16,18 +16,35 @@
   <p>Content items</p>
 <div>
 
-<div class="report-section" id="progress">
+<div id="progress">
   <h3>Audit progress</h3>
 
-  <div class="bar">
-    <div class="inner" style="width: <%= format_percentage(audited_percentage, precision: 5) %>"></div>
+  <div class="progress">
+    <div class="progress-bar"
+         role="progressbar"
+         aria-valuenow="<%= audited_percentage %>"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         style="width: <%= format_percentage(audited_percentage, precision: 5) %>;">
+      <span class="sr-only">
+        <%= format_percentage(audited_percentage, precision: 5) %> Complete
+      </span>
+    </div>
   </div>
 
-  <div class="statistic">
-    <span class="name">Items audited</span>
-    <span><%= format_number(audited_count) %></span>
-    <span><%= format_percentage(audited_percentage) %></span>
-  </div>
+  <table class="table">
+    <tr>
+      <td class="col-md-6">Items audited</td>
+      <td class="col-md-3"><%= format_number(audited_count) %></td>
+      <td class="col-md-3"><%= format_percentage(audited_percentage) %></td>
+    </tr>
+    <tr>
+      <td class="col-md-6">Items still to audit</td>
+      <td class="col-md-3"><%= format_number(not_audited_count) %></td>
+      <td class="col-md-3"><%= format_percentage(not_audited_percentage) %></td>
+    </tr>
+  </table>
+</div>
 
   <div class="statistic">
     <span class="name">Items still to audit</span>
