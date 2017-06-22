@@ -19,5 +19,30 @@ class Search
     def options_for(identifier)
       filter_options.fetch(identifier)
     end
+
+    def next_content_item(content_item)
+      next_scope =
+        sort.where_only_after(
+          content_items.unscope(:limit, :offset),
+          content_item
+        )
+
+      limit = 10
+
+      loop do
+        ids = next_scope.limit(limit).pluck(:id)
+        current_item_index = ids.index(content_item.id)
+
+        if current_item_index.nil?
+          limit *= 2
+          next
+        elsif limit == (current_item_index + 1)
+          limit += 1
+          next
+        else
+          return next_scope.find_by(id: ids[current_item_index + 1])
+        end
+      end
+    end
   end
 end
