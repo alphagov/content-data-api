@@ -20,12 +20,6 @@ class ContentItem < ApplicationRecord
       .joins("join (#{nested.to_sql}) x on target_content_id = content_id")
   end
 
-  def self.next_item(current_item)
-    ids = pluck(:id)
-    index = ids.index(current_item.id)
-    all[index + 1] if index
-  end
-
   def self.document_type_counts
     all
       .select(:document_type, "count(1) as count")
