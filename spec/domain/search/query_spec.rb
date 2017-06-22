@@ -40,39 +40,18 @@ RSpec.describe Search::Query do
     end
   end
 
-  describe "audit_status" do
-    it "defaults to not filter by audit status" do
-      expect(subject.filters).to be_empty
-    end
+  it "does not apply any filters by default" do
+    expect(subject.filters).to be_empty
+  end
 
-    it "adds a filter when setting the audit status" do
+  describe "audit_status" do
+    it "adds a filter" do
       subject.audit_status = :audited
       expect(subject.filters).to be_present
-    end
-
-    it "does not add a filter if blank" do
-      subject.audit_status = nil
-      expect(subject.filters).to be_empty
-    end
-
-    it "removes the existing audit filter when blank" do
-      subject.audit_status = :audited
-      subject.audit_status = nil
-
-      expect(subject.filters).to be_empty
     end
   end
 
   describe "theme" do
-    it "defaults to not filter by theme" do
-      expect(subject.filters).to be_empty
-    end
-
-    it "does not add a filter if blank" do
-      subject.theme = nil
-      expect(subject.filters).to be_empty
-    end
-
     it "does not add a filter if an unrecognised type" do
       subject.theme = "Unknown_123"
       expect(subject.filters).to be_empty
@@ -87,13 +66,6 @@ RSpec.describe Search::Query do
 
         expect(subject.filters).to be_present
         expect(subject.filters.first).to be_a(Search::RulesFilter)
-      end
-
-      it "removes the existing rules filter when blank" do
-        subject.theme = identifier
-        subject.theme = nil
-
-        expect(subject.filters).to be_empty
       end
 
       it "raises an error if theme doesn't exist" do
@@ -113,13 +85,6 @@ RSpec.describe Search::Query do
         expect(subject.filters.first).to be_a(Search::RulesFilter)
       end
 
-      it "removes the existing rules filter when blank" do
-        subject.theme = identifier
-        subject.theme = nil
-
-        expect(subject.filters).to be_empty
-      end
-
       it "raises an error if subtheme doesn't exist" do
         expect { subject.theme = "Subtheme_999" }
           .to raise_error(ActiveRecord::RecordNotFound)
@@ -128,25 +93,9 @@ RSpec.describe Search::Query do
   end
 
   describe "document_type" do
-    it "defaults to not filter by document type" do
-      expect(subject.filters).to be_empty
-    end
-
-    it "adds a filter when setting the document type" do
+    it "adds a filter" do
       subject.document_type = "organisation"
       expect(subject.filters).to be_present
-    end
-
-    it "does not add a filter if blank" do
-      subject.document_type = nil
-      expect(subject.filters).to be_empty
-    end
-
-    it "removes the existing audit filter when blank" do
-      subject.document_type = "organisation"
-      subject.document_type = nil
-
-      expect(subject.filters).to be_empty
     end
   end
 

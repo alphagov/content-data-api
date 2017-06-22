@@ -12,6 +12,7 @@ class Question < ApplicationRecord
 end
 
 class BooleanQuestion < Question
+  PASS = "yes".freeze
 end
 
 class FreeTextQuestion < Question

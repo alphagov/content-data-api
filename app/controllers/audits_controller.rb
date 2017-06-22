@@ -1,8 +1,8 @@
 class AuditsController < ApplicationController
   helper_method :filter_params
+  before_action :content_items, only: %i(index report export)
 
   def index
-    content_items
   end
 
   def show
@@ -26,10 +26,22 @@ class AuditsController < ApplicationController
     end
   end
 
+  def report
+  end
+
+  def export
+    csv = Report.generate(audits)
+    send_data(csv, filename: "report.csv")
+  end
+
 private
 
   def audit
     @audit ||= Audit.find_or_initialize_by(content_item: content_item).decorate
+  end
+
+  def audits
+    @audits ||= Audit.where(content_item: content_items.object)
   end
 
   def content_item
@@ -74,7 +86,7 @@ private
   end
 
   def filter_by_audit_status!(search)
-    search.audit_status = params[:audit_status] if params[:audit_status]
+    search.audit_status = params[:audit_status].to_sym if params[:audit_status].present?
   end
 
   def filter_by_link_types!(search)
@@ -85,10 +97,10 @@ private
   end
 
   def filter_by_theme!(search)
-    search.theme = params[:theme] if params[:theme]
+    search.theme = params[:theme] if params[:theme].present?
   end
 
   def filter_by_document_type!(search)
-    search.document_type = params[:document_type] if params[:document_type]
+    search.document_type = params[:document_type] if params[:document_type].present?
   end
 end

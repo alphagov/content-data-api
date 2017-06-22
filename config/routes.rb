@@ -11,6 +11,11 @@ Rails.application.routes.draw do
 
   resources :audits, only: %w(index)
 
+  namespace :audits do
+    get :report
+    get :export
+  end
+
   namespace :inventory do
     root action: "show"
     get :toggle, action: "toggle"

@@ -3,6 +3,14 @@ module FormatHelper
     number_with_delimiter(n, delimiter: ",")
   end
 
+  def format_percentage(p, precision: 0)
+    number_with_precision(
+      p,
+      precision: precision,
+      strip_insignificant_zeros: true,
+    ) + "%"
+  end
+
   def format_datetime(d)
     return "Never" unless d
 
