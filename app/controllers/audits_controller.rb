@@ -60,7 +60,7 @@ private
   end
 
   def next_item
-    @next_item ||= content_items.next_item(content_item)
+    @next_item ||= search.next_content_item(content_item)
   end
 
   def search
