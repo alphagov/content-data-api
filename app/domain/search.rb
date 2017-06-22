@@ -85,6 +85,10 @@ class Search
     result.options_for(identifier)
   end
 
+  def next_content_item(content_item)
+    result.next_content_item(content_item)
+  end
+
   def dimension(identifier)
     @dimension ||= {}
 
