@@ -4,23 +4,24 @@ class Search
 
     def self.all
       [
-        Sort.new(:page_views_desc, "six_months_page_views desc"),
+        Sort.new(:page_views_desc, "six_months_page_views", :desc),
       ]
     end
 
     attr_reader :identifier
 
-    def initialize(identifier, sort_query)
+    def initialize(identifier, field, order)
       @identifier = identifier
-      @sort_query = sort_query
+      @field = field
+      @order = order
     end
 
     def apply(scope)
-      scope.order(sort_query)
+      scope.order("#{field} #{order}")
     end
 
   private
 
-    attr_accessor :sort_query
+    attr_accessor :field, :order
   end
 end
