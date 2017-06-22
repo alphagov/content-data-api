@@ -20,6 +20,13 @@ class Search
       scope.order("#{field} #{order}")
     end
 
+    def where_only_after(scope, content_item)
+      scope.where(
+        "#{field} #{{ desc: '<=', asc: '>=' }[order]} ?",
+        content_item.object.send(field)
+      )
+    end
+
   private
 
     attr_accessor :field, :order
