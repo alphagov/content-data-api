@@ -20,7 +20,7 @@ class Search
       apply_sort!
       paginate!
 
-      Result.new(scope, filter_options)
+      Result.new(scope, filter_options, query.sort)
     end
 
   private
