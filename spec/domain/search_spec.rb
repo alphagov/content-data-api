@@ -137,6 +137,14 @@ RSpec.describe Search do
     expect(content_ids).to eq %w(id2)
   end
 
+  it "can return an unpaginated scope of content items" do
+    subject.per_page = 2
+    subject.execute
+
+    expect(subject.content_items.size).to eq(2)
+    expect(subject.unpaginated.size).to eq(6)
+  end
+
   describe "#dimension" do
     before do
       content_item = ContentItem.find_by!(content_id: "id2")

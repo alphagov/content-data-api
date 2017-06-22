@@ -41,7 +41,7 @@ private
   end
 
   def audits
-    @audits ||= Audit.where(content_item: content_items.object)
+    @audits ||= Audit.where(content_item: @search.unpaginated)
   end
 
   def content_item
