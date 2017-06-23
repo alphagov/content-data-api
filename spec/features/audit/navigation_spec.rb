@@ -69,4 +69,23 @@ RSpec.feature "Navigation" do
     expected = content_item_audit_path(second, some_filter: "value")
     expect(current_url).to end_with(expected)
   end
+
+  context "when on the second page of content items" do
+    before do
+      FactoryGirl.create_list(:content_item, 25)
+
+      FactoryGirl.create(:content_item, title: "Penultimate item")
+      FactoryGirl.create(:content_item, title: "Last item")
+
+      visit audits_path(page: 2)
+    end
+
+    scenario "continuing to the next item from the audit page" do
+      click_link "Penultimate item"
+      click_on "Next"
+
+      expect(page).to have_content("Last item")
+      expect(page).to have_no_link "Next"
+    end
+  end
 end
