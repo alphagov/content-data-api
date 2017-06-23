@@ -34,10 +34,22 @@ class Search
     end
 
     def where_only_after(scope, content_item)
-      scope.where(
-        "#{field} #{{ desc: '<=', asc: '>=' }[order]} ?",
-        content_item.object.send(field)
-      )
+      field_value = content_item.object.send(field)
+
+      if field_value.nil?
+        case @nulls
+        when :first
+          # Can't narrow down the possibilities any more, as the field
+          # value for the next item could be null, or it might not be.
+          scope
+        when :last
+          scope.where("#{field} IS NULL")
+        end
+      else
+        scope.where(
+          "#{field} #{{ desc: '<=', asc: '>=' }[order]} ?", field_value
+        )
+      end
     end
 
   private
