@@ -12,6 +12,13 @@ class AuditsController < ApplicationController
 
   def save
     audit.user = current_user
+    # Get the next_item before updating the audit. As the
+    # next_content_item functionality depends on finding the current
+    # item in the search, if updating the audit removes the current
+    # item from the search, this can mean that the next item can't be
+    # found.
+    next_item
+
     updated = audit.update(audit_params)
 
     if next_item && updated
