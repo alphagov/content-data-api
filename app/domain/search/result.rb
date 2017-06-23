@@ -35,6 +35,11 @@ class Search
 
         if current_item_index.nil?
           limit *= 2
+          # Give up if the limit is greater than 500, as this process
+          # is probably taking too long, and might not even finish if
+          # somehow the content item provided has fallen out of the
+          # filter criteria
+          return false if limit > 500
           next
         elsif limit == (current_item_index + 1)
           limit += 1
