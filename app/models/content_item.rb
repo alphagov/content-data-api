@@ -1,7 +1,18 @@
 class ContentItem < ApplicationRecord
   has_and_belongs_to_many :organisations
   has_and_belongs_to_many :taxons
+
   has_one :audit, primary_key: :content_id, foreign_key: :content_id
+  has_many :links, primary_key: :content_id, foreign_key: :source_content_id
+
+  Search.all_link_types.each do |link_type|
+    has_many(
+      :"linked_#{link_type}",
+      -> { where(links: { link_type: link_type }) },
+      through: :links,
+      source: :target,
+    )
+  end
 
   attr_accessor :details
 
@@ -43,18 +54,6 @@ class ContentItem < ApplicationRecord
     end
   end
 
-  def topics
-    linked_content(Link::TOPICS)
-  end
-
-  def organisations_tmp
-    linked_content(Link::ALL_ORGS)
-  end
-
-  def policy_areas
-    linked_content(Link::POLICY_AREAS)
-  end
-
   def guidance?
     document_type == "guidance"
   end
@@ -84,13 +83,5 @@ class ContentItem < ApplicationRecord
       taxon = Taxon.find_by(content_id: taxon_id)
       taxons << taxon unless taxon.nil? || taxons.include?(taxon)
     end
-  end
-
-private
-
-  def linked_content(link_type)
-    links = Link.where(link_type: link_type, source_content_id: content_id)
-
-    ContentItem.where(content_id: links.select(:target_content_id))
   end
 end

@@ -190,34 +190,13 @@ RSpec.describe ContentItem, type: :model do
     end
   end
 
-  describe "linked content" do
-    let!(:content_item) { create(:content_item, content_id: "cid1") }
+  describe "#linked_topics" do
+    it "returns the topics linked to the Content Item" do
+      item =  FactoryGirl.create(:content_item)
+      topic = FactoryGirl.create(:content_item)
 
-    describe "#topics" do
-      it "returns the topics linked to the Content Item" do
-        topic = create(:content_item, content_id: "topic1")
-        Link.create(link_type: "topics", source_content_id: "cid1", target_content_id: "topic1")
-
-        expect(content_item.topics).to match_array([topic])
-      end
-    end
-
-    describe "#organisations_tmp" do
-      it "returns the topics linked to the Content Item" do
-        organisation = create(:content_item, content_id: "org1")
-        Link.create(link_type: "organisations", source_content_id: "cid1", target_content_id: "org1")
-
-        expect(content_item.organisations_tmp).to match_array([organisation])
-      end
-    end
-
-    describe "#policy_areas" do
-      it "returns the topics linked to the Content Item" do
-        policy_area = create(:content_item, content_id: "policy_area_1")
-        Link.create(link_type: "policy_areas", source_content_id: "cid1", target_content_id: "policy_area_1")
-
-        expect(content_item.policy_areas).to match_array([policy_area])
-      end
+      FactoryGirl.create(:link, source: item, target: topic, link_type: "topics")
+      expect(item.linked_topics).to eq [topic]
     end
   end
 
