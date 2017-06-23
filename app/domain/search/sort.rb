@@ -11,15 +11,16 @@ class Search
 
     attr_reader :identifier, :label
 
-    def initialize(identifier, label, field, order)
+    def initialize(identifier, label, field, order, options = {})
       @identifier = identifier
       @label = label
       @field = field
       @order = order
+      @nulls = options.fetch(:nulls, order == :dsc ? :first : :last)
     end
 
     def apply(scope)
-      scope.order("#{field} #{order}")
+      scope.order("#{field} #{order} NULLS #{nulls}")
     end
 
     def where_only_after(scope, content_item)
@@ -31,6 +32,6 @@ class Search
 
   private
 
-    attr_accessor :field, :order
+    attr_accessor :field, :order, :nulls
   end
 end

@@ -4,7 +4,7 @@ RSpec.describe Search::Sort do
       scope = double
       sort = Search::Sort.new(:identifier, "label", :sort_field, :sort_order)
 
-      expect(scope).to receive(:order).with("sort_field sort_order")
+      expect(scope).to receive(:order).with("sort_field sort_order NULLS last")
       sort.apply(scope)
     end
   end
