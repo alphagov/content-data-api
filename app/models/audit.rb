@@ -16,4 +16,12 @@ class Audit < ApplicationRecord
   def template
     @template ||= Template.new
   end
+
+  def passing?
+    !failing?
+  end
+
+  def failing?
+    responses.any?(&:failing?)
+  end
 end

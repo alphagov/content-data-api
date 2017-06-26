@@ -91,4 +91,27 @@ RSpec.describe Response do
       end
     end
   end
+
+  describe "#passing?, #failing?" do
+    let(:free) { FactoryGirl.create(:free_text_question) }
+    let(:bool) { FactoryGirl.create(:boolean_question) }
+
+    it "is passing for responses to non-boolean questions" do
+      response = FactoryGirl.create(:response, question: free)
+      expect(response).to be_passing
+      expect(response).not_to be_failing
+    end
+
+    it "is passing for responses to boolean questions with a 'yes' value" do
+      response = FactoryGirl.create(:response, question: bool, value: "yes")
+      expect(response).to be_passing
+      expect(response).not_to be_failing
+    end
+
+    it "is failing for responses to boolean questions with a 'no' value" do
+      response = FactoryGirl.create(:response, question: bool, value: "no")
+      expect(response).not_to be_passing
+      expect(response).to be_failing
+    end
+  end
 end

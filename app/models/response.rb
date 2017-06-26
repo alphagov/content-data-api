@@ -13,4 +13,16 @@ class Response < ApplicationRecord
 
   validates :value, presence: { message: "mandatory field missing" },
     if: -> { audit && audit.template.mandatory?(question) }
+
+  def boolean?
+    question.is_a?(BooleanQuestion)
+  end
+
+  def passing?
+    boolean? ? (value == BooleanQuestion::PASS) : true
+  end
+
+  def failing?
+    !passing?
+  end
 end
