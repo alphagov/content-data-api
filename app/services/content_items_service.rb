@@ -10,7 +10,7 @@ class ContentItemsService
   end
 
   def fetch(content_id)
-    attribute_names = %i(public_updated_at base_path title document_type description content_id details)
+    attribute_names = %i(public_updated_at base_path title document_type description content_id details publishing_app)
     all_attributes = client.fetch(content_id)
 
     ContentItem.new(all_attributes.slice(*attribute_names))

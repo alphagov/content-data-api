@@ -242,4 +242,23 @@ RSpec.describe ContentItem, type: :model do
       expect(content_item.withdrawn?).to be false
     end
   end
+
+  describe "#whitehall_url" do
+    it "returns a URL to the whitehall edit page" do
+      content_item = FactoryGirl.build(
+        :content_item,
+        publishing_app: "whitehall",
+        content_id: "id123",
+      )
+
+      expect(content_item.whitehall_url).to eq(
+        "#{WHITEHALL}/government/admin/by-content-id/id123"
+      )
+    end
+
+    it "returns nil if the publishing_app isn't whitehall" do
+      content_item = FactoryGirl.build(:content_item)
+      expect(content_item.whitehall_url).to be_nil
+    end
+  end
 end

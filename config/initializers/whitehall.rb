@@ -1,0 +1,1 @@
+WHITEHALL = Plek.find("whitehall")
