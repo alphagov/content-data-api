@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170626100039) do
+ActiveRecord::Schema.define(version: 20170626133926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,6 +106,12 @@ ActiveRecord::Schema.define(version: 20170626100039) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["type"], name: "index_questions_on_type"
+  end
+
+  create_table "report_rows", force: :cascade do |t|
+    t.string "content_id"
+    t.json "data"
+    t.index ["content_id"], name: "index_report_rows_on_content_id", unique: true
   end
 
   create_table "responses", id: :serial, force: :cascade do |t|

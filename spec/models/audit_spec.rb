@@ -32,6 +32,13 @@ RSpec.describe Audit do
     end
   end
 
+  describe "callbacks" do
+    it "precomputes the content_item's report row after saving" do
+      expect { subject.save! }.to change(ReportRow, :count).by(1)
+      expect { subject.save! }.not_to change(ReportRow, :count)
+    end
+  end
+
   describe "scopes" do
     let!(:passing_audit) { FactoryGirl.create(:audit) }
     let!(:failing_audit) { FactoryGirl.create(:audit) }

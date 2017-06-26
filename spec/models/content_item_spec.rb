@@ -1,4 +1,13 @@
 RSpec.describe ContentItem, type: :model do
+  describe "callbacks" do
+    subject { FactoryGirl.build(:content_item) }
+
+    it "precomputes the content_item's report row after saving" do
+      expect { subject.save! }.to change(ReportRow, :count).by(1)
+      expect { subject.save! }.not_to change(ReportRow, :count)
+    end
+  end
+
   describe ".next_item" do
     let!(:content_items) { FactoryGirl.create_list(:content_item, 5) }
 
