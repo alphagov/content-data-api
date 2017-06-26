@@ -9,6 +9,7 @@ gem 'gds-sso'
 gem 'govuk_admin_template'
 gem 'govuk_sidekiq'
 gem 'plek'
+gem "govspeak", "~> 5.0.3"
 
 # third party gems
 gem 'draper'
