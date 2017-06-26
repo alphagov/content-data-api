@@ -67,6 +67,11 @@ class ContentItem < ApplicationRecord
     "https://gov.uk#{base_path}"
   end
 
+  def whitehall_url
+    return unless publishing_app == "whitehall"
+    "#{WHITEHALL}/government/admin/by-content-id/#{content_id}"
+  end
+
   def add_organisations_by_id(orgs)
     orgs.each do |org|
       organisation = Organisation.find_by(content_id: org)
