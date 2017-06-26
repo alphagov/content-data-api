@@ -4,7 +4,7 @@ class Search
 
     def self.all
       [
-        Sort.new(:page_views_desc, "six_months_page_views desc"),
+        Sort.new(:page_views_desc, "content_items.six_months_page_views desc"),
       ]
     end
 

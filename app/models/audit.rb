@@ -13,7 +13,17 @@ class Audit < ApplicationRecord
 
   accepts_nested_attributes_for :responses
 
+  after_save { ReportRow.precompute(content_item) }
+
   def template
     @template ||= Template.new
+  end
+
+  def passing?
+    !failing?
+  end
+
+  def failing?
+    responses.any?(&:failing?)
   end
 end

@@ -53,6 +53,10 @@ class Search
     result.content_items
   end
 
+  def unpaginated
+    result.unpaginated
+  end
+
   def per_page=(value)
     query.per_page = value
   end

@@ -47,4 +47,5 @@ group :development, :test do
   gem 'spring-watcher-listen'
   gem 'timecop'
   gem 'webmock'
+  gem 'active_record_disabler'
 end

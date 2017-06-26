@@ -22,15 +22,15 @@ class ContentItemDecorator < Draper::Decorator
   end
 
   def topics
-    titles(object.topics)
+    titles(object.linked_topics)
   end
 
   def organisations
-    titles(object.organisations_tmp)
+    titles(object.linked_organisations)
   end
 
   def policy_areas
-    titles(object.policy_areas)
+    titles(object.linked_policy_areas)
   end
 
   def guidance

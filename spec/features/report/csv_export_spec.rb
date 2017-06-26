@@ -8,7 +8,12 @@ RSpec.feature "Exporting a CSV from the report page" do
   end
 
   before do
-    example = FactoryGirl.create(:content_item, title: "Example")
+    example = FactoryGirl.create(
+      :content_item,
+      title: "Example",
+      base_path: "/example",
+    )
+
     FactoryGirl.create(:audit, content_item: example)
   end
 
@@ -18,10 +23,12 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     expect(content_type).to eq("text/csv")
     expect(content_disposition).to start_with("attachment")
-    expect(content_disposition).to include('filename="report.csv"')
+    expect(content_disposition).to include(
+      'filename="Transformation_audit_report_CSV_download.csv"',
+    )
 
-    expect(page).to have_content("Title,Audited by")
-    expect(page).to have_content("Example,Test User")
+    expect(page).to have_content("Title,URL")
+    expect(page).to have_content("Example,https://gov.uk/example")
   end
 
   scenario "Applying the filters to the export" do
@@ -31,6 +38,6 @@ RSpec.feature "Exporting a CSV from the report page" do
     click_on "Filter"
 
     click_link "Export filtered audit to CSV"
-    expect(page).to have_no_content("Example,Test User")
+    expect(page).to have_no_content("Example,https://gov.uk/example")
   end
 end

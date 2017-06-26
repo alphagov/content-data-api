@@ -6,6 +6,8 @@ class Link < ApplicationRecord
   MAINSTREAM = "mainstream_browse_pages".freeze
   TOPICS = "topics".freeze
 
+  after_save { ReportRow.precompute(source) }
+
   belongs_to :source,
     class_name: :ContentItem,
     foreign_key: :source_content_id,

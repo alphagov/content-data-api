@@ -1,4 +1,7 @@
 module FormatHelper
+  include ActionView::Helpers::DateHelper
+  include ActionView::Helpers::NumberHelper
+
   def format_number(n)
     number_with_delimiter(n, delimiter: ",")
   end
@@ -11,13 +14,13 @@ module FormatHelper
     ) + "%"
   end
 
-  def format_datetime(d)
+  def format_datetime(d, relative: true)
     return "Never" unless d
 
     date = d.to_date.to_s(:short)
     time_ago = time_ago_in_words(d)
 
-    "#{date} (#{time_ago} ago)"
+    relative ? "#{date} (#{time_ago} ago)" : date
   end
 
   def format_boolean(b)

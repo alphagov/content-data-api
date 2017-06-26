@@ -30,8 +30,8 @@ class AuditsController < ApplicationController
   end
 
   def export
-    csv = Report.generate(audits)
-    send_data(csv, filename: "report.csv")
+    csv = Report.generate(@search.unpaginated, request)
+    send_data(csv, filename: "Transformation_audit_report_CSV_download.csv")
   end
 
 private
@@ -41,7 +41,7 @@ private
   end
 
   def audits
-    @audits ||= Audit.where(content_item: content_items.object)
+    @audits ||= Audit.where(content_item: @search.unpaginated)
   end
 
   def content_item

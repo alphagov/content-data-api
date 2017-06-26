@@ -11,6 +11,10 @@ class Search
       scope
     end
 
+    def unpaginated
+      content_items.limit(nil).offset(nil)
+    end
+
     def options_for(identifier)
       filter_options.fetch(identifier)
     end
