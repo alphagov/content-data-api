@@ -28,6 +28,14 @@
     <%= @audit.content_item.description %>
   </p>
 
+  <%if @audit.content_item.whitehall_url %>
+    <p>
+      <%= link_to "Open in Whitehall Publisher", @audit.content_item.whitehall_url %>
+    </p>
+  <% end %>
+
+  <hr/>
+
   <%= form_for [@audit.content_item, @audit], url: content_item_audit_path(filter_params) do |form| %>
     <%= form.fields_for :responses do |builder| %>
       <% response = builder.object %>
