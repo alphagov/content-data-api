@@ -20,11 +20,22 @@
   margin: 2em 0 4em 0;
 }
 
+.question {
+  &.is-there-content-out-of-date {
+    margin-top: 4em;
+  }
+}
+
 .free-text-question {
   &.redirect-or-combine-with-url {
     textarea {
       height: 2em;
     }
+  }
+
+  &.ur-ls-of-similar-pages {
+    border-left: solid;
+    padding-left: 2em;
   }
 }
 

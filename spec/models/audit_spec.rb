@@ -47,12 +47,12 @@ RSpec.describe Audit do
       bool = FactoryGirl.create(:boolean_question)
       free = FactoryGirl.create(:free_text_question)
 
-      FactoryGirl.create(:response, audit: passing_audit, question: bool, value: "yes")
-      FactoryGirl.create(:response, audit: passing_audit, question: bool, value: "yes")
+      FactoryGirl.create(:response, audit: passing_audit, question: bool, value: "no")
+      FactoryGirl.create(:response, audit: passing_audit, question: bool, value: "no")
       FactoryGirl.create(:response, audit: passing_audit, question: free, value: "Hello")
 
-      FactoryGirl.create(:response, audit: failing_audit, question: bool, value: "yes")
       FactoryGirl.create(:response, audit: failing_audit, question: bool, value: "no")
+      FactoryGirl.create(:response, audit: failing_audit, question: bool, value: "yes")
       FactoryGirl.create(:response, audit: failing_audit, question: free, value: "Hello")
     end
 

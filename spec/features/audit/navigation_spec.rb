@@ -39,12 +39,14 @@ RSpec.feature "Navigation" do
   scenario "continuing to next item on save" do
     visit content_item_audit_path(first, some_filter: "value")
 
-    within("#question-1") { choose "Yes" }
-    within("#question-2") { choose "Yes" }
-    within("#question-3") { choose "Yes" }
-    within("#question-4") { choose "Yes" }
-    within("#question-5") { choose "Yes" }
-    within("#question-6") { choose "Yes" }
+    within("#question-1") { choose "No" }
+    within("#question-2") { choose "No" }
+    within("#question-3") { choose "No" }
+    within("#question-4") { choose "No" }
+    within("#question-5") { choose "No" }
+    within("#question-6") { choose "No" }
+    within("#question-7") { choose "No" }
+    within("#question-8") { choose "No" }
 
     click_on "Save"
 

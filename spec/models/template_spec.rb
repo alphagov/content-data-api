@@ -3,7 +3,7 @@ RSpec.describe Template do
     it "returns an ordered list of questions" do
       q = subject.questions
 
-      expect(q.first.text).to eq("Is the title clear in isolation?")
+      expect(q.first.text).to eq("Title")
       expect(q.last.text).to eq("Notes")
     end
 

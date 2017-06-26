@@ -54,8 +54,8 @@ RSpec.describe Response do
     let!(:bool) { FactoryGirl.create(:boolean_question) }
     let!(:free) { FactoryGirl.create(:free_text_question) }
 
-    let!(:passing_response) { FactoryGirl.create(:response, question: bool, value: "yes") }
-    let!(:failing_response) { FactoryGirl.create(:response, question: bool, value: "no") }
+    let!(:passing_response) { FactoryGirl.create(:response, question: bool, value: "no") }
+    let!(:failing_response) { FactoryGirl.create(:response, question: bool, value: "yes") }
     let!(:text_response) { FactoryGirl.create(:response, question: free, value: "Hello") }
 
     describe ".boolean" do
