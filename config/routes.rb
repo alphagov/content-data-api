@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     get :audit, to: "audits#show"
     post :audit, to: "audits#save"
     patch :audit, to: "audits#save"
+    get "audit/next", to: "audits#next"
   end
 
   resources :audits, only: %w(index guidance)

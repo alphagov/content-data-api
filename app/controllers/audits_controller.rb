@@ -10,6 +10,15 @@ class AuditsController < ApplicationController
     next_item
   end
 
+  def next
+    if next_item
+      redirect_to content_item_audit_path(next_item, filter_params)
+    else
+      flash.alert = "Unable to find the next item to audit."
+      redirect_to audits_path(filter_params.without(:page))
+    end
+  end
+
   def save
     audit.user = current_user
     updated = audit.update(audit_params)
