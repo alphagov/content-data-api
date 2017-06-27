@@ -12,7 +12,7 @@ module Seeder
     BooleanQuestion.create!(text: "Page detail")
     BooleanQuestion.create!(text: "Attachments")
     BooleanQuestion.create!(text: "Document type")
-    BooleanQuestion.create!(text: "Is there content out of date?")
+    BooleanQuestion.create!(text: "Is the content out of date?")
     BooleanQuestion.create!(text: "Should the content be removed?")
     BooleanQuestion.create!(text: "Is this content very similar to other pages?")
 
