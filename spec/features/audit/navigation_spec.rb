@@ -1,7 +1,7 @@
 RSpec.feature "Navigation" do
-  let!(:first) { FactoryGirl.create(:content_item, title: "First") }
-  let!(:second) { FactoryGirl.create(:content_item, title: "Second") }
-  let!(:third) { FactoryGirl.create(:content_item, title: "Third") }
+  let!(:first) { FactoryGirl.create(:content_item, title: "First", six_months_page_views: 3) }
+  let!(:second) { FactoryGirl.create(:content_item, title: "Second", six_months_page_views: 2) }
+  let!(:third) { FactoryGirl.create(:content_item, title: "Third", six_months_page_views: 1) }
 
   scenario "navigating between audits and the index page" do
     visit audits_path(some_filter: "value")
@@ -39,12 +39,14 @@ RSpec.feature "Navigation" do
   scenario "continuing to next item on save" do
     visit content_item_audit_path(first, some_filter: "value")
 
-    within("#question-1") { choose "Yes" }
-    within("#question-2") { choose "Yes" }
-    within("#question-3") { choose "Yes" }
-    within("#question-4") { choose "Yes" }
-    within("#question-5") { choose "Yes" }
-    within("#question-6") { choose "Yes" }
+    within("#question-1") { choose "No" }
+    within("#question-2") { choose "No" }
+    within("#question-3") { choose "No" }
+    within("#question-4") { choose "No" }
+    within("#question-5") { choose "No" }
+    within("#question-6") { choose "No" }
+    within("#question-7") { choose "No" }
+    within("#question-8") { choose "No" }
 
     click_on "Save"
 
@@ -72,10 +74,10 @@ RSpec.feature "Navigation" do
 
   context "when on the second page of content items" do
     before do
-      FactoryGirl.create_list(:content_item, 25)
+      FactoryGirl.create_list(:content_item, 25, six_months_page_views: 2)
 
-      FactoryGirl.create(:content_item, title: "Penultimate item")
-      FactoryGirl.create(:content_item, title: "Last item")
+      FactoryGirl.create(:content_item, title: "Penultimate item", six_months_page_views: 1)
+      FactoryGirl.create(:content_item, title: "Last item", six_months_page_views: 0)
 
       visit audits_path(page: 2)
     end

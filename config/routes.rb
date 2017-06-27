@@ -9,12 +9,15 @@ Rails.application.routes.draw do
     patch :audit, to: "audits#save"
   end
 
-  resources :audits, only: %w(index)
+  resources :audits, only: %w(index guidance)
 
   namespace :audits do
     get :report
     get :export
+    get :guidance
   end
+
+  get "audit-guidance", to: "audits#guidance"
 
   namespace :inventory do
     root action: "show"

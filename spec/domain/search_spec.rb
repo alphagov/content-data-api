@@ -108,7 +108,7 @@ RSpec.describe Search do
       :response,
       question: FactoryGirl.create(:boolean_question),
       audit: audit,
-      value: "yes"
+      value: "no"
     )
 
     subject.passing = true
@@ -122,7 +122,7 @@ RSpec.describe Search do
       :response,
       question: FactoryGirl.create(:boolean_question),
       audit: audit,
-      value: "no"
+      value: "yes"
     )
 
     subject.passing = false
