@@ -103,13 +103,13 @@ RSpec.describe Response do
     end
 
     it "is passing for responses to boolean questions with a 'yes' value" do
-      response = FactoryGirl.create(:response, question: bool, value: "yes")
+      response = FactoryGirl.create(:response, question: bool, value: "no")
       expect(response).to be_passing
       expect(response).not_to be_failing
     end
 
     it "is failing for responses to boolean questions with a 'no' value" do
-      response = FactoryGirl.create(:response, question: bool, value: "no")
+      response = FactoryGirl.create(:response, question: bool, value: "yes")
       expect(response).not_to be_passing
       expect(response).to be_failing
     end

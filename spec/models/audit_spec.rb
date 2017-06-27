@@ -83,7 +83,7 @@ RSpec.describe Audit do
     let(:bool) { FactoryGirl.create(:boolean_question) }
 
     it "is passing if all responses are passing" do
-      response = FactoryGirl.create(:response, question: bool, value: "yes")
+      response = FactoryGirl.create(:response, question: bool, value: "no")
       audit = FactoryGirl.create(:audit, responses: [response])
 
       expect(audit).to be_passing
@@ -91,7 +91,7 @@ RSpec.describe Audit do
     end
 
     it "is failing if any response is failing" do
-      response = FactoryGirl.create(:response, question: bool, value: "no")
+      response = FactoryGirl.create(:response, question: bool, value: "yes")
       audit = FactoryGirl.create(:audit, responses: [response])
 
       expect(audit).not_to be_passing

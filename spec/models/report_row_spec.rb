@@ -37,9 +37,9 @@ RSpec.describe ReportRow do
 
   specify { expect(subject.title).to eq                   "Title" }
   specify { expect(subject.url).to eq                     "https://gov.uk/example/path" }
-  specify { expect(subject.is_work_needed).to eq          "No" }
+  specify { expect(subject.is_work_needed).to eq          "Yes" }
   specify { expect(subject.page_views).to eq              "1,234" }
-  specify { expect(subject.response_values).to start_with %w(Yes Yes Yes) }
+  specify { expect(subject.response_values).to start_with %w(No No No) }
   specify { expect(subject.primary_organisation).to eq    "HMRC" }
   specify { expect(subject.other_organisations).to eq     "" }
   specify { expect(subject.content_type).to eq            "Travel Advice" }
@@ -50,7 +50,7 @@ RSpec.describe ReportRow do
     before { audit.destroy }
 
     specify { expect(subject.is_work_needed).to be_nil }
-    specify { expect(subject.response_values).to eq [nil] * 8 }
+    specify { expect(subject.response_values).to eq [nil] * 10 }
   end
 
   context "when the content item has many organisations" do
