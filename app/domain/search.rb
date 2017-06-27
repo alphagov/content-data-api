@@ -13,12 +13,23 @@ class Search
     Link::TOPICS,
   ].freeze
 
+  DIMENSIONS = {
+    audited: -> (s) { s.audit_status = :audited },
+    not_audited: -> (s) { s.audit_status = :non_audited },
+    passing: -> (s) { s.passing = true },
+    not_passing: -> (s) { s.passing = false },
+  }.freeze
+
   def initialize
     self.query = Query.new
   end
 
   def audit_status=(identifier)
     query.audit_status = identifier
+  end
+
+  def passing=(bool)
+    query.passing = bool
   end
 
   def theme=(identifier)
@@ -70,6 +81,18 @@ class Search
     result.options_for(identifier)
   end
 
+  def dimension(identifier)
+    @dimension ||= {}
+
+    @dimension[identifier] ||= (
+      search = Search.new
+      search.query = deep_clone(query)
+      DIMENSIONS.fetch(identifier).call(search)
+      search.execute
+      search
+    )
+  end
+
   def self.all_link_types
     (FILTERABLE_LINK_TYPES + GROUPABLE_LINK_TYPES).uniq
   end
@@ -82,7 +105,13 @@ class Search
     Subtheme.all
   end
 
-private
+protected
 
   attr_accessor :query, :result
+
+private
+
+  def deep_clone(object)
+    Marshal.load(Marshal.dump(object))
+  end
 end

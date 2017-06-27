@@ -49,4 +49,46 @@ RSpec.describe Response do
       expect(Response.all).to eq [a, b]
     end
   end
+
+  describe "scopes" do
+    let!(:bool) { FactoryGirl.create(:boolean_question) }
+    let!(:free) { FactoryGirl.create(:free_text_question) }
+
+    let!(:passing_response) { FactoryGirl.create(:response, question: bool, value: "yes") }
+    let!(:failing_response) { FactoryGirl.create(:response, question: bool, value: "no") }
+    let!(:text_response) { FactoryGirl.create(:response, question: free, value: "Hello") }
+
+    describe ".boolean" do
+      it "returns responses for boolean questions" do
+        expect(Response.boolean).to match_array [passing_response, failing_response]
+      end
+
+      it "can be chained" do
+        scope = Response.where(id: passing_response)
+        expect(scope.boolean).to eq [passing_response]
+      end
+    end
+
+    describe ".passing" do
+      it "returns responses for boolean questions with a value of 'yes'" do
+        expect(Response.passing).to eq [passing_response]
+      end
+
+      it "can be chained" do
+        scope = Response.where(id: failing_response)
+        expect(scope.passing).to be_empty
+      end
+    end
+
+    describe ".failing" do
+      it "returns responses for boolean questions with a value of 'no'" do
+        expect(Response.failing).to eq [failing_response]
+      end
+
+      it "can be chained" do
+        scope = Response.where(id: passing_response)
+        expect(scope.failing).to be_empty
+      end
+    end
+  end
 end

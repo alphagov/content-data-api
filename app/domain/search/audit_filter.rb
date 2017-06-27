@@ -20,7 +20,7 @@ class Search
       if self.identifier == :audited
         scope.joins(:audit)
       elsif self.identifier == :non_audited
-        scope.left_outer_joins(:audit).where("content_items.content_id not IN( select content_id from audits)")
+        scope.where.not(content_id: Audit.all.select(:content_id))
       else
         scope
       end

@@ -17,6 +17,11 @@ Rails.application.routes.draw do
 
   resources :taxonomy_todos, only: %w(show update)
 
+  namespace :audits do
+    get :report
+    get :export
+  end
+
   namespace :inventory do
     root action: "show"
     get :toggle, action: "toggle"

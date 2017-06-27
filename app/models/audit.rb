@@ -8,6 +8,9 @@ class Audit < ApplicationRecord
   validates :content_item, presence: true
   validates :user, presence: true
 
+  scope :passing, -> { where.not(id: failing) }
+  scope :failing, -> { where(id: Response.failing.select(:audit_id)) }
+
   accepts_nested_attributes_for :responses
 
   def template

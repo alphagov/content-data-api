@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 20170706143916) do
     t.integer "one_month_page_views", default: 0
     t.integer "number_of_pdfs", default: 0
     t.integer "six_months_page_views", default: 0
+    t.string "publishing_app"
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
     t.index ["title"], name: "index_content_items_on_title"
   end

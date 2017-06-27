@@ -7,6 +7,10 @@ class Response < ApplicationRecord
   validates :audit, presence: true
   validates :question, presence: true
 
+  scope :boolean, -> { joins(:question).where(questions: { type: "BooleanQuestion" }) }
+  scope :passing, -> { boolean.where(value: BooleanQuestion::PASS) }
+  scope :failing, -> { boolean.where.not(id: passing) }
+
   validates :value, presence: { message: "mandatory field missing" },
     if: -> { audit && audit.template.mandatory?(question) }
 end

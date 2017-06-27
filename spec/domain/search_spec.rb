@@ -97,8 +97,36 @@ RSpec.describe Search do
     content_item = ContentItem.find_by!(content_id: "id2")
     FactoryGirl.create(:audit, content_item: content_item)
 
-    subject.audit_status = "audited"
+    subject.audit_status = :audited
     expect(content_ids).to eq %w(id2)
+  end
+
+  it "can filter by passing status" do
+    content_item = ContentItem.find_by!(content_id: "id2")
+    audit = FactoryGirl.create(:audit, content_item: content_item)
+    FactoryGirl.create(
+      :response,
+      question: FactoryGirl.create(:boolean_question),
+      audit: audit,
+      value: "yes"
+    )
+
+    subject.passing = true
+    expect(content_ids).to eq %w(id2)
+  end
+
+  it "can filter by not passing status" do
+    content_item = ContentItem.find_by!(content_id: "id2")
+    audit = FactoryGirl.create(:audit, content_item: content_item)
+    FactoryGirl.create(
+      :response,
+      question: FactoryGirl.create(:boolean_question),
+      audit: audit,
+      value: "no"
+    )
+
+    subject.passing = false
+    expect(content_ids).to eq %w{id2}
   end
 
   it "can filter by document type" do
@@ -107,5 +135,48 @@ RSpec.describe Search do
 
     subject.document_type = "travel_advice"
     expect(content_ids).to eq %w(id2)
+  end
+
+  describe "#dimension" do
+    before do
+      content_item = ContentItem.find_by!(content_id: "id2")
+      FactoryGirl.create(:audit, content_item: content_item)
+    end
+
+    it "applies the block associated with the dimension" do
+      audited = subject.dimension(:audited)
+      content_ids = audited.content_items.map(&:content_id)
+      expect(content_ids).to eq %w(id2)
+    end
+
+    it "inherits query parameters" do
+      subject.page = 2
+
+      audited = subject.dimension(:audited)
+      expect(audited.page).to eq(2)
+    end
+
+    it "returns no results if contradictory dimensions are set" do
+      search = subject
+        .dimension(:audited)
+        .dimension(:not_audited)
+
+
+      content_ids = search.content_items.map(&:content_id)
+      expect(content_ids).to be_empty
+    end
+
+    it "does not mutate the existing Search" do
+      subject.dimension(:audited)
+      expect(content_ids).to eq %w(id1 id2 id3 org1 org2 policy1)
+    end
+
+    it "memoizes for each dimension" do
+      expect(Search::Executor).to receive(:execute).twice
+
+      subject.dimension(:audited)
+      subject.dimension(:not_audited)
+      subject.dimension(:audited)
+    end
   end
 end

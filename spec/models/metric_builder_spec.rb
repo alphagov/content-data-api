@@ -1,22 +1,26 @@
 RSpec.describe MetricBuilder do
   describe "#run_all" do
-    let(:metrics) { { m1: 1 } }
-
+    let(:content_item) { create :content_item, number_of_pdfs: 1 }
     it "calls each metric class once" do
-      expect_any_instance_of(Metrics::NumberOfPdfs).to receive(:run).exactly(1).times
-
-      subject.run_all({})
+      result = subject.run_all(content_item)
+      expect(result).to eq(number_of_pdfs: 0)
     end
   end
 
   describe "#run_collection" do
-    it "calls each collection metric class once" do
-      expect_any_instance_of(Metrics::TotalPages).to receive(:run).exactly(1).times.and_return({})
-      expect_any_instance_of(Metrics::ZeroPageViews).to receive(:run).exactly(1).times.and_return({})
-      expect_any_instance_of(Metrics::PagesNotUpdated).to receive(:run).exactly(1).times.and_return({})
-      expect_any_instance_of(Metrics::PagesWithPdfs).to receive(:run).exactly(1).times.and_return({})
+    it "return collection metrics" do
+      create :content_item, number_of_pdfs: 1
+      create :content_item, one_month_page_views: 2
 
-      subject.run_collection([])
+      result = subject.run_collection(ContentItem.all)
+      expected_result = {
+        total_pages: { value: 2 },
+        zero_page_views: { value: 1 },
+        pages_not_updated: { value: 0 },
+        pages_with_pdfs: { value: 1, percentage: 50.0 }
+      }
+
+      expect(result).to eq(expected_result)
     end
   end
 end

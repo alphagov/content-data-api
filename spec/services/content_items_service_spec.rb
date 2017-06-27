@@ -19,6 +19,8 @@ RSpec.describe ContentItemsService do
         title: "title",
         description: "description",
         content_store: "live",
+        details: { the: :details },
+        publishing_app: "publishing_app",
       )
 
       content_item = subject.fetch("id-123")
@@ -27,6 +29,8 @@ RSpec.describe ContentItemsService do
       expect(content_item.content_id).to eq("id-123")
       expect(content_item.title).to eq("title")
       expect(content_item.description).to eq("description")
+      expect(content_item.details).to eq(the: :details)
+      expect(content_item.publishing_app).to eq("publishing_app")
     end
   end
 

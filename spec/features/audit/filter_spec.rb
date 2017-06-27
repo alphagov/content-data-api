@@ -84,6 +84,18 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     expect(page).to have_content("DFE (1)")
   end
 
+  scenario "organisations are in alphabetical order" do
+    visit audits_path
+
+    within("#organisations") do
+      options = page.all("option")
+
+      expect(options.map(&:text)).to eq [
+        "All", "DFE (1)", "HMRC (1)",
+      ]
+    end
+  end
+
   scenario "themes and subthemes are in alphabetical order" do
     visit audits_path
 
@@ -98,6 +110,11 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
         "All Travel",
         "Aviation",
       ]
+
+      groups = page.all("optgroup")
+      labels = groups.map { |g| g[:label] }
+
+      expect(labels).to eq %w(Environment Travel)
     end
   end
 
