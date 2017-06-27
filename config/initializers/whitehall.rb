@@ -1,1 +1,1 @@
-WHITEHALL = Plek.find("whitehall")
+WHITEHALL = Plek.find("whitehall-admin")
