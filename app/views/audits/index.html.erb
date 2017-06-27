@@ -5,6 +5,22 @@
 
 <h1>GOV.UK Content Audit</h1>
 
+<% if flash.notice %>
+  <div class="alert alert-success" role="alert">
+    <p>
+      <strong>Success:</strong>
+      <%= flash.notice %>
+    </p>
+  </div>
+<% elsif flash.alert %>
+  <div class="alert alert-warning" role="alert">
+    <p>
+      <strong>Warning:</strong>
+      <%= flash.alert %>
+    </p>
+  </div>
+<% end %>
+
 <ul class="nav nav-tabs">
   <li role="presentation" class="active">
     <%= link_to "Content", "#", aria_controls: "home", role: "tab" %>
