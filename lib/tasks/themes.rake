@@ -8,6 +8,11 @@ namespace :themes do
   task restore: :environment do
     run("psql #{db} < themes.sql")
   end
+
+  desc "Compare the base paths for the theme against an inventory csv"
+  task :compare, [:csv_path, :theme_name] => :environment do |_, args|
+    Comparison.print(*args)
+  end
 end
 
 def db
