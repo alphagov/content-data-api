@@ -17,6 +17,10 @@ class TaxonomyTodo < ApplicationRecord
     status.in?(DONE_STATES)
   end
 
+  def tagged?
+    status == STATE_TAGGED
+  end
+
   def change_state!(state, user)
     update!(
       status: state,
