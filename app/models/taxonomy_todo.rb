@@ -16,4 +16,12 @@ class TaxonomyTodo < ApplicationRecord
   def completed?
     status.in?(DONE_STATES)
   end
+
+  def change_state!(state, user)
+    update!(
+      status: state,
+      completed_at: Time.zone.now,
+      completed_by: user.uid
+    )
+  end
 end
