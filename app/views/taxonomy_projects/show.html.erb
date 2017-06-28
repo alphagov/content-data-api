@@ -59,6 +59,9 @@
         <td>
           <% if taxonomy_todo.completed? %>
             <%= taxonomy_todo.completed_at.to_s(:govuk_date) %> by <%= taxonomy_todo.user.name %>
+            <% if taxonomy_todo.status != "tagged" %>
+              (<%= t("term_generation_states.#{taxonomy_todo.status}") %>)
+            <% end %>
           <% end %>
           </td>
       </tr>
