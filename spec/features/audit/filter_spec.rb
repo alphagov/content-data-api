@@ -26,8 +26,10 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
   before do
     # Links:
+    FactoryGirl.create(:link, source: vat, target: hmrc, link_type: "primary_publishing_organisation")
+    FactoryGirl.create(:link, source: felling, target: dfe, link_type: "primary_publishing_organisation")
     FactoryGirl.create(:link, source: vat, target: hmrc, link_type: "organisations")
-    FactoryGirl.create(:link, source: felling, target: dfe, link_type: "organisations")
+    FactoryGirl.create(:link, source: insurance, target: hmrc, link_type: "organisations")
     FactoryGirl.create(:link, source: insurance, target: flying, link_type: "policies")
     FactoryGirl.create(:link, source: felling, target: management, link_type: "policies")
 
@@ -65,8 +67,10 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     expect(page).to have_select("audit_status", selected: "Non Audited")
   end
 
-  scenario "filtering by organisation" do
+  scenario "filtering by primary organisation" do
     visit audits_path
+    expect(page.find("#primary")).to be_checked
+
     select "HMRC", from: "organisations"
 
     click_on "Filter"
@@ -82,6 +86,22 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     click_on "Filter"
     expect(page).to have_no_content("HMRC (0)")
     expect(page).to have_content("DFE (1)")
+  end
+
+  scenario "filtering by organisation" do
+    visit audits_path
+    uncheck "primary"
+
+    select "HMRC", from: "organisations"
+
+    click_on "Filter"
+
+    expect(page).to have_content("VAT")
+    expect(page).to have_content("Travel insurance")
+    expect(page).to have_no_content("Tree felling")
+
+    expect(page).to have_content("HMRC (2)")
+    expect(page).to have_no_content("DFE")
   end
 
   scenario "organisations are in alphabetical order" do
