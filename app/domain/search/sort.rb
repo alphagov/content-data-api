@@ -4,18 +4,18 @@ class Search
 
     def self.all
       [
-        Sort.new(:page_views_desc, "Six months page views (Decending)",
+        Sort.new(:page_views_desc, "Most views",
                  "six_months_page_views", :desc),
-        Sort.new(:page_views_asc, "Six months page views (Ascending)",
+        Sort.new(:page_views_asc, "Least views",
                  "six_months_page_views", :asc),
-        Sort.new(:title_desc, "Title (Decending)",
-                 "title", :desc),
-        Sort.new(:title_asc, "Title (Ascending)",
+        Sort.new(:title_desc, "A - Z",
                  "title", :asc),
-        Sort.new(:public_updated_at_asc, "Last public update (Oldest first)",
-                 "public_updated_at", :asc, nulls: :first),
-        Sort.new(:public_updated_at_desc, "Last public update (Most recent first)",
+        Sort.new(:title_asc, "Z - A",
+                 "title", :desc),
+        Sort.new(:public_updated_at_desc, "Updated - most recently",
                  "public_updated_at", :desc, nulls: :last),
+        Sort.new(:public_updated_at_asc, "Updated - least recently",
+                 "public_updated_at", :asc, nulls: :first),
       ]
     end
 
