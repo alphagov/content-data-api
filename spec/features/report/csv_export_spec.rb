@@ -7,14 +7,33 @@ RSpec.feature "Exporting a CSV from the report page" do
     page.response_headers.fetch("Content-Disposition")
   end
 
-  before do
-    example = FactoryGirl.create(
+  let!(:hmrc) {
+    FactoryGirl.create(
       :content_item,
-      title: "Example",
-      base_path: "/example",
+      title: "HMRC",
+      document_type: "organisation"
+    )
+  }
+
+  before do
+    example1 = FactoryGirl.create(
+      :content_item,
+      title: "Example 1",
+      base_path: "/example1",
     )
 
-    FactoryGirl.create(:audit, content_item: example)
+    FactoryGirl.create(
+      :link,
+      source_content_id: example1.content_id,
+      target_content_id: hmrc.content_id,
+      link_type: "primary_publishing_organisation",
+    )
+
+    FactoryGirl.create(
+      :content_item,
+      title: "Example 2",
+      base_path: "/example2",
+    )
   end
 
   scenario "Exporting a csv file as an attachment" do
@@ -28,13 +47,13 @@ RSpec.feature "Exporting a CSV from the report page" do
     )
 
     expect(page).to have_content("Title,URL")
-    expect(page).to have_content("Example,https://gov.uk/example")
+    expect(page).to have_content("Example 1,https://gov.uk/example1")
   end
 
   scenario "Applying the filters to the export" do
     visit audits_report_path
 
-    select "Non Audited", from: "audit_status"
+    select "HMRC (1)", from: "organisations"
     click_on "Filter"
 
     click_link "Export filtered audit to CSV"

@@ -57,27 +57,9 @@ RSpec.feature "Reporting on audit progress" do
     expect(width("#items-needing-improvement")).to eq("width: 50%;")
   end
 
-  scenario "Displaying sensible output when 'audit_status' is selected" do
+  scenario "Audit status filter is not present" do
     visit audits_report_path
 
-    select "Audited", from: "audit_status"
-    click_on "Filter"
-
-    expect(page).to have_content("2 Content items")
-    expect(page).to have_content("Items audited 2 100%")
-    expect(page).to have_content("Items still to audit 0 0%")
-    expect(page).to have_content("Items that need improvement 1 50%")
-    expect(page).to have_content("Items that don't need improvement 1 50%")
-    expect(width("#progress")).to eq("width: 100%;")
-
-    select "Non Audited", from: "audit_status"
-    click_on "Filter"
-
-    expect(page).to have_content("1 Content items")
-    expect(page).to have_content("Items audited 0 0%")
-    expect(page).to have_content("Items still to audit 1 100%")
-    expect(page).to have_content("Items that need improvement 0 0%")
-    expect(page).to have_content("Items that don't need improvement 0 0%")
-    expect(width("#items-needing-improvement")).to eq("width: 0%;")
+    expect(page).to have_no_content("Audit status")
   end
 end

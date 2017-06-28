@@ -2,13 +2,15 @@
   <h1>Filter</h1>
   <%= form_tag submit_path, method: :get do %>
 
-    <div class="form-group">
-      <%= label_tag :audit_status, 'Audit status' %>
-      <%= select_tag :audit_status,
-          audit_status_options,
-          include_blank: "All",
-          class: "form-control" %>
-    </div>
+    <% if audit_status_filter_enabled? %>
+      <div class="form-group">
+        <%= label_tag :audit_status, 'Audit status' %>
+        <%= select_tag :audit_status,
+        audit_status_options,
+        include_blank: "All",
+        class: "form-control" %>
+      </div>
+    <% end %>
 
     <div class="form-group">
       <%= label_tag :theme, 'Theme' %>
