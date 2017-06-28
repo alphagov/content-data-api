@@ -9,7 +9,7 @@ class TaxonomyTodosController < ApplicationController
     todo_form.user = current_user
     todo_form.save
 
-    redirect_to next_taxonomy_project_path(taxonomy_todo.taxonomy_project)
+    redirect_to_next_item
   end
 
   def dont_know
@@ -19,7 +19,7 @@ class TaxonomyTodosController < ApplicationController
       completed_by: current_user.uid
     )
 
-    redirect_to next_taxonomy_project_path(taxonomy_todo.taxonomy_project)
+    redirect_to_next_item
   end
 
   def not_relevant
@@ -29,10 +29,14 @@ class TaxonomyTodosController < ApplicationController
       completed_by: current_user.uid
     )
 
-    redirect_to next_taxonomy_project_path(taxonomy_todo.taxonomy_project)
+    redirect_to_next_item
   end
 
 private
+
+  def redirect_to_next_item
+    redirect_to next_taxonomy_project_path(taxonomy_todo.taxonomy_project)
+  end
 
   def taxonomy_todo
     @taxonomy_todo ||= TaxonomyTodo.find(params[:id])
