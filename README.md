@@ -81,6 +81,19 @@ These tasks will read/write a `themes.sql` file in the top-level directory.
 Existing backups are in `backups/` and will need to be copied to use the rake
 tasks, e.g. `cp backups/2017-06-11-themes.sql backups.sql`.
 
+### Comparing themes against a CSV
+
+Previously, inventories were exported as CSVs. There is a rake task that
+compares one of these CSVs against the content items in a Theme and prints a
+report. To run it:
+
+```
+bundle exec rake themes:compare[~/Downloads/transport.csv,Transport]
+```
+
+The first argument is the path to the CSV export. The second argument is the
+name of the theme.
+
 ### API
 
 * [Configuration](doc/api.md#set_up_api)
