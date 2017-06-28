@@ -42,6 +42,15 @@ module DropdownHelper
     )
   end
 
+  def sort_options
+    options_from_collection_for_select(
+      Search::Sort.all,
+      :identifier,
+      :label,
+      params[:sort],
+    )
+  end
+
   class ThemeOption < SimpleDelegator
     def name
       "All #{super}"

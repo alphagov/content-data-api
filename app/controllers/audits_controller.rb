@@ -70,6 +70,7 @@ private
       filter_by_link_types!(search)
       filter_by_theme!(search)
       filter_by_document_type!(search)
+      sort_by!(search)
       search.page = params[:page]
       search.execute
       search
@@ -109,5 +110,9 @@ private
 
   def filter_by_document_type!(search)
     search.document_type = params[:document_type] if params[:document_type].present?
+  end
+
+  def sort_by!(search)
+    search.sort = params[:sort].to_sym if params[:sort].present?
   end
 end
