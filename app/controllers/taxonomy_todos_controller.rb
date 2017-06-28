@@ -1,6 +1,9 @@
 class TaxonomyTodosController < ApplicationController
   def show
-    @todo_form = TaxonomyTodoForm.new(taxonomy_todo: taxonomy_todo)
+    @todo_form = TaxonomyTodoForm.new(
+      taxonomy_todo: taxonomy_todo,
+      terms: taxonomy_todo.terms.order(:name).pluck(:name).join(', '),
+    )
   end
 
   def update
@@ -35,6 +38,6 @@ private
   end
 
   def todo_params
-    params.require(:taxonomy_todo_form).permit(:new_terms)
+    params.require(:taxonomy_todo_form).permit(:terms)
   end
 end

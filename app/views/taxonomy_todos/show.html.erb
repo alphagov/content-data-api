@@ -41,10 +41,29 @@
 
   <%= form_for @todo_form, url: taxonomy_todo_path(@todo_form.taxonomy_todo), method: 'put' do |f| %>
     <div class='form-group'>
-      <%= f.label :new_terms, "New terms:", class: 'control-label' %>
+      <%= f.label :terms, 'Terms', class: 'control-label' %>
       <div class='form-wrapper'>
-        <%= f.text_field :new_terms, data: { role: "tagsinput" } %>
+        <%= f.text_field :terms, value: @todo_form.terms %>
       </div>
+      <script>
+        var terms = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          remote: '<%= terms_taxonomy_project_path(@todo_form.taxonomy_todo.taxonomy_project, format: 'json') %>'
+        });
+
+        terms.initialize();
+
+        $('#taxonomy_todo_form_terms').tagsinput({
+          trimValue: true,
+          typeaheadjs: {
+            name: 'terms',
+            displayKey: 'name',
+            valueKey: 'name',
+            source: terms.ttAdapter()
+          }
+        });
+      </script>
     </div>
 
     <%= f.submit "Save", class: "btn btn-success" %>

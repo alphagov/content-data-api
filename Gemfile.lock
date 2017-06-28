@@ -400,6 +400,10 @@ GEM
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.3)
+    twitter-typeahead-rails (0.11.1)
+      actionpack (>= 3.1)
+      jquery-rails
+      railties (>= 3.1)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uber (0.1.0)
@@ -469,6 +473,7 @@ DEPENDENCIES
   spring-watcher-listen
   timecop
   turbolinks
+  twitter-typeahead-rails
   uglifier
   unicorn
   web-console

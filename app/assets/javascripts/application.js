@@ -12,3 +12,4 @@
 //
 //= require_tree .
 //= require bootstrap-tagsinput.js
+//= require twitter/typeahead

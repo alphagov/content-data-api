@@ -1,6 +1,6 @@
 class TaxonomyTodoForm
   include ActiveModel::Model
-  attr_accessor :taxonomy_todo, :new_terms, :user
+  attr_accessor :taxonomy_todo, :terms, :user
 
   delegate :title, :url, :description, to: :content_item
 
@@ -22,15 +22,11 @@ private
   end
 
   def save_terms
-    split_terms = new_terms.split(',').map(&:strip)
-
-    split_terms.each do |term_text|
-      term = Term.find_or_create_by!(
-        name: term_text,
-        taxonomy_project: taxonomy_todo.taxonomy_project
-      )
-
-      taxonomy_todo.terms << term
-    end
+    taxonomy_todo.terms =
+      terms
+        .split(',')
+        .map(&:squish)
+        .map { |term| taxonomy_todo.taxonomy_project.terms.where(name: term) }
+        .map(&:first_or_create!)
   end
 end
