@@ -14,8 +14,8 @@ RSpec.describe Taxonomy::ProjectStats do
 
   describe '#done_count' do
     it 'returns the number of done todos' do
-      create(:taxonomy_todo, taxonomy_project: project, completed_at: Time.now)
-      create(:taxonomy_todo, taxonomy_project: project, completed_at: Time.now)
+      create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_TAGGED)
+      create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_DONT_KNOW)
       create(:taxonomy_todo, taxonomy_project: project)
 
       stats = Taxonomy::ProjectStats.new(project)
@@ -26,8 +26,8 @@ RSpec.describe Taxonomy::ProjectStats do
 
   describe '#still_todo_count' do
     it 'returns the number of todos still to do' do
-      create(:taxonomy_todo, taxonomy_project: project, completed_at: Time.now)
-      create(:taxonomy_todo, taxonomy_project: project, completed_at: Time.now)
+      create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_TAGGED)
+      create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_DONT_KNOW)
       create(:taxonomy_todo, taxonomy_project: project)
 
       stats = Taxonomy::ProjectStats.new(project)
@@ -38,9 +38,9 @@ RSpec.describe Taxonomy::ProjectStats do
 
   describe '#progress_percentage' do
     it 'returns percentage of todos done' do
-      create(:taxonomy_todo, taxonomy_project: project, completed_at: Time.now)
-      create(:taxonomy_todo, taxonomy_project: project, completed_at: Time.now)
-      create(:taxonomy_todo, taxonomy_project: project, completed_at: Time.now)
+      create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_TAGGED)
+      create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_TAGGED)
+      create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_TAGGED)
       create(:taxonomy_todo, taxonomy_project: project)
 
       stats = Taxonomy::ProjectStats.new(project)

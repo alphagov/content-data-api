@@ -19,6 +19,7 @@ private
 
   def update_todo
     taxonomy_todo.update!(
+      status: TaxonomyTodo::STATE_TAGGED,
       completed_at: Time.zone.now,
       completed_by: user.uid
     )
