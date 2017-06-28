@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Importers::TodosForTaxonomyProject do
-  subject { described_class.new("foo bar", csv_parser) }
+  subject { described_class.new(create(:taxonomy_project), csv_parser) }
   let(:csv_parser) { double(:remote_csv_parser_service) }
   let(:content_item) { create(:content_item) }
 
@@ -12,11 +12,6 @@ RSpec.describe Importers::TodosForTaxonomyProject do
   end
 
   describe "#run" do
-    it "creates a taxonomy project" do
-      expect { subject.run }.to change(TaxonomyProject, :count).from(0).to(1)
-      expect(TaxonomyProject.first.name).to eql "foo bar"
-    end
-
     it "creates the taxonomy todos" do
       expect { subject.run }.to change(TaxonomyTodo, :count).from(0).to(1)
     end

@@ -7,6 +7,16 @@ class TaxonomyProjectsController < ApplicationController
     @project = TaxonomyProject.find(params[:id])
   end
 
+  def new
+    @form = NewTaxonomyProject.new
+  end
+
+  def create
+    form = NewTaxonomyProject.new(taxonomy_project_params)
+    form.save
+    redirect_to taxonomy_project_path(form.project_id)
+  end
+
   def next
     project = TaxonomyProject.find(params[:id])
 
@@ -17,5 +27,11 @@ class TaxonomyProjectsController < ApplicationController
     else
       redirect_to project, notice: "All done!"
     end
+  end
+
+private
+
+  def taxonomy_project_params
+    params.require(:new_taxonomy_project).permit(:name, :csv_url)
   end
 end

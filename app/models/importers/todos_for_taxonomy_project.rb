@@ -1,9 +1,9 @@
 module Importers
   class TodosForTaxonomyProject
-    attr_reader :errors, :completed
+    attr_reader :errors, :completed, :project
 
-    def initialize(group_name, csv_parser)
-      @name = group_name
+    def initialize(project, csv_parser)
+      @project = project
       @csv_parser = csv_parser
       @completed = []
       @errors = []
@@ -14,7 +14,7 @@ module Importers
         @csv_parser.each_row do |row|
           content_item = ContentItem.find_by(content_id: row['content_id'])
           if content_item
-            TaxonomyTodo.create(
+            TaxonomyTodo.create!(
               taxonomy_project: project,
               content_item: content_item
             )
@@ -34,10 +34,6 @@ module Importers
 
     def track_success(id)
       @completed << id
-    end
-
-    def project
-      @_project ||= TaxonomyProject.create(name: @name)
     end
   end
 end
