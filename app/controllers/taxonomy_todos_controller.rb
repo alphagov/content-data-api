@@ -12,6 +12,26 @@ class TaxonomyTodosController < ApplicationController
     redirect_to next_taxonomy_project_path(taxonomy_todo.taxonomy_project)
   end
 
+  def dont_know
+    taxonomy_todo.update!(
+      status: TaxonomyTodo::STATE_DONT_KNOW,
+      completed_at: Time.zone.now,
+      completed_by: current_user.uid
+    )
+
+    redirect_to next_taxonomy_project_path(taxonomy_todo.taxonomy_project)
+  end
+
+  def not_relevant
+    taxonomy_todo.update!(
+      status: TaxonomyTodo::STATE_NOT_RELEVANT,
+      completed_at: Time.zone.now,
+      completed_by: current_user.uid
+    )
+
+    redirect_to next_taxonomy_project_path(taxonomy_todo.taxonomy_project)
+  end
+
 private
 
   def taxonomy_todo

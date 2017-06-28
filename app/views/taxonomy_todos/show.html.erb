@@ -39,6 +39,9 @@
     <%= @todo_form.description %>
   </p>
 
+  <%= button_to "I don't know", dont_know_taxonomy_todo_path(@todo_form.taxonomy_todo) %>
+  <%= button_to "This page is not relevant / relevant to different theme", not_relevant_taxonomy_todo_path(@todo_form.taxonomy_todo) %>
+
   <%= form_for @todo_form, url: taxonomy_todo_path(@todo_form.taxonomy_todo), method: 'put' do |f| %>
     <div class='form-group'>
       <%= f.label :new_terms, "New terms:", class: 'control-label' %>

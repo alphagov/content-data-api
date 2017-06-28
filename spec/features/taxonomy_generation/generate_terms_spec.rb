@@ -15,6 +15,30 @@ RSpec.feature "Generating terms", type: :feature do
     then_i_see_the_generated_terms
   end
 
+  it "allows users to say that they don't know" do
+    given_theres_a_project_with_todos
+
+    when_i_visit_the_taxonomy_project_page
+    and_i_click_to_start_with_a_project
+    then_i_should_see_a_page
+
+    when_i_click_i_dont_know
+    then_the_todo_is_marked_as_dont_know
+    and_i_see_the_next_page
+  end
+
+  it "allows users to say that the page isn't relevant" do
+    given_theres_a_project_with_todos
+
+    when_i_visit_the_taxonomy_project_page
+    and_i_click_to_start_with_a_project
+    then_i_should_see_a_page
+
+    when_i_click_this_is_not_relevant
+    then_the_todo_is_marked_as_irrelevant
+    and_i_see_the_next_page
+  end
+
   def given_theres_a_project_with_todos
     @project = create(:taxonomy_project, name: 'A Fancy Group')
 
@@ -42,6 +66,21 @@ RSpec.feature "Generating terms", type: :feature do
     @todo.reload
   end
 
+  def when_i_click_i_dont_know
+    click_button "I don't know"
+    @todo.reload
+  end
+
+  def when_i_click_this_is_not_relevant
+    click_button "This page is not relevant / relevant to different theme"
+    @todo.reload
+  end
+
+  def then_the_todo_is_marked_as_dont_know
+    expect(@todo).to be_completed
+    expect(@todo.status).to eql(TaxonomyTodo::STATE_DONT_KNOW)
+  end
+
   def then_the_term_is_saved
     expect(@todo).to be_completed
     expect(@todo.terms.count).to eql(3)
@@ -49,6 +88,11 @@ RSpec.feature "Generating terms", type: :feature do
 
   def and_i_see_the_next_page
     expect(page.body).not_to match "A Fancy Content Item"
+  end
+
+  def then_the_todo_is_marked_as_irrelevant
+    expect(@todo).to be_completed
+    expect(@todo.status).to eql(TaxonomyTodo::STATE_NOT_RELEVANT)
   end
 
   def when_i_go_to_the_project_page
