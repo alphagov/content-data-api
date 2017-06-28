@@ -1,9 +1,9 @@
 class TaxonomyTodo < ApplicationRecord
-  STATE_TODO = 'todo'
-  STATE_TAGGED = 'tagged'
-  STATE_NOT_RELEVANT = 'not-relevant'
-  STATE_DONT_KNOW = 'dont-know'
-  DONE_STATES = [STATE_TAGGED, STATE_NOT_RELEVANT, STATE_DONT_KNOW]
+  STATE_TODO = 'todo'.freeze
+  STATE_TAGGED = 'tagged'.freeze
+  STATE_NOT_RELEVANT = 'not-relevant'.freeze
+  STATE_DONT_KNOW = 'dont-know'.freeze
+  DONE_STATES = [STATE_TAGGED, STATE_NOT_RELEVANT, STATE_DONT_KNOW].freeze
 
   belongs_to :content_item
   belongs_to :taxonomy_project
