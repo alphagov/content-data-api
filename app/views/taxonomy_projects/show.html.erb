@@ -1,5 +1,26 @@
 <h1><%= @project.name %></h1>
 
+<div class="summary">
+  <div class="row">
+    <div class="summary-item col-xs-3">
+      <span class="summary-item-value"><%= number_with_delimiter @project.stats.todo_count %></span>
+      <span class="summary-item-label">Pages in project</span>
+    </div>
+    <div class="summary-item col-xs-3">
+      <span class="summary-item-value"><%= number_with_delimiter @project.stats.done_count %></span>
+      <span class="summary-item-label">Done</span>
+    </div>
+    <div class="summary-item col-xs-3">
+      <span class="summary-item-value"><%= number_with_delimiter @project.stats.still_todo_count %></span>
+      <span class="summary-item-label">Still to do</span>
+    </div>
+    <div class="summary-item col-xs-3">
+      <span class="summary-item-value"><%= number_with_precision @project.stats.progress_percentage, precision: 1 %>%</span>
+      <span class="summary-item-label">Complete</span>
+    </div>
+  </div>
+</div>
+
 <h2>Terms</h2>
 
 <table class="table table-bordered table-hover">
