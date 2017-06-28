@@ -13,4 +13,8 @@ class TaxonomyProject < ApplicationRecord
   def next_todo
     taxonomy_todos.still_todo.first
   end
+
+  def stats
+    Taxonomy::ProjectStats.new(self)
+  end
 end
