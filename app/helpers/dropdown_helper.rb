@@ -19,14 +19,14 @@ module DropdownHelper
     )
   end
 
-  def link_type_options(link_type)
-    options = @search.options_for(link_type).order(:title)
+  def organisation_options
+    options = @search.options_for(org_link_type).order(:title)
 
     options_from_collection_for_select(
       options,
       :content_id,
       :title_with_count,
-      selected: params[link_type],
+      selected: params[:organisations],
     )
   end
 

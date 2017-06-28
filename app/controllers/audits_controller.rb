@@ -1,5 +1,5 @@
 class AuditsController < ApplicationController
-  helper_method :filter_params
+  helper_method :filter_params, :primary_org_only?, :org_link_type
   before_action :content_items, only: %i(index report export)
 
   def index
@@ -64,7 +64,7 @@ private
     @search ||= (
       search = Search.new
       filter_by_audit_status!(search)
-      filter_by_link_types!(search)
+      filter_by_organisation!(search)
       filter_by_theme!(search)
       filter_by_document_type!(search)
       search.page = params[:page]
@@ -93,11 +93,9 @@ private
     search.audit_status = params[:audit_status].to_sym if params[:audit_status].present?
   end
 
-  def filter_by_link_types!(search)
-    params.slice(*Search::FILTERABLE_LINK_TYPES).each do |link_type, content_id|
-      next if content_id.blank?
-      search.filter_by(link_type: link_type, target_ids: content_id)
-    end
+  def filter_by_organisation!(search)
+    content_id = params[:organisations]
+    search.filter_by(link_type: org_link_type, target_ids: content_id) if content_id.present?
   end
 
   def filter_by_theme!(search)
@@ -106,5 +104,13 @@ private
 
   def filter_by_document_type!(search)
     search.document_type = params[:document_type] if params[:document_type].present?
+  end
+
+  def org_link_type
+    primary_org_only? ? Link::PRIMARY_ORG : Link::ALL_ORGS
+  end
+
+  def primary_org_only?
+    params[:primary].blank? || params[:primary] == "true"
   end
 end
