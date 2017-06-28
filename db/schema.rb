@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170706143916) do
+ActiveRecord::Schema.define(version: 20170706143917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(version: 20170706143916) do
     t.string "completed_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "status", default: "todo"
     t.index ["content_item_id"], name: "index_taxonomy_todos_on_content_item_id"
     t.index ["taxonomy_project_id"], name: "index_taxonomy_todos_on_taxonomy_project_id"
   end

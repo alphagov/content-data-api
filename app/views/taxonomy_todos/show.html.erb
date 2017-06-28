@@ -49,11 +49,16 @@
 
     <%= f.submit "Save", class: "btn btn-success" %>
   <% end %>
+  or
+
+  <div class='state-changers'>
+    <%= button_to "I don't know", dont_know_taxonomy_todo_path(@todo_form.taxonomy_todo), class: 'btn btn-md btn-default' %>
+    <%= button_to "This page is not relevant / relevant to different theme", not_relevant_taxonomy_todo_path(@todo_form.taxonomy_todo), class: 'btn btn-md btn-default' %>
+  </div>
 
   <div class="add-top-padding">
     <iframe id='#frame' src="<%=@todo_form.url%>"  sandbox="" width="100%" height="800" scrolling="yes"></iframe>
   </div>
-
 </div>
 
 <div class="col-sm-3">

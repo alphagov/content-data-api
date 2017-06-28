@@ -15,7 +15,10 @@ Rails.application.routes.draw do
     get 'next', on: :member
   end
 
-  resources :taxonomy_todos, only: %w(show update)
+  resources :taxonomy_todos, only: %w(show update) do
+    post 'dont_know', on: :member
+    post 'not_relevant', on: :member
+  end
 
   namespace :audits do
     get :report

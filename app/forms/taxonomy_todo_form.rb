@@ -18,10 +18,7 @@ class TaxonomyTodoForm
 private
 
   def update_todo
-    taxonomy_todo.update!(
-      completed_at: Time.zone.now,
-      completed_by: user.uid
-    )
+    taxonomy_todo.change_state!(TaxonomyTodo::STATE_TAGGED, user)
   end
 
   def save_terms
