@@ -15,8 +15,6 @@
     </div>
   <% end %>
 
-  <h1>GOV.UK Content Audit</h1>
-
   <nav class="prev-next-links">
     <%= link_to "< All items", audits_path(filter_params.without(:page)), class: "all-items" %>
     <%= link_to "Next", content_item_audit_path(@next_item, filter_params), class: "next-item" if @next_item %>

@@ -1,0 +1,30 @@
+<% content_for :page_title do %>
+  Content Audit Tool
+<% end %>
+
+<% content_for :app_title do %>
+  Content Audit Tool
+<% end %>
+
+<% content_for :head do %>
+  <%= csrf_meta_tags %>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+<% content_for :content do %>
+  <%= render 'application/phase_banner' %>
+  <div class="row header-row">
+    <div class="col-md-12">
+      <%= yield :header %>
+    </div>
+  </div>
+  <div class="row">
+    <%= yield :sidebar %>
+    <div class="<%= content_for?(:sidebar) ? 'col-sm-9' : ''%>">
+      <%= yield %>
+    </div>
+  </div>
+<% end %>
+
+<%= render file: 'layouts/govuk_admin_template' %>

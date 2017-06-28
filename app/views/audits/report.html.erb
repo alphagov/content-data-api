@@ -2,8 +2,7 @@
   <%= render 'sidebar', submit_path: audits_report_path %>
 <% end %>
 
-<h1>GOV.UK Content Audit</h1>
-
+<% content_for :header do %>
 <ul class="nav nav-tabs">
   <li role="presentation">
     <%= link_to "Content", audits_path(filter_params), aria_controls: "home", role: "tab" %>
@@ -12,10 +11,8 @@
     <%= link_to "Report", "#", aria_controls: "home", role: "tab" %>
   </li>
 </ul>
+<% end %>
 
-<div class="tab-content">
-
-<br>
 <%= link_to "Export filtered audit to CSV", audits_export_path(filter_params), class: "report-export" %>
 
 <div class="report-section">
@@ -59,6 +56,4 @@
       <td class="col-md-3"><%= format_percentage(not_passing_percentage) %></td>
     </tr>
   </table>
-</div>
-
 </div>
