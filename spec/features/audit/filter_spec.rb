@@ -104,6 +104,16 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     expect(page).to have_no_content("DFE")
   end
 
+  scenario "toggling the primary org checkbox by clicking its label" do
+    visit audits_path
+
+    page.find("label[for='primary']").click
+    expect(page.find("#primary")).not_to be_checked
+
+    page.find("label[for='primary']").click
+    expect(page.find("#primary")).to be_checked
+  end
+
   scenario "organisations are in alphabetical order" do
     visit audits_path
 

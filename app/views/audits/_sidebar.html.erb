@@ -27,7 +27,7 @@
     </div>
 
     <div class="form-group">
-      <%= hidden_field_tag :primary, false %>
+      <%= hidden_field_tag :primary, false, id: nil %>
       <%= check_box_tag :primary, true, primary_org_only? %>
       <%= label_tag :primary, "Primary organisation only" %>
     </div>
