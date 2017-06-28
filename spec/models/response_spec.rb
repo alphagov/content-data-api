@@ -47,6 +47,11 @@ RSpec.describe Response do
       a.save!
 
       expect(Response.all).to eq [a, b]
+
+      a.question.text = "New text"
+      a.save!
+
+      expect(Response.all).to eq [a, b]
     end
   end
 
