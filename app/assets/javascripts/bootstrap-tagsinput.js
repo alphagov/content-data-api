@@ -24,7 +24,11 @@
     addOnBlur: true,
     maxTags: undefined,
     maxChars: undefined,
-    confirmKeys: [44],
+    confirmKeys: [
+      44, // comma
+      13, // enter
+      9   // tab
+    ],
     delimiter: ',',
     delimiterRegex: null,
     cancelConfirmKeysOnEmpty: false,
