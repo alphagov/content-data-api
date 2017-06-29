@@ -52,7 +52,7 @@
   </tr>
   </thead>
   <tbody>
-    <% @project.taxonomy_todos.includes(:terms).reverse.each do |taxonomy_todo| %>
+    <% @project.taxonomy_todos.includes(:terms, :content_item).each do |taxonomy_todo| %>
       <tr>
         <td><%= link_to taxonomy_todo.content_item.title, taxonomy_todo %></td>
         <td><%= taxonomy_todo.terms.map(&:name).join(', ') %></td>
