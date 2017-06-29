@@ -23,6 +23,7 @@ gem 'puma'
 gem 'rails', '~> 5.1'
 gem 'sass-rails'
 gem 'turbolinks'
+gem 'twitter-typeahead-rails'
 gem 'uglifier'
 gem 'unicorn'
 
