@@ -44,25 +44,17 @@
     <div class='form-group'>
       <%= f.label :terms, 'Terms', class: 'control-label' %>
       <div class='form-wrapper'>
-        <%= f.text_field :terms, value: @todo_form.terms %>
+        <%= f.select :terms, @todo_form.terms, { }, { class: 'form-control', multiple: true } %>
       </div>
       <script>
-        var terms = new Bloodhound({
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace,
-          remote: '<%= terms_taxonomy_project_path(@todo_form.taxonomy_todo.taxonomy_project, format: 'json') %>'
-        });
+        var data = <%= @taxonomy_project_terms.map { |t| { id: t, text: t } }.to_json.html_safe %>;
 
-        terms.initialize();
-
-        $('#taxonomy_todo_form_terms').tagsinput({
-          trimValue: true,
-          typeaheadjs: {
-            name: 'terms',
-            displayKey: 'name',
-            valueKey: 'name',
-            source: terms.ttAdapter()
-          }
+        $("#taxonomy_todo_form_terms").select2({
+          tags: true,
+          tokenSeparators: [','],
+          data: data,
+          theme: 'bootstrap',
+          selectOnClose: true
         });
       </script>
     </div>

@@ -22,6 +22,7 @@ gem 'pg'
 gem 'puma'
 gem 'rails', '~> 5.1'
 gem 'sass-rails'
+gem "select2-rails"
 gem 'turbolinks'
 gem 'twitter-typeahead-rails'
 gem 'uglifier'
