@@ -1,3 +1,7 @@
+<div>
+  <%= link_to "< Projects", taxonomy_projects_path %>
+</div>
+
 <h1><%= @project.name %></h1>
 
 <div class="summary">
@@ -20,6 +24,8 @@
     </div>
   </div>
 </div>
+
+<td><%= link_to 'Start tagging', next_taxonomy_project_path(@project), class: 'btn btn-md btn-default' %></td>
 
 <h2>Terms</h2>
 
@@ -52,7 +58,7 @@
   </tr>
   </thead>
   <tbody>
-    <% @project.taxonomy_todos.includes(:terms).reverse.each do |taxonomy_todo| %>
+    <% @project.taxonomy_todos.includes(:terms, :content_item, :user).each do |taxonomy_todo| %>
       <tr>
         <td><%= link_to taxonomy_todo.content_item.title, taxonomy_todo %></td>
         <td><%= taxonomy_todo.terms.map(&:name).join(', ') %></td>

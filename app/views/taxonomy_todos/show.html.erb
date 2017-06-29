@@ -33,7 +33,8 @@
     </div>
   <% end %>
 
-  <h2><%= link_to @todo_form.title, @todo_form.url, data: {toggle: "modal", target: "#myModal"} %></h2>
+  <h2 class='project-name'><%= link_to @todo_form.project.name, taxonomy_projects_path(@todo_form.project.name) %></h2>
+  <h1><%= link_to @todo_form.title, @todo_form.url, data: {toggle: "modal", target: "#myModal"} %></h1>
 
   <p class="description">
     <%= @todo_form.description %>
@@ -82,6 +83,19 @@
 
 <div class="col-sm-3">
   <div id="metadata" class="term_review-metadata">
+    <div>
+      <% if @todo_form.taxonomy_todo.completed? %>
+        <h4>Completed</h4>
+        <p>
+          <%= @todo_form.taxonomy_todo.completed_at.to_s(:govuk_date) %> by <%= @todo_form.taxonomy_todo.user.name %>
+          <% unless @todo_form.taxonomy_todo.tagged? %>
+            (<%= t("term_generation_states.#{@todo_form.taxonomy_todo.status}") %>)
+          <% end %>
+        </p>
+        <hr/>
+      <% end %>
+    </div>
+
     <div id="organisations">
       <h4>Organisations</h4>
       <p><%= @todo_form.content_item.organisations %></p>

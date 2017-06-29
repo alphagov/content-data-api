@@ -15,6 +15,10 @@ class TaxonomyTodoForm
     taxonomy_todo.content_item.decorate
   end
 
+  def project
+    taxonomy_todo.taxonomy_project
+  end
+
 private
 
   def update_todo
