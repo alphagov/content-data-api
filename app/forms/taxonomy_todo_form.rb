@@ -28,7 +28,7 @@ private
   def save_terms
     taxonomy_todo.terms =
       terms
-        .split(',')
+        .reject(&:blank?)
         .map(&:squish)
         .map { |term| taxonomy_todo.taxonomy_project.terms.where(name: term) }
         .map(&:first_or_create!)

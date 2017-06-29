@@ -2,8 +2,9 @@ class TaxonomyTodosController < ApplicationController
   def show
     @todo_form = TaxonomyTodoForm.new(
       taxonomy_todo: taxonomy_todo,
-      terms: taxonomy_todo.terms.order(:name).pluck(:name).join(', '),
+      terms: taxonomy_todo.terms.order(:name).pluck(:name),
     )
+    @taxonomy_project_terms = taxonomy_project_terms
   end
 
   def update
@@ -29,6 +30,13 @@ class TaxonomyTodosController < ApplicationController
 
 private
 
+  def taxonomy_project_terms
+    taxonomy_todo
+      .taxonomy_project
+      .terms
+      .map(&:name)
+  end
+
   def redirect_to_next_item
     redirect_to next_taxonomy_project_path(taxonomy_todo.taxonomy_project)
   end
@@ -38,6 +46,6 @@ private
   end
 
   def todo_params
-    params.require(:taxonomy_todo_form).permit(:terms)
+    params.require(:taxonomy_todo_form).permit(terms: [])
   end
 end
