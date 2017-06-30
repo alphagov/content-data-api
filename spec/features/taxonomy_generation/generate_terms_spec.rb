@@ -129,6 +129,6 @@ RSpec.feature "Generating terms", type: :feature do
   end
 
   def then_i_see_the_previously_generated_terms
-    expect(page).to have_field('Terms', with: 'The First, The Second, The Third')
+    expect(page).to have_field('Terms', with: 'The First,The Second,The Third')
   end
 end

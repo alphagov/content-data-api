@@ -11,5 +11,4 @@
 // about supported directives.
 //
 //= require_tree .
-//= require bootstrap-tagsinput.js
-//= require twitter/typeahead
+//= require selectize

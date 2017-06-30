@@ -13,7 +13,6 @@ Rails.application.routes.draw do
 
   resources :taxonomy_projects, path: '/taxonomy-projects', only: %w(index show new create) do
     get 'next', on: :member
-    get 'terms', on: :member, constraints: { format: 'json' }
   end
 
   resources :taxonomy_todos, only: %w(show update) do

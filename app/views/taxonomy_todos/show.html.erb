@@ -47,23 +47,22 @@
         <%= f.text_field :terms, value: @todo_form.terms %>
       </div>
       <script>
-        var terms = new Bloodhound({
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace,
-          remote: '<%= terms_taxonomy_project_path(@todo_form.taxonomy_todo.taxonomy_project, format: 'json') %>'
-        });
-
-        terms.initialize();
-
-        $('#taxonomy_todo_form_terms').tagsinput({
-          trimValue: true,
-          typeaheadjs: {
-            name: 'terms',
-            displayKey: 'name',
-            valueKey: 'name',
-            source: terms.ttAdapter()
-          }
-        });
+        $('#taxonomy_todo_form_terms').selectize({
+          plugins: ['remove_button'],
+          options: <%= @todo_form.project.terms.to_json(only: %i(name)).html_safe %>,
+          create: true,
+          highlight: false,
+          persist: false,
+          openOnFocus: false,
+          hideSelected: true,
+          closeAfterSelect: true,
+          addPrecedence: true,
+          selectOnTab: true,
+          valueField: 'name',
+          labelField: 'name',
+          sortField: 'name',
+          searchField: 'name'
+        })
       </script>
     </div>
 

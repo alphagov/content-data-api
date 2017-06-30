@@ -2,7 +2,7 @@ class TaxonomyTodosController < ApplicationController
   def show
     @todo_form = TaxonomyTodoForm.new(
       taxonomy_todo: taxonomy_todo,
-      terms: taxonomy_todo.terms.order(:name).pluck(:name).join(', '),
+      terms: taxonomy_todo.terms.order(:name).pluck(:name).join(','),
     )
   end
 

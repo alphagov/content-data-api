@@ -11,6 +11,8 @@
  * It is generally better to create a new file per style scope.
  *
  *= require_self
+ *= require selectize
+ *= require selectize.bootstrap3
  */
 
 @import 'govuk_admin_template';
@@ -21,8 +23,6 @@
 @import 'audit';
 @import 'report';
 @import 'inventory';
-@import 'bootstrap-tagsinput';
-@import 'bootstrap-tagsinput-typeahead';
 @import 'term_generation';
 
 // TODO: move any styles below to modules once more established
