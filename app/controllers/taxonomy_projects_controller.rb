@@ -29,12 +29,6 @@ class TaxonomyProjectsController < ApplicationController
     end
   end
 
-  def terms
-    @project = TaxonomyProject.find(params[:id])
-
-    render json: @project.terms.to_json(only: %i(name))
-  end
-
 private
 
   def taxonomy_project_params

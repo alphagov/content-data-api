@@ -360,6 +360,7 @@ GEM
     scss_lint (0.53.0)
       rake (>= 0.9, < 13)
       sass (~> 3.4.20)
+    selectize-rails (0.12.4)
     shellany (0.0.1)
     sidekiq (4.2.10)
       concurrent-ruby (~> 1.0)
@@ -400,10 +401,6 @@ GEM
     turbolinks (5.0.1)
       turbolinks-source (~> 5)
     turbolinks-source (5.0.3)
-    twitter-typeahead-rails (0.11.1)
-      actionpack (>= 3.1)
-      jquery-rails
-      railties (>= 3.1)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
     uber (0.1.0)
@@ -468,12 +465,12 @@ DEPENDENCIES
   rails-controller-testing
   rspec-rails
   sass-rails
+  selectize-rails
   spring
   spring-commands-rspec
   spring-watcher-listen
   timecop
   turbolinks
-  twitter-typeahead-rails
   uglifier
   unicorn
   web-console
