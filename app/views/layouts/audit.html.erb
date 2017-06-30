@@ -6,6 +6,10 @@
   Content Audit Tool
 <% end %>
 
+<% content_for :app_home_path do %>
+  <%= audits_path %>
+<% end %>
+
 <% content_for :head do %>
   <%= csrf_meta_tags %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
