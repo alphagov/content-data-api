@@ -46,7 +46,7 @@ class ReportRow < ApplicationRecord
       next unless response
 
       if response.boolean?
-        format_boolean(response.passing?)
+        response.value.capitalize
       else
         response.value
       end

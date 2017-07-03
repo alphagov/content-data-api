@@ -39,7 +39,7 @@ RSpec.describe ReportRow do
   specify { expect(subject.url).to eq                     "https://gov.uk/example/path" }
   specify { expect(subject.is_work_needed).to eq          "Yes" }
   specify { expect(subject.page_views).to eq              "1,234" }
-  specify { expect(subject.response_values).to start_with %w(No No No) }
+  specify { expect(subject.response_values).to start_with %w(Yes Yes Yes) }
   specify { expect(subject.primary_organisation).to eq    "HMRC" }
   specify { expect(subject.other_organisations).to eq     "" }
   specify { expect(subject.content_type).to eq            "Travel Advice" }
