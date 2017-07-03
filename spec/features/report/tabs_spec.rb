@@ -7,7 +7,6 @@ RSpec.feature "Tabs" do
     expect(page).to have_select("audit_status", selected: "Audited")
 
     click_link "Report"
-    expect(page).to have_select("audit_status", selected: "Audited")
 
     click_link "Content"
     expect(page).to have_select("audit_status", selected: "Audited")

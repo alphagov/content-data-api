@@ -1,5 +1,6 @@
 class AuditsController < ApplicationController
-  helper_method :filter_params, :primary_org_only?, :org_link_type
+  helper_method :filter_params, :primary_org_only?, :org_link_type,
+                :audit_status_filter_enabled?
 
   layout "audit"
 
@@ -66,7 +67,7 @@ private
   def search
     @search ||= (
       search = Search.new
-      filter_by_audit_status!(search)
+      filter_by_audit_status!(search) if audit_status_filter_enabled?
       filter_by_organisation!(search)
       filter_by_theme!(search)
       filter_by_document_type!(search)
@@ -80,6 +81,10 @@ private
     params
       .require(:audit)
       .permit(responses_attributes: [:id, :value, :question_id])
+  end
+
+  def audit_status_filter_enabled?
+    action_name != "report"
   end
 
   def filter_params
