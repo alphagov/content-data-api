@@ -2,8 +2,6 @@ class AuditsController < ApplicationController
   helper_method :filter_params, :primary_org_only?, :org_link_type,
                 :audit_status_filter_enabled?
 
-  layout "audit"
-
   before_action :content_items, only: %i(index report export)
 
   def index
