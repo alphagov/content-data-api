@@ -4,18 +4,13 @@
 
 This is an app that aggregates metrics from multiple sources to give easy view of content performance measurements.
 
-### Setting up the local environment
+### Setting up the application
 
-Create the test and development databases:
-
-```bash
-$ rake db:create
-```
-
-Run all migrations:
+The application contains a [setup script](./bin/setup) that will perform the
+steps required to bootstrap the application.
 
 ```bash
-$ rake db:migrate
+$ ./bin/setup
 ```
 
 ### Running the application
