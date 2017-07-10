@@ -4,23 +4,31 @@ class Search
 
     def self.all
       [
-        Sort.new(:page_views_desc, "content_items.six_months_page_views desc"),
+        Sort.new(:page_views_desc, "content_items.six_months_page_views", :desc),
       ]
     end
 
     attr_reader :identifier
 
-    def initialize(identifier, sort_query)
+    def initialize(identifier, field, order)
       @identifier = identifier
-      @sort_query = sort_query
+      @field = field
+      @order = order
     end
 
     def apply(scope)
-      scope.order(sort_query)
+      scope.order("#{field} #{order}")
+    end
+
+    def where_only_after(scope, content_item)
+      scope.where(
+        "#{field} #{{ desc: '<=', asc: '>=' }[order]} ?",
+        content_item.object.send(field)
+      )
     end
 
   private
 
-    attr_accessor :sort_query
+    attr_accessor :field, :order
   end
 end
