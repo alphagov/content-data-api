@@ -3,8 +3,7 @@
   <%= render 'sidebar', submit_path: audits_path %>
 <% end %>
 
-<h1>GOV.UK Content Audit</h1>
-
+<% content_for :header do %>
 <ul class="nav nav-tabs">
   <li role="presentation" class="active">
     <%= link_to "Content", "#", aria_controls: "home", role: "tab" %>
@@ -13,8 +12,7 @@
     <%= link_to "Report", audits_report_path(filter_params), aria_controls: "home", role: "tab" %>
   </li>
 </ul>
-
-<div class="tab-content">
+<% end %>
 
 <table class="table table-bordered table-hover">
   <thead>
@@ -29,5 +27,3 @@
 </table>
 
 <%= paginate @content_items, :window => 2 %>
-
-</div>

@@ -66,7 +66,7 @@ RSpec.describe Search do
 
   it "can filter by a single type and multiple targets" do
     subject.filter_by(link_type: "organisations", target_ids: %w(org1 org2))
-    expect(content_ids).to eq %w(id1 id2 id3)
+    expect(content_ids).to match_array %w(id1 id2 id3)
   end
 
   it "can filter by multiple types for a single target" do
@@ -80,7 +80,7 @@ RSpec.describe Search do
     subject.filter_by(link_type: "organisations", target_ids: %w(org1 org2))
     subject.filter_by(link_type: "policies", target_ids: "policy1")
 
-    expect(content_ids).to eq %w(id2 id3)
+    expect(content_ids).to match_array %w(id2 id3)
   end
 
   it "can filter by source instead of target" do
@@ -108,7 +108,7 @@ RSpec.describe Search do
       :response,
       question: FactoryGirl.create(:boolean_question),
       audit: audit,
-      value: "yes"
+      value: "no"
     )
 
     subject.passing = true
@@ -122,7 +122,7 @@ RSpec.describe Search do
       :response,
       question: FactoryGirl.create(:boolean_question),
       audit: audit,
-      value: "no"
+      value: "yes"
     )
 
     subject.passing = false
@@ -135,6 +135,14 @@ RSpec.describe Search do
 
     subject.document_type = "travel_advice"
     expect(content_ids).to eq %w(id2)
+  end
+
+  it "can return an unpaginated scope of content items" do
+    subject.per_page = 2
+    subject.execute
+
+    expect(subject.content_items.size).to eq(2)
+    expect(subject.unpaginated.size).to eq(6)
   end
 
   describe "#dimension" do
@@ -168,7 +176,7 @@ RSpec.describe Search do
 
     it "does not mutate the existing Search" do
       subject.dimension(:audited)
-      expect(content_ids).to eq %w(id1 id2 id3 org1 org2 policy1)
+      expect(content_ids).to match_array %w(id1 id2 id3 org1 org2 policy1)
     end
 
     it "memoizes for each dimension" do

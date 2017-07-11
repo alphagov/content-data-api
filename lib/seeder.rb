@@ -7,14 +7,16 @@ module Seeder
   def self.questions!
     return if Question.any?
 
-    BooleanQuestion.create!(text: "Is the title clear in isolation?")
-    BooleanQuestion.create!(text: "Is the description optimised?")
-    BooleanQuestion.create!(text: "Is there a clear user need?")
-    BooleanQuestion.create!(text: "Is the page out of date?")
-    BooleanQuestion.create!(text: "Is the page the right format?")
-    BooleanQuestion.create!(text: "Are there similar pages? (Merge pages)")
+    BooleanQuestion.create!(text: "Title")
+    BooleanQuestion.create!(text: "Summary")
+    BooleanQuestion.create!(text: "Page detail")
+    BooleanQuestion.create!(text: "Attachments")
+    BooleanQuestion.create!(text: "Document type")
+    BooleanQuestion.create!(text: "Is the content out of date?")
+    BooleanQuestion.create!(text: "Should the content be removed?")
+    BooleanQuestion.create!(text: "Is this content very similar to other pages?")
 
-    FreeTextQuestion.create!(text: "Redirect or combine with URL")
+    FreeTextQuestion.create!(text: "URLs of similar pages")
     FreeTextQuestion.create!(text: "Notes")
   end
 

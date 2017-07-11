@@ -1,6 +1,4 @@
 .prev-next-links {
-  margin: 5em 0 3em 0;
-
   a {
     font-size: 16px;
     color: black;
@@ -20,11 +18,26 @@
   margin: 2em 0 4em 0;
 }
 
+.header-row {
+  margin-bottom: 1.5em;
+}
+
+.question {
+  &.is-there-content-out-of-date {
+    margin-top: 4em;
+  }
+}
+
 .free-text-question {
   &.redirect-or-combine-with-url {
     textarea {
       height: 2em;
     }
+  }
+
+  &.ur-ls-of-similar-pages {
+    border-left: solid;
+    padding-left: 2em;
   }
 }
 
@@ -33,8 +46,6 @@
 }
 
 .audit-metadata {
-  margin-left: 2em;
-
   h4 {
     margin-top: 2em;
   }

@@ -1,33 +1,54 @@
 class Report
+  include FormatHelper
+
   def self.generate(*args)
     new(*args).generate
   end
 
-  attr_accessor :audits
+  attr_accessor :content_items, :request, :questions
 
-  def initialize(audits)
-    self.audits = audits.includes(:content_item, :user)
+  def initialize(content_items, request)
+    self.content_items = content_items
+    self.request = request
+    self.questions = Question.order(:id).to_a
   end
 
   def generate
     CSV.generate do |csv|
       csv << headers
-
-      each do |_audit, item, user|
-        csv << [item.title, user.name]
-      end
+      csv << [report_url, report_timestamp]
+      rows.each { |row| csv << [nil, nil, *row] }
     end
   end
 
 private
 
   def headers
-    ["Title", "Audited by"]
+    [
+      "Report URL",
+      "Report timestamp",
+      "Title",
+      "URL",
+      "Is work needed?",
+      "Pageviews (last 6 months)",
+      *questions.map(&:text),
+      "Primary organisation",
+      "Other organisations",
+      "Content type",
+      "Last major update",
+      "Whitehall URL",
+    ]
   end
 
-  def each
-    audits.find_each do |audit|
-      yield [audit, audit.content_item, audit.user]
-    end
+  def rows
+    content_items.joins(:report_row).pluck(:data)
+  end
+
+  def report_url
+    request.url
+  end
+
+  def report_timestamp
+    format_datetime(DateTime.now, relative: false)
   end
 end

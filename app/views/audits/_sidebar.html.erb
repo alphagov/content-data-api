@@ -2,13 +2,15 @@
   <h1>Filter</h1>
   <%= form_tag submit_path, method: :get do %>
 
-    <div class="form-group">
-      <%= label_tag :audit_status, 'Audit status' %>
-      <%= select_tag :audit_status,
-          audit_status_options,
-          include_blank: "All",
-          class: "form-control" %>
-    </div>
+    <% if audit_status_filter_enabled? %>
+      <div class="form-group">
+        <%= label_tag :audit_status, 'Audit status' %>
+        <%= select_tag :audit_status,
+        audit_status_options,
+        include_blank: "All",
+        class: "form-control" %>
+      </div>
+    <% end %>
 
     <div class="form-group">
       <%= label_tag :theme, 'Theme' %>
@@ -18,15 +20,19 @@
           class: "form-control" %>
     </div>
 
-    <% Search::FILTERABLE_LINK_TYPES.each do |link_type| %>
-      <div class="form-group">
-        <%= label_tag link_type, link_type.titleize.singularize %>
-        <%= select_tag link_type,
-            link_type_options(link_type),
-            include_blank: "All",
-            class: "form-control" %>
-      </div>
-    <% end %>
+    <div class="form-group">
+      <%= label_tag :organisations, "Organisation" %>
+      <%= select_tag :organisations,
+          organisation_options,
+          include_blank: "All",
+          class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= hidden_field_tag :primary, false, id: nil %>
+      <%= check_box_tag :primary, true, primary_org_only? %>
+      <%= label_tag :primary, "Primary organisation only" %>
+    </div>
 
     <div class="form-group">
       <%= label_tag :document_type, 'Content type' %>

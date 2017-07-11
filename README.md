@@ -4,18 +4,13 @@
 
 This is an app that aggregates metrics from multiple sources to give easy view of content performance measurements.
 
-### Setting up the local environment
+### Setting up the application
 
-Create the test and development databases:
-
-```bash
-$ rake db:create
-```
-
-Run all migrations:
+The application contains a [setup script](./bin/setup) that will perform the
+steps required to bootstrap the application.
 
 ```bash
-$ rake db:migrate
+$ ./bin/setup
 ```
 
 ### Running the application
@@ -80,6 +75,19 @@ application and they take a long time to set up.
 These tasks will read/write a `themes.sql` file in the top-level directory.
 Existing backups are in `backups/` and will need to be copied to use the rake
 tasks, e.g. `cp backups/2017-06-11-themes.sql backups.sql`.
+
+### Comparing themes against a CSV
+
+Previously, inventories were exported as CSVs. There is a rake task that
+compares one of these CSVs against the content items in a Theme and prints a
+report. To run it:
+
+```
+bundle exec rake themes:compare[~/Downloads/transport.csv,Transport]
+```
+
+The first argument is the path to the CSV export. The second argument is the
+name of the theme.
 
 ### API
 

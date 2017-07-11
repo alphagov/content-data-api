@@ -15,8 +15,6 @@
     </div>
   <% end %>
 
-  <h1>GOV.UK Content Audit</h1>
-
   <nav class="prev-next-links">
     <%= link_to "< All items", audits_path(filter_params.without(:page)), class: "all-items" %>
     <%= link_to "Next", content_item_audit_path(@next_item, filter_params), class: "next-item" if @next_item %>
@@ -27,6 +25,18 @@
   <p class="description">
     <%= @audit.content_item.description %>
   </p>
+
+  <%if @audit.content_item.whitehall_url %>
+    <p>
+      <%= link_to "Open in Whitehall Publisher", @audit.content_item.whitehall_url %>
+    </p>
+  <% end %>
+
+  <hr/>
+
+  <%= link_to "Audit question help", "/audit-guidance" %>
+
+  <h4>Do these things need to change?</h4>
 
   <%= form_for [@audit.content_item, @audit], url: content_item_audit_path(filter_params) do |form| %>
     <%= form.fields_for :responses do |builder| %>
@@ -42,6 +52,8 @@
     <%= form.submit "Save", class: "btn btn-success" %>
   <% end %>
 </div>
+
+<div class="col-sm-1"></div>
 
 <div class="col-sm-4">
   <div id="metadata" class="audit-metadata">

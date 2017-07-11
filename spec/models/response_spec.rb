@@ -47,6 +47,11 @@ RSpec.describe Response do
       a.save!
 
       expect(Response.all).to eq [a, b]
+
+      a.question.text = "New text"
+      a.save!
+
+      expect(Response.all).to eq [a, b]
     end
   end
 
@@ -54,8 +59,8 @@ RSpec.describe Response do
     let!(:bool) { FactoryGirl.create(:boolean_question) }
     let!(:free) { FactoryGirl.create(:free_text_question) }
 
-    let!(:passing_response) { FactoryGirl.create(:response, question: bool, value: "yes") }
-    let!(:failing_response) { FactoryGirl.create(:response, question: bool, value: "no") }
+    let!(:passing_response) { FactoryGirl.create(:response, question: bool, value: "no") }
+    let!(:failing_response) { FactoryGirl.create(:response, question: bool, value: "yes") }
     let!(:text_response) { FactoryGirl.create(:response, question: free, value: "Hello") }
 
     describe ".boolean" do
@@ -89,6 +94,29 @@ RSpec.describe Response do
         scope = Response.where(id: passing_response)
         expect(scope.failing).to be_empty
       end
+    end
+  end
+
+  describe "#passing?, #failing?" do
+    let(:free) { FactoryGirl.create(:free_text_question) }
+    let(:bool) { FactoryGirl.create(:boolean_question) }
+
+    it "is passing for responses to non-boolean questions" do
+      response = FactoryGirl.create(:response, question: free)
+      expect(response).to be_passing
+      expect(response).not_to be_failing
+    end
+
+    it "is passing for responses to boolean questions with a 'yes' value" do
+      response = FactoryGirl.create(:response, question: bool, value: "no")
+      expect(response).to be_passing
+      expect(response).not_to be_failing
+    end
+
+    it "is failing for responses to boolean questions with a 'no' value" do
+      response = FactoryGirl.create(:response, question: bool, value: "yes")
+      expect(response).not_to be_passing
+      expect(response).to be_failing
     end
   end
 end

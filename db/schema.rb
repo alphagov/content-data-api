@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170706143917) do
+ActiveRecord::Schema.define(version: 20170626153519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,6 +108,12 @@ ActiveRecord::Schema.define(version: 20170706143917) do
     t.index ["type"], name: "index_questions_on_type"
   end
 
+  create_table "report_rows", force: :cascade do |t|
+    t.string "content_id"
+    t.json "data"
+    t.index ["content_id"], name: "index_report_rows_on_content_id", unique: true
+  end
+
   create_table "responses", id: :serial, force: :cascade do |t|
     t.integer "audit_id"
     t.integer "question_id"
@@ -127,45 +133,11 @@ ActiveRecord::Schema.define(version: 20170706143917) do
     t.index ["theme_id"], name: "index_subthemes_on_theme_id"
   end
 
-  create_table "taxonomy_projects", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "taxonomy_todos", force: :cascade do |t|
-    t.bigint "content_item_id"
-    t.bigint "taxonomy_project_id"
-    t.datetime "completed_at"
-    t.string "completed_by"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "status", default: "todo"
-    t.index ["content_item_id"], name: "index_taxonomy_todos_on_content_item_id"
-    t.index ["taxonomy_project_id"], name: "index_taxonomy_todos_on_taxonomy_project_id"
-  end
-
-  create_table "taxonomy_todos_terms", id: false, force: :cascade do |t|
-    t.bigint "term_id", null: false
-    t.bigint "taxonomy_todo_id", null: false
-    t.index ["taxonomy_todo_id"], name: "index_taxonomy_todos_terms_on_taxonomy_todo_id"
-    t.index ["term_id", "taxonomy_todo_id"], name: "index_terms_taxonomy_todos", unique: true
-    t.index ["term_id"], name: "index_taxonomy_todos_terms_on_term_id"
-  end
-
   create_table "taxons", id: :serial, force: :cascade do |t|
     t.string "content_id"
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "terms", force: :cascade do |t|
-    t.string "name"
-    t.bigint "taxonomy_project_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["taxonomy_project_id"], name: "index_terms_on_taxonomy_project_id"
   end
 
   create_table "themes", force: :cascade do |t|
@@ -188,6 +160,4 @@ ActiveRecord::Schema.define(version: 20170706143917) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "taxonomy_todos", "content_items"
-  add_foreign_key "taxonomy_todos", "taxonomy_projects"
 end
