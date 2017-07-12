@@ -16,7 +16,13 @@ class Search
     end
 
     def apply(scope)
-      scope.order(sort_query)
+      # Sorting by id guarrentees a deterministic order in the case
+      # where the other sort criteria don't differ between the items
+      # being sorted. This is critical to ensure that the user
+      # experience is consistent in terms of the order items are
+      # displayed, and that features provided by PostgreSQL like ORDER
+      # and OFFSET work.
+      scope.order("#{sort_query}, content_items.id")
     end
 
   private
