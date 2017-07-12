@@ -289,6 +289,8 @@ GEM
       rack (>= 0.4)
     rack-protection (2.0.0)
       rack
+    rack-proxy (0.6.1)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.1.2)
@@ -483,6 +485,7 @@ DEPENDENCIES
   poltergeist
   pry-rails
   puma
+  rack-proxy
   rails (~> 5.1)
   rails-controller-testing
   rspec-rails
