@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    image: content-performance-manager
+    command: rails server -b 0.0.0.0
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: postgres://content_performance_manager@db/content_performance_manager_production
+      TEST_DATABASE_URL: postgres://content_performance_manager@db/content_performance_manager_test
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/src/app
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: content_performance_manager
+    volumes:
+      - ${DATABASE_BACKUP}:/docker-entrypoint-initdb.d/content_performance_manager_production.sql.gz
