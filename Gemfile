@@ -27,6 +27,7 @@ gem 'selectize-rails'
 gem 'turbolinks'
 gem 'uglifier'
 gem 'unicorn'
+gem 'rack-proxy'
 
 group :development do
   gem 'web-console'

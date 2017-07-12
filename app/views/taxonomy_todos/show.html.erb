@@ -7,7 +7,7 @@
         <h4 class="modal-title" id="myModalLabel"><%=@todo_form.title%></h4>
       </div>
       <div class="modal-body">
-        <iframe id='#frame' src="<%=@todo_form.url%>"  sandbox="" width="100%" height="600" scrolling="yes"></iframe>
+        <iframe id='frame1' src="<%=@todo_form.proxy_url%>"  width="100%" height="600" scrolling="yes"></iframe>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -76,7 +76,7 @@
   </div>
 
   <div class="add-top-padding">
-    <iframe id='#frame' src="<%=@todo_form.url%>"  sandbox="" width="100%" height="800" scrolling="yes"></iframe>
+    <iframe id='frame2' src="<%=@todo_form.proxy_url%>"  width="100%" height="800" scrolling="yes"></iframe>
   </div>
 </div>
 
@@ -136,4 +136,5 @@
       <p><%= @todo_form.content_item.six_months_page_views %> in the last six months</p>
     </div>
   </div>
+
 </div>

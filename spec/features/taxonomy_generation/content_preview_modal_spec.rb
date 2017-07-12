@@ -1,6 +1,13 @@
 require "rails_helper"
 
 RSpec.feature "Content Preview Modal", type: :feature, js: true do
+  before :each do
+    Proxies::IframeAllowingProxy::PROXY_BASE_PATH = '/iframe-proxy/'.freeze
+
+    #ignore the fact the iframe points to an invalid path
+    Capybara.raise_server_errors = false
+  end
+
   it "pops up a modal when previewing content" do
     given_theres_a_project_with_a_todo
     when_i_visit_the_taxonomy_project_page
@@ -29,7 +36,7 @@ RSpec.feature "Content Preview Modal", type: :feature, js: true do
 
   def then_a_modal_with_the_content_pops_up
     within('.modal-content') do
-      expect(page).to have_css('iframe[src="https://gov.uk/path/to/a/page.html"]')
+      expect(page).to have_css('iframe[src="/iframe-proxy/path/to/a/page.html"]')
     end
   end
 end

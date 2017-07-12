@@ -38,4 +38,12 @@ Rails.application.routes.draw do
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end
+
+  class ProxyAccessContraint
+    def matches?(request)
+      !request.env['warden'].try(:user).nil?
+    end
+  end
+
+  mount Proxies::IframeAllowingProxy.new => Proxies::IframeAllowingProxy::PROXY_BASE_PATH, constraints: ProxyAccessContraint.new
 end

@@ -2,7 +2,7 @@ class TaxonomyTodoForm
   include ActiveModel::Model
   attr_accessor :taxonomy_todo, :terms, :user
 
-  delegate :title, :url, :description, to: :content_item
+  delegate :base_path, :title, :url, :description, to: :content_item
 
   def save
     TaxonomyTodo.transaction do
@@ -13,6 +13,10 @@ class TaxonomyTodoForm
 
   def content_item
     taxonomy_todo.content_item.decorate
+  end
+
+  def proxy_url
+    File.join(Proxies::IframeAllowingProxy::PROXY_BASE_PATH, base_path)
   end
 
   def project
