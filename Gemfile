@@ -23,9 +23,11 @@ gem 'pg'
 gem 'puma'
 gem 'rails', '~> 5.1'
 gem 'sass-rails'
+gem 'selectize-rails'
 gem 'turbolinks'
 gem 'uglifier'
 gem 'unicorn'
+gem 'rack-proxy'
 
 group :development do
   gem 'web-console'
@@ -36,6 +38,7 @@ group :development, :test do
   gem 'byebug'
   gem 'capybara'
   gem 'database_cleaner'
+  gem 'phantomjs'
   gem 'factory_girl_rails'
   gem 'govuk-lint'
   gem 'guard-rspec', require: false

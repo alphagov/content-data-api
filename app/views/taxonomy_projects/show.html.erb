@@ -1,0 +1,76 @@
+<div>
+  <%= link_to "< Projects", taxonomy_projects_path %>
+</div>
+
+<h1><%= @project.name %></h1>
+
+<div class="summary">
+  <div class="row">
+    <div class="summary-item col-xs-3">
+      <span class="summary-item-value"><%= number_with_delimiter @project.stats.todo_count %></span>
+      <span class="summary-item-label">Pages in project</span>
+    </div>
+    <div class="summary-item col-xs-3">
+      <span class="summary-item-value"><%= number_with_delimiter @project.stats.done_count %></span>
+      <span class="summary-item-label">Done</span>
+    </div>
+    <div class="summary-item col-xs-3">
+      <span class="summary-item-value"><%= number_with_delimiter @project.stats.still_todo_count %></span>
+      <span class="summary-item-label">Still to do</span>
+    </div>
+    <div class="summary-item col-xs-3">
+      <span class="summary-item-value"><%= number_with_precision @project.stats.progress_percentage, precision: 1 %>%</span>
+      <span class="summary-item-label">Complete</span>
+    </div>
+  </div>
+</div>
+
+<td><%= link_to 'Start tagging', next_taxonomy_project_path(@project), class: 'btn btn-md btn-default' %></td>
+
+<h2>Terms</h2>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr class="table-header">
+      <th>Term</th>
+      <th>Items</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  <% @project.terms.includes(:taxonomy_todos).each do |term| %>
+    <tr>
+      <td><%= term.name %></td>
+      <td><%= term.taxonomy_todos.count %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<h2>Content items</h2>
+
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr class="table-header">
+    <td>Title</td>
+    <td>Terms</td>
+    <td>Completed</td>
+  </tr>
+  </thead>
+  <tbody>
+    <% @project.taxonomy_todos.includes(:terms, :content_item, :user).each do |taxonomy_todo| %>
+      <tr>
+        <td><%= link_to taxonomy_todo.content_item.title, taxonomy_todo %></td>
+        <td><%= taxonomy_todo.terms.map(&:name).join(', ') %></td>
+        <td>
+          <% if taxonomy_todo.completed? %>
+            <%= taxonomy_todo.completed_at.to_s(:govuk_date) %> by <%= taxonomy_todo.user.name %>
+            <% unless taxonomy_todo.tagged? %>
+              (<%= t("term_generation_states.#{taxonomy_todo.status}") %>)
+            <% end %>
+          <% end %>
+          </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

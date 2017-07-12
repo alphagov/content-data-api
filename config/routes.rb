@@ -11,6 +11,15 @@ Rails.application.routes.draw do
 
   resources :audits, only: %w(index guidance)
 
+  resources :taxonomy_projects, path: '/taxonomy-projects', only: %w(index show new create) do
+    get 'next', on: :member
+  end
+
+  resources :taxonomy_todos, only: %w(show update) do
+    post 'dont_know', on: :member
+    post 'not_relevant', on: :member
+  end
+
   namespace :audits do
     get :report
     get :export
@@ -29,4 +38,12 @@ Rails.application.routes.draw do
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end
+
+  class ProxyAccessContraint
+    def matches?(request)
+      !request.env['warden'].try(:user).nil?
+    end
+  end
+
+  mount Proxies::IframeAllowingProxy.new => Proxies::IframeAllowingProxy::PROXY_BASE_PATH, constraints: ProxyAccessContraint.new
 end

@@ -31,3 +31,7 @@
 
 en:
   hello: "Hello world"
+
+  term_generation_states:
+    dont-know: "Don't know"
+    not-relevant: "Not relevant to theme"

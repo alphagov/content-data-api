@@ -269,6 +269,7 @@ GEM
     parser (2.4.0.0)
       ast (~> 2.2)
     pg (0.21.0)
+    phantomjs (2.1.1.0)
     plek (2.0.0)
     poltergeist (1.15.0)
       capybara (~> 2.1)
@@ -287,6 +288,8 @@ GEM
     rack-cache (1.7.0)
       rack (>= 0.4)
     rack-protection (2.0.0)
+      rack
+    rack-proxy (0.6.1)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -379,6 +382,7 @@ GEM
     scss_lint (0.54.0)
       rake (>= 0.9, < 13)
       sass (~> 3.4.20)
+    selectize-rails (0.12.4)
     shellany (0.0.1)
     sidekiq (4.2.10)
       concurrent-ruby (~> 1.0)
@@ -476,14 +480,17 @@ DEPENDENCIES
   listen
   logstasher
   pg
+  phantomjs
   plek
   poltergeist
   pry-rails
   puma
+  rack-proxy
   rails (~> 5.1)
   rails-controller-testing
   rspec-rails
   sass-rails
+  selectize-rails
   spring
   spring-commands-rspec
   spring-watcher-listen
