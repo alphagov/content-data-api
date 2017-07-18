@@ -1,5 +1,4 @@
 class ContentItem < ApplicationRecord
-  has_and_belongs_to_many :organisations
   has_and_belongs_to_many :taxons
 
   has_one :audit, primary_key: :content_id, foreign_key: :content_id
@@ -72,13 +71,6 @@ class ContentItem < ApplicationRecord
   def whitehall_url
     return unless publishing_app == "whitehall"
     "#{WHITEHALL}/government/admin/by-content-id/#{content_id}"
-  end
-
-  def add_organisations_by_id(orgs)
-    orgs.each do |org|
-      organisation = Organisation.find_by(content_id: org)
-      organisations << organisation unless organisation.nil? || organisations.include?(organisation)
-    end
   end
 
   def add_taxons_by_id(taxon_ids)
