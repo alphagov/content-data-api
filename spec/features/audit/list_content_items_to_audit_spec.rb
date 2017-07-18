@@ -1,5 +1,3 @@
-require 'features/common/pagination_spec_helper'
-
 RSpec.feature "List Content Items to Audit", type: :feature do
   let!(:content_item_1) { create(:content_item, title: "All about flooding.") }
   let!(:content_item_2) { create(:content_item, title: "All about gardening.") }
@@ -30,11 +28,5 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     rows = page.all('main tbody tr')
     expect(rows[0].text).to match("All about gardening.")
     expect(rows[1].text).to match("All about flooding.")
-  end
-
-  describe "User can navigate paged lists of content items" do
-    before { create_list :content_item, 3 }
-
-    it_behaves_like 'a paginated list', 'content_items'
   end
 end

@@ -1,26 +1,12 @@
-require "features/common/pagination_spec_helper"
-
 RSpec.feature "Content Items List", type: :feature do
   before do
     create(:user)
-  end
-
-  describe "User can navigate paged lists of content items" do
-    before { create_list :content_item, 3 }
-
-    it_behaves_like 'a paginated list', 'content_items'
   end
 
   scenario "User does can see CPM feedback survey link in banner" do
     visit "/content_items"
 
     expect(page).to have_link("these quick questions")
-  end
-
-  scenario "Renders the page title" do
-    visit "/content_items"
-
-    expect(page).to have_selector('h1', text: 'GOV.UK')
   end
 
   scenario "Renders the table header" do
@@ -53,5 +39,16 @@ RSpec.feature "Content Items List", type: :feature do
     visit "/content_items"
 
     expect(page).to have_selector('table tbody tr', count: 2)
+  end
+
+  scenario "Paginate through content items" do
+    FactoryGirl.create_list(:content_item, 26)
+
+    visit "/content_items"
+    expect(page).to have_selector("main tbody tr", count: 25)
+
+    within(".pagination") { click_on "2" }
+
+    expect(page).to have_selector("main tbody tr", count: 1)
   end
 end
