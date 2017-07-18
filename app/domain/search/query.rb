@@ -1,6 +1,6 @@
 class Search
   class Query
-    attr_accessor :filters, :per_page, :page, :sort
+    attr_accessor :filters, :per_page, :page, :sort, :title
 
     def initialize
       self.filters = []
@@ -27,6 +27,10 @@ class Search
 
     def document_type=(document_type)
       filters.push(DocumentTypeFilter.new(document_type))
+    end
+
+    def title=(text)
+      filters.push(TitleFilter.new(text))
     end
 
     def filter_by(link_type, source_ids, target_ids)
