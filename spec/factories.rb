@@ -58,7 +58,6 @@ FactoryGirl.define do
     organisation_slug "government-digital-service"
   end
 
-  # deprecated
   factory :group do
     sequence(:slug) { |index| "slug-#{index}" }
     sequence(:name) { |index| "name-#{index}" }
