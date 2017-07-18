@@ -60,7 +60,7 @@ class ReportRow < ApplicationRecord
 
   def other_organisations
     organisations = content_item.linked_organisations
-    others = organisations.map(&:title) - [primary_organisation]
+    others = organisations.map(&:title).sort - [primary_organisation]
 
     others.join(", ")
   end
