@@ -5,6 +5,7 @@ class Link < ApplicationRecord
   ALL_ORGS = "organisations".freeze
   MAINSTREAM = "mainstream_browse_pages".freeze
   TOPICS = "topics".freeze
+  TAXONOMIES = "taxons".freeze
 
   after_save { ReportRow.precompute(source) }
 

@@ -52,6 +52,18 @@ RSpec.describe Search do
 
       expect(views).to eq [999, 100, 100, 100, 100, 0]
     end
+
+    it "can sort by title" do
+      ContentItem.update_all(title: "AAA")
+      ContentItem.find_by!(content_id: "id1").update!(title: "BBB")
+      ContentItem.find_by!(content_id: "id3").update!(title: "CCC")
+
+      subject.sort = :title_desc
+      subject.execute
+      results = subject.content_items
+
+      expect(results.pluck(:title)).to eq %w(CCC BBB AAA AAA AAA AAA)
+    end
   end
 
   let(:content_ids) do
@@ -143,6 +155,14 @@ RSpec.describe Search do
 
     expect(subject.content_items.size).to eq(2)
     expect(subject.unpaginated.size).to eq(6)
+  end
+
+  it "can filter by title" do
+    content_item = ContentItem.find_by!(content_id: "id2")
+    content_item.update!(title: "Advice about a travel")
+
+    subject.title = "about a travel"
+    expect(content_ids).to eq %w(id2)
   end
 
   describe "#dimension" do

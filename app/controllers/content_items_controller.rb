@@ -1,15 +1,18 @@
 class ContentItemsController < ApplicationController
-  before_action :set_organisation, only: :index
-  before_action :set_taxon, only: :index
-  before_action :set_filter_options, only: :index
-  before_action :set_query_options, only: :index
-  before_action :set_all_organisations, only: :index
-  before_action :set_all_taxons, only: :index
+  helper_method :filter_params, :primary_org_only?, :org_link_type
 
   def index
-    query = Queries::ContentItemsQuery.new(@query_options)
-    @content_items = query.paginated_results.decorate
-    @metrics = MetricBuilder.new.run_collection(query.results)
+    @search = Search.new
+    filter_by_organisation!(@search)
+    filter_by_taxon!(@search)
+    sort!(@search)
+    @search.title = params[:query] if params[:query]
+    @search.page = params[:page]
+    @search.execute
+
+    @metrics = MetricBuilder.new.run_collection(@search.unpaginated)
+
+    @content_items = @search.content_items.decorate
   end
 
   def show
@@ -18,37 +21,33 @@ class ContentItemsController < ApplicationController
 
 private
 
-  def set_query_options
-    @query_options = {
-      sort: params[:sort],
-      order: params[:order],
-      query: params[:query],
-      page: params[:page],
-      taxon: @taxon,
-      organisation: @organisation
-    }
+  def filter_by_organisation!(search)
+    content_id = params[:organisations]
+    search.filter_by(link_type: org_link_type, target_ids: content_id) if content_id.present?
   end
 
-  def set_all_organisations
-    @organisations = Organisation.order(:title)
+  def sort!(search)
+    if params[:order].present? && params[:sort].present?
+      search.sort = "#{params[:sort]}_#{params[:order]}".to_sym
+    end
   end
 
-  def set_all_taxons
-    @taxons = Taxon.order(:title)
+  def filter_by_taxon!(search)
+    content_id = params[:taxons]
+    search.filter_by(link_type: "taxons", target_ids: content_id) if content_id.present?
   end
 
-  def set_organisation
-    @organisation = Organisation.find_by(content_id: params[:organisation_content_id]) if params[:organisation_content_id]
+  def org_link_type
+    primary_org_only? ? Link::PRIMARY_ORG : Link::ALL_ORGS
   end
 
-  def set_taxon
-    @taxon = Taxon.find_by(content_id: params[:taxon_content_id]) if params[:taxon_content_id]
+  def primary_org_only?
+    params[:primary].blank? || params[:primary] == "true"
   end
 
-  def set_filter_options
-    @filter_options = {}
-    @filter_options[:organisation_content_id] = params[:organisation_content_id]
-    @filter_options[:taxon_content_id] = params[:taxon_content_id]
-    @filter_options[:query] = params[:query]
+  def filter_params
+    request
+      .query_parameters
+      .deep_symbolize_keys
   end
 end

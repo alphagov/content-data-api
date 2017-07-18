@@ -2,6 +2,7 @@ class Search
   FILTERABLE_LINK_TYPES = [
     Link::PRIMARY_ORG,
     Link::ALL_ORGS,
+    Link::TAXONOMIES,
   ].freeze
 
   GROUPABLE_LINK_TYPES = [
@@ -38,6 +39,10 @@ class Search
 
   def document_type=(document_type)
     query.document_type = document_type
+  end
+
+  def title=(title)
+    query.title = title
   end
 
   def filter_by(link_type:, source_ids: nil, target_ids: nil)
