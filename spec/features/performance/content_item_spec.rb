@@ -1,5 +1,3 @@
-require 'features/common/pagination_spec_helper'
-
 RSpec.feature "Content Item Details", type: :feature do
   before do
     create(:user)
@@ -40,13 +38,17 @@ RSpec.feature "Content Item Details", type: :feature do
   end
 
   scenario "Renders the taxons" do
-    content_item = create(:content_item)
-    content_item.taxons << create(:taxon, title: 'A Taxon')
-    content_item.taxons << create(:taxon, title: 'Another Taxon')
+    content = create(:content_item, title: "Offsted report")
 
-    visit "/content_items/#{content_item.id}"
+    taxonomy1 = create(:content_item, title: "Education")
+    taxonomy2 = create(:content_item, title: "Health")
 
-    expect(page).to have_text('A Taxon, Another Taxon')
+    create(:link, source: content, target: taxonomy1, link_type: "taxons")
+    create(:link, source: content, target: taxonomy2, link_type: "taxons")
+
+    visit "/content_items/#{content.id}"
+
+    expect(page).to have_text('Education, Health')
   end
 
   scenario "Renders stats for Google Analytics" do
@@ -67,13 +69,17 @@ RSpec.feature "Content Item Details", type: :feature do
   end
 
   scenario "Renders the organisations belonging to a Content Item" do
-    content_item = create(:content_item)
-    content_item.organisations << create(:organisation, title: 'An Organisation')
-    content_item.organisations << create(:organisation, title: 'Another Organisation')
+    content = create(:content_item, title: "Offsted report")
 
-    visit "/content_items/#{content_item.id}"
+    organisation1 = create(:content_item, title: "Education")
+    organisation2 = create(:content_item, title: "Health")
 
-    expect(page).to have_text('An Organisation, Another Organisation')
+    create(:link, source: content, target: organisation1, link_type: "organisations")
+    create(:link, source: content, target: organisation2, link_type: "organisations")
+
+    visit "/content_items/#{content.id}"
+
+    expect(page).to have_text('Education, Health')
   end
 
   scenario "Renders when an item has not been published" do

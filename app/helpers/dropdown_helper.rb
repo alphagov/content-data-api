@@ -19,6 +19,17 @@ module DropdownHelper
     )
   end
 
+  def taxons_options
+    options = @search.options_for("taxons").order(:title)
+
+    options_from_collection_for_select(
+      options,
+      :content_id,
+      :title_with_count,
+      selected: params["taxons"],
+    )
+  end
+
   def organisation_options
     options = @search.options_for(org_link_type).order(:title)
 
