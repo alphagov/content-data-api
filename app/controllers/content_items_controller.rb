@@ -4,7 +4,7 @@ class ContentItemsController < ApplicationController
   def index
     search.filter_by(link_type: org_link_type, target_ids: params[:organisations]) if params[:organisations].present?
     search.filter_by(link_type: "taxons", target_ids: params[:taxons]) if params[:taxons].present?
-    search.sort = "#{params[:sort]}_#{params[:order]}".to_sym if params[:order].present? && params[:sort].present?
+    search.sort = "#{params[:sort]}_#{params[:order]}".to_sym if params[:sort].present? && params[:order].present?
     search.title = params[:query] if params[:query]
     search.page = params[:page]
     search.execute

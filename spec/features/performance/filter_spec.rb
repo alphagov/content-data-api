@@ -82,7 +82,7 @@ RSpec.feature "Filter in content items", type: :feature do
     end
 
     scenario "the user can see the additional filters if they are currently filtering by one of them", js: true do
-      content = create(:content_item, title: "Offsted report")
+      content = create(:content_item, title: "Ofsted report")
       taxonomy = create(:content_item, title: "Education")
       create(:link, source: content, target: taxonomy, link_type: "taxons")
 

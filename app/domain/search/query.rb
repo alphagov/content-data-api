@@ -6,7 +6,7 @@ class Search
       self.filters = []
       self.page = 1
       self.per_page = 25
-      self.sort = :page_views_desc
+      self.sort = :six_months_page_views_desc
     end
 
     def audit_status=(identifier)

@@ -15,51 +15,34 @@ module TableHelper
     end
 
     def render
-      content_tag :th, "aria-sort" => aria_label do
-        link text_label, order_param
+      content_tag :th, class: aria_label do
+        header_link inversed_order
       end
     end
 
   private
 
-    def link(label, order)
-      link_options = {
-          sort: attribute,
-          order: order
-      }.merge!(view.filter_params)
+    def header_link(order)
+      link_options = view.filter_params.merge(
+        sort: attribute,
+        order: order
+      )
 
       link_to content_items_path(link_options) do
-        "#{heading}#{content_tag :span, label, class: 'rm'}".html_safe
+        "#{heading}#{content_tag :span, '', class: 'rm'}".html_safe
       end
     end
 
-    def currently_sorted_by?
-      params[:order].present? && params[:sort] == attribute
-    end
-
-    def text_label
-      ", sort #{readable_sort_term(order_param)}"
-    end
-
-    def order_param
-      if currently_sorted_by? && params[:order] == "asc"
-        "desc"
-      else
-        "asc"
-      end
+    def inversed_order
+      sorting_enabled? && params[:order] == "asc" ? "desc" : "asc"
     end
 
     def aria_label
-      if currently_sorted_by?
-        readable_sort_term(params[:order])
-      else
-        "none"
-      end
+      sorting_enabled? ? params[:order] : "none"
     end
 
-    def readable_sort_term(term)
-      term_map = { "asc" => "ascending", "desc" => "descending" }
-      term_map[term] || "ascending"
+    def sorting_enabled?
+      params[:order].present? && params[:sort] == attribute
     end
   end
 end
