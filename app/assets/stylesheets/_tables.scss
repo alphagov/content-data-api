@@ -18,18 +18,18 @@ $visited-colour: #337ab7;
   }
 }
 
-.table > thead > tr > th[aria-sort=descending],
-.table > thead > tr > th[aria-sort=ascending] {
+.table > thead > tr > .desc,
+.table > thead > tr > .asc {
   padding-right: 18px; // Increase cell padding to fit arrow
 }
 
-[aria-sort=descending] > * {
+.desc > * {
   &:after {
     content: '\25BC'; // Down arrow
   }
 }
 
-[aria-sort=ascending] > * {
+.asc > * {
   &:after {
     content: '\25B2'; // Up arrow
   }

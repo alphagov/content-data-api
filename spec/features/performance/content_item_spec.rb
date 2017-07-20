@@ -38,7 +38,7 @@ RSpec.feature "Content Item Details", type: :feature do
   end
 
   scenario "Renders the taxons" do
-    content = create(:content_item, title: "Offsted report")
+    content = create(:content_item, title: "Ofsted report")
 
     taxonomy1 = create(:content_item, title: "Education")
     taxonomy2 = create(:content_item, title: "Health")
@@ -69,7 +69,7 @@ RSpec.feature "Content Item Details", type: :feature do
   end
 
   scenario "Renders the organisations belonging to a Content Item" do
-    content = create(:content_item, title: "Offsted report")
+    content = create(:content_item, title: "Ofsted report")
 
     organisation1 = create(:content_item, title: "Education")
     organisation2 = create(:content_item, title: "Health")
