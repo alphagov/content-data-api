@@ -59,7 +59,15 @@ private
   end
 
   def next_item
-    @next_item ||= content_items.next_item(content_item)
+    @next_item ||= begin
+      next_item_query = Search::QueryBuilder
+        .from_query(query)
+        .after(content_item)
+        .page(1)
+        .per_page(1)
+
+      Search.new(next_item_query).content_items.first
+    end
   end
 
   def query
@@ -72,7 +80,7 @@ private
       filter_by_theme!(query_builder)
       filter_by_document_type!(query_builder)
 
-      query_builder.build
+      query_builder
     end
   end
 

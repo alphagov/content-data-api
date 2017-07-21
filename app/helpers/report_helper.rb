@@ -1,16 +1,16 @@
 module ReportHelper
   def audited_count
-    query = Search::QueryBuilder.from_query(@query)
+    query = Search::QueryBuilder
+      .from_query(@query)
       .audited
-      .build
 
     Search.new(query).content_items.total_count
   end
 
   def not_audited_count
-    query = Search::QueryBuilder.from_query(@query)
+    query = Search::QueryBuilder
+      .from_query(@query)
       .non_audited
-      .build
 
     Search.new(query).content_items.total_count
   end
@@ -24,17 +24,17 @@ module ReportHelper
   end
 
   def passing_count
-    query = Search::QueryBuilder.from_query(@query)
+    query = Search::QueryBuilder
+      .from_query(@query)
       .passing
-      .build
 
     Search.new(query).content_items.total_count
   end
 
   def not_passing_count
-    query = Search::QueryBuilder.from_query(@query)
+    query = Search::QueryBuilder
+      .from_query(@query)
       .not_passing
-      .build
 
     Search.new(query).content_items.total_count
   end

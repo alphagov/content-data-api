@@ -41,7 +41,6 @@ private
     @base_paths_in_theme ||= begin
       query = Search::QueryBuilder.new
         .theme("Theme_#{theme.id}")
-        .build
 
       search = Search.new(query)
 

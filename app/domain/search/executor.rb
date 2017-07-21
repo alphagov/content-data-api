@@ -19,6 +19,7 @@ class Search
       apply_filters!
       apply_sort!
       paginate!
+      apply_previous_content_item_filter!
 
       Result.new(scope, filter_options)
     end
@@ -59,6 +60,12 @@ class Search
 
     def apply_sort!
       self.scope = query.sort.apply(scope)
+    end
+
+    def apply_previous_content_item_filter!
+      if query.previous_content_item
+        self.scope = query.sort.apply_next_item(scope, query.previous_content_item)
+      end
     end
 
     def paginate!

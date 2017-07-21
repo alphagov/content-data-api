@@ -1,12 +1,13 @@
 class Search
   class QueryBuilder
     def self.from_query(query)
-      clone = query.deep_clone
+      clone = query.build.deep_clone
       QueryBuilder.new
         .filters(clone.filters)
         .page(clone.page)
         .per_page(clone.per_page)
         .sort(clone.sort.identifier)
+        .after(clone.previous_content_item)
     end
 
     def initialize
@@ -14,6 +15,7 @@ class Search
       @page = 1
       @per_page = 25
       @sort = Sort.find(:page_views_desc)
+      @after = nil
     end
 
     def page(page)
@@ -86,8 +88,13 @@ class Search
       self
     end
 
+    def after(content_item)
+      @after = content_item
+      self
+    end
+
     def build
-      Search::Query.new(@filters, @per_page, @page, @sort)
+      Search::Query.new(@filters, @per_page, @page, @sort, @after)
     end
 
   private

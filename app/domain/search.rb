@@ -13,8 +13,8 @@ class Search
     Link::TOPICS,
   ].freeze
 
-  def initialize(query = QueryBuilder.new.build)
-    @query = query
+  def initialize(query = QueryBuilder.new)
+    @query = query.build
   end
 
   def content_items
