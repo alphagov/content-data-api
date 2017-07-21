@@ -442,6 +442,7 @@ GEM
     unicorn (5.3.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
+    value_struct (0.8.0)
     warden (1.2.7)
       rack (>= 1.0)
     warden-oauth2 (0.0.1)
@@ -506,6 +507,7 @@ DEPENDENCIES
   turbolinks
   uglifier
   unicorn
+  value_struct
   web-console
   webmock
 

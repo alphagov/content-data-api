@@ -28,10 +28,13 @@ RSpec.describe Search do
   end
 
   it "can paginate" do
-    subject.per_page = 5
-    subject.page = 2
-    subject.execute
-    results = subject.content_items
+    query = Search::QueryBuilder.new
+      .per_page(5)
+      .page(2)
+      .build
+
+    search = Search.new(query)
+    results = search.content_items
 
     expect(results.total_pages).to eq(2)
     expect(results.count).to eq(1)
@@ -43,62 +46,80 @@ RSpec.describe Search do
       ContentItem.find_by!(content_id: "id1").update!(six_months_page_views: 999)
       ContentItem.find_by!(content_id: "id3").update!(six_months_page_views: 0)
 
-      subject.sort = :page_views_desc
-      subject.per_page = 100
-      subject.execute
+      query = Search::QueryBuilder.new
+        .sort(:page_views_desc)
+        .per_page(100)
+        .build
 
-      results = subject.content_items
+      search = Search.new(query)
+
+      results = search.content_items
       views = results.pluck(:six_months_page_views)
 
       expect(views).to eq [999, 100, 100, 100, 100, 0]
     end
   end
 
-  let(:content_ids) do
-    subject.execute
-    subject.content_items.map(&:content_id)
+  def content_ids_for(query)
+    Search.new(query)
+      .content_items
+      .map(&:content_id)
   end
 
   it "can filter by a single type and single target" do
-    subject.filter_by(link_type: "organisations", target_ids: "org1")
-    expect(content_ids).to match_array %w(id1 id3)
+    query = Search::QueryBuilder.new
+      .filter_by(link_type: "organisations", target_ids: "org1")
+      .build
+    expect(content_ids_for(query)).to match_array %w(id1 id3)
   end
 
   it "can filter by a single type and multiple targets" do
-    subject.filter_by(link_type: "organisations", target_ids: %w(org1 org2))
-    expect(content_ids).to match_array %w(id1 id2 id3)
+    query = Search::QueryBuilder.new
+      .filter_by(link_type: "organisations", target_ids: %w(org1 org2))
+      .build
+    expect(content_ids_for(query)).to match_array %w(id1 id2 id3)
   end
 
   it "can filter by multiple types for a single target" do
-    subject.filter_by(link_type: "organisations", target_ids: "org1")
-    subject.filter_by(link_type: "policies", target_ids: "policy1")
+    query = Search::QueryBuilder.new
+      .filter_by(link_type: "organisations", target_ids: "org1")
+      .filter_by(link_type: "policies", target_ids: "policy1")
+      .build
 
-    expect(content_ids).to eq %w(id3)
+    expect(content_ids_for(query)).to eq %w(id3)
   end
 
   it "can filter by multiple types and multiple targets" do
-    subject.filter_by(link_type: "organisations", target_ids: %w(org1 org2))
-    subject.filter_by(link_type: "policies", target_ids: "policy1")
+    query = Search::QueryBuilder.new
+      .filter_by(link_type: "organisations", target_ids: %w(org1 org2))
+      .filter_by(link_type: "policies", target_ids: "policy1")
+      .build
 
-    expect(content_ids).to match_array %w(id2 id3)
+    expect(content_ids_for(query)).to match_array %w(id2 id3)
   end
 
   it "can filter by source instead of target" do
-    subject.filter_by(link_type: "organisations", source_ids: "id2")
-    expect(content_ids).to eq %w(org2)
+    query = Search::QueryBuilder.new
+      .filter_by(link_type: "organisations", source_ids: "id2")
+      .build
+    expect(content_ids_for(query)).to eq %w(org2)
   end
 
   it "returns no results if there is no target for the type" do
-    subject.filter_by(link_type: "policies", target_ids: "org1")
-    expect(content_ids).to be_empty
+    query = Search::QueryBuilder.new
+      .filter_by(link_type: "policies", target_ids: "org1")
+      .build
+    expect(content_ids_for(query)).to be_empty
   end
 
   it "can filter by audit status" do
     content_item = ContentItem.find_by!(content_id: "id2")
     create(:audit, content_item: content_item)
 
-    subject.audit_status = :audited
-    expect(content_ids).to eq %w(id2)
+    query = Search::QueryBuilder.new
+      .audited
+      .build
+    expect(content_ids_for(query)).to eq %w(id2)
   end
 
   it "can filter by passing status" do
@@ -111,8 +132,10 @@ RSpec.describe Search do
       value: "no"
     )
 
-    subject.passing = true
-    expect(content_ids).to eq %w(id2)
+    query = Search::QueryBuilder.new
+      .passing
+      .build
+    expect(content_ids_for(query)).to eq %w(id2)
   end
 
   it "can filter by not passing status" do
@@ -125,66 +148,53 @@ RSpec.describe Search do
       value: "yes"
     )
 
-    subject.passing = false
-    expect(content_ids).to eq %w{id2}
+    query = Search::QueryBuilder.new
+      .not_passing
+      .build
+    expect(content_ids_for(query)).to eq %w{id2}
   end
 
   it "can filter by document type" do
     content_item = ContentItem.find_by!(content_id: "id2")
     content_item.update!(document_type: "travel_advice")
 
-    subject.document_type = "travel_advice"
-    expect(content_ids).to eq %w(id2)
+    query = Search::QueryBuilder.new
+      .document_type('travel_advice')
+      .build
+    expect(content_ids_for(query)).to contain_exactly("id2")
   end
 
   it "can return an unpaginated scope of content items" do
-    subject.per_page = 2
-    subject.execute
+    query = Search::QueryBuilder.new
+      .per_page(2)
+      .build
+    search = Search.new(query)
 
-    expect(subject.content_items.size).to eq(2)
-    expect(subject.unpaginated.size).to eq(6)
+    expect(search.content_items.size).to eq(2)
+    expect(search.unpaginated.size).to eq(6)
   end
 
-  describe "#dimension" do
+  describe "with an audited content item" do
     before do
       content_item = ContentItem.find_by!(content_id: "id2")
       create(:audit, content_item: content_item)
     end
 
-    it "applies the block associated with the dimension" do
-      audited = subject.dimension(:audited)
-      content_ids = audited.content_items.map(&:content_id)
-      expect(content_ids).to eq %w(id2)
+    it "can search for audited content items" do
+      query = Search::QueryBuilder.new
+        .audited
+        .build
+
+      expect(content_ids_for(query)).to contain_exactly("id2")
     end
 
-    it "inherits query parameters" do
-      subject.page = 2
+    it "returns no results if contradictory audit statuses are set" do
+      query = Search::QueryBuilder.new
+        .audited
+        .non_audited
+        .build
 
-      audited = subject.dimension(:audited)
-      expect(audited.page).to eq(2)
-    end
-
-    it "returns no results if contradictory dimensions are set" do
-      search = subject
-        .dimension(:audited)
-        .dimension(:not_audited)
-
-
-      content_ids = search.content_items.map(&:content_id)
-      expect(content_ids).to be_empty
-    end
-
-    it "does not mutate the existing Search" do
-      subject.dimension(:audited)
-      expect(content_ids).to match_array %w(id1 id2 id3 org1 org2 policy1)
-    end
-
-    it "memoizes for each dimension" do
-      expect(Search::Executor).to receive(:execute).twice
-
-      subject.dimension(:audited)
-      subject.dimension(:not_audited)
-      subject.dimension(:audited)
+      expect(content_ids_for(query)).to be_empty
     end
   end
 end
