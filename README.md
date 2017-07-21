@@ -89,10 +89,6 @@ bundle exec rake themes:compare[~/Downloads/transport.csv,Transport]
 The first argument is the path to the CSV export. The second argument is the
 name of the theme.
 
-### API
-
-* [Configuration](doc/api.md#set_up_api)
-* [Samples](doc/api.md#samples)
 
 ### Deploying the application
 * [Heroku](doc/deploying.md#heroku)
