@@ -1,11 +1,13 @@
+$next-link-colour: #000000;
+
 .prev-next-links {
   a {
     font-size: 16px;
-    color: black;
+    color: $next-link-colour;
     text-decoration: underline;
 
     &:visited {
-      color: black;
+      color: $next-link-colour;
     }
   }
 

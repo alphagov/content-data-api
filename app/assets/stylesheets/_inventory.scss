@@ -1,3 +1,14 @@
+$theme-border-colour: #444;
+$row-colour: #000;
+$background-colour: #ddd;
+$row-border-colour: #ccc;
+$link-background: #ffa;
+$theme-active-colour: #8CEFFD;
+$subtheme-active-colour: #A5FF8A;
+$criteria-active-colour: #DBBFF7;
+$content-active-colour: #FFFF99;
+
+
 .inventory {
   h1 {
     margin-bottom: 1em;
@@ -5,15 +16,20 @@
 
   .tiered-menu {
     display: inline-block;
-    border: 2px solid #444;
+    border: 2px solid $theme-border-colour;
     margin-top: 2em;
   }
 
-  .themes, .subthemes, .criteria {
-    border-right: 1px solid #444;
+  .themes,
+  .subthemes,
+  .criteria {
+    border-right: 1px solid $theme-border-colour;
   }
 
-  .themes, .subthemes, .criteria, .content {
+  .themes,
+  .subthemes,
+  .criteria,
+  .content {
     display: table-cell;
     padding: 0;
   }
@@ -30,11 +46,11 @@
 
   .row {
     display: block;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $row-border-colour;
     min-width: 12em;
     margin: 0;
     padding: 1em;
-    color: black;
+    color: $row-colour;
     text-decoration: none;
 
     &.active {
@@ -42,17 +58,17 @@
     }
 
     &.header {
-      color: black;
-      background: #ddd;
-      border-color: black;
+      color: $row-colour;
+      background: $background-colour;
+      border-color: $row-colour;
 
       &:hover {
-        background: #ddd;
+        background: $background-colour;
       }
     }
 
     &:hover {
-      background: #ffa;
+      background: $link-background;
     }
 
     input[type="text"] {
@@ -61,19 +77,23 @@
     }
   }
 
-  .themes .row.active {
-    background: #8CEFFD;
+  .themes
+  .row.active {
+    background: $theme-active-colour;
   }
 
-  .subthemes .row.active {
-    background: #A5FF8A;
+  .subthemes
+  .row.active {
+    background: $subtheme-active-colour;
   }
 
-  .criteria .row.active {
-    background: #DBBFF7;
+  .criteria
+  .row.active {
+    background: $criteria-active-colour;
   }
 
-  .content .row.active {
-    background: #FFFF99;
+  .content
+  .row.active {
+    background: $content-active-colour;
   }
 }

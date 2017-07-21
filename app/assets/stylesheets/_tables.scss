@@ -1,3 +1,5 @@
+$visited-colour: #337ab7;
+
 [aria-sort] > * {
   display: inline-block;
   position: relative;
@@ -12,7 +14,7 @@
   }
 
   &:visited {
-    color: #337ab7;
+    color: $visited-colour;
   }
 }
 

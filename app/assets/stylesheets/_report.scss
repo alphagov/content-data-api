@@ -1,4 +1,7 @@
-.report-export, .report-export:visited {
-  color: black;
+$visited-colour: #000;
+
+.report-export,
+.report-export:visited {
+  color: $visited-colour;
   text-decoration: underline;
 }
