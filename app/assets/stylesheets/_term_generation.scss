@@ -1,9 +1,11 @@
-.state-changers .button_to {
+$project-colour: #333;
+
+.state-changers .button-to {
   display: inline-block;
 }
 
-h2.project-name {
-  color: #333;
+.project-name {
+  color: $project-colour;
   text-decoration: underline;
   font-size: 20px;
 }
