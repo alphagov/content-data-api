@@ -12,7 +12,7 @@ RSpec.feature "Audit metadata", type: :feature do
   end
 
   scenario "showing minimal metadata next to the audit quesionnaire" do
-    visit content_item_audit_path(content_item)
+    visit content_item_audit_path(content_item.content_id)
 
     within("#metadata") do
       expect(page).to have_selector("#audited", text: "Not audited yet")
@@ -65,7 +65,7 @@ RSpec.feature "Audit metadata", type: :feature do
       expect(page).to have_selector("#guidance", text: "Yes")
       expect(page).to have_selector("#topics", text: "Borders, Immigration")
       expect(page).to have_selector("#policy-areas", text: "Borders and Immigration")
-#      expect(page).to have_selector("#withdrawn", text: "No")
+      expect(page).to have_selector("#withdrawn", text: "No")
       expect(page).to have_selector("#pageviews", text: "1,234 in the last month")
       expect(page).to have_selector("#pageviews", text: "12,345 in the last six months")
     end
