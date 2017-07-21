@@ -8,6 +8,14 @@ RSpec.describe ContentItem, type: :model do
     end
   end
 
+  describe ".to_param" do
+    let!(:content_item) { build(:content_item, content_id: "content-id-1") }
+
+    it "returns the content id" do
+      expect(content_item.to_param).to eq("content-id-1")
+    end
+  end
+
   describe ".next_item" do
     let!(:content_items) { create_list(:content_item, 5) }
 

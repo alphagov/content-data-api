@@ -12,7 +12,7 @@ RSpec.feature "Audit metadata", type: :feature do
   end
 
   scenario "showing minimal metadata next to the audit quesionnaire" do
-    visit content_item_audit_path(content_item.content_id)
+    visit content_item_audit_path(content_item)
 
     within("#metadata") do
       expect(page).to have_selector("#audited", text: "Not audited yet")

@@ -23,7 +23,7 @@ RSpec.describe ContentItemsController, type: :controller do
     let(:content_item) { create(:content_item) }
 
     before do
-      get :show, params: { id: content_item.id }
+      get :show, params: { content_id: content_item.content_id }
     end
 
     it "returns http success" do
