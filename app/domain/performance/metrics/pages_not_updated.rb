@@ -1,13 +1,13 @@
 module Performance::Metrics
   class PagesNotUpdated
-    attr_accessor :content_items
+    attr_reader :scope
 
-    def initialize(content_items)
-      @content_items = content_items
+    def initialize(scope)
+      @scope = scope
     end
 
     def run
-      { pages_not_updated: { value: content_items.where("public_updated_at < ?", 6.months.ago).count } }
+      { pages_not_updated: { value: scope.where("public_updated_at < ?", 6.months.ago).count } }
     end
   end
 end

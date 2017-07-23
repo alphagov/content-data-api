@@ -1,13 +1,13 @@
 module Performance::Metrics
   class ZeroPageViews
-    attr_accessor :content_items
+    attr_accessor :scope
 
-    def initialize(content_items)
-      @content_items = content_items
+    def initialize(scope)
+      @scope = scope
     end
 
     def run
-      { zero_page_views: { value: content_items.where("one_month_page_views = 0").count } }
+      { zero_page_views: { value: scope.where("one_month_page_views = 0").count } }
     end
   end
 end

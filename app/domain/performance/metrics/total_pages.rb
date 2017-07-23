@@ -1,13 +1,13 @@
 module Performance::Metrics
   class TotalPages
-    attr_accessor :content_items
+    attr_reader :scope
 
-    def initialize(content_items)
-      @content_items = content_items
+    def initialize(scope)
+      @scope = scope
     end
 
     def run
-      { total_pages: { value: content_items.count } }
+      { total_pages: { value: scope.count } }
     end
   end
 end
