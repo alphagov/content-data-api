@@ -1,4 +1,4 @@
-module Metrics
+module Performance::Metrics
   class NumberOfPdfs
     attr_accessor :content_item
 

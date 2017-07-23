@@ -1,4 +1,4 @@
-module Metrics
+module Performance::Metrics
   class PagesNotUpdated
     attr_accessor :content_items
 

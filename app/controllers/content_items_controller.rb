@@ -10,7 +10,7 @@ class ContentItemsController < ApplicationController
     search.page = params[:page]
     search.execute
 
-    @metrics = MetricBuilder.new.run_collection(search.unpaginated)
+    @metrics = Performance::MetricBuilder.new.run_collection(search.unpaginated)
 
     @content_items = search.content_items.decorate
   end
