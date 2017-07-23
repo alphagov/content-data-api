@@ -1,5 +1,5 @@
-module Importers
-  class SingleContentItem
+module Content
+  class Importers::SingleContentItem
     attr_accessor :content_items_service, :metric_builder
 
     def self.run(*args)

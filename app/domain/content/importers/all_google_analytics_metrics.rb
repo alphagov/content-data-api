@@ -1,5 +1,5 @@
-module Importers
-  class AllGoogleAnalyticsMetrics
+module Content
+  class Importers::AllGoogleAnalyticsMetrics
     attr_accessor :batch_size
 
     def initialize

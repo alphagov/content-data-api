@@ -1,5 +1,5 @@
-module Importers
-  class AllContentItems
+module Content
+  class Importers::AllContentItems
     attr_accessor :content_items_service
 
     def initialize
