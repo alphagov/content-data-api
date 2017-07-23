@@ -8,7 +8,7 @@ module Importers
 
     def initialize
       self.content_items_service = ContentItemsService.new
-      self.metric_builder = MetricBuilder.new
+      self.metric_builder = Performance::MetricBuilder.new
     end
 
     def run(content_id)

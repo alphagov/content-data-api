@@ -1,4 +1,4 @@
-module Metrics
+module Performance::Metrics
   class ZeroPageViews
     attr_accessor :content_items
 

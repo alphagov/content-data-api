@@ -1,4 +1,4 @@
-module Metrics
+module Performance::Metrics
   class TotalPages
     attr_accessor :content_items
 

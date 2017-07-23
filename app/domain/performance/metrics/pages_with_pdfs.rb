@@ -1,4 +1,4 @@
-module Metrics
+module Performance::Metrics
   class PagesWithPdfs
     attr_accessor :content_items
 
