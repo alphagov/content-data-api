@@ -1,6 +1,6 @@
 RSpec.describe ContentItem, type: :model do
   describe "callbacks" do
-    subject { FactoryGirl.build(:content_item) }
+    subject { build(:content_item) }
 
     it "precomputes the content_item's report row after saving" do
       expect { subject.save! }.to change(ReportRow, :count).by(1)
@@ -9,7 +9,7 @@ RSpec.describe ContentItem, type: :model do
   end
 
   describe ".next_item" do
-    let!(:content_items) { FactoryGirl.create_list(:content_item, 5) }
+    let!(:content_items) { create_list(:content_item, 5) }
 
     it "returns the next item given the current item" do
       result = ContentItem.all.next_item(content_items[0])
@@ -50,16 +50,16 @@ RSpec.describe ContentItem, type: :model do
   end
 
   describe ".targets_of" do
-    let!(:a) { FactoryGirl.create(:content_item) }
-    let!(:b) { FactoryGirl.create(:content_item) }
-    let!(:c) { FactoryGirl.create(:content_item) }
+    let!(:a) { create(:content_item) }
+    let!(:b) { create(:content_item) }
+    let!(:c) { create(:content_item) }
 
     before do
-      FactoryGirl.create(:link, source: a, target: b, link_type: "type1")
-      FactoryGirl.create(:link, source: b, target: a, link_type: "type1")
+      create(:link, source: a, target: b, link_type: "type1")
+      create(:link, source: b, target: a, link_type: "type1")
 
-      FactoryGirl.create(:link, source: a, target: c, link_type: "type2")
-      FactoryGirl.create(:link, source: b, target: c, link_type: "type2")
+      create(:link, source: a, target: c, link_type: "type2")
+      create(:link, source: b, target: c, link_type: "type2")
     end
 
     it "returns a scope of items that have links to them with the given type" do
@@ -101,8 +101,8 @@ RSpec.describe ContentItem, type: :model do
 
   describe ".document_type_counts" do
     before do
-      FactoryGirl.create_list(:content_item, 2, document_type: "organisation")
-      FactoryGirl.create_list(:content_item, 3, document_type: "policy")
+      create_list(:content_item, 2, document_type: "organisation")
+      create_list(:content_item, 3, document_type: "policy")
     end
 
     it "returns a hash of document_types to the count of items" do
@@ -118,7 +118,7 @@ RSpec.describe ContentItem, type: :model do
     end
 
     it "orders alphabetically" do
-      FactoryGirl.create_list(:content_item, 4, document_type: "guide")
+      create_list(:content_item, 4, document_type: "guide")
 
       result = described_class.document_type_counts
       expect(result.to_a).to eq [
@@ -131,8 +131,8 @@ RSpec.describe ContentItem, type: :model do
 
   describe "#title_with_count" do
     before do
-      item = FactoryGirl.create(:content_item, title: "Title")
-      FactoryGirl.create(:link, source: item, target: item, link_type: "type")
+      item = create(:content_item, title: "Title")
+      create(:link, source: item, target: item, link_type: "type")
     end
 
     it "returns the title with the count of incoming links" do
@@ -201,10 +201,10 @@ RSpec.describe ContentItem, type: :model do
 
   describe "#linked_topics" do
     it "returns the topics linked to the Content Item" do
-      item =  FactoryGirl.create(:content_item)
-      topic = FactoryGirl.create(:content_item)
+      item =  create(:content_item)
+      topic = create(:content_item)
 
-      FactoryGirl.create(:link, source: item, target: topic, link_type: "topics")
+      create(:link, source: item, target: topic, link_type: "topics")
       expect(item.linked_topics).to eq [topic]
     end
   end
@@ -233,7 +233,7 @@ RSpec.describe ContentItem, type: :model do
 
   describe "#whitehall_url" do
     it "returns a URL to the whitehall edit page" do
-      content_item = FactoryGirl.build(
+      content_item = build(
         :content_item,
         publishing_app: "whitehall",
         content_id: "id123",
@@ -245,7 +245,7 @@ RSpec.describe ContentItem, type: :model do
     end
 
     it "returns nil if the publishing_app isn't whitehall" do
-      content_item = FactoryGirl.build(:content_item)
+      content_item = build(:content_item)
       expect(content_item.whitehall_url).to be_nil
     end
   end

@@ -1,5 +1,5 @@
 RSpec.describe InventoryRule do
-  subject { FactoryGirl.build(:inventory_rule) }
+  subject { build(:inventory_rule) }
 
   describe "validations" do
     it "has a valid factory" do
@@ -22,7 +22,7 @@ RSpec.describe InventoryRule do
     end
 
     it "requires a unique target_content_id scoped to subtheme and link_type" do
-      existing = FactoryGirl.create(:inventory_rule, target_content_id: "id123")
+      existing = create(:inventory_rule, target_content_id: "id123")
 
       subject.target_content_id = "id123"
       expect(subject).to be_valid
@@ -35,7 +35,7 @@ RSpec.describe InventoryRule do
     end
 
     it "has case-insensitive uniqueness" do
-      existing = FactoryGirl.create(:inventory_rule, target_content_id: "id123")
+      existing = create(:inventory_rule, target_content_id: "id123")
 
       subject.subtheme = existing.subtheme
       subject.link_type = existing.link_type

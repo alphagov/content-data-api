@@ -3,20 +3,20 @@ require "rails_helper"
 RSpec.describe Importers::SingleContentItem do
   let(:content_id) { "id-123" }
 
-  let!(:org1) { FactoryGirl.create(:organisation, content_id: "org-1") }
-  let!(:org2) { FactoryGirl.create(:organisation, content_id: "org-2") }
+  let!(:org1) { create(:organisation, content_id: "org-1") }
+  let!(:org2) { create(:organisation, content_id: "org-2") }
 
-  let!(:taxon1) { FactoryGirl.create(:taxon, content_id: "taxon-1") }
-  let!(:taxon2) { FactoryGirl.create(:taxon, content_id: "taxon-2") }
+  let!(:taxon1) { create(:taxon, content_id: "taxon-1") }
+  let!(:taxon2) { create(:taxon, content_id: "taxon-2") }
 
-  let(:content_item) { FactoryGirl.build(:content_item, content_id: content_id, title: "title") }
+  let(:content_item) { build(:content_item, content_id: content_id, title: "title") }
 
   def links
     [
-      FactoryGirl.build(:link, source_content_id: content_id, link_type: "organisations", target_content_id: "org-1"),
-      FactoryGirl.build(:link, source_content_id: content_id, link_type: "organisations", target_content_id: "org-2"),
-      FactoryGirl.build(:link, source_content_id: content_id, link_type: "taxons", target_content_id: "taxon-1"),
-      FactoryGirl.build(:link, source_content_id: content_id, link_type: "taxons", target_content_id: "taxon-2"),
+      build(:link, source_content_id: content_id, link_type: "organisations", target_content_id: "org-1"),
+      build(:link, source_content_id: content_id, link_type: "organisations", target_content_id: "org-2"),
+      build(:link, source_content_id: content_id, link_type: "taxons", target_content_id: "taxon-1"),
+      build(:link, source_content_id: content_id, link_type: "taxons", target_content_id: "taxon-2"),
     ]
   end
 
@@ -67,7 +67,7 @@ RSpec.describe Importers::SingleContentItem do
 
   context "when the content item already exists" do
     before do
-      FactoryGirl.create(
+      create(
         :content_item,
         content_id: content_id,
         title: "old title",

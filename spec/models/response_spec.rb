@@ -1,6 +1,6 @@
 RSpec.describe Response do
   describe "validations" do
-    subject { FactoryGirl.build(:response) }
+    subject { build(:response) }
 
     it "has a valid factory" do
       expect(subject).to be_valid
@@ -17,7 +17,7 @@ RSpec.describe Response do
     end
 
     context "when the question is mandatory" do
-      before { subject.question = FactoryGirl.build(:boolean_question) }
+      before { subject.question = build(:boolean_question) }
 
       it "requires a value" do
         subject.value = " "
@@ -29,7 +29,7 @@ RSpec.describe Response do
     end
 
     context "when the question is optional" do
-      before { subject.question = FactoryGirl.build(:free_text_question) }
+      before { subject.question = build(:free_text_question) }
 
       it "does not require a value" do
         subject.value = nil
@@ -40,8 +40,8 @@ RSpec.describe Response do
 
   describe "default scope" do
     it "orders by id" do
-      a = FactoryGirl.create(:response)
-      b = FactoryGirl.create(:response)
+      a = create(:response)
+      b = create(:response)
 
       a.touch
       a.save!
@@ -56,12 +56,12 @@ RSpec.describe Response do
   end
 
   describe "scopes" do
-    let!(:bool) { FactoryGirl.create(:boolean_question) }
-    let!(:free) { FactoryGirl.create(:free_text_question) }
+    let!(:bool) { create(:boolean_question) }
+    let!(:free) { create(:free_text_question) }
 
-    let!(:passing_response) { FactoryGirl.create(:response, question: bool, value: "no") }
-    let!(:failing_response) { FactoryGirl.create(:response, question: bool, value: "yes") }
-    let!(:text_response) { FactoryGirl.create(:response, question: free, value: "Hello") }
+    let!(:passing_response) { create(:response, question: bool, value: "no") }
+    let!(:failing_response) { create(:response, question: bool, value: "yes") }
+    let!(:text_response) { create(:response, question: free, value: "Hello") }
 
     describe ".boolean" do
       it "returns responses for boolean questions" do
@@ -98,23 +98,23 @@ RSpec.describe Response do
   end
 
   describe "#passing?, #failing?" do
-    let(:free) { FactoryGirl.create(:free_text_question) }
-    let(:bool) { FactoryGirl.create(:boolean_question) }
+    let(:free) { create(:free_text_question) }
+    let(:bool) { create(:boolean_question) }
 
     it "is passing for responses to non-boolean questions" do
-      response = FactoryGirl.create(:response, question: free)
+      response = create(:response, question: free)
       expect(response).to be_passing
       expect(response).not_to be_failing
     end
 
     it "is passing for responses to boolean questions with a 'yes' value" do
-      response = FactoryGirl.create(:response, question: bool, value: "no")
+      response = create(:response, question: bool, value: "no")
       expect(response).to be_passing
       expect(response).not_to be_failing
     end
 
     it "is failing for responses to boolean questions with a 'no' value" do
-      response = FactoryGirl.create(:response, question: bool, value: "yes")
+      response = create(:response, question: bool, value: "yes")
       expect(response).not_to be_passing
       expect(response).to be_failing
     end

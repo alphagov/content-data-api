@@ -1,19 +1,19 @@
 RSpec.describe Search::RulesFilter do
   subject { described_class.new(rules: subtheme.inventory_rules) }
 
-  let(:subtheme) { FactoryGirl.create(:subtheme) }
+  let(:subtheme) { create(:subtheme) }
   let(:result) { subject.apply(ContentItem.all).map(&:title) }
 
   def node(title)
-    FactoryGirl.create(:content_item, title: title)
+    create(:content_item, title: title)
   end
 
   def edge(source, target, type)
-    FactoryGirl.create(:link, source: source, target: target, link_type: type)
+    create(:link, source: source, target: target, link_type: type)
   end
 
   def rule(type, target)
-    FactoryGirl.create(
+    create(
       :inventory_rule,
       subtheme: subtheme,
       link_type: type,

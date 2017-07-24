@@ -1,6 +1,6 @@
 RSpec.feature "Phase banner", type: :feature do
   before do
-    FactoryGirl.create(:user)
+    create(:user)
   end
 
   scenario "The user can see a phase banner" do

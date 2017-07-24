@@ -18,8 +18,8 @@ RSpec.describe Template do
   end
 
   describe "#mandatory?" do
-    let(:q1) { FactoryGirl.build(:boolean_question) }
-    let(:q2) { FactoryGirl.build(:free_text_question) }
+    let(:q1) { build(:boolean_question) }
+    let(:q2) { build(:free_text_question) }
 
     it "returns true for boolean questions" do
       expect(subject.mandatory?(q1)).to eq(true)

@@ -1,6 +1,6 @@
 RSpec.feature "Audit metadata", type: :feature do
   let!(:content_item) do
-    FactoryGirl.create(
+    create(
       :content_item,
       public_updated_at: nil,
       document_type: "document_collection",
@@ -29,9 +29,9 @@ RSpec.feature "Audit metadata", type: :feature do
   end
 
   def create_linked_content(link_type, title)
-    target = FactoryGirl.create(:content_item, title: title)
+    target = create(:content_item, title: title)
 
-    FactoryGirl.create(
+    create(
       :link,
       link_type: link_type,
       source_content_id: content_item.content_id,
@@ -47,7 +47,7 @@ RSpec.feature "Audit metadata", type: :feature do
       document_type: "guidance",
     )
 
-    FactoryGirl.create(:audit, content_item: content_item)
+    create(:audit, content_item: content_item)
 
     create_linked_content("organisations", "Home office")
     create_linked_content("topics", "Immigration")

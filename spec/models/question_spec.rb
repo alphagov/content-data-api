@@ -4,7 +4,7 @@ RSpec.describe Question do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:boolean_question) }
+    subject { build(:boolean_question) }
 
     it "has a valid factory" do
       expect(subject).to be_valid

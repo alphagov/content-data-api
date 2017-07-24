@@ -1,8 +1,8 @@
 require 'features/common/pagination_spec_helper'
 
 RSpec.feature "List Content Items to Audit", type: :feature do
-  let!(:content_item_1) { FactoryGirl.create(:content_item, title: "All about flooding.") }
-  let!(:content_item_2) { FactoryGirl.create(:content_item, title: "All about gardening.") }
+  let!(:content_item_1) { create(:content_item, title: "All about flooding.") }
+  let!(:content_item_2) { create(:content_item, title: "All about gardening.") }
 
   scenario "User does not see CPM feedback survey link in banner" do
     visit audits_path

@@ -1,19 +1,19 @@
 RSpec.describe Comparison do
-  let!(:first) { FactoryGirl.create(:content_item, base_path: "/first") }
-  let!(:third) { FactoryGirl.create(:content_item, base_path: "/third") }
+  let!(:first) { create(:content_item, base_path: "/first") }
+  let!(:third) { create(:content_item, base_path: "/third") }
 
   before do
-    policy = FactoryGirl.create(:content_item)
+    policy = create(:content_item)
 
-    FactoryGirl.create(
+    create(
       :theme,
       name: "Transport",
       subthemes: [
-        FactoryGirl.create(
+        create(
           :subtheme,
           name: "Driving",
           inventory_rules: [
-            FactoryGirl.create(
+            create(
               :inventory_rule,
               link_type: "policies",
               target_content_id: policy.content_id,
@@ -23,8 +23,8 @@ RSpec.describe Comparison do
       ],
     )
 
-    FactoryGirl.create(:link, source: first, target: policy, link_type: "policies")
-    FactoryGirl.create(:link, source: third, target: policy, link_type: "policies")
+    create(:link, source: first, target: policy, link_type: "policies")
+    create(:link, source: third, target: policy, link_type: "policies")
   end
 
   let(:fixture) { "#{Rails.root}/spec/fixtures/transport.csv" }

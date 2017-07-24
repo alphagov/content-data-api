@@ -1,10 +1,10 @@
 RSpec.describe Search do
   def node(content_id)
-    FactoryGirl.create(:content_item, content_id: content_id)
+    create(:content_item, content_id: content_id)
   end
 
   def edge(from:, to:, type:)
-    FactoryGirl.create(
+    create(
       :link,
       source_content_id: from,
       target_content_id: to,
@@ -95,7 +95,7 @@ RSpec.describe Search do
 
   it "can filter by audit status" do
     content_item = ContentItem.find_by!(content_id: "id2")
-    FactoryGirl.create(:audit, content_item: content_item)
+    create(:audit, content_item: content_item)
 
     subject.audit_status = :audited
     expect(content_ids).to eq %w(id2)
@@ -103,10 +103,10 @@ RSpec.describe Search do
 
   it "can filter by passing status" do
     content_item = ContentItem.find_by!(content_id: "id2")
-    audit = FactoryGirl.create(:audit, content_item: content_item)
-    FactoryGirl.create(
+    audit = create(:audit, content_item: content_item)
+    create(
       :response,
-      question: FactoryGirl.create(:boolean_question),
+      question: create(:boolean_question),
       audit: audit,
       value: "no"
     )
@@ -117,10 +117,10 @@ RSpec.describe Search do
 
   it "can filter by not passing status" do
     content_item = ContentItem.find_by!(content_id: "id2")
-    audit = FactoryGirl.create(:audit, content_item: content_item)
-    FactoryGirl.create(
+    audit = create(:audit, content_item: content_item)
+    create(
       :response,
-      question: FactoryGirl.create(:boolean_question),
+      question: create(:boolean_question),
       audit: audit,
       value: "yes"
     )
@@ -148,7 +148,7 @@ RSpec.describe Search do
   describe "#dimension" do
     before do
       content_item = ContentItem.find_by!(content_id: "id2")
-      FactoryGirl.create(:audit, content_item: content_item)
+      create(:audit, content_item: content_item)
     end
 
     it "applies the block associated with the dimension" do
