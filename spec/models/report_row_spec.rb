@@ -1,6 +1,6 @@
 RSpec.describe ReportRow do
   let!(:content_item) do
-    FactoryGirl.create(
+    create(
       :content_item,
       title: "Title",
       base_path: "/example/path",
@@ -12,18 +12,18 @@ RSpec.describe ReportRow do
     )
   end
 
-  let!(:audit) { FactoryGirl.create(:audit, content_item: content_item) }
+  let!(:audit) { create(:audit, content_item: content_item) }
 
   let!(:responses) do
     Question.all.map do |question|
-      FactoryGirl.create(:response, audit: audit, question: question, value: "yes")
+      create(:response, audit: audit, question: question, value: "yes")
     end
   end
 
-  let!(:hmrc) { FactoryGirl.create(:content_item, title: "HMRC") }
+  let!(:hmrc) { create(:content_item, title: "HMRC") }
 
   let!(:hmrc_link) do
-    FactoryGirl.create(
+    create(
       :link,
       source: content_item,
       target: hmrc,
@@ -55,12 +55,12 @@ RSpec.describe ReportRow do
 
   context "when the content item has many organisations" do
     before do
-      aaib = FactoryGirl.create(:content_item, title: "AAIB")
-      maib = FactoryGirl.create(:content_item, title: "MAIB")
+      aaib = create(:content_item, title: "AAIB")
+      maib = create(:content_item, title: "MAIB")
 
-      FactoryGirl.create(:link, source: content_item, target: aaib, link_type: "organisations")
-      FactoryGirl.create(:link, source: content_item, target: hmrc, link_type: "organisations")
-      FactoryGirl.create(:link, source: content_item, target: maib, link_type: "organisations")
+      create(:link, source: content_item, target: aaib, link_type: "organisations")
+      create(:link, source: content_item, target: hmrc, link_type: "organisations")
+      create(:link, source: content_item, target: maib, link_type: "organisations")
     end
 
     specify { expect(subject.primary_organisation).to eq "HMRC" }

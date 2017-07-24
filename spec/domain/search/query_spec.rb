@@ -58,7 +58,7 @@ RSpec.describe Search::Query do
     end
 
     context "when filtering by theme" do
-      let(:theme) { FactoryGirl.create(:theme) }
+      let(:theme) { create(:theme) }
       let(:identifier) { "Theme_#{theme.id}" }
 
       it "adds a rules filter when setting the theme" do
@@ -75,7 +75,7 @@ RSpec.describe Search::Query do
     end
 
     context "when filtering by subtheme" do
-      let(:subtheme) { FactoryGirl.create(:subtheme) }
+      let(:subtheme) { create(:subtheme) }
       let(:identifier) { "Subtheme_#{subtheme.id}" }
 
       it "adds a rules filter when setting the theme" do

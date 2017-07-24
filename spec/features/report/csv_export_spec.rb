@@ -8,7 +8,7 @@ RSpec.feature "Exporting a CSV from the report page" do
   end
 
   let!(:hmrc) {
-    FactoryGirl.create(
+    create(
       :content_item,
       title: "HMRC",
       document_type: "organisation"
@@ -16,20 +16,20 @@ RSpec.feature "Exporting a CSV from the report page" do
   }
 
   before do
-    example1 = FactoryGirl.create(
+    example1 = create(
       :content_item,
       title: "Example 1",
       base_path: "/example1",
     )
 
-    FactoryGirl.create(
+    create(
       :link,
       source_content_id: example1.content_id,
       target_content_id: hmrc.content_id,
       link_type: "primary_publishing_organisation",
     )
 
-    FactoryGirl.create(
+    create(
       :content_item,
       title: "Example 2",
       base_path: "/example2",

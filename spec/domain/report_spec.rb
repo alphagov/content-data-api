@@ -2,7 +2,7 @@ RSpec.describe Report do
   let(:request) { double(:request, url: "http://example.com") }
 
   before do
-    FactoryGirl.create(:content_item, title: "Example")
+    create(:content_item, title: "Example")
   end
 
   after do

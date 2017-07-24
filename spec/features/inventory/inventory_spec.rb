@@ -1,11 +1,11 @@
 # rubocop:disable Style/VariableNumber
 RSpec.feature "Managing inventory" do
   def node(title)
-    FactoryGirl.create(:content_item, title: title)
+    create(:content_item, title: title)
   end
 
   def edge(from, to, type)
-    FactoryGirl.create(:link, source: from, target: to, link_type: type)
+    create(:link, source: from, target: to, link_type: type)
   end
 
   def expect_active(title)

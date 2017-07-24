@@ -1,6 +1,6 @@
 RSpec.feature "Auditing a content item", type: :feature do
   let!(:content_item) do
-    FactoryGirl.create(
+    create(
       :content_item,
       title: "Flooding",
       description: "All about flooding.",
@@ -9,7 +9,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     )
   end
 
-  let!(:user) { FactoryGirl.create(:user) }
+  let!(:user) { create(:user) }
 
   def chosen_radio_button
     first("input[@type='radio'][@checked='checked']")

@@ -1,41 +1,41 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
   # Organisations:
-  let!(:hmrc) { FactoryGirl.create(:content_item, title: "HMRC") }
-  let!(:dfe) { FactoryGirl.create(:content_item, title: "DFE") }
+  let!(:hmrc) { create(:content_item, title: "HMRC") }
+  let!(:dfe) { create(:content_item, title: "DFE") }
 
   # Policies:
-  let!(:flying) { FactoryGirl.create(:content_item, title: "Flying abroad") }
-  let!(:insurance) { FactoryGirl.create(:content_item, title: "Travel insurance") }
+  let!(:flying) { create(:content_item, title: "Flying abroad") }
+  let!(:insurance) { create(:content_item, title: "Travel insurance") }
 
   # Content:
-  let!(:felling) { FactoryGirl.create(:content_item, title: "Tree felling") }
-  let!(:management) { FactoryGirl.create(:content_item, title: "Forest management") }
-  let!(:vat) { FactoryGirl.create(:content_item, title: "VAT") }
+  let!(:felling) { create(:content_item, title: "Tree felling") }
+  let!(:management) { create(:content_item, title: "Forest management") }
+  let!(:vat) { create(:content_item, title: "VAT") }
 
   # Audit:
-  let!(:audit) { FactoryGirl.create(:audit, content_item: felling) }
+  let!(:audit) { create(:audit, content_item: felling) }
 
   # Themes:
-  let!(:travel) { FactoryGirl.create(:theme, name: "Travel") }
-  let!(:environment) { FactoryGirl.create(:theme, name: "Environment") }
+  let!(:travel) { create(:theme, name: "Travel") }
+  let!(:environment) { create(:theme, name: "Environment") }
 
   # Subthemes:
-  let!(:aviation) { FactoryGirl.create(:subtheme, theme: travel, name: "Aviation") }
-  let!(:forestry) { FactoryGirl.create(:subtheme, theme: environment, name: "Forestry") }
-  let!(:pollution) { FactoryGirl.create(:subtheme, theme: environment, name: "Air pollution") }
+  let!(:aviation) { create(:subtheme, theme: travel, name: "Aviation") }
+  let!(:forestry) { create(:subtheme, theme: environment, name: "Forestry") }
+  let!(:pollution) { create(:subtheme, theme: environment, name: "Air pollution") }
 
   before do
     # Links:
-    FactoryGirl.create(:link, source: vat, target: hmrc, link_type: "primary_publishing_organisation")
-    FactoryGirl.create(:link, source: felling, target: dfe, link_type: "primary_publishing_organisation")
-    FactoryGirl.create(:link, source: vat, target: hmrc, link_type: "organisations")
-    FactoryGirl.create(:link, source: insurance, target: hmrc, link_type: "organisations")
-    FactoryGirl.create(:link, source: insurance, target: flying, link_type: "policies")
-    FactoryGirl.create(:link, source: felling, target: management, link_type: "policies")
+    create(:link, source: vat, target: hmrc, link_type: "primary_publishing_organisation")
+    create(:link, source: felling, target: dfe, link_type: "primary_publishing_organisation")
+    create(:link, source: vat, target: hmrc, link_type: "organisations")
+    create(:link, source: insurance, target: hmrc, link_type: "organisations")
+    create(:link, source: insurance, target: flying, link_type: "policies")
+    create(:link, source: felling, target: management, link_type: "policies")
 
     # Rules:
-    FactoryGirl.create(:inventory_rule, subtheme: aviation, link_type: "policies", target_content_id: flying.content_id)
-    FactoryGirl.create(:inventory_rule, subtheme: forestry, link_type: "policies", target_content_id: management.content_id)
+    create(:inventory_rule, subtheme: aviation, link_type: "policies", target_content_id: flying.content_id)
+    create(:inventory_rule, subtheme: forestry, link_type: "policies", target_content_id: management.content_id)
   end
 
   scenario "List all content items (audited and not audited)" do
@@ -189,7 +189,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   end
 
   scenario "Reseting page to 1 after filtering" do
-    FactoryGirl.create_list(:content_item, 25)
+    create_list(:content_item, 25)
 
     visit audits_path
     within(".pagination") { click_on "2" }

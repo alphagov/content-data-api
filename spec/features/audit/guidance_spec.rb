@@ -1,6 +1,6 @@
 RSpec.feature "Using guidance while auditing a content item", type: :feature do
   let!(:content_item) do
-    FactoryGirl.create(
+    create(
       :content_item,
       title: "Flooding",
       description: "All about flooding.",

@@ -2,7 +2,7 @@ require "features/common/pagination_spec_helper"
 
 RSpec.feature "Content Items List", type: :feature do
   before do
-    FactoryGirl.create(:user)
+    create(:user)
   end
 
   describe "User can navigate paged lists of content items" do

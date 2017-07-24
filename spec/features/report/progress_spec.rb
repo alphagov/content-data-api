@@ -1,24 +1,24 @@
 RSpec.feature "Reporting on audit progress" do
   # Organisations:
-  let!(:hmrc) { FactoryGirl.create(:content_item, title: "HMRC", document_type: "organisation") }
+  let!(:hmrc) { create(:content_item, title: "HMRC", document_type: "organisation") }
 
   # Policies:
-  let!(:flying) { FactoryGirl.create(:content_item, title: "Flying abroad", document_type: "policy") }
-  let!(:insurance) { FactoryGirl.create(:content_item, title: "Travel insurance", document_type: "policy") }
+  let!(:flying) { create(:content_item, title: "Flying abroad", document_type: "policy") }
+  let!(:insurance) { create(:content_item, title: "Travel insurance", document_type: "policy") }
 
   before do
-    flying_audit = FactoryGirl.create(:audit, content_item: flying)
-    FactoryGirl.create(
+    flying_audit = create(:audit, content_item: flying)
+    create(
       :response,
-      question: FactoryGirl.create(:boolean_question),
+      question: create(:boolean_question),
       audit: flying_audit,
       value: "no"
     )
 
-    insurance_audit = FactoryGirl.create(:audit, content_item: insurance)
-    FactoryGirl.create(
+    insurance_audit = create(:audit, content_item: insurance)
+    create(
       :response,
-      question: FactoryGirl.create(:boolean_question),
+      question: create(:boolean_question),
       audit: insurance_audit,
       value: "yes"
     )

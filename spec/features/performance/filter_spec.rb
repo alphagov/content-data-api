@@ -2,7 +2,7 @@ require 'features/common/pagination_spec_helper'
 
 RSpec.feature "Filter in content items", type: :feature do
   before do
-    FactoryGirl.create(:user)
+    create(:user)
   end
 
   context "filtering by search term" do

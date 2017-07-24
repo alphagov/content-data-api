@@ -1,7 +1,7 @@
 RSpec.describe Link do
   describe "callbacks" do
-    let(:content_item) { FactoryGirl.build(:content_item) }
-    subject { FactoryGirl.build(:link, source: content_item) }
+    let(:content_item) { build(:content_item) }
+    subject { build(:link, source: content_item) }
 
     it "precomputes the content_item's report row after saving" do
       expect { subject.save! }.to change(ReportRow, :count).by(1)

@@ -1,5 +1,5 @@
 RSpec.describe Subtheme do
-  subject { FactoryGirl.build(:subtheme) }
+  subject { build(:subtheme) }
 
   describe "validations" do
     it "has a valid factory" do
@@ -17,7 +17,7 @@ RSpec.describe Subtheme do
     end
 
     it "requires a unique name scoped to theme" do
-      existing = FactoryGirl.create(:subtheme, name: "Waste")
+      existing = create(:subtheme, name: "Waste")
 
       subject.name = "Waste"
       expect(subject).to be_valid
@@ -27,7 +27,7 @@ RSpec.describe Subtheme do
     end
 
     it "has case-insensitive uniqueness" do
-      existing = FactoryGirl.create(:subtheme, name: "Waste")
+      existing = create(:subtheme, name: "Waste")
 
       subject.theme = existing.theme
       subject.name = "waste"
