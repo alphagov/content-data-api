@@ -38,15 +38,16 @@ group :development, :test do
   gem 'byebug'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'phantomjs'
   gem 'factory_girl_rails'
   gem 'govuk-lint'
   gem 'guard-rspec', require: false
   gem 'listen'
+  gem 'phantomjs'
   gem 'poltergeist'
   gem 'pry-rails'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
+  gem 'simplecov', :require => false
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen'
