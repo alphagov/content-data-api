@@ -1,18 +1,26 @@
 class TaxonomyTodosController < ApplicationController
   def show
-    @todo_form = TaxonomyTodoForm.new(
-      taxonomy_todo: taxonomy_todo,
-      terms: taxonomy_todo.terms.order(:name).pluck(:name).join(','),
-    )
+    @todo_form = TaxonomyTodoForm.new(taxonomy_todo: taxonomy_todo)
+    if flash.key?(:taxonomy_todos_params)
+      @todo_form.terms = flash[:taxonomy_todos_params][:terms]
+      @todo_form.valid?
+    else
+      @todo_form.terms = taxonomy_todo.terms.order(:name).pluck(:name).join(',')
+    end
   end
 
   def update
-    todo_form = TaxonomyTodoForm.new(todo_params)
-    todo_form.taxonomy_todo = taxonomy_todo
-    todo_form.user = current_user
-    todo_form.save
-
-    redirect_to_next_item
+    @todo_form = TaxonomyTodoForm.new(todo_params)
+    @todo_form.taxonomy_todo = taxonomy_todo
+    @todo_form.user = current_user
+    if @todo_form.valid?
+      @todo_form.save
+      redirect_to_next_item
+    else
+      flash.alert = @todo_form.errors.full_messages.join(', ')
+      flash[:taxonomy_todos_params] = todo_params
+      redirect_to taxonomy_todo
+    end
   end
 
   def dont_know

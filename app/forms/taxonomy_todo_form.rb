@@ -4,6 +4,8 @@ class TaxonomyTodoForm
 
   delegate :base_path, :title, :url, :description, to: :content_item
 
+  validates :terms, presence: true
+
   def save
     TaxonomyTodo.transaction do
       update_todo
