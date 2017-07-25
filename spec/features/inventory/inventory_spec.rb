@@ -1,13 +1,5 @@
 # rubocop:disable Style/VariableNumber
 RSpec.feature "Managing inventory" do
-  def node(title)
-    create(:content_item, title: title)
-  end
-
-  def edge(from, to, type)
-    create(:link, source: from, target: to, link_type: type)
-  end
-
   def expect_active(title)
     expect(page).to have_css(".row.active", text: title)
   end
@@ -18,22 +10,25 @@ RSpec.feature "Managing inventory" do
   end
 
   before do
-    content_item_1 = node("Content Item 1")
-    content_item_2 = node("Content Item 2")
+    organisation_1 = create(:content_item, title: "Organisation 1")
+    organisation_2 = create(:content_item, title: "Organisation 2")
 
-    organisation_1 = node("Organisation 1")
-    organisation_2 = node("Organisation 2")
+    policy_area_1 = create(:content_item, title: "Policy Area 1")
+    policy_area_2 = create(:content_item, title: "Policy Area 2")
 
-    policy_area_1 = node("Policy Area 1")
-    policy_area_2 = node("Policy Area 2")
+    create(
+      :content_item,
+      title: "Content Item 1",
+      organisations: organisation_1,
+      policy_areas: [policy_area_1, policy_area_2],
+    )
 
-    edge(content_item_1, organisation_1, "organisations")
-    edge(content_item_2, organisation_1, "organisations")
-    edge(content_item_2, organisation_2, "organisations")
-
-    edge(content_item_1, policy_area_1, "policy_areas")
-    edge(content_item_1, policy_area_2, "policy_areas")
-    edge(content_item_2, policy_area_2, "policy_areas")
+    create(
+      :content_item,
+      title: "Content Item 2",
+      organisations: [organisation_1, organisation_2],
+      policy_areas: [policy_area_2]
+    )
   end
 
   scenario "managing inventory rules for themes and subthemes" do

@@ -1,12 +1,27 @@
 require_relative "../app/models/question"
+require_relative "./factories/link_factory"
 
 FactoryGirl.define do
   factory :content_item do
+    transient do
+      organisations nil
+      primary_publishing_organisation nil
+      policies nil
+      policy_areas nil
+    end
+
     sequence(:content_id) { |index| "content-id-#{index}" }
     sequence(:title) { |index| "content-item-title-#{index}" }
     sequence(:document_type) { |index| "document_type-#{index}" }
     base_path "api/content/item/path"
     public_updated_at { Time.now }
+
+    after(:create) do |content_item, evaluator|
+      LinkFactory.add_organisations(content_item, evaluator.organisations)
+      LinkFactory.add_primary_publishing_organisation(content_item, evaluator.primary_publishing_organisation)
+      LinkFactory.add_policies(content_item, evaluator.policies)
+      LinkFactory.add_policy_areas(content_item, evaluator.policy_areas)
+    end
   end
 
   factory :link do

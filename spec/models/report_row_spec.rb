@@ -9,6 +9,7 @@ RSpec.describe ReportRow do
       six_months_page_views: 1234,
       content_id: "id123",
       publishing_app: "whitehall",
+      primary_publishing_organisation: hmrc,
     )
   end
 
@@ -21,15 +22,6 @@ RSpec.describe ReportRow do
   end
 
   let!(:hmrc) { create(:content_item, title: "HMRC") }
-
-  let!(:hmrc_link) do
-    create(
-      :link,
-      source: content_item,
-      target: hmrc,
-      link_type: "primary_publishing_organisation",
-    )
-  end
 
   subject { described_class.precompute(content_item) }
 
@@ -57,10 +49,7 @@ RSpec.describe ReportRow do
     before do
       aaib = create(:content_item, title: "AAIB")
       maib = create(:content_item, title: "MAIB")
-
-      create(:link, source: content_item, target: aaib, link_type: "organisations")
-      create(:link, source: content_item, target: hmrc, link_type: "organisations")
-      create(:link, source: content_item, target: maib, link_type: "organisations")
+      LinkFactory.add_organisations(content_item, [aaib, hmrc, maib])
     end
 
     specify { expect(subject.primary_organisation).to eq "HMRC" }

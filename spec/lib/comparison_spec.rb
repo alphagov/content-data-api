@@ -1,10 +1,9 @@
 RSpec.describe Comparison do
-  let!(:first) { create(:content_item, base_path: "/first") }
-  let!(:third) { create(:content_item, base_path: "/third") }
+  let!(:policy) { create(:content_item) }
+  let!(:first) { create(:content_item, base_path: "/first", policies: policy) }
+  let!(:third) { create(:content_item, base_path: "/third", policies: policy) }
 
   before do
-    policy = create(:content_item)
-
     create(
       :theme,
       name: "Transport",
@@ -22,9 +21,6 @@ RSpec.describe Comparison do
         ),
       ],
     )
-
-    create(:link, source: first, target: policy, link_type: "policies")
-    create(:link, source: third, target: policy, link_type: "policies")
   end
 
   let(:fixture) { "#{Rails.root}/spec/fixtures/transport.csv" }
