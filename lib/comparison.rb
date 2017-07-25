@@ -38,14 +38,16 @@ private
   end
 
   def base_paths_in_theme
-    @base_paths_in_theme ||= (
-      search = Search.new
-      search.theme = "Theme_#{theme.id}"
-      search.execute
+    @base_paths_in_theme ||= begin
+      query = Search::QueryBuilder.new
+        .theme("Theme_#{theme.id}")
+
+      search = Search.new(query)
+
       items = search.unpaginated
       paths = items.pluck(:base_path)
       normalise(paths)
-    )
+    end
   end
 
   def base_paths_in_csv

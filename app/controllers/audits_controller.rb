@@ -1,6 +1,6 @@
 class AuditsController < ApplicationController
   helper_method :filter_params, :primary_org_only?, :org_link_type,
-                :audit_status_filter_enabled?
+    :audit_status_filter_enabled?
 
   before_action :content_items, only: %i(index report export)
 
@@ -59,20 +59,33 @@ private
   end
 
   def next_item
-    @next_item ||= content_items.next_item(content_item)
+    @next_item ||= begin
+      next_item_query = Search::QueryBuilder
+        .from_query(query)
+        .after(content_item)
+        .page(1)
+        .per_page(1)
+
+      Search.new(next_item_query).content_items.first
+    end
+  end
+
+  def query
+    @query = begin
+      query_builder = Search::QueryBuilder.new
+        .page(params[:page])
+
+      filter_by_audit_status!(query_builder) if audit_status_filter_enabled?
+      filter_by_organisation!(query_builder)
+      filter_by_theme!(query_builder)
+      filter_by_document_type!(query_builder)
+
+      query_builder
+    end
   end
 
   def search
-    @search ||= (
-      search = Search.new
-      filter_by_audit_status!(search) if audit_status_filter_enabled?
-      filter_by_organisation!(search)
-      filter_by_theme!(search)
-      filter_by_document_type!(search)
-      search.page = params[:page]
-      search.execute
-      search
-    )
+    @search ||= Search.new(query)
   end
 
   def audit_params
@@ -95,21 +108,21 @@ private
     audit.errors.messages.values.join(', ').capitalize
   end
 
-  def filter_by_audit_status!(search)
-    search.audit_status = params[:audit_status].to_sym if params[:audit_status].present?
+  def filter_by_audit_status!(query_builder)
+    query_builder.audit_status(params[:audit_status].to_sym) if params[:audit_status].present?
   end
 
-  def filter_by_organisation!(search)
+  def filter_by_organisation!(query_builder)
     content_id = params[:organisations]
-    search.filter_by(link_type: org_link_type, target_ids: content_id) if content_id.present?
+    query_builder.filter_by(link_type: org_link_type, target_ids: content_id) if content_id.present?
   end
 
-  def filter_by_theme!(search)
-    search.theme = params[:theme] if params[:theme].present?
+  def filter_by_theme!(query_builder)
+    query_builder.theme(params[:theme]) if params[:theme].present?
   end
 
-  def filter_by_document_type!(search)
-    search.document_type = params[:document_type] if params[:document_type].present?
+  def filter_by_document_type!(query_builder)
+    query_builder.document_type(params[:document_type]) if params[:document_type].present?
   end
 
   def org_link_type

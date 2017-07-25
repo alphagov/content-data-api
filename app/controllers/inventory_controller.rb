@@ -43,7 +43,6 @@ private
 
   def assign_content_items
     search = Search.new
-    search.execute
 
     @content_items = search
       .options_for(@link_type)

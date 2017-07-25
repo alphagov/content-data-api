@@ -28,6 +28,7 @@ gem 'turbolinks'
 gem 'uglifier'
 gem 'unicorn'
 gem 'rack-proxy'
+gem 'value_struct'
 
 group :development do
   gem 'web-console'
