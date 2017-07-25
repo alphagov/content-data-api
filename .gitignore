@@ -17,6 +17,7 @@
 .byebug_history
 
 # Ignore local config
+.env
 config/local_env.yml
 
 # Ignore test coverage report
