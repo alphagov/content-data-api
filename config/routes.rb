@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root to: 'content_items#index'
 
-  resources :content_items, only: %w(index show) do
+  resources :content_items, only: %w(index show), param: :content_id do
     get :audit, to: "audits#show"
     post :audit, to: "audits#save"
     patch :audit, to: "audits#save"

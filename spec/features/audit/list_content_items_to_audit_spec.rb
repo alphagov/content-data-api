@@ -16,7 +16,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     expect(page).to have_content("All about flooding.")
     expect(page).to have_content("All about gardening.")
     expect(page).to have_content("1,234")
-    expect(page).to have_link("All about gardening.", href: "/content_items/#{content_item_2.id}/audit")
+    expect(page).to have_link("All about gardening.", href: "/content_items/#{content_item_2.content_id}/audit")
   end
 
   scenario "Default sorting by popularity" do

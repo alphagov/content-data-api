@@ -16,6 +16,10 @@ class ContentItem < ApplicationRecord
 
   attr_accessor :details
 
+  def to_param
+    content_id
+  end
+
   def self.targets_of(link_type:, scope_to_count: all)
     sql = scope_to_count.to_sql.presence
     sql ||= "select * from content_items where id = -1"
