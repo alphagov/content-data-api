@@ -7,7 +7,7 @@ RSpec.describe 'Import organisation rake task' do
     end
 
     it 'runs the processs to import all content items' do
-      expect_any_instance_of(Importers::AllContentItems).to receive(:run)
+      expect_any_instance_of(Content::Importers::AllContentItems).to receive(:run)
 
       Rake::Task['import:all_content_items'].invoke
     end
@@ -19,7 +19,7 @@ RSpec.describe 'Import organisation rake task' do
     end
 
     it 'runs the all_inventory task' do
-      expect_any_instance_of(Importers::AllInventory).to receive(:run)
+      expect_any_instance_of(Content::Importers::AllInventory).to receive(:run)
 
       Rake::Task['import:all_inventory'].invoke
     end
@@ -31,7 +31,7 @@ RSpec.describe 'Import organisation rake task' do
     end
 
     it 'runs the all_ga_metrics task' do
-      expect_any_instance_of(Importers::AllGoogleAnalyticsMetrics).to receive(:run)
+      expect_any_instance_of(Content::Importers::AllGoogleAnalyticsMetrics).to receive(:run)
 
       Rake::Task['import:all_ga_metrics'].invoke
     end

@@ -1,7 +1,7 @@
 namespace :import do
   desc 'Import all content items for all organisations'
   task all_content_items: :environment do
-    Importers::AllContentItems.new.run
+    Content::Importers::AllContentItems.new.run
   end
 
   desc 'Import all taxons (without content items)'
@@ -11,12 +11,12 @@ namespace :import do
 
   desc 'Import all the inventory'
   task all_inventory: :environment do
-    Importers::AllInventory.new.run
+    Content::Importers::AllInventory.new.run
   end
 
   desc 'Import GA metrics '
   task all_ga_metrics: :environment do
-    Importers::AllGoogleAnalyticsMetrics.new.run
+    Content::Importers::AllGoogleAnalyticsMetrics.new.run
   end
 
   desc 'Import todos for taxonomy project'
