@@ -19,7 +19,7 @@ private
 
   def create_todos(project)
     csv = RemoteCsv.new(csv_url)
-    importer = Importers::TodosForTaxonomyProject.new(project, csv)
+    importer = TermGeneration::Importers::TodosForTaxonomyProject.new(project, csv)
     importer.run
   end
 end
