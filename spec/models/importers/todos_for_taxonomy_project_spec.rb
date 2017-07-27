@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Importers::TodosForTaxonomyProject do
+RSpec.describe TermGeneration::Importers::TodosForTaxonomyProject do
   subject { described_class.new(create(:taxonomy_project), csv_parser) }
   let(:csv_parser) { double(:remote_csv_parser_service) }
   let(:content_item) { create(:content_item) }
