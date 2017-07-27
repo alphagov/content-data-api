@@ -1,4 +1,4 @@
-RSpec.describe Taxonomy::ProjectStats do
+RSpec.describe TermGeneration::ProjectStats do
   let(:project) { create(:taxonomy_project, name: 'A Fancy Group') }
 
   describe '#todo_count' do
@@ -6,7 +6,7 @@ RSpec.describe Taxonomy::ProjectStats do
       create(:taxonomy_todo, taxonomy_project: project)
       create(:taxonomy_todo, taxonomy_project: project)
 
-      stats = Taxonomy::ProjectStats.new(project)
+      stats = TermGeneration::ProjectStats.new(project)
 
       expect(stats.todo_count).to eql(2)
     end
@@ -18,7 +18,7 @@ RSpec.describe Taxonomy::ProjectStats do
       create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_DONT_KNOW)
       create(:taxonomy_todo, taxonomy_project: project)
 
-      stats = Taxonomy::ProjectStats.new(project)
+      stats = TermGeneration::ProjectStats.new(project)
 
       expect(stats.done_count).to eql(2)
     end
@@ -30,7 +30,7 @@ RSpec.describe Taxonomy::ProjectStats do
       create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_DONT_KNOW)
       create(:taxonomy_todo, taxonomy_project: project)
 
-      stats = Taxonomy::ProjectStats.new(project)
+      stats = TermGeneration::ProjectStats.new(project)
 
       expect(stats.still_todo_count).to eql(1)
     end
@@ -43,7 +43,7 @@ RSpec.describe Taxonomy::ProjectStats do
       create(:taxonomy_todo, taxonomy_project: project, status: TaxonomyTodo::STATE_TAGGED)
       create(:taxonomy_todo, taxonomy_project: project)
 
-      stats = Taxonomy::ProjectStats.new(project)
+      stats = TermGeneration::ProjectStats.new(project)
 
       expect(stats.progress_percentage).to eql(75.0)
     end

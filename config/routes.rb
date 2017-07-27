@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   resources :audits, only: %w(index guidance)
 
-  resources :taxonomy_projects, path: '/taxonomy-projects', only: %w(index show new create) do
+  resources :taxonomy_projects, path: '/term_generation-projects', only: %w(index show new create) do
     get 'next', on: :member
   end
 
