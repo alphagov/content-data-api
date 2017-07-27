@@ -1,4 +1,4 @@
-module Taxonomy
+module TermGeneration
   class ProjectStats
     attr_reader :scope
 

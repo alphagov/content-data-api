@@ -12,11 +12,11 @@ RSpec.describe Importers::TodosForTaxonomyProject do
   end
 
   describe "#run" do
-    it "creates the taxonomy todos" do
+    it "creates the term_generation todos" do
       expect { subject.run }.to change(TaxonomyTodo, :count).from(0).to(1)
     end
 
-    it "links content items to the taxonomy project" do
+    it "links content items to the term_generation project" do
       expect { subject.run }
         .to change { TaxonomyProject.first&.taxonomy_todos&.count }
         .from(nil)
