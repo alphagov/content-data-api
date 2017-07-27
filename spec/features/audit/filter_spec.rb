@@ -5,12 +5,41 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
   # Policies:
   let!(:flying) { create(:content_item, title: "Flying abroad") }
-  let!(:insurance) { create(:content_item, title: "Travel insurance") }
+
+  let!(:insurance) do
+    create(
+      :content_item,
+      title: "Travel insurance",
+      organisations: hmrc,
+      policies: flying,
+    )
+  end
 
   # Content:
-  let!(:felling) { create(:content_item, title: "Tree felling") }
-  let!(:management) { create(:content_item, title: "Forest management") }
-  let!(:vat) { create(:content_item, title: "VAT") }
+  let!(:felling) do
+    create(
+      :content_item,
+      title: "Tree felling",
+      primary_publishing_organisation: dfe,
+      policies: management,
+    )
+  end
+
+  let!(:management) do
+    create(
+      :content_item,
+      title: "Forest management",
+    )
+  end
+
+  let!(:vat) do
+    create(
+      :content_item,
+      title: "VAT",
+      primary_publishing_organisation: hmrc,
+      organisations: hmrc,
+    )
+  end
 
   # Audit:
   let!(:audit) { create(:audit, content_item: felling) }
@@ -25,14 +54,6 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   let!(:pollution) { create(:subtheme, theme: environment, name: "Air pollution") }
 
   before do
-    # Links:
-    create(:link, source: vat, target: hmrc, link_type: "primary_publishing_organisation")
-    create(:link, source: felling, target: dfe, link_type: "primary_publishing_organisation")
-    create(:link, source: vat, target: hmrc, link_type: "organisations")
-    create(:link, source: insurance, target: hmrc, link_type: "organisations")
-    create(:link, source: insurance, target: flying, link_type: "policies")
-    create(:link, source: felling, target: management, link_type: "policies")
-
     # Rules:
     create(:inventory_rule, subtheme: aviation, link_type: "policies", target_content_id: flying.content_id)
     create(:inventory_rule, subtheme: forestry, link_type: "policies", target_content_id: management.content_id)

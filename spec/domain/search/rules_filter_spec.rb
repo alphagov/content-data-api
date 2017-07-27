@@ -4,14 +4,6 @@ RSpec.describe Search::RulesFilter do
   let(:subtheme) { create(:subtheme) }
   let(:result) { subject.apply(ContentItem.all).map(&:title) }
 
-  def node(title)
-    create(:content_item, title: title)
-  end
-
-  def edge(source, target, type)
-    create(:link, source: source, target: target, link_type: type)
-  end
-
   def rule(type, target)
     create(
       :inventory_rule,
@@ -21,24 +13,22 @@ RSpec.describe Search::RulesFilter do
     )
   end
 
-  let!(:a) { node("a") }
-  let!(:b) { node("b") }
-  let!(:c) { node("c") }
+  let!(:hmrc) { create(:content_item, title: "HMRC") }
+  let!(:raib) { create(:content_item, title: "RAIB") }
 
-  let!(:hmrc) { node("HMRC") }
-  let!(:raib) { node("RAIB") }
+  let!(:vat) { create(:content_item, title: "VAT") }
+  let!(:rail) { create(:content_item, title: "Railways") }
 
-  let!(:vat) { node("VAT") }
-  let!(:rail) { node("Railways") }
+  let!(:a) do
+    create(:content_item, title: "a", organisations: hmrc, policies: vat)
+  end
 
-  before do
-    edge(a, hmrc, "organisations")
-    edge(b, hmrc, "organisations")
-    edge(c, raib, "organisations")
+  let!(:b) do
+    create(:content_item, title: "b", organisations: hmrc, policies: rail)
+  end
 
-    edge(a, vat, "policies")
-    edge(b, rail, "policies")
-    edge(c, rail, "policies")
+  let!(:c) do
+    create(:content_item, title: "c", organisations: raib, policies: rail)
   end
 
   it "filters content items for a single inventory rule" do
