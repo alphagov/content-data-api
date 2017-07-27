@@ -35,8 +35,9 @@ RSpec.describe Search::Query do
   end
 
   describe "sort" do
-    it "defaults to page_views_desc" do
-      expect(subject.sort.identifier).to eq(:six_months_page_views_desc)
+    it "defaults to page_views descending" do
+      expect(subject.sort).to eq(:six_months_page_views)
+      expect(subject.sort_direction).to eq(:desc)
     end
   end
 

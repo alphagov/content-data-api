@@ -1,12 +1,13 @@
 class Search
   class Query
-    attr_accessor :filters, :per_page, :page, :sort, :title
+    attr_accessor :filters, :per_page, :page, :sort, :sort_direction, :title
 
     def initialize
       self.filters = []
       self.page = 1
       self.per_page = 25
-      self.sort = :six_months_page_views_desc
+      self.sort = :six_months_page_views
+      self.sort_direction = :desc
     end
 
     def audit_status=(identifier)
@@ -54,10 +55,6 @@ class Search
     def per_page=(value)
       @per_page = value.to_i
       @per_page = 100 if @per_page > 100
-    end
-
-    def sort=(identifier)
-      @sort = Sort.find(identifier)
     end
 
   private

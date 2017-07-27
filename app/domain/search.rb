@@ -82,6 +82,10 @@ class Search
     query.sort = identifier
   end
 
+  def sort_direction=(direction)
+    query.sort_direction = direction
+  end
+
   def sort
     query.sort
   end

@@ -58,7 +58,11 @@ class Search
     end
 
     def apply_sort!
-      self.scope = query.sort.apply(scope)
+      self.scope = scope.order(
+        query.sort => query.sort_direction,
+        # Finally sort by base path (which is unique) to stabilise sort order
+        :base_path => :asc,
+      )
     end
 
     def paginate!
