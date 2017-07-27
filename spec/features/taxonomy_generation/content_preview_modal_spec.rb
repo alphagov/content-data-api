@@ -2,8 +2,6 @@ require "rails_helper"
 
 RSpec.feature "Content Preview Modal", type: :feature, js: true do
   before :each do
-    Proxies::IframeAllowingProxy::PROXY_BASE_PATH = '/iframe-proxy/'.freeze
-
     #ignore the fact the iframe points to an invalid path
     Capybara.raise_server_errors = false
   end
