@@ -3,7 +3,6 @@ RSpec.describe Proxies::IframeAllowingProxy do
     @proxy = Proxies::IframeAllowingProxy.new
     @status = {}
     @headers = {}
-    Proxies::IframeAllowingProxy::PROXY_BASE_PATH = '/iframe-proxy/'.freeze
   end
 
   describe '#rewrite_response' do
