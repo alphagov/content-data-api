@@ -47,7 +47,7 @@ FactoryGirl.define do
     sequence(:text) { |i| "FreeTextQuestion #{i}" }
   end
 
-  factory :response do
+  factory :response, class: Audits::Response do
     audit
     question factory: :boolean_question
     value "true"

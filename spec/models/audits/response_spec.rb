@@ -1,4 +1,4 @@
-RSpec.describe Response do
+RSpec.describe Audits::Response do
   describe "validations" do
     subject { build(:response) }
 
@@ -46,12 +46,12 @@ RSpec.describe Response do
       a.touch
       a.save!
 
-      expect(Response.all).to eq [a, b]
+      expect(Audits::Response.all).to eq [a, b]
 
       a.question.text = "New text"
       a.save!
 
-      expect(Response.all).to eq [a, b]
+      expect(Audits::Response.all).to eq [a, b]
     end
   end
 
@@ -65,33 +65,33 @@ RSpec.describe Response do
 
     describe ".boolean" do
       it "returns responses for boolean questions" do
-        expect(Response.boolean).to match_array [passing_response, failing_response]
+        expect(Audits::Response.boolean).to match_array [passing_response, failing_response]
       end
 
       it "can be chained" do
-        scope = Response.where(id: passing_response)
+        scope = Audits::Response.where(id: passing_response)
         expect(scope.boolean).to eq [passing_response]
       end
     end
 
     describe ".passing" do
       it "returns responses for boolean questions with a value of 'yes'" do
-        expect(Response.passing).to eq [passing_response]
+        expect(Audits::Response.passing).to eq [passing_response]
       end
 
       it "can be chained" do
-        scope = Response.where(id: failing_response)
+        scope = Audits::Response.where(id: failing_response)
         expect(scope.passing).to be_empty
       end
     end
 
     describe ".failing" do
       it "returns responses for boolean questions with a value of 'no'" do
-        expect(Response.failing).to eq [failing_response]
+        expect(Audits::Response.failing).to eq [failing_response]
       end
 
       it "can be chained" do
-        scope = Response.where(id: passing_response)
+        scope = Audits::Response.where(id: passing_response)
         expect(scope.failing).to be_empty
       end
     end
