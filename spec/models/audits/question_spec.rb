@@ -1,6 +1,6 @@
-RSpec.describe Question do
+RSpec.describe Audits::Question do
   it "is abstract" do
-    expect { Question.new }.to raise_error(/abstract class/i)
+    expect { Audits::Question.new }.to raise_error(/abstract class/i)
   end
 
   describe "validations" do

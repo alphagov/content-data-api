@@ -16,7 +16,7 @@ RSpec.describe ReportRow do
   let!(:audit) { create(:audit, content_item: content_item) }
 
   let!(:responses) do
-    Question.all.map do |question|
+    Audits::Question.all.map do |question|
       create(:response, audit: audit, question: question, value: "yes")
     end
   end

@@ -1,4 +1,4 @@
-require_relative "../app/models/question"
+require_relative "../app/models/audits/question"
 require_relative "./factories/link_factory"
 
 FactoryGirl.define do
@@ -39,11 +39,11 @@ FactoryGirl.define do
     user
   end
 
-  factory :boolean_question, class: BooleanQuestion do
+  factory :boolean_question, class: Audits::BooleanQuestion do
     sequence(:text) { |i| "BooleanQuestion #{i}" }
   end
 
-  factory :free_text_question, class: FreeTextQuestion do
+  factory :free_text_question, class: Audits::FreeTextQuestion do
     sequence(:text) { |i| "FreeTextQuestion #{i}" }
   end
 

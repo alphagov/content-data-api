@@ -8,7 +8,7 @@ RSpec.describe Template do
     end
 
     context "when no questions exist" do
-      before { Question.destroy_all }
+      before { Audits::Question.destroy_all }
       after { Seeder.questions! }
 
       it "provides a helpful error" do

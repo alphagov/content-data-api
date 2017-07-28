@@ -92,6 +92,6 @@ private
   end
 
   def questions
-    @questions ||= Question.order(:id)
+    @questions ||= Audits::Question.order(:id)
   end
 end
