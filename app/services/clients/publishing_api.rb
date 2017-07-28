@@ -16,14 +16,15 @@ module Clients
     end
 
     def content_ids
-      results = paginate do |p|
-        publishing_api.get_content_items({
-          fields: %w(content_id),
-          states: %w(published),
-        }.merge(p))
-      end
-
-      results.map { |r| r.fetch(:content_id) }
+      publishing_api
+        .get_paged_editions(
+          fields: %w[content_id],
+          states: %w[published],
+          per_page: @per_page,
+        )
+        .map { |response| normalise(response).fetch(:results) }
+        .flatten
+        .map { |result| result.fetch(:content_id) }
     end
 
     def fetch(content_id)
@@ -78,18 +79,6 @@ module Clients
     def build_current_page_query(query, page)
       query[:page] = page
       query
-    end
-
-    def paginate
-      page = 1
-      results = []
-
-      loop do
-        response = yield(page: page, per_page: PER_PAGE)
-        results += normalise(response).fetch(:results)
-        return results if last_page?(response)
-        page += 1
-      end
     end
 
     def normalise(response)

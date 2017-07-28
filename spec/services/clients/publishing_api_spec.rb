@@ -8,19 +8,17 @@ RSpec.describe Clients::PublishingAPI do
 
     let(:content_ids) { (page_size + 1).times.map { |i| "id-#{i}" } }
 
-    before do
-      1.upto(2) do |page|
-        publishing_api_has_content(
-          content_ids.map { |id| { content_id: id } },
-          fields: %w(content_id),
-          states: %w(published),
-          page: page,
-          per_page: page_size,
-        )
-      end
-    end
-
     it "returns all the content ids" do
+      editions = content_ids.map { |id| { "content_id" => id } }
+
+      pages = editions.each_slice(page_size).map do |page|
+        {
+          "results" => page,
+        }
+      end
+
+      allow_any_instance_of(GdsApi::PublishingApiV2).to receive(:get_paged_editions).and_return(pages)
+
       result = subject.content_ids
       expect(result).to eq(content_ids)
     end
