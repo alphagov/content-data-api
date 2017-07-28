@@ -20,7 +20,7 @@ class Search
       if self.identifier == :audited
         scope.joins(:audit)
       elsif self.identifier == :non_audited
-        scope.where.not(content_id: Audit.all.select(:content_id))
+        scope.where.not(content_id: Audits::Audit.all.select(:content_id))
       else
         scope
       end

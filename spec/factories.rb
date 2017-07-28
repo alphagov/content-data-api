@@ -34,7 +34,7 @@ FactoryGirl.define do
     link_type "organisations"
   end
 
-  factory :audit do
+  factory :audit, class: Audits::Audit do
     content_item
     user
   end

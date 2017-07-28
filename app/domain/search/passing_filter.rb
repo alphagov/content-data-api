@@ -7,7 +7,7 @@ class Search
     end
 
     def apply(scope)
-      nested = passing ? Audit.passing : Audit.failing
+      nested = passing ? Audits::Audit.passing : Audits::Audit.failing
       scope.where(content_id: nested.select(:content_id))
     end
   end

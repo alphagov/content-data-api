@@ -1,7 +1,7 @@
 class Response < ApplicationRecord
   default_scope { order(id: :asc) }
 
-  belongs_to :audit
+  belongs_to :audit, class_name: Audits::Audit
   belongs_to :question
 
   validates :audit, presence: true

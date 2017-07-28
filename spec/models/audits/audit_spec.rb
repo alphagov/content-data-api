@@ -1,4 +1,4 @@
-RSpec.describe Audit do
+RSpec.describe Audits::Audit do
   subject { build(:audit) }
 
   describe "associations" do
@@ -58,22 +58,22 @@ RSpec.describe Audit do
 
     describe ".passing" do
       it "returns audits where all boolean responses are 'yes'" do
-        expect(Audit.passing).to eq [passing_audit]
+        expect(Audits::Audit.passing).to eq [passing_audit]
       end
 
       it "can be chained" do
-        scope = Audit.where(id: failing_audit)
+        scope = Audits::Audit.where(id: failing_audit)
         expect(scope.passing).to be_empty
       end
     end
 
     describe ".failing" do
       it "returns audits where any one boolean response is 'no'" do
-        expect(Audit.failing).to eq [failing_audit]
+        expect(Audits::Audit.failing).to eq [failing_audit]
       end
 
       it "can be chained" do
-        scope = Audit.where(id: passing_audit)
+        scope = Audits::Audit.where(id: passing_audit)
         expect(scope.failing).to be_empty
       end
     end
