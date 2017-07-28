@@ -29,8 +29,8 @@ content_id
     stub_request(:get, "https://example.org/spreadsheet.csv").
       to_return(status: 200, body: csv)
 
-    fill_in :new_taxonomy_project_name, with: "Project Foo"
-    fill_in :new_taxonomy_project_csv_url, with: "https://example.org/spreadsheet.csv"
+    fill_in :name, with: "Project Foo"
+    fill_in :csv_url, with: "https://example.org/spreadsheet.csv"
     click_button "Save"
   end
 

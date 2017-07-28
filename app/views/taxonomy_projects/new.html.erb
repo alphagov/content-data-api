@@ -2,27 +2,27 @@
 
 <div class='row'>
   <div class='col-md-8'>
-    <%= form_for @form, url: taxonomy_projects_path do |f| %>
+    <%= form_tag taxonomy_projects_path do %>
       <div class="form-group">
-        <%= f.label :name, "Name", class: "control-label" %>
+        <%= label_tag :name, "Name", class: "control-label" %>
 
         <div class="form-wrapper">
-          <%= f.text_field :name, class: "form-control" %>
+          <%= text_field_tag :name, nil, class: "form-control" %>
         </div>
       </div>
 
       <div class="form-group">
-        <%= f.label :csv_url, "Google Spreadsheet URL", class: "control-label" %>
+        <%= label_tag :csv_url, "Google Spreadsheet URL", class: "control-label" %>
 
         <div class="form-wrapper">
-          <%= f.text_field :csv_url, class: "form-control" %>
+          <%= text_field_tag :csv_url, nil, class: "form-control" %>
         </div>
 
         <p>The spreadsheet should have a <code>content_id</code> column with the
           content IDs of the pages. </p>
       </div>
 
-      <%= f.submit "Save", class: "btn btn-success" %>
+      <%= submit_tag "Save", class: "btn btn-success" %>
     <% end %>
   </div>
 

@@ -8,13 +8,11 @@ class TaxonomyProjectsController < ApplicationController
   end
 
   def new
-    @form = NewTaxonomyProject.new
   end
 
   def create
-    form = NewTaxonomyProject.new(taxonomy_project_params)
-    form.save
-    redirect_to taxonomy_project_path(form.project_id)
+    project = TermGeneration::TaxonomyProjectBuilder.build(name: taxonomy_project_params[:name], csv_url: taxonomy_project_params[:csv_url])
+    redirect_to taxonomy_project_path(project)
   end
 
   def next
@@ -32,6 +30,6 @@ class TaxonomyProjectsController < ApplicationController
 private
 
   def taxonomy_project_params
-    params.require(:new_taxonomy_project).permit(:name, :csv_url)
+    params.permit(:name, :csv_url)
   end
 end
