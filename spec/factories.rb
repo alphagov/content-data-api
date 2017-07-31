@@ -22,6 +22,10 @@ FactoryGirl.define do
       LinkFactory.add_policies(content_item, evaluator.policies)
       LinkFactory.add_policy_areas(content_item, evaluator.policy_areas)
     end
+
+    factory :organisation do
+      document_type "organisation"
+    end
   end
 
   factory :link do

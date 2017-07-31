@@ -20,30 +20,31 @@ module DropdownHelper
   end
 
   def taxons_options
-    options = @search.options_for("taxons").order(:title)
+    options = ContentItem.all_taxons
 
     options_from_collection_for_select(
       options,
       :content_id,
-      :title_with_count,
+      :title,
       selected: params["taxons"],
     )
   end
 
   def organisation_options
-    options = @search.options_for(org_link_type).order(:title)
+    options = ContentItem.all_organisations
 
     options_from_collection_for_select(
       options,
       :content_id,
-      :title_with_count,
+      :title,
       selected: params[:organisations],
     )
   end
 
   def document_type_options
-    options = @search.options_for(:document_type)
-    options = options.map { |o| DocumentTypeOption.new(o) }
+    options = ContentItem
+      .all_document_types
+      .map { |option| DocumentTypeOption.new(option) }
 
     options_from_collection_for_select(
       options,
@@ -71,11 +72,11 @@ module DropdownHelper
 
   class DocumentTypeOption < SimpleDelegator
     def name
-      "#{first.titleize} (#{second})"
+      document_type.titleize.to_s
     end
 
     def value
-      first
+      document_type
     end
   end
 end

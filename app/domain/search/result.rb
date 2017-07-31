@@ -1,22 +1,15 @@
 class Search
   class Result
-    attr_accessor :scope, :filter_options
-
-    def initialize(scope, filter_options)
-      self.scope = scope
-      self.filter_options = filter_options
+    def initialize(scope)
+      @scope = scope
     end
 
     def content_items
-      scope
+      @scope
     end
 
     def unpaginated
-      content_items.limit(nil).offset(nil)
-    end
-
-    def options_for(identifier)
-      filter_options.fetch(identifier)
+      @scope.limit(nil).offset(nil)
     end
   end
 end

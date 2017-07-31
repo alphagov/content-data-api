@@ -50,28 +50,28 @@ RSpec.feature "Managing inventory" do
     expect_active "Waste"
 
     click_on "Organisations"
-    expect_inactive "Organisation 1 (2)"
-    expect_inactive "Organisation 2 (1)"
+    expect_inactive "Organisation 1"
+    expect_inactive "Organisation 2"
 
-    click_on "Organisation 1 (2)"
-    expect_active "Organisation 1 (2)"
-    expect_inactive "Organisation 2 (1)"
+    click_on "Organisation 1"
+    expect_active "Organisation 1"
+    expect_inactive "Organisation 2"
 
-    click_on "Organisation 1 (2)"
-    expect_inactive "Organisation 1 (2)"
-    expect_inactive "Organisation 2 (1)"
+    click_on "Organisation 1"
+    expect_inactive "Organisation 1"
+    expect_inactive "Organisation 2"
 
-    click_on "Organisation 2 (1)"
-    expect_inactive "Organisation 1 (2)"
-    expect_active "Organisation 2 (1)"
+    click_on "Organisation 2"
+    expect_inactive "Organisation 1"
+    expect_active "Organisation 2"
 
     click_on "Policy Areas"
-    expect_inactive "Policy Area 1 (1)"
-    expect_inactive "Policy Area 2 (2)"
+    expect_inactive "Policy Area 1"
+    expect_inactive "Policy Area 2"
 
-    click_on "Policy Area 1 (1)"
-    expect_active "Policy Area 1 (1)"
-    expect_inactive "Policy Area 2 (2)"
+    click_on "Policy Area 1"
+    expect_active "Policy Area 1"
+    expect_inactive "Policy Area 2"
 
     within ".subthemes" do
       fill_in "subtheme_name", with: "Air pollution"
@@ -81,24 +81,24 @@ RSpec.feature "Managing inventory" do
     expect_active("Air pollution")
 
     click_on "Organisations"
-    expect_inactive "Organisation 1 (2)"
-    expect_inactive "Organisation 2 (1)"
+    expect_inactive "Organisation 1"
+    expect_inactive "Organisation 2"
 
-    click_on "Organisation 1 (2)"
-    expect_active "Organisation 1 (2)"
-    expect_inactive "Organisation 2 (1)"
+    click_on "Organisation 1"
+    expect_active "Organisation 1"
+    expect_inactive "Organisation 2"
 
     click_on "Waste"
-    expect_inactive "Organisation 1 (2)"
-    expect_active "Organisation 2 (1)"
+    expect_inactive "Organisation 1"
+    expect_active "Organisation 2"
 
     click_on "Policy Areas"
-    expect_active "Policy Area 1 (1)"
-    expect_inactive "Policy Area 2 (2)"
+    expect_active "Policy Area 1"
+    expect_inactive "Policy Area 2"
 
     click_on "Air pollution"
-    expect_inactive "Policy Area 1 (1)"
-    expect_inactive "Policy Area 2 (2)"
+    expect_inactive "Policy Area 1"
+    expect_inactive "Policy Area 2"
   end
 
   scenario "disabling columns when no theme or subtheme is selected" do
@@ -156,17 +156,17 @@ RSpec.feature "Managing inventory" do
     end
 
     click_on "Organisations"
-    expect_inactive "Organisation 1 (2)"
-    expect_inactive "Organisation 2 (1)"
+    expect_inactive "Organisation 1"
+    expect_inactive "Organisation 2"
 
-    click_on "Organisation 1 (2)"
-    expect_active "Organisation 1 (2)"
+    click_on "Organisation 1"
+    expect_active "Organisation 1"
 
-    click_on "Organisation 1 (2)"
-    expect_inactive "Organisation 1 (2)"
+    click_on "Organisation 1"
+    expect_inactive "Organisation 1"
 
-    click_on "Organisation 1 (2)"
-    expect_active "Organisation 1 (2)"
+    click_on "Organisation 1"
+    expect_active "Organisation 1"
   end
 
   scenario "disallowing users without the inventory_management permission" do

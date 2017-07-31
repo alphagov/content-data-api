@@ -36,8 +36,8 @@ RSpec.feature "Filter in content items", type: :feature do
   end
 
   context "filtering" do
-    let!(:hmrc) { create(:content_item, title: "HMRC") }
-    let!(:dfe) { create(:content_item, title: "DFE") }
+    let!(:hmrc) { create(:organisation, title: "HMRC") }
+    let!(:dfe) { create(:organisation, title: "DFE") }
 
     let!(:felling) { create(:content_item, title: "Tree felling") }
     let!(:vat) { create(:content_item, title: "VAT") }
@@ -62,7 +62,7 @@ RSpec.feature "Filter in content items", type: :feature do
       select "HMRC", from: "organisations"
       click_on "Filter"
 
-      expect(page).to have_select(:organisations, selected: "HMRC (1)")
+      expect(page).to have_select(:organisations, selected: "HMRC")
     end
   end
 
