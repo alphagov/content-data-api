@@ -59,11 +59,11 @@ FactoryGirl.define do
     sequence(:target_content_id) { |i| "target-content-id-#{i}" }
   end
 
-  factory :theme do
+  factory :theme, class: Audits::Theme do
     sequence(:name) { |i| "Theme #{i}" }
   end
 
-  factory :subtheme do
+  factory :subtheme, class: Audits::Subtheme do
     theme
     sequence(:name) { |i| "Subtheme #{i}" }
   end

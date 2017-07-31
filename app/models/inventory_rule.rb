@@ -1,5 +1,5 @@
 class InventoryRule < ApplicationRecord
-  belongs_to :subtheme
+  belongs_to :subtheme, class_name: "Audits::Subtheme"
 
   validates :link_type, presence: true
   validates :target_content_id,

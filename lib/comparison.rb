@@ -15,7 +15,7 @@ class Comparison
 
   def initialize(csv_path, theme_name)
     self.csv = CSV.read(csv_path)
-    self.theme = Theme.find_by!(name: theme_name)
+    self.theme = Audits::Theme.find_by!(name: theme_name)
 
     compute_additions_and_deletions
   end

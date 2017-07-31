@@ -22,7 +22,7 @@ class Search
       type, id = identifier.to_s.split("_")
       return unless %(Theme Subtheme).include?(type)
 
-      model = type.constantize.find(id)
+      model = Audits.const_get(type).find(id)
       filters.push(RulesFilter.new(rules: model.inventory_rules))
     end
 

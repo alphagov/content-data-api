@@ -1,4 +1,4 @@
-RSpec.describe Subtheme do
+RSpec.describe Audits::Subtheme do
   subject { build(:subtheme) }
 
   describe "validations" do
