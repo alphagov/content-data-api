@@ -1,4 +1,4 @@
-RSpec.describe Template do
+RSpec.describe Audits::Template do
   describe "#questions" do
     it "returns an ordered list of questions" do
       q = subject.questions
