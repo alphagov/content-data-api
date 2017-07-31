@@ -5,7 +5,7 @@ namespace :report do
     count = 0
 
     ContentItem.find_each do |content_item|
-      ReportRow.precompute(content_item)
+      Audits::ReportRow.precompute(content_item)
 
       count += 1
 
