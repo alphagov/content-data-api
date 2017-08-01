@@ -93,7 +93,7 @@ module Audits
     end
 
     def questions
-      @questions ||= Audits::Question.order(:id)
+      @questions ||= Question.order(:id)
     end
   end
 end

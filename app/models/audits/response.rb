@@ -9,7 +9,7 @@ module Audits
     validates :question, presence: true
 
     scope :boolean, -> { joins(:question).where(questions: { type: "Audits::BooleanQuestion" }) }
-    scope :passing, -> { boolean.where(value: Audits::BooleanQuestion::PASS) }
+    scope :passing, -> { boolean.where(value: BooleanQuestion::PASS) }
     scope :failing, -> { boolean.where.not(id: passing) }
 
     validates :value, presence: { message: "mandatory field missing" },
