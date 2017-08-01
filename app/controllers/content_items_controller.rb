@@ -2,7 +2,7 @@ class ContentItemsController < ApplicationController
   helper_method :filter_params, :primary_org_only?
 
   def index
-    @metrics = Performance::MetricBuilder.new.run_collection(search.unpaginated)
+    @metrics = Performance::MetricBuilder.new.run_collection(search.all_content_items)
     @content_items = search.content_items.decorate
   end
 
@@ -13,17 +13,13 @@ class ContentItemsController < ApplicationController
 private
 
   def search
-    @search ||= begin
-      query = Content::Query.new
-        .organisations(params[:organisations], primary_org_only?)
-        .taxons(params[:taxons])
-        .sort(params[:sort])
-        .sort_direction(params[:order])
-        .title(params[:query])
-        .page(params[:page])
-
-      Content::Result.new(query.scope)
-    end
+    @search ||= Content::Query.new
+      .organisations(params[:organisations], primary_org_only?)
+      .taxons(params[:taxons])
+      .sort(params[:sort])
+      .sort_direction(params[:order])
+      .title(params[:query])
+      .page(params[:page])
   end
 
   def primary_org_only?

@@ -32,7 +32,7 @@ module Audits
     end
 
     def export
-      csv = Report.generate(@search.unpaginated, request)
+      csv = Report.generate(search.all_content_items, request)
       send_data(csv, filename: "Transformation_audit_report_CSV_download.csv")
     end
 
@@ -47,7 +47,7 @@ module Audits
     end
 
     def audits
-      @audits ||= Audit.where(content_item: @search.unpaginated)
+      @audits ||= Audit.where(content_item: search.all_content_items)
     end
 
     def content_item
@@ -71,18 +71,13 @@ module Audits
     end
 
     def search
-      @search ||= begin
-        scope = content_query.scope
-
-        if audit_status_filter_enabled?
-          scope = Audits::ContentQuery
-            .filter_scope(scope)
-            .audit_status(params[:audit_status])
-            .scope
-        end
-
-        Content::Result.new(scope)
-      end
+      @search ||= if audit_status_filter_enabled?
+                    Audits::ContentQuery
+                      .filter_query(content_query)
+                      .audit_status(params[:audit_status])
+                  else
+                    content_query
+                  end
     end
 
     def audit_params

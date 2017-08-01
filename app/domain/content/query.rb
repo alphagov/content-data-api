@@ -88,7 +88,7 @@ module Content
     end
 
     def scope
-      @scope = @scope
+      @scope
         .order(
           @sort => @sort_direction,
           # Finally sort by base path (which is unique) to stabilise sort order
@@ -96,6 +96,18 @@ module Content
         )
         .page(@page)
         .per(@per_page)
+    end
+
+    def content_items
+      scope
+    end
+
+    def all_content_items
+      scope.limit(nil).offset(nil)
+    end
+
+    def clone
+      Marshal.load(Marshal.dump(self))
     end
 
   private

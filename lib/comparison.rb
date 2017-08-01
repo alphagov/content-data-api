@@ -39,10 +39,10 @@ private
 
   def base_paths_in_theme
     @base_paths_in_theme ||= begin
-      query = Content::Query.new
+      items = Content::Query.new
         .theme("Theme_#{theme.id}")
+        .all_content_items
 
-      items = Content::Result.new(query.scope).unpaginated
       paths = items.pluck(:base_path)
       normalise(paths)
     end

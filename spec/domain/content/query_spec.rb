@@ -32,20 +32,17 @@ RSpec.describe Content::Query do
         .per_page(5)
         .page(2)
 
-      results = subject.scope
-
-      expect(results.total_pages).to eq(2)
-      expect(results.count).to eq(1)
+      expect(subject.content_items).to have_attributes(total_pages: 2, count: 1)
     end
 
     it "can filter by a single organisation" do
       subject.organisations(organisation_1.content_id)
-      expect(subject.scope).to contain_exactly(content_item_1, content_item_3)
+      expect(subject.content_items).to contain_exactly(content_item_1, content_item_3)
     end
 
     it "can filter by multiple organisations" do
       subject.organisations([organisation_1, organisation_2].map(&:content_id))
-      expect(subject.scope).to contain_exactly(content_item_1, content_item_2, content_item_3)
+      expect(subject.content_items).to contain_exactly(content_item_1, content_item_2, content_item_3)
     end
 
     it "can filter by both organisation and policy" do
@@ -53,7 +50,7 @@ RSpec.describe Content::Query do
         .organisations(organisation_1.content_id)
         .policies(policy_1.content_id)
 
-      expect(subject.scope).to contain_exactly(content_item_3)
+      expect(subject.content_items).to contain_exactly(content_item_3)
     end
 
     it "can filter by multiple organisations and a policy" do
@@ -61,33 +58,31 @@ RSpec.describe Content::Query do
         .organisations([organisation_1, organisation_2].map(&:content_id))
         .policies(policy_1.content_id)
 
-      expect(subject.scope).to contain_exactly(content_item_2, content_item_3)
+      expect(subject.content_items).to contain_exactly(content_item_2, content_item_3)
     end
 
     it "returns no results if there is no target for the type" do
       subject.organisations(policy_1.content_id)
-      expect(subject.scope).to be_empty
+      expect(subject.content_items).to be_empty
     end
 
     it "can filter by document type" do
       travel_advice = create(:content_item, document_type: "travel_advice")
       subject.document_type("travel_advice")
-      expect(subject.scope).to contain_exactly(travel_advice)
+      expect(subject.content_items).to contain_exactly(travel_advice)
     end
 
-    # TODO: Move
     it "can return an unpaginated scope of content items" do
       subject.per_page(2)
 
-      results = Content::Result.new(subject.scope)
-      expect(results.content_items.size).to eq(2)
-      expect(results.unpaginated.size).to eq(6)
+      expect(subject.content_items.size).to eq(2)
+      expect(subject.all_content_items.size).to eq(6)
     end
 
     it "can filter by title" do
       foo = create(:content_item, title: "barfoobaz")
       subject.title("foo")
-      expect(subject.scope).to contain_exactly(foo)
+      expect(subject.content_items).to contain_exactly(foo)
     end
   end
 
@@ -95,19 +90,19 @@ RSpec.describe Content::Query do
     let!(:content_items) { create_list(:content_item, 26) }
 
     it "defaults to the page 1 with 25 per page" do
-      expect(subject.scope.count).to eq 25
-      expect(subject.scope).to match_array(content_items[0..24])
+      expect(subject.content_items.count).to eq 25
+      expect(subject.content_items).to match_array(content_items[0..24])
     end
 
     describe "theme" do
       before do
         subject.per_page(100)
-        expect(subject.scope.count).to eq 26
+        expect(subject.content_items.count).to eq 26
       end
 
       it "does not add a filter if it is an unrecognised type" do
         subject.theme("Unknown_123")
-        expect(subject.scope.count).to eq 26
+        expect(subject.content_items.count).to eq 26
       end
 
       describe "when filtering by theme" do
@@ -116,7 +111,7 @@ RSpec.describe Content::Query do
 
         it "adds a rules filter when setting the theme" do
           subject.theme(identifier)
-          expect(subject.scope).to be_empty
+          expect(subject.content_items).to be_empty
         end
 
         it "raises an error if theme doesn't exist" do
@@ -131,7 +126,7 @@ RSpec.describe Content::Query do
 
         it "adds a rules filter when setting the theme" do
           subject.theme(identifier)
-          expect(subject.scope).to be_empty
+          expect(subject.content_items).to be_empty
         end
 
         it "raises an error if subtheme doesn't exist" do
@@ -149,7 +144,7 @@ RSpec.describe Content::Query do
     let!(:content_item_4) { create(:content_item, six_months_page_views: 9) }
 
     it "defaults to six month page views descending" do
-      expect(subject.scope.pluck(:six_months_page_views)).to match_array [9, 3, 3, 1]
+      expect(subject.content_items.pluck(:six_months_page_views)).to match_array [9, 3, 3, 1]
     end
   end
 end
