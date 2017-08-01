@@ -24,6 +24,12 @@ module Content
       set(:sort_direction, sort_direction)
     end
 
+    def title(title)
+      builder(verify_presence: title) do
+        @scope = @scope.where("title like ?", "%#{title}%")
+      end
+    end
+
     def document_type(document_type)
       builder(verify_presence: document_type) do
         @scope = @scope.where(document_type: document_type)
