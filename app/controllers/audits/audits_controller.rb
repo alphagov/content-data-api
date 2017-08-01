@@ -1,7 +1,6 @@
 module Audits
   class AuditsController < ApplicationController
-    helper_method :filter_params, :primary_org_only?, :org_link_type,
-                  :audit_status_filter_enabled?
+    helper_method :filter_params, :primary_org_only?, :audit_status_filter_enabled?
 
     before_action :content_items, only: %i(index report export)
 
@@ -63,17 +62,27 @@ module Audits
       @next_item ||= content_items.next_item(content_item)
     end
 
+    def content_query
+      @content_query ||= Content::Query.new
+        .page(params[:page])
+        .organisations(params[:organisations], primary_org_only?)
+        .document_type(params[:document_type])
+        .theme(params[:theme])
+    end
+
     def search
-      @search ||= (
-        search = Search.new
-        filter_by_audit_status!(search) if audit_status_filter_enabled?
-        filter_by_organisation!(search)
-        filter_by_theme!(search)
-        filter_by_document_type!(search)
-        search.page = params[:page]
-        search.execute
-        search
-      )
+      @search ||= begin
+        scope = content_query.scope
+
+        if audit_status_filter_enabled?
+          scope = Audits::FilteredContentQuery
+            .filter_scope(scope)
+            .audit_status(params[:audit_status])
+            .scope
+        end
+
+        Search::Result.new(scope)
+      end
     end
 
     def audit_params
@@ -94,27 +103,6 @@ module Audits
 
     def error_message
       audit.errors.messages.values.join(', ').capitalize
-    end
-
-    def filter_by_audit_status!(search)
-      search.audit_status = params[:audit_status].to_sym if params[:audit_status].present?
-    end
-
-    def filter_by_organisation!(search)
-      content_id = params[:organisations]
-      search.filter_by(link_type: org_link_type, target_ids: content_id) if content_id.present?
-    end
-
-    def filter_by_theme!(search)
-      search.theme = params[:theme] if params[:theme].present?
-    end
-
-    def filter_by_document_type!(search)
-      search.document_type = params[:document_type] if params[:document_type].present?
-    end
-
-    def org_link_type
-      primary_org_only? ? Link::PRIMARY_ORG : Link::ALL_ORGS
     end
 
     def primary_org_only?

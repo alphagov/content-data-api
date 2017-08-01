@@ -1,10 +1,18 @@
 module ReportHelper
   def audited_count
-    @search.dimension(:audited).content_items.total_count
+    Audits::FilteredContentQuery
+      .filter_query(@content_query)
+      .audited
+      .content_items
+      .total_count
   end
 
   def not_audited_count
-    @search.dimension(:not_audited).content_items.total_count
+    Audits::FilteredContentQuery
+      .filter_query(@content_query)
+      .non_audited
+      .content_items
+      .total_count
   end
 
   def audited_percentage
@@ -16,11 +24,19 @@ module ReportHelper
   end
 
   def passing_count
-    @search.dimension(:passing).content_items.total_count
+    Audits::FilteredContentQuery
+      .filter_query(@content_query)
+      .passing
+      .content_items
+      .total_count
   end
 
   def not_passing_count
-    @search.dimension(:not_passing).content_items.total_count
+    Audits::FilteredContentQuery
+      .filter_query(@content_query)
+      .failing
+      .content_items
+      .total_count
   end
 
   def passing_percentage
