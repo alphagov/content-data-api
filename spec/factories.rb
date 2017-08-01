@@ -1,4 +1,4 @@
-require_relative "../app/models/question"
+require_relative "../app/models/audits/question"
 require_relative "./factories/link_factory"
 
 FactoryGirl.define do
@@ -34,20 +34,20 @@ FactoryGirl.define do
     link_type "organisations"
   end
 
-  factory :audit do
+  factory :audit, class: Audits::Audit do
     content_item
     user
   end
 
-  factory :boolean_question, class: BooleanQuestion do
+  factory :boolean_question, class: Audits::BooleanQuestion do
     sequence(:text) { |i| "BooleanQuestion #{i}" }
   end
 
-  factory :free_text_question, class: FreeTextQuestion do
+  factory :free_text_question, class: Audits::FreeTextQuestion do
     sequence(:text) { |i| "FreeTextQuestion #{i}" }
   end
 
-  factory :response do
+  factory :response, class: Audits::Response do
     audit
     question factory: :boolean_question
     value "true"
@@ -59,11 +59,11 @@ FactoryGirl.define do
     sequence(:target_content_id) { |i| "target-content-id-#{i}" }
   end
 
-  factory :theme do
+  factory :theme, class: Audits::Theme do
     sequence(:name) { |i| "Theme #{i}" }
   end
 
-  factory :subtheme do
+  factory :subtheme, class: Audits::Subtheme do
     theme
     sequence(:name) { |i| "Subtheme #{i}" }
   end

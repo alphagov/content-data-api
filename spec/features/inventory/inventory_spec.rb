@@ -36,14 +36,14 @@ RSpec.feature "Managing inventory" do
     expect(page).to have_content("This page lets you manage themes and subthemes.")
 
     within ".themes" do
-      fill_in "theme_name", with: "Environment"
+      fill_in "audits_theme_name", with: "Environment"
       click_on "Add"
     end
 
     expect_active "Environment"
 
     within ".subthemes" do
-      fill_in "subtheme_name", with: "Waste"
+      fill_in "audits_subtheme_name", with: "Waste"
       click_on "Add"
     end
 
@@ -74,7 +74,7 @@ RSpec.feature "Managing inventory" do
     expect_inactive "Policy Area 2"
 
     within ".subthemes" do
-      fill_in "subtheme_name", with: "Air pollution"
+      fill_in "audits_subtheme_name", with: "Air pollution"
       click_on "Add"
     end
 
@@ -110,7 +110,7 @@ RSpec.feature "Managing inventory" do
     expect(page).to have_css(".content.disabled")
 
     within ".themes" do
-      fill_in "theme_name", with: "Environment"
+      fill_in "audits_theme_name", with: "Environment"
       click_on "Add"
     end
 
@@ -120,7 +120,7 @@ RSpec.feature "Managing inventory" do
     expect(page).to have_css(".content.disabled")
 
     within ".subthemes" do
-      fill_in "subtheme_name", with: "Waste"
+      fill_in "audits_subtheme_name", with: "Waste"
       click_on "Add"
     end
 
@@ -132,7 +132,7 @@ RSpec.feature "Managing inventory" do
     click_on "Organisations"
 
     within ".themes" do
-      fill_in "theme_name", with: "Travel"
+      fill_in "audits_theme_name", with: "Travel"
       click_on "Add"
     end
 
@@ -146,12 +146,12 @@ RSpec.feature "Managing inventory" do
     visit inventory_root_path
 
     within ".themes" do
-      fill_in "theme_name", with: "Environment"
+      fill_in "audits_theme_name", with: "Environment"
       click_on "Add"
     end
 
     within ".subthemes" do
-      fill_in "subtheme_name", with: "Waste"
+      fill_in "audits_subtheme_name", with: "Waste"
       click_on "Add"
     end
 

@@ -1,4 +1,4 @@
-RSpec.describe Theme do
+RSpec.describe Audits::Theme do
   subject { build(:theme) }
 
   describe "validations" do

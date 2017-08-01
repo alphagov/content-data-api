@@ -1,9 +1,9 @@
 class ContentItem < ApplicationRecord
-  has_one :audit, primary_key: :content_id, foreign_key: :content_id
-  has_one :report_row, primary_key: :content_id, foreign_key: :content_id
+  has_one :audit, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::Audit"
+  has_one :report_row, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::ReportRow"
   has_many :links, primary_key: :content_id, foreign_key: :source_content_id
 
-  after_save { ReportRow.precompute(self) }
+  after_save { Audits::ReportRow.precompute(self) }
 
   Search.all_link_types.each do |link_type|
     has_many(

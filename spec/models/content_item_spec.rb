@@ -3,8 +3,8 @@ RSpec.describe ContentItem, type: :model do
     subject { build(:content_item) }
 
     it "precomputes the content_item's report row after saving" do
-      expect { subject.save! }.to change(ReportRow, :count).by(1)
-      expect { subject.save! }.not_to change(ReportRow, :count)
+      expect { subject.save! }.to change(Audits::ReportRow, :count).by(1)
+      expect { subject.save! }.not_to change(Audits::ReportRow, :count)
     end
   end
 

@@ -17,12 +17,12 @@ class InventoryController < ApplicationController
   end
 
   def add_theme
-    theme = Theme.create!(theme_params)
+    theme = Audits::Theme.create!(theme_params)
     rerender(theme_id: theme.id)
   end
 
   def add_subtheme
-    subtheme = Subtheme.create!(subtheme_params)
+    subtheme = Audits::Subtheme.create!(subtheme_params)
     rerender(subtheme_id: subtheme.id)
   end
 
@@ -56,21 +56,21 @@ private
   end
 
   def lookup_theme
-    @theme = Theme.find(params[:theme_id]) if params[:theme_id].present?
-    @theme ||= Theme.first
+    @theme = Audits::Theme.find(params[:theme_id]) if params[:theme_id].present?
+    @theme ||= Audits::Theme.first
   end
 
   def lookup_subtheme
-    @subtheme = Subtheme.find(params[:subtheme_id]) if params[:subtheme_id].present?
+    @subtheme = Audits::Subtheme.find(params[:subtheme_id]) if params[:subtheme_id].present?
     @subtheme = @theme.subthemes.first if @theme && (!@subtheme || @subtheme.theme != @theme)
   end
 
   def build_theme
-    @new_theme = Theme.new
+    @new_theme = Audits::Theme.new
   end
 
   def build_subtheme
-    @new_subtheme = Subtheme.new
+    @new_subtheme = Audits::Subtheme.new
   end
 
   def set_param(key, value)
@@ -115,10 +115,10 @@ private
   end
 
   def theme_params
-    params.require(:theme).permit(:name)
+    params.require(:audits_theme).permit(:name)
   end
 
   def subtheme_params
-    params.require(:subtheme).permit(:name, :theme_id)
+    params.require(:audits_subtheme).permit(:name, :theme_id)
   end
 end

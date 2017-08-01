@@ -5,19 +5,19 @@ module Seeder
   end
 
   def self.questions!
-    return if Question.any?
+    return if Audits::Question.any?
 
-    BooleanQuestion.create!(text: "Title")
-    BooleanQuestion.create!(text: "Summary")
-    BooleanQuestion.create!(text: "Page detail")
-    BooleanQuestion.create!(text: "Attachments")
-    BooleanQuestion.create!(text: "Document type")
-    BooleanQuestion.create!(text: "Is the content out of date?")
-    BooleanQuestion.create!(text: "Should the content be removed?")
-    BooleanQuestion.create!(text: "Is this content very similar to other pages?")
+    Audits::BooleanQuestion.create!(text: "Title")
+    Audits::BooleanQuestion.create!(text: "Summary")
+    Audits::BooleanQuestion.create!(text: "Page detail")
+    Audits::BooleanQuestion.create!(text: "Attachments")
+    Audits::BooleanQuestion.create!(text: "Document type")
+    Audits::BooleanQuestion.create!(text: "Is the content out of date?")
+    Audits::BooleanQuestion.create!(text: "Should the content be removed?")
+    Audits::BooleanQuestion.create!(text: "Is this content very similar to other pages?")
 
-    FreeTextQuestion.create!(text: "URLs of similar pages")
-    FreeTextQuestion.create!(text: "Notes")
+    Audits::FreeTextQuestion.create!(text: "URLs of similar pages")
+    Audits::FreeTextQuestion.create!(text: "Notes")
   end
 
   def self.user!

@@ -23,7 +23,7 @@
     <div class="themes">
       <span class="row header" href="#">Theme</span>
 
-      <% Theme.all.each do |theme| %>
+      <% Audits::Theme.all.each do |theme| %>
         <%= link_to theme.name, set_param(:theme_id, theme.id), class: "row #{"active" if theme == @theme}" %>
       <% end %>
 

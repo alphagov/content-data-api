@@ -1,6 +1,6 @@
 module DropdownHelper
   def theme_and_subtheme_options
-    groups = Theme.all.map do |theme|
+    groups = Audits::Theme.all.map do |theme|
       options = [ThemeOption.new(theme)]
       options += theme.subthemes.map { |s| SubthemeOption.new(s) }
 
