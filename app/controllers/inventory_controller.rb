@@ -42,12 +42,12 @@ private
   end
 
   def assign_content_items
-    search = Search.new
-    search.execute
-
-    @content_items = search
-      .options_for(@link_type)
-      .order(:title)
+    @content_items = Link
+      .select(:target_content_id)
+      .where(link_type: @link_type)
+      .group(:target_content_id)
+      .map(&:target)
+      .sort_by(&:title)
   end
 
   def lookup_link_type

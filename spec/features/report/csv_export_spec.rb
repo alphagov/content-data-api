@@ -53,7 +53,7 @@ RSpec.feature "Exporting a CSV from the report page" do
   scenario "Applying the filters to the export" do
     visit audits_report_path
 
-    select "HMRC (1)", from: "organisations"
+    select "HMRC", from: "organisations"
     click_on "Filter"
 
     click_link "Export filtered audit to CSV"

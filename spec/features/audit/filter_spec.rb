@@ -1,7 +1,7 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
   # Organisations:
-  let!(:hmrc) { create(:content_item, title: "HMRC") }
-  let!(:dfe) { create(:content_item, title: "DFE") }
+  let!(:hmrc) { create(:organisation, title: "HMRC") }
+  let!(:dfe) { create(:organisation, title: "DFE") }
 
   # Policies:
   let!(:flying) { create(:content_item, title: "Flying abroad") }
@@ -98,15 +98,6 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
     expect(page).to have_content("VAT")
     expect(page).to have_no_content("Tree felling")
-
-    expect(page).to have_content("HMRC (1)")
-    expect(page).to have_content("DFE (1)")
-
-    select "Audited", from: "audit_status"
-
-    click_on "Filter"
-    expect(page).to have_no_content("HMRC (0)")
-    expect(page).to have_content("DFE (1)")
   end
 
   scenario "filtering by organisation" do
@@ -120,9 +111,6 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     expect(page).to have_content("VAT")
     expect(page).to have_content("Travel insurance")
     expect(page).to have_no_content("Tree felling")
-
-    expect(page).to have_content("HMRC (2)")
-    expect(page).to have_no_content("DFE")
   end
 
   scenario "toggling the primary org checkbox by clicking its label" do
@@ -141,9 +129,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     within("#organisations") do
       options = page.all("option")
 
-      expect(options.map(&:text)).to eq [
-        "All", "DFE (1)", "HMRC (1)",
-      ]
+      expect(options.map(&:text)).to eq %w[All DFE HMRC]
     end
   end
 

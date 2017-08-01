@@ -60,7 +60,7 @@
 
       <% @content_items.each do |content_item| %>
         <%= link_to(
-          content_item.title_with_count,
+          content_item.title,
           inventory_toggle_path(selection_params.merge(content_id: content_item.content_id)),
           class: "row #{"active" if rule_exists?(content_item)}",
           remote: true

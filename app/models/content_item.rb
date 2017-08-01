@@ -20,42 +20,10 @@ class ContentItem < ApplicationRecord
     content_id
   end
 
-  def self.targets_of(link_type:, scope_to_count: all)
-    sql = scope_to_count.to_sql.presence
-    sql ||= "select * from content_items where id = -1"
-
-    nested = Link
-      .select(:target_content_id, "count(x.id) as c")
-      .joins("join (#{sql}) x on content_id = source_content_id")
-      .where(link_type: link_type)
-      .group(:target_content_id)
-
-    ContentItem
-      .select("*, c as incoming_links_count")
-      .joins("join (#{nested.to_sql}) x on target_content_id = content_id")
-  end
-
   def self.next_item(current_item)
     ids = pluck(:id)
     index = ids.index(current_item.id)
     all[index + 1] if index
-  end
-
-  def self.document_type_counts
-    all
-      .select(:document_type, "count(1) as count")
-      .group(:document_type)
-      .map { |r| [r.document_type, r.count] }
-      .sort_by(&:first)
-      .to_h
-  end
-
-  def title_with_count
-    if respond_to?(:incoming_links_count)
-      "#{title} (#{incoming_links_count})"
-    else
-      title
-    end
   end
 
   def guidance?
@@ -73,5 +41,20 @@ class ContentItem < ApplicationRecord
   def whitehall_url
     return unless publishing_app == "whitehall"
     "#{WHITEHALL}/government/admin/by-content-id/#{content_id}"
+  end
+
+  def self.all_taxons
+    where(document_type: "taxon").order(:title)
+  end
+
+  def self.all_organisations
+    where(document_type: "organisation").order(:title)
+  end
+
+  def self.all_document_types
+    all
+      .select(:document_type)
+      .group(:document_type)
+      .sort_by(&:document_type)
   end
 end
