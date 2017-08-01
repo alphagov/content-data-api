@@ -4,7 +4,7 @@ RSpec.describe Audits::ContentQuery do
 
   it "can filter by audit status" do
     subject.audit_status(:audited)
-    expect(subject.scope).to eq [content_item]
+    expect(subject.content_items).to contain_exactly(content_item)
   end
 
   it "can filter by passing status" do
@@ -16,7 +16,7 @@ RSpec.describe Audits::ContentQuery do
     )
 
     subject.passing
-    expect(subject.scope).to eq [content_item]
+    expect(subject.content_items).to contain_exactly(content_item)
   end
 
   it "can filter by failing status" do
@@ -28,6 +28,6 @@ RSpec.describe Audits::ContentQuery do
     )
 
     subject.failing
-    expect(subject.scope).to eq [content_item]
+    expect(subject.content_items).to contain_exactly(content_item)
   end
 end

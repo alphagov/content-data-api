@@ -1,7 +1,6 @@
 module Audits
   class ContentQuery
     attr_reader :scope
-    alias_method :content_items, :scope
 
     def self.filter_scope(content_scope)
       ContentQuery.new(content_scope)
@@ -46,6 +45,14 @@ module Audits
     def failing
       @scope = @scope.where(content_id: Audit.failing.select(:content_id))
       self
+    end
+
+    def content_items
+      scope
+    end
+
+    def all_content_items
+      scope.limit(nil).offset(nil)
     end
   end
 end
