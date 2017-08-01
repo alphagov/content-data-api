@@ -42,7 +42,7 @@ private
       query = Content::Query.new
         .theme("Theme_#{theme.id}")
 
-      items = Search::Result.new(query.scope).unpaginated
+      items = Content::Result.new(query.scope).unpaginated
       paths = items.pluck(:base_path)
       normalise(paths)
     end

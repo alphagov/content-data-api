@@ -7,6 +7,21 @@ class Link < ApplicationRecord
   TOPICS = "topics".freeze
   TAXONOMIES = "taxons".freeze
 
+  FILTERABLE_LINK_TYPES = [
+    Link::PRIMARY_ORG,
+    Link::ALL_ORGS,
+    Link::TAXONOMIES,
+  ].freeze
+
+  GROUPABLE_LINK_TYPES = [
+    Link::POLICY_AREAS,
+    Link::POLICIES,
+    Link::PRIMARY_ORG,
+    Link::ALL_ORGS,
+    Link::MAINSTREAM,
+    Link::TOPICS,
+  ].freeze
+
   after_save { Audits::ReportRow.precompute(source) }
 
   belongs_to :source,
@@ -20,4 +35,8 @@ class Link < ApplicationRecord
     foreign_key: :target_content_id,
     primary_key: :content_id,
     optional: true
+
+  def self.all_link_types
+    (FILTERABLE_LINK_TYPES + GROUPABLE_LINK_TYPES).uniq
+  end
 end

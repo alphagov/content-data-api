@@ -22,7 +22,7 @@ private
         .title(params[:query])
         .page(params[:page])
 
-      Search::Result.new(query.scope)
+      Content::Result.new(query.scope)
     end
   end
 

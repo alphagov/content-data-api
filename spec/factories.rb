@@ -13,7 +13,7 @@ FactoryGirl.define do
     sequence(:content_id) { |index| "content-id-#{index}" }
     sequence(:title) { |index| "content-item-title-#{index}" }
     sequence(:document_type) { |index| "document_type-#{index}" }
-    base_path "api/content/item/path"
+    sequence(:base_path) { |index| "api/content/item/path-%04i" % index }
     public_updated_at { Time.now }
 
     after(:create) do |content_item, evaluator|
@@ -25,6 +25,10 @@ FactoryGirl.define do
 
     factory :organisation do
       document_type "organisation"
+    end
+
+    factory :policy do
+      document_type "policy"
     end
   end
 

@@ -5,7 +5,7 @@ class ContentItem < ApplicationRecord
 
   after_save { Audits::ReportRow.precompute(self) }
 
-  Search.all_link_types.each do |link_type|
+  Link.all_link_types.each do |link_type|
     has_many(
       :"linked_#{link_type}",
       -> { where(links: { link_type: link_type }) },

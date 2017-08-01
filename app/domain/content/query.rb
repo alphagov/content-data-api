@@ -58,6 +58,15 @@ module Content
       end
     end
 
+    def policies(policies)
+      builder(verify_presence: policies) do
+        apply_link_filter(
+          link_type: Link::POLICIES,
+          target_ids: policies,
+        )
+      end
+    end
+
     def taxons(taxons)
       builder(verify_presence: taxons) do
         apply_link_filter(
@@ -73,7 +82,7 @@ module Content
         return self unless %(Theme Subtheme).include?(type)
 
         model = Audits.const_get(type).find(id)
-        filter = Search::RulesFilter.new(rules: model.inventory_rules)
+        filter = RulesFilter.new(rules: model.inventory_rules)
         @scope = filter.apply(@scope)
       end
     end
@@ -92,7 +101,7 @@ module Content
   private
 
     def apply_link_filter(link_type:, source_ids: nil, target_ids: nil)
-      filter = Search::LinkFilter.new(
+      filter = LinkFilter.new(
         link_type: link_type,
         source_ids: source_ids,
         target_ids: target_ids,

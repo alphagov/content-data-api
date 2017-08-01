@@ -1,4 +1,4 @@
-class Search
+module Content
   class LinkFilter
     attr_accessor :link_type, :source_ids, :target_ids
 

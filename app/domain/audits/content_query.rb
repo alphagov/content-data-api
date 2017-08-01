@@ -1,10 +1,10 @@
 module Audits
-  class FilteredContentQuery
+  class ContentQuery
     attr_reader :scope
     alias_method :content_items, :scope
 
     def self.filter_scope(content_scope)
-      FilteredContentQuery.new(content_scope)
+      ContentQuery.new(content_scope)
     end
 
     def self.filter_query(query)
@@ -19,9 +19,9 @@ module Audits
       return self unless audit_status.present?
 
       case audit_status.to_sym
-      when :audited
+      when Audit::AUDITED
         audited
-      when :non_audited
+      when Audit::NON_AUDITED
         non_audited
       else
         self
@@ -44,7 +44,7 @@ module Audits
     end
 
     def failing
-      @scope = @scope.where(content_id: Audit.passing.select(:content_id))
+      @scope = @scope.where(content_id: Audit.failing.select(:content_id))
       self
     end
   end

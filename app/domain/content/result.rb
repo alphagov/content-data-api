@@ -1,4 +1,4 @@
-class Search
+module Content
   class Result
     def initialize(scope)
       @scope = scope

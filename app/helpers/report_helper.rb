@@ -1,6 +1,6 @@
 module ReportHelper
   def audited_count
-    Audits::FilteredContentQuery
+    Audits::ContentQuery
       .filter_query(@content_query)
       .audited
       .content_items
@@ -8,7 +8,7 @@ module ReportHelper
   end
 
   def not_audited_count
-    Audits::FilteredContentQuery
+    Audits::ContentQuery
       .filter_query(@content_query)
       .non_audited
       .content_items
@@ -24,7 +24,7 @@ module ReportHelper
   end
 
   def passing_count
-    Audits::FilteredContentQuery
+    Audits::ContentQuery
       .filter_query(@content_query)
       .passing
       .content_items
@@ -32,7 +32,7 @@ module ReportHelper
   end
 
   def not_passing_count
-    Audits::FilteredContentQuery
+    Audits::ContentQuery
       .filter_query(@content_query)
       .failing
       .content_items

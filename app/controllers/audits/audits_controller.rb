@@ -75,13 +75,13 @@ module Audits
         scope = content_query.scope
 
         if audit_status_filter_enabled?
-          scope = Audits::FilteredContentQuery
+          scope = Audits::ContentQuery
             .filter_scope(scope)
             .audit_status(params[:audit_status])
             .scope
         end
 
-        Search::Result.new(scope)
+        Content::Result.new(scope)
       end
     end
 

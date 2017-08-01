@@ -1,5 +1,5 @@
 RSpec.describe 'sorting' do
-  let(:search) { Search.new }
+  let(:query) { Content::Query.new }
 
   describe "sorting" do
     context "by page views (6 months)" do
@@ -9,24 +9,21 @@ RSpec.describe 'sorting' do
         create(:content_item, six_months_page_views: 0, base_path: '/c')
         create(:content_item, six_months_page_views: 999, base_path: '/z')
 
-        search.sort = :six_months_page_views
+        query.sort(:six_months_page_views)
       end
 
       it "sorts in descending order" do
-        search.sort_direction = :desc
-        search.execute
+        query.sort_direction(:desc)
         expect(results.pluck(:six_months_page_views)).to eq [999, 0, 0, 0]
       end
 
       it "sorts in ascending order" do
-        search.sort_direction = :asc
-        search.execute
+        query.sort_direction(:asc)
         expect(results.pluck(:six_months_page_views)).to eq [0, 0, 0, 999]
       end
 
       it "breaks ties on ascending base path" do
-        search.sort_direction = :asc
-        search.execute
+        query.sort_direction(:asc)
         expect(results.pluck(:base_path)).to contain_exactly('/a', '/b', '/c', '/z')
       end
     end
@@ -38,16 +35,16 @@ RSpec.describe 'sorting' do
       end
 
       it "sorts in descending order" do
-        search.sort = :one_month_page_views
-        search.sort_direction = :desc
-        search.execute
+        query
+          .sort(:one_month_page_views)
+          .sort_direction(:desc)
         expect(results.pluck(:one_month_page_views)).to eq [999, 0]
       end
 
       it "sorts in ascending order" do
-        search.sort = :one_month_page_views
-        search.sort_direction = :asc
-        search.execute
+        query
+          .sort(:one_month_page_views)
+          .sort_direction(:asc)
         expect(results.pluck(:one_month_page_views)).to eq [0, 999]
       end
     end
@@ -59,16 +56,16 @@ RSpec.describe 'sorting' do
       end
 
       it "sorts in ascending order" do
-        search.sort = :title
-        search.sort_direction = :asc
-        search.execute
+        query
+          .sort(:title)
+          .sort_direction(:asc)
         expect(results.pluck(:title)).to eq %w(AAA BBB)
       end
 
       it "sorts in descending order" do
-        search.sort = :title
-        search.sort_direction = :desc
-        search.execute
+        query
+          .sort(:title)
+          .sort_direction(:desc)
         expect(results.pluck(:title)).to eq %w(BBB AAA)
       end
     end
@@ -80,16 +77,16 @@ RSpec.describe 'sorting' do
       end
 
       it "sorts in ascending order" do
-        search.sort = :document_type
-        search.sort_direction = :asc
-        search.execute
+        query
+          .sort(:document_type)
+          .sort_direction(:asc)
         expect(results.pluck(:document_type)).to eq ["DOC-TYPE-AAA", "DOC-TYPE-BBB"]
       end
 
       it "sorts in descending order" do
-        search.sort = :document_type
-        search.sort_direction = :desc
-        search.execute
+        query
+          .sort(:document_type)
+          .sort_direction(:desc)
         expect(results.pluck(:document_type)).to eq ["DOC-TYPE-BBB", "DOC-TYPE-AAA"]
       end
     end
@@ -104,23 +101,22 @@ RSpec.describe 'sorting' do
       end
 
       it "sorts in ascending order" do
-        search.sort = :public_updated_at
-        search.sort_direction = :asc
-
+        query
+          .sort(:public_updated_at)
+          .sort_direction(:asc)
         expect(results.pluck(:public_updated_at)).to eq [older_time, time]
       end
 
       it "sorts in descending order" do
-        search.sort = :public_updated_at
-        search.sort_direction = :desc
-
+        query
+          .sort(:public_updated_at)
+          .sort_direction(:desc)
         expect(results.pluck(:public_updated_at)).to eq [time, older_time]
       end
     end
 
     def results
-      search.execute
-      search.content_items
+      query.scope
     end
   end
 end
