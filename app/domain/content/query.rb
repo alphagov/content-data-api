@@ -91,8 +91,8 @@ module Content
       @scope
         .order(
           @sort => @sort_direction,
-          # Finally sort by base path (which is unique) to stabilise sort order
-          :base_path => :asc,
+          # Finally sort by Content ID (which is unique) to stabilise sort order
+          :content_id => @sort_direction,
         )
         .page(@page)
         .per(@per_page)
