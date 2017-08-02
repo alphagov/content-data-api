@@ -16,47 +16,6 @@ RSpec.describe ContentItem, type: :model do
     end
   end
 
-  describe ".next_item" do
-    let!(:content_items) { create_list(:content_item, 5) }
-
-    it "returns the next item given the current item" do
-      result = ContentItem.all.next_item(content_items[0])
-      expect(result).to eq(content_items[1])
-
-      result = ContentItem.all.next_item(content_items[1])
-      expect(result).to eq(content_items[2])
-
-      result = ContentItem.all.next_item(content_items[2])
-      expect(result).to eq(content_items[3])
-
-      result = ContentItem.all.next_item(content_items[3])
-      expect(result).to eq(content_items[4])
-    end
-
-    it "returns nil if there's no next item" do
-      result = ContentItem.all.next_item(content_items[4])
-      expect(result).to be_nil
-    end
-
-    it "returns nil if the current item isn't in the scope" do
-      result = ContentItem.offset(1).next_item(ContentItem.first)
-      expect(result).to be_nil
-    end
-
-    it "is based on the filtered, ordered scope" do
-      scope = ContentItem.limit(3).offset(1).order("id desc")
-
-      result = scope.next_item(content_items[3])
-      expect(result).to eq(content_items[2])
-
-      result = scope.next_item(content_items[2])
-      expect(result).to eq(content_items[1])
-
-      result = scope.next_item(content_items[1])
-      expect(result).to be_nil
-    end
-  end
-
   describe "#url" do
     it "returns a url to a content item on gov.uk" do
       content_item = build(:content_item, base_path: "/api/content/item/path/1")
