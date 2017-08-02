@@ -87,6 +87,23 @@ module Content
       end
     end
 
+    def after(content_item)
+      builder(verify_presence: content_item) do
+        sort_field = ContentItem.arel_table[@sort]
+        content_id_field = ContentItem.arel_table[:content_id]
+
+        comparison = @sort_direction == :asc ? :gt : :lt
+
+        @scope = @scope.where(
+          sort_field.send(comparison, content_item[@sort])
+            .or(
+              sort_field.eq(content_item[@sort])
+                .and(content_id_field.send(comparison, content_item[:content_id]))
+            )
+        )
+      end
+    end
+
     def scope
       @scope
         .order(
@@ -104,6 +121,10 @@ module Content
 
     def all_content_items
       scope.limit(nil).offset(nil)
+    end
+
+    def clone
+      Marshal.load(Marshal.dump(self))
     end
 
   private

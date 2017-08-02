@@ -20,12 +20,6 @@ class ContentItem < ApplicationRecord
     content_id
   end
 
-  def self.next_item(current_item)
-    ids = pluck(:id)
-    index = ids.index(current_item.id)
-    all[index + 1] if index
-  end
-
   def guidance?
     document_type == "guidance"
   end

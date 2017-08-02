@@ -59,7 +59,13 @@ module Audits
     end
 
     def next_item
-      @next_item ||= content_items.next_item(content_item)
+      @next_item ||= content_query
+        .clone
+        .after(content_item)
+        .page(1)
+        .per_page(1)
+        .content_items
+        .first
     end
 
     def content_query
