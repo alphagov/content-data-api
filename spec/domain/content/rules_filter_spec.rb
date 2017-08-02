@@ -1,4 +1,4 @@
-RSpec.describe Search::RulesFilter do
+RSpec.describe Content::RulesFilter do
   subject { described_class.new(rules: subtheme.inventory_rules) }
 
   let(:subtheme) { create(:subtheme) }

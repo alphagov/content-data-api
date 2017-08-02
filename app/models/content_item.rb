@@ -5,7 +5,7 @@ class ContentItem < ApplicationRecord
 
   after_save { Audits::ReportRow.precompute(self) }
 
-  Search.all_link_types.each do |link_type|
+  Link.all_link_types.each do |link_type|
     has_many(
       :"linked_#{link_type}",
       -> { where(links: { link_type: link_type }) },
@@ -18,12 +18,6 @@ class ContentItem < ApplicationRecord
 
   def to_param
     content_id
-  end
-
-  def self.next_item(current_item)
-    ids = pluck(:id)
-    index = ids.index(current_item.id)
-    all[index + 1] if index
   end
 
   def guidance?

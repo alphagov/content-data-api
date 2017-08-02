@@ -1,4 +1,4 @@
-RSpec.describe Search::LinkFilter do
+RSpec.describe Content::LinkFilter do
   subject { described_class }
   it "raises an error if constructing a filter with source and target" do
     expect {

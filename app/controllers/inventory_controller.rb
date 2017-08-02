@@ -38,7 +38,7 @@ private
   end
 
   def assign_link_types
-    @link_types = Search::GROUPABLE_LINK_TYPES
+    @link_types = Link::GROUPABLE_LINK_TYPES
   end
 
   def assign_content_items

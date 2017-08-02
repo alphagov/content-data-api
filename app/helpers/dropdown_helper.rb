@@ -12,8 +12,11 @@ module DropdownHelper
 
   def audit_status_options
     options_from_collection_for_select(
-      Search.all_audit_status,
-      :identifier,
+      [
+        AuditStatusOption.new(Audits::Audit::AUDITED),
+        AuditStatusOption.new(Audits::Audit::NON_AUDITED),
+      ],
+      :value,
       :name,
       params[:audit_status],
     )
@@ -72,11 +75,21 @@ module DropdownHelper
 
   class DocumentTypeOption < SimpleDelegator
     def name
-      document_type.titleize.to_s
+      document_type.titleize
     end
 
     def value
       document_type
+    end
+  end
+
+  class AuditStatusOption < SimpleDelegator
+    def name
+      to_s.titleize
+    end
+
+    def value
+      to_s
     end
   end
 end
