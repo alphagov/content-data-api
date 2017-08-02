@@ -1,7 +1,7 @@
 RSpec.feature "Navigation" do
-  let!(:first) { create(:content_item, title: "First", six_months_page_views: 3) }
-  let!(:second) { create(:content_item, title: "Second", six_months_page_views: 2) }
-  let!(:third) { create(:content_item, title: "Third", six_months_page_views: 1) }
+  let!(:first) { create(:content_item, title: "First", six_months_page_views: 10) }
+  let!(:second) { create(:content_item, title: "Second", six_months_page_views: 9) }
+  let!(:third) { create(:content_item, title: "Third", six_months_page_views: 8) }
 
   scenario "navigating between audits and the index page" do
     visit audits_path(some_filter: "value")
