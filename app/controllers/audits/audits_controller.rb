@@ -2,7 +2,7 @@ module Audits
   class AuditsController < ApplicationController
     layout "audits"
 
-    helper_method :filter_params, :primary_org_only?, :audit_status_filter_enabled?
+    helper_method :filter_params, :primary_org_only?
 
     before_action :content_items, only: %i(export)
 

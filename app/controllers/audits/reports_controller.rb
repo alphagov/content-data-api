@@ -2,7 +2,7 @@ module Audits
   class ReportsController < ApplicationController
     layout "audits"
 
-    helper_method :filter_params, :primary_org_only?, :audit_status_filter_enabled?
+    helper_method :filter_params, :primary_org_only?
 
     def show
       @content_query ||= Content::Query.new
