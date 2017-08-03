@@ -1,4 +1,4 @@
-class Search
+module Content
   class RulesFilter
     attr_accessor :rules
 
