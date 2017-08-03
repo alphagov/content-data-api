@@ -36,10 +36,6 @@ module Audits
       send_data(csv, filename: "Transformation_audit_report_CSV_download.csv")
     end
 
-    def guidance
-      @body = Govspeak::Document.new(File.read("doc/guidance.md")).to_html.html_safe
-    end
-
   private
 
     def audit

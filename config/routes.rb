@@ -3,22 +3,19 @@ Rails.application.routes.draw do
 
   resources :content_items, only: %w(index show), param: :content_id
 
-  scope module: :audits do
-    resources :audits, only: %w(index guidance)
-
-    resources :content_items, only: %w(index show), param: :content_id do
+  resources :content_items, only: %w(index show), param: :content_id do
+    scope module: "audits" do
       get :audit, to: "audits#show"
       post :audit, to: "audits#save"
       patch :audit, to: "audits#save"
     end
+  end
 
-    namespace :audits do
-      get :report
-      get :export
-      get :guidance
-    end
-
-    get "audit-guidance", to: "audits#guidance"
+  namespace :audits do
+    get '/', to: "audits#index"
+    get :report, to: "audits#report"
+    get :export, to: "audits#export"
+    resource :guidance, only: :show
   end
 
   namespace :inventory do
