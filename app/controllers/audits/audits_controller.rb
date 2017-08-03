@@ -2,7 +2,7 @@ module Audits
   class AuditsController < ApplicationController
     helper_method :filter_params, :primary_org_only?, :audit_status_filter_enabled?
 
-    before_action :content_items, only: %i(report export)
+    before_action :content_items, only: %i(export)
 
     def index
       @content_items = FindContent.call(
@@ -37,6 +37,19 @@ module Audits
     end
 
     def report
+      @content_query ||= Content::Query.new
+                           .page(params[:page])
+                           .organisations(params[:organisations], primary_org_only?)
+                           .document_type(params[:document_type])
+                           .theme(params[:theme])
+
+      @content_items = FindContent.call(
+        params[:theme],
+        page: params[:page],
+        organisations: params[:organisations],
+        document_type: params[:document_type],
+        primary_org_only: primary_org_only?,
+      ).decorate
     end
 
     def export
