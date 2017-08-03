@@ -2,12 +2,8 @@ module Audits
   class ContentQuery
     attr_reader :scope
 
-    def self.filter_query(query)
-      ContentQuery.new(query.clone.scope)
-    end
-
-    def initialize(content_scope = ContentItem.all)
-      @scope = content_scope
+    def initialize(scope: ContentItem.all)
+      @scope = scope
     end
 
     def audit_status(audit_status)

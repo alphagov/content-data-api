@@ -95,7 +95,7 @@ module Audits
 
     def apply_audit_status(query)
       Audits::ContentQuery
-        .filter_query(query)
+        .new(scope: query.scope)
         .audit_status(params[:audit_status])
     end
   end

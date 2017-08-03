@@ -7,8 +7,7 @@ module Audits
                 .document_type(document_type)
                 .theme(theme_id)
 
-      Audits::ContentQuery
-        .filter_query(query)
+      Audits::ContentQuery.new(scope: query.scope)
         .audit_status(audit_status)
         .content_items
     end
