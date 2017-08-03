@@ -15,11 +15,5 @@ module Audits
         primary_org_only: primary_org_only?,
       ).decorate
     end
-
-  private
-
-    def audit_status_filter_enabled?
-      action_name != "report"
-    end
   end
 end

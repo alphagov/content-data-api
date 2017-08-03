@@ -89,17 +89,11 @@ module Audits
         .permit(responses_attributes: [:id, :value, :question_id])
     end
 
-    def audit_status_filter_enabled?
-      action_name != "report"
-    end
-
-
     def error_message
       audit.errors.messages.values.join(', ').capitalize
     end
 
     def apply_audit_status(query)
-      return query unless audit_status_filter_enabled?
       Audits::ContentQuery
         .filter_query(query)
         .audit_status(params[:audit_status])
