@@ -1,9 +1,5 @@
 module Audits
-  class ReportsController < ApplicationController
-    layout "audits"
-
-    helper_method :filter_params, :primary_org_only?
-
+  class ReportsController < BaseController
     def show
       @content_query ||= Content::Query.new
                            .page(params[:page])
@@ -22,18 +18,8 @@ module Audits
 
   private
 
-    def primary_org_only?
-      params[:primary].blank? || params[:primary] == "true"
-    end
-
     def audit_status_filter_enabled?
       action_name != "report"
-    end
-
-    def filter_params
-      request
-        .query_parameters
-        .deep_symbolize_keys
     end
   end
 end
