@@ -16,7 +16,7 @@ RSpec.feature "Using guidance while auditing a content item", type: :feature do
 
     click_link("Audit question help")
 
-    expect(page).to have_current_path("/audit-guidance")
+    expect(page).to have_current_path("/audits/guidance")
     expect(page).to have_css("h1")
     expect(page).to have_content("Audit GOV.UK content")
   end
