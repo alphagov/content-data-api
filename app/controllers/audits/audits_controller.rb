@@ -1,9 +1,5 @@
 module Audits
-  class AuditsController < ApplicationController
-    layout "audits"
-
-    helper_method :filter_params, :primary_org_only?
-
+  class AuditsController < BaseController
     before_action :content_items, only: %i(export)
 
     def index
@@ -97,18 +93,9 @@ module Audits
       action_name != "report"
     end
 
-    def filter_params
-      request
-        .query_parameters
-        .deep_symbolize_keys
-    end
 
     def error_message
       audit.errors.messages.values.join(', ').capitalize
-    end
-
-    def primary_org_only?
-      params[:primary].blank? || params[:primary] == "true"
     end
 
     def apply_audit_status(query)

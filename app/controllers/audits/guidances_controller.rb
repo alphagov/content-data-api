@@ -1,7 +1,5 @@
 module Audits
-  class GuidancesController < ApplicationController
-    layout "audits"
-
+  class GuidancesController < BaseController
     def show
       @content = Support.get
     end
