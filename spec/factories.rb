@@ -10,7 +10,7 @@ FactoryGirl.define do
       policy_areas nil
     end
 
-    sequence(:content_id) { |index| "content-id-#{index}" }
+    sequence(:content_id) { |index| "content-id-%04i" % index }
     sequence(:title) { |index| "content-item-title-#{index}" }
     sequence(:document_type) { |index| "document_type-#{index}" }
     sequence(:base_path) { |index| "api/content/item/path-%04i" % index }

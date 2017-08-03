@@ -87,15 +87,17 @@ module Content
       end
     end
 
+    def after(content_item)
+      builder(verify_presence: content_item) do
+        @after = content_item
+      end
+    end
+
     def scope
-      @scope
-        .order(
-          @sort => @sort_direction,
-          # Finally sort by base path (which is unique) to stabilise sort order
-          :base_path => :asc,
-        )
-        .page(@page)
-        .per(@per_page)
+      scope = @scope.clone
+      scope = apply_ordering(scope)
+      scope = apply_pagination(scope)
+      apply_after(scope)
     end
 
     def content_items
@@ -120,6 +122,35 @@ module Content
       )
 
       @scope = filter.apply(@scope)
+    end
+
+    def apply_ordering(scope)
+      scope.order(
+        @sort => @sort_direction,
+        # Finally sort by Content ID (which is unique) to stabilise sort order
+        :content_id => @sort_direction,
+      )
+    end
+
+    def apply_pagination(scope)
+      scope.page(@page).per(@per_page)
+    end
+
+    def apply_after(scope)
+      return scope unless @after
+
+      sort_field = ContentItem.arel_table[@sort]
+      content_id_field = ContentItem.arel_table[:content_id]
+
+      comparison = @sort_direction == :asc ? :gt : :lt
+
+      scope.where(
+        sort_field.send(comparison, @after[@sort])
+          .or(
+            sort_field.eq(@after[@sort])
+              .and(content_id_field.send(comparison, @after[:content_id]))
+          )
+      )
     end
 
     def set(instance_variable, value)

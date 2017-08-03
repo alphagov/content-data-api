@@ -4,10 +4,10 @@ RSpec.describe 'sorting' do
   describe "sorting" do
     context "by page views (6 months)" do
       before do
-        create(:content_item, six_months_page_views: 0, base_path: '/b')
-        create(:content_item, six_months_page_views: 0, base_path: '/a')
-        create(:content_item, six_months_page_views: 0, base_path: '/c')
-        create(:content_item, six_months_page_views: 999, base_path: '/z')
+        create(:content_item, six_months_page_views: 0, content_id: 'b')
+        create(:content_item, six_months_page_views: 0, content_id: 'a')
+        create(:content_item, six_months_page_views: 0, content_id: 'c')
+        create(:content_item, six_months_page_views: 999, content_id: 'z')
 
         query.sort(:six_months_page_views)
       end
@@ -24,7 +24,7 @@ RSpec.describe 'sorting' do
 
       it "breaks ties on ascending base path" do
         query.sort_direction(:asc)
-        expect(query.content_items.pluck(:base_path)).to contain_exactly('/a', '/b', '/c', '/z')
+        expect(query.content_items.pluck(:content_id)).to contain_exactly('a', 'b', 'c', 'z')
       end
     end
 

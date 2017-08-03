@@ -59,7 +59,17 @@ module Audits
     end
 
     def next_item
-      @next_item ||= content_items.next_item(content_item)
+      @next_item ||= begin
+        query = content_query
+          .clone
+          .after(content_item)
+          .page(1)
+          .per_page(1)
+
+        apply_audit_status(query)
+          .content_items
+          .first
+      end
     end
 
     def content_query
@@ -71,13 +81,7 @@ module Audits
     end
 
     def search
-      @search ||= if audit_status_filter_enabled?
-                    Audits::ContentQuery
-                      .filter_query(content_query)
-                      .audit_status(params[:audit_status])
-                  else
-                    content_query
-                  end
+      @search ||= apply_audit_status(content_query)
     end
 
     def audit_params
@@ -102,6 +106,13 @@ module Audits
 
     def primary_org_only?
       params[:primary].blank? || params[:primary] == "true"
+    end
+
+    def apply_audit_status(query)
+      return query unless audit_status_filter_enabled?
+      Audits::ContentQuery
+        .filter_query(query)
+        .audit_status(params[:audit_status])
     end
   end
 end

@@ -90,6 +90,7 @@ RSpec.describe Content::Query do
     let!(:content_items) { create_list(:content_item, 26) }
 
     it "defaults to the page 1 with 25 per page" do
+      subject.sort_direction(:asc)
       expect(subject.content_items.count).to eq 25
       expect(subject.content_items).to match_array(content_items[0..24])
     end
@@ -143,8 +144,51 @@ RSpec.describe Content::Query do
     let!(:content_item_3) { create(:content_item, six_months_page_views: 1) }
     let!(:content_item_4) { create(:content_item, six_months_page_views: 9) }
 
-    it "defaults to six month page views descending" do
-      expect(subject.content_items.pluck(:six_months_page_views)).to match_array [9, 3, 3, 1]
+    describe "with default sort" do
+      it "sorts by six month page views descending" do
+        expect(subject.content_items).to contain_exactly(
+          content_item_4,
+          content_item_2,
+          content_item_1,
+          content_item_3,
+        )
+      end
+    end
+
+    describe "picking content items after another item" do
+      describe "sorting by six month page views" do
+        before do
+          subject.sort(:six_months_page_views)
+        end
+
+        it "returns the correct results when sorted in descending order" do
+          subject
+            .sort_direction(:desc)
+            .after(content_item_1)
+          expect(subject.content_items).to contain_exactly(content_item_3)
+        end
+
+        it "returns the correct results when sorted in ascending order" do
+          subject
+            .sort_direction(:asc)
+            .after(content_item_1)
+          expect(subject.content_items).to contain_exactly(content_item_2, content_item_4)
+        end
+
+        it "returns nothing after the last result" do
+          subject
+            .sort_direction(:desc)
+            .after(content_item_3)
+          expect(subject.content_items).to be_empty
+        end
+
+        it "returns everything after the first result" do
+          subject
+            .sort_direction(:desc)
+            .after(content_item_4)
+          expect(subject.content_items).to contain_exactly(content_item_2, content_item_1, content_item_3)
+        end
+      end
     end
   end
 end
