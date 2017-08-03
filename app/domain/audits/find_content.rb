@@ -1,6 +1,6 @@
 module Audits
   class FindContent
-    def self.call(theme_id, page:, organisations:, document_type:, audit_status:, primary_org_only:)
+    def self.call(theme_id, page:, organisations:, document_type:, audit_status: nil, primary_org_only:)
       query = Content::Query.new
                 .page(page)
                 .organisations(organisations, primary_org_only)
