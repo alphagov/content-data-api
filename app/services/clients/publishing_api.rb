@@ -15,20 +15,19 @@ module Clients
       @per_page = 700
     end
 
-    def content_ids
+    def fetch_all(fields)
       publishing_api
         .get_paged_editions(
-          fields: %w[content_id],
+          fields: fields,
           states: %w[published],
           per_page: @per_page,
         )
         .map { |response| normalise(response).fetch(:results) }
         .flatten
-        .map { |result| result.fetch(:content_id) }
     end
 
-    def fetch(content_id)
-      normalise(publishing_api.get_content(content_id))
+    def fetch(content_id, locale)
+      normalise(publishing_api.get_content(content_id, locale: locale))
     end
 
     def links(content_id)

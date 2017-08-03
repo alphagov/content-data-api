@@ -1,6 +1,7 @@
 module Content
   RSpec.describe Importers::SingleContentItem do
     let(:content_id) { "id-123" }
+    let(:locale) { "en" }
 
     let!(:org1) { create(:content_item, title: "org-1", content_id: "org-id-1") }
     let!(:org2) { create(:content_item, title: "org-2", content_id: "org-id-2") }
@@ -8,6 +9,7 @@ module Content
     let!(:taxon1) { create(:content_item, title: "taxon-1", content_id: "taxon-id-1") }
     let!(:taxon2) { create(:content_item, title: "taxon-2", content_id: "taxon-id-2") }
 
+    let(:partial_content_item) { { content_id: content_id, locale: locale } }
     let(:content_item) { build(:content_item, content_id: content_id, title: "title") }
 
     before do
@@ -26,11 +28,13 @@ module Content
 
     context "Import a new Content Item" do
       before do
-        allow(subject.content_items_service).to receive(:fetch).with(content_id).and_return(content_item)
+        allow(subject.content_items_service).to receive(:fetch)
+          .with(content_id, locale)
+          .and_return(content_item)
       end
 
       it "imports a content item" do
-        expect { subject.run(content_id) }.to change(ContentItem, :count).by(1)
+        expect { subject.run(content_id, locale) }.to change(ContentItem, :count).by(1)
 
         content_item = ContentItem.last
 
@@ -41,7 +45,7 @@ module Content
       end
 
       it "imports links" do
-        expect { subject.run(content_id) }
+        expect { subject.run(content_id, locale) }
           .to change(Link, :count).by(4)
 
         content_item = ContentItem.last
@@ -65,13 +69,13 @@ module Content
       let(:updated_content_item) { build(:content_item, content_id: content_id, title: "new title") }
 
       before do
-        allow(subject.content_items_service).to receive(:fetch).with(content_id).and_return(updated_content_item)
+        allow(subject.content_items_service).to receive(:fetch).with(content_id, locale).and_return(updated_content_item)
       end
 
       it "updates the content item" do
         content_item.save!
 
-        expect { subject.run(content_id) }
+        expect { subject.run(content_id, locale) }
           .to change { content_item.reload.title }.from("title").to("new title")
           .and change { content_item.reload.linked_taxons.to_a }.from([]).to([taxon1, taxon2])
           .and change { content_item.reload.linked_organisations.to_a }.from([]).to([org1, org2])
@@ -81,12 +85,12 @@ module Content
 
     context "when the links already exists, and the Publishing API is unchanged" do
       before do
-        allow(subject.content_items_service).to receive(:fetch).with(content_id).and_return(content_item)
-        subject.run(content_id)
+        allow(subject.content_items_service).to receive(:fetch).with(content_id, locale).and_return(content_item)
+        subject.run(content_id, locale)
       end
 
       it "doesn't create any additional links" do
-        expect { subject.run(content_id) }
+        expect { subject.run(content_id, locale) }
           .not_to change(Link, :count)
       end
 
@@ -97,7 +101,7 @@ module Content
         end
 
         it "deletes non-existing links" do
-          expect { subject.run(content_id) }
+          expect { subject.run(content_id, locale) }
             .to change(Link, :count).by(-4)
         end
       end

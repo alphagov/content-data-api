@@ -8,8 +8,8 @@ RSpec.describe TermGeneration::TaxonomyProjectBuilder do
         yyy
     EOCSV
 
-    ContentItem.create(content_id: 'xxx')
-    ContentItem.create(content_id: 'yyy')
+    create(:content_item, content_id: 'xxx')
+    create(:content_item, content_id: 'yyy')
     stub_request(:get, @url).to_return(body: csv)
   end
 

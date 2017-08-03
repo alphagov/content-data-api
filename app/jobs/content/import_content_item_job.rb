@@ -1,8 +1,7 @@
 module Content
   class ImportContentItemJob < ApplicationJob
     def perform(*args)
-      content_id = args[0]
-      Importers::SingleContentItem.run(content_id)
+      Importers::SingleContentItem.run(*args)
     end
   end
 end
