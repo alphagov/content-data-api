@@ -16,25 +16,25 @@
 <%= link_to "Export filtered audit to CSV", audits_export_path(filter_params), class: "report-export" %>
 
 <div class="report-section">
-  <h3><%= format_number(@content_items.total_count) %></h3>
+  <h3><%= format_number(@monitor.total_count) %></h3>
   <p>Content items</p>
   <div>
 
     <div id="progress">
       <h3>Audit progress</h3>
 
-      <%= render "progress_bar", percentage: audited_percentage %>
+      <%= render "progress_bar", percentage: @monitor.audited_percentage %>
 
       <table class="table">
         <tr>
           <td class="col-md-6">Items audited</td>
-          <td class="col-md-3"><%= format_number(audited_count) %></td>
-          <td class="col-md-3"><%= format_percentage(audited_percentage) %></td>
+          <td class="col-md-3"><%= format_number(@monitor.audited_count) %></td>
+          <td class="col-md-3"><%= format_percentage(@monitor.audited_percentage) %></td>
         </tr>
         <tr>
           <td class="col-md-6">Items still to audit</td>
-          <td class="col-md-3"><%= format_number(not_audited_count) %></td>
-          <td class="col-md-3"><%= format_percentage(not_audited_percentage) %></td>
+          <td class="col-md-3"><%= format_number(@monitor.not_audited_count) %></td>
+          <td class="col-md-3"><%= format_percentage(@monitor.not_audited_percentage) %></td>
         </tr>
       </table>
     </div>
@@ -42,18 +42,18 @@
     <div id="items-needing-improvement">
       <h3>Items needing improvement</h3>
 
-      <%= render "progress_bar", percentage: passing_percentage %>
+      <%= render "progress_bar", percentage: @monitor.passing_percentage %>
 
       <table class="table">
         <tr>
           <td class="col-md-6">Items that need improvement</td>
-          <td class="col-md-3"><%= format_number(passing_count) %></td>
-          <td class="col-md-3"><%= format_percentage(passing_percentage) %></td>
+          <td class="col-md-3"><%= format_number(@monitor.passing_count) %></td>
+          <td class="col-md-3"><%= format_percentage(@monitor.passing_percentage) %></td>
         </tr>
         <tr>
           <td class="col-md-6">Items that don't need improvement</td>
-          <td class="col-md-3"><%= format_number(not_passing_count) %></td>
-          <td class="col-md-3"><%= format_percentage(not_passing_percentage) %></td>
+          <td class="col-md-3"><%= format_number(@monitor.not_passing_count) %></td>
+          <td class="col-md-3"><%= format_percentage(@monitor.not_passing_percentage) %></td>
         </tr>
       </table>
     </div>
