@@ -1,6 +1,6 @@
 require_relative "./lib/guard/lint"
 
-guard :rspec, cmd: 'bundle exec spring rspec' do
+guard :rspec, cmd: 'NO_COVERAGE=true bundle exec spring rspec' do
   watch('spec/spec_helper.rb')                        { "spec" }
   watch('spec/rails_helper.rb')                       { "spec" }
   watch('config/routes.rb')                           { "spec/routing" }
