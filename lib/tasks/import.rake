@@ -9,11 +9,6 @@ namespace :import do
     Importers::AllTaxons.new.run
   end
 
-  desc 'Import all the inventory'
-  task all_inventory: :environment do
-    Content::Importers::AllInventory.new.run
-  end
-
   desc 'Import GA metrics '
   task all_ga_metrics: :environment do
     Content::Importers::AllGoogleAnalyticsMetrics.new.run
