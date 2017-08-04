@@ -7,29 +7,59 @@ module Audits
                class_name: 'Content::Item'
     belongs_to :user, primary_key: :uid, foreign_key: :uid
 
-    has_many :responses, inverse_of: :audit
-    has_many :questions, through: :responses
-
     validates :content_item, presence: true
     validates :user, presence: true
 
-    scope :passing, -> { where.not(id: failing) }
-    scope :failing, -> { where(id: Response.failing.select(:audit_id)) }
+    validates :change_attachments, inclusion: { in: [true, false] }
+    validates :change_body, inclusion: { in: [true, false] }
+    validates :change_description, inclusion: { in: [true, false] }
+    validates :change_title, inclusion: { in: [true, false] }
+    validates :outdated, inclusion: { in: [true, false] }
+    validates :redundant, inclusion: { in: [true, false] }
+    validates :reformat, inclusion: { in: [true, false] }
+    validates :similar, inclusion: { in: [true, false] }
 
-    accepts_nested_attributes_for :responses
+    scope :passing, -> {
+      where(
+        change_attachments: false,
+        change_body: false,
+        change_description: false,
+        change_title: false,
+        outdated: false,
+        redundant: false,
+        reformat: false,
+        similar: false,
+      )
+    }
+
+    scope :failing, -> {
+      where(change_attachments: true)
+        .or(where(change_body: true))
+        .or(where(change_description: true))
+        .or(where(change_title: true))
+        .or(where(outdated: true))
+        .or(where(redundant: true))
+        .or(where(reformat: true))
+        .or(where(similar: true))
+    }
 
     after_save { ReportRow.precompute(content_item) }
-
-    def template
-      @template ||= Template.new
-    end
 
     def passing?
       !failing?
     end
 
     def failing?
-      responses.any?(&:failing?)
+      [
+        change_attachments,
+        change_body,
+        change_description,
+        change_title,
+        outdated,
+        redundant,
+        reformat,
+        similar,
+      ].any?
     end
   end
 end

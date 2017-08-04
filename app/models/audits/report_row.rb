@@ -15,7 +15,16 @@ module Audits
         url,
         is_work_needed,
         page_views,
-        *response_values,
+        audit&.change_title,
+        audit&.change_description,
+        audit&.change_body,
+        audit&.change_attachments,
+        audit&.reformat,
+        audit&.outdated,
+        audit&.redundant,
+        audit&.similar,
+        audit&.similar_urls,
+        audit&.notes,
         primary_organisation,
         other_organisations,
         content_type,
@@ -41,18 +50,6 @@ module Audits
 
     def page_views
       format_number(content_item.six_months_page_views)
-    end
-
-    def response_values
-      ordered_responses.map do |response|
-        next unless response
-
-        if response.boolean?
-          response.value.capitalize
-        else
-          response.value
-        end
-      end
     end
 
     def primary_organisation
@@ -81,20 +78,8 @@ module Audits
 
   private
 
-    def ordered_responses
-      questions.map { |q| responses.detect { |r| r.question_id == q.id } }
-    end
-
-    def responses
-      @responses ||= audit ? audit.responses : []
-    end
-
     def audit
       @audit ||= content_item.audit
-    end
-
-    def questions
-      @questions ||= Question.order(:id)
     end
   end
 end

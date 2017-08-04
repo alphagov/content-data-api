@@ -38,16 +38,53 @@
 
   <h4>Do these things need to change?</h4>
 
-  <%= form_for [content_item, audit], url: content_item_audit_path(filter_params) do |form| %>
-    <%= form.fields_for :responses do |builder| %>
-      <% response = builder.object %>
-      <% question = response.question %>
+  <% if audit.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <p>Please answer <strong>Yes</strong> or
+        <strong>No</strong> to each of the questions.</p>
+    </div>
+  <% end %>
 
-      <div class="<%= question.css_class %> form-group" id="<%= question.css_id %>">
-        <%= render partial: question, locals: { f: builder, response: response } %>
-        <%= builder.hidden_field :question_id, value: question.id %>
-      </div>
-    <% end %>
+  <%= form_for audit, url: content_item_audit_path(filter_params) do |form| %>
+    <%= render 'boolean_question', form: form,
+               attribute: :change_title,
+               question: 'Title' %>
+
+    <%= render 'boolean_question', form: form,
+               attribute: :change_description,
+               question: 'Summary' %>
+
+    <%= render 'boolean_question', form: form,
+               attribute: :change_body,
+               question: 'Page detail' %>
+
+    <%= render 'boolean_question', form: form,
+               attribute: :change_attachments,
+               question: 'Attachments' %>
+
+    <%= render 'boolean_question', form: form,
+               attribute: :reformat,
+               question: 'Document type' %>
+
+    <%= render 'boolean_question', form: form,
+               attribute: :outdated,
+               question: 'Is the content out of date?' %>
+
+    <%= render 'boolean_question', form: form,
+               attribute: :redundant,
+               question: 'Should the content be removed?' %>
+
+    <%= render 'boolean_question', form: form,
+               attribute: :similar,
+               question: 'Is this content very similar to other pages?' %>
+
+    <%= render 'free_text_question', form: form,
+               attribute: :similar_urls,
+               question: 'URLs of similar pages' %>
+
+    <%= render 'free_text_question', form: form,
+               attribute: :notes,
+               question: 'Notes' %>
 
     <%= form.submit "Save", class: "btn btn-success" %>
   <% end %>

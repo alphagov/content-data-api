@@ -1,4 +1,3 @@
-require_relative "../app/models/audits/question"
 require_relative "./factories/link_factory"
 
 FactoryGirl.define do
@@ -39,23 +38,22 @@ FactoryGirl.define do
     link_type "organisations"
   end
 
-  factory :audit, class: Audits::Audit do
+  factory :audit, aliases: %i(passing_audit), class: Audits::Audit do
     content_item
     user
-  end
 
-  factory :boolean_question, class: Audits::BooleanQuestion do
-    sequence(:text) { |i| "BooleanQuestion #{i}" }
-  end
+    change_attachments false
+    change_body false
+    change_description false
+    change_title false
+    outdated false
+    redundant false
+    reformat false
+    similar false
 
-  factory :free_text_question, class: Audits::FreeTextQuestion do
-    sequence(:text) { |i| "FreeTextQuestion #{i}" }
-  end
-
-  factory :response, class: Audits::Response do
-    audit
-    question factory: :boolean_question
-    value "true"
+    factory :failing_audit do
+      redundant true
+    end
   end
 
   factory :inventory_rule do

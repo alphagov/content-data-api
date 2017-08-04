@@ -18,7 +18,6 @@ module Audits
       @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
       @next_content_item = FindNextItem.call(@content_item, build_filter)
       @audit = Audit.find_or_initialize_by(content_item: @content_item)
-      @audit.questions = @audit.template.questions if @audit.new_record?
     end
 
     def save
@@ -36,7 +35,6 @@ module Audits
           render :show
         end
       else
-        flash.now.alert = error_message
         render :show
       end
     end
@@ -46,11 +44,20 @@ module Audits
     def audit_params
       params
         .require(:audits_audit)
-        .permit(responses_attributes: [:id, :value, :question_id])
-    end
-
-    def error_message
-      @audit.errors.messages.values.join(', ').capitalize
+        .permit(
+          %i(
+            change_attachments
+            change_body
+            change_description
+            change_title
+            notes
+            outdated
+            redundant
+            reformat
+            similar
+            similar_urls
+          )
+        )
     end
   end
 end

@@ -56,7 +56,7 @@ RSpec.feature "Navigation", type: :feature do
       expected = content_item_audit_path(first, some_filter: "value")
       expect(current_url).to end_with(expected)
 
-      expect(page).to have_content("Warning: Mandatory field missing")
+      expect(page).to have_content("Please answer Yes or No to each of the questions.")
 
       click_on "Next"
 
@@ -104,15 +104,21 @@ RSpec.feature "Navigation", type: :feature do
     end
   end
 
+  def answer_question(question, answer)
+    find('p', text: question)
+      .first(:xpath, '..//..')
+      .choose(answer)
+  end
+
   def perform_audit
-    within("#question-1") { choose "No" }
-    within("#question-2") { choose "No" }
-    within("#question-3") { choose "No" }
-    within("#question-4") { choose "No" }
-    within("#question-5") { choose "No" }
-    within("#question-6") { choose "No" }
-    within("#question-7") { choose "No" }
-    within("#question-8") { choose "No" }
+    answer_question "Title", "No"
+    answer_question "Summary", "No"
+    answer_question "Page detail", "No"
+    answer_question "Attachments", "No"
+    answer_question "Document type", "No"
+    answer_question "Is the content out of date?", "No"
+    answer_question "Should the content be removed?", "No"
+    answer_question "Is this content very similar to other pages?", "No"
 
     click_on "Save"
   end

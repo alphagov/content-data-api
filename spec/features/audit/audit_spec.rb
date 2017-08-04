@@ -11,8 +11,17 @@ RSpec.feature "Auditing a content item", type: :feature do
 
   let!(:user) { create(:user) }
 
-  def chosen_radio_button
-    first("input[@type='radio'][@checked='checked']")
+  def answer_question(question, answer)
+    find('p', text: question)
+      .first(:xpath, '..//..')
+      .choose(answer)
+  end
+
+  def expect_answer(question, answer)
+    label_element = find('p', text: question)
+                      .first(:xpath, "..//..//input[@type='radio'][@checked='checked']//..")
+
+    expect(label_element).to have_content(answer)
   end
 
   scenario "auditing a content item" do
@@ -24,44 +33,47 @@ RSpec.feature "Auditing a content item", type: :feature do
 
     expect(page).to have_content("Do these things need to change?")
 
-    within("#question-1") { choose "No" }
-    within("#question-2") { choose "Yes" }
-    within("#question-3") { choose "No" }
-    within("#question-10") { fill_in "Notes", with: "something" }
+    answer_question "Title", "No"
+    answer_question "Summary", "Yes"
+    answer_question "Page detail", "No"
+    fill_in "Notes", with: "something"
 
     click_on "Save"
-    expect(page).to have_content("Warning: Mandatory field missing")
+    expect(page).to have_content("Please answer Yes or No to each of the questions.")
 
-    within("#question-4") { choose "Yes" }
-    within("#question-5") { choose "No" }
-    within("#question-6") { choose "Yes" }
-    within("#question-7") { choose "Yes" }
-    within("#question-8") { choose "Yes" }
-    within("#question-9") { fill_in "URLs of similar pages", with: "something" }
-
-    click_on "Save"
-    expect(page).to have_content("Success: Saved successfully.")
-
-    within("#question-1") { expect(chosen_radio_button.value).to eq("no") }
-    within("#question-2") { expect(chosen_radio_button.value).to eq("yes") }
-    within("#question-3") { expect(chosen_radio_button.value).to eq("no") }
-    within("#question-4") { expect(chosen_radio_button.value).to eq("yes") }
-    within("#question-5") { expect(chosen_radio_button.value).to eq("no") }
-    within("#question-6") { expect(chosen_radio_button.value).to eq("yes") }
-    within("#question-10") { expect(find_field("Notes").value).to eq("something") }
-
-    within("#question-4") { choose "Yes" }
-    within("#question-5") { choose "No" }
-    within("#question-6") { choose "Yes" }
+    answer_question "Attachments", "Yes"
+    answer_question "Document type", "No"
+    answer_question "Is the content out of date?", "Yes"
+    answer_question "Should the content be removed?", "Yes"
+    answer_question "Is this content very similar to other pages?", "Yes"
+    fill_in "URLs of similar pages", with: "something"
 
     click_on "Save"
     expect(page).to have_content("Success: Saved successfully.")
 
-    within("#question-1") { expect(chosen_radio_button.value).to eq("no") }
-    within("#question-2") { expect(chosen_radio_button.value).to eq("yes") }
-    within("#question-3") { expect(chosen_radio_button.value).to eq("no") }
-    within("#question-4") { expect(chosen_radio_button.value).to eq("yes") }
-    within("#question-5") { expect(chosen_radio_button.value).to eq("no") }
-    within("#question-6") { expect(chosen_radio_button.value).to eq("yes") }
+    expect_answer "Title", "No"
+    expect_answer "Summary", "Yes"
+    expect_answer "Page detail", "No"
+    expect_answer "Attachments", "Yes"
+    expect_answer "Document type", "No"
+    expect_answer "Is the content out of date?", "Yes"
+    expect_answer "Should the content be removed?", "Yes"
+    expect_answer "Is this content very similar to other pages?", "Yes"
+    expect(find_field("URLs of similar pages").value).to eq("something")
+    expect(find_field("Notes").value).to eq("something")
+
+    answer_question "Attachments", "Yes"
+    answer_question "Document type", "No"
+    answer_question "Is the content out of date?", "Yes"
+
+    click_on "Save"
+    expect(page).to have_content("Success: Saved successfully.")
+
+    expect_answer "Title", "No"
+    expect_answer "Summary", "Yes"
+    expect_answer "Page detail", "No"
+    expect_answer "Attachments", "Yes"
+    expect_answer "Document type", "No"
+    expect_answer "Is the content out of date?", "Yes"
   end
 end
