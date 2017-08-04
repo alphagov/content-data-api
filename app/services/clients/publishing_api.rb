@@ -34,7 +34,6 @@ module Clients
       normalise(publishing_api.get_links(content_id)).fetch(:links)
     end
 
-    # This is deprecated. We want to remove this soon.
     def find_each(fields, options = {})
       current_page = 1
       query = build_base_query(fields, options)
@@ -44,7 +43,7 @@ module Clients
         response = publishing_api.get_content_items(query)
         response["results"].each do |result|
           if options[:links]
-            result[:links] = deprecated_links(result["content_id"])
+            result[:links] = links(result["content_id"])
           end
           yield result.deep_symbolize_keys
         end
@@ -56,13 +55,6 @@ module Clients
 
   private
 
-    # deprecated
-    def deprecated_links(content_id)
-      response = publishing_api.get_links(content_id)
-      response["links"]
-    end
-
-    # deprecated
     def build_base_query(fields, options)
       {
         document_type: options[:document_type],
@@ -74,7 +66,6 @@ module Clients
       }
     end
 
-    # deprecated
     def build_current_page_query(query, page)
       query[:page] = page
       query

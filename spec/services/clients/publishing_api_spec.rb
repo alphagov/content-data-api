@@ -101,7 +101,7 @@ RSpec.describe Clients::PublishingAPI do
 
       allow(subject.publishing_api).to receive(:get_content_items).and_return(result)
 
-      expect(subject).to receive(:deprecated_links).with("the_id").and_return({})
+      expect(subject).to receive(:links).with("the_id").and_return({})
 
       subject.find_each([], links: true) {}
     end
