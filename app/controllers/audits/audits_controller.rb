@@ -35,7 +35,7 @@ module Audits
     end
 
     def export
-      csv = Report.generate(@content_query.all_content_items, request)
+      csv = Report.generate(@content_query.all_content_items, request.url)
       send_data(csv, filename: "Transformation_audit_report_CSV_download.csv")
     end
 

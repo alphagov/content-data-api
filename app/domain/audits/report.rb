@@ -6,11 +6,11 @@ module Audits
       new(*args).generate
     end
 
-    attr_accessor :content_items, :request, :questions
+    attr_accessor :content_items, :report_url, :questions
 
-    def initialize(content_items, request)
+    def initialize(content_items, report_url)
       self.content_items = content_items
-      self.request = request
+      self.report_url = report_url
       self.questions = Question.order(:id).to_a
     end
 
@@ -43,10 +43,6 @@ module Audits
 
     def rows
       content_items.joins(:report_row).pluck(:data)
-    end
-
-    def report_url
-      request.url
     end
 
     def report_timestamp

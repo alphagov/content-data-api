@@ -1,7 +1,5 @@
 module Audits
   RSpec.describe Report do
-    let(:request) { double(:request, url: "http://example.com") }
-
     before do
       create(:content_item, title: "Example")
     end
@@ -10,7 +8,7 @@ module Audits
       ActiveRecord.enable
     end
 
-    subject! { described_class.new(ContentItem.all, request) }
+    subject! { described_class.new(ContentItem.all, "http://example.com") }
 
     let(:csv) { subject.generate }
     let(:lines) { csv.split("\n") }
