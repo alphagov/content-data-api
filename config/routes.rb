@@ -13,7 +13,6 @@ Rails.application.routes.draw do
 
   namespace :audits do
     get '/', to: "audits#index"
-    get :export, to: "audits#export"
     resource :report, only: :show
     resource :guidance, only: :show
   end
