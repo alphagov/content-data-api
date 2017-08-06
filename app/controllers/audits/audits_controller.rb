@@ -1,14 +1,7 @@
 module Audits
   class AuditsController < BaseController
     def index
-      @content_items = FindContent.call(
-        params[:theme],
-        page: params[:page],
-        organisations: params[:organisations],
-        document_type: params[:document_type],
-        audit_status: params[:audit_status],
-        primary_org_only: primary_org_only?,
-      ).decorate
+      @content_items = FindContent.call(build_filter).decorate
     end
 
     def show
@@ -33,14 +26,7 @@ module Audits
     end
 
     def export
-      content_items = FindContent.call(
-        params[:theme],
-        organisations: params[:organisations],
-        document_type: params[:document_type],
-        primary_org_only: primary_org_only?,
-      )
-
-      csv = Report.generate(content_items, request.url)
+      csv = Report.generate(build_filter, request.url)
       send_data(csv, filename: "Transformation_audit_report_CSV_download.csv")
     end
 
@@ -55,17 +41,7 @@ module Audits
     end
 
     def next_item
-      @next_item ||= begin
-        FindNextItem.call(
-          params[:theme],
-          page: params[:page],
-          organisations: params[:organisations],
-          document_type: params[:document_type],
-          audit_status: params[:audit_status],
-          primary_org_only: primary_org_only?,
-          after: content_item
-        )
-      end
+      @next_item ||= FindNextItem.call(content_item, build_filter)
     end
 
     def audit_params
