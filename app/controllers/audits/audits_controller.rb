@@ -1,7 +1,15 @@
 module Audits
   class AuditsController < BaseController
     def index
-      @content_items = FindContent.call(build_filter).decorate
+      respond_to do |format|
+        format.html { @content_items = FindContent.call(build_filter).decorate }
+        format.csv do
+          send_data(
+            Report.generate(build_filter, request.url),
+            filename: "Transformation_audit_report_CSV_download.csv"
+          )
+        end
+      end
     end
 
     def show
@@ -23,11 +31,6 @@ module Audits
         flash.now.alert = error_message
         render :show
       end
-    end
-
-    def export
-      csv = Report.generate(build_filter, request.url)
-      send_data(csv, filename: "Transformation_audit_report_CSV_download.csv")
     end
 
   private
