@@ -3,6 +3,17 @@ module Audits
     layout "audits"
     helper_method :filter_params, :primary_org_only?
 
+    def build_filter
+      Filter.new(
+        theme_id: params[:theme],
+        page: params[:page],
+        organisations: params[:organisations],
+        document_type: params[:document_type],
+        audit_status: params[:audit_status],
+        primary_org_only: primary_org_only?,
+      )
+    end
+
   private
 
     def filter_params

@@ -1,16 +1,13 @@
 module Audits
   class Monitor
-    attr_accessor :theme_id, :organisations, :document_type, :primary_org_only
+    attr_accessor :filter
 
-    def initialize(theme_id, organisations:, document_type:, primary_org_only:)
-      self.theme_id = theme_id
-      self.organisations = organisations
-      self.document_type = document_type
-      self.primary_org_only = primary_org_only
+    def initialize(filter)
+      self.filter = filter
     end
 
     def total_count
-      content_items.total_count
+      content_items.count
     end
 
     def audited_count
@@ -48,12 +45,7 @@ module Audits
   private
 
     def content_items
-      @content_items ||= FindContent.call(
-        theme_id,
-        organisations: organisations,
-        document_type: document_type,
-        primary_org_only: primary_org_only,
-      )
+      @content_items ||= FindContent.call(filter).limit(nil).offset(nil)
     end
 
     def percentage(number, out_of:)

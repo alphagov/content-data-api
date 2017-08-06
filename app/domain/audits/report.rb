@@ -8,8 +8,11 @@ module Audits
 
     attr_accessor :content_items, :report_url, :questions
 
-    def initialize(content_items, report_url)
-      self.content_items = content_items
+    def initialize(filter, report_url)
+      filter.audit_status = nil
+      filter.page = nil
+
+      self.content_items = FindContent.call(filter)
       self.report_url = report_url
       self.questions = Question.order(:id).to_a
     end
