@@ -56,7 +56,7 @@ module Audits
 
     def next_item
       @next_item ||= begin
-        FindContent.call(
+        FindNextItem.call(
           params[:theme],
           page: params[:page],
           organisations: params[:organisations],
@@ -64,7 +64,7 @@ module Audits
           audit_status: params[:audit_status],
           primary_org_only: primary_org_only?,
           after: content_item
-        ).first
+        )
       end
     end
 
