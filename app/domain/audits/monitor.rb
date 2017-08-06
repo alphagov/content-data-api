@@ -9,55 +9,32 @@ module Audits
       self.primary_org_only = primary_org_only
     end
 
-    def query
-      @query ||= Content::Query.new
-                   .organisations(organisations, primary_org_only)
-                   .document_type(document_type)
-                   .theme(theme_id)
-    end
-
     def total_count
-      query.content_items.total_count
+      content_items.total_count
     end
 
     def audited_count
-      Audits::ContentQuery
-        .new(scope: query.scope)
-        .audited
-        .content_items
-        .total_count
+      Policies::Audited.call(content_items).count
     end
 
     def not_audited_count
-      Audits::ContentQuery
-        .new(scope: query.scope)
-        .non_audited
-        .content_items
-        .total_count
-    end
-
-    def audited_percentage
-      percentage(audited_count, out_of: query.content_items.total_count)
-    end
-
-    def not_audited_percentage
-      percentage(not_audited_count, out_of: query.content_items.total_count)
+      Policies::NonAudited.call(content_items).count
     end
 
     def passing_count
-      Audits::ContentQuery
-        .new(scope: query.scope)
-        .passing
-        .content_items
-        .total_count
+      Policies::Passed.call(content_items).count
     end
 
     def not_passing_count
-      Audits::ContentQuery
-        .new(scope: query.scope)
-        .failing
-        .content_items
-        .total_count
+      Policies::Failed.call(content_items).count
+    end
+
+    def audited_percentage
+      percentage(audited_count, out_of: total_count)
+    end
+
+    def not_audited_percentage
+      percentage(not_audited_count, out_of: total_count)
     end
 
     def passing_percentage
@@ -69,6 +46,15 @@ module Audits
     end
 
   private
+
+    def content_items
+      @content_items ||= FindContent.call(
+        theme_id,
+        organisations: organisations,
+        document_type: document_type,
+        primary_org_only: primary_org_only,
+      )
+    end
 
     def percentage(number, out_of:)
       return 0 if out_of.zero?
