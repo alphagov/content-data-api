@@ -59,15 +59,15 @@ module Audits
 
     def next_item
       @next_item ||= begin
-        query = content_query
-          .clone
-          .after(content_item)
-          .page(1)
-          .per_page(1)
-
-        apply_audit_status(query)
-          .content_items
-          .first
+        FindContent.call(
+          params[:theme],
+          page: params[:page],
+          organisations: params[:organisations],
+          document_type: params[:document_type],
+          audit_status: params[:audit_status],
+          primary_org_only: primary_org_only?,
+          after: content_item
+        ).first
       end
     end
 
