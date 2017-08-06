@@ -50,16 +50,8 @@ module Audits
       @audit ||= Audit.find_or_initialize_by(content_item: content_item).decorate
     end
 
-    def audits
-      @audits ||= Audit.where(content_item: search.all_content_items)
-    end
-
     def content_item
       @content_item ||= ContentItem.find_by(content_id: params.fetch(:content_item_content_id)).decorate
-    end
-
-    def content_items
-      @content_items ||= search.content_items.decorate
     end
 
     def next_item
@@ -76,18 +68,6 @@ module Audits
       end
     end
 
-    def content_query
-      @content_query ||= Content::Query.new
-        .page(params[:page])
-        .organisations(params[:organisations], primary_org_only?)
-        .document_type(params[:document_type])
-        .theme(params[:theme])
-    end
-
-    def search
-      @search ||= apply_audit_status(content_query)
-    end
-
     def audit_params
       params
         .require(:audits_audit)
@@ -96,12 +76,6 @@ module Audits
 
     def error_message
       audit.errors.messages.values.join(', ').capitalize
-    end
-
-    def apply_audit_status(query)
-      Audits::ContentQuery
-        .new(scope: query.scope)
-        .audit_status(params[:audit_status])
     end
   end
 end
