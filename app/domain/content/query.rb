@@ -1,7 +1,7 @@
 module Content
   class Query
-    def initialize
-      @scope = ContentItem.all
+    def initialize(scope = ContentItem.all)
+      @scope = scope
       @page = 1
       @per_page = 25
       @sort = :six_months_page_views
