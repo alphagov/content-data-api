@@ -1,7 +1,5 @@
 module Audits
   class AuditsController < BaseController
-    before_action :content_items, only: %i(export)
-
     def index
       @content_items = FindContent.call(
         params[:theme],
@@ -35,7 +33,14 @@ module Audits
     end
 
     def export
-      csv = Report.generate(@content_query.all_content_items, request.url)
+      content_items = FindContent.call(
+        params[:theme],
+        organisations: params[:organisations],
+        document_type: params[:document_type],
+        primary_org_only: primary_org_only?,
+      )
+
+      csv = Report.generate(content_items, request.url)
       send_data(csv, filename: "Transformation_audit_report_CSV_download.csv")
     end
 
