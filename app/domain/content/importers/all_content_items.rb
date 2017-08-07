@@ -7,10 +7,10 @@ module Content
     end
 
     def run
-      content_ids = content_items_service.content_ids
+      content_items = content_items_service.fetch_all_with_default_locale_only
 
-      content_ids.each do |content_id|
-        ImportContentItemJob.perform_later(content_id)
+      content_items.each do |content_item|
+        ImportContentItemJob.perform_later(content_item[:content_id], content_item[:locale])
       end
     end
   end

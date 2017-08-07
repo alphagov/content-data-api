@@ -15,6 +15,7 @@ FactoryGirl.define do
     sequence(:document_type) { |index| "document_type-#{index}" }
     sequence(:base_path) { |index| "api/content/item/path-%04i" % index }
     public_updated_at { Time.now }
+    locale { "en" }
 
     after(:create) do |content_item, evaluator|
       LinkFactory.add_organisations(content_item, evaluator.organisations)

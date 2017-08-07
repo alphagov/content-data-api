@@ -5,13 +5,29 @@ class ContentItemsService
     self.client = Clients::PublishingAPI.new
   end
 
-  def content_ids
-    client.content_ids
+  def fetch_all_with_default_locale_only
+    client
+      .fetch_all(%w[content_id locale])
+      .group_by { |content_item| content_item[:content_id] }
+      .values
+      .map do |content_items_with_the_same_id|
+        content_item_with_en_locale_or_first_other(content_items_with_the_same_id)
+      end
   end
 
-  def fetch(content_id)
-    attribute_names = %i(public_updated_at base_path title document_type description content_id details publishing_app)
-    all_attributes = client.fetch(content_id)
+  def fetch(content_id, locale)
+    attribute_names = %i[
+      public_updated_at
+      base_path
+      title
+      document_type
+      description
+      content_id
+      details
+      publishing_app
+      locale
+    ]
+    all_attributes = client.fetch(content_id, locale)
 
     ContentItem.new(all_attributes.slice(*attribute_names))
   end
@@ -26,5 +42,15 @@ class ContentItemsService
         )
       end
     end
+  end
+
+private
+
+  def content_item_with_en_locale_or_first_other(content_items)
+    en_content_item = content_items
+      .select { |content_item| content_item[:locale] == "en" }
+      .first
+
+    en_content_item || content_items.first
   end
 end

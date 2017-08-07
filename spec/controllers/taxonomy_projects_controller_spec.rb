@@ -58,7 +58,7 @@ RSpec.describe TaxonomyProjectsController, type: :controller do
       @project = TaxonomyProject.create
     end
     it 'redirects to the next todo' do
-      todo = @project.taxonomy_todos.create(content_item: ContentItem.create)
+      todo = @project.taxonomy_todos.create(content_item: create(:content_item))
       get :next, params: { id: @project.id }
       expect(response).to redirect_to(todo)
     end

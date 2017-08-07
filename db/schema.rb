@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170728202520) do
+ActiveRecord::Schema.define(version: 20170804092444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20170728202520) do
     t.integer "number_of_pdfs", default: 0
     t.integer "six_months_page_views", default: 0
     t.string "publishing_app"
+    t.string "locale", null: false
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
     t.index ["title"], name: "index_content_items_on_title"
   end
@@ -50,13 +51,13 @@ ActiveRecord::Schema.define(version: 20170728202520) do
   end
 
   create_table "content_items_organisations", id: false, force: :cascade do |t|
-    t.bigint "content_item_id", null: false
-    t.bigint "organisation_id", null: false
+    t.integer "content_item_id", null: false
+    t.integer "organisation_id", null: false
   end
 
   create_table "content_items_taxons", id: false, force: :cascade do |t|
-    t.bigint "content_item_id", null: false
-    t.bigint "taxon_id", null: false
+    t.integer "content_item_id", null: false
+    t.integer "taxon_id", null: false
     t.index ["content_item_id"], name: "index_content_items_taxons_on_content_item_id"
     t.index ["taxon_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true
   end
