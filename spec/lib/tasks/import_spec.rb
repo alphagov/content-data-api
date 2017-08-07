@@ -13,18 +13,6 @@ RSpec.describe 'Import organisation rake task' do
     end
   end
 
-  describe 'import:all_inventory' do
-    before do
-      Rake::Task['import:all_inventory'].reenable
-    end
-
-    it 'runs the all_inventory task' do
-      expect_any_instance_of(Content::Importers::AllInventory).to receive(:run)
-
-      Rake::Task['import:all_inventory'].invoke
-    end
-  end
-
   describe 'import:all_ga_metrics' do
     before do
       Rake::Task['import:all_ga_metrics'].reenable
