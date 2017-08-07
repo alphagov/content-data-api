@@ -4,10 +4,10 @@ module Clients
   class PublishingAPI
     PER_PAGE = 700
 
-    attr_accessor :deprecated_publishing_api, :per_page
+    attr_accessor :publishing_api, :per_page
 
     def initialize
-      @deprecated_publishing_api = GdsApi::PublishingApiV2.new(
+      @publishing_api = GdsApi::PublishingApiV2.new(
         Plek.new.find('publishing-api'),
         disable_cache: true,
         bearer_token: ENV['PUBLISHING_API_BEARER_TOKEN'] || 'example',
@@ -34,17 +34,16 @@ module Clients
       normalise(publishing_api.get_links(content_id)).fetch(:links)
     end
 
-    # This is deprecated. We want to remove this soon.
     def find_each(fields, options = {})
       current_page = 1
       query = build_base_query(fields, options)
 
       loop do
         query = build_current_page_query(query, current_page)
-        response = deprecated_publishing_api.get_content_items(query)
+        response = publishing_api.get_content_items(query)
         response["results"].each do |result|
           if options[:links]
-            result[:links] = deprecated_links(result["content_id"])
+            result[:links] = links(result["content_id"])
           end
           yield result.deep_symbolize_keys
         end
@@ -56,13 +55,6 @@ module Clients
 
   private
 
-    # deprecated
-    def deprecated_links(content_id)
-      response = deprecated_publishing_api.get_links(content_id)
-      response["links"]
-    end
-
-    # deprecated
     def build_base_query(fields, options)
       {
         document_type: options[:document_type],
@@ -74,7 +66,6 @@ module Clients
       }
     end
 
-    # deprecated
     def build_current_page_query(query, page)
       query[:page] = page
       query
@@ -82,10 +73,6 @@ module Clients
 
     def normalise(response)
       response.to_hash.deep_symbolize_keys
-    end
-
-    def publishing_api
-      Services.publishing_api
     end
 
     def last_page?(response)
