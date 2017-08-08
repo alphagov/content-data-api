@@ -7,7 +7,7 @@ class ContentItemsController < ApplicationController
   end
 
   def show
-    @content_item = ContentItem.find_by!(content_id: params[:content_id]).decorate
+    @content_item = Content::Item.find_by!(content_id: params[:content_id]).decorate
   end
 
 private

@@ -29,13 +29,13 @@ class ContentItemsService
     ]
     all_attributes = client.fetch(content_id, locale)
 
-    ContentItem.new(all_attributes.slice(*attribute_names))
+    Content::Item.new(all_attributes.slice(*attribute_names))
   end
 
   def links(source_content_id)
     client.links(source_content_id).flat_map do |link_type, content_ids|
       content_ids.map do |target_content_id|
-        Link.new(
+        Content::Link.new(
           source_content_id: source_content_id,
           link_type: link_type,
           target_content_id: target_content_id,

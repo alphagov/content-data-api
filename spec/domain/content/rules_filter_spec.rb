@@ -2,7 +2,7 @@ RSpec.describe Content::RulesFilter do
   subject { described_class.new(rules: subtheme.inventory_rules) }
 
   let(:subtheme) { create(:subtheme) }
-  let(:result) { subject.apply(ContentItem.all).map(&:title) }
+  let(:result) { subject.apply(Content::Item.all).map(&:title) }
 
   def rule(type, target)
     create(

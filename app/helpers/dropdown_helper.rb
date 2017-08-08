@@ -23,7 +23,7 @@ module DropdownHelper
   end
 
   def taxons_options
-    options = ContentItem.all_taxons
+    options = Content::Item.all_taxons
 
     options_from_collection_for_select(
       options,
@@ -34,7 +34,7 @@ module DropdownHelper
   end
 
   def organisation_options
-    options = ContentItem.all_organisations
+    options = Content::Item.all_organisations
 
     options_from_collection_for_select(
       options,
@@ -45,7 +45,7 @@ module DropdownHelper
   end
 
   def document_type_options
-    options = ContentItem
+    options = Content::Item
       .all_document_types
       .map { |option| DocumentTypeOption.new(option) }
 

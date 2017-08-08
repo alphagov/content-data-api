@@ -1,6 +1,6 @@
 module Content
   class Query
-    def initialize(scope = ContentItem.all)
+    def initialize(scope = Item.all)
       @scope = scope
       @page = 1
       @per_page = 25
@@ -139,8 +139,8 @@ module Content
     def apply_after(scope)
       return scope unless @after
 
-      sort_field = ContentItem.arel_table[@sort]
-      content_id_field = ContentItem.arel_table[:content_id]
+      sort_field = Item.arel_table[@sort]
+      content_id_field = Item.arel_table[:content_id]
 
       comparison = @sort_direction == :asc ? :gt : :lt
 
