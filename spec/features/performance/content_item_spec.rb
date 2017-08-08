@@ -80,6 +80,9 @@ RSpec.feature "Content Item Details", type: :feature do
     visit "/content_items/#{content.content_id}"
 
     expect(page).to have_text('Education, Health')
+
+    click_link "Education"
+    expect(page).to have_text('Education')
   end
 
   scenario "Renders when an item has not been published" do

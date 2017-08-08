@@ -11,7 +11,7 @@ class ContentItemDecorator < Draper::Decorator
 
   def organisation_links
     names = object.linked_organisations.collect do |organisation|
-      helpers.link_to(organisation.title, helpers.content_item_path(organisation.id))
+      helpers.link_to(organisation.title, helpers.content_item_path(organisation.content_id))
     end
 
     names.join(', ').html_safe
