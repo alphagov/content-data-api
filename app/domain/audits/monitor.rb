@@ -45,7 +45,7 @@ module Audits
   private
 
     def content_items
-      @content_items ||= FindContent.call(filter).limit(nil).offset(nil)
+      @content_items ||= FindContent.all(filter)
     end
 
     def percentage(number, out_of:)
