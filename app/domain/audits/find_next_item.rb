@@ -2,9 +2,10 @@ module Audits
   class FindNextItem
     def self.call(content_item, filter)
       filter.after = content_item
-      filter.page = nil
+      filter.page = 1
+      filter.per_page = 1
 
-      FindContent.call(filter).first
+      FindContent.paged(filter).first
     end
   end
 end

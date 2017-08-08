@@ -10,9 +10,8 @@ module Audits
 
     def initialize(filter, report_url)
       filter.audit_status = nil
-      filter.page = nil
 
-      self.content_items = FindContent.call(filter)
+      self.content_items = FindContent.all(filter)
       self.report_url = report_url
       self.questions = Question.order(:id).to_a
     end

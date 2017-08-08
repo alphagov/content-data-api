@@ -1,7 +1,7 @@
 module Audits
   class Filter
     include ActiveModel::Model
-    attr_accessor :theme_id, :page, :organisations, :document_type, :audit_status, :primary_org_only, :after
+    attr_accessor :theme_id, :page, :per_page, :organisations, :document_type, :audit_status, :primary_org_only, :after
 
     def audit_status=(value)
       @audit_status = if value.blank?
