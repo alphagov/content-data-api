@@ -40,7 +40,7 @@ module Audits
     end
 
     def content_item
-      @content_item ||= ContentItem.find_by(content_id: params.fetch(:content_item_content_id)).decorate
+      @content_item ||= ContentItem.find_by!(content_id: params.fetch(:content_item_content_id)).decorate
     end
 
     def next_item
