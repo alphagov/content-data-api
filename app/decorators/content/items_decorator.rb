@@ -1,4 +1,4 @@
-class ContentItemsDecorator < Draper::CollectionDecorator
+class Content::ItemsDecorator < Draper::CollectionDecorator
   delegate(
     :current_page,
     :total_pages,
