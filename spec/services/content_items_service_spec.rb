@@ -58,7 +58,7 @@ RSpec.describe Content::ItemsService do
       )
 
       content_item = subject.fetch("id-123", "en")
-      expect(content_item).to be_a(ContentItem)
+      expect(content_item).to be_a(Content::Item)
 
       expect(content_item.content_id).to eq("id-123")
       expect(content_item.title).to eq("title")

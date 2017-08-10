@@ -31,7 +31,7 @@ module Content
     end
 
     def overwrite_content_item!(content_item)
-      existing = ContentItem.find_by(content_id: content_item.content_id)
+      existing = Content::Item.find_by(content_id: content_item.content_id)
 
       if existing
         attributes = content_item

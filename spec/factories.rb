@@ -2,7 +2,7 @@ require_relative "../app/models/audits/question"
 require_relative "./factories/link_factory"
 
 FactoryGirl.define do
-  factory :content_item do
+  factory :content_item, class: Content::Item do
     transient do
       organisations nil
       primary_publishing_organisation nil

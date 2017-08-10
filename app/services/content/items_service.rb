@@ -29,7 +29,7 @@ class Content::ItemsService
     ]
     all_attributes = client.fetch(content_id, locale)
 
-    ContentItem.new(all_attributes.slice(*attribute_names))
+    Content::Item.new(all_attributes.slice(*attribute_names))
   end
 
   def links(source_content_id)

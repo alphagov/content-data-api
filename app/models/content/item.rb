@@ -1,4 +1,6 @@
-class ContentItem < ApplicationRecord
+class Content::Item < ApplicationRecord
+  self.table_name = 'content_items'
+
   has_one :audit, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::Audit"
   has_one :report_row, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::ReportRow"
   has_many :links, primary_key: :content_id, foreign_key: :source_content_id
@@ -22,10 +24,6 @@ class ContentItem < ApplicationRecord
 
   def to_param
     content_id
-  end
-
-  def to_partial_path
-    'content/items/content_item'
   end
 
   def guidance?

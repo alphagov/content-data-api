@@ -2,7 +2,8 @@ module Audits
   class ReportRow < ApplicationRecord
     include FormatHelper
 
-    belongs_to :content_item, primary_key: :content_id, foreign_key: :content_id
+    belongs_to :content_item, primary_key: :content_id, foreign_key: :content_id,
+               class_name: 'Content::Item'
 
     def self.precompute(content_item)
       find_or_initialize_by(content_item: content_item).precompute
