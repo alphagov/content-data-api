@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170804092444) do
+ActiveRecord::Schema.define(version: 20170810074052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "allocations", force: :cascade do |t|
+    t.string "content_id", null: false
+    t.string "uid", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_allocations_on_content_id", unique: true
+    t.index ["uid"], name: "index_allocations_on_uid"
+  end
 
   create_table "audits", id: :serial, force: :cascade do |t|
     t.string "content_id", null: false
@@ -51,13 +60,13 @@ ActiveRecord::Schema.define(version: 20170804092444) do
   end
 
   create_table "content_items_organisations", id: false, force: :cascade do |t|
-    t.integer "content_item_id", null: false
-    t.integer "organisation_id", null: false
+    t.bigint "content_item_id", null: false
+    t.bigint "organisation_id", null: false
   end
 
   create_table "content_items_taxons", id: false, force: :cascade do |t|
-    t.integer "content_item_id", null: false
-    t.integer "taxon_id", null: false
+    t.bigint "content_item_id", null: false
+    t.bigint "taxon_id", null: false
     t.index ["content_item_id"], name: "index_content_items_taxons_on_content_item_id"
     t.index ["taxon_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true
   end
