@@ -62,6 +62,11 @@ FactoryGirl.define do
     sequence(:target_content_id) { |i| "target-content-id-#{i}" }
   end
 
+  factory :allocation, class: Audits::Allocation do
+    content_item
+    user
+  end
+
   factory :theme, class: Audits::Theme do
     sequence(:name) { |i| "Theme #{i}" }
   end
