@@ -1,7 +1,6 @@
 module Seeder
   def self.seed!
     questions!
-    user!
   end
 
   def self.questions!
@@ -18,16 +17,5 @@ module Seeder
 
     Audits::FreeTextQuestion.create!(text: "URLs of similar pages")
     Audits::FreeTextQuestion.create!(text: "Notes")
-  end
-
-  def self.user!
-    return if User.any?
-
-    User.create!(
-      uid: "user-1",
-      name: "Test User",
-      organisation_slug: "government-digital-service",
-      permissions: %w(inventory_management),
-    )
   end
 end
