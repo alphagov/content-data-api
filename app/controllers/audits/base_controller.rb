@@ -11,6 +11,7 @@ module Audits
         document_type: params[:document_type],
         audit_status: params[:audit_status],
         primary_org_only: primary_org_only?,
+        allocated_to: params[:allocated_to],
       )
     end
 
