@@ -1,4 +1,4 @@
-class ContentItemsController < ApplicationController
+class Content::ItemsController < ApplicationController
   helper_method :filter_params, :primary_org_only?
 
   def index

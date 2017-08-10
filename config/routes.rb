@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  root to: 'content_items#index'
+  root to: 'content/items#index'
 
-  resources :content_items, only: %w(index show), param: :content_id
+  namespace :content do
+    resources :items, only: %w(index show), param: :content_id
+  end
 
   resources :content_items, only: %w(index show), param: :content_id do
     scope module: "audits" do

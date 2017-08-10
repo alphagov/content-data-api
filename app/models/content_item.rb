@@ -20,6 +20,10 @@ class ContentItem < ApplicationRecord
     content_id
   end
 
+  def to_partial_path
+    'content/items/content_item'
+  end
+
   def guidance?
     document_type == "guidance"
   end

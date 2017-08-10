@@ -5,7 +5,7 @@ RSpec.feature "Header of Content Items List", type: :feature do
 
   context "When no filter is present" do
     scenario "Renders GOV.UK" do
-      visit "/content_items"
+      visit "/content/items"
 
       expect(page).to have_selector("h1", text: "GOV.UK")
     end
@@ -16,7 +16,7 @@ RSpec.feature "Header of Content Items List", type: :feature do
     let!(:taxon1) { create(:content_item, content_id: 2, title: "TAXON") }
 
     scenario "Renders GOV.UK" do
-      visit "/content_items?organisations=1&taxons=2"
+      visit "/content/items?organisations=1&taxons=2"
 
       expect(page).to have_selector('h1', text: "HMRC + TAXON")
     end
