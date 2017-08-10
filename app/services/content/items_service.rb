@@ -1,4 +1,4 @@
-class ContentItemsService
+class Content::ItemsService
   attr_accessor :client
 
   def initialize

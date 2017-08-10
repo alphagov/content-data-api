@@ -7,7 +7,7 @@ module Content
     end
 
     def initialize
-      self.content_items_service = ContentItemsService.new
+      self.content_items_service = Content::ItemsService.new
       self.metric_builder = Performance::MetricBuilder.new
     end
 

@@ -3,7 +3,7 @@ module Content
     attr_accessor :content_items_service
 
     def initialize
-      @content_items_service = ContentItemsService.new
+      @content_items_service = Content::ItemsService.new
     end
 
     def run

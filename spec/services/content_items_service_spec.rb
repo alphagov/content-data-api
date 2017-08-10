@@ -1,4 +1,4 @@
-RSpec.describe ContentItemsService do
+RSpec.describe Content::ItemsService do
   let(:client) { double('client') }
 
   before do
