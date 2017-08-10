@@ -50,8 +50,8 @@ RSpec.feature "Generating terms", type: :feature do
 
     @content_item = create(:content_item, title: 'A Fancy Content Item')
     @another_content_item = create(:content_item, title: 'Another Content Item')
-    @todo = create(:taxonomy_todo, content_item: @content_item, taxonomy_project: @project)
-    create(:taxonomy_todo, content_item: @another_content_item, taxonomy_project: @project)
+    @todo_a = create(:taxonomy_todo, content_item: @content_item, taxonomy_project: @project)
+    @todo_b = create(:taxonomy_todo, content_item: @another_content_item, taxonomy_project: @project)
   end
 
   def when_i_visit_the_taxonomy_project_page
@@ -60,10 +60,15 @@ RSpec.feature "Generating terms", type: :feature do
 
   def and_i_click_to_start_with_a_project
     click_on 'Start tagging'
+
+    # Because the next item is picked at random, we'll have to figure out
+    # here which todo we are actually editting
+    page_title = page.find('h1').text
+    @todo = [@todo_a, @todo_b].find { |todo| todo.content_item.title == page_title }
   end
 
   def then_i_should_see_a_page
-    expect(page.body).to match "A Fancy Content Item"
+    expect(page.body).to match @todo.content_item.title
   end
 
   def when_i_submit_terms
@@ -106,7 +111,7 @@ RSpec.feature "Generating terms", type: :feature do
   end
 
   def and_i_see_the_next_page
-    expect(page.body).not_to match "A Fancy Content Item"
+    expect(page.body).not_to match @todo.content_item.title
   end
 
   def then_the_todo_is_marked_as_irrelevant

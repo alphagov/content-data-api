@@ -11,7 +11,7 @@ class TaxonomyProject < ApplicationRecord
   has_many :terms
 
   def next_todo
-    taxonomy_todos.still_todo.first
+    taxonomy_todos.still_todo.order('RANDOM()').limit(1).first
   end
 
   def stats
