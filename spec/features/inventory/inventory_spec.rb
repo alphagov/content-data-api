@@ -1,5 +1,14 @@
 # rubocop:disable Style/VariableNumber
 RSpec.feature "Managing inventory" do
+  before do
+    User.first.update!(
+      uid: "user-99",
+      name: "Test User",
+      organisation_slug: "government-digital-service",
+      permissions: %w(inventory_management),
+    )
+  end
+
   def expect_active(title)
     expect(page).to have_css(".row.active", text: title)
   end

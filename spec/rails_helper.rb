@@ -54,4 +54,8 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
     Seeder.seed! if use_truncation?
   end
+
+  config.before(type: :feature) do
+    create :user
+  end
 end

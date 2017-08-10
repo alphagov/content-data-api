@@ -1,4 +1,4 @@
-RSpec.feature "Navigation" do
+RSpec.feature "Navigation", type: :feature do
   context "with three items with different numbers of page views" do
     let!(:first) { create(:content_item, title: "First", six_months_page_views: 10) }
     let!(:second) { create(:content_item, title: "Second", six_months_page_views: 9) }
