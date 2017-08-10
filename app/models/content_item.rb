@@ -1,6 +1,8 @@
 class ContentItem < ApplicationRecord
   has_one :audit, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::Audit"
+  has_one :allocation, class_name: "Audits::Allocation"
   has_one :report_row, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::ReportRow"
+
   has_many :links, primary_key: :content_id, foreign_key: :source_content_id
 
   after_save { Audits::ReportRow.precompute(self) }
