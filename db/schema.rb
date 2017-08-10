@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170804092444) do
+ActiveRecord::Schema.define(version: 20170810074052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "allocations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "content_item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_item_id"], name: "index_allocations_on_content_item_id"
+    t.index ["user_id"], name: "index_allocations_on_user_id"
+  end
 
   create_table "audits", id: :serial, force: :cascade do |t|
     t.string "content_id", null: false
@@ -195,6 +204,8 @@ ActiveRecord::Schema.define(version: 20170804092444) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "allocations", "content_items"
+  add_foreign_key "allocations", "users"
   add_foreign_key "taxonomy_todos", "content_items"
   add_foreign_key "taxonomy_todos", "taxonomy_projects"
 end
