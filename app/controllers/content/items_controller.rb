@@ -3,7 +3,7 @@ class Content::ItemsController < ApplicationController
 
   def index
     @metrics = Performance::MetricBuilder.new.run_collection(search.all_content_items)
-    @content_items = Content::ItemsDecorator.new(search.content_items)
+    @content_items = search.content_items.decorate
   end
 
   def show

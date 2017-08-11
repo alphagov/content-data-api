@@ -2,11 +2,7 @@ module Audits
   class AuditsController < BaseController
     def index
       respond_to do |format|
-        format.html do
-          @content_items = Content::ItemsDecorator.new(
-            FindContent.paged(build_filter)
-          )
-        end
+        format.html { @content_items = FindContent.paged(build_filter).decorate }
         format.csv do
           send_data(
             Report.generate(build_filter, request.url),

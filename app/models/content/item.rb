@@ -18,10 +18,6 @@ class Content::Item < ApplicationRecord
 
   attr_accessor :details
 
-  def decorator_class
-    Content::ItemDecorator
-  end
-
   def to_param
     content_id
   end
