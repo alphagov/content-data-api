@@ -7,7 +7,7 @@ module Content
     end
 
     def run
-      ContentItem.find_in_batches(batch_size: batch_size) do |content_items|
+      Content::Item.find_in_batches(batch_size: batch_size) do |content_items|
         ImportPageviewsJob.perform_later(content_items)
       end
     end

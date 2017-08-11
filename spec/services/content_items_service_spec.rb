@@ -1,4 +1,4 @@
-RSpec.describe ContentItemsService do
+RSpec.describe Content::ItemsService do
   let(:client) { double('client') }
 
   before do
@@ -58,7 +58,7 @@ RSpec.describe ContentItemsService do
       )
 
       content_item = subject.fetch("id-123", "en")
-      expect(content_item).to be_a(ContentItem)
+      expect(content_item).to be_a(Content::Item)
 
       expect(content_item.content_id).to eq("id-123")
       expect(content_item.title).to eq("title")
@@ -80,7 +80,7 @@ RSpec.describe ContentItemsService do
       expect(links.size).to eq(3)
 
       links.each do |link|
-        expect(link).to be_a(Link)
+        expect(link).to be_a(Content::Link)
         expect(link.source_content_id).to eq("id-123")
       end
 

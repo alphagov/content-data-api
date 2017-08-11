@@ -7,7 +7,7 @@ module Content
     end
 
     def initialize
-      self.content_items_service = ContentItemsService.new
+      self.content_items_service = Content::ItemsService.new
       self.metric_builder = Performance::MetricBuilder.new
     end
 
@@ -31,7 +31,7 @@ module Content
     end
 
     def overwrite_content_item!(content_item)
-      existing = ContentItem.find_by(content_id: content_item.content_id)
+      existing = Content::Item.find_by(content_id: content_item.content_id)
 
       if existing
         attributes = content_item
@@ -48,7 +48,7 @@ module Content
     end
 
     def overwrite_links!(content_id, links)
-      Link.where(source_content_id: content_id).destroy_all
+      Content::Link.where(source_content_id: content_id).destroy_all
 
       links.each(&:save!)
     end

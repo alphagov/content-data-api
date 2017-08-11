@@ -13,7 +13,7 @@ module Content
     end
 
     def apply(scope)
-      nested = Link.where(link_type: link_type)
+      nested = Content::Link.where(link_type: link_type)
 
       if by_source?
         nested = nested.where(source_content_id: source_ids)

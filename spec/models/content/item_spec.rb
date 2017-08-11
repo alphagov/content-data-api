@@ -1,4 +1,4 @@
-RSpec.describe ContentItem, type: :model do
+RSpec.describe Content::Item, type: :model do
   describe "callbacks" do
     subject { build(:content_item) }
 

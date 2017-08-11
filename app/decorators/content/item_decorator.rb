@@ -1,4 +1,4 @@
-class ContentItemDecorator < Draper::Decorator
+class Content::ItemDecorator < Draper::Decorator
   delegate_all
 
   def last_updated

@@ -1,4 +1,4 @@
-RSpec.describe ContentItemsController, type: :controller do
+RSpec.describe Content::ItemsController, type: :controller do
   include AuthenticationControllerHelpers
 
   before do

@@ -11,7 +11,7 @@ module Performance
     }
 
     it "returns the number of items with zero page views in the collection" do
-      expect(subject.new(ContentItem.all).run).to eq(zero_page_views: { value: 2 })
+      expect(subject.new(Content::Item.all).run).to eq(zero_page_views: { value: 2 })
     end
   end
 end

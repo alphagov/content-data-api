@@ -1,4 +1,4 @@
-class ContentItemsController < ApplicationController
+class Content::ItemsController < ApplicationController
   helper_method :filter_params, :primary_org_only?
 
   def index
@@ -7,7 +7,7 @@ class ContentItemsController < ApplicationController
   end
 
   def show
-    @content_item = ContentItem.find_by!(content_id: params[:content_id]).decorate
+    @content_item = Content::Item.find_by!(content_id: params[:content_id]).decorate
   end
 
 private
