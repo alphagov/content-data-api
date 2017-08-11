@@ -8,7 +8,7 @@ module SidebarHelper
     if content_ids.empty?
       "GOV.UK"
     else
-      ContentItem.where(content_id: content_ids).map(&:title).join(" + ")
+      Content::Item.where(content_id: content_ids).map(&:title).join(" + ")
     end
   end
 end

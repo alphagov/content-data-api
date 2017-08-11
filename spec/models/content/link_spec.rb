@@ -1,4 +1,4 @@
-RSpec.describe Link do
+RSpec.describe Content::Link do
   describe "callbacks" do
     let(:content_item) { build(:content_item) }
     subject { build(:link, source: content_item) }

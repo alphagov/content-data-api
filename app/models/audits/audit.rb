@@ -3,7 +3,7 @@ module Audits
     AUDITED = :audited
     NON_AUDITED = :non_audited
 
-    belongs_to :content_item, primary_key: :content_id, foreign_key: :content_id
+    belongs_to :content_item, class_name: "Content::Item", primary_key: :content_id, foreign_key: :content_id
     belongs_to :user, primary_key: :uid, foreign_key: :uid
 
     has_many :responses, inverse_of: :audit

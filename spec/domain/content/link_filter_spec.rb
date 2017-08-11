@@ -16,14 +16,14 @@ RSpec.describe Content::LinkFilter do
     let!(:link) { create(:link, link_type: "organisations", source_content_id: "sid1", target_content_id: "tid1") }
 
     it "returns the links filter by source_ids" do
-      scope = ContentItem.all
+      scope = Content::Item.all
       filter = subject.new(link_type: "organisations", source_ids: "sid1")
 
       expect(filter.apply(scope)).to match_array([content_item2])
     end
 
     it "returns the links filter by target ids" do
-      scope = ContentItem.all
+      scope = Content::Item.all
       filter = subject.new(link_type: "organisations", target_ids: "tid1")
 
       expect(filter.apply(scope)).to match_array([content_item1])

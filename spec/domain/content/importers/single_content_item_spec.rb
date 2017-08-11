@@ -34,9 +34,9 @@ module Content
       end
 
       it "imports a content item" do
-        expect { subject.run(content_id, locale) }.to change(ContentItem, :count).by(1)
+        expect { subject.run(content_id, locale) }.to change(Item, :count).by(1)
 
-        content_item = ContentItem.last
+        content_item = Item.last
 
         expect(content_item.title).to eq("title")
         expect(content_item.linked_organisations).to match_array([org1, org2])
@@ -48,7 +48,7 @@ module Content
         expect { subject.run(content_id, locale) }
           .to change(Link, :count).by(4)
 
-        content_item = ContentItem.last
+        content_item = Item.last
         content_item_links = Link.where(source_content_id: content_item.content_id)
 
         expect(

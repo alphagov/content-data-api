@@ -8,7 +8,7 @@ RSpec.feature "Import a single content item", type: :feature do
     publishing_api_has_item(build(:content_item, content_id: "id-123", title: "title"))
 
     expect { Content::ImportContentItemJob.new.perform("id-123", "en") }
-      .to change(ContentItem, :count).by(1)
-      .and change(Link, :count).by(1)
+      .to change(Content::Item, :count).by(1)
+      .and change(Content::Link, :count).by(1)
   end
 end

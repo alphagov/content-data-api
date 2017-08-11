@@ -38,11 +38,11 @@ private
   end
 
   def assign_link_types
-    @link_types = Link::GROUPABLE_LINK_TYPES
+    @link_types = Content::Link::GROUPABLE_LINK_TYPES
   end
 
   def assign_content_items
-    @content_items = Link
+    @content_items = Content::Link
       .select(:target_content_id)
       .where(link_type: @link_type)
       .group(:target_content_id)

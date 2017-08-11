@@ -5,7 +5,7 @@ class TaxonomyTodo < ApplicationRecord
   STATE_DONT_KNOW = 'dont-know'.freeze
   DONE_STATES = [STATE_TAGGED, STATE_NOT_RELEVANT, STATE_DONT_KNOW].freeze
 
-  belongs_to :content_item
+  belongs_to :content_item, class_name: "Content::Item"
   belongs_to :taxonomy_project
   has_and_belongs_to_many :terms
   belongs_to :user, primary_key: :uid, foreign_key: :completed_by, optional: true

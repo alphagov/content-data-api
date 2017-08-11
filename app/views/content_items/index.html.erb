@@ -16,7 +16,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= render @content_items %>
+    <%= render partial: "content_items/content_item", collection: @content_items %>
   </tbody>
 </table>
 

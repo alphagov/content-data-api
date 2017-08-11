@@ -13,7 +13,7 @@ module TermGeneration
       def run
         TaxonomyTodo.transaction do
           @csv_parser.each_row do |row|
-            content_item = ContentItem.find_by(content_id: row['content_id'])
+            content_item = Content::Item.find_by(content_id: row['content_id'])
             if content_item
               TaxonomyTodo.create!(
                 taxonomy_project: project,
