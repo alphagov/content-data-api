@@ -44,7 +44,10 @@ module Audits
     end
 
     def rows
-      content_items.joins(:report_row).pluck(:data)
+      content_items
+        .joins(:report_row)
+        .unscope(:order)
+        .pluck(:data)
     end
 
     def report_timestamp
