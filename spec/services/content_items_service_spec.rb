@@ -80,7 +80,7 @@ RSpec.describe Content::ItemsService do
       expect(links.size).to eq(3)
 
       links.each do |link|
-        expect(link).to be_a(Link)
+        expect(link).to be_a(Content::Link)
         expect(link.source_content_id).to eq("id-123")
       end
 

@@ -3,11 +3,11 @@ class Content::Item < ApplicationRecord
 
   has_one :audit, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::Audit"
   has_one :report_row, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::ReportRow"
-  has_many :links, primary_key: :content_id, foreign_key: :source_content_id
+  has_many :links, primary_key: :content_id, foreign_key: :source_content_id, class_name: "Content::Link"
 
   after_save { Audits::ReportRow.precompute(self) }
 
-  Link.all_link_types.each do |link_type|
+  Content::Link.all_link_types.each do |link_type|
     has_many(
       :"linked_#{link_type}",
       -> { where(links: { link_type: link_type }) },

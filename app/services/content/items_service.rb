@@ -35,7 +35,7 @@ class Content::ItemsService
   def links(source_content_id)
     client.links(source_content_id).flat_map do |link_type, content_ids|
       content_ids.map do |target_content_id|
-        Link.new(
+        Content::Link.new(
           source_content_id: source_content_id,
           link_type: link_type,
           target_content_id: target_content_id,

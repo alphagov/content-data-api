@@ -46,10 +46,10 @@ module Content
 
       it "imports links" do
         expect { subject.run(content_id, locale) }
-          .to change(Link, :count).by(4)
+          .to change(Content::Link, :count).by(4)
 
         content_item = Content::Item.last
-        content_item_links = Link.where(source_content_id: content_item.content_id)
+        content_item_links = Content::Link.where(source_content_id: content_item.content_id)
 
         expect(
           content_item_links.where(
@@ -91,7 +91,7 @@ module Content
 
       it "doesn't create any additional links" do
         expect { subject.run(content_id, locale) }
-          .not_to change(Link, :count)
+          .not_to change(Content::Link, :count)
       end
 
       context "when all the links have been removed" do
@@ -102,7 +102,7 @@ module Content
 
         it "deletes non-existing links" do
           expect { subject.run(content_id, locale) }
-            .to change(Link, :count).by(-4)
+            .to change(Content::Link, :count).by(-4)
         end
       end
     end

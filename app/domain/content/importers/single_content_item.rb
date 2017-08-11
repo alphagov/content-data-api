@@ -48,7 +48,7 @@ module Content
     end
 
     def overwrite_links!(content_id, links)
-      Link.where(source_content_id: content_id).destroy_all
+      Content::Link.where(source_content_id: content_id).destroy_all
 
       links.each(&:save!)
     end

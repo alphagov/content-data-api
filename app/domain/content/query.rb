@@ -39,7 +39,7 @@ module Content
     def primary_organisation(organisation)
       builder(verify_presence: organisation) do
         apply_link_filter(
-          link_type: Link::PRIMARY_ORG,
+          link_type: Content::Link::PRIMARY_ORG,
           target_ids: organisation,
         )
       end
@@ -51,7 +51,7 @@ module Content
           primary_organisation(organisations)
         else
           apply_link_filter(
-            link_type: Link::ALL_ORGS,
+            link_type: Content::Link::ALL_ORGS,
             target_ids: organisations,
           )
         end
@@ -61,7 +61,7 @@ module Content
     def policies(policies)
       builder(verify_presence: policies) do
         apply_link_filter(
-          link_type: Link::POLICIES,
+          link_type: Content::Link::POLICIES,
           target_ids: policies,
         )
       end
@@ -70,7 +70,7 @@ module Content
     def taxons(taxons)
       builder(verify_presence: taxons) do
         apply_link_filter(
-          link_type: Link::TAXONOMIES,
+          link_type: Content::Link::TAXONOMIES,
           target_ids: taxons,
         )
       end

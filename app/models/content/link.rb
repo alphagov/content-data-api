@@ -1,4 +1,4 @@
-class Link < ApplicationRecord
+class Content::Link < ApplicationRecord
   POLICY_AREAS = "policy_areas".freeze
   POLICIES = "policies".freeze
   PRIMARY_ORG = "primary_publishing_organisation".freeze
@@ -8,18 +8,18 @@ class Link < ApplicationRecord
   TAXONOMIES = "taxons".freeze
 
   FILTERABLE_LINK_TYPES = [
-    Link::PRIMARY_ORG,
-    Link::ALL_ORGS,
-    Link::TAXONOMIES,
+    Content::Link::PRIMARY_ORG,
+    Content::Link::ALL_ORGS,
+    Content::Link::TAXONOMIES,
   ].freeze
 
   GROUPABLE_LINK_TYPES = [
-    Link::POLICY_AREAS,
-    Link::POLICIES,
-    Link::PRIMARY_ORG,
-    Link::ALL_ORGS,
-    Link::MAINSTREAM,
-    Link::TOPICS,
+    Content::Link::POLICY_AREAS,
+    Content::Link::POLICIES,
+    Content::Link::PRIMARY_ORG,
+    Content::Link::ALL_ORGS,
+    Content::Link::MAINSTREAM,
+    Content::Link::TOPICS,
   ].freeze
 
   after_save { Audits::ReportRow.precompute(source) }

@@ -9,6 +9,6 @@ RSpec.feature "Import a single content item", type: :feature do
 
     expect { Content::ImportItemJob.new.perform("id-123", "en") }
       .to change(Content::Item, :count).by(1)
-      .and change(Link, :count).by(1)
+      .and change(Content::Link, :count).by(1)
   end
 end

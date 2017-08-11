@@ -33,7 +33,7 @@ FactoryGirl.define do
     end
   end
 
-  factory :link do
+  factory :link, class: Content::Link do
     sequence(:source_content_id) { |i| "source-#{i}" }
     sequence(:target_content_id) { |i| "target-#{i}" }
     link_type "organisations"
