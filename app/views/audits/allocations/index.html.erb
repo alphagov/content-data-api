@@ -1,0 +1,40 @@
+<% content_for :sidebar do %>
+    <%= render 'sidebar', submit_path: audits_allocations_path %>
+<% end %>
+
+<% if flash[:notice] %>
+    <div class="notice"><%= flash[:notice] %></div>
+<% end %>
+
+<%= form_tag audits_allocations_path do %>
+    <div class="allocation-menu">
+      <div class="row">
+        <div class="col-sm-8">
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group form-inline pull-right">
+            <%= label_tag :allocate_to, "Assign to" %>
+            <%= select_tag "allocations[user_uid]",
+              allocation_options,
+              class: "form-control",
+              id: "allocate_to" %>
+            <%= submit_tag "Go", class: "btn btn-default" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="table table-bordered table-hover">
+      <thead>
+      <tr class="table-header">
+        <td></td>
+        <td>Title</td>
+        <td>Page views (6mth)</td>
+      </tr>
+      </thead>
+      <tbody>
+      <%= render collection: @content_items, partial: 'content_item' %>
+      </tbody>
+    </table>
+<% end %>
+<%= paginate @content_items, :window => 2 %>
