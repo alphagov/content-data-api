@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get '/', to: "audits#index"
     resource :report, only: :show
     resource :guidance, only: :show
+    resources :allocations, only: %w(index create)
   end
 
   namespace :inventory do
