@@ -13,6 +13,7 @@ gem 'plek'
 
 # Third party gems
 gem 'draper'
+gem 'feature'
 gem 'google-api-client', '~> 0.9'
 gem 'httparty'
 gem 'jbuilder'

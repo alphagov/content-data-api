@@ -1,0 +1,16 @@
+# Be sure to restart your server when you modify this file.
+
+default: &default
+  features:
+    auditing_allocation: true
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+  features:
+    auditing_allocation: <%= ENV['CONTENT-PERFORMANCE-MANAGER_AUDITING_ALLOCATION'].present? %>
