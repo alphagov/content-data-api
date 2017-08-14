@@ -14,10 +14,11 @@
         <div class="col-sm-4">
           <div class="form-group form-inline pull-right">
             <%= label_tag :allocate_to, "Assign to" %>
-            <%= select_tag "allocations[user_uid]",
+            <%= select_tag "allocate_to",
               allocation_options,
               class: "form-control",
               id: "allocate_to" %>
+            <%= filter_to_hidden_fields %>
             <%= submit_tag "Go", class: "btn btn-default" %>
           </div>
         </div>
