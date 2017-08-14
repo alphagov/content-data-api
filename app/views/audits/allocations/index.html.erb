@@ -38,8 +38,8 @@
       </tr>
       </thead>
       <tbody>
-      <%= render collection: @content_items, partial: 'content_item' %>
+      <%= render collection: content_items, partial: 'content_item' %>
       </tbody>
     </table>
 <% end %>
-<%= paginate @content_items, :window => 2 %>
+<%= paginate content_items, :window => 2 %>
