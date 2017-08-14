@@ -1,7 +1,9 @@
 module Audits
   class AllocationsController < BaseController
+    decorates_assigned :content_items
+
     def index
-      @content_items = FindContent.paged(build_filter).decorate
+      @content_items = FindContent.paged(build_filter)
     end
 
     def create
