@@ -1,8 +1,10 @@
 module Audits
   class AuditsController < BaseController
+    decorates_assigned :audit, :content_item, :content_items, :next_content_item
+
     def index
       respond_to do |format|
-        format.html { @content_items = FindContent.paged(build_filter).decorate }
+        format.html { @content_items = FindContent.paged(build_filter) }
         format.csv do
           send_data(
             Report.generate(build_filter, request.url),
@@ -13,20 +15,26 @@ module Audits
     end
 
     def show
-      audit.questions = audit.template.questions if audit.new_record?
-      next_item
+      @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
+      @next_content_item = FindNextItem.call(@content_item, build_filter)
+      @audit = Audit.find_or_initialize_by(content_item: @content_item)
+      @audit.questions = @audit.template.questions if @audit.new_record?
     end
 
     def save
-      audit.user = current_user
-      updated = audit.update(audit_params)
+      @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
+      @next_content_item = FindNextItem.call(@content_item, build_filter)
+      @audit = Audit.find_or_initialize_by(content_item: @content_item)
+      @audit.user = current_user
 
-      if next_item && updated
-        flash.notice = "Saved successfully and continued to next item."
-        redirect_to content_item_audit_path(next_item, filter_params)
-      elsif updated
-        flash.now.notice = "Saved successfully."
-        render :show
+      if @audit.update(audit_params)
+        if @next_content_item
+          flash.notice = "Saved successfully and continued to next item."
+          redirect_to content_item_audit_path(@next_content_item, filter_params)
+        else
+          flash.now.notice = "Saved successfully."
+          render :show
+        end
       else
         flash.now.alert = error_message
         render :show
@@ -35,18 +43,6 @@ module Audits
 
   private
 
-    def audit
-      @audit ||= Audit.find_or_initialize_by(content_item: content_item).decorate
-    end
-
-    def content_item
-      @content_item ||= Content::Item.find_by!(content_id: params.fetch(:content_item_content_id)).decorate
-    end
-
-    def next_item
-      @next_item ||= FindNextItem.call(content_item, build_filter)
-    end
-
     def audit_params
       params
         .require(:audits_audit)
@@ -54,7 +50,7 @@ module Audits
     end
 
     def error_message
-      audit.errors.messages.values.join(', ').capitalize
+      @audit.errors.messages.values.join(', ').capitalize
     end
   end
 end

@@ -1,13 +1,14 @@
 class Content::ItemsController < ApplicationController
+  decorates_assigned :content_item, :content_items
   helper_method :filter_params, :primary_org_only?
 
   def index
     @metrics = Performance::MetricBuilder.new.run_collection(search.all_content_items)
-    @content_items = search.content_items.decorate
+    @content_items = search.content_items
   end
 
   def show
-    @content_item = Content::Item.find_by!(content_id: params[:content_id]).decorate
+    @content_item = Content::Item.find_by!(content_id: params[:content_id])
   end
 
 private
