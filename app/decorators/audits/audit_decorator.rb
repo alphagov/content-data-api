@@ -8,6 +8,10 @@ module Audits
     decorates_association :content_item
     decorates_association :user
 
+    def incomplete?
+      object.new_record?
+    end
+
     def last_updated
       h.format_datetime(updated_at)
     end

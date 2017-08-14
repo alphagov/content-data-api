@@ -17,18 +17,18 @@
 
   <nav class="prev-next-links">
     <%= link_to "< All items", audits_path(filter_params.without(:page)), class: "all-items" %>
-    <%= link_to "Next", content_item_audit_path(@next_item, filter_params), class: "next-item" if @next_item %>
+    <%= link_to "Next", content_item_audit_path(next_content_item, filter_params), class: "next-item" if next_content_item %>
   </nav>
 
-  <h2><%= link_to @content_item.title, @content_item.url, target: :_blank %></h2>
+  <h2><%= link_to content_item.title, content_item.url, target: :_blank %></h2>
 
   <p class="description">
-    <%= @audit.content_item.description %>
+    <%= content_item.description %>
   </p>
 
-  <%if @audit.content_item.whitehall_url %>
+  <%if content_item.whitehall_url %>
     <p>
-      <%= link_to "Open in Whitehall Publisher", @audit.content_item.whitehall_url %>
+      <%= link_to "Open in Whitehall Publisher", content_item.whitehall_url %>
     </p>
   <% end %>
 
@@ -38,7 +38,7 @@
 
   <h4>Do these things need to change?</h4>
 
-  <%= form_for [@audit.content_item, @audit], url: content_item_audit_path(filter_params) do |form| %>
+  <%= form_for [content_item, audit], url: content_item_audit_path(filter_params) do |form| %>
     <%= form.fields_for :responses do |builder| %>
       <% response = builder.object %>
       <% question = response.question %>
@@ -60,54 +60,54 @@
     <div id="audited">
       <h4>Audited</h4>
 
-      <% if @audit.new_record? %>
+      <% if audit.incomplete? %>
         <p>Not audited yet</p>
       <% else %>
-        <p><%= @audit.last_updated %></p>
-        <p>by <%= @audit.user.name %></p>
-        <p><%= @audit.user.department %></p>
+        <p><%= audit.last_updated %></p>
+        <p>by <%= audit.user.name %></p>
+        <p><%= audit.user.department %></p>
       <% end %>
     </div>
 
     <div id="organisations">
       <h4>Organisations</h4>
-      <p><%= @audit.content_item.organisations %></p>
+      <p><%= content_item.organisations %></p>
     </div>
 
     <div id="last-updated">
       <h4>Last major update</h4>
-      <p><%= @audit.content_item.last_updated %></p>
+      <p><%= content_item.last_updated %></p>
     </div>
 
     <div id="content-type">
       <h4>Content type</h4>
-      <p><%= @audit.content_item.document_type %></p>
+      <p><%= content_item.document_type %></p>
     </div>
 
     <div id="guidance">
       <h4>Guidance</h4>
-      <p><%= @audit.content_item.guidance %></p>
+      <p><%= content_item.guidance %></p>
     </div>
 
     <div id="topics">
       <h4>Topics</h4>
-      <p><%= @audit.content_item.topics %></p>
+      <p><%= content_item.topics %></p>
     </div>
 
     <div id="policy-areas">
       <h4>Policy areas</h4>
-      <p><%= @audit.content_item.policy_areas %></p>
+      <p><%= content_item.policy_areas %></p>
     </div>
 
     <div id="withdrawn">
       <h4>Withdrawn</h4>
-      <p><%= @audit.content_item.withdrawn %></p>
+      <p><%= content_item.withdrawn %></p>
     </div>
 
     <div id="pageviews">
       <h4>Unique pageviews</h4>
-      <p><%= @audit.content_item.one_month_page_views %> in the last month</p>
-      <p><%= @audit.content_item.six_months_page_views %> in the last six months</p>
+      <p><%= content_item.one_month_page_views %> in the last month</p>
+      <p><%= content_item.six_months_page_views %> in the last six months</p>
     </div>
   </div>
 </div>
