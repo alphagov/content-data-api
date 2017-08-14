@@ -81,4 +81,22 @@ RSpec.feature "Content Allocation", type: :feature do
 
     expect(page).to have_select("allocated_to", selected: "No one")
   end
+
+  scenario "Unallocate content" do
+    create(:allocation, content_item: content_item, user: current_user)
+
+    visit audits_allocations_path
+
+    select "Me", from: "allocated_to"
+    click_on "Filter"
+    expect(page).to have_content("content item 1")
+
+
+    check option: content_item.content_id
+    select "No one", from: "allocate_to"
+    click_on "Go"
+
+    expect(page).to_not have_content("content item 1")
+    expect(page).to have_select("allocate_to", selected: "No one")
+  end
 end
