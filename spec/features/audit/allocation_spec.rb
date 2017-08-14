@@ -44,7 +44,7 @@ RSpec.feature "Content Allocation", type: :feature do
     select "Me", from: "allocate_to"
     click_on "Go"
 
-    expect(page).to have_content("2 items assigned to #{current_user.name}")
+    expect(page).to have_content("2 items allocated to #{current_user.name}")
 
     select "Me", from: "allocated_to"
     click_on "Filter"
@@ -98,5 +98,6 @@ RSpec.feature "Content Allocation", type: :feature do
 
     expect(page).to_not have_content("content item 1")
     expect(page).to have_select("allocate_to", selected: "No one")
+    expect(page).to have_content("1 items unallocated")
   end
 end

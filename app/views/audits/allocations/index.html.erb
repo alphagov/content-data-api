@@ -3,7 +3,11 @@
 <% end %>
 
 <% if flash[:notice] %>
-    <div class="notice"><%= flash[:notice] %></div>
+    <div class="alert alert-success" role="alert">
+      <%= flash[:notice] %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+
 <% end %>
 
 <%= form_tag audits_allocations_path do %>
@@ -15,7 +19,7 @@
           <div class="form-group form-inline pull-right">
             <%= label_tag :allocate_to, "Assign to" %>
             <%= select_tag "allocate_to",
-              allocation_options,
+              allocate_to_options,
               class: "form-control",
               id: "allocate_to" %>
             <%= filter_to_hidden_fields(:allocate_to) %>
