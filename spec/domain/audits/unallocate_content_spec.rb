@@ -14,5 +14,18 @@ module Audits
       expect(Allocation.first.user).to eq(user)
       expect(Allocation.first.content_item).to eq(item2)
     end
+
+    it "Returns a message with the number of unallocated items" do
+      user = create :user
+      item1 = create :content_item, content_id: "content_id_1"
+      item2 = create :content_item, content_id: "content_id_2"
+
+      create(:allocation, user: user, content_item: item1)
+      create(:allocation, user: user, content_item: item2)
+
+      result = UnallocateContent.call(content_ids: %w(content_id_1 content_id_2))
+
+      expect(result.message).to eq("2 items unallocated")
+    end
   end
 end

@@ -26,5 +26,17 @@ module Audits
       expect(Allocation.count).to eq(1)
       expect(Allocation.first.user).to eq(user)
     end
+
+    it "Returns a message with the number of allocated items" do
+      user = create :user, name: "John Smith"
+      create :content_item, content_id: "content_id_2"
+
+      result = AllocateContent.call(
+        user_uid: user.uid,
+        content_ids: %w(content_id_1 content_id_2)
+      )
+
+      expect(result.message).to eq("2 items allocated to John Smith")
+    end
   end
 end
