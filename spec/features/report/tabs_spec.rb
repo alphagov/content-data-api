@@ -3,7 +3,7 @@ RSpec.feature "Tabs" do
     visit audits_path
     select "Audited", from: "audit_status"
 
-    click_on "Filter"
+    click_on "Apply filters"
     expect(page).to have_select("audit_status", selected: "Audited")
 
     click_link "Report"

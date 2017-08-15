@@ -63,7 +63,7 @@ RSpec.feature "Exporting a CSV from the report page" do
       visit audits_report_path
 
       select "HMRC", from: "organisations"
-      click_on "Filter"
+      click_on "Apply filters"
 
       click_link "Export filtered audit to CSV"
       expect(page).to have_no_content("Example,https://gov.uk/example")
@@ -73,7 +73,7 @@ RSpec.feature "Exporting a CSV from the report page" do
       visit audits_path
       select "Audited", from: "audit_status"
 
-      click_on "Filter"
+      click_on "Apply filters"
       expect(page).to have_content("Example 1")
       expect(page).to have_no_content("Example 2")
 
