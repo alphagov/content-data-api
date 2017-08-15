@@ -1,0 +1,7 @@
+<div class="form-group">
+  <%= label_tag :audit_status, 'Audit status' %>
+  <%= select_tag :audit_status,
+    audit_status_options,
+    include_blank: "All",
+    class: "form-control" %>
+</div>
