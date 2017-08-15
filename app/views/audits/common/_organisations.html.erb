@@ -1,0 +1,7 @@
+<div class="form-group">
+  <%= label_tag :organisations, "Organisation" %>
+  <%= select_tag :organisations,
+    organisation_options,
+    include_blank: "All",
+    class: "form-control" %>
+</div>

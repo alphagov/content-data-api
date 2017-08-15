@@ -1,0 +1,7 @@
+<div class="form-group">
+  <%= label_tag :document_type, 'Content type' %>
+  <%= select_tag :document_type,
+    document_type_options,
+    include_blank: "All",
+    class: "form-control" %>
+</div>
