@@ -15,18 +15,18 @@ RSpec.feature "Content Allocation", type: :feature do
     expect(page).to have_content("content item 2")
 
     select "Me", from: "allocated_to"
-    click_on "Filter"
+    click_on "Apply filters"
     expect(page).to have_content("content item 1")
     expect(page).to_not have_content("content item 2")
 
     select "No one", from: "allocated_to"
-    click_on "Filter"
+    click_on "Apply filters"
     expect(page).to_not have_content("content item 1")
     expect(page).to_not have_content("content item 2")
     expect(page).to have_content("content item 3")
 
     select "Anyone", from: "allocated_to"
-    click_on "Filter"
+    click_on "Apply filters"
     expect(page).to have_content("content item 1")
     expect(page).to have_content("content item 2")
     expect(page).to have_content("content item 3")
@@ -47,14 +47,14 @@ RSpec.feature "Content Allocation", type: :feature do
     expect(page).to have_content("2 items allocated to #{current_user.name}")
 
     select "Me", from: "allocated_to"
-    click_on "Filter"
+    click_on "Apply filters"
 
     expect(page).to_not have_content("content item 1")
     expect(page).to have_content("content item 2")
     expect(page).to have_content("content item 3")
 
     select "No one", from: "allocated_to"
-    click_on "Filter"
+    click_on "Apply filters"
 
     expect(page).to have_content("content item 1")
     expect(page).to_not have_content("content item 2")
@@ -70,7 +70,7 @@ RSpec.feature "Content Allocation", type: :feature do
     visit audits_allocations_path
 
     select "No one", from: "allocated_to"
-    click_on "Filter"
+    click_on "Apply filters"
 
     check option: item3.content_id
     select "Me", from: "allocate_to"
@@ -88,7 +88,7 @@ RSpec.feature "Content Allocation", type: :feature do
     visit audits_allocations_path
 
     select "Me", from: "allocated_to"
-    click_on "Filter"
+    click_on "Apply filters"
     expect(page).to have_content("content item 1")
 
 

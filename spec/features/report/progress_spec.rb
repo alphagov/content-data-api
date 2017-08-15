@@ -33,11 +33,11 @@ RSpec.feature "Reporting on audit progress" do
     expect(page).to have_content("3 Content items")
 
     select "Organisation", from: "document_type"
-    click_on "Filter"
+    click_on "Apply filters"
     expect(page).to have_content("1 Content items")
 
     select "Policy", from: "document_type"
-    click_on "Filter"
+    click_on "Apply filters"
     expect(page).to have_content("2 Content items")
   end
 
