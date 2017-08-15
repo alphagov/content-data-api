@@ -1,5 +1,5 @@
 <% content_for :sidebar do %>
-  <%= render 'sidebar', submit_path: audits_report_path %>
+  <%= render 'sidebar'%>
 <% end %>
 
 <%= link_to "Export filtered audit to CSV", audits_path(params: filter_params, format: :csv), class: "report-export" %>
