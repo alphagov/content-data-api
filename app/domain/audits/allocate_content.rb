@@ -12,16 +12,18 @@ module Audits
     end
 
     def call
-      content_items.find_each do |content_item|
-        allocation = Allocation.find_by(content_item: content_item)
-        if allocation
-          allocation.update!(user: user, content_item: content_item)
-        else
-          Allocation.create!(user: user, content_item: content_item)
-        end
-      end
+      Allocation.transaction { create_or_update_allocation! }
 
       Result.new(user, content_items)
+    end
+
+  private
+
+    def create_or_update_allocation!
+      Allocation.where(content_item: content_items).delete_all
+      content_items.find_each do |item|
+        Allocation.create(user: user, content_item: item)
+      end
     end
 
     class Result
