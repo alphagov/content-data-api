@@ -2,13 +2,7 @@
     <%= render 'sidebar' %>
 <% end %>
 
-<% if flash[:notice] %>
-    <div class="alert alert-success" role="alert">
-      <%= flash[:notice] %>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    </div>
-
-<% end %>
+<%= render 'notice' %>
 
 <%= form_tag audits_allocations_path do %>
     <div class="allocation-menu">
