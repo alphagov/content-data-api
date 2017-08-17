@@ -13,7 +13,7 @@
   </ul>
 <% end %>
 
-<%= link_to "Export filtered audit to CSV", audits_path(filter_params, format: :csv), class: "report-export" %>
+<%= link_to "Export filtered audit to CSV", audits_path(params: filter_params, format: :csv), class: "report-export" %>
 
 <div class="report-section">
   <h3><%= format_number(@monitor.total_count) %></h3>
