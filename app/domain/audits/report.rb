@@ -6,14 +6,13 @@ module Audits
       new(*args).generate
     end
 
-    attr_accessor :content_items, :report_url, :questions
+    attr_accessor :content_items, :report_url
 
     def initialize(filter, report_url)
       filter.audit_status = nil
 
       self.content_items = FindContent.all(filter)
       self.report_url = report_url
-      self.questions = Question.order(:id).to_a
     end
 
     def generate
@@ -34,7 +33,16 @@ module Audits
         "URL",
         "Is work needed?",
         "Pageviews (last 6 months)",
-        *questions.map(&:text),
+        "Change title",
+        "Change description",
+        "Change body",
+        "Change attachments",
+        "Change document type",
+        "Outdated",
+        "Remove",
+        "Similar",
+        "Similar URLs",
+        "Notes",
         "Primary organisation",
         "Other organisations",
         "Content type",

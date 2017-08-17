@@ -36,13 +36,7 @@ RSpec.feature "Exporting a CSV from the report page" do
         base_path: "/example2",
       )
 
-      tax_audit = create(:audit, content_item: example1)
-      create(
-        :response,
-        question: create(:boolean_question),
-        audit: tax_audit,
-        value: "no"
-      )
+      create(:audit, content_item: example1)
     end
 
     scenario "Exporting a csv file as an attachment" do

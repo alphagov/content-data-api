@@ -7,21 +7,8 @@ RSpec.feature "Reporting on audit progress" do
   let!(:insurance) { create(:content_item, title: "Travel insurance", document_type: "policy") }
 
   before do
-    flying_audit = create(:audit, content_item: flying)
-    create(
-      :response,
-      question: create(:boolean_question),
-      audit: flying_audit,
-      value: "no"
-    )
-
-    insurance_audit = create(:audit, content_item: insurance)
-    create(
-      :response,
-      question: create(:boolean_question),
-      audit: insurance_audit,
-      value: "yes"
-    )
+    create(:passing_audit, content_item: flying)
+    create(:failing_audit, content_item: insurance)
   end
 
   def width(id)

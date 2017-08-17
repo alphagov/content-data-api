@@ -39,7 +39,6 @@ RSpec.configure do |config|
     WebMock.disable_net_connect!(allow_localhost: true)
     Capybara.javascript_driver = :poltergeist
     DatabaseCleaner.clean_with(:truncation)
-    Seeder.seed!
   end
 
   def use_truncation?
@@ -53,7 +52,6 @@ RSpec.configure do |config|
 
   config.after(:each) do
     DatabaseCleaner.clean
-    Seeder.seed! if use_truncation?
   end
 
   config.before(type: :feature) do

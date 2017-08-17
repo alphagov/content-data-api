@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170804092444) do
+ActiveRecord::Schema.define(version: 20170808081001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 20170804092444) do
     t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "change_title"
+    t.boolean "change_description"
+    t.boolean "change_body"
+    t.boolean "change_attachments"
+    t.boolean "outdated"
+    t.boolean "redundant"
+    t.boolean "reformat"
+    t.boolean "similar"
+    t.text "similar_urls"
+    t.text "notes"
     t.index ["content_id"], name: "index_audits_on_content_id", unique: true
     t.index ["uid"], name: "index_audits_on_uid"
   end

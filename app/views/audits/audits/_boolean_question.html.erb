@@ -1,18 +1,18 @@
-<div class="row">
+<div class="row t-<%= attribute.to_s.dasherize %>">
   <div class="col-sm-8">
-    <p><%= boolean_question.text %></p>
+    <p><%= question %></p>
   </div>
   <div class="col-sm-4">
     <div class="pull-right">
-      <%= f.label :value_yes, class: "radio-inline" do %>
-        <%= f.radio_button :value, "yes" %>
+      <%= form.label "#{attribute}_true", class: "radio-inline" do %>
+        <%= form.radio_button attribute, true %>
         Yes
       <% end %>
 
-      <%= f.label :value_no, class: "radio-inline" do %>
-        <%= f.radio_button :value, "no" %>
+      <%= form.label "#{attribute}_false", class: "radio-inline" do %>
+        <%= form.radio_button attribute, false %>
         No
-      <% end %>  
+      <% end %>
     </div>
   </div>
 </div>
