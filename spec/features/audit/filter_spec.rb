@@ -70,7 +70,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     visit audits_path
     select "Audited", from: "audit_status"
 
-    click_on "Filter"
+    click_on "Apply filters"
 
     expect(page).to have_content("Tree felling")
     expect(page).to have_no_content("Forest management")
@@ -81,7 +81,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     visit audits_path
     select "Non Audited", from: "audit_status"
 
-    click_on "Filter"
+    click_on "Apply filters"
 
     expect(page).to have_no_content("Tree felling")
     expect(page).to have_content("Forest management")
@@ -94,7 +94,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
     select "HMRC", from: "organisations"
 
-    click_on "Filter"
+    click_on "Apply filters"
 
     expect(page).to have_content("VAT")
     expect(page).to have_no_content("Tree felling")
@@ -106,7 +106,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
     select "HMRC", from: "organisations"
 
-    click_on "Filter"
+    click_on "Apply filters"
 
     expect(page).to have_content("VAT")
     expect(page).to have_content("Travel insurance")
@@ -159,7 +159,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     visit audits_path
     select "All Environment", from: "theme"
 
-    click_on "Filter"
+    click_on "Apply filters"
 
     within("table") do
       expect(page).to have_content("Tree felling")
@@ -172,7 +172,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     visit audits_path
     select "Aviation", from: "theme"
 
-    click_on "Filter"
+    click_on "Apply filters"
 
     within("table") do
       expect(page).to have_content("Travel insurance")
@@ -187,7 +187,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     visit audits_path
     select "Organisation", from: "document_type"
 
-    click_on "Filter"
+    click_on "Apply filters"
 
     within("table") do
       expect(page).to have_content("HMRC")
@@ -202,7 +202,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     within(".pagination") { click_on "2" }
 
     select "Non Audited", from: "audit_status"
-    click_on "Filter"
+    click_on "Apply filters"
 
     expect(page).to have_css(".pagination .active", text: "1")
   end

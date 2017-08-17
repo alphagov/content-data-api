@@ -1,0 +1,23 @@
+<% content_for :sidebar do %>
+    <%= render 'sidebar' %>
+<% end %>
+
+<%= render 'notice' %>
+
+<%= form_tag audits_allocations_path do %>
+    <%= render 'toolbar' %>
+
+    <table class="table table-bordered table-hover">
+      <thead>
+      <tr class="table-header">
+        <td></td>
+        <td>Title</td>
+        <td>Page views (6mth)</td>
+      </tr>
+      </thead>
+      <tbody>
+      <%= render collection: content_items, partial: 'content_item' %>
+      </tbody>
+    </table>
+<% end %>
+<%= paginate content_items, :window => 2 %>

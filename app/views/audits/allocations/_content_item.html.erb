@@ -1,0 +1,5 @@
+<tr>
+  <td><%= check_box_tag "content_ids[]", content_item.content_id %></td>
+  <td><%= link_to content_item.title, content_item_audit_path(content_item, filter_params) %></td>
+  <td><%= content_item.six_months_page_views %></td>
+</tr>

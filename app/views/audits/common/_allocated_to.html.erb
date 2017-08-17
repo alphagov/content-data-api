@@ -1,0 +1,7 @@
+<div class="form-group">
+  <%= label_tag :allocated_to, "Assigned to" %>
+  <%= select_tag :allocated_to,
+    allocated_to_options,
+    include_blank: "Anyone",
+    class: "form-control" %>
+</div>

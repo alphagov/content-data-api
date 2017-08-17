@@ -17,6 +17,9 @@ Rails.application.routes.draw do
     get '/', to: "audits#index"
     resource :report, only: :show
     resource :guidance, only: :show
+
+    post :allocations, to: "allocations#destroy", constraints: ->(req) { req.parameters["allocate_to"] == "no_one" }
+    resources :allocations, only: %w(index create)
   end
 
   namespace :inventory do

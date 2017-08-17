@@ -1,16 +1,5 @@
 <% content_for :sidebar do %>
-  <%= render 'sidebar', submit_path: audits_report_path %>
-<% end %>
-
-<% content_for :header do %>
-  <ul class="nav nav-tabs">
-    <li role="presentation">
-      <%= link_to "Content", audits_path(filter_params), aria_controls: "home", role: "tab" %>
-    </li>
-    <li role="presentation" class="active">
-      <%= link_to "Report", "#", aria_controls: "home", role: "tab" %>
-    </li>
-  </ul>
+  <%= render 'sidebar'%>
 <% end %>
 
 <%= link_to "Export filtered audit to CSV", audits_path(params: filter_params, format: :csv), class: "report-export" %>
