@@ -33,7 +33,9 @@
     </div>
   <% end %>
 
-  <h2 class='project-name'><%= link_to @todo_form.project.name, taxonomy_projects_path(@todo_form.project.name) %></h2>
+  <h2 class='project-name'>
+    <%= link_to "Back to '#{@todo_form.project.name}'", taxonomy_project_path(@todo_form.project.id) %>
+  </h2>
   <h1><%= link_to @todo_form.title, @todo_form.url, data: {toggle: "modal", target: "#myModal"} %></h1>
 
   <p class="description">
