@@ -1,4 +1,8 @@
 RSpec.feature "Content Allocation", type: :feature do
+  around(:each) do |example|
+    Feature.run_with_activated(:auditing_allocation) { example.run }
+  end
+
   let!(:content_item) { create :content_item, title: "content item 1" }
   let!(:current_user) { User.first }
 

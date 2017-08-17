@@ -1,6 +1,6 @@
 <%= form_tag audits_path, method: :get do %>
   <%= render 'audits/common/audit_status' %>
-  <%= render 'audits/common/allocated_to' %>
+  <%= render 'audits/common/allocated_to' if Feature.active?(:auditing_allocation) %>
   <%= render 'audits/common/theme_subtheme' %>
   <%= render 'audits/common/organisations' %>
   <%= render 'audits/common/primary' %>
