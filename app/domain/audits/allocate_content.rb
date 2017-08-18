@@ -4,38 +4,45 @@ module Audits
       new(*args).call
     end
 
-    attr_accessor :user, :content_items
+    attr_accessor :user_uid, :content_ids
 
     def initialize(user_uid:, content_ids:)
-      self.user = User.find_by(uid: user_uid)
-      self.content_items = Content::Item.where(content_id: content_ids)
+      self.user_uid = user_uid
+      self.content_ids = content_ids
     end
 
     def call
       Allocation.transaction { create_or_update_allocation! }
 
-      Result.new(user, content_items)
+      Result.new(user.name, content_ids.size)
     end
 
   private
 
     def create_or_update_allocation!
-      Allocation.where(content_item: content_items).delete_all
-      content_items.find_each do |item|
-        Allocation.create(user: user, content_item: item)
+      Allocation.where(content_id: content_ids).delete_all
+
+      allocations = content_ids.map do |content_id|
+        { uid: user_uid, content_id: content_id }
       end
+
+      Allocation.import(allocations, validate: false)
+    end
+
+    def user
+      @user ||= User.find_by(uid: user_uid)
     end
 
     class Result
-      attr_reader :user, :content_items
+      attr_reader :user, :count
 
-      def initialize(user, content_items)
+      def initialize(user, count)
         @user = user
-        @content_items = content_items
+        @count = count
       end
 
       def message
-        "#{content_items.count} items allocated to #{user.name}"
+        "#{count} items allocated to #{user}"
       end
     end
   end

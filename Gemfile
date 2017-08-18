@@ -12,6 +12,7 @@ gem 'govuk_sidekiq'
 gem 'plek'
 
 # Third party gems
+gem 'activerecord-import'
 gem 'draper'
 gem 'feature'
 gem 'google-api-client', '~> 0.9'
