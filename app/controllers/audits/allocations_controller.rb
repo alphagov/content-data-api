@@ -25,7 +25,11 @@ module Audits
     end
 
     def content_ids
-      params.fetch(:content_ids) { [] }
+      if params[:select_all_pages]
+        FindContent.all(build_filter).pluck(:content_id)
+      else
+        params[:content_ids]
+      end
     end
 
     def redirect_params
