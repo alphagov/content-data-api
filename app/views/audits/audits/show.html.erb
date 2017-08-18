@@ -96,9 +96,9 @@
   <div id="metadata" class="audit-metadata">
     <div id="allocated">
       <h4>Assigned to</h4>
-      <% if content_item&.allocation&.user&.name %>
-        <p><%= content_item&.allocation&.user&.name %></p>
-        <p><%= content_item.allocation&.user&.organisation_slug.titleize %></p>
+      <% if content_item.allocation %>
+        <p><%= content_item.auditor %></p>
+        <p><%= content_item.auditor_org %></p>
      <% else %>
         <p>No one</p>
       <% end %>
