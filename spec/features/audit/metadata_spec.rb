@@ -15,6 +15,7 @@ RSpec.feature "Audit metadata", type: :feature do
     visit content_item_audit_path(content_item)
 
     within("#metadata") do
+      expect(page).to have_selector("#allocated", text: "Assigned to No one")
       expect(page).to have_selector("#audited", text: "Not audited yet")
       expect(page).to have_selector("#organisations", text: "None")
       expect(page).to have_selector("#last-updated", text: "Never")
@@ -54,10 +55,15 @@ RSpec.feature "Audit metadata", type: :feature do
     create_linked_content("topics", "Borders")
     create_linked_content("policy_areas", "Borders and Immigration")
 
+    user = create(:user, name: "Edd the Duck")
+    create(:allocation, content_item: content_item, user: user)
+
     visit content_item_audit_path(content_item)
 
     within("#metadata") do
+      allocated_text = "Assigned to Edd the Duck Government Digital Service"
       audited_text = "Audited 01/01/17 (less than a minute ago) by Test User Government Digital Service"
+      expect(page).to have_selector("#allocated", text: allocated_text)
       expect(page).to have_selector("#audited", text: audited_text)
       expect(page).to have_selector("#organisations", text: "Organisations Home office")
       expect(page).to have_selector("#last-updated", text: "03/01/17 (2 days ago)")

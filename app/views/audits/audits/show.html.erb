@@ -94,6 +94,15 @@
 
 <div class="col-sm-4">
   <div id="metadata" class="audit-metadata">
+    <div id="allocated">
+      <h4>Assigned to</h4>
+      <% if content_item.allocation %>
+        <p><%= content_item.auditor %></p>
+        <p><%= content_item.auditor_org %></p>
+     <% else %>
+        <p>No one</p>
+      <% end %>
+    </div>
     <div id="audited">
       <h4>Audited</h4>
 
