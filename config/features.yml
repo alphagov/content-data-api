@@ -13,4 +13,4 @@ test:
 production:
   <<: *default
   features:
-    auditing_allocation: <%= ENV['FEATURE_AUDITING_ALLOCATION'].present? %>
+    auditing_allocation: <%= ENV['FEATURE_AUDITING_ALLOCATION'] %>
