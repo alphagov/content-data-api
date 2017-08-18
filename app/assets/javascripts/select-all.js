@@ -2,9 +2,7 @@
   "use strict";
 
   Modules.SelectAll = function () {
-    var that = this;
-
-    that.start = function (element) {
+    this.start = function (element) {
       function addEventListener() {
         var selectAll = element.find('#select_all');
 

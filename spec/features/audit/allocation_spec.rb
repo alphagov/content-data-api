@@ -106,7 +106,7 @@ RSpec.feature "Content Allocation", type: :feature do
   end
 
   scenario 'Allocate all content within current page', :js do
-    create_list(:content_item, 100)
+    create_list(:content_item, 26)
 
     visit audits_allocations_path
 
