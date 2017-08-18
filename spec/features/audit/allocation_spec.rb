@@ -104,4 +104,19 @@ RSpec.feature "Content Allocation", type: :feature do
     expect(page).to have_select("allocate_to", selected: "No one")
     expect(page).to have_content("1 items unallocated")
   end
+
+  scenario 'Allocate all content within current page', :js do
+    create_list(:content_item, 100)
+
+    visit audits_allocations_path
+
+    check 'Select all'
+
+    select 'Me', from: 'allocate_to'
+    click_on 'Go'
+
+    within('.alert-success') do
+      expect(page).to have_content("25 items allocated to #{current_user.name}")
+    end
+  end
 end
