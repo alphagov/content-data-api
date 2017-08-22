@@ -1,11 +1,11 @@
 # Audit GOV.UK content
-We've created this document to help you understand the questions on the audit spreadsheet before your team starts auditing content. We've also provided guidance about things to consider, and examples of good and bad content.
+We've created this document to help you understand the questions on the audit tool before your team starts auditing content. We've also provided guidance about things to consider, and examples of good and bad content.
 
 ---
 
 ## Before you start
-You can group similar content together by sorting the spreadsheet by `Title` and then `Organisation` or `Content type > Sub type`.
- 
+Items are ordered by most popular - page views in the past 6 months.
+
 Keep in mind any:
 * upcoming content that could affect older pieces - for example a policy update
 * recently renamed policies or groups - for example Transport Focus (formerly Passenger Focus)
@@ -30,11 +30,11 @@ References: [Style guide (Titles)](https://www.gov.uk/guidance/style-guide/a-to-
 ### Consider
 
 Check whether the title would make sense:
- 
+
 * as the link text in the new navigation (where all titles from the topic area are listed together)
 * in search results
 * in collections
- 
+
 Are there acronyms that are widely known that don’t need spelling out? For example, RAIB, DVLA, DVSA.
 
 #### Good example
@@ -45,20 +45,20 @@ Are there acronyms that are widely known that don’t need spelling out? For exa
 > Addendum to the 2002 Guidance to the Civil Aviation Authority (CAA) on environmental objectives relating to the exercise of its air aviation functions"
 
 Reason: Too long and repeats what’s in the summary.
- 
-#### Alternative 
+
+#### Alternative
 
 > Updates to Civil Aviation Authority environmental guidance since 2002
- 
+
 ---
 
 ## Does the summary need to change?
 
 Summaries should:
- 
+
 * be 140 characters (see 'Desc. length' column)
 * not repeat the title
-Use terms that you know users are searching for, as you would when you write the content. Summaries are a good place to include alternative search terms that aren’t in the content. 
+Use terms that you know users are searching for, as you would when you write the content. Summaries are a good place to include alternative search terms that aren’t in the content.
 
 References: [Writing for GOV.UK: titles and summaries](https://www.gov.uk/guidance/content-design/writing-for-gov-uk#titles-and-summaries) and [How to optimise your content for search](https://www.gov.uk/guidance/content-design/data-and-analytics#how-to-optimise-your-content-for-search)
 
@@ -73,14 +73,14 @@ What terms can be drawn from the content, and do they feature in the summary?
 #### Bad example
 
 > Complete if you are applying for a new permit, applying to change or transfer an existing permit.
- 
+
 Reason: It’s not clear what or who the permit is for.
- 
+
 #### Alternative
 
 > Complete the application to apply for a new environmental permit, or apply to change or transfer a standard facilities permit you already have.
 
---- 
+---
 
 ## Does the page detail need to change?
 
@@ -98,40 +98,40 @@ Reference: Structuring your content
 
 ### Consider
 
-Is content in the correct tense? For example, 
+Is content in the correct tense? For example,
 
 > applications will close on 2 February 2015’ should be changed to say ‘applications closed…
- 
-Replace a minister's name with their role. For example, change 
 
-> Claire Perry opened… 
+Replace a minister's name with their role. For example, change
 
-to 
+> Claire Perry opened…
+
+to
 
 > the Rail Minister opened…
- 
+
 Is there content that's no longer relevant? Or is there content that can be removed or repositioned so that the most important content is at the top?
- 
+
 Look at related links. Do you want to keep links to withdrawn content? (Probably yes, if it’s important for users to be able to find it.)
- 
+
 Has $CTA (call to action markdown) been used to 'highlight' content?
 
 #### Good example
 
 > List of post holders who can receive driving tests and instructors statistics up to 24 hours before release to the general public.
- 
+
 Reason: It gives detail on who this is for, what it’s used for and when the statistics will be available.
 
 #### Bad example
 
 > Index table of vehicle
- 
+
 Reason: Doesn’t give any detail on what a user would need this for or what the table represents.
- 
+
 #### Alternative
 
 > "A list of vehicle licensing statistics that shows how many vehicles were registered and licensed in 2013. This includes cars, motorcycles, light vans, HGVs, buses and coaches."
- 
+
 ---
 
 ## Do the attachments need work?
@@ -186,7 +186,7 @@ With a spreadsheet, can you:
 
 > [Format 2 - PDF - Times and heights of high and low waters, split into morning and afternoon, one month per page, with a table drawn around the date (A4 portrait)](https://www.gov.uk/government/publications/ukho-tidal-prediction-service-sample-pdf-format-two)
 
-Reason: Attachment name is too long and repeats what’s in the page title and summary. The PDF doesn’t have the organisation branding, and should be in HTML table format for better accessibility. 
+Reason: Attachment name is too long and repeats what’s in the page title and summary. The PDF doesn’t have the organisation branding, and should be in HTML table format for better accessibility.
 
 * * *
 
@@ -302,7 +302,7 @@ The options are:
 
 * unpublish - this content was published in error, or can be merged into another page that we'll redirect to
 
-If you select 'merge' or 'unpublish', add the destination url in the 'Redirect or combine with URL' column. 
+If you select 'merge' or 'unpublish', add the destination url in the 'Redirect or combine with URL' column.
 
 References: [Withdrawing and unpublishing content](https://www.gov.uk/guidance/content-design/gov-uk-content-retention-and-withdrawal-archiving-policy) and [Unpublishing content](https://www.gov.uk/guidance/content-design/gov-uk-content-retention-and-withdrawal-archiving-policy#unpublishing-content)
 
@@ -328,22 +328,22 @@ Add notes or reminders that will help later in the audit or improvement stage.
 
 ## Is work needed?
 
-This column will automatically populate with ‘Yes’ or ‘No’ based on your answers to the other questions. It's used to populate the ‘need work’ and ‘no work needed’ totals on the 'Summary' tab of the spreadsheet.
+This column will automatically populate with ‘Yes’ or ‘No’ in the report CSV export based on your answers to the other questions.
 
 * * *
 
 
 ## Improvement subject
 
-Use this dropdown to identify groups of similar content. 
+Use this dropdown to identify groups of similar content.
 
-You can then sort the spreadsheet by this column to more easily:
+You can then sort the tool by this column to more easily:
 
 * audit groups of similar content
 
 * assign content for improvement work
 
-If you have a new subject for the dropdown, add it to the list on the ‘improvement-subjects’ tab of the spreadsheet.
+If you have a new subject for the dropdown, add it to the list on the ‘improvement-subjects’ tab of the tool.
 
 ### Consider
 
@@ -368,7 +368,7 @@ You can create more granular subjects by adding commas, for example:
 
 ## After the audit: content improvement
 
-When you've completed the audit, we'll make a copy of the spreadsheet so you can keep track of content updates and consultations with content owners.
+When you've completed the audit, we'll make a copy of the tool so you can keep track of content updates and consultations with content owners.
 
 We can discuss additional columns that might help you, such as:
 
