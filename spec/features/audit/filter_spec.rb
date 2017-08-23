@@ -133,7 +133,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     end
   end
 
-  skip scenario "themes and subthemes are in alphabetical order" do
+  scenario "themes and subthemes are in alphabetical order" do
     visit audits_path
 
     within("#theme") do
@@ -155,7 +155,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     end
   end
 
-  skip scenario "filtering by theme" do
+  scenario "filtering by theme" do
     visit audits_path
     select "All Environment", from: "theme"
 
@@ -168,7 +168,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     end
   end
 
-  skip scenario "filtering by subtheme" do
+  scenario "filtering by subtheme" do
     visit audits_path
     select "Aviation", from: "theme"
 
