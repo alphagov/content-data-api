@@ -15,4 +15,4 @@ production:
   <<: *default
   features:
     auditing_allocation: <%= ENV['FEATURE_AUDITING_ALLOCATION'] %>
-    filtering_themes: false
+    filtering_themes: <%= ENV['FEATURE_AUDITING_THEME_FILTERING'] %>
