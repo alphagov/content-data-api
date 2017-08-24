@@ -16,10 +16,6 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
-<% content_for :header do %>
-    <%= render 'audits/common/navigation' %>
-<% end %>
-
 <% content_for :content do %>
   <%= render 'application/phase_banner' %>
   <div class="row header-row">

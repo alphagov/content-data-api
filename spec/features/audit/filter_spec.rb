@@ -61,6 +61,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
   scenario "List all content items (audited and not audited)" do
     visit audits_path
+    expect(page).to have_selector(".nav")
 
     expect(page).to have_content("Tree felling")
     expect(page).to have_content("Forest management")

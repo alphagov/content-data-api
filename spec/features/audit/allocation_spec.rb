@@ -15,6 +15,9 @@ RSpec.feature "Content Allocation", type: :feature do
     create(:allocation, content_item: another_content_item, user: another_user)
 
     visit audits_path
+
+    expect(page).to have_selector(".nav")
+
     expect(page).to have_content("content item 1")
     expect(page).to have_content("content item 2")
 

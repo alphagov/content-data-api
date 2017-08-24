@@ -2,6 +2,10 @@
   <%= render 'sidebar'%>
 <% end %>
 
+<% content_for :header do %>
+    <%= render 'audits/common/navigation' %>
+<% end %>
+
 <%= link_to "Export filtered audit to CSV", audits_path(params: filter_params, format: :csv), class: "report-export" %>
 
 <div class="report-section">

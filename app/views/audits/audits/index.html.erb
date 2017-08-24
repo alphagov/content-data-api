@@ -3,6 +3,10 @@
   <%= render 'sidebar' %>
 <% end %>
 
+<% content_for :header do %>
+    <%= render 'audits/common/navigation' %>
+<% end %>
+
 <table class="table table-bordered table-hover">
   <thead>
   <tr class="table-header">

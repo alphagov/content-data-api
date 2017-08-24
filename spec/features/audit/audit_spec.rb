@@ -26,6 +26,9 @@ RSpec.feature "Auditing a content item", type: :feature do
 
   scenario "auditing a content item" do
     visit content_item_audit_path(content_item)
+
+    expect(page).to_not have_selector(".nav")
+
     expect(page).to have_link("Flooding", href: "https://gov.uk/flooding")
     expect(page).to have_content("All about flooding.")
 
