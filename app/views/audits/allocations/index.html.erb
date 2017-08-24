@@ -2,6 +2,10 @@
     <%= render 'sidebar' %>
 <% end %>
 
+<% content_for :header do %>
+    <%= render 'audits/common/navigation' %>
+<% end %>
+
 <%= render 'notice' %>
 
 <%= form_tag audits_allocations_path do %>

@@ -17,6 +17,8 @@ RSpec.feature "Reporting on audit progress" do
 
   scenario "Displaying the number of items included in the audit" do
     visit audits_report_path
+    expect(page).to have_selector(".nav")
+
     expect(page).to have_content("3 Content items")
 
     select "Organisation", from: "document_type"
