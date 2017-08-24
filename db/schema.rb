@@ -61,23 +61,6 @@ ActiveRecord::Schema.define(version: 20170824150019) do
     t.index ["title"], name: "index_content_items_on_title"
   end
 
-  create_table "content_items_groups", id: false, force: :cascade do |t|
-    t.bigint "group_id", null: false
-    t.bigint "content_item_id", null: false
-    t.index ["content_item_id"], name: "index_content_items_groups_on_content_item_id"
-    t.index ["group_id", "content_item_id"], name: "index_group_content_items", unique: true
-    t.index ["group_id"], name: "index_content_items_groups_on_group_id"
-  end
-
-  create_table "groups", id: :serial, force: :cascade do |t|
-    t.string "slug"
-    t.string "name"
-    t.string "group_type"
-    t.integer "parent_group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "inventory_rules", force: :cascade do |t|
     t.bigint "subtheme_id"
     t.string "link_type", null: false
