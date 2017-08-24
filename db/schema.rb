@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170810074052) do
+ActiveRecord::Schema.define(version: 20170824145545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,11 +69,6 @@ ActiveRecord::Schema.define(version: 20170810074052) do
     t.index ["group_id"], name: "index_content_items_groups_on_group_id"
   end
 
-  create_table "content_items_organisations", id: false, force: :cascade do |t|
-    t.bigint "content_item_id", null: false
-    t.bigint "organisation_id", null: false
-  end
-
   create_table "content_items_taxons", id: false, force: :cascade do |t|
     t.bigint "content_item_id", null: false
     t.bigint "taxon_id", null: false
@@ -109,15 +104,6 @@ ActiveRecord::Schema.define(version: 20170810074052) do
     t.index ["link_type"], name: "index_links_on_link_type"
     t.index ["source_content_id"], name: "index_links_on_source_content_id"
     t.index ["target_content_id"], name: "index_links_on_target_content_id"
-  end
-
-  create_table "organisations", id: :serial, force: :cascade do |t|
-    t.string "slug"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "title"
-    t.string "content_id"
-    t.index ["slug"], name: "index_organisations_on_slug", unique: true
   end
 
   create_table "questions", id: :serial, force: :cascade do |t|
