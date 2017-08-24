@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170824145545) do
+ActiveRecord::Schema.define(version: 20170824150019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,13 +67,6 @@ ActiveRecord::Schema.define(version: 20170824145545) do
     t.index ["content_item_id"], name: "index_content_items_groups_on_content_item_id"
     t.index ["group_id", "content_item_id"], name: "index_group_content_items", unique: true
     t.index ["group_id"], name: "index_content_items_groups_on_group_id"
-  end
-
-  create_table "content_items_taxons", id: false, force: :cascade do |t|
-    t.bigint "content_item_id", null: false
-    t.bigint "taxon_id", null: false
-    t.index ["content_item_id"], name: "index_content_items_taxons_on_content_item_id"
-    t.index ["taxon_id", "content_item_id"], name: "index_content_item_taxonomies", unique: true
   end
 
   create_table "groups", id: :serial, force: :cascade do |t|
@@ -163,13 +156,6 @@ ActiveRecord::Schema.define(version: 20170824145545) do
     t.index ["taxonomy_todo_id"], name: "index_taxonomy_todos_terms_on_taxonomy_todo_id"
     t.index ["term_id", "taxonomy_todo_id"], name: "index_terms_taxonomy_todos", unique: true
     t.index ["term_id"], name: "index_taxonomy_todos_terms_on_term_id"
-  end
-
-  create_table "taxons", id: :serial, force: :cascade do |t|
-    t.string "content_id"
-    t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "terms", force: :cascade do |t|
