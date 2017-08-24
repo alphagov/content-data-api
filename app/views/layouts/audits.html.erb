@@ -17,11 +17,7 @@
 <% end %>
 
 <% content_for :header do %>
-  <ul class="nav nav-tabs">
-    <%= navigation_link "Content", audits_url(filter_params), 'audits'%>
-    <%= navigation_link "Assign content", audits_allocations_url(filter_params), 'allocations' if Feature.active?(:auditing_allocation) %>
-    <%= navigation_link "Report", audits_report_url(filter_params), 'reports' %>
-  </ul>
+    <%= render 'audits/common/navigation' %>
 <% end %>
 
 <% content_for :content do %>
