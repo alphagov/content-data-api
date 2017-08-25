@@ -11,7 +11,7 @@
         if ($selectAll.length) {
           $selectAll.on('change', function (e) {
             var $checked = $selectAll.prop('checked');
-            var $checkboxes = $('.select-content-item');
+            var $checkboxes = $element.find('.select-content-item');
             $checkboxes.prop('checked', $checked);
 
             if ($selectAllPages.length) {
