@@ -15,6 +15,20 @@ module DropdownHelper
     options_for_select(organisation_options, selected)
   end
 
+  def organisations_options
+    options = Content::Item.all_organisations
+    organisations = params[:organisations] || ['']
+
+    organisations.map do |organisation|
+      options_from_collection_for_select(
+        options,
+        :content_id,
+        :title,
+        selected: organisation,
+      )
+    end
+  end
+
   def sort_by_options_for_select(selected = nil)
     sort_by_options = {
       "Title A-Z" => "title_asc",

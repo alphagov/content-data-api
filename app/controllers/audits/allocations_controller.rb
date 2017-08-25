@@ -48,9 +48,9 @@ module Audits
         :audit_status,
         :content_ids,
         :document_type,
-        :organisations,
         :primary,
-        :user_uid
+        :user_uid,
+        organisations: [],
       )
     end
   end

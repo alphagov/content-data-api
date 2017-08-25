@@ -57,7 +57,7 @@ RSpec.feature "Exporting a CSV from the report page" do
       visit audits_report_path
       select "Anyone", from: "allocated_to"
 
-      select "HMRC", from: "organisations"
+      select "HMRC", from: "Organisations"
       click_on "Apply filters"
 
       click_link "Export filtered audit to CSV"

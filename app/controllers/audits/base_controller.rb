@@ -8,7 +8,7 @@ module Audits
         allocated_to: params[:allocated_to],
         audit_status: params[:audit_status],
         document_type: params[:document_type],
-        organisations: params[:organisations],
+        organisations: organisations,
         page: params[:page],
         primary_org_only: primary_org_only?,
         sort_by: params[:sort_by],
@@ -28,6 +28,13 @@ module Audits
 
     def primary_org_only?
       params[:primary].blank? || params[:primary] == "true"
+    end
+
+    def organisations
+      params
+        .fetch(:organisations, [])
+        .flatten
+        .reject(&:blank?)
     end
   end
 end

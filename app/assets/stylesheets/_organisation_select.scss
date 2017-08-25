@@ -1,0 +1,41 @@
+[data-module="organisation-autocomplete"] {
+  $black: #000;
+
+  .organisation-select-wrapper {
+    position: relative;
+    margin-bottom: 6px;
+
+    &:only-of-type {
+      .autocomplete__wrapper {
+        width: 100%;
+      }
+
+      .remove-organisation {
+        display: none;
+      }
+    }
+
+    .autocomplete__wrapper {
+      width: 85%;
+    }
+
+    .remove-organisation {
+      @extend %legend-reset;
+
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: none;
+      height: 34px;
+    }
+  }
+
+  .add-organisation {
+    @extend %legend-reset;
+
+    background: none;
+    border-bottom: 1px solid $black;
+    padding: 0 2px;
+    margin: 3px;
+  }
+}
