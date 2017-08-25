@@ -10,5 +10,12 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require_tree .
+//= require polyfills/bind
+//= require bootstrap-tagsinput
+//= require cable
+//= require google-tag-manager
+//= require inventory_toggle
+//= require select-all
 //= require selectize
+//= require accessible-autocomplete.min
+//= require organisation-autocomplete
