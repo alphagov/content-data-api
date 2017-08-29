@@ -1,2 +1,9 @@
 AllCops:
     TargetRubyVersion: 2.3
+Style/BlockLength:
+  Exclude:
+    - "Rakefile"
+    - "**/*.rake"
+    - "spec/**/*.rb"
+    - "config/routes.rb"
+    - "config/environments/*.rb"
