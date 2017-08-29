@@ -16,7 +16,7 @@ module Audits
 
       expect {
         AllocateContent.call(user_uid: user.uid, content_ids: %w(content_id_1))
-      }.not_to change { Allocation.count }
+      }.not_to change(Allocation, :count)
 
       allocation = Allocation.first
       expect(allocation).to have_attributes(content_item: content_item, user: user)
