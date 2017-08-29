@@ -16,4 +16,4 @@ namespace :lint do
 end
 
 task lint: ["lint:ruby", "lint:sass"]
-task default: [:spec, :lint]
+task default: %i[spec lint]

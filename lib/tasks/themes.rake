@@ -10,7 +10,7 @@ namespace :themes do
   end
 
   desc "Compare the base paths for the theme against an inventory csv"
-  task :compare, [:csv_path, :theme_name] => :environment do |_, args|
+  task :compare, %i[csv_path theme_name] => :environment do |_, args|
     Comparison.print(*args)
   end
 end

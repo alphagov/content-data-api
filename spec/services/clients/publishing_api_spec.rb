@@ -86,13 +86,13 @@ RSpec.describe Clients::PublishingAPI do
         document_type: 'a_document_type',
         order: 'a_order',
         q: 'a_search_term',
-        fields: [:field_1, :field_2]
+        fields: %i[field_1 field_2]
       }
       result = { "results" => [{}], "pages" => 1, "current_page" => 1 }
 
       expect(subject.publishing_api).to receive(:get_content_items).with(hash_including(expected_query)).and_return(result)
 
-      subject.find_each([:field_1, :field_2], document_type: 'a_document_type', order: 'a_order', q: 'a_search_term') {}
+      subject.find_each(%i[field_1 field_2], document_type: 'a_document_type', order: 'a_order', q: 'a_search_term') {}
     end
 
     it "makes a request for links when that option is passed in" do
