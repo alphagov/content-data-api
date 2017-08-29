@@ -68,7 +68,7 @@ RSpec.describe Content::Query do
 
     it "can filter by document type" do
       travel_advice = create(:content_item, document_type: "travel_advice")
-      subject.document_type("travel_advice")
+      subject.document_types("travel_advice")
       expect(subject.content_items).to contain_exactly(travel_advice)
     end
 
