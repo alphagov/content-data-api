@@ -9,6 +9,8 @@ module Audits
       :page,
       :per_page,
       :primary_org_only,
+      :sort,
+      :sort_direction,
       :theme_id
 
     def audit_status=(value)
@@ -17,6 +19,15 @@ module Audits
                       else
                         value.to_sym
                       end
+    end
+
+    def sort_by=(value)
+      if value.present?
+        values = value.split("_")
+
+        self.sort = values[0]
+        self.sort_direction = values[1]
+      end
     end
 
     def allocated_policy
