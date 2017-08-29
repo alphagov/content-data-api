@@ -1,7 +1,7 @@
 module Audits
   module Policies
-    class AuditedAndNotAudited
-      def self.call(scope)
+    class NoPolicy
+      def self.call(scope, *)
         scope
       end
     end

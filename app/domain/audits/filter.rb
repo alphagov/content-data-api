@@ -23,7 +23,7 @@ module Audits
       if allocated_to == 'no_one'
         Policies::Unallocated
       elsif allocated_to.blank?
-        Policies::AllocatedAndUnallocated
+        Policies::NoPolicy
       else
         Policies::Allocated
       end
@@ -36,7 +36,7 @@ module Audits
       when :non_audited
         Policies::NonAudited
       else
-        Policies::AuditedAndNotAudited
+        Policies::NoPolicy
       end
     end
   end
