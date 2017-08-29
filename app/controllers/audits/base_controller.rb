@@ -5,13 +5,13 @@ module Audits
 
     def build_filter
       Filter.new(
-        theme_id: params[:theme],
-        page: params[:page],
-        organisations: params[:organisations],
-        document_type: params[:document_type],
-        audit_status: params[:audit_status],
-        primary_org_only: primary_org_only?,
         allocated_to: params[:allocated_to],
+        audit_status: params[:audit_status],
+        document_type: params[:document_type],
+        organisations: params[:organisations],
+        page: params[:page],
+        primary_org_only: primary_org_only?,
+        theme_id: params[:theme],
       )
     end
 
