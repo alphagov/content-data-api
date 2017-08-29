@@ -22,17 +22,6 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     expect(page).to have_link(content_items[1].title, href: "/content_items/#{content_items[1].content_id}/audit")
   end
 
-  scenario "Default sorting by popularity" do
-    content_items[0].update!(six_months_page_views: 0)
-    content_items[1].update!(six_months_page_views: 1234)
-
-    visit audits_path
-
-    rows = page.all('main tbody tr')
-    expect(rows[0].text).to match(content_items[1].title)
-    expect(rows[1].text).to match(content_items[0].title)
-  end
-
   scenario "Showing 25 items on the first page" do
     visit audits_path
 
