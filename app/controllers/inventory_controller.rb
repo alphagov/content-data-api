@@ -13,8 +13,7 @@ class InventoryController < ApplicationController
     :assign_content_items,
   )
 
-  def show
-  end
+  def show; end
 
   def add_theme
     theme = Audits::Theme.create!(theme_params)

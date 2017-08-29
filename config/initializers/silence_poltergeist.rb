@@ -2,8 +2,7 @@
 module Capybara
   module Poltergeist
     class Client
-      def warn(*)
-      end
+      def warn(*); end
     end
   end
 end
