@@ -30,6 +30,7 @@ gem 'turbolinks'
 gem 'uglifier'
 gem 'unicorn'
 gem 'rack-proxy'
+gem 'ruby-progressbar'
 
 group :development do
   gem 'better_errors'
