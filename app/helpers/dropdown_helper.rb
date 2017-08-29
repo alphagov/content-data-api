@@ -47,6 +47,7 @@ module DropdownHelper
   def sort_by_options
     options = {
       "Title A-Z" => "title_asc",
+      "Title Z-A" => "title_desc",
     }
 
     options_for_select(options, params[:sort_by])
