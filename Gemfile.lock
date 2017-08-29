@@ -490,7 +490,7 @@ DEPENDENCIES
   gds-api-adapters
   gds-sso
   google-api-client (~> 0.9)
-  govspeak (~> 5.0.3)
+  govspeak
   govuk-lint (~> 3.2)
   govuk_admin_template
   govuk_sidekiq
