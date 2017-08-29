@@ -4,7 +4,7 @@ ruby File.read('.ruby-version').chomp
 
 # GOV.UK gems and forks
 gem 'airbrake', git: 'https://github.com/alphagov/airbrake', branch: 'silence-dep-warnings-for-rails-5'
-gem 'gds-api-adapters', '~> 47.4'
+gem 'gds-api-adapters'
 gem 'gds-sso'
 gem 'govspeak', '~> 5.0.3'
 gem 'govuk_admin_template'
