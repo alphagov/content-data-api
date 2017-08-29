@@ -30,9 +30,12 @@ module Content
       end
     end
 
-    def document_type(document_type)
-      builder(verify_presence: document_type) do
-        @scope = @scope.where(document_type: document_type)
+    def document_types(*document_types)
+      document_types.compact!
+      document_types.reject!(&:empty?)
+
+      builder(verify_presence: document_types) do
+        @scope = @scope.where(document_type: document_types)
       end
     end
 
@@ -161,6 +164,7 @@ module Content
 
     def builder(verify_presence:)
       yield if verify_presence.present?
+
       self
     end
   end

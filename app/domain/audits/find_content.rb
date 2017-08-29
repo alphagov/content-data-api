@@ -20,7 +20,7 @@ module Audits
         .page(filter.page)
         .per_page(filter.per_page)
         .organisations(filter.organisations, filter.primary_org_only)
-        .document_type(filter.document_type)
+        .document_types(filter.document_type)
         .sort(filter.sort)
         .sort_direction(filter.sort_direction)
         .after(filter.after)
