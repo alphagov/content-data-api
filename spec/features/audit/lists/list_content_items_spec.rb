@@ -1,10 +1,4 @@
 RSpec.feature "List Content Items to Audit", type: :feature do
-  let!(:content_items) {
-    create_list(:content_item, 30)
-      .sort_by(&:base_path)
-      .reverse
-  }
-
   scenario "User does not see CPM feedback survey link in banner" do
     visit audits_path
 
@@ -12,53 +6,63 @@ RSpec.feature "List Content Items to Audit", type: :feature do
   end
 
   scenario "List Content Items to Audit" do
-    content_items[0].update!(six_months_page_views: 1234)
+    create(:content_item, title: "item1", six_months_page_views: 10_000, content_id: "content-id")
+    create(:content_item, title: "item2")
 
     visit audits_path
 
-    expect(page).to have_content(content_items[0].title)
-    expect(page).to have_content(content_items[1].title)
-    expect(page).to have_content("1,234")
-    expect(page).to have_link(content_items[1].title, href: "/content_items/#{content_items[1].content_id}/audit")
+    expect(page).to have_content("item1")
+    expect(page).to have_content("10,000")
+    expect(page).to have_link("item1", href: "/content_items/content-id/audit")
+
+    expect(page).to have_content("item2")
   end
 
-  scenario "Showing 25 items on the first page" do
-    visit audits_path
+  describe "pagination" do
+    let!(:content_items) {
+      create_list(:content_item, 30)
+        .sort_by(&:base_path)
+        .reverse
+    }
 
-    content_items[0..24].each do |content_item|
-      expect(page).to have_content(content_item.title)
+    scenario "Showing 25 items on the first page" do
+      visit audits_path
+
+      content_items[0..24].each do |content_item|
+        expect(page).to have_content(content_item.title)
+      end
+
+      content_items[25..29].each do |content_item|
+        expect(page).to have_no_content(content_item.title)
+      end
     end
 
-    content_items[25..29].each do |content_item|
-      expect(page).to have_no_content(content_item.title)
-    end
-  end
+    scenario "Showing the second page of items" do
+      visit audits_path
 
-  scenario "Showing the second page of items" do
-    visit audits_path
+      click_link "Next →"
 
-    click_link "Next →"
+      content_items[0..24].each do |content_item|
+        expect(page).to have_no_content(content_item.title)
+      end
 
-    content_items[0..24].each do |content_item|
-      expect(page).to have_no_content(content_item.title)
-    end
-
-    content_items[25..29].each do |content_item|
-      expect(page).to have_content(content_item.title)
-    end
-  end
-
-  scenario "Clicking 'Next' on content items" do
-    visit audits_path
-
-    click_link content_items[0].title
-
-    (content_items.count - 1).times do |index|
-      expect(page).to have_content(content_items[index].title)
-      click_link "Next"
+      content_items[25..29].each do |content_item|
+        expect(page).to have_content(content_item.title)
+      end
     end
 
-    expect(page).to have_content(content_items.last.title)
-    expect(page).to have_no_content "Next"
+    scenario "Clicking 'Next' on content items" do
+      visit audits_path
+
+      click_link content_items[0].title
+
+      (content_items.count - 1).times do |index|
+        expect(page).to have_content(content_items[index].title)
+        click_link "Next"
+      end
+
+      expect(page).to have_content(content_items.last.title)
+      expect(page).to have_no_content "Next"
+    end
   end
 end
