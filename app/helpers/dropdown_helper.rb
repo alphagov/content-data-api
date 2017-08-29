@@ -44,6 +44,14 @@ module DropdownHelper
     )
   end
 
+  def sort_by_options
+    options = {
+      "Title A-Z" => "title_asc",
+    }
+
+    options_for_select(options, params[:sort_by])
+  end
+
   def document_type_options
     options = Content::Item
       .all_document_types
