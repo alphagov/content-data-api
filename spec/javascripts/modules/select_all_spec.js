@@ -6,6 +6,12 @@ describe('A select-all module', function() {
       itemCheckboxes,
       $element;
 
+  var checkSelectAllBox = function() {
+    $element.find('#select_all')
+      .prop('checked', true)
+      .trigger('change');
+  }
+
   beforeEach(function() {
     selectAll = new GOVUKAdmin.Modules.SelectAll();
   });
@@ -19,21 +25,25 @@ describe('A select-all module', function() {
       selectOnAllPages = $element.find('#select_all_pages_container');
 
       selectAll.start($element);
-      $element.find('#select_all')
-        .prop('checked', true)
-        .trigger('change');
     });
 
     it('checks the checkboxes of items on the page', function() {
+      expect(itemCheckboxes).not.toBeChecked();
+
+      checkSelectAllBox();
       expect(itemCheckboxes).toBeChecked();
     });
 
     it('removes the if-js-hide class to display Select X items on all pages checkbox', function () {
       expect(selectOnAllPages).toHaveClass('checkbox');
+      expect(selectOnAllPages).toHaveClass('if-js-hide');
+
+      checkSelectAllBox();
       expect(selectOnAllPages).not.toHaveClass('if-js-hide');
     });
 
     it('displays the Select X items on all pages checkbox', function() {
+      checkSelectAllBox();
       expect(selectOnAllPages).toBeVisible;
     });
   });
