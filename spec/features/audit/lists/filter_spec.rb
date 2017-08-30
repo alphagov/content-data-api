@@ -198,10 +198,10 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   end
 
   scenario "filtering by document type" do
-    hmrc.update!(document_type: "organisation")
+    hmrc.update!(document_type: "guide")
 
     visit audits_path
-    select "Organisation", from: "document_type"
+    select "Guide", from: "document_type"
 
     click_on "Apply filters"
 
