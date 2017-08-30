@@ -15,7 +15,7 @@ namespace :import do
   end
 
   desc 'Import todos for term_generation project'
-  task :todos_for_taxonomy_project, [:name, :csv_url] => :environment do |_, args|
+  task :todos_for_taxonomy_project, %i[name csv_url] => :environment do |_, args|
     csv = RemoteCsv.new(args.csv_url)
     project = TaxonomyProject.create(args.name)
     importer = TermGeneration::Importers::TodosForTaxonomyProject.new(project, csv)

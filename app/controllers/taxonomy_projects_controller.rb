@@ -7,8 +7,7 @@ class TaxonomyProjectsController < ApplicationController
     @project = TaxonomyProject.find(params[:id])
   end
 
-  def new
-  end
+  def new; end
 
   def create
     project = TermGeneration::TaxonomyProjectBuilder.build(name: taxonomy_project_params[:name], csv_url: taxonomy_project_params[:csv_url])
