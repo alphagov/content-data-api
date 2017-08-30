@@ -13,6 +13,7 @@
 // may get better load performance if you require the specific files that are being used in the spec that tests them.
 //= require support/jquery-1.12.4
 //= require support/jasmine-jquery-2.0.5
+//= require support/wait
 //= require application
 //
 // Deferring execution

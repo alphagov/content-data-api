@@ -1,0 +1,17 @@
+<%
+  def organisations_options
+    options = {
+      "cabinet-office": "Cabinet Office",
+      "department-for-education": "Department for Education",
+      "ministry-of-defence": "Ministry of Defence",
+    }
+
+    [
+      options.reduce("") do |html, (value, label)|
+        html + "<option value=\"#{value}\">#{label}</option>"
+      end
+    ]
+  end
+%>
+
+<%= render "audits/common/organisations" %>
