@@ -7,5 +7,11 @@ module Audits
 
       it { is_expected.to have_attributes(sort: 'foo', sort_direction: 'asc') }
     end
+
+    context "sorting by 'invalid_value'" do
+      subject { -> { described_class.new(sort_by: 'an_invalid_value') } }
+
+      it { is_expected.to raise_error("Invalid value: an_invalid_value") }
+    end
   end
 end
