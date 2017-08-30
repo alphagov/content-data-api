@@ -23,8 +23,9 @@ module Audits
 
     def sort_by=(value)
       if value.present?
-        values = value.split("_")
+        raise "Invalid value: #{value}" unless value =~ /\A[a-z]+_(asc|desc)\z/
 
+        values = value.split("_")
         self.sort = values[0]
         self.sort_direction = values[1]
       end
