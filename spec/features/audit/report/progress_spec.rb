@@ -1,10 +1,7 @@
 RSpec.feature "Reporting on audit progress" do
-  # Organisations:
-  let!(:hmrc) { create(:content_item, title: "HMRC", document_type: "organisation") }
-
-  # Policies:
-  let!(:flying) { create(:content_item, title: "Flying abroad", document_type: "policy") }
-  let!(:insurance) { create(:content_item, title: "Travel insurance", document_type: "policy") }
+  let!(:content_item) { create(:content_item, document_type: "transaction") }
+  let!(:flying) { create(:content_item, document_type: "transaction") }
+  let!(:insurance) { create(:content_item, document_type: "transaction") }
 
   before do
     create(:passing_audit, content_item: flying)
@@ -21,13 +18,13 @@ RSpec.feature "Reporting on audit progress" do
 
     expect(page).to have_content("3 Content items")
 
-    select "Organisation", from: "document_type"
+    select "Guide", from: "document_type"
     click_on "Apply filters"
-    expect(page).to have_content("1 Content items")
+    expect(page).to have_content("0 Content items")
 
-    select "Policy", from: "document_type"
+    select "Transaction", from: "document_type"
     click_on "Apply filters"
-    expect(page).to have_content("2 Content items")
+    expect(page).to have_content("3 Content items")
   end
 
   scenario "Displaying the number of items audited/not audited" do

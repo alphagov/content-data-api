@@ -54,16 +54,11 @@ module DropdownHelper
   end
 
   def document_type_options
-    options = Content::Item
-      .all_document_types
-      .map { |option| DocumentTypeOption.new(option) }
+    options = Audits::Plan
+                .document_types
+                .sort_by { |key, _value| key.split(/\s>\s/) }
 
-    options_from_collection_for_select(
-      options,
-      :value,
-      :name,
-      params[:document_type],
-    )
+    options_for_select(options, params[:document_type])
   end
 
   def allocated_to_options
@@ -91,16 +86,6 @@ module DropdownHelper
   class SubthemeOption < SimpleDelegator
     def value
       "Subtheme_#{id}"
-    end
-  end
-
-  class DocumentTypeOption < SimpleDelegator
-    def name
-      document_type.titleize
-    end
-
-    def value
-      document_type
     end
   end
 

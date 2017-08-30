@@ -21,6 +21,7 @@ module Audits
         .per_page(filter.per_page)
         .organisations(filter.organisations, filter.primary_org_only)
         .document_types(filter.document_type)
+        .document_types(*Plan.document_type_ids)
         .sort(filter.sort)
         .sort_direction(filter.sort_direction)
         .after(filter.after)

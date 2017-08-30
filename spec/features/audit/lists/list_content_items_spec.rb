@@ -18,6 +18,15 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     expect(page).to have_content("item2")
   end
 
+  scenario "List content items of auditable formats" do
+    create(:content_item, document_type: "guide")
+    create(:content_item, document_type: "other-format")
+
+    visit audits_path
+
+    expect(page).to have_css("main tbody tr", count: 1)
+  end
+
   describe "pagination" do
     let!(:content_items) {
       create_list(:content_item, 30)
