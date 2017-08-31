@@ -3,7 +3,7 @@
 default: &default
   features:
     auditing_allocation: true
-    filtering_themes: true
+    filtering_themes: false
 
 development:
   <<: *default
