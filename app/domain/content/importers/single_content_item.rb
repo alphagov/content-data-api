@@ -37,11 +37,15 @@ module Content
         attributes = content_item
           .attributes
           .symbolize_keys
-          .except(:id, :created_at, :updated_at)
+          .except(
+            :created_at,
+            :id,
+            :one_month_page_views,
+            :six_months_page_views,
+            :updated_at,
+          )
 
-        existing.attributes = attributes
-
-        existing.save!
+        existing.update! attributes
       else
         content_item.save!
       end

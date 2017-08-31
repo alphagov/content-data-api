@@ -81,6 +81,20 @@ module Content
           .and change { content_item.reload.linked_organisations.to_a }.from([]).to([org1, org2])
           .and change { content_item.reload.number_of_pdfs }.from(0).to(10)
       end
+
+      it "does not override `six_months_page_views` attributes" do
+        content_item.update!(six_months_page_views: 1000)
+
+        expect { subject.run(content_id, locale) }
+          .to_not change(content_item.reload, :six_months_page_views)
+      end
+
+      it "does not override `one_month_page_views` attributes" do
+        content_item.update!(one_month_page_views: 1000)
+
+        expect { subject.run(content_id, locale) }
+          .to_not change(content_item.reload, :one_month_page_views)
+      end
     end
 
     context "when the links already exists, and the Publishing API is unchanged" do
