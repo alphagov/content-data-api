@@ -1,4 +1,8 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
+  around(:each) do |example|
+    Feature.run_with_activated(:filtering_themes) { example.run }
+  end
+
   # Organisations:
   let!(:hmrc) { create(:organisation, title: "HMRC") }
   let!(:dfe) { create(:organisation, title: "DFE") }
