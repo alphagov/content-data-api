@@ -37,6 +37,12 @@ group :development do
   gem 'web-console'
 end
 
+group :test do
+  # This is a dependency for Teaspoon and a known issue
+  # See https://github.com/jejacks0n/teaspoon/issues/405
+  gem 'coffee-script'
+end
+
 group :development, :test do
   gem 'active_record_disabler'
   gem 'byebug'
@@ -55,6 +61,7 @@ group :development, :test do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen'
+  gem 'teaspoon-jasmine'
   gem 'timecop'
   gem 'webmock'
 end

@@ -1,13 +1,13 @@
 <div class="allocation-menu">
   <div class="row">
-    <div class="col-sm-8" data-module="select-all">
+    <div class="col-sm-8">
       <div class="checkbox">
         <label>
           <%= check_box_tag :select_all, nil, false %> Select all
         </label>
       </div>
       <% if select_all_pages > 1 %>
-        <div class="checkbox if-js-hide">
+        <div class="checkbox if-js-hide" id="select_all_pages_container">
           <label>
             <%= check_box_tag :select_all_pages, nil, false %>
             Select <%= number_with_delimiter(select_all_count) %> items
