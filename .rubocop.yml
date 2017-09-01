@@ -1,6 +1,6 @@
 AllCops:
     TargetRubyVersion: 2.3
-Style/BlockLength:
+Metrics/BlockLength:
   Exclude:
     - "Rakefile"
     - "**/*.rake"
