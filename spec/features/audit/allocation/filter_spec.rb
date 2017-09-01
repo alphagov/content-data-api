@@ -3,16 +3,16 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     Feature.run_with_activated(:auditing_allocation) { example.run }
   end
 
-  let!(:content_item) { create :content_item, title: "content item 1" }
   let!(:current_user) { User.first }
 
   scenario "Filter allocated content" do
     another_user = create(:user)
-    another_content_item = create(:content_item, title: "content item 2")
+    item1 = create :content_item, title: "content item 1"
+    item2 = create(:content_item, title: "content item 2")
     create(:content_item, title: "content item 3")
 
-    create(:allocation, content_item: content_item, user: current_user)
-    create(:allocation, content_item: another_content_item, user: another_user)
+    create(:allocation, content_item: item1, user: current_user)
+    create(:allocation, content_item: item2, user: another_user)
 
     visit audits_path
 
@@ -41,6 +41,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
   end
 
   scenario "Does not change filer status after user has allocated content" do
+    create :content_item, title: "content item 1"
     item2 = create(:content_item, title: "content item 2")
     item3 = create(:content_item, title: "content item 3")
 
