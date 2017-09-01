@@ -61,4 +61,22 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
 
     expect(page).to have_select("allocated_to", selected: "No one")
   end
+
+  scenario "Filter content allocated to other content auditor" do
+    user = create(:user, name: "John Smith")
+    item1 = create :content_item, title: "content item 1"
+    create :allocation, user: user, content_item: item1
+    create :content_item, title: "content item 2"
+
+    visit audits_allocations_path
+
+    expect(page).to have_content("content item 1")
+    expect(page).to have_content("content item 2")
+
+    select "John Smith", from: "allocated_to"
+    click_on "Apply filters"
+
+    expect(page).to have_content("content item 1")
+    expect(page).to_not have_content("content item 2")
+  end
 end
