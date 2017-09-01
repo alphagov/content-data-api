@@ -28,7 +28,7 @@ module Audits
       if params[:select_all_pages]
         FindContent.all(build_filter).pluck(:content_id)
       else
-        params[:content_ids]
+        params.fetch(:content_ids, [])
       end
     end
 
