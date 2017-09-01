@@ -56,13 +56,19 @@ module DropdownHelper
     options_for_select(document_type_options, selected)
   end
 
-  def allocate_to_options(selected = nil)
-    allocation_options = {
-      "Me" => current_user.uid,
-      "No one" => :no_one,
-    }
+  def allocation_options_for_select(selected = nil)
+    auditors = Audits::Plan
+                 .auditors(exclude: current_user)
+                 .sort_by(&:name)
+                 .unshift(OpenStruct.new(name: "Me", uid: current_user.uid))
+                 .unshift(OpenStruct.new(name: "No one", uid: :no_one))
 
-    options_for_select(allocation_options, selected)
+    options_from_collection_for_select(
+      auditors,
+      :uid,
+      :name,
+      selected: selected,
+    )
   end
 
   class ThemeOption < SimpleDelegator
