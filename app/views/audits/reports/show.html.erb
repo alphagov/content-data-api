@@ -40,13 +40,13 @@
       <table class="table">
         <tr>
           <td class="col-md-6">Items that need improvement</td>
-          <td class="col-md-3"><%= format_number(@monitor.passing_count) %></td>
-          <td class="col-md-3"><%= format_percentage(@monitor.passing_percentage) %></td>
+          <td class="col-md-3"><%= format_number(@monitor.not_passing_count) %></td>
+          <td class="col-md-3"><%= format_percentage(@monitor.not_passing_percentage) %></td>
         </tr>
         <tr>
           <td class="col-md-6">Items that don't need improvement</td>
-          <td class="col-md-3"><%= format_number(@monitor.not_passing_count) %></td>
-          <td class="col-md-3"><%= format_percentage(@monitor.not_passing_percentage) %></td>
+          <td class="col-md-3"><%= format_number(@monitor.passing_count) %></td>
+          <td class="col-md-3"><%= format_percentage(@monitor.passing_percentage) %></td>
         </tr>
       </table>
     </div>
