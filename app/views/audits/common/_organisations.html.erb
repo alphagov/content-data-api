@@ -1,7 +1,7 @@
 <div class="form-group" data-module="organisation-autocomplete">
   <%= label_tag :organisations, "Organisation" %>
   <%= select_tag :organisations,
-                 organisation_options_for_select,
+                 organisation_options_for_select(params[:organisations]),
                  include_blank: "",
                  id: "organisations",
                  class: "form-control" %>

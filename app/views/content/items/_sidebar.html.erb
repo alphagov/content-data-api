@@ -8,7 +8,7 @@
     <div class="form-group">
       <%= label_tag :organisations, "Organisation" %>
       <%= select_tag :organisations,
-                     organisation_options_for_select,
+                     organisation_options_for_select(params[:organisations]),
                      include_blank: "All",
                      class: "form-control" %>
     </div>
@@ -24,7 +24,7 @@
         <div class="form-group">
           <%= label_tag :taxons, "Taxons" %>
           <%= select_tag :taxons,
-                         taxon_options_for_select,
+                         taxon_options_for_select(params['taxons']),
                          include_blank: "All",
                          class: "form-control" %>
         </div>

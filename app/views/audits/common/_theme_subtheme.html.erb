@@ -1,7 +1,7 @@
 <div class="form-group">
   <%= label_tag :theme, 'Theme' %>
   <%= select_tag :theme,
-                 theme_and_subtheme_options_for_select,
+                 theme_and_subtheme_options_for_select(params[:theme]),
                  include_blank: "All",
                  class: "form-control" %>
 </div>
