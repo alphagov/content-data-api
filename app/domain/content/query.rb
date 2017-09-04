@@ -26,7 +26,7 @@ module Content
 
     def title(title)
       builder(verify_presence: title) do
-        @scope = @scope.where("title like ?", "%#{title}%")
+        @scope = @scope.where("lower(title) like ?", "%#{title.downcase}%")
       end
     end
 
