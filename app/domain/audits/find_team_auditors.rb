@@ -15,7 +15,6 @@ module Audits
         .joins("INNER JOIN allocations ON allocations.uid = users.uid")
         .where(organisation_slug: user.organisation_slug)
         .distinct
-        .order(name: :asc)
         .to_a
     end
   end
