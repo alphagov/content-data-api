@@ -4,11 +4,7 @@ module Audits
 
     let(:user_uid) { "uid1" }
     let(:organisation_slug) { "slug1" }
-    let(:user) { create :user, uid: user_uid, organisation_slug: organisation_slug }
-
-    before do
-      create :allocation, user: user
-    end
+    let!(:user) { create :user, :with_allocated_content, uid: user_uid, organisation_slug: organisation_slug }
 
     it "returns only auditors belonging to my organisation" do
       create :user, organisation_slug: :other_org_slug
