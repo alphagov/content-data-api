@@ -11,10 +11,8 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
   end
 
   scenario "List content auditors of same organisation with content assigned" do
-    user = create :user, name: "John Smith", organisation_slug: organisation_slug
-    create :allocation, user: user
-
-    create :user, name: "User with no allocated content", organisation_slug: "slug1"
+    create :user, :with_allocated_content, name: "John Smith", organisation_slug: organisation_slug
+    create :user, organisation_slug: organisation_slug
 
     visit audits_allocations_path
 
@@ -28,15 +26,13 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
   end
 
   scenario "Allocate content to other content auditors" do
-    user = create :user, name: "John Smith", organisation_slug: organisation_slug
-    create :allocation, user: user
-
-    item1 = create :content_item, title: "content item 1"
+    create :user, :with_allocated_content, name: "John Smith", organisation_slug: organisation_slug
+    create :content_item, title: "content item 1", content_id: "content-id-1"
     create :content_item, title: "content item 2"
 
     visit audits_allocations_path
 
-    check option: item1.content_id
+    check option: "content-id-1"
 
     select "John Smith", from: "allocate_to"
     click_on "Go"
