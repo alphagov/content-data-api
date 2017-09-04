@@ -2,7 +2,7 @@
   <%= label_tag :organisations, "Organisation" %>
   <%= select_tag :organisations,
                  organisation_options_for_select(params[:organisations]),
-                 include_blank: "",
+                 include_blank: true,
                  id: "organisations",
                  class: "form-control" %>
 </div>
