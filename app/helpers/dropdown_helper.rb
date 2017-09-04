@@ -1,5 +1,5 @@
 module DropdownHelper
-  def theme_and_subtheme_options
+  def theme_and_subtheme_options_for_select
     groups = Audits::Theme.all.map do |theme|
       options = [ThemeOption.new(theme)]
       options += theme.subthemes.map { |s| SubthemeOption.new(s) }
@@ -10,7 +10,7 @@ module DropdownHelper
     grouped_options_for_select(groups, params[:theme])
   end
 
-  def audit_status_options
+  def audit_status_options_for_select
     options_from_collection_for_select(
       [
         AuditStatusOption.new(Audits::Audit::AUDITED),
@@ -22,7 +22,7 @@ module DropdownHelper
     )
   end
 
-  def taxons_options
+  def taxon_options_for_select
     options = Content::Item.all_taxons
 
     options_from_collection_for_select(
@@ -33,7 +33,7 @@ module DropdownHelper
     )
   end
 
-  def organisation_options
+  def organisation_options_for_select
     options = Content::Item.all_organisations
 
     options_from_collection_for_select(
@@ -44,7 +44,7 @@ module DropdownHelper
     )
   end
 
-  def sort_by_options
+  def sort_by_options_for_select
     options = {
       "Title A-Z" => "title_asc",
       "Title Z-A" => "title_desc",
@@ -53,7 +53,7 @@ module DropdownHelper
     options_for_select(options, params[:sort_by])
   end
 
-  def document_type_options
+  def document_type_options_for_select
     options = Audits::Plan
                 .document_types
                 .sort_by { |key, _value| key.split(/\s>\s/) }
@@ -61,13 +61,13 @@ module DropdownHelper
     options_for_select(options, params[:document_type])
   end
 
-  def allocated_to_options
+  def allocated_to_options_for_select
     options = { "Me" => current_user.uid, "No one" => :no_one }
 
     options_for_select(options, params[:allocated_to])
   end
 
-  def allocate_to_options
+  def allocate_to_options_for_select
     options = { "Me" => current_user.uid, "No one" => :no_one }
 
     options_for_select(options, params[:allocate_to])
