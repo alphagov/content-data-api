@@ -8,10 +8,6 @@ module Audits
       DOCUMENT_TYPES
     end
 
-    def self.auditors(exclude: nil)
-      User.all - Array(exclude)
-    end
-
     DOCUMENT_TYPES = {
       "Answer" => :answer,
       "Case Study > Case Study" => :case_study,
