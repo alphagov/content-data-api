@@ -57,12 +57,12 @@ module DropdownHelper
   end
 
   def allocation_options_for_select(selected = nil)
-    auditors = Audits::Plan
-                 .auditors(exclude: current_user)
-                 .sort_by(&:name)
+    auditors = Audits::FindTeamAuditors
+                 .call(user_uid: current_user.uid)
                  .unshift(OpenStruct.new(name: "Me", uid: current_user.uid))
                  .unshift(OpenStruct.new(name: "No one", uid: :no_one))
 
+    auditors.delete(current_user)
     options_from_collection_for_select(
       auditors,
       :uid,
