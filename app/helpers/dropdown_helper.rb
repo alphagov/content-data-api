@@ -34,6 +34,8 @@ module DropdownHelper
     organisation_options = Content::Item
                              .all_organisations
                              .pluck(:title, :content_id)
+                             .map { |title, content_id| [title.squish, content_id] }
+                             .sort_by { |title, _| title }
 
     options_for_select(organisation_options, selected)
   end
