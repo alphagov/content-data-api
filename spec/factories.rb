@@ -82,6 +82,12 @@ FactoryGirl.define do
     email 'user@example.com'
     permissions { ['signin'] }
     organisation_slug "government-digital-service"
+
+    trait :with_allocated_content do
+      after(:create) do |user|
+        create :allocation, user: user
+      end
+    end
   end
 
   factory :group do
