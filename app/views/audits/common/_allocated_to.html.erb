@@ -1,7 +1,7 @@
 <div class="form-group">
   <%= label_tag :allocated_to, "Assigned to" %>
   <%= select_tag :allocated_to,
-                 allocated_to_options_for_select,
+                 allocation_options_for_select(params[:allocated_to]),
                  include_blank: "Anyone",
                  class: "form-control" %>
 </div>

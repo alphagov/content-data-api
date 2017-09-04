@@ -61,16 +61,11 @@ module DropdownHelper
     options_for_select(options, params[:document_type])
   end
 
-  def allocated_to_options_for_select
-    options = { "Me" => current_user.uid, "No one" => :no_one }
-
-    options_for_select(options, params[:allocated_to])
-  end
-
-  def allocate_to_options_for_select
-    options = { "Me" => current_user.uid, "No one" => :no_one }
-
-    options_for_select(options, params[:allocate_to])
+  def allocation_options_for_select(selected = nil)
+    options_for_select(
+      { 'Me' => current_user.uid, 'No one' => :no_one },
+      selected,
+    )
   end
 
   class ThemeOption < SimpleDelegator
