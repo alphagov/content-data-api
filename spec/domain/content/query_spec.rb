@@ -84,6 +84,12 @@ RSpec.describe Content::Query do
       subject.title("foo")
       expect(subject.content_items).to contain_exactly(foo)
     end
+
+    it "is not case sensitive" do
+      foo = create(:content_item, title: "barfoobaz")
+      subject.title("Foo")
+      expect(subject.content_items).to contain_exactly(foo)
+    end
   end
 
   describe "with 26 content items" do
