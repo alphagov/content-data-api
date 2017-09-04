@@ -11,7 +11,8 @@ module Audits
       :primary_org_only,
       :sort,
       :sort_direction,
-      :theme_id
+      :theme_id,
+      :title
 
     def audit_status=(value)
       @audit_status = if value.blank?

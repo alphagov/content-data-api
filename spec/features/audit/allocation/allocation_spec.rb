@@ -17,7 +17,9 @@ RSpec.feature "Content Allocation", type: :feature do
     visit audits_allocations_path
 
     expect(page).to have_selector(".nav")
+    expect(page).to have_selector("li.active", text: "Assign content")
     expect(page).to have_selector("#sort_by")
+    expect(page).to have_selector("#query")
 
     expect(page).to have_content("content item 1")
     expect(page).to have_content("content item 2")

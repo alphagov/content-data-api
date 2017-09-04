@@ -153,6 +153,27 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     end
   end
 
+  context "filtering by title" do
+    scenario "the user enters a text in the search box and retrieves a filtered list" do
+      create :content_item, title: "some text"
+      create :content_item, title: "another text"
+
+      visit audits_path
+      fill_in "query", with: "some text"
+      click_on "Apply filters"
+
+      expect(page).to have_selector("main tbody tr", count: 1)
+    end
+
+    scenario "show the query entered by the user after filtering" do
+      visit audits_path
+      fill_in 'query', with: 'a search value'
+      click_on "Apply filters"
+
+      expect(page).to have_field(:query, with: 'a search value')
+    end
+  end
+
   scenario "themes and subthemes are in alphabetical order" do
     visit audits_path
 
