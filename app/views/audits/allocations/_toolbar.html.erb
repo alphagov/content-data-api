@@ -20,9 +20,9 @@
       <div class="form-group form-inline pull-right">
         <%= label_tag :allocate_to, "Assign to" %>
         <%= select_tag "allocate_to",
-          allocate_to_options,
-          class: "form-control",
-          id: "allocate_to" %>
+                       allocation_options_for_select(params[:allocate_to]),
+                       class: "form-control",
+                       id: "allocate_to" %>
         <%= filter_to_hidden_fields(:allocate_to) %>
         <%= submit_tag "Go", class: "btn btn-default" %>
       </div>

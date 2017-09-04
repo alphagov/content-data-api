@@ -1,76 +1,66 @@
 module DropdownHelper
-  def theme_and_subtheme_options
-    groups = Audits::Theme.all.map do |theme|
+  def theme_and_subtheme_options_for_select(selected = nil)
+    theme_and_subtheme_options = Audits::Theme.all.map do |theme|
       options = [ThemeOption.new(theme)]
       options += theme.subthemes.map { |s| SubthemeOption.new(s) }
 
       [theme.name, options.map { |o| [o.name, o.value] }]
     end
 
-    grouped_options_for_select(groups, params[:theme])
+    grouped_options_for_select(theme_and_subtheme_options, selected)
   end
 
-  def audit_status_options
+  def audit_status_options_for_select(selected = nil)
+    audit_status_options = [
+      AuditStatusOption.new(Audits::Audit::AUDITED),
+      AuditStatusOption.new(Audits::Audit::NON_AUDITED),
+    ]
+
     options_from_collection_for_select(
-      [
-        AuditStatusOption.new(Audits::Audit::AUDITED),
-        AuditStatusOption.new(Audits::Audit::NON_AUDITED),
-      ],
+      audit_status_options,
       :value,
       :name,
-      params[:audit_status],
+      selected,
     )
   end
 
-  def taxons_options
-    options = Content::Item.all_taxons
+  def taxon_options_for_select(selected = nil)
+    taxon_options = Content::Item.all_taxons.pluck(:title, :content_id)
 
-    options_from_collection_for_select(
-      options,
-      :content_id,
-      :title,
-      selected: params["taxons"],
-    )
+    options_for_select(taxon_options, selected)
   end
 
-  def organisation_options
-    options = Content::Item.all_organisations
+  def organisation_options_for_select(selected = nil)
+    organisation_options = Content::Item
+                             .all_organisations
+                             .pluck(:title, :content_id)
+                             .map { |title, content_id| [title.squish, content_id] }
+                             .sort_by { |title, _| title }
 
-    options_from_collection_for_select(
-      options,
-      :content_id,
-      :title,
-      selected: params[:organisations],
-    )
+    options_for_select(organisation_options, selected)
   end
 
-  def sort_by_options
-    options = {
+  def sort_by_options_for_select(selected = nil)
+    sort_by_options = {
       "Title A-Z" => "title_asc",
       "Title Z-A" => "title_desc",
     }
 
-    options_for_select(options, params[:sort_by])
+    options_for_select(sort_by_options, selected)
   end
 
-  def document_type_options
-    options = Audits::Plan
-                .document_types
-                .sort_by { |key, _value| key.split(/\s>\s/) }
+  def document_type_options_for_select(selected = nil)
+    document_type_options = Audits::Plan
+                              .document_types
+                              .sort_by { |key, _value| key.split(/\s>\s/) }
 
-    options_for_select(options, params[:document_type])
+    options_for_select(document_type_options, selected)
   end
 
-  def allocated_to_options
-    options = { "Me" => current_user.uid, "No one" => :no_one }
+  def allocation_options_for_select(selected = nil)
+    allocation_options = { 'Me' => current_user.uid, 'No one' => :no_one }
 
-    options_for_select(options, params[:allocated_to])
-  end
-
-  def allocate_to_options
-    options = { "Me" => current_user.uid, "No one" => :no_one }
-
-    options_for_select(options, params[:allocate_to])
+    options_for_select(allocation_options, selected)
   end
 
   class ThemeOption < SimpleDelegator
