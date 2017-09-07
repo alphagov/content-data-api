@@ -7,10 +7,12 @@
       var template = organisationSelectHTML();
 
       appendAddButton();
+      createSelectElementsForSelectedOptions();
       enableAutocomplete();
 
       function organisationSelectHTML() {
         var $select = organisationSelects().first();
+        $select.removeAttr('multiple');
         var $wrapper = wrapper($select);
         var $template = $wrapper.clone();
         $template.find('[selected]').removeAttr('selected');
@@ -42,8 +44,29 @@
         $element.append(addButton());
       }
 
+      function createSelectElementsForSelectedOptions() {
+        selectedOptions().each(function (index, option) {
+          if (index > 0) {
+            $(template)
+              .insertAfter(lastSelectWrapper())
+              .find('option[value="' + $(option).val() + '"]')
+              .attr('selected', 'selected')
+          }
+        });
+      }
+
       function enableAutocomplete() {
         organisationSelects().each(function (index, select) {
+
+          // When we have a select with the multiple attribute set and no
+          // option is selected, the selectedIndex property will return -1. We
+          // have a blank option at index 0. Selecting the blank option
+          // circumvents a regression in the accessible autocomplete component
+          // where it assumes `selectedIndex` is always a positive number.
+          if (select.selectedIndex === -1) {
+            select.selectedIndex = 0;
+          }
+
           enhanceSelectElement(select);
         });
       }

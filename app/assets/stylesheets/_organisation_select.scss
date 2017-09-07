@@ -1,6 +1,10 @@
 [data-module="organisation-autocomplete"] {
   $black: #000;
 
+  .organisation-select[multiple] {
+    height: 300px;
+  }
+
   .organisation-select-wrapper {
     position: relative;
     margin-bottom: 6px;

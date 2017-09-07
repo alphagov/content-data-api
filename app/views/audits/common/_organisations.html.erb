@@ -1,14 +1,13 @@
 <div class="form-group" data-module="organisation-autocomplete">
-  <%= label_tag "organisations[]", "Organisations" %>
-  <% organisations_options.each do |options| %>
-    <div class="organisation-select-wrapper js-organisation-select-wrapper">
-      <%= select_tag "organisations[]",
-                     options,
-                     include_blank: true,
-                     class: "form-control js-organisation-select",
-                     data: {
-                         tracking_id: "organisations",
-                     } %>
-    </div>
-  <% end %>
+  <%= label_tag :organisations %>
+  <div class="organisation-select-wrapper js-organisation-select-wrapper">
+    <%= select_tag :organisations,
+                   organisation_options_for_select(params[:organisations]),
+                   include_blank: true,
+                   multiple: true,
+                   class: "form-control organisation-select js-organisation-select",
+                   data: {
+                       tracking_id: "organisations",
+                   } %>
+  </div>
 </div>

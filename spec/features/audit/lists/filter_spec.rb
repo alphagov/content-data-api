@@ -119,7 +119,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
     context "filtering by organisation" do
       scenario "organisations are in alphabetical order" do
-        within("#organisations_") do
+        within("#organisations") do
           options = page.all("option")
 
           expect(options.map(&:text)).to eq ["", "DFE", "HMRC"]
@@ -129,7 +129,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
       scenario "using autocomplete", js: true do
         expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
 
-        organisations_autocomplete = page.find("#organisations_")
+        organisations_autocomplete = page.find("#organisations")
         organisations_autocomplete.send_keys("HM", :down, :enter)
 
         click_on "Apply filters"
@@ -142,8 +142,8 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
         page.find("#add-organisation").click
 
-        page.find_all("#organisations_")[1].send_keys("DF", :down, :enter)
-        page.find_all("#organisations_")[0].send_keys("HM", :down, :enter)
+        page.find_all("#organisations")[1].send_keys("DF", :down, :enter)
+        page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
 
         click_on "Apply filters"
 

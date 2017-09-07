@@ -1,17 +1,13 @@
 <%
-  def organisations_options
-    options = {
-      "cabinet-office": "Cabinet Office",
-      "department-for-education": "Department for Education",
-      "ministry-of-defence": "Ministry of Defence",
-    }
-
-    [
-      options.reduce("") do |html, (value, label)|
-        selected = value == :"ministry-of-defence" ? 'selected="selected"' : ''
-        html + "<option value=\"#{value}\" #{selected}>#{label}</option>"
-      end
+  def organisation_options_for_select(selected = nil)
+    selected = 'ministry-of-defence'
+    organisation_options = [
+      ["Cabinet Office", "cabinet-office"],
+      ["Department for Education", "department-for-education"],
+      ["Ministry of Defence", "ministry-of-defence"],
     ]
+
+    options_for_select(organisation_options, selected)
   end
 %>
 

@@ -125,14 +125,14 @@ describe('Organisation autocomplete', function () {
 
     it('has two elements selected', function () {
       expect(numberOfOrganisations()).toBe(2);
-      assertNthFilterHasValue(0, 'ministry-of-defence', 'Ministry of Defence');
-      assertNthFilterHasValue(1, 'cabinet-office', 'Cabinet Office');
+      assertNthFilterHasValue(0, 'cabinet-office', 'Cabinet Office');
+      assertNthFilterHasValue(1, 'ministry-of-defence', 'Ministry of Defence');
     });
 
     it('can remove the first organisation', function (done) {
       expect(numberOfOrganisations()).toBe(2);
-      assertNthFilterHasValue(0, 'ministry-of-defence', 'Ministry of Defence');
-      assertNthFilterHasValue(1, 'cabinet-office', 'Cabinet Office');
+      assertNthFilterHasValue(0, 'cabinet-office', 'Cabinet Office');
+      assertNthFilterHasValue(1, 'ministry-of-defence', 'Ministry of Defence');
 
       removeOrganisation(0);
 
@@ -141,15 +141,15 @@ describe('Organisation autocomplete', function () {
           return numberOfOrganisations() === 1;
         })
         .then(function () {
-          assertNthFilterHasValue(0, 'cabinet-office', 'Cabinet Office');
+          assertNthFilterHasValue(0, 'ministry-of-defence', 'Ministry of Defence');
           done();
         });
     });
 
     it('can remove the second organisation', function (done) {
       expect(numberOfOrganisations()).toBe(2);
-      assertNthFilterHasValue(0, 'ministry-of-defence', 'Ministry of Defence');
-      assertNthFilterHasValue(1, 'cabinet-office', 'Cabinet Office');
+      assertNthFilterHasValue(0, 'cabinet-office', 'Cabinet Office');
+      assertNthFilterHasValue(1, 'ministry-of-defence', 'Ministry of Defence');
 
       removeOrganisation(1);
 
@@ -158,7 +158,7 @@ describe('Organisation autocomplete', function () {
           return numberOfOrganisations() === 1;
         })
         .then(function () {
-          assertNthFilterHasValue(0, 'ministry-of-defence', 'Ministry of Defence');
+          assertNthFilterHasValue(0, 'cabinet-office', 'Cabinet Office');
           done();
         })
     });
