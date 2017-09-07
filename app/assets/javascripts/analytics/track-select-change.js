@@ -8,7 +8,8 @@
 
     var trackingEvent = {
       "event": "govuk.change",
-      "govuk.value": $select.val()
+      "govuk.value": $select.val(),
+      "govuk.trackingId": $select.data("tracking-id")
     };
 
     dataLayer.push(trackingEvent);
