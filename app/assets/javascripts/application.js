@@ -13,9 +13,12 @@
 //= require polyfills/bind
 //= require bootstrap-tagsinput
 //= require cable
-//= require google-tag-manager
 //= require namespaces
 //= require selectize
 //= require accessible-autocomplete.min
 //= require organisation-autocomplete
 //= require batch-selection.js
+
+// --- Analytics ---
+//= require analytics/google-tag-manager
+//= require analytics/track-select-change
