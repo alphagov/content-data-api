@@ -20,4 +20,13 @@ RSpec.feature "Unallocate content", type: :feature do
     expect(page).to have_select("allocate_to", selected: "No one")
     expect(page).to have_content("1 items unallocated")
   end
+
+  scenario "Unallocate 0 content items" do
+    visit audits_allocations_path
+
+    select "No one", from: "allocate_to"
+    click_on "Go"
+
+    expect(page).to have_content("0 items unallocated")
+  end
 end
