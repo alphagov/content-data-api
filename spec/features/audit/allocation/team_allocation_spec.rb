@@ -10,10 +10,9 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
     create :allocation, user: current_user
   end
 
-  scenario "List content auditors of same organisation with content assigned" do
+  scenario "List content auditors of same organisation" do
     create :user, :with_allocated_content, name: "John Smith", organisation_slug: organisation_slug
     create :user, :with_allocated_content, name: "Arthur Johnson", organisation_slug: organisation_slug
-    create :user, organisation_slug: organisation_slug
 
     visit audits_allocations_path
 

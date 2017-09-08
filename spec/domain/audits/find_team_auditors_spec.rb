@@ -10,12 +10,5 @@ module Audits
 
       expect(subject.call(user_uid: user_uid)).to match_array(user)
     end
-
-    it "returns only users with content allocated" do
-      create :user, organisation_slug: "organisation_slug"
-
-      users = subject.call(user_uid: user_uid)
-      expect(users).to match_array([user])
-    end
   end
 end
