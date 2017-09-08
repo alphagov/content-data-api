@@ -69,7 +69,7 @@ RSpec.feature "Navigation", type: :feature do
       perform_audit
 
       visit audits_path
-      select "Non Audited", from: "audit_status"
+      choose "Not audited"
       click_on "Apply filters"
 
       expect(page).to have_content(first.title)

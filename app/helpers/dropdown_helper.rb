@@ -10,20 +10,6 @@ module DropdownHelper
     grouped_options_for_select(theme_and_subtheme_options, selected)
   end
 
-  def audit_status_options_for_select(selected = nil)
-    audit_status_options = [
-      AuditStatusOption.new(Audits::Audit::AUDITED),
-      AuditStatusOption.new(Audits::Audit::NON_AUDITED),
-    ]
-
-    options_from_collection_for_select(
-      audit_status_options,
-      :value,
-      :name,
-      selected,
-    )
-  end
-
   def taxon_options_for_select(selected = nil)
     taxon_options = Content::Item.all_taxons.pluck(:title, :content_id)
 
@@ -85,16 +71,6 @@ module DropdownHelper
   class SubthemeOption < SimpleDelegator
     def value
       "Subtheme_#{id}"
-    end
-  end
-
-  class AuditStatusOption < SimpleDelegator
-    def name
-      to_s.titleize
-    end
-
-    def value
-      to_s
     end
   end
 end

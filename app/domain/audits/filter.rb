@@ -15,11 +15,11 @@ module Audits
       :title
 
     def audit_status=(value)
-      @audit_status = if value.blank?
-                        nil
-                      else
-                        value.to_sym
-                      end
+      @audit_status = value.to_sym unless value.blank?
+    end
+
+    def audit_status
+      @audit_status || Audit::NON_AUDITED
     end
 
     def sort_by=(value)
@@ -44,9 +44,9 @@ module Audits
 
     def audited_policy
       case self.audit_status
-      when :audited
+      when Audit::AUDITED
         Policies::Audited
-      when :non_audited
+      when Audit::NON_AUDITED
         Policies::NonAudited
       else
         Policies::NoPolicy

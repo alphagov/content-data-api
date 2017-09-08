@@ -66,7 +66,7 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     scenario "Discard audit status filter when clicking from content view to report, and then exporting CSV" do
       visit audits_path
-      select "Audited", from: "audit_status"
+      choose "Audited"
 
       click_on "Apply filters"
       expect(page).to have_content("Example 1")
