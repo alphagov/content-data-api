@@ -6,9 +6,9 @@ RSpec.feature "Tabs" do
     click_on "Apply filters"
     expect(page).to have_select("audit_status", selected: "Audited")
 
-    click_link "Report"
+    click_link "Audit progress"
 
-    click_link "Content"
+    click_link "Audit content"
     expect(page).to have_select("audit_status", selected: "Audited")
   end
 end
