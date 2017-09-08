@@ -14,7 +14,6 @@
 //= require bootstrap-tagsinput
 //= require cable
 //= require google-tag-manager
-//= require select-all
 //= require selectize
 //= require accessible-autocomplete.min
 //= require organisation-autocomplete
