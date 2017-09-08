@@ -72,7 +72,7 @@ RSpec.feature "Exporting a CSV from the report page" do
       expect(page).to have_content("Example 1")
       expect(page).to have_no_content("Example 2")
 
-      click_link "Report"
+      click_link "Audit progress"
 
       click_link "Export filtered audit to CSV"
       expect(content_disposition).to include(
