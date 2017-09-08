@@ -18,6 +18,8 @@ RSpec.feature "Reporting on audit progress" do
 
     expect(page).to have_content("3 Content items")
 
+    select "Anyone", from: "allocated_to"
+
     select "Guide", from: "document_type"
     click_on "Apply filters"
     expect(page).to have_content("0 Content items")
