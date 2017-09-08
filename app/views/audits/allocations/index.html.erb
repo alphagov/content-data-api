@@ -8,10 +8,7 @@
 
 <%= render 'notice' %>
 
-<%= form_tag audits_allocations_path, data: { module: 'select-all' } do %>
-    <%= render 'toolbar',
-               select_all_count: content_items.total_count,
-               select_all_pages: content_items.total_pages %>
+<%= form_tag audits_allocations_path do %>
     <table class="table table-bordered table-hover">
       <thead>
       <tr class="table-header">

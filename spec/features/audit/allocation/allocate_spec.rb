@@ -31,37 +31,6 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     expect(page).to_not have_content("content item 3")
   end
 
-  scenario 'Allocate all content within current page', :js do
-    create_list(:content_item, 26)
-
-    visit audits_allocations_path
-
-    check 'Select all'
-
-    select 'Me', from: 'allocate_to'
-    click_on 'Go'
-
-    within('.alert-success') do
-      expect(page).to have_content("25 items allocated to #{current_user.name}")
-    end
-  end
-
-  scenario 'Allocate all content within all pages', :js do
-    create_list(:content_item, 26)
-
-    visit audits_allocations_path
-
-    check 'Select all'
-    check 'Select 27 items on all pages'
-
-    select 'Me', from: 'allocate_to'
-    click_on 'Go'
-
-    within('.alert-success') do
-      expect(page).to have_content("27 items allocated to #{current_user.name}")
-    end
-  end
-
   scenario "Allocate 0 content items" do
     visit audits_allocations_path
 
