@@ -61,4 +61,13 @@ RSpec.feature "Allocate multiple content items", type: :feature do
       expect(page).to have_content("27 items allocated to #{current_user.name}")
     end
   end
+
+  scenario "Allocate 0 content items" do
+    visit audits_allocations_path
+
+    select "Me", from: "allocate_to"
+    click_on "Go"
+
+    expect(page).to have_content("0 items allocated to #{current_user.name}")
+  end
 end
