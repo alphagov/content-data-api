@@ -1,6 +1,6 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
   around(:each) do |example|
-    Feature.run_with_activated(:filtering_themes) { example.run }
+    Feature.run_with_activated(:filtering_themes, :auditing_allocation) { example.run }
   end
 
   # Organisations:
@@ -74,8 +74,9 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
   scenario "filtering audited content" do
     visit audits_path
-    choose "Audited"
+    select "Anyone", from: "allocated_to"
 
+    choose "Audited"
     click_on "Apply filters"
 
     expect(page).to have_content("Tree felling")
@@ -85,8 +86,9 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
   scenario "filtering for content regardless of audit status" do
     visit audits_path
-    choose "All"
+    select "Anyone", from: "allocated_to"
 
+    choose "All"
     click_on "Apply filters"
 
     expect(page).to have_content("Tree felling")
@@ -97,6 +99,8 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   context "when showing content regardless of audit status" do
     before(:each) do
       visit audits_path
+      select "Anyone", from: "allocated_to"
+
       choose "All"
       click_on "Apply filters"
     end
@@ -233,6 +237,8 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
       create_list(:content_item, 25)
 
       visit audits_path
+      select "Anyone", from: "allocated_to"
+
       choose "All"
       click_on "Apply filters"
 

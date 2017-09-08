@@ -69,6 +69,8 @@ RSpec.feature "Navigation", type: :feature do
       perform_audit
 
       visit audits_path
+      select "Anyone", from: "allocated_to"
+
       choose "Not audited"
       click_on "Apply filters"
 

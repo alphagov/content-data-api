@@ -5,6 +5,12 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
 
   let!(:current_user) { User.first }
 
+  scenario "List is unfiltered" do
+    visit audits_path
+
+    expect(page).to have_select("allocated_to", selected: "Me")
+  end
+
   scenario "Filter allocated content" do
     another_user = create(:user)
     item1 = create :content_item, title: "content item 1"

@@ -55,6 +55,7 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     scenario "Applying the filters to the export" do
       visit audits_report_path
+      select "Anyone", from: "allocated_to"
 
       select "HMRC", from: "organisations"
       click_on "Apply filters"
@@ -66,6 +67,8 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     scenario "Discard audit status filter when clicking from content view to report, and then exporting CSV" do
       visit audits_path
+      select "Anyone", from: "allocated_to"
+
       choose "Audited"
 
       click_on "Apply filters"

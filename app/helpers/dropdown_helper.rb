@@ -43,6 +43,8 @@ module DropdownHelper
   end
 
   def allocation_options_for_select(selected = nil)
+    selected = current_user.uid if selected.nil?
+
     auditors = Audits::FindTeamAuditors
                  .call(user_uid: current_user.uid)
                  .sort_by(&:name)
