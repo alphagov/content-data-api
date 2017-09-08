@@ -1,0 +1,11 @@
+<div class="radio">
+  <label for="<%= option[:id] -%>"
+         class="radio">
+    <input type="radio"
+           id="<%= option[:id] -%>"
+           name="audit_status"
+           value="<%= option[:value] -%>"
+           <%= "checked" if option[:selected] -%> />
+    <%= option[:label] %>
+  </label>
+</div>

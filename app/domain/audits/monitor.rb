@@ -1,9 +1,8 @@
 module Audits
   class Monitor
-    attr_accessor :filter
-
     def initialize(filter)
-      self.filter = filter
+      @filter = filter
+      @filter.audit_status = Audit::ALL
     end
 
     def total_count
@@ -45,7 +44,7 @@ module Audits
   private
 
     def content_items
-      @content_items ||= FindContent.all(filter)
+      @content_items ||= FindContent.all(@filter)
     end
 
     def percentage(number, out_of:)

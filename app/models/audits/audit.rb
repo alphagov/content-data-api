@@ -1,5 +1,6 @@
 module Audits
   class Audit < ApplicationRecord
+    ALL = :all
     AUDITED = :audited
     NON_AUDITED = :non_audited
 

@@ -1,7 +1,7 @@
 <div class="form-group">
   <%= label_tag :audit_status, 'Audit status' %>
-  <%= select_tag :audit_status,
-                 audit_status_options_for_select(params[:audit_status]),
-                 include_blank: "All",
-                 class: "form-control" %>
+
+  <%= render partial: "components/radio_button",
+             collection: audit_status_radio_button_options(params[:audit_status]),
+             as: :option %>
 </div>
