@@ -12,7 +12,6 @@ module Audits
 
     def call
       User
-        .joins("INNER JOIN allocations ON allocations.uid = users.uid")
         .where(organisation_slug: user.organisation_slug)
         .distinct
         .to_a
