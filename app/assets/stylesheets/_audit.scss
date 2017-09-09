@@ -24,11 +24,10 @@ $next-link-colour: #000000;
   margin-bottom: 1.5em;
 }
 
-.question {
-  &.is-there-content-out-of-date {
-    margin-top: 4em;
-  }
+.t-reformat {
+  margin-bottom: 2em;
 }
+
 
 .free-text-question {
   &.redirect-or-combine-with-url {
