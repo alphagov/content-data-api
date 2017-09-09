@@ -47,7 +47,11 @@ RSpec.feature "Auditing a content item", type: :feature do
     answer_question "Attachments", "Yes"
     answer_question "Document type", "No"
     answer_question "Is the content out of date?", "Yes"
+
     answer_question "Should the content be removed?", "Yes"
+    expect(page).to have_content("Where should users be redirected to? (optional)")
+    fill_in "Where should users be redirected to? (optional)", with: "http://www.example.com"
+
     answer_question "Is this content very similar to other pages?", "Yes"
     fill_in "URLs of similar pages", with: "something"
 
@@ -61,6 +65,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     expect_answer "Document type", "No"
     expect_answer "Is the content out of date?", "Yes"
     expect_answer "Should the content be removed?", "Yes"
+    expect(find_field("Where should users be redirected to? (optional)").value).to eq("http://www.example.com")
     expect_answer "Is this content very similar to other pages?", "Yes"
     expect(find_field("URLs of similar pages").value).to eq("something")
     expect(find_field("Notes").value).to eq("something")

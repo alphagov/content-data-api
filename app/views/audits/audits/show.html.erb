@@ -74,6 +74,10 @@
                attribute: :redundant,
                question: 'Should the content be removed?' %>
 
+    <%= render 'free_text_question', form: form,
+               attribute: :redirect_urls,
+               question: 'Where should users be redirected to? (optional)' %>
+
     <%= render 'boolean_question', form: form,
                attribute: :similar,
                question: 'Is this content very similar to other pages?' %>

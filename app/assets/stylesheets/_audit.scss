@@ -28,18 +28,20 @@ $next-link-colour: #000000;
   margin-bottom: 2em;
 }
 
+.t-redirect-urls {
+  margin-left: 0;
+  padding-left: 2em;
+  border-left: solid 2px;
+  margin-bottom: 1.5em;
 
-.free-text-question {
-  &.redirect-or-combine-with-url {
-    textarea {
-      height: 2em;
-    }
+  label {
+    font-weight: normal;
   }
+}
 
-  &.ur-ls-of-similar-pages {
-    border-left: solid;
-    padding-left: 2em;
-  }
+.ur-ls-of-similar-pages {
+  border-left: solid;
+  padding-left: 2em;
 }
 
 .btn-success {

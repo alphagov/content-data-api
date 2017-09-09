@@ -61,6 +61,7 @@ module Audits
             notes
             outdated
             redundant
+            redirect_urls
             reformat
             similar
             similar_urls
