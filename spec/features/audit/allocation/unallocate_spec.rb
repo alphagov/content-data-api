@@ -21,6 +21,33 @@ RSpec.feature "Unallocate content", type: :feature do
     expect(page).to have_content("1 items unallocated")
   end
 
+  scenario "Allocate using the batch input" do
+    create_list :content_item, 2
+
+    visit audits_allocations_path
+
+    select "No one", from: "allocate_to"
+    fill_in "batch_size", with: "2"
+    click_on "Go"
+
+    expect(page).to have_content("2 items unallocated")
+  end
+
+  scenario "Allocate selecting individual items" do
+    item2 = create(:content_item, title: "content item 2")
+    item3 = create(:content_item, title: "content item 3")
+
+    visit audits_allocations_path
+
+    check option: item2.content_id
+    check option: item3.content_id
+
+    select "No one", from: "allocate_to"
+    click_on "Go"
+
+    expect(page).to have_content("2 items unallocated")
+  end
+
   scenario "Unallocate 0 content items" do
     visit audits_allocations_path
 
