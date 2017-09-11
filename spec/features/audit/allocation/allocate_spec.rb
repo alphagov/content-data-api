@@ -31,6 +31,33 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     expect(page).to_not have_content("content item 3")
   end
 
+  scenario "Allocate using the batch input" do
+    create_list :content_item, 2
+
+    visit audits_allocations_path
+
+    select "Me", from: "allocate_to"
+    fill_in "batch_size", with: "2"
+    click_on "Go"
+
+    expect(page).to have_content("2 items allocated to #{current_user.name}")
+  end
+
+  scenario "Allocate selecting individual items" do
+    item2 = create(:content_item, title: "content item 2")
+    item3 = create(:content_item, title: "content item 3")
+
+    visit audits_allocations_path
+
+    check option: item2.content_id
+    check option: item3.content_id
+
+    select "Me", from: "allocate_to"
+    click_on "Go"
+
+    expect(page).to have_content("2 items allocated to #{current_user.name}")
+  end
+
   scenario "Allocate 0 content items" do
     visit audits_allocations_path
 
