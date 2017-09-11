@@ -45,19 +45,18 @@ module DropdownHelper
   def allocation_options_for_select(selected = nil)
     selected = current_user.uid if selected.nil?
 
-    auditors = Audits::FindTeamAuditors
-                 .call(user_uid: current_user.uid)
-                 .sort_by(&:name)
-                 .unshift(OpenStruct.new(name: "Me", uid: current_user.uid))
-                 .unshift(OpenStruct.new(name: "No one", uid: :no_one))
+    allocation_options = FindOrganisationUsers
+                           .call(organisation_slug: current_user.organisation_slug)
+                           .pluck(:name, :uid)
+                           .map { |name, uid| [name.squish, uid] }
+                           .reject { |_, uid| uid == current_user.uid }
+                           .sort_by { |name, _| name }
+                           .unshift(
+                             ['No one', :no_one],
+                             ['Me', current_user.uid],
+                           )
 
-    auditors.delete(current_user)
-    options_from_collection_for_select(
-      auditors,
-      :uid,
-      :name,
-      selected: selected,
-    )
+    options_for_select(allocation_options, selected)
   end
 
   class ThemeOption < SimpleDelegator
