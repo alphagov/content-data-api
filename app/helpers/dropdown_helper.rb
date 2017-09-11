@@ -45,7 +45,7 @@ module DropdownHelper
   def allocation_options_for_select(selected = nil)
     selected = current_user.uid if selected.nil?
 
-    allocation_options = Audits::FindTeamAuditors
+    allocation_options = FindOrganisationUsers
                            .call(organisation_slug: current_user.organisation_slug)
                            .pluck(:name, :uid)
                            .map { |name, uid| [name.squish, uid] }
