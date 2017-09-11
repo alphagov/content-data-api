@@ -33,7 +33,17 @@ module Audits
     end
 
     def redirect_params
-      params.permit(:user_uid, :audit_status, :organisations, :primary, :document_type, :content_ids, :allocated_to, :allocate_to)
+      params.permit(
+        :allocate_to,
+        :batch_size,
+        :allocated_to,
+        :audit_status,
+        :content_ids,
+        :document_type,
+        :organisations,
+        :primary,
+        :user_uid
+      )
     end
   end
 end
