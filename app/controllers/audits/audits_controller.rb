@@ -4,10 +4,10 @@ module Audits
 
     def index
       respond_to do |format|
-        format.html { @content_items = FindContent.paged(build_filter) }
+        format.html { @content_items = FindContent.paged(filter) }
         format.csv do
           send_data(
-            Report.generate(build_filter, request.url),
+            Report.generate(filter, request.url),
             filename: "Transformation_audit_report_CSV_download.csv"
           )
         end
@@ -16,13 +16,13 @@ module Audits
 
     def show
       @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
-      @next_content_item = FindNextItem.call(@content_item, build_filter)
+      @next_content_item = FindNextItem.call(@content_item, filter)
       @audit = Audit.find_or_initialize_by(content_item: @content_item)
     end
 
     def save
       @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
-      @next_content_item = FindNextItem.call(@content_item, build_filter)
+      @next_content_item = FindNextItem.call(@content_item, filter)
       @audit = Audit.find_or_initialize_by(content_item: @content_item)
       @audit.user = current_user
 

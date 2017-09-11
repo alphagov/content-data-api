@@ -1,9 +1,9 @@
 module Audits
   class BaseController < ApplicationController
     layout "audits"
-    helper_method :filter_params, :primary_org_only?
+    helper_method :filter, :filter_params, :primary_org_only?
 
-    def build_filter(override = {})
+    def filter(override = {})
       options = {
         allocated_to: params[:allocated_to],
         audit_status: params[:audit_status],
@@ -15,7 +15,7 @@ module Audits
         title: params[:query],
       }.merge(override)
 
-      Filter.new options
+      Filter.new(options)
     end
 
   private
