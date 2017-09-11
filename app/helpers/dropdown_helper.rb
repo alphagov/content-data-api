@@ -46,7 +46,7 @@ module DropdownHelper
     selected = current_user.uid if selected.nil?
 
     allocation_options = Audits::FindTeamAuditors
-                           .call(user_uid: current_user.uid)
+                           .call(organisation_slug: current_user.organisation_slug)
                            .pluck(:name, :uid)
                            .map { |name, uid| [name.squish, uid] }
                            .reject { |_, uid| uid == current_user.uid }

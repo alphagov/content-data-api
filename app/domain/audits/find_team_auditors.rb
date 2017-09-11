@@ -6,13 +6,13 @@ module Audits
 
     attr_reader :user
 
-    def initialize(user_uid:)
-      @user = User.find_by uid: user_uid
+    def initialize(organisation_slug:)
+      @organisation_slug = organisation_slug
     end
 
     def call
       User
-        .where(organisation_slug: user.organisation_slug)
+        .where(organisation_slug: organisation_slug)
         .distinct
     end
   end
