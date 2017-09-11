@@ -55,6 +55,6 @@ RSpec.configure do |config|
   end
 
   config.before(type: :feature) do
-    create :user
+    @current_user = create :user
   end
 end

@@ -7,4 +7,5 @@
     <%= render 'audits/common/navigation' %>
 <% end %>
 
+<%= render "no_content_to_audit" if content_items.empty? %>
 <%= render "content_items", locals: { content_items: content_items } if content_items.any? %>
