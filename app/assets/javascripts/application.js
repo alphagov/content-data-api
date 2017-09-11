@@ -17,3 +17,4 @@
 //= require selectize
 //= require accessible-autocomplete.min
 //= require organisation-autocomplete
+//= require batch-selection.js
