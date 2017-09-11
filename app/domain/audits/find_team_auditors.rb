@@ -14,7 +14,6 @@ module Audits
       User
         .where(organisation_slug: user.organisation_slug)
         .distinct
-        .to_a
     end
   end
 end
