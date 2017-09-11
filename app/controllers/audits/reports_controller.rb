@@ -1,7 +1,7 @@
 module Audits
   class ReportsController < BaseController
     def show
-      @monitor = ::Audits::Monitor.new(build_filter)
+      @monitor = ::Audits::Monitor.new(filter)
     end
   end
 end

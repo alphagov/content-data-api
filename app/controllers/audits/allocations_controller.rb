@@ -5,7 +5,7 @@ module Audits
     decorates_assigned :content_items
 
     def index
-      @content_items = FindContent.paged(build_filter)
+      @content_items = FindContent.paged(filter)
     end
 
     def create
@@ -28,7 +28,7 @@ module Audits
 
     def set_batch_value
       params[:content_ids] = FindContent
-                               .paged(build_filter(per_page: batch_size))
+                               .paged(filter(per_page: batch_size))
                                .pluck(:content_id)
     end
 
