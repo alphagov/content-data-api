@@ -64,17 +64,16 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   end
 
   scenario "List not audited by default" do
-    visit audits_path
-    expect(page).to have_selector(".nav")
+    visit audits_path(allocated_to: "anyone", audit_status: "non_audited")
 
+    expect(page).to have_selector(".nav")
     expect(page).to have_no_content("Tree felling")
     expect(page).to have_content("Forest management")
     expect(page).to have_checked_field("audit_status_non_audited")
   end
 
   scenario "filtering audited content" do
-    visit audits_path
-    select "Anyone", from: "allocated_to"
+    visit audits_path(allocated_to: "anyone")
 
     choose "Audited"
     click_on "Apply filters"

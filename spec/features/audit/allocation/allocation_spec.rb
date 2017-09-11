@@ -14,7 +14,7 @@ RSpec.feature "Content Allocation", type: :feature do
     create(:allocation, content_item: content_item, user: current_user)
     create(:allocation, content_item: another_content_item, user: another_user)
 
-    visit audits_allocations_path
+    visit audits_allocations_path(allocated_to: "anyone")
 
     expect(page).to have_selector(".nav")
     expect(page).to have_selector("li.active", text: "Assign content")
@@ -46,7 +46,7 @@ RSpec.feature "Content Allocation", type: :feature do
     second = create(:content_item, title: "content item 2")
     first = create(:content_item, title: "content item 3")
 
-    visit audits_allocations_path
+    visit audits_allocations_path(allocated_to: "anyone")
 
     check option: second.content_id
     check option: first.content_id
@@ -114,7 +114,7 @@ RSpec.feature "Content Allocation", type: :feature do
   scenario 'Allocate all content within current page', :js do
     create_list(:content_item, 26)
 
-    visit audits_allocations_path
+    visit audits_allocations_path(allocated_to: "anyone")
 
     check 'Select all'
 
@@ -129,7 +129,7 @@ RSpec.feature "Content Allocation", type: :feature do
   scenario 'Allocate all content within all pages', :js do
     create_list(:content_item, 26)
 
-    visit audits_allocations_path
+    visit audits_allocations_path(allocated_to: "anyone")
 
     check 'Select all'
     check 'Select 27 items on all pages'

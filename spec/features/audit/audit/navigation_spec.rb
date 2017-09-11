@@ -5,28 +5,20 @@ RSpec.feature "Navigation", type: :feature do
     let!(:third) { create(:content_item, title: "Third", six_months_page_views: 8) }
 
     scenario "navigating between audits and the index page" do
-      visit audits_path(some_filter: "value")
+      visit audits_path(allocated_to: "anyone")
+
       click_link "First"
-
-      expected = content_item_audit_path(first, some_filter: "value")
-      expect(current_url).to end_with(expected)
+      test_navigation_destination(content_item_audit_path(first, allocated_to: "anyone"))
 
       click_link "Next"
-
-      expected = content_item_audit_path(second, some_filter: "value")
-      expect(current_url).to end_with(expected)
+      test_navigation_destination(content_item_audit_path(second, allocated_to: "anyone"))
 
       click_link "Next"
-
-      expected = content_item_audit_path(third, some_filter: "value")
-      expect(current_url).to end_with(expected)
-
+      test_navigation_destination(content_item_audit_path(third, allocated_to: "anyone"))
       expect(page).to have_no_link("Next")
 
       click_link "< All items"
-
-      expected = audits_path(some_filter: "value")
-      expect(current_url).to end_with(expected)
+      test_navigation_destination(audits_path(allocated_to: "anyone"))
     end
 
     scenario "returning to the first page of the index" do
@@ -38,30 +30,30 @@ RSpec.feature "Navigation", type: :feature do
     end
 
     scenario "continuing to next item on save" do
-      visit content_item_audit_path(first, some_filter: "value")
+      visit content_item_audit_path(first, allocated_to: "anyone")
 
       perform_audit
 
-      expected = content_item_audit_path(second, some_filter: "value")
-      expect(current_url).to end_with(expected)
+      expected = URI.parse(content_item_audit_path(second, allocated_to: "anyone")).path
+      expect(URI.parse(current_url).path).to eq(expected)
 
       expect(page).to have_content("Success: Saved successfully and continued to next item.")
     end
 
     scenario "not continuing to next item if fails to save" do
-      visit content_item_audit_path(first, some_filter: "value")
+      visit content_item_audit_path(first, allocated_to: "anyone")
 
       click_on "Save"
 
-      expected = content_item_audit_path(first, some_filter: "value")
-      expect(current_url).to end_with(expected)
+      expected = URI.parse(content_item_audit_path(first, allocated_to: "anyone")).path
+      expect(URI.parse(current_url).path).to eq(expected)
 
       expect(page).to have_content("Please answer Yes or No to each of the questions.")
 
       click_on "Next"
 
-      expected = content_item_audit_path(second, some_filter: "value")
-      expect(current_url).to end_with(expected)
+      expected = URI.parse(content_item_audit_path(second, some_filter: "value")).path
+      expect(URI.parse(current_url).path).to end_with(expected)
     end
 
     scenario "continuing to the next unadited item on save" do
@@ -92,7 +84,7 @@ RSpec.feature "Navigation", type: :feature do
     }
 
     scenario "Clicking 'Next' to navigate between individual content items" do
-      visit audits_path
+      visit audits_path(allocated_to: "anyone")
 
       click_link content_items[0].title
 
@@ -123,5 +115,14 @@ RSpec.feature "Navigation", type: :feature do
     answer_question "Is this content very similar to other pages?", "No"
 
     click_on "Save"
+  end
+
+  def test_navigation_destination(url_string)
+    expected = URI.parse(url_string)
+    url = URI.parse(current_url)
+    expect(url.path).to eq(expected.path)
+
+    params = CGI.parse(url.query)
+    expect(params["allocated_to"][0]).to eq("anyone")
   end
 end

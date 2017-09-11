@@ -13,7 +13,7 @@ RSpec.feature "Reporting on audit progress" do
   end
 
   scenario "Displaying the number of items included in the audit" do
-    visit audits_report_path
+    visit audits_report_path(allocated_to: "anyone")
     expect(page).to have_selector(".nav")
 
     expect(page).to have_content("3 Content items")
@@ -30,7 +30,7 @@ RSpec.feature "Reporting on audit progress" do
   end
 
   scenario "Displaying the number of items audited/not audited" do
-    visit audits_report_path
+    visit audits_report_path(allocated_to: "anyone")
 
     expect(page).to have_content("Items audited 2 67%")
     expect(page).to have_content("Items still to audit 1 33%")
@@ -38,7 +38,7 @@ RSpec.feature "Reporting on audit progress" do
   end
 
   scenario "Displaying the number of items needing improvement/not needing improvement" do
-    visit audits_report_path
+    visit audits_report_path(allocated_to: "anyone")
 
     expect(page).to have_content("Items that need improvement 1 50%")
     expect(page).to have_content("Items that don't need improvement 1 50%")

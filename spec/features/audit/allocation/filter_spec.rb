@@ -5,10 +5,21 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
 
   let!(:current_user) { User.first }
 
-  scenario "List is unfiltered" do
+  scenario "Default view is 'Allocated to Me' and there is no allocated content" do
     visit audits_path
 
     expect(page).to have_select("allocated_to", selected: "Me")
+    expect(page).to have_no_content("An item to be audited")
+  end
+
+  scenario "Default view is 'Allocated to Me' and there is allocated content" do
+    content_item = create(:content_item, title: "An item to be audited")
+    create(:allocation, content_item: content_item, user: current_user)
+
+    visit audits_path
+
+    expect(page).to have_select("allocated_to", selected: "Me")
+    expect(page).to have_content("An item to be audited")
   end
 
   scenario "Filter allocated content" do
@@ -20,7 +31,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     create(:allocation, content_item: item1, user: current_user)
     create(:allocation, content_item: item2, user: another_user)
 
-    visit audits_path
+    visit audits_path(allocated_to: "anyone")
 
     expect(page).to have_selector(".nav")
     expect(page).to have_selector("#sort_by")
@@ -74,7 +85,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     create :allocation, user: user, content_item: item1
     create :content_item, title: "content item 2"
 
-    visit audits_allocations_path
+    visit audits_allocations_path(allocated_to: "anyone")
 
     expect(page).to have_content("content item 1")
     expect(page).to have_content("content item 2")

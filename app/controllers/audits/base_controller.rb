@@ -7,6 +7,7 @@ module Audits
       Filter.new(
         allocated_to: params[:allocated_to],
         audit_status: params[:audit_status],
+        current_user_id: current_user.uid,
         document_type: params[:document_type],
         organisations: params[:organisations],
         page: params[:page],

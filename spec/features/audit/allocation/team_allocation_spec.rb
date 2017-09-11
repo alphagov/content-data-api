@@ -31,7 +31,7 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
     create :content_item, title: "content item 1", content_id: "content-id-1"
     create :content_item, title: "content item 2"
 
-    visit audits_allocations_path
+    visit audits_allocations_path(allocated_to: "anyone")
 
     check option: "content-id-1"
 

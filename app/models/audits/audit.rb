@@ -3,6 +3,7 @@ module Audits
     ALL = :all
     AUDITED = :audited
     NON_AUDITED = :non_audited
+    ALLOCATED_TO = :allocated_to
 
     belongs_to :content_item, primary_key: :content_id, foreign_key: :content_id,
                class_name: 'Content::Item'

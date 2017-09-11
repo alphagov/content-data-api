@@ -48,8 +48,9 @@ module DropdownHelper
     auditors = Audits::FindTeamAuditors
                  .call(user_uid: current_user.uid)
                  .sort_by(&:name)
-                 .unshift(OpenStruct.new(name: "Me", uid: current_user.uid))
                  .unshift(OpenStruct.new(name: "No one", uid: :no_one))
+                 .unshift(OpenStruct.new(name: "Anyone", uid: :anyone))
+                 .unshift(OpenStruct.new(name: "Me", uid: current_user.uid))
 
     auditors.delete(current_user)
     options_from_collection_for_select(

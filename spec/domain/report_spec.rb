@@ -1,14 +1,13 @@
 module Audits
   RSpec.describe Report do
-    before do
-      create(:content_item, title: "Example")
-    end
+    let!(:example_content) { create(:content_item, title: "Example") }
+    let!(:current_user) { create(:user, uid: 1) }
 
     after do
       ActiveRecord.enable
     end
 
-    subject! { described_class.new(Filter.new, "http://example.com") }
+    subject! { described_class.new(Filter.new(current_user_id: current_user.uid), "http://example.com") }
 
     let(:csv) { subject.generate }
     let(:lines) { csv.split("\n") }
@@ -25,6 +24,7 @@ module Audits
     end
 
     it "outputs a row for each content item" do
+      create(:allocation, content_item: example_content, user: current_user)
       expect(data.third).to start_with("", "", "Example")
     end
 

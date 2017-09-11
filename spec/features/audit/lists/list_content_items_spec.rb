@@ -9,11 +9,11 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     create(:content_item, title: "item1", six_months_page_views: 10_000, content_id: "content-id")
     create(:content_item, title: "item2")
 
-    visit audits_path
+    visit audits_path(allocated_to: "anyone")
 
     expect(page).to have_content("item1")
     expect(page).to have_content("10,000")
-    expect(page).to have_link("item1", href: "/content_items/content-id/audit")
+    expect(page).to have_link("item1", href: "/content_items/content-id/audit?allocated_to=anyone")
 
     expect(page).to have_content("item2")
   end
@@ -22,7 +22,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     create(:content_item, document_type: "guide")
     create(:content_item, document_type: "other-format")
 
-    visit audits_path
+    visit audits_path(allocated_to: "anyone")
 
     expect(page).to have_css("main tbody tr", count: 1)
   end
@@ -35,7 +35,8 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     }
 
     scenario "Showing 25 items on the first page" do
-      visit audits_path
+      content_items.sort_by!(&:title)
+      visit audits_path(allocated_to: "anyone", sort_by: "title_asc")
 
       content_items[0..24].each do |content_item|
         expect(page).to have_content(content_item.title)
@@ -47,7 +48,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     end
 
     scenario "Showing the second page of items" do
-      visit audits_path
+      visit audits_path(allocated_to: "anyone")
 
       click_link "Next →"
 
@@ -61,8 +62,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     end
 
     scenario "Clicking 'Next' on content items" do
-      visit audits_path
-
+      visit audits_path(allocated_to: "anyone")
       click_link content_items[0].title
 
       (content_items.count - 1).times do |index|

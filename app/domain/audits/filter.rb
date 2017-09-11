@@ -4,6 +4,7 @@ module Audits
     attr_accessor :after,
       :allocated_to,
       :audit_status,
+      :current_user_id,
       :document_type,
       :organisations,
       :page,
@@ -19,7 +20,7 @@ module Audits
     end
 
     def audit_status
-      @audit_status || Audit::NON_AUDITED
+      @audit_status || Audit::ALLOCATED_TO
     end
 
     def sort_by=(value)
@@ -33,10 +34,13 @@ module Audits
     end
 
     def allocated_policy
-      if allocated_to == 'no_one'
-        Policies::Unallocated
-      elsif allocated_to.blank?
+      if allocated_to.blank?
+        @allocated_to = current_user_id
+        Policies::Allocated
+      elsif allocated_to == 'anyone'
         Policies::NoPolicy
+      elsif allocated_to == 'no_one'
+        Policies::Unallocated
       else
         Policies::Allocated
       end
