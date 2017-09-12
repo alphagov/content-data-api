@@ -60,6 +60,7 @@ In the browser navigate to: http://localhost:3206
 * [On the local environment](doc/importing_data.md#Local_environment)
 * [On GOV.UK environments](doc/importing_data.md#jenkins)
 
+<<<<<<< HEAD
 ### Importing themes
 
 There are custom rake tasks for backing up and restoring themes:
