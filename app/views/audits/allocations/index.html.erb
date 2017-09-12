@@ -11,6 +11,8 @@
 <div class="allocations" data-module="batch-selection">
   <%= form_tag audits_allocations_path do %>
       <%= render 'toolbar' %>
+      <%= render 'audits/common/counter', locals: { content_items: content_items } %>
+
       <table class="table table-bordered table-hover">
         <thead>
         <tr class="table-header">
