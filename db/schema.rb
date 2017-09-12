@@ -96,15 +96,6 @@ ActiveRecord::Schema.define(version: 20170912052906) do
     t.index ["question_id"], name: "index_responses_on_question_id"
   end
 
-  create_table "subthemes", force: :cascade do |t|
-    t.bigint "theme_id"
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["theme_id", "name"], name: "index_subthemes_on_theme_id_and_name", unique: true
-    t.index ["theme_id"], name: "index_subthemes_on_theme_id"
-  end
-
   create_table "taxonomy_projects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
