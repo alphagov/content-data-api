@@ -1,8 +1,4 @@
 RSpec.feature "Filter content by allocated content auditor", type: :feature do
-  around(:each) do |example|
-    Feature.run_with_activated(:auditing_allocation) { example.run }
-  end
-
   let!(:current_user) { User.first }
 
   scenario "List is unfiltered" do
