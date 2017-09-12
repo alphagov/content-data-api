@@ -56,7 +56,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
 
     check option: item3.content_id
     select "Me", from: "allocate_to"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to_not have_content("content item 2")
     expect(page).to_not have_content("content item 3")
