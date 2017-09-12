@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170912052906) do
+ActiveRecord::Schema.define(version: 20170912052927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,13 +128,6 @@ ActiveRecord::Schema.define(version: 20170912052906) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["taxonomy_project_id"], name: "index_terms_on_taxonomy_project_id"
-  end
-
-  create_table "themes", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_themes_on_name", unique: true
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
