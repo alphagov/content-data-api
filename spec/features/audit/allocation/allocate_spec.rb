@@ -12,7 +12,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     check option: first.content_id
 
     select "Me", from: "allocate_to"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to have_content("2 items allocated to #{current_user.name}")
 
@@ -38,7 +38,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
 
     select "Me", from: "allocate_to"
     fill_in "batch_size", with: "2"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to have_content("2 items allocated to #{current_user.name}")
   end
@@ -53,7 +53,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     check option: item3.content_id
 
     select "Me", from: "allocate_to"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to have_content("2 items allocated to #{current_user.name}")
   end
@@ -62,7 +62,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     visit audits_allocations_path
 
     select "Me", from: "allocate_to"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to have_content("0 items allocated to #{current_user.name}")
   end
