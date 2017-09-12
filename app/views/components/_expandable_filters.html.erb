@@ -1,12 +1,19 @@
 <% start_expanded ||= false %>
 
-<div id="additionalFilters" class="collapse <%= "in" if start_expanded %>">
-  <%= yield %>
-</div>
+<div data-module="expandable-filters" data-start-expanded="<%= start_expanded -%>" class="js-hidden">
+  <div id="additionalFilters" class="js-additional-filters collapse in">
+    <%= yield %>
+  </div>
 
-<div class="form-group">
-  <a class="" role="button" data-toggle="collapse" href="#additionalFilters" aria-expanded="<%=advanced_filter_enabled? %>" aria-controls="additionalFilters">
-    <span data-open-label>More filter options</span>
-    <span data-close-label>Less filter options</span>
-  </a>
+  <div class="form-group js-expand-button-wrapper hidden">
+    <button type="button"
+            class="btn btn-link <%= "collapsed" unless start_expanded -%>"
+            data-toggle="collapse"
+            data-target="#additionalFilters"
+            aria-expanded="<%= start_expanded -%>"
+            aria-controls="additionalFilters">
+      <span class="data-open-label">More options</span>
+      <span class="data-close-label">Fewer options</span>
+    </button>
+  </div>
 </div>

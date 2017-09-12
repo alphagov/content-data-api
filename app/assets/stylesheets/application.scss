@@ -18,6 +18,7 @@
 // scss-lint:enable Comment
 
 @import 'govuk_admin_template';
+@import 'javascript';
 @import 'tables';
 @import 'pagination';
 @import 'phase_banner';
@@ -29,23 +30,4 @@
 @import 'organisation_select';
 @import 'allocation';
 @import 'guidance';
-
-// TODO: move any styles below to modules once more established
-
-[data-toggle] {
-
-  &[aria-expanded="true"] {
-
-    [data-close-label] {
-      display: inline;
-    }
-
-    [data-open-label] {
-      display: none;
-    }
-  }
-
-  [data-close-label] {
-    display: none;
-  }
-}
+@import 'expandable_filters';

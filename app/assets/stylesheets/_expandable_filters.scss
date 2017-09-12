@@ -1,0 +1,25 @@
+[data-module="expandable-filters"] {
+  .js-expand-button-wrapper {
+    .btn {
+      padding: 0;
+    }
+  }
+
+  .data-close-label {
+    display: inline;
+  }
+
+  .data-open-label {
+    display: none;
+  }
+
+  .collapsed {
+    .data-close-label {
+      display: none;
+    }
+
+    .data-open-label {
+      display: inline;
+    }
+  }
+}
