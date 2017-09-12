@@ -27,7 +27,7 @@
     <div class="<%= content_for?(:sidebar) ? 'col-sm-3' : ''%> sidebar">
       <%= yield :sidebar %>
     </div>
-    <div class="col-sm-9">
+    <div class="<%= content_for?(:sidebar) ? 'col-sm-9' : ''%>">
       <%= yield %>
     </div>
   </div>
