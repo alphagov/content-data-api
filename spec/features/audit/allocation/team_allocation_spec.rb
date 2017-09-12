@@ -1,8 +1,4 @@
 RSpec.feature "Allocate content to other content auditors", type: :feature do
-  around(:each) do |example|
-    Feature.run_with_activated(:auditing_allocation) { example.run }
-  end
-
   let(:current_user) { User.first }
   let(:organisation_slug) { current_user.organisation_slug }
 
