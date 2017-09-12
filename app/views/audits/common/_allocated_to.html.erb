@@ -3,5 +3,8 @@
   <%= select_tag :allocated_to,
                  allocation_options_for_select(params[:allocated_to]),
                  include_blank: "Anyone",
-                 class: "form-control" %>
+                 class: "form-control",
+                 data: {
+                   tracking_id: "allocated-to",
+                 } %>
 </div>

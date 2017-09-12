@@ -7,7 +7,10 @@
       <%= select_tag "allocate_to",
         allocation_options_for_select(params[:allocate_to]),
         class: "form-control",
-        id: "allocate_to" %>
+        id: "allocate_to",
+        data: {
+            tracking_id: "allocate-to",
+        } %>
       <%= filter_to_hidden_fields(:allocate_to, :batch_size) %>
       <%= submit_tag "Go", class: "btn btn-default" %>
     </div>

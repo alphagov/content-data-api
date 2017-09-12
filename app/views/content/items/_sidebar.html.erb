@@ -10,7 +10,10 @@
       <%= select_tag :organisations,
                      organisation_options_for_select(params[:organisations]),
                      include_blank: "All",
-                     class: "form-control" %>
+                     class: "form-control",
+                     data: {
+                       tracking_id: "organisations",
+                     }%>
     </div>
 
     <div class="form-group">
@@ -26,7 +29,10 @@
           <%= select_tag :taxons,
                          taxon_options_for_select(params['taxons']),
                          include_blank: "All",
-                         class: "form-control" %>
+                         class: "form-control",
+                         data: {
+                           tracking_id: "taxons",
+                         }%>
         </div>
       </div>
     </div>
