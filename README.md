@@ -90,10 +90,6 @@ The first argument is the path to the CSV export. The second argument is the
 name of the theme.
 
 
-### Deploying the application
-* [Heroku](doc/deploying.md#heroku)
-* [Integration](doc/deploying.md#integration)
-
 ### App development
 
 * [GOVUK-LINT-RUBY](doc/govuk-lint.md)
