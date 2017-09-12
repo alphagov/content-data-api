@@ -1,15 +1,4 @@
 module DropdownHelper
-  def theme_and_subtheme_options_for_select(selected = nil)
-    theme_and_subtheme_options = Audits::Theme.all.map do |theme|
-      options = [ThemeOption.new(theme)]
-      options += theme.subthemes.map { |s| SubthemeOption.new(s) }
-
-      [theme.name, options.map { |o| [o.name, o.value] }]
-    end
-
-    grouped_options_for_select(theme_and_subtheme_options, selected)
-  end
-
   def taxon_options_for_select(selected = nil)
     taxon_options = Content::Item.all_taxons.pluck(:title, :content_id)
 

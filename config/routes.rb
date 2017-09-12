@@ -22,13 +22,6 @@ Rails.application.routes.draw do
     resources :allocations, only: %w(index create)
   end
 
-  namespace :inventory do
-    root action: "show"
-    get :toggle, action: "toggle"
-    post :themes, action: "add_theme"
-    post :subthemes, action: "add_subtheme"
-  end
-
   resources :taxonomy_projects, path: '/taxonomy-projects', only: %w(index show new create) do
     get 'next', on: :member
   end
