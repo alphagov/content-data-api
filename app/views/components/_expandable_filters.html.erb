@@ -1,0 +1,12 @@
+<% start_expanded ||= false %>
+
+<div id="additionalFilters" class="collapse <%= "in" if start_expanded %>">
+  <%= yield %>
+</div>
+
+<div class="form-group">
+  <a class="" role="button" data-toggle="collapse" href="#additionalFilters" aria-expanded="<%=advanced_filter_enabled? %>" aria-controls="additionalFilters">
+    <span data-open-label>More filter options</span>
+    <span data-close-label>Less filter options</span>
+  </a>
+</div>
