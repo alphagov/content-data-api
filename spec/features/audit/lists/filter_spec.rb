@@ -1,8 +1,4 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
-  around(:each) do |example|
-    Feature.run_with_activated(:filtering_themes, :auditing_allocation) { example.run }
-  end
-
   # Organisations:
   let!(:hmrc) { create(:organisation, title: "HMRC") }
   let!(:dfe) { create(:organisation, title: "DFE") }
@@ -47,21 +43,6 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
   # Audit:
   let!(:audit) { create(:audit, content_item: felling) }
-
-  # Themes:
-  let!(:travel) { create(:theme, name: "Travel") }
-  let!(:environment) { create(:theme, name: "Environment") }
-
-  # Subthemes:
-  let!(:aviation) { create(:subtheme, theme: travel, name: "Aviation") }
-  let!(:forestry) { create(:subtheme, theme: environment, name: "Forestry") }
-  let!(:pollution) { create(:subtheme, theme: environment, name: "Air pollution") }
-
-  before do
-    # Rules:
-    create(:inventory_rule, subtheme: aviation, link_type: "policies", target_content_id: flying.content_id)
-    create(:inventory_rule, subtheme: forestry, link_type: "policies", target_content_id: management.content_id)
-  end
 
   scenario "List not audited by default" do
     visit audits_path
@@ -173,50 +154,6 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
         click_on "Apply filters"
 
         expect(page).to have_field(:query, with: 'a search value')
-      end
-    end
-
-    scenario "themes and subthemes are in alphabetical order" do
-      within("#theme") do
-        options = page.all("option")
-
-        expect(options.map(&:text)).to eq [
-          "All",
-          "All Environment",
-          "Air pollution",
-          "Forestry",
-          "All Travel",
-          "Aviation",
-        ]
-
-        groups = page.all("optgroup")
-        labels = groups.map { |g| g[:label] }
-
-        expect(labels).to eq %w(Environment Travel)
-      end
-    end
-
-    scenario "filtering by theme" do
-      select "All Environment", from: "theme"
-
-      click_on "Apply filters"
-
-      within("table") do
-        expect(page).to have_content("Tree felling")
-        expect(page).to have_no_content("Forest management")
-        expect(page).to have_no_content("DFE")
-      end
-    end
-
-    scenario "filtering by subtheme" do
-      select "Aviation", from: "theme"
-
-      click_on "Apply filters"
-
-      within("table") do
-        expect(page).to have_content("Travel insurance")
-        expect(page).to have_no_content("Flying to countries abroad")
-        expect(page).to have_no_content("DFE")
       end
     end
 

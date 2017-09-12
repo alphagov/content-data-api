@@ -56,24 +56,9 @@ FactoryGirl.define do
     end
   end
 
-  factory :inventory_rule do
-    subtheme
-    sequence(:link_type) { |i| "link-type-#{i}" }
-    sequence(:target_content_id) { |i| "target-content-id-#{i}" }
-  end
-
   factory :allocation, class: Audits::Allocation do
     content_item
     user
-  end
-
-  factory :theme, class: Audits::Theme do
-    sequence(:name) { |i| "Theme #{i}" }
-  end
-
-  factory :subtheme, class: Audits::Subtheme do
-    theme
-    sequence(:name) { |i| "Subtheme #{i}" }
   end
 
   factory :user do

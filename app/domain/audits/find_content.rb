@@ -26,7 +26,6 @@ module Audits
         .sort(filter.sort)
         .sort_direction(filter.sort_direction)
         .after(filter.after)
-        .theme(filter.theme_id)
     end
   end
 end

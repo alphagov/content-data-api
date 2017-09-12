@@ -79,17 +79,6 @@ module Content
       end
     end
 
-    def theme(identifier)
-      builder(verify_presence: identifier) do
-        type, id = identifier.to_s.split("_")
-        return self unless %(Theme Subtheme).include?(type)
-
-        model = Audits.const_get(type).find(id)
-        filter = RulesFilter.new(rules: model.inventory_rules)
-        @scope = filter.apply(@scope)
-      end
-    end
-
     def after(content_item)
       builder(verify_presence: content_item) do
         @after = content_item

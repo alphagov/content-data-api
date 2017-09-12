@@ -100,48 +100,6 @@ RSpec.describe Content::Query do
       expect(subject.content_items.count).to eq 25
       expect(subject.content_items).to match_array(content_items[0..24])
     end
-
-    describe "theme" do
-      before do
-        subject.per_page(100)
-        expect(subject.content_items.count).to eq 26
-      end
-
-      it "does not add a filter if it is an unrecognised type" do
-        subject.theme("Unknown_123")
-        expect(subject.content_items.count).to eq 26
-      end
-
-      describe "when filtering by theme" do
-        let(:theme) { create(:theme) }
-        let(:identifier) { "Theme_#{theme.id}" }
-
-        it "adds a rules filter when setting the theme" do
-          subject.theme(identifier)
-          expect(subject.content_items).to be_empty
-        end
-
-        it "raises an error if theme doesn't exist" do
-          expect { subject.theme("Theme_999") }
-            .to raise_error(ActiveRecord::RecordNotFound)
-        end
-      end
-
-      describe "when filtering by subtheme" do
-        let(:subtheme) { create(:subtheme) }
-        let(:identifier) { "Subtheme_#{subtheme.id}" }
-
-        it "adds a rules filter when setting the theme" do
-          subject.theme(identifier)
-          expect(subject.content_items).to be_empty
-        end
-
-        it "raises an error if subtheme doesn't exist" do
-          expect { subject.theme("Subtheme_999") }
-            .to raise_error(ActiveRecord::RecordNotFound)
-        end
-      end
-    end
   end
 
   describe "with content items with page views" do
