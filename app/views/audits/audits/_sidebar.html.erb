@@ -2,9 +2,11 @@
   <%= render 'audits/common/title' %>
   <%= render 'audits/common/audit_status' %>
   <%= render 'audits/common/allocated_to' %>
-  <%= render 'audits/common/organisations' %>
-  <%= render 'audits/common/primary' %>
   <%= render 'audits/common/document_type' %>
+  <%= render 'components/expandable_filters', start_expanded: filter.organisations.any? do %>
+    <%= render 'audits/common/organisations' %>
+    <%= render 'audits/common/primary' %>
+  <% end %>
   <%= render 'audits/common/sort' %>
   <%= render 'audits/common/submit' %>
 <% end %>

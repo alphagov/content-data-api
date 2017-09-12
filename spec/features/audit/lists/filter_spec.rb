@@ -129,6 +129,9 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
       scenario "using autocomplete", js: true do
         expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
 
+        click_on "More options"
+        expect(page).to have_selector("#organisations", visible: true)
+
         organisations_autocomplete = page.find("#organisations")
         organisations_autocomplete.send_keys("HM", :down, :enter)
 
@@ -139,6 +142,9 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
       scenario "multiple", js: true do
         expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
+
+        click_on "More options"
+        expect(page).to have_selector("#add-organisation", visible: true)
 
         page.find("#add-organisation").click
 
