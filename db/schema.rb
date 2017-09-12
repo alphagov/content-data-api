@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170824150019) do
+ActiveRecord::Schema.define(version: 20170912052906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,16 +59,6 @@ ActiveRecord::Schema.define(version: 20170824150019) do
     t.string "locale", null: false
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
     t.index ["title"], name: "index_content_items_on_title"
-  end
-
-  create_table "inventory_rules", force: :cascade do |t|
-    t.bigint "subtheme_id"
-    t.string "link_type", null: false
-    t.string "target_content_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["subtheme_id", "link_type", "target_content_id"], name: "index_subtheme_link_type_content_id", unique: true
-    t.index ["subtheme_id"], name: "index_inventory_rules_on_subtheme_id"
   end
 
   create_table "links", id: :serial, force: :cascade do |t|
