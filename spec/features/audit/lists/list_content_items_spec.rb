@@ -18,6 +18,14 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     expect(page).to have_content("item2")
   end
 
+  scenario "Displays the number of content items" do
+    create_list :content_item, 2
+
+    visit audits_path
+
+    expect(page).to have_text("2 items")
+  end
+
   scenario "List content items of auditable formats" do
     create(:content_item, document_type: "guide")
     create(:content_item, document_type: "other-format")

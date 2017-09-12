@@ -81,4 +81,12 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     expect(page).to have_content("content item 1")
     expect(page).to_not have_content("content item 2")
   end
+
+  scenario "Displays the number of content items" do
+    create_list :content_item, 2
+
+    visit audits_allocations_path
+
+    expect(page).to have_text("2 items")
+  end
 end
