@@ -1,0 +1,14 @@
+<%
+  def organisation_options_for_select(selected = nil)
+    selected = 'ministry-of-defence'
+    organisation_options = [
+      ["Cabinet Office", "cabinet-office"],
+      ["Department for Education", "department-for-education"],
+      ["Ministry of Defence", "ministry-of-defence"],
+    ]
+
+    options_for_select(organisation_options, selected)
+  end
+%>
+
+<%= render "audits/common/organisations" %>

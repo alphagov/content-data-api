@@ -32,7 +32,7 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
     check option: "content-id-1"
 
     select "John Smith", from: "allocate_to"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to have_content("1 items allocated to John Smith")
 

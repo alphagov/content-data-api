@@ -89,7 +89,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     scenario "filtering by primary organisation" do
       expect(page.find("#primary")).to be_checked
 
-      select "HMRC", from: "organisations"
+      select "HMRC", from: "Organisations"
 
       click_on "Apply filters"
 
@@ -100,7 +100,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     scenario "filtering by organisation" do
       uncheck "primary"
 
-      select "HMRC", from: "organisations"
+      select "HMRC", from: "Organisations"
 
       click_on "Apply filters"
 
@@ -127,14 +127,28 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
       end
 
       scenario "using autocomplete", js: true do
-        expect(page.current_url).not_to include("organisations=#{hmrc.content_id}")
+        expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
 
         organisations_autocomplete = page.find("#organisations")
         organisations_autocomplete.send_keys("HM", :down, :enter)
 
         click_on "Apply filters"
 
-        expect(page.current_url).to include("organisations=#{hmrc.content_id}")
+        expect(page.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
+      end
+
+      scenario "multiple", js: true do
+        expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
+
+        page.find("#add-organisation").click
+
+        page.find_all("#organisations")[1].send_keys("DF", :down, :enter)
+        page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
+
+        click_on "Apply filters"
+
+        expect(page.current_url).to include("organisations%5B%5D=#{dfe.content_id}")
+        expect(page.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
       end
     end
 

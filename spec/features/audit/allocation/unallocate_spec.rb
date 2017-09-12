@@ -14,7 +14,7 @@ RSpec.feature "Unallocate content", type: :feature do
 
     check option: content_item.content_id
     select "No one", from: "allocate_to"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to_not have_content("content item 1")
     expect(page).to have_select("allocate_to", selected: "No one")
@@ -28,7 +28,7 @@ RSpec.feature "Unallocate content", type: :feature do
 
     select "No one", from: "allocate_to"
     fill_in "batch_size", with: "2"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to have_content("2 items unallocated")
   end
@@ -43,7 +43,7 @@ RSpec.feature "Unallocate content", type: :feature do
     check option: item3.content_id
 
     select "No one", from: "allocate_to"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to have_content("2 items unallocated")
   end
@@ -52,7 +52,7 @@ RSpec.feature "Unallocate content", type: :feature do
     visit audits_allocations_path
 
     select "No one", from: "allocate_to"
-    click_on "Go"
+    click_on "Assign"
 
     expect(page).to have_content("0 items unallocated")
   end

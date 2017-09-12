@@ -57,7 +57,7 @@ RSpec.feature "Filter in content items", type: :feature do
       expect(page).to have_content("VAT")
     end
 
-    scenario "the users previously filtered organisation is selected after filtering" do
+    scenario "the user's previously filtered organisation is selected after filtering" do
       visit "/content/items"
       select "HMRC", from: "organisations"
       click_on "Filter"
