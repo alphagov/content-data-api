@@ -12,7 +12,6 @@ module Audits
         page: params[:page],
         primary_org_only: primary_org_only?,
         sort_by: params[:sort_by],
-        theme_id: params[:theme],
         title: params[:query],
       )
     end
