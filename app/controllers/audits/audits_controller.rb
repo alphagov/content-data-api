@@ -41,6 +41,13 @@ module Audits
 
   private
 
+    def default_filter
+      {
+        allocated_to: current_user.uid,
+        audit_status: Audit::NON_AUDITED,
+      }
+    end
+
     def audit_params
       params
         .require(:audits_audit)

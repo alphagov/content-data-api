@@ -1,8 +1,31 @@
 RSpec.feature "Navigation", type: :feature do
   context "with three items with different numbers of page views" do
-    let!(:first) { create(:content_item, title: "First", six_months_page_views: 10) }
-    let!(:second) { create(:content_item, title: "Second", six_months_page_views: 9) }
-    let!(:third) { create(:content_item, title: "Third", six_months_page_views: 8) }
+    let!(:first) do
+      create(
+        :content_item,
+        title: "First",
+        six_months_page_views: 10,
+        allocated_to: @current_user,
+      )
+    end
+
+    let!(:second) do
+      create(
+        :content_item,
+        title: "Second",
+        six_months_page_views: 9,
+        allocated_to: @current_user,
+      )
+    end
+
+    let!(:third) do
+      create(
+        :content_item,
+        title: "Third",
+        six_months_page_views: 8,
+        allocated_to: @current_user,
+      )
+    end
 
     scenario "navigating between audits and the index page" do
       visit audits_path(some_filter: "value")
@@ -86,7 +109,7 @@ RSpec.feature "Navigation", type: :feature do
 
   context "when there are multiple pages of content items" do
     let!(:content_items) {
-      create_list(:content_item, 30)
+      create_list(:content_item, 30, allocated_to: @current_user)
         .sort_by(&:base_path)
         .reverse
     }

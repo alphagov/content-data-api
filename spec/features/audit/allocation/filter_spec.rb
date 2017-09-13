@@ -22,11 +22,6 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     expect(page).to have_selector("#sort_by")
 
     expect(page).to have_content("content item 1")
-    expect(page).to have_content("content item 2")
-
-    select "Me", from: "allocated_to"
-    click_on "Apply filters"
-    expect(page).to have_content("content item 1")
     expect(page).to_not have_content("content item 2")
 
     select "No one", from: "allocated_to"
@@ -72,7 +67,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
 
     visit audits_allocations_path
 
-    expect(page).to have_content("content item 1")
+    expect(page).to have_no_content("content item 1")
     expect(page).to have_content("content item 2")
 
     select "John Smith", from: "allocated_to"

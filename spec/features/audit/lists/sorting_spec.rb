@@ -1,7 +1,7 @@
 RSpec.feature "Sort content items to audit", type: :feature do
   scenario "Default sorting by popularity" do
-    create(:content_item, six_months_page_views: 0, title: "item1")
-    create(:content_item, six_months_page_views: 1234, title: "item2")
+    create(:content_item, six_months_page_views: 0, title: "item1", allocated_to: @current_user)
+    create(:content_item, six_months_page_views: 1234, title: "item2", allocated_to: @current_user)
 
     visit audits_path
 

@@ -4,6 +4,16 @@ module Audits
     helper_method :filter, :filter_params, :primary_org_only?
 
     def filter(override = {})
+      options = default_filter
+        .merge(query_string_filter)
+        .merge(override)
+
+      Filter.new(options)
+    end
+
+  private
+
+    def query_string_filter
       options = {
         allocated_to: params[:allocated_to],
         audit_status: params[:audit_status],
@@ -13,12 +23,16 @@ module Audits
         primary_org_only: primary_org_only?,
         sort_by: params[:sort_by],
         title: params[:query],
-      }.merge(override)
+      }
 
-      Filter.new(options)
+      options.delete_if do |_, v|
+        v == "" || v.nil?
+      end
     end
 
-  private
+    def default_filter
+      {}
+    end
 
     def filter_params
       request

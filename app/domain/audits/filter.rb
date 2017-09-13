@@ -14,12 +14,12 @@ module Audits
       :theme_id,
       :title
 
-    def audit_status=(value)
-      @audit_status = value.to_sym unless value.blank?
+    def audit_status
+      @audit_status&.to_sym
     end
 
-    def audit_status
-      @audit_status || Audit::NON_AUDITED
+    def allocated_to
+      @allocated_to&.to_s
     end
 
     def sort_by=(value)
@@ -27,15 +27,19 @@ module Audits
         raise "Invalid value: #{value}" unless value =~ /\A[a-z]+_(asc|desc)\z/
 
         values = value.split("_")
-        self.sort = values[0]
-        self.sort_direction = values[1]
+        @sort = values[0]
+        @sort_direction = values[1]
       end
+    end
+
+    def sort_by
+      "#{sort}_#{sort_direction}"
     end
 
     def allocated_policy
       if allocated_to == 'no_one'
         Policies::Unallocated
-      elsif allocated_to.blank?
+      elsif allocated_to == 'anyone'
         Policies::NoPolicy
       else
         Policies::Allocated

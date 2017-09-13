@@ -9,7 +9,7 @@ module RadioButtonHelper
     options.map.with_index do |option, index|
       option.merge(
         id: "audit_status_#{option[:value]}",
-        selected: selected == option[:value].to_s || index.zero?,
+        selected: selected == option[:value] || index.zero?,
       )
     end
   end

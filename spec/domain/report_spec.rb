@@ -8,7 +8,7 @@ module Audits
       ActiveRecord.enable
     end
 
-    subject! { described_class.new(Filter.new, "http://example.com") }
+    subject! { described_class.new(build(:filter), "http://example.com") }
 
     let(:csv) { subject.generate }
     let(:lines) { csv.split("\n") }
@@ -24,8 +24,10 @@ module Audits
       end
     end
 
-    it "outputs a row for each content item" do
-      expect(data.third).to start_with("", "", "Example")
+    describe "reporting on all content" do
+      it "outputs a row for each content item" do
+        expect(data.third).to start_with("", "", "Example")
+      end
     end
 
     it "doesn't execute N+1 queries" do

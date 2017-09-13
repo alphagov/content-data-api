@@ -6,20 +6,20 @@ RSpec.feature "List Content Items to Audit", type: :feature do
   end
 
   scenario "List Content Items to Audit" do
-    create(:content_item, title: "item1", six_months_page_views: 10_000, content_id: "content-id")
-    create(:content_item, title: "item2")
+    content_item1 = create(:content_item, six_months_page_views: 10_000, allocated_to: @current_user)
+    content_item2 = create(:content_item, allocated_to: @current_user)
 
     visit audits_path
 
-    expect(page).to have_content("item1")
+    expect(page).to have_content(content_item1.title)
     expect(page).to have_content("10,000")
-    expect(page).to have_link("item1", href: "/content_items/content-id/audit")
+    expect(page).to have_link(content_item1.title, href: "/content_items/#{content_item1.content_id}/audit")
 
-    expect(page).to have_content("item2")
+    expect(page).to have_content(content_item2.title)
   end
 
   scenario "Displays the number of content items" do
-    create_list :content_item, 2
+    create_list(:content_item, 2, allocated_to: @current_user)
 
     visit audits_path
 
@@ -27,8 +27,8 @@ RSpec.feature "List Content Items to Audit", type: :feature do
   end
 
   scenario "List content items of auditable formats" do
-    create(:content_item, document_type: "guide")
-    create(:content_item, document_type: "other-format")
+    create(:content_item, document_type: "guide", allocated_to: @current_user)
+    create(:content_item, document_type: "other-format", allocated_to: @current_user)
 
     visit audits_path
 
@@ -37,7 +37,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
 
   describe "pagination" do
     let!(:content_items) {
-      create_list(:content_item, 30)
+      create_list(:content_item, 30, allocated_to: @current_user)
         .sort_by(&:base_path)
         .reverse
     }

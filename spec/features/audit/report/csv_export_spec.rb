@@ -41,6 +41,9 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     scenario "Exporting a csv file as an attachment" do
       visit audits_report_path
+      select "Anyone", from: "allocated_to"
+      click_on "Apply filters"
+
       click_link "Export filtered audit to CSV"
 
       expect(content_type).to eq("text/csv")
@@ -91,6 +94,9 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     scenario "Exporting an unfiltered audit to CSV with all the content items" do
       visit audits_report_path
+      select "Anyone", from: "allocated_to"
+      click_on "Apply filters"
+
       click_link "Export filtered audit to CSV"
 
       csv = CSV.parse(page.body, headers: true)
