@@ -104,7 +104,12 @@
       }
 
       function clearAutocompleteAndSelect($organisationSelectWrapper) {
-        $organisationSelectWrapper.find('input').val('');
+        var $input = $organisationSelectWrapper.find('input');
+        $input.val('');
+        // Changing the value will expand the autocomplete, but without focus, meaning that
+        // it won't close if you click outside it. Here we manually focus and blur it, so
+        // the options don't display
+        $input.click().focus().blur();
         // Clearing the input doesn't reset the select, so we have to reset it manually.
         // See: https://github.com/alphagov/accessible-autocomplete/issues/220
         $organisationSelectWrapper.find('select').val('');
