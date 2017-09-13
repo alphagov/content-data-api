@@ -17,7 +17,8 @@
 //= require selectize
 //= require accessible-autocomplete.min
 //= require organisation-autocomplete
-//= require batch-selection.js
+//= require batch-selection
+//= require expandable-filters
 
 // --- Analytics ---
 //= require analytics/google-tag-manager

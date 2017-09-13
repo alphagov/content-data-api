@@ -73,12 +73,20 @@ RSpec.feature "Filter in content items", type: :feature do
       expect(page).to have_selector('#additionalFilters', visible: false)
     end
 
+    scenario "the user can see the additional filters if JavaScript is disabled", js: false do
+      visit "/content/items"
+
+      expect(page).to have_selector('#additionalFilters', visible: true)
+    end
+
     scenario "the user can toggle the visibility of the additional filters", js: true do
       visit "/content/items"
 
-      click_on "More filter options"
-
+      click_on "More options"
       expect(page).to have_selector('#additionalFilters', visible: true)
+
+      click_on "Fewer options"
+      expect(page).to have_selector('#additionalFilters', visible: false)
     end
 
     scenario "the user can see the additional filters if they are currently filtering by one of them", js: true do
