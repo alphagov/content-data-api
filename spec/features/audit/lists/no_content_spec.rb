@@ -23,6 +23,9 @@ RSpec.feature "Notifying of no content to audit", type: :feature do
         expect(page).to have_content("You have no content to audit.")
         expect(page).to have_css(".alert")
         expect(page).to have_css(".alert a")
+        within(".alert") do
+          expect(page).to have_link("Assign content", href: "http://www.example.com/audits/allocations")
+        end
       end
 
       scenario "audited content should not show a banner" do
