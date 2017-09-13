@@ -35,11 +35,6 @@
   }
 
   .add-organisation {
-    @extend %legend-reset;
-
-    background: none;
-    border-bottom: 1px solid $black;
-    padding: 0 2px;
-    margin: 3px;
+    padding: 0;
   }
 }
