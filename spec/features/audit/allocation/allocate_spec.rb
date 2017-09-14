@@ -43,6 +43,20 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     expect(page).to have_content("2 items allocated to #{current_user.name}")
   end
 
+  scenario "Allocation when filtering by organisation using filter results" do
+    create :organisation, title: "HMRC"
+
+    visit audits_allocations_path
+    select "HMRC", from: "Organisations"
+    click_on "Apply filters"
+
+    select "Me", from: "allocate_to"
+    fill_in "batch_size", with: "4"
+    click_on "Assign"
+
+    expect(page).to have_content("0 items allocated to #{current_user.name}")
+  end
+
   scenario "Allocate selecting individual items" do
     item2 = create(:content_item, title: "content item 2")
     item3 = create(:content_item, title: "content item 3")
