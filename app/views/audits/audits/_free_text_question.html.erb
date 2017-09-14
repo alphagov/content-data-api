@@ -1,4 +1,4 @@
-<div class="row t-<%= attribute.to_s.dasherize %>">
+<div class="row <% unless related_question_answered %>if-js-hide<% end %> t-<%= attribute.to_s.dasherize %> js-free-text-question">
   <div class="col-sm-12">
     <%= form.label attribute, question %>
     <%= form.text_area attribute, class: 'form-control' %>

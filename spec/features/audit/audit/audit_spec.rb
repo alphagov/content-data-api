@@ -84,4 +84,45 @@ RSpec.feature "Auditing a content item", type: :feature do
     expect_answer "Document type", "No"
     expect_answer "Is the content out of date?", "Yes"
   end
+
+  scenario "clicking on yes and no buttons for similar content questions", js: true do
+    visit content_item_audit_path(content_item)
+
+    expect(page).to have_no_content('Where should users be redirected to? (optional)')
+
+    answer_question "Should the content be removed?", "Yes"
+    expect(page).to have_content('Where should users be redirected to? (optional)')
+
+    answer_question "Should the content be removed?", "No"
+    expect(page).to have_no_content('Where should users be redirected to? (optional)')
+  end
+
+  scenario "filling in and saving questions for similar content", js: true do
+    visit content_item_audit_path(content_item)
+
+    answer_question "Title", "No"
+    answer_question "Summary", "Yes"
+    answer_question "Page detail", "No"
+    fill_in "Notes", with: "something"
+    answer_question "Attachments", "Yes"
+    answer_question "Document type", "No"
+    answer_question "Is the content out of date?", "Yes"
+    answer_question "Should the content be removed?", "Yes"
+    fill_in "Where should users be redirected to? (optional)", with: "http://www.example.com"
+    answer_question "Is this content very similar to other pages?", "Yes"
+    fill_in "URLs of similar pages", with: "something"
+
+    click_on "Save"
+
+    expect(page).to have_content('Where should users be redirected to? (optional)')
+    expect(find_field("Where should users be redirected to? (optional)").value).to eq("http://www.example.com")
+
+    answer_question "Should the content be removed?", "No"
+    click_on "Save"
+
+    expect(page).to have_no_content('Where should users be redirected to? (optional)')
+
+    answer_question "Should the content be removed?", "Yes"
+    expect(find_field("Where should users be redirected to? (optional)").value).to eq("")
+  end
 end
