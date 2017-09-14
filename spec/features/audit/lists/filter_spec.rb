@@ -48,6 +48,9 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     visit audits_path
     expect(page).to have_selector(".nav")
 
+    select "Anyone", from: "allocated_to"
+    click_on "Apply filters"
+
     expect(page).to have_no_content("Tree felling")
     expect(page).to have_content("Forest management")
     expect(page).to have_checked_field("audit_status_non_audited")

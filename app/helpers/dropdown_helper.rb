@@ -32,8 +32,6 @@ module DropdownHelper
   end
 
   def allocation_options_for_select(selected = nil)
-    selected = current_user.uid if selected.nil?
-
     allocation_options = FindOrganisationUsers
                            .call(organisation_slug: current_user.organisation_slug)
                            .pluck(:name, :uid)
@@ -41,8 +39,9 @@ module DropdownHelper
                            .reject { |_, uid| uid == current_user.uid }
                            .sort_by { |name, _| name }
                            .unshift(
-                             ['No one', :no_one],
                              ['Me', current_user.uid],
+                             ['Anyone', :anyone],
+                             ['No one', :no_one],
                            )
 
     options_for_select(allocation_options, selected)

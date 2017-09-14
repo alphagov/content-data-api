@@ -14,11 +14,10 @@ RSpec.feature "Reporting on audit progress" do
 
   scenario "Displaying the number of items included in the audit" do
     visit audits_report_path
-    expect(page).to have_selector(".nav")
+    select "Anyone", from: "allocated_to"
+    click_on "Apply filters"
 
     expect(page).to have_content("3 Content items")
-
-    select "Anyone", from: "allocated_to"
 
     select "Guide", from: "document_type"
     click_on "Apply filters"
@@ -31,6 +30,8 @@ RSpec.feature "Reporting on audit progress" do
 
   scenario "Displaying the number of items audited/not audited" do
     visit audits_report_path
+    select "Anyone", from: "allocated_to"
+    click_on "Apply filters"
 
     expect(page).to have_content("Items audited 2 67%")
     expect(page).to have_content("Items still to audit 1 33%")
@@ -39,6 +40,8 @@ RSpec.feature "Reporting on audit progress" do
 
   scenario "Displaying the number of items needing improvement/not needing improvement" do
     visit audits_report_path
+    select "Anyone", from: "allocated_to"
+    click_on "Apply filters"
 
     expect(page).to have_content("Items that need improvement 1 50%")
     expect(page).to have_content("Items that don't need improvement 1 50%")

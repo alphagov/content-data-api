@@ -3,6 +3,7 @@ require_relative "./factories/link_factory"
 FactoryGirl.define do
   factory :content_item, class: Content::Item do
     transient do
+      allocated_to nil
       organisations nil
       primary_publishing_organisation nil
       policies nil
@@ -21,6 +22,7 @@ FactoryGirl.define do
       LinkFactory.add_primary_publishing_organisation(content_item, evaluator.primary_publishing_organisation)
       LinkFactory.add_policies(content_item, evaluator.policies)
       LinkFactory.add_policy_areas(content_item, evaluator.policy_areas)
+      create(:allocation, content_item: content_item, user: evaluator.allocated_to) unless evaluator.allocated_to.nil?
     end
 
     factory :organisation do
@@ -91,5 +93,10 @@ FactoryGirl.define do
         group.content_items << create(:content_item)
       end
     end
+  end
+
+  factory :filter, class: Audits::Filter do
+    allocated_to 'anyone'
+    audit_status :all
   end
 end

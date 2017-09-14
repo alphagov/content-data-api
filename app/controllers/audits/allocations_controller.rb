@@ -22,6 +22,13 @@ module Audits
 
   private
 
+    def default_filter
+      {
+        allocated_to: :no_one,
+        audit_status: Audit::NON_AUDITED,
+      }
+    end
+
     def user_uid
       params.fetch(:allocate_to)
     end

@@ -41,6 +41,9 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     scenario "Exporting a csv file as an attachment" do
       visit audits_report_path
+      select "Anyone", from: "allocated_to"
+      click_on "Apply filters"
+
       click_link "Export filtered audit to CSV"
 
       expect(content_type).to eq("text/csv")
@@ -64,26 +67,6 @@ RSpec.feature "Exporting a CSV from the report page" do
       expect(page).to have_content("Example 1,https://gov.uk/example1")
       expect(page).to have_no_content("Example 2,https://gov.uk/example2")
     end
-
-    scenario "Discard audit status filter when clicking from content view to report, and then exporting CSV" do
-      visit audits_path
-      select "Anyone", from: "allocated_to"
-
-      choose "Audited"
-
-      click_on "Apply filters"
-      expect(page).to have_content("Example 1")
-      expect(page).to have_no_content("Example 2")
-
-      click_link "Audit progress"
-
-      click_link "Export filtered audit to CSV"
-      expect(content_disposition).to include(
-        'filename="Transformation_audit_report_CSV_download.csv"',
-      )
-      expect(page).to have_content("Example 1")
-      expect(page).to have_content("Example 2")
-    end
   end
 
   context "Multiple pages of content items are in the database" do
@@ -91,6 +74,9 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     scenario "Exporting an unfiltered audit to CSV with all the content items" do
       visit audits_report_path
+      select "Anyone", from: "allocated_to"
+      click_on "Apply filters"
+
       click_link "Export filtered audit to CSV"
 
       csv = CSV.parse(page.body, headers: true)
