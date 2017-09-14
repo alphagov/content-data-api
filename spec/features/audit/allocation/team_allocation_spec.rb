@@ -1,45 +1,67 @@
 RSpec.feature "Allocate content to other content auditors", type: :feature do
-  let(:current_user) { User.first }
-  let(:organisation_slug) { current_user.organisation_slug }
-
-  before do
-    create :allocation, user: current_user
+  let!(:my_organisation) do
+    create(
+      :organisation,
+      title: "Discworld",
+    )
   end
 
-  scenario "List content auditors of same organisation" do
-    create :user, :with_allocated_content, name: "John Smith", organisation_slug: organisation_slug
-    create :user, :with_allocated_content, name: "Arthur Johnson", organisation_slug: organisation_slug
-
-    visit audits_allocations_path
-
-    options = [
-      "Me",
-      "Anyone",
-      "No one",
-      "Arthur Johnson",
-      "John Smith",
-    ]
-    expect(page).to have_select("allocated_to", options: options)
+  let!(:me) do
+    create(
+      :user,
+      name: "Terry Pratchett",
+      organisation: my_organisation,
+    )
   end
 
-  scenario "Allocate content to other content auditors" do
-    create :user, :with_allocated_content, name: "John Smith", organisation_slug: organisation_slug
-    create :content_item, title: "content item 1", content_id: "content-id-1"
-    create :content_item, title: "content item 2"
+  context "There are other auditors in my organisation" do
+    let!(:vimes) do
+      create(
+        :user,
+        name: "Commander Vimes",
+        organisation: my_organisation,
+      )
+    end
 
-    visit audits_allocations_path
+    let!(:tiffany) do
+      create(
+        :user,
+        name: "Tiffany Aching",
+        organisation: my_organisation,
+      )
+    end
 
-    check option: "content-id-1"
+    scenario "List content auditors of same organisation" do
+      visit audits_allocations_path
 
-    select "John Smith", from: "allocate_to"
-    click_on "Assign"
+      options = [
+        "Me",
+        "Anyone",
+        "No one",
+        "Commander Vimes",
+        "Tiffany Aching",
+      ]
+      expect(page).to have_select("allocated_to", options: options)
+    end
 
-    expect(page).to have_content("1 items allocated to John Smith")
+    scenario "Allocate content to other content auditors" do
+      create :content_item, title: "The Wee Free Men", content_id: "wee-free-men"
+      create :content_item, title: "Going Postal"
 
-    select "John Smith", from: "allocated_to"
-    click_on "Apply filters"
+      visit audits_allocations_path
 
-    expect(page).to have_content("content item 1")
-    expect(page).to_not have_content("content item 2")
+      check option: "wee-free-men"
+
+      select "Tiffany Aching", from: "allocate_to"
+      click_on "Assign"
+
+      expect(page).to have_content("1 items allocated to Tiffany Aching")
+
+      select "Tiffany Aching", from: "allocated_to"
+      click_on "Apply filters"
+
+      expect(page).to have_content("The Wee Free Men")
+      expect(page).to_not have_content("Going Postal")
+    end
   end
 end

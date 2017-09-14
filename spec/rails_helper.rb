@@ -53,8 +53,4 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
-  config.before(type: :feature) do
-    @current_user = create :user
-  end
 end

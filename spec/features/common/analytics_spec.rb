@@ -1,4 +1,10 @@
 RSpec.feature "Analytics", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   context "Tracking select elements" do
     scenario "all select elements have a data-tracking-id attribute" do
       paths_to_check = [

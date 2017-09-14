@@ -1,4 +1,10 @@
 RSpec.feature "List Content Items to Audit", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   scenario "User does not see CPM feedback survey link in banner" do
     visit audits_path
 

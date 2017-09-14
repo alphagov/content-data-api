@@ -1,5 +1,9 @@
 RSpec.feature "Filter content by allocated content auditor", type: :feature do
-  let!(:current_user) { User.first }
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
 
   scenario "List is unfiltered" do
     visit audits_path
@@ -13,7 +17,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     item2 = create(:content_item, title: "content item 2")
     create(:content_item, title: "content item 3")
 
-    create(:allocation, content_item: item1, user: current_user)
+    create(:allocation, content_item: item1, user: me)
     create(:allocation, content_item: item2, user: another_user)
 
     visit audits_path
@@ -47,7 +51,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     item2 = create(:content_item, title: "content item 2")
     item3 = create(:content_item, title: "content item 3")
 
-    create(:allocation, content_item: item2, user: current_user)
+    create(:allocation, content_item: item2, user: me)
 
     visit audits_allocations_path
 

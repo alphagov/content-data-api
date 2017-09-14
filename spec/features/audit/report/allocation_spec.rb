@@ -1,9 +1,14 @@
 RSpec.feature "Content Allocation", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   scenario "Filter allocated content" do
-    current_user = User.first
     content_item = create :content_item, title: "content item 1"
 
-    create(:allocation, content_item: content_item, user: current_user)
+    create(:allocation, content_item: content_item, user: me)
 
     visit audits_report_path
 

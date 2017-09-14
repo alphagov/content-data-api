@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Taxonomy generation", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   scenario "User creates a project" do
     when_i_visit_the_projects_page
     and_i_click_on_the_new_project_button

@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Content Preview Modal", type: :feature, js: true do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   before :each do
     #ignore the fact the iframe points to an invalid path
     Capybara.raise_server_errors = false

@@ -1,4 +1,11 @@
 RSpec.feature "Audit metadata", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+      name: "Harper Lee",
+    )
+  end
+
   let!(:content_item) do
     create(
       :content_item,
@@ -48,7 +55,7 @@ RSpec.feature "Audit metadata", type: :feature do
       document_type: "guidance",
     )
 
-    create(:audit, content_item: content_item, user: @current_user)
+    create(:audit, content_item: content_item, user: me)
 
     create_linked_content("organisations", "Home office")
     create_linked_content("topics", "Immigration")
@@ -62,7 +69,7 @@ RSpec.feature "Audit metadata", type: :feature do
 
     within("#metadata") do
       allocated_text = "Assigned to Edd the Duck Government Digital Service"
-      audited_text = "Audited 01/01/17 (less than a minute ago) by #{@current_user.name} Government Digital Service"
+      audited_text = "Audited 01/01/17 (less than a minute ago) by Harper Lee Government Digital Service"
       expect(page).to have_selector("#allocated", text: allocated_text)
       expect(page).to have_selector("#audited", text: audited_text)
       expect(page).to have_selector("#organisations", text: "Organisations Home office")

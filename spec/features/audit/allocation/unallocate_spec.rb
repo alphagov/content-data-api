@@ -1,9 +1,14 @@
 RSpec.feature "Unallocate content", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   let!(:content_item) { create :content_item, title: "content item 1" }
-  let!(:current_user) { User.first }
 
   scenario "Unallocate content" do
-    create(:allocation, content_item: content_item, user: current_user)
+    create(:allocation, content_item: content_item, user: me)
 
     visit audits_allocations_path
 
