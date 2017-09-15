@@ -1,19 +1,27 @@
 RSpec.feature "Content Allocation", type: :feature do
+  let!(:my_organisation) do
+    create(
+      :organisation,
+    )
+  end
+
   let!(:me) do
     create(
       :user,
+      organisation: my_organisation,
     )
   end
 
   scenario "Filter allocated content" do
-    content_item = create :content_item, title: "content item 1"
-
-    create(:allocation, content_item: content_item, user: me)
+    create(
+      :content_item,
+      title: "Do Androids Dream of Electric Sheep",
+      allocated_to: me,
+      primary_publishing_organisation: my_organisation,
+    )
 
     visit audits_report_path
 
-    select "Me", from: "allocated_to"
-    click_on "Apply filters"
     expect(page).to have_selector(".report-section", text: "1")
 
     select "No one", from: "allocated_to"

@@ -2,7 +2,6 @@ module Audits
   class Monitor
     def initialize(filter)
       @filter = filter
-      @filter.audit_status = Audit::ALL
     end
 
     def total_count
