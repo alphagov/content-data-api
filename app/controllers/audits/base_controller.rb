@@ -11,7 +11,8 @@ module Audits
         organisations: organisations,
         page: params[:page],
         primary_org_only: primary_org_only?,
-        sort_by: params[:sort_by],
+        sort: Sort.column(params[:sort_by]),
+        sort_direction: Sort.direction(params[:sort_by]),
         title: params[:query],
       }.merge(override)
 

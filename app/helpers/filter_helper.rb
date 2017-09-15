@@ -1,9 +1,14 @@
 module FilterHelper
-  def filter_to_hidden_fields(*fields_to_exclude)
-    filter_params = params.except(:controller, :action).except(*fields_to_exclude)
-    hidden_fields = filter_params.keys.map do |key|
-      key = "#{key}[]" if params[key].is_a?(Array)
-      hidden_field_tag key, filter_params.dig(key)
+  def filter_to_hidden_fields
+    hidden_fields = filter.to_h.each_with_object([]) do |(key, value), fields|
+      # TODO: Test for multi-org filtering
+      if value.is_a?(Array)
+        value.each do |array_element|
+          fields << hidden_field_tag("#{key}[]", array_element)
+        end
+      else
+        fields << hidden_field_tag(key, value)
+      end
     end
 
     hidden_fields.join.html_safe
