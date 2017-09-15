@@ -1,5 +1,5 @@
 RSpec.feature "Allocate content to other content auditors", type: :feature do
-  let!(:my_organisation) do
+  let!(:discworld) do
     create(
       :organisation,
       title: "Discworld",
@@ -10,7 +10,7 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
     create(
       :user,
       name: "Terry Pratchett",
-      organisation: my_organisation,
+      organisation: discworld,
     )
   end
 
@@ -19,7 +19,7 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
       create(
         :user,
         name: "Commander Vimes",
-        organisation: my_organisation,
+        organisation: discworld,
       )
     end
 
@@ -27,7 +27,7 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
       create(
         :user,
         name: "Tiffany Aching",
-        organisation: my_organisation,
+        organisation: discworld,
       )
     end
 
@@ -45,8 +45,18 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
     end
 
     scenario "Allocate content to other content auditors" do
-      create :content_item, title: "The Wee Free Men", content_id: "wee-free-men"
-      create :content_item, title: "Going Postal"
+      create(
+        :content_item,
+        title: "The Wee Free Men",
+        content_id: "wee-free-men",
+        primary_publishing_organisation: discworld,
+      )
+
+      create(
+        :content_item,
+        title: "Going Postal",
+        primary_publishing_organisation: discworld,
+      )
 
       visit audits_allocations_path
 

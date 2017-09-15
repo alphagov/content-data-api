@@ -1,88 +1,117 @@
 RSpec.feature "Allocate multiple content items", type: :feature do
-  let!(:content_item) { create :content_item, title: "content item 1" }
+  let!(:novelists) do
+    create(
+      :organisation,
+      title: "Novelists",
+    )
+  end
+
   let!(:me) do
     create(
       :user,
       name: "Jane Austen",
+      organisation: novelists,
     )
   end
 
-  scenario "Allocate content within current page" do
-    second = create(:content_item, title: "content item 2")
-    first = create(:content_item, title: "content item 3")
+  context "There are three unallocated content items belonging to my organisation" do
+    let!(:pride_and_prejudice) do
+      create(
+        :content_item,
+        title: "Pride and Prejudice",
+        content_id: "pride-and-prejudice",
+        primary_publishing_organisation: novelists,
+      )
+    end
 
-    visit audits_allocations_path
+    let!(:emma) do
+      create(
+        :content_item,
+        title: "Emma",
+        content_id: "emma",
+        primary_publishing_organisation: novelists,
+      )
+    end
 
-    check option: second.content_id
-    check option: first.content_id
+    let!(:sense_and_sensibility) do
+      create(
+        :content_item,
+        title: "Sense and Sensibility",
+        content_id: "sense-and-sensibility",
+        primary_publishing_organisation: novelists,
+      )
+    end
 
-    select "Me", from: "allocate_to"
-    click_on "Assign"
+    scenario "Allocate content within current page" do
+      visit audits_allocations_path
 
-    expect(page).to have_content("2 items allocated to Jane Austen")
+      check option: "emma"
+      check option: "sense-and-sensibility"
 
-    select "Me", from: "allocated_to"
-    click_on "Apply filters"
+      select "Me", from: "allocate_to"
+      click_on "Assign"
 
-    expect(page).to_not have_content("content item 1")
-    expect(page).to have_content("content item 2")
-    expect(page).to have_content("content item 3")
+      expect(page).to have_content("2 items allocated to Jane Austen")
 
-    select "No one", from: "allocated_to"
-    click_on "Apply filters"
+      select "Me", from: "allocated_to"
+      click_on "Apply filters"
 
-    expect(page).to have_content("content item 1")
-    expect(page).to_not have_content("content item 2")
-    expect(page).to_not have_content("content item 3")
-  end
+      expect(page).to_not have_content("Pride and Prejudice")
+      expect(page).to have_content("Emma")
+      expect(page).to have_content("Sense and Sensibility")
 
-  scenario "Allocate using the batch input" do
-    create_list :content_item, 2
+      select "No one", from: "allocated_to"
+      click_on "Apply filters"
 
-    visit audits_allocations_path
+      expect(page).to have_content("Pride and Prejudice")
+      expect(page).to_not have_content("Emma")
+      expect(page).to_not have_content("Sense and Sensibility")
+    end
 
-    select "Me", from: "allocate_to"
-    fill_in "batch_size", with: "2"
-    click_on "Assign"
+    scenario "Allocate using the batch input" do
+      visit audits_allocations_path
 
-    expect(page).to have_content("2 items allocated to Jane Austen")
-  end
+      select "Me", from: "allocate_to"
+      fill_in "batch_size", with: "2"
+      click_on "Assign"
 
-  scenario "Allocation when filtering by organisation using filter results" do
-    create :organisation, title: "HMRC"
+      expect(page).to have_content("2 items allocated to Jane Austen")
+    end
 
-    visit audits_allocations_path
-    select "HMRC", from: "Organisations"
-    click_on "Apply filters"
+    scenario "Allocation when filtering by organisation using filter results" do
+      create(:organisation, title: "Painters")
 
-    select "Me", from: "allocate_to"
-    fill_in "batch_size", with: "4"
-    click_on "Assign"
+      visit audits_allocations_path
+      unselect "Novelists", from: "Organisations"
+      select "Painters", from: "Organisations"
+      click_on "Apply filters"
 
-    expect(page).to have_content("0 items allocated to Jane Austen")
-  end
+      select "Me", from: "allocate_to"
+      fill_in "batch_size", with: "4"
+      click_on "Assign"
 
-  scenario "Allocate selecting individual items" do
-    item2 = create(:content_item, title: "content item 2")
-    item3 = create(:content_item, title: "content item 3")
+      expect(page).to have_content("0 items allocated to Jane Austen")
+    end
 
-    visit audits_allocations_path
+    scenario "Allocate selecting individual items" do
+      visit audits_allocations_path
 
-    check option: item2.content_id
-    check option: item3.content_id
+      check option: "emma"
+      check option: "sense-and-sensibility"
 
-    select "Me", from: "allocate_to"
-    click_on "Assign"
+      select "Me", from: "allocate_to"
+      click_on "Assign"
 
-    expect(page).to have_content("2 items allocated to Jane Austen")
-  end
+      expect(page).to have_content("2 items allocated to Jane Austen")
+    end
 
-  scenario "Allocate 0 content items" do
-    visit audits_allocations_path
+    scenario "Allocate 0 content items" do
+      visit audits_allocations_path
 
-    select "Me", from: "allocate_to"
-    click_on "Assign"
+      select "Me", from: "allocate_to"
+      click_on "Assign"
 
-    expect(page).to have_content("0 items allocated to Jane Austen")
+      expect(page).to have_content("0 items allocated to Jane Austen")
+    end
   end
 end
