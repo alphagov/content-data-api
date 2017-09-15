@@ -46,7 +46,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     expect(page).to have_content("content item 3")
   end
 
-  scenario "Does not change filer status after user has allocated content" do
+  scenario "Does not change filter status after user has allocated content" do
     create :content_item, title: "content item 1"
     item2 = create(:content_item, title: "content item 2")
     item3 = create(:content_item, title: "content item 3")
@@ -62,10 +62,10 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     select "Me", from: "allocate_to"
     click_on "Assign"
 
+    expect(page).to have_select("allocated_to", selected: "No one")
+
     expect(page).to_not have_content("content item 2")
     expect(page).to_not have_content("content item 3")
-
-    expect(page).to have_select("allocated_to", selected: "No one")
   end
 
   scenario "Filter content allocated to other content auditor" do

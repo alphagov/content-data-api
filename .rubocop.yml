@@ -7,3 +7,4 @@ Metrics/BlockLength:
     - "spec/**/*.rb"
     - "config/routes.rb"
     - "config/environments/*.rb"
+    - "app/domain/audits/filter.rb"

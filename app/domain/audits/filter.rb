@@ -1,35 +1,35 @@
 module Audits
-  class Filter
-    include ActiveModel::Model
-    attr_accessor :after,
-      :allocated_to,
-      :audit_status,
-      :document_type,
-      :organisations,
-      :page,
-      :per_page,
-      :primary_org_only,
-      :sort,
-      :sort_direction,
-      :theme_id,
-      :title
+  Filter = Struct.new(
+    :after,
+    :allocated_to,
+    :audit_status,
+    :document_type,
+    :organisations,
+    :page,
+    :per_page,
+    :primary_org_only,
+    :sort,
+    :sort_direction,
+    :theme_id,
+    :title
+  ) do
+
+    def initialize(hash = {})
+      hash.each do |key, value|
+        self[key] = value
+      end
+    end
 
     def audit_status
-      @audit_status&.to_sym
+      self[:audit_status]&.to_sym
     end
 
     def allocated_to
-      @allocated_to&.to_s
+      self[:allocated_to]&.to_s
     end
 
-    def sort_by=(value)
-      if value.present?
-        raise "Invalid value: #{value}" unless value =~ /\A[a-z]+_(asc|desc)\z/
-
-        values = value.split("_")
-        self.sort = values[0]
-        self.sort_direction = values[1]
-      end
+    def sort_by
+      Sort.combine(@sort, @sort_direction)
     end
 
     def allocated_policy
@@ -43,7 +43,7 @@ module Audits
     end
 
     def audited_policy
-      case self.audit_status
+      case audit_status
       when Audit::AUDITED
         Policies::Audited
       when Audit::NON_AUDITED
