@@ -5,212 +5,244 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     )
   end
 
-  # Organisations:
-  let!(:hmrc) { create(:organisation, title: "HMRC") }
-  let!(:dfe) { create(:organisation, title: "DFE") }
+  context "I have some unaudited content allocated to me" do
+    let!(:famous_five) do
+      create(
+        :content_item,
+        title: "The Famous Five",
+        allocated_to: me,
+      )
+    end
 
-  # Policies:
-  let!(:flying) { create(:content_item, title: "Flying abroad") }
+    let!(:secret_seven) do
+      create(
+        :content_item,
+        title: "The Secret Seven",
+      )
+    end
 
-  let!(:insurance) do
-    create(
-      :content_item,
-      title: "Travel insurance",
-      organisations: hmrc,
-      policies: flying,
-    )
+    let!(:wishing_chair) do
+      wishing_chair = create(
+        :content_item,
+        title: "The Wishing Chair",
+        allocated_to: me,
+      )
+
+      create(:audit, content_item: wishing_chair, user: me)
+      wishing_chair
+    end
+
+    scenario "List filters by my unaudited content by default" do
+      visit audits_path
+
+      expect(page).to have_select("allocated_to", selected: "Me")
+      expect(page).to have_checked_field("audit_status_non_audited")
+
+      expect(page).to have_content("The Famous Five")
+      expect(page).to have_no_content("The Secret Seven")
+      expect(page).to have_no_content("The Wishing Chair")
+    end
   end
 
-  # Content:
-  let!(:felling) do
-    create(
-      :content_item,
-      title: "Tree felling",
-      primary_publishing_organisation: dfe,
-      policies: management,
-    )
-  end
+  context "With some organisations and documents set up" do
+    # Organisations:
+    let!(:hmrc) { create(:organisation, title: "HMRC") }
+    let!(:dfe) { create(:organisation, title: "DFE") }
 
-  let!(:management) do
-    create(
-      :content_item,
-      title: "Forest management",
-    )
-  end
+    # Policies:
+    let!(:flying) { create(:content_item, title: "Flying abroad") }
 
-  let!(:vat) do
-    create(
-      :content_item,
-      title: "VAT",
-      primary_publishing_organisation: hmrc,
-      organisations: hmrc,
-    )
-  end
+    let!(:insurance) do
+      create(
+        :content_item,
+        title: "Travel insurance",
+        organisations: hmrc,
+        policies: flying,
+      )
+    end
 
-  # Audit:
-  let!(:audit) { create(:audit, content_item: felling) }
+    # Content:
+    let!(:felling) do
+      create(
+        :content_item,
+        title: "Tree felling",
+        primary_publishing_organisation: dfe,
+        policies: management,
+      )
+    end
 
-  scenario "List not audited by default" do
-    visit audits_path
-    expect(page).to have_selector(".nav")
+    let!(:management) do
+      create(
+        :content_item,
+        title: "Forest management",
+      )
+    end
 
-    expect(page).to have_no_content("Tree felling")
-    expect(page).to have_content("Forest management")
-    expect(page).to have_checked_field("audit_status_non_audited")
-  end
+    let!(:vat) do
+      create(
+        :content_item,
+        title: "VAT",
+        primary_publishing_organisation: hmrc,
+        organisations: hmrc,
+      )
+    end
 
-  scenario "filtering audited content" do
-    visit audits_path
-    select "Anyone", from: "allocated_to"
+    # Audit:
+    let!(:audit) { create(:audit, content_item: felling) }
 
-    choose "Audited"
-    click_on "Apply filters"
+    scenario "filtering audited content" do
+      visit audits_path
+      select "Anyone", from: "allocated_to"
 
-    expect(page).to have_content("Tree felling")
-    expect(page).to have_no_content("Forest management")
-    expect(page).to have_checked_field("audit_status_audited")
-  end
+      choose "Audited"
+      click_on "Apply filters"
 
-  scenario "filtering for content regardless of audit status" do
-    visit audits_path
-    select "Anyone", from: "allocated_to"
+      expect(page).to have_content("Tree felling")
+      expect(page).to have_no_content("Forest management")
+      expect(page).to have_checked_field("audit_status_audited")
+    end
 
-    choose "All"
-    click_on "Apply filters"
-
-    expect(page).to have_content("Tree felling")
-    expect(page).to have_content("Forest management")
-    expect(page).to have_checked_field("audit_status_all")
-  end
-
-  context "when showing content regardless of audit status" do
-    before(:each) do
+    scenario "filtering for content regardless of audit status" do
       visit audits_path
       select "Anyone", from: "allocated_to"
 
       choose "All"
       click_on "Apply filters"
+
+      expect(page).to have_content("Tree felling")
+      expect(page).to have_content("Forest management")
+      expect(page).to have_checked_field("audit_status_all")
     end
 
-    scenario "filtering by primary organisation" do
-      expect(page.find("#primary")).to be_checked
+    context "when showing content regardless of audit status" do
+      before(:each) do
+        visit audits_path
+        select "Anyone", from: "allocated_to"
 
-      select "HMRC", from: "Organisations"
+        choose "All"
+        click_on "Apply filters"
+      end
 
-      click_on "Apply filters"
+      scenario "filtering by primary organisation" do
+        expect(page.find("#primary")).to be_checked
 
-      expect(page).to have_content("VAT")
-      expect(page).to have_no_content("Tree felling")
-    end
+        select "HMRC", from: "Organisations"
 
-    scenario "filtering by organisation" do
-      uncheck "primary"
+        click_on "Apply filters"
 
-      select "HMRC", from: "Organisations"
+        expect(page).to have_content("VAT")
+        expect(page).to have_no_content("Tree felling")
+      end
 
-      click_on "Apply filters"
+      scenario "filtering by organisation" do
+        uncheck "primary"
 
-      expect(page).to have_content("VAT")
-      expect(page).to have_content("Travel insurance")
-      expect(page).to have_no_content("Tree felling")
-    end
+        select "HMRC", from: "Organisations"
 
-    scenario "toggling the primary org checkbox by clicking its label" do
-      page.find("label[for='primary']").click
-      expect(page.find("#primary")).not_to be_checked
+        click_on "Apply filters"
 
-      page.find("label[for='primary']").click
-      expect(page.find("#primary")).to be_checked
-    end
+        expect(page).to have_content("VAT")
+        expect(page).to have_content("Travel insurance")
+        expect(page).to have_no_content("Tree felling")
+      end
 
-    context "filtering by organisation" do
-      scenario "organisations are in alphabetical order" do
-        within("#organisations") do
-          options = page.all("option")
+      scenario "toggling the primary org checkbox by clicking its label" do
+        page.find("label[for='primary']").click
+        expect(page.find("#primary")).not_to be_checked
 
-          expect(options.map(&:text)).to eq ["", "DFE", "HMRC"]
+        page.find("label[for='primary']").click
+        expect(page.find("#primary")).to be_checked
+      end
+
+      context "filtering by organisation" do
+        scenario "organisations are in alphabetical order" do
+          within("#organisations") do
+            options = page.all("option")
+
+            expect(options.map(&:text)).to eq ["", "DFE", "HMRC"]
+          end
+        end
+
+        scenario "using autocomplete", js: true do
+          expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
+
+          click_on "More options"
+          expect(page).to have_selector("#organisations", visible: true)
+
+          organisations_autocomplete = page.find("#organisations")
+          organisations_autocomplete.send_keys("HM", :down, :enter)
+
+          click_on "Apply filters"
+
+          expect(page.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
+        end
+
+        scenario "multiple", js: true do
+          expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
+
+          click_on "More options"
+          expect(page).to have_selector("#add-organisation", visible: true)
+
+          page.find("#add-organisation").click
+
+          page.find_all("#organisations")[1].send_keys("DF", :down, :enter)
+          page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
+
+          click_on "Apply filters"
+
+          expect(page.current_url).to include("organisations%5B%5D=#{dfe.content_id}")
+          expect(page.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
         end
       end
 
-      scenario "using autocomplete", js: true do
-        expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
+      context "filtering by title" do
+        scenario "the user enters a text in the search box and retrieves a filtered list" do
+          create :content_item, title: "some text"
+          create :content_item, title: "another text"
 
-        click_on "More options"
-        expect(page).to have_selector("#organisations", visible: true)
+          fill_in "query", with: "some text"
+          click_on "Apply filters"
 
-        organisations_autocomplete = page.find("#organisations")
-        organisations_autocomplete.send_keys("HM", :down, :enter)
+          expect(page).to have_selector("main tbody tr", count: 1)
+        end
+
+        scenario "show the query entered by the user after filtering" do
+          fill_in 'query', with: 'a search value'
+          click_on "Apply filters"
+
+          expect(page).to have_field(:query, with: 'a search value')
+        end
+      end
+
+      scenario "filtering by document type" do
+        hmrc.update!(document_type: "guide")
+
+        select "Guide", from: "document_type"
 
         click_on "Apply filters"
 
-        expect(page.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
+        within("table") do
+          expect(page).to have_content("HMRC")
+          expect(page).to have_no_content("Flying to countries abroad")
+        end
       end
 
-      scenario "multiple", js: true do
-        expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
+      scenario "Reseting page to 1 after filtering" do
+        create_list(:content_item, 25)
 
-        click_on "More options"
-        expect(page).to have_selector("#add-organisation", visible: true)
+        visit audits_path
+        select "Anyone", from: "allocated_to"
 
-        page.find("#add-organisation").click
-
-        page.find_all("#organisations")[1].send_keys("DF", :down, :enter)
-        page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
-
+        choose "All"
         click_on "Apply filters"
 
-        expect(page.current_url).to include("organisations%5B%5D=#{dfe.content_id}")
-        expect(page.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
-      end
-    end
+        within(".pagination") { click_on "2" }
 
-    context "filtering by title" do
-      scenario "the user enters a text in the search box and retrieves a filtered list" do
-        create :content_item, title: "some text"
-        create :content_item, title: "another text"
-
-        fill_in "query", with: "some text"
+        choose "Not audited"
         click_on "Apply filters"
 
-        expect(page).to have_selector("main tbody tr", count: 1)
+        expect(page).to have_css(".pagination .active", text: "1")
       end
-
-      scenario "show the query entered by the user after filtering" do
-        fill_in 'query', with: 'a search value'
-        click_on "Apply filters"
-
-        expect(page).to have_field(:query, with: 'a search value')
-      end
-    end
-
-    scenario "filtering by document type" do
-      hmrc.update!(document_type: "guide")
-
-      select "Guide", from: "document_type"
-
-      click_on "Apply filters"
-
-      within("table") do
-        expect(page).to have_content("HMRC")
-        expect(page).to have_no_content("Flying to countries abroad")
-      end
-    end
-
-    scenario "Reseting page to 1 after filtering" do
-      create_list(:content_item, 25)
-
-      visit audits_path
-      select "Anyone", from: "allocated_to"
-
-      choose "All"
-      click_on "Apply filters"
-
-      within(".pagination") { click_on "2" }
-
-      choose "Not audited"
-      click_on "Apply filters"
-
-      expect(page).to have_css(".pagination .active", text: "1")
     end
   end
 end

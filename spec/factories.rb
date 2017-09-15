@@ -7,6 +7,7 @@ FactoryGirl.define do
       primary_publishing_organisation nil
       policies nil
       policy_areas nil
+      allocated_to nil
     end
 
     sequence(:content_id) { |index| "content-id-%04i" % index }
@@ -21,6 +22,7 @@ FactoryGirl.define do
       LinkFactory.add_primary_publishing_organisation(content_item, evaluator.primary_publishing_organisation)
       LinkFactory.add_policies(content_item, evaluator.policies)
       LinkFactory.add_policy_areas(content_item, evaluator.policy_areas)
+      create(:allocation, content_item: content_item, user: evaluator.allocated_to) unless evaluator.allocated_to.nil?
     end
 
     factory :organisation do

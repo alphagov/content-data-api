@@ -5,12 +5,6 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     )
   end
 
-  scenario "List is unfiltered" do
-    visit audits_path
-
-    expect(page).to have_select("allocated_to", selected: "Anyone")
-  end
-
   scenario "Filter allocated content" do
     another_user = create(:user)
     item1 = create :content_item, title: "content item 1"
@@ -20,7 +14,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
     create(:allocation, content_item: item1, user: me)
     create(:allocation, content_item: item2, user: another_user)
 
-    visit audits_path
+    visit audits_allocations_path
 
     expect(page).to have_selector(".nav")
     expect(page).to have_selector("#sort_by")

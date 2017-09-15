@@ -4,7 +4,15 @@ module Audits
 
     def index
       respond_to do |format|
-        format.html { @content_items = FindContent.paged(filter) }
+        format.html do
+          @default_filter = {
+            allocated_to: current_user.uid,
+            audit_status: Audits::Audit::NON_AUDITED,
+          }
+
+          @content_items = FindContent.paged(filter)
+        end
+
         format.csv do
           send_data(
             Report.generate(filter, request.url),

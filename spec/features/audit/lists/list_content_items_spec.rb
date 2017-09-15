@@ -12,8 +12,8 @@ RSpec.feature "List Content Items to Audit", type: :feature do
   end
 
   scenario "List Content Items to Audit" do
-    create(:content_item, title: "item1", six_months_page_views: 10_000, content_id: "content-id")
-    create(:content_item, title: "item2")
+    create(:content_item, title: "item1", six_months_page_views: 10_000, content_id: "content-id", allocated_to: me)
+    create(:content_item, title: "item2", allocated_to: me)
 
     visit audits_path
 
@@ -25,7 +25,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
   end
 
   scenario "Displays the number of content items" do
-    create_list :content_item, 2
+    create_list(:content_item, 2, allocated_to: me)
 
     visit audits_path
 
@@ -33,8 +33,8 @@ RSpec.feature "List Content Items to Audit", type: :feature do
   end
 
   scenario "List content items of auditable formats" do
-    create(:content_item, document_type: "guide")
-    create(:content_item, document_type: "other-format")
+    create(:content_item, document_type: "guide", allocated_to: me)
+    create(:content_item, document_type: "other-format", allocated_to: me)
 
     visit audits_path
 
@@ -43,7 +43,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
 
   describe "pagination" do
     let!(:content_items) {
-      create_list(:content_item, 30)
+      create_list(:content_item, 30, allocated_to: me)
         .sort_by(&:base_path)
         .reverse
     }
