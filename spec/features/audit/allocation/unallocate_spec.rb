@@ -1,56 +1,81 @@
 RSpec.feature "Unallocate content", type: :feature do
+  let!(:my_organisation) do
+    create(
+      :organisation,
+    )
+  end
+
   let!(:me) do
     create(
       :user,
+      organisation: my_organisation,
     )
   end
 
   let!(:content_item) { create :content_item, title: "content item 1" }
 
-  scenario "Unallocate content" do
-    create(:allocation, content_item: content_item, user: me)
+  context "There are two content items allocated to me" do
+    let!(:winnie_the_pooh) do
+      create(
+        :content_item,
+        title: "Winnie the Pooh",
+        content_id: "winnie-the-pooh",
+        allocated_to: me,
+        primary_publishing_organisation: my_organisation,
+      )
+    end
 
-    visit audits_allocations_path
+    let!(:eeyore) do
+      create(
+        :content_item,
+        title: "Eeyore",
+        content_id: "eeyore",
+        allocated_to: me,
+        primary_publishing_organisation: my_organisation,
+      )
+    end
 
-    select "Me", from: "allocated_to"
-    click_on "Apply filters"
-    expect(page).to have_content("content item 1")
+    before(:each) do
+      visit audits_allocations_path
 
+      select "Me", from: "allocated_to"
+      click_on "Apply filters"
 
-    check option: content_item.content_id
-    select "No one", from: "allocate_to"
-    click_on "Assign"
+      expect(page).to have_content("Winnie the Pooh")
+      expect(page).to have_content("Eeyore")
+    end
 
-    expect(page).to_not have_content("content item 1")
-    expect(page).to have_select("allocate_to", selected: "No one")
-    expect(page).to have_content("1 items unallocated")
-  end
+    scenario "Unallocate content" do
+      check option: "winnie-the-pooh"
+      select "No one", from: "allocate_to"
+      click_on "Assign"
 
-  scenario "Allocate using the batch input" do
-    create_list :content_item, 2
+      expect(page).to_not have_content("Winnie the Pooh")
+      expect(page).to have_select("allocate_to", selected: "No one")
+      expect(page).to have_content("1 items unallocated")
+    end
 
-    visit audits_allocations_path
+    scenario "Allocate using the batch input" do
+      select "No one", from: "allocate_to"
+      fill_in "batch_size", with: "2"
+      click_on "Assign"
 
-    select "No one", from: "allocate_to"
-    fill_in "batch_size", with: "2"
-    click_on "Assign"
+      expect(page).to have_content("2 items unallocated")
+      expect(page).to_not have_content("Winnie the Pooh")
+      expect(page).to_not have_content("Eeyore")
+    end
 
-    expect(page).to have_content("2 items unallocated")
-  end
+    scenario "Allocate selecting individual items" do
+      check option: "winnie-the-pooh"
+      check option: "eeyore"
 
-  scenario "Allocate selecting individual items" do
-    item2 = create(:content_item, title: "content item 2")
-    item3 = create(:content_item, title: "content item 3")
+      select "No one", from: "allocate_to"
+      click_on "Assign"
 
-    visit audits_allocations_path
-
-    check option: item2.content_id
-    check option: item3.content_id
-
-    select "No one", from: "allocate_to"
-    click_on "Assign"
-
-    expect(page).to have_content("2 items unallocated")
+      expect(page).to have_content("2 items unallocated")
+      expect(page).to_not have_content("Winnie the Pooh")
+      expect(page).to_not have_content("Eeyore")
+    end
   end
 
   scenario "Unallocate 0 content items" do

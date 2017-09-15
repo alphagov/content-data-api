@@ -5,6 +5,12 @@ module Audits
     decorates_assigned :content_items
 
     def index
+      @default_filter = {
+        allocated_to: :no_one,
+        audit_status: Audits::Audit::NON_AUDITED,
+        organisations: [current_user.organisation_content_id],
+      }
+
       @content_items = FindContent.paged(filter)
     end
 
