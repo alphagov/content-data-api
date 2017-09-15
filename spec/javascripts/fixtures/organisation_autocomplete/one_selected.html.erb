@@ -1,4 +1,8 @@
 <%
+  def filter
+    OpenStruct.new
+  end
+
   def organisation_options_for_select(selected = nil)
     selected = 'ministry-of-defence'
     organisation_options = [

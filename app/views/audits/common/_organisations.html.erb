@@ -2,7 +2,7 @@
   <%= label_tag :organisations %>
   <div class="organisation-select-wrapper js-organisation-select-wrapper">
     <%= select_tag :organisations,
-                   organisation_options_for_select(params[:organisations]),
+                   organisation_options_for_select(filter.organisations),
                    include_blank: true,
                    multiple: true,
                    class: "form-control organisation-select js-organisation-select",

@@ -8,7 +8,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
   scenario "List is unfiltered" do
     visit audits_path
 
-    expect(page).to have_select("allocated_to", selected: "Me")
+    expect(page).to have_select("allocated_to", selected: "Anyone")
   end
 
   scenario "Filter allocated content" do
