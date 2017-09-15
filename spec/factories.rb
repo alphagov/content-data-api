@@ -62,6 +62,10 @@ FactoryGirl.define do
   end
 
   factory :user do
+    transient do
+      organisation nil
+    end
+
     sequence(:uid) { |i| "user-#{i}" }
     sequence(:name) { |i| "Test User #{i}" }
     email 'user@example.com'
@@ -71,6 +75,13 @@ FactoryGirl.define do
     trait :with_allocated_content do
       after(:create) do |user|
         create :allocation, user: user
+      end
+    end
+
+    before(:create) do |user, evaluator|
+      unless evaluator.organisation.nil?
+        user.organisation_slug = evaluator.organisation.base_path
+        user.organisation_content_id = evaluator.organisation.content_id
       end
     end
   end

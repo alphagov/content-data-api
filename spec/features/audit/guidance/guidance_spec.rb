@@ -1,4 +1,10 @@
 RSpec.feature "Using guidance while auditing a content item", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   let!(:content_item) do
     create(
       :content_item,

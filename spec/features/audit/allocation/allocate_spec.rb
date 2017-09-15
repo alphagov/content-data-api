@@ -1,6 +1,11 @@
 RSpec.feature "Allocate multiple content items", type: :feature do
   let!(:content_item) { create :content_item, title: "content item 1" }
-  let!(:current_user) { User.first }
+  let!(:me) do
+    create(
+      :user,
+      name: "Jane Austen",
+    )
+  end
 
   scenario "Allocate content within current page" do
     second = create(:content_item, title: "content item 2")
@@ -14,7 +19,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     select "Me", from: "allocate_to"
     click_on "Assign"
 
-    expect(page).to have_content("2 items allocated to #{current_user.name}")
+    expect(page).to have_content("2 items allocated to Jane Austen")
 
     select "Me", from: "allocated_to"
     click_on "Apply filters"
@@ -40,7 +45,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     fill_in "batch_size", with: "2"
     click_on "Assign"
 
-    expect(page).to have_content("2 items allocated to #{current_user.name}")
+    expect(page).to have_content("2 items allocated to Jane Austen")
   end
 
   scenario "Allocation when filtering by organisation using filter results" do
@@ -54,7 +59,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     fill_in "batch_size", with: "4"
     click_on "Assign"
 
-    expect(page).to have_content("0 items allocated to #{current_user.name}")
+    expect(page).to have_content("0 items allocated to Jane Austen")
   end
 
   scenario "Allocate selecting individual items" do
@@ -69,7 +74,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     select "Me", from: "allocate_to"
     click_on "Assign"
 
-    expect(page).to have_content("2 items allocated to #{current_user.name}")
+    expect(page).to have_content("2 items allocated to Jane Austen")
   end
 
   scenario "Allocate 0 content items" do
@@ -78,6 +83,6 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     select "Me", from: "allocate_to"
     click_on "Assign"
 
-    expect(page).to have_content("0 items allocated to #{current_user.name}")
+    expect(page).to have_content("0 items allocated to Jane Austen")
   end
 end

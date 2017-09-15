@@ -1,4 +1,10 @@
 RSpec.feature "Exporting a CSV from the report page" do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   def content_type
     page.response_headers.fetch("Content-Type")
   end

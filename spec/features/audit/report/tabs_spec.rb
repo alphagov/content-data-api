@@ -1,4 +1,10 @@
 RSpec.feature "Tabs" do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   scenario "preserving filters across tabs" do
     visit audits_path
     choose "Audited"

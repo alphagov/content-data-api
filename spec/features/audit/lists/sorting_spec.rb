@@ -1,4 +1,10 @@
 RSpec.feature "Sort content items to audit", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   scenario "Default sorting by popularity" do
     create(:content_item, six_months_page_views: 0, title: "item1")
     create(:content_item, six_months_page_views: 1234, title: "item2")

@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.feature "Generating terms", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   it "allows users to generate terms" do
     given_theres_a_project_with_todos
 
