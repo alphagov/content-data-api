@@ -103,4 +103,9 @@ FactoryGirl.define do
       end
     end
   end
+
+  factory :filter, class: Audits::Filter do
+    audit_status :all
+    allocated_to :anyone
+  end
 end

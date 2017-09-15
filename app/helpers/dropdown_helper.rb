@@ -41,8 +41,9 @@ module DropdownHelper
                            .reject { |_, uid| uid == current_user.uid }
                            .sort_by { |name, _| name }
                            .unshift(
-                             ['No one', :no_one],
                              ['Me', current_user.uid],
+                             ['No one', :no_one],
+                             ['Anyone', :anyone],
                            )
 
     options_for_select(allocation_options, selected)
