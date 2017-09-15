@@ -6,8 +6,8 @@ RSpec.feature "Sort content items to audit", type: :feature do
   end
 
   scenario "Default sorting by popularity" do
-    create(:content_item, six_months_page_views: 0, title: "item1")
-    create(:content_item, six_months_page_views: 1234, title: "item2")
+    create(:content_item, six_months_page_views: 0, title: "item1", allocated_to: me)
+    create(:content_item, six_months_page_views: 1234, title: "item2", allocated_to: me)
 
     visit audits_path
 
@@ -17,9 +17,9 @@ RSpec.feature "Sort content items to audit", type: :feature do
   end
 
   scenario "Sort list by title A-Z" do
-    create(:content_item, title: "BBBB")
-    create(:content_item, title: "AAA")
-    create(:content_item, title: "CCC")
+    create(:content_item, title: "BBBB", allocated_to: me)
+    create(:content_item, title: "AAA", allocated_to: me)
+    create(:content_item, title: "CCC", allocated_to: me)
 
     visit audits_path
     select "Anyone", from: "allocated_to"
@@ -34,9 +34,9 @@ RSpec.feature "Sort content items to audit", type: :feature do
   end
 
   scenario "Sort list by title Z-A" do
-    create(:content_item, title: "BBBB")
-    create(:content_item, title: "AAA")
-    create(:content_item, title: "CCC")
+    create(:content_item, title: "BBBB", allocated_to: me)
+    create(:content_item, title: "AAA", allocated_to: me)
+    create(:content_item, title: "CCC", allocated_to: me)
 
     visit audits_path
     select "Anyone", from: "allocated_to"

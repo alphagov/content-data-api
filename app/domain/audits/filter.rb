@@ -18,6 +18,8 @@ module Audits
       hash.each do |key, value|
         self[key] = value
       end
+
+      self[:organisations] = [] if self[:organisations].blank?
     end
 
     def audit_status
