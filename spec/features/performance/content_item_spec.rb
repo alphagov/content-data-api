@@ -48,7 +48,8 @@ RSpec.feature "Content Item Details", type: :feature do
 
     visit "/content/items/#{content.content_id}"
 
-    expect(page).to have_text('Education, Health')
+    expect(page).to have_text('Education')
+    expect(page).to have_text('Health')
   end
 
   scenario "Renders stats for Google Analytics" do
@@ -79,7 +80,8 @@ RSpec.feature "Content Item Details", type: :feature do
 
     visit "/content/items/#{content.content_id}"
 
-    expect(page).to have_text('Education, Health')
+    expect(page).to have_text('Education')
+    expect(page).to have_text('Health')
 
     click_link "Education"
     expect(page).to have_text('Education')
