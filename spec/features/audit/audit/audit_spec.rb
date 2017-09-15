@@ -85,19 +85,26 @@ RSpec.feature "Auditing a content item", type: :feature do
     expect_answer "Is the content out of date?", "Yes"
   end
 
-  scenario "clicking on yes and no buttons for similar content questions", js: true do
+  scenario "clicking on yes and no buttons for redundant/similar content questions", js: true do
     visit content_item_audit_path(content_item)
 
-    expect(page).to have_no_content('Where should users be redirected to? (optional)')
+    expect(page).to have_no_content("Where should users be redirected to? (optional)")
+    expect(page).to have_no_content("URLs of similar pages")
 
     answer_question "Should the content be removed?", "Yes"
-    expect(page).to have_content('Where should users be redirected to? (optional)')
+    expect(page).to have_content("Where should users be redirected to? (optional)")
 
     answer_question "Should the content be removed?", "No"
-    expect(page).to have_no_content('Where should users be redirected to? (optional)')
+    expect(page).to have_no_content("Where should users be redirected to? (optional)")
+
+    answer_question "Is this content very similar to other pages?", "Yes"
+    expect(page).to have_content("URLs of similar pages")
+
+    answer_question "Is this content very similar to other pages?", "No"
+    expect(page).to have_no_content("URLs of similar pages")
   end
 
-  scenario "filling in and saving questions for similar content", js: true do
+  scenario "filling in and saving questions for redundant content", js: true do
     visit content_item_audit_path(content_item)
 
     answer_question "Title", "No"
@@ -110,19 +117,25 @@ RSpec.feature "Auditing a content item", type: :feature do
     answer_question "Should the content be removed?", "Yes"
     fill_in "Where should users be redirected to? (optional)", with: "http://www.example.com"
     answer_question "Is this content very similar to other pages?", "Yes"
-    fill_in "URLs of similar pages", with: "something"
+    fill_in "URLs of similar pages", with: "http://www.example.com"
 
     click_on "Save"
 
-    expect(page).to have_content('Where should users be redirected to? (optional)')
+    expect(page).to have_content("Where should users be redirected to? (optional)")
     expect(find_field("Where should users be redirected to? (optional)").value).to eq("http://www.example.com")
+    expect(page).to have_content("URLs of similar pages")
+    expect(find_field("URLs of similar pages").value).to eq("http://www.example.com")
 
     answer_question "Should the content be removed?", "No"
+    answer_question "Is this content very similar to other pages?", "No"
     click_on "Save"
 
     expect(page).to have_no_content('Where should users be redirected to? (optional)')
+    expect(page).to have_no_content("URLs of similar pages")
 
     answer_question "Should the content be removed?", "Yes"
+    answer_question "Is this content very similar to other pages?", "Yes"
     expect(find_field("Where should users be redirected to? (optional)").value).to eq("")
+    expect(find_field("URLs of similar pages").value).to eq("")
   end
 end

@@ -28,7 +28,8 @@ $next-link-colour: #000000;
   margin-bottom: 2em;
 }
 
-.t-redirect-urls {
+.t-redirect-urls,
+.t-similar-urls {
   margin-left: 0;
   padding-left: 2em;
   border-left: solid 2px;
@@ -37,11 +38,6 @@ $next-link-colour: #000000;
   label {
     font-weight: normal;
   }
-}
-
-.ur-ls-of-similar-pages {
-  border-left: solid;
-  padding-left: 2em;
 }
 
 .btn-success {
