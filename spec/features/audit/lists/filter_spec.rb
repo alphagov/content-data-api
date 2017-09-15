@@ -1,4 +1,10 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
+  let!(:me) do
+    create(
+      :user,
+    )
+  end
+
   # Organisations:
   let!(:hmrc) { create(:organisation, title: "HMRC") }
   let!(:dfe) { create(:organisation, title: "DFE") }

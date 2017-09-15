@@ -8,7 +8,7 @@ module Audits
       ActiveRecord.enable
     end
 
-    subject! { described_class.new(Filter.new, "http://example.com") }
+    subject! { described_class.new(build(:filter), "http://example.com") }
 
     let(:csv) { subject.generate }
     let(:lines) { csv.split("\n") }

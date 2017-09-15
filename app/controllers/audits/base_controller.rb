@@ -5,8 +5,8 @@ module Audits
 
     def filter(override = {})
       options = {
-        allocated_to: params[:allocated_to],
-        audit_status: params[:audit_status],
+        allocated_to: params[:allocated_to] || :anyone,
+        audit_status: params[:audit_status] || Audits::Audit::NON_AUDITED,
         document_type: params[:document_type],
         organisations: organisations,
         page: params[:page],
