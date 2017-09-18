@@ -8,7 +8,8 @@ module Content
 
     def run
       Content::Item.find_in_batches(batch_size: batch_size) do |content_items|
-        ImportPageviewsJob.perform_later(content_items)
+        base_paths = content_items.map(&:base_path)
+        ImportPageviewsJob.perform_async(base_paths)
       end
     end
   end

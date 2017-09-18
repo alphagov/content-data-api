@@ -8,9 +8,7 @@ module Content
       @google_analytics_service = GoogleAnalyticsService.new
     end
 
-    def run(content_items)
-      base_paths = content_items.pluck(:base_path)
-
+    def run(base_paths)
       results = @google_analytics_service.page_views(base_paths)
       results.each do |result|
         content_item = Content::Item.find_by(base_path: result[:base_path])

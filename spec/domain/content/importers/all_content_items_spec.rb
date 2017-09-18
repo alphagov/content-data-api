@@ -11,8 +11,8 @@ module Content
 
     describe '#run' do
       it 'creates a job for each content item to import' do
-        expect(ImportItemJob).to receive(:perform_later).with("id-123", "en")
-        expect(ImportItemJob).to receive(:perform_later).with("id-456", "cy")
+        expect(ImportItemJob).to receive(:perform_async).with("id-123", "en")
+        expect(ImportItemJob).to receive(:perform_async).with("id-456", "cy")
 
         subject.run
       end

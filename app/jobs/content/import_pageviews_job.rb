@@ -1,8 +1,8 @@
 module Content
   class ImportPageviewsJob < ApplicationJob
     def perform(*args)
-      content_items = args[0]
-      Importers::Pageviews.run(content_items)
+      base_paths = args[0]
+      Importers::Pageviews.run(base_paths)
     end
   end
 end
