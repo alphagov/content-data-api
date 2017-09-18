@@ -37,18 +37,18 @@ RSpec.feature "Notifying of no content to audit", type: :feature do
         expect(page).to have_css(".alert a")
       end
 
-      scenario "audited content should not show a banner" do
+      scenario "audited content should show a banner" do
         choose "Audited"
         click_on "Apply filters"
-        expect(page).to have_no_content("You have no content to audit.")
-        expect(page).to have_no_css(".alert")
+        expect(page).to have_content("You have no content to audit.")
+        expect(page).to have_css(".alert")
       end
 
-      scenario "all content should not show a banner" do
+      scenario "all content, assigned to 'Me', should show a banner" do
         choose "All"
         click_on "Apply filters"
-        expect(page).to have_no_content("You have no content to audit.")
-        expect(page).to have_no_css(".alert")
+        expect(page).to have_content("You have no content to audit.")
+        expect(page).to have_css(".alert")
       end
     end
 
@@ -85,7 +85,7 @@ RSpec.feature "Notifying of no content to audit", type: :feature do
       scenario "not audited content should show a banner" do
         choose "Not audited"
         click_on "Apply filters"
-        expect(page).to have_no_css(".alert")
+        expect(page).to have_css(".alert")
       end
     end
 
@@ -98,7 +98,7 @@ RSpec.feature "Notifying of no content to audit", type: :feature do
       scenario "not audited content should show a banner" do
         choose "Not audited"
         click_on "Apply filters"
-        expect(page).to have_no_css(".alert")
+        expect(page).to have_css(".alert")
       end
     end
   end

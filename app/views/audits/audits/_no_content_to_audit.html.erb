@@ -1,14 +1,17 @@
-<% if show_allocation_message? %>
-  <div class="alert alert-info" role="alert">
+<div class="alert alert-info" role="alert">
+  <% if filtered_to_current_user? %>
     <p>
-      <% if filtered_to_current_user? %>
-        You have no content to audit.
-      <% elsif filtered_to_specific_user? %>
-        <%= filtered_user.name %> has no content to audit.
-      <% end %>
+      You have no content to audit.
     </p>
     <p>
       <%= link_to "Assign content", audits_allocations_url %>
     </p>
-  </div>
-<% end %>
+  <% elsif filtered_to_specific_user? %>
+    <%= filtered_user.name %> has no content to audit.
+    <p>
+      <%= link_to "Assign content", audits_allocations_url %>
+    </p>
+  <% else %>
+    No content items match your filters
+  <% end %>
+</div>
