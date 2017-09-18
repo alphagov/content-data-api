@@ -1,6 +1,6 @@
 <% start_expanded ||= false %>
 
-<div data-module="expandable-filters" data-start-expanded="<%= start_expanded -%>" class="js-hidden">
+<div data-module="expandable-filters" data-start-expanded="<%= start_expanded -%>" class="if-js-hide">
   <div id="additionalFilters" class="js-additional-filters collapse in">
     <%= yield %>
   </div>

@@ -29,7 +29,7 @@
       }
 
       function showElement() {
-        $element.removeClass('js-hidden');
+        $element.removeClass('if-js-hide');
       }
     };
   };
