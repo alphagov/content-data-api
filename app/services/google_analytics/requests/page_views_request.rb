@@ -41,9 +41,11 @@ module GoogleAnalytics
 
       def filters(base_paths, name, operator = "EXACT")
         dimension_filter_clause = DimensionFilterClause.new
-        dimension_filter_clause.filters = base_paths.map do|base_path|
-          filter(base_path, name, operator)
-        end
+
+        dimension_filter_clause.filters = base_paths
+          .select(&:present?)
+          .map { |base_path| filter(base_path, name, operator) }
+
         [dimension_filter_clause]
       end
 
