@@ -1,6 +1,6 @@
-<% if flash[:notice] %>
-    <div class="alert alert-success" role="alert">
-      <%= flash[:notice] %>
+<% if message.present? %>
+    <div class="alert <%= notice_class -%>" role="alert">
+      <%= message -%>
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
 <% end %>

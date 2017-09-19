@@ -17,10 +17,10 @@ module Audits
       expect(Allocation.first).to have_attributes(content_item: item2, user: user)
     end
 
-    it "Returns a message with the number of unallocated items" do
+    it "returns a result with the number of unallocated items" do
       result = UnallocateContent.call(content_ids: %w(content_id_1 content_id_2))
 
-      expect(result.message).to eq("2 items unallocated")
+      expect(result).to have_attributes(count: 2)
     end
   end
 end
