@@ -10,7 +10,7 @@ module Content
       content_items = content_items_service.fetch_all_with_default_locale_only
 
       content_items.each do |content_item|
-        ImportItemJob.perform_later(content_item[:content_id], content_item[:locale])
+        ImportItemJob.perform_async(content_item[:content_id], content_item[:locale])
       end
     end
   end

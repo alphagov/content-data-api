@@ -3,7 +3,8 @@ module Content
     describe "#run" do
       it "creates a job to import pageviews for content items" do
         content_items = [create(:content_item)]
-        expect(ImportPageviewsJob).to receive(:perform_later).with(content_items)
+        base_paths = content_items.map(&:base_path)
+        expect(ImportPageviewsJob).to receive(:perform_async).with(base_paths)
 
         subject.run
       end
@@ -12,7 +13,7 @@ module Content
         create_list(:content_item, 2)
         subject.batch_size = 1
 
-        expect(ImportPageviewsJob).to receive(:perform_later).twice
+        expect(ImportPageviewsJob).to receive(:perform_async).twice
 
         subject.run
       end

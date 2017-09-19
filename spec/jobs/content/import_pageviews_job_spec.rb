@@ -12,7 +12,7 @@ module Content
         ]
       )
 
-      subject.perform([content_item])
+      subject.perform(['/the-base-path'])
 
       content_item.reload
       expect(content_item.one_month_page_views).to eq(88)
