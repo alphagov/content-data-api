@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20170912052927) do
     t.boolean "similar"
     t.text "similar_urls"
     t.text "notes"
+    t.text "redirect_urls"
     t.index ["content_id"], name: "index_audits_on_content_id", unique: true
     t.index ["uid"], name: "index_audits_on_uid"
   end

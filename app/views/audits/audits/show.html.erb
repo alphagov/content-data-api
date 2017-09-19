@@ -70,21 +70,32 @@
                attribute: :outdated,
                question: 'Is the content out of date?' %>
 
-    <%= render 'boolean_question', form: form,
-               attribute: :redundant,
-               question: 'Should the content be removed?' %>
+    <div data-module="show-free-text-question">
+      <%= render 'boolean_question', form: form,
+                 attribute: :redundant,
+                 question: 'Should the content be removed?' %>
 
-    <%= render 'boolean_question', form: form,
-               attribute: :similar,
-               question: 'Is this content very similar to other pages?' %>
+      <%= render 'free_text_question', form: form,
+                 attribute: :redirect_urls,
+                 question: 'Where should users be redirected to? (optional)',
+                 related_question_answered: audit.redundant %>
+    </div>
 
-    <%= render 'free_text_question', form: form,
-               attribute: :similar_urls,
-               question: 'URLs of similar pages' %>
+    <div data-module="show-free-text-question">
+      <%= render 'boolean_question', form: form,
+                 attribute: :similar,
+                 question: 'Is this content very similar to other pages?' %>
+
+      <%= render 'free_text_question', form: form,
+                 attribute: :similar_urls,
+                 question: 'URLs of similar pages',
+                 related_question_answered: audit.similar %>
+    </div>
 
     <%= render 'free_text_question', form: form,
                attribute: :notes,
-               question: 'Notes' %>
+               question: 'Notes',
+               related_question_answered: {} %>
 
     <%= form.submit "Save", class: "btn btn-success" %>
   <% end %>

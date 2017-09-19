@@ -1,15 +1,15 @@
-<div class="row t-<%= attribute.to_s.dasherize %>">
+<div class="row <%= attribute.to_s.dasherize %>">
   <div class="col-sm-8">
     <p><%= question %></p>
   </div>
   <div class="col-sm-4">
     <div class="pull-right">
-      <%= form.label "#{attribute}_true", class: "radio-inline" do %>
+      <%= form.label "#{attribute}_true", class: "radio-inline js-yes-radio" do %>
         <%= form.radio_button attribute, true %>
         Yes
       <% end %>
 
-      <%= form.label "#{attribute}_false", class: "radio-inline" do %>
+      <%= form.label "#{attribute}_false", class: "radio-inline js-no-radio" do %>
         <%= form.radio_button attribute, false %>
         No
       <% end %>

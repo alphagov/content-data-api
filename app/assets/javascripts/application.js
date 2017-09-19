@@ -15,6 +15,7 @@
 //= require cable
 //= require namespaces
 //= require selectize
+//= require show-free-text-question
 //= require accessible-autocomplete.min
 //= require organisation-autocomplete
 //= require batch-selection

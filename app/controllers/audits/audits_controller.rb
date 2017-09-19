@@ -29,12 +29,17 @@ module Audits
     end
 
     def save
-      @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
-      @next_content_item = FindNextItem.call(@content_item, filter)
-      @audit = Audit.find_or_initialize_by(content_item: @content_item)
-      @audit.user = current_user
+      result = Audits::SaveAudit.call(
+        attributes: audit_params,
+        content_id: params.fetch(:content_item_content_id),
+        user_uid: current_user.uid
+      )
 
-      if @audit.update(audit_params)
+      @content_item = result.content_item
+      @next_content_item = FindNextItem.call(@content_item, filter)
+      @audit = result.audit
+
+      if result.success
         if @next_content_item
           flash.notice = "Saved successfully and continued to next item."
           redirect_to content_item_audit_path(@next_content_item, filter_params)
@@ -61,6 +66,7 @@ module Audits
             notes
             outdated
             redundant
+            redirect_urls
             reformat
             similar
             similar_urls

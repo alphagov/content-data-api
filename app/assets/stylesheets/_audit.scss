@@ -24,22 +24,15 @@ $next-link-colour: #000000;
   margin-bottom: 1.5em;
 }
 
-.question {
-  &.is-there-content-out-of-date {
-    margin-top: 4em;
-  }
-}
+.redirect-urls,
+.similar-urls {
+  margin-left: 0;
+  padding-left: 2em;
+  border-left: solid 2px;
+  margin-bottom: 1.5em;
 
-.free-text-question {
-  &.redirect-or-combine-with-url {
-    textarea {
-      height: 2em;
-    }
-  }
-
-  &.ur-ls-of-similar-pages {
-    border-left: solid;
-    padding-left: 2em;
+  label {
+    font-weight: normal;
   }
 }
 
