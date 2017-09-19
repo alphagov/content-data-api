@@ -159,6 +159,9 @@ GEM
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.3.1)
       rails (>= 3.2.0)
+    govuk_app_config (0.2.0)
+      sentry-raven (~> 2.6.3)
+      statsd-ruby (~> 1.4.0)
     govuk_sidekiq (2.0.0)
       gds-api-adapters (>= 19.1.0)
       redis-namespace (~> 1.5.2)
@@ -390,6 +393,8 @@ GEM
       rake (>= 0.9, < 13)
       sass (~> 3.4.20)
     selectize-rails (0.12.4)
+    sentry-raven (2.6.3)
+      faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
     sidekiq (4.2.10)
       concurrent-ruby (~> 1.0)
@@ -491,6 +496,7 @@ DEPENDENCIES
   govspeak
   govuk-lint (~> 3.2)
   govuk_admin_template
+  govuk_app_config
   govuk_sidekiq
   guard-rspec
   httparty

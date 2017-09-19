@@ -7,6 +7,7 @@ gem 'gds-api-adapters'
 gem 'gds-sso'
 gem 'govspeak'
 gem 'govuk_admin_template'
+gem 'govuk_app_config'
 gem 'govuk_sidekiq'
 gem 'plek'
 
