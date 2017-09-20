@@ -3,9 +3,21 @@ RSpec.feature "Phase banner", type: :feature do
     create(:user)
   end
 
-  scenario "The user can see a phase banner" do
-    visit "/"
+  scenario 'the user can see a ALPHA phase banner' do
+    visit '/'
 
-    expect(page).to have_selector(".phase-banner", count: 1)
+    within('.phase-banner') do
+      expect(page).to have_text('ALPHA')
+    end
+  end
+
+  context 'when auditing' do
+    scenario 'the user can see a BETA phase banner' do
+      visit '/audits'
+
+      within('.phase-banner') do
+        expect(page).to have_text('BETA')
+      end
+    end
   end
 end
