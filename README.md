@@ -60,21 +60,6 @@ In the browser navigate to: http://localhost:3206
 * [On the local environment](doc/importing_data.md#Local_environment)
 * [On GOV.UK environments](doc/importing_data.md#jenkins)
 
-### Importing themes
-
-There are custom rake tasks for backing up and restoring themes:
-
-```
-bundle exec rake themes:backup
-bundle exec rake themes:restore
-```
-
-We decided to check this data into git because themes are vital to the
-application and they take a long time to set up.
-
-These tasks will read/write a `themes.sql` file in the top-level directory.
-Existing backups are in `backups/` and will need to be copied to use the rake
-tasks, e.g. `cp backups/2017-06-11-themes.sql backups.sql`.
 
 ### Comparing themes against a CSV
 
