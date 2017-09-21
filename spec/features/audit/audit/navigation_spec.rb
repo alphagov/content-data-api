@@ -146,7 +146,7 @@ RSpec.feature "Navigation", type: :feature do
     answer_question "Summary", "No"
     answer_question "Page detail", "No"
     answer_question "Attachments", "No"
-    answer_question "Document type", "No"
+    answer_question "Content type", "No"
     answer_question "Is the content out of date?", "No"
     answer_question "Should the content be removed?", "No"
     answer_question "Is this content very similar to other pages?", "No"

@@ -227,7 +227,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
         end
       end
 
-      scenario "filtering by document type" do
+      scenario "filtering by content type" do
         hmrc.update!(document_type: "guide")
 
         select "Guide", from: "document_type"

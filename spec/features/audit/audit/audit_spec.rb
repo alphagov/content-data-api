@@ -45,7 +45,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     expect(page).to have_content("Please answer Yes or No to each of the questions.")
 
     answer_question "Attachments", "Yes"
-    answer_question "Document type", "No"
+    answer_question "Content type", "No"
     answer_question "Is the content out of date?", "Yes"
 
     answer_question "Should the content be removed?", "Yes"
@@ -62,7 +62,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     expect_answer "Summary", "Yes"
     expect_answer "Page detail", "No"
     expect_answer "Attachments", "Yes"
-    expect_answer "Document type", "No"
+    expect_answer "Content type", "No"
     expect_answer "Is the content out of date?", "Yes"
     expect_answer "Should the content be removed?", "Yes"
     expect(find_field("Where should users be redirected to? (optional)").value).to eq("http://www.example.com")
@@ -71,7 +71,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     expect(find_field("Notes").value).to eq("something")
 
     answer_question "Attachments", "Yes"
-    answer_question "Document type", "No"
+    answer_question "Content type", "No"
     answer_question "Is the content out of date?", "Yes"
 
     click_on "Save"
@@ -81,7 +81,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     expect_answer "Summary", "Yes"
     expect_answer "Page detail", "No"
     expect_answer "Attachments", "Yes"
-    expect_answer "Document type", "No"
+    expect_answer "Content type", "No"
     expect_answer "Is the content out of date?", "Yes"
   end
 
@@ -112,7 +112,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     answer_question "Page detail", "No"
     fill_in "Notes", with: "something"
     answer_question "Attachments", "Yes"
-    answer_question "Document type", "No"
+    answer_question "Content type", "No"
     answer_question "Is the content out of date?", "Yes"
     answer_question "Should the content be removed?", "Yes"
     fill_in "Where should users be redirected to? (optional)", with: "http://www.example.com"

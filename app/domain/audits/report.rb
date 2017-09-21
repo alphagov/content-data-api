@@ -37,7 +37,7 @@ module Audits
         "Change description",
         "Change body",
         "Change attachments",
-        "Change document type",
+        "Change content type",
         "Outdated",
         "Remove",
         "Similar",
