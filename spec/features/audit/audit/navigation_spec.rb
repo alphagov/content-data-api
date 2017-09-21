@@ -85,7 +85,7 @@ RSpec.feature "Navigation", type: :feature do
       expected = content_item_audit_path(peter_rabbit, some_filter: "value")
       expect(current_url).to end_with(expected)
 
-      expect(page).to have_content("Please answer Yes or No to each of the questions.")
+      expect(page).to have_content("Please answer all the questions.")
 
       click_on "Next"
 

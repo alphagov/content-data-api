@@ -42,7 +42,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     fill_in "Notes", with: "something"
 
     click_on "Save"
-    expect(page).to have_content("Please answer Yes or No to each of the questions.")
+    expect(page).to have_content("Please answer all the questions.")
 
     answer_question "Attachments", "Yes"
     answer_question "Content type", "No"
