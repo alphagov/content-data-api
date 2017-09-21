@@ -1,6 +1,6 @@
 module Audits
   class AuditsController < BaseController
-    decorates_assigned :audit, :content_item, :content_items, :next_content_item
+    decorates_assigned :audit, :content_item, :content_items
 
     def index
       respond_to do |format|
@@ -24,7 +24,6 @@ module Audits
 
     def show
       @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
-      @next_content_item = FindNextItem.call(@content_item, filter)
       @audit = Audit.find_or_initialize_by(content_item: @content_item)
     end
 
@@ -36,13 +35,12 @@ module Audits
       )
 
       @content_item = result.content_item
-      @next_content_item = FindNextItem.call(@content_item, filter)
       @audit = result.audit
 
       if result.success
-        if @next_content_item
+        if (next_content_item = FindNextItem.call(@content_item, filter))
           flash.notice = "Saved successfully and continued to next item."
-          redirect_to content_item_audit_path(@next_content_item, filter_params)
+          redirect_to content_item_audit_path(next_content_item, filter_params)
         else
           flash.now.notice = "Saved successfully."
           render :show

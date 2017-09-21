@@ -15,9 +15,8 @@
     </div>
   <% end %>
 
-  <nav class="prev-next-links">
+  <nav class="all-items-nav">
     <%= link_to "< All items", audits_path(filter_params.without(:page)), class: "all-items" %>
-    <%= link_to "Next", content_item_audit_path(next_content_item, filter_params), class: "next-item" if next_content_item %>
   </nav>
 
   <h2><%= link_to content_item.title, content_item.url, target: :_blank %></h2>

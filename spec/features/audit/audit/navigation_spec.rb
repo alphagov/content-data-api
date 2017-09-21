@@ -40,18 +40,6 @@ RSpec.feature "Navigation", type: :feature do
       expected = content_item_audit_path(peter_rabbit, some_filter: "value")
       expect(current_url).to end_with(expected)
 
-      click_link "Next"
-
-      expected = content_item_audit_path(jemima_puddle_duck, some_filter: "value")
-      expect(current_url).to end_with(expected)
-
-      click_link "Next"
-
-      expected = content_item_audit_path(benjamin_bunny, some_filter: "value")
-      expect(current_url).to end_with(expected)
-
-      expect(page).to have_no_link("Next")
-
       click_link "< All items"
 
       expected = audits_path(some_filter: "value")
@@ -86,11 +74,6 @@ RSpec.feature "Navigation", type: :feature do
       expect(current_url).to end_with(expected)
 
       expect(page).to have_content("Please answer all the questions.")
-
-      click_on "Next"
-
-      expected = content_item_audit_path(jemima_puddle_duck, some_filter: "value")
-      expect(current_url).to end_with(expected)
     end
 
     scenario "continuing to the next unadited item on save" do
@@ -110,28 +93,6 @@ RSpec.feature "Navigation", type: :feature do
       click_link "Peter Rabbit"
       perform_audit
       expect(current_url).to include(content_item_audit_path(benjamin_bunny))
-    end
-  end
-
-  context "when there are multiple pages of content items assigned to me" do
-    let!(:content_items) {
-      create_list(:content_item, 30, allocated_to: me)
-        .sort_by(&:base_path)
-        .reverse
-    }
-
-    scenario "Clicking 'Next' to navigate between individual content items" do
-      visit audits_path
-
-      click_link content_items[0].title
-
-      (content_items.count - 1).times do |index|
-        expect(page).to have_content(content_items[index].title)
-        click_link "Next"
-      end
-
-      expect(page).to have_content(content_items.last.title)
-      expect(page).to have_no_content "Next"
     end
   end
 

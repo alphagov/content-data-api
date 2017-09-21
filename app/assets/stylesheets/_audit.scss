@@ -1,18 +1,14 @@
-$next-link-colour: #000000;
+$all-items-link-colour: #000000;
 
-.prev-next-links {
+.all-items-nav {
   a {
     font-size: 16px;
-    color: $next-link-colour;
+    color: $all-items-link-colour;
     text-decoration: underline;
 
     &:visited {
-      color: $next-link-colour;
+      color: $all-items-link-colour;
     }
-  }
-
-  .next-item {
-    float: right;
   }
 }
 
