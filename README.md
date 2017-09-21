@@ -34,7 +34,7 @@ The application can be accessed from:
 
 http://content-performance-manager.dev.gov.uk
 
-### Running the tests
+To run the test suite:
  ```bash
  $ bundle exec rake
  ```
@@ -44,12 +44,6 @@ http://content-performance-manager.dev.gov.uk
  ```bash
  $ bundle exec guard
  ```
-
-### App development
-
-* [GOVUK-LINT-RUBY](doc/govuk-lint.md)
-* [Set up Google Analytics credentials in development](doc/google_analytics_setup.md)
-
 
 ### Using Docker
 
@@ -98,6 +92,13 @@ To run the test suite:
 $ docker-compose exec app rails db:setup RAILS_ENV=test
 $ docker-compose exec app rake
 ```
+
+
+### App development
+
+* [GOVUK-LINT-RUBY](doc/govuk-lint.md)
+* [Set up Google Analytics credentials in development](doc/google_analytics_setup.md)
+
 
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/overview/
