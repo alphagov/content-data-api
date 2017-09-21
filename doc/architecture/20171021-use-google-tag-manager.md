@@ -1,0 +1,20 @@
+## Decision
+
+Use of Google Tag Manager (GTM) for CPM and the Audit Tool.
+
+Google Tag Manager (GTM) is an out-of-the-box analytics tagging package. It is designed to enable quick updates to web tracking.
+
+The most important steps we have followed related to our development process are listed below:
+
+1. Disable Custom HTML tags.
+2. Set up multiple environments so that we can securely test changes in integration and staging.
+3. All the data that is not directly configured via GTM with built-in tags [is manually published to the "Data Layer"][1].
+
+To find all the details about our approach [GTM please read our GTM Wiki page][2].
+
+Note: at the moment of writing this note, we still don't have the final approval from IA. 
+We have followed though, all the security steps that they have recommended.   
+
+[1]: https://github.com/alphagov/content-performance-manager/pull/322
+[2]: https://gov-uk.atlassian.net/wiki/spaces/AC/pages/164954113/Google+Tag+Manager+GTM
+
