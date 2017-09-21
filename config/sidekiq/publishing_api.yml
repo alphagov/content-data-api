@@ -1,0 +1,4 @@
+---
+:concurrency:  3
+:queues:
+  - publishing_api
