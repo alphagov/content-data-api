@@ -80,7 +80,7 @@ RSpec.feature "Navigation", type: :feature do
     scenario "not continuing to next item if fails to save" do
       visit content_item_audit_path(peter_rabbit, some_filter: "value")
 
-      click_on "Save"
+      click_on "Save and continue"
 
       expected = content_item_audit_path(peter_rabbit, some_filter: "value")
       expect(current_url).to end_with(expected)
@@ -151,6 +151,6 @@ RSpec.feature "Navigation", type: :feature do
     answer_question "Should the content be removed?", "No"
     answer_question "Is this content very similar to other pages?", "No"
 
-    click_on "Save"
+    click_on "Save and continue"
   end
 end
