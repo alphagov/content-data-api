@@ -55,20 +55,6 @@ In the browser navigate to: http://localhost:3206
  $ bundle exec guard
  ```
 
-### Comparing themes against a CSV
-
-Previously, inventories were exported as CSVs. There is a rake task that
-compares one of these CSVs against the content items in a Theme and prints a
-report. To run it:
-
-```
-bundle exec rake themes:compare[~/Downloads/transport.csv,Transport]
-```
-
-The first argument is the path to the CSV export. The second argument is the
-name of the theme.
-
-
 ### App development
 
 * [GOVUK-LINT-RUBY](doc/govuk-lint.md)
