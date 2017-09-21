@@ -34,16 +34,6 @@ The application can be accessed from:
 
 http://content-performance-manager.dev.gov.uk
 
-#### From the local machine
-
-The application can be started with:
-
-```bash
-$ ./startup.sh
-```
-
-In the browser navigate to: http://localhost:3206
-
 ### Running the tests
  ```bash
  $ bundle exec rake
