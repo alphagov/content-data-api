@@ -26,12 +26,6 @@
     <%= content_item.description %>
   </p>
 
-  <%if content_item.whitehall_url %>
-    <p>
-      <%= link_to "Open in Whitehall Publisher", content_item.whitehall_url %>
-    </p>
-  <% end %>
-
   <hr/>
 
   <%= link_to "Audit guidance", audits_guidance_path %>

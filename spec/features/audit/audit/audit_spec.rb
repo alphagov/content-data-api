@@ -32,8 +32,6 @@ RSpec.feature "Auditing a content item", type: :feature do
     expect(page).to have_link("Flooding", href: "https://gov.uk/flooding")
     expect(page).to have_content("All about flooding.")
 
-    expect(page).to have_link("Open in Whitehall Publisher")
-
     expect(page).to have_content("Do these things need to change?")
 
     answer_question "Title", "No"
