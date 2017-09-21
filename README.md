@@ -55,12 +55,6 @@ In the browser navigate to: http://localhost:3206
  $ bundle exec guard
  ```
 
-### Importing data
-
-* [On the local environment](doc/importing_data.md#Local_environment)
-* [On GOV.UK environments](doc/importing_data.md#jenkins)
-
-
 ### Comparing themes against a CSV
 
 Previously, inventories were exported as CSVs. There is a rake task that
