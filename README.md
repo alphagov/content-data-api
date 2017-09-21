@@ -34,17 +34,7 @@ The application can be accessed from:
 
 http://content-performance-manager.dev.gov.uk
 
-#### From the local machine
-
-The application can be started with:
-
-```bash
-$ ./startup.sh
-```
-
-In the browser navigate to: http://localhost:3206
-
-### Running the tests
+To run the test suite:
  ```bash
  $ bundle exec rake
  ```
@@ -54,48 +44,6 @@ In the browser navigate to: http://localhost:3206
  ```bash
  $ bundle exec guard
  ```
-
-### Importing data
-
-* [On the local environment](doc/importing_data.md#Local_environment)
-* [On GOV.UK environments](doc/importing_data.md#jenkins)
-
-<<<<<<< HEAD
-### Importing themes
-
-There are custom rake tasks for backing up and restoring themes:
-
-```
-bundle exec rake themes:backup
-bundle exec rake themes:restore
-```
-
-We decided to check this data into git because themes are vital to the
-application and they take a long time to set up.
-
-These tasks will read/write a `themes.sql` file in the top-level directory.
-Existing backups are in `backups/` and will need to be copied to use the rake
-tasks, e.g. `cp backups/2017-06-11-themes.sql backups.sql`.
-
-### Comparing themes against a CSV
-
-Previously, inventories were exported as CSVs. There is a rake task that
-compares one of these CSVs against the content items in a Theme and prints a
-report. To run it:
-
-```
-bundle exec rake themes:compare[~/Downloads/transport.csv,Transport]
-```
-
-The first argument is the path to the CSV export. The second argument is the
-name of the theme.
-
-
-### App development
-
-* [GOVUK-LINT-RUBY](doc/govuk-lint.md)
-* [Set up Google Analytics credentials in development](doc/google_analytics_setup.md)
-
 
 ### Using Docker
 
@@ -144,6 +92,13 @@ To run the test suite:
 $ docker-compose exec app rails db:setup RAILS_ENV=test
 $ docker-compose exec app rake
 ```
+
+
+### App development
+
+* [GOVUK-LINT-RUBY](doc/govuk-lint.md)
+* [Set up Google Analytics credentials in development](doc/google_analytics_setup.md)
+
 
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/overview/
