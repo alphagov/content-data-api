@@ -24,3 +24,4 @@
 // --- Analytics ---
 //= require analytics/google-tag-manager
 //= require analytics/track-select-change
+//= require analytics/track-allocation-batch-size

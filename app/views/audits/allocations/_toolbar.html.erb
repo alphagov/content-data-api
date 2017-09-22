@@ -2,7 +2,12 @@
   <div class="row">
     <div class="form-group form-inline pull-left">
       <%= label_tag :allocate_to, "Assign", class: "allocate" %>
-      <%= text_field_tag :batch_size, "", class: "form-control" %>
+      <%= text_field_tag :batch_size,
+          "",
+          class: "form-control",
+          data: {
+            tracking_id: "allocation-batch-size",
+          } %>
       <%= label_tag :allocate_to, "items to", class: "items"  %>
       <%= select_tag "allocate_to",
         allocation_options_for_select(params[:allocate_to]),
