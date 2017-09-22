@@ -155,6 +155,10 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
       end
 
       context "filtering by organisation" do
+        around(:each) do |example|
+          Capybara.using_wait_time(5) { example.run }
+        end
+
         scenario "organisations are in alphabetical order" do
           within("#organisations") do
             options = page.all("option")
@@ -167,13 +171,17 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
           expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
 
           click_on "More options"
-          expect(page).to have_selector("#organisations", visible: true)
+          expect(page).to have_selector("#organisations", visible: :visible)
+          expect(page).to have_selector("#organisations-select", visible: :hidden)
 
           organisations_autocomplete = page.find("#organisations")
           organisations_autocomplete.send_keys("HM", :down, :enter)
 
+          expect(page).to have_field("Organisations", with: "HMRC")
+
           click_on "Apply filters"
 
+          expect(page).to have_selector("option[selected][value=\"#{hmrc.content_id}\"]", visible: :hidden)
           expect(page.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
         end
 
@@ -181,12 +189,17 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
           expect(page.current_url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
 
           click_on "More options"
+          expect(page).to have_selector("#organisations", visible: :visible)
+          expect(page).to have_selector("#organisations-select", visible: :hidden)
           expect(page).to have_selector("#add-organisation", visible: true)
 
           page.find("#add-organisation").click
 
           page.find_all("#organisations")[1].send_keys("DF", :down, :enter)
           page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
+
+          expect(page).to have_field("Organisations", with: "DFE")
+          expect(page).to have_field("Organisations", with: "HMRC")
 
           click_on "Apply filters"
 
