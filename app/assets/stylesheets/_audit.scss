@@ -44,6 +44,12 @@ $next-link-colour: #000000;
   margin-top: 1em;
 }
 
+.audit-content-item {
+  a {
+    text-decoration: underline;
+  }
+}
+
 .audit-metadata {
   h4 {
     margin-top: 2em;
