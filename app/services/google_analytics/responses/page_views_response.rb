@@ -8,7 +8,10 @@ module GoogleAnalytics
 
       def parse(response)
         report = response.reports.first
-        report.data.rows.map do |row|
+        # If none of the provided base paths have associated pageviews, then
+        # GA returns nil instead of an empty array
+        rows = report.data.rows || []
+        rows.map do |row|
           {
             base_path: row.dimensions.first,
             one_month_page_views: row.metrics.first.values.first.to_i,

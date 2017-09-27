@@ -40,7 +40,14 @@ RSpec.describe GoogleAnalyticsService do
       expect_any_instance_of(GoogleAnalytics::Requests::PageViewsRequest).to_not receive(:build)
 
       response = subject.page_views(base_paths)
+      expect(response).to eq([])
+    end
 
+    it 'returns an empty array if the returns rows are nil' do
+      google_response = GoogleAnalyticsFactory.build_page_views_response(nil)
+      allow(google_client).to receive(:batch_get_reports).and_return(google_response)
+
+      response = subject.page_views(%w(/a-path-with-no-pageviews))
       expect(response).to eq([])
     end
   end
