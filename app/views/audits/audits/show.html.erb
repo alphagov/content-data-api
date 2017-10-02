@@ -1,4 +1,4 @@
-<div class="col-sm-7">
+<div class="audit-content-item col-sm-7">
   <% if flash.notice %>
     <div class="alert alert-success" role="alert">
       <p>
@@ -36,14 +36,14 @@
 
   <%= link_to "Audit question help", audits_guidance_path %>
 
-  <h4>Do these things need to change?</h4>
-
   <% if audit.errors.any? %>
     <div class="alert alert-danger" role="alert">
       <p>Please answer <strong>Yes</strong> or
         <strong>No</strong> to each of the questions.</p>
     </div>
   <% end %>
+
+  <h4>Do these things need to change?</h4>
 
   <%= form_for audit, url: content_item_audit_path(filter_params) do |form| %>
     <%= render 'boolean_question', form: form,
