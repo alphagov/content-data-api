@@ -17,7 +17,7 @@ $next-link-colour: #000000;
 }
 
 .description {
-  margin: 2em 0 4em 0;
+  margin: 2em 0 2em 0;
 }
 
 .header-row {
@@ -31,7 +31,7 @@ $next-link-colour: #000000;
 .redirect-urls,
 .similar-urls {
   margin-left: 0;
-  padding-left: 2em;
+  padding-left: 0.5em;
   border-left: solid 2px;
   margin-bottom: 1.5em;
 
@@ -40,11 +40,24 @@ $next-link-colour: #000000;
   }
 }
 
-.btn-success {
+.notes {
   margin-top: 1em;
 }
 
+.btn-success {
+  margin-top: 1em;
+  font-size: 19px;
+}
+
 .audit-content-item {
+  font-size: 19px;
+
+  h4 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 22px;
+  }
+
   a {
     text-decoration: underline;
   }
