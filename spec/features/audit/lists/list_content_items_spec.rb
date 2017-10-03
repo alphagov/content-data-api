@@ -73,19 +73,5 @@ RSpec.feature "List Content Items to Audit", type: :feature do
         expect(page).to have_content(content_item.title)
       end
     end
-
-    scenario "Clicking 'Next' on content items" do
-      visit audits_path
-
-      click_link content_items[0].title
-
-      (content_items.count - 1).times do |index|
-        expect(page).to have_content(content_items[index].title)
-        click_link "Next"
-      end
-
-      expect(page).to have_content(content_items.last.title)
-      expect(page).to have_no_content "Next"
-    end
   end
 end

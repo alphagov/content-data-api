@@ -65,7 +65,7 @@ RSpec.feature "Allocate content to other content auditors", type: :feature do
       select "Tiffany Aching", from: "allocate_to"
       click_on "Assign"
 
-      expect(page).to have_content("1 items allocated to Tiffany Aching")
+      expect(page).to have_content("1 item assigned to Tiffany Aching")
 
       select "Tiffany Aching", from: "allocated_to"
       click_on "Apply filters"

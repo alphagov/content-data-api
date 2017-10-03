@@ -15,9 +15,8 @@
     </div>
   <% end %>
 
-  <nav class="prev-next-links">
+  <nav class="all-items-nav">
     <%= link_to "< All items", audits_path(filter_params.without(:page)), class: "all-items" %>
-    <%= link_to "Next", content_item_audit_path(next_content_item, filter_params), class: "next-item" if next_content_item %>
   </nav>
 
   <h2><%= link_to content_item.title, content_item.url, target: :_blank %></h2>
@@ -26,20 +25,13 @@
     <%= content_item.description %>
   </p>
 
-  <%if content_item.whitehall_url %>
-    <p>
-      <%= link_to "Open in Whitehall Publisher", content_item.whitehall_url %>
-    </p>
-  <% end %>
-
   <hr/>
 
-  <%= link_to "Audit question help", audits_guidance_path %>
+  <%= link_to "Audit guidance", audits_guidance_path %>
 
   <% if audit.errors.any? %>
     <div class="alert alert-danger" role="alert">
-      <p>Please answer <strong>Yes</strong> or
-        <strong>No</strong> to each of the questions.</p>
+      <p>Please answer all the questions.</p>
     </div>
   <% end %>
 
@@ -64,7 +56,7 @@
 
     <%= render 'boolean_question', form: form,
                attribute: :reformat,
-               question: 'Document type' %>
+               question: 'Content type' %>
 
     <%= render 'boolean_question', form: form,
                attribute: :outdated,
@@ -97,7 +89,7 @@
                question: 'Notes',
                related_question_answered: {} %>
 
-    <%= form.submit "Save", class: "btn btn-success" %>
+    <%= form.submit "Save and continue", class: "btn btn-success" %>
   <% end %>
 </div>
 

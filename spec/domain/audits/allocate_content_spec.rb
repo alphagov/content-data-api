@@ -22,12 +22,12 @@ module Audits
       expect(allocation).to have_attributes(content_item: content_item, user: user)
     end
 
-    it "Returns a message with the number of allocated items" do
+    it "returns a result with the number of allocated items and the user they were allocation to" do
       user.update name: "John Smith"
       create :content_item, content_id: "content_id_2"
 
       result = AllocateContent.call(user_uid: user.uid, content_ids: %w(content_id_1 content_id_2))
-      expect(result.message).to eq("2 items allocated to John Smith")
+      expect(result).to have_attributes(count: 2, user: 'John Smith')
     end
   end
 end

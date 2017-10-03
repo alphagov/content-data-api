@@ -14,7 +14,7 @@ module Audits
     def call
       Allocation.transaction { create_or_update_allocation! }
 
-      Result.new(user.name, content_ids.size)
+      AllocationResult.new(user.name, content_ids.count)
     end
 
   private
@@ -31,19 +31,6 @@ module Audits
 
     def user
       @user ||= User.find_by(uid: user_uid)
-    end
-
-    class Result
-      attr_reader :user, :count
-
-      def initialize(user, count)
-        @user = user
-        @count = count
-      end
-
-      def message
-        "#{count} items allocated to #{user}"
-      end
     end
   end
 end

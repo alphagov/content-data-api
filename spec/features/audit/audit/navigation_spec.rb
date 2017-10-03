@@ -40,18 +40,6 @@ RSpec.feature "Navigation", type: :feature do
       expected = content_item_audit_path(peter_rabbit, some_filter: "value")
       expect(current_url).to end_with(expected)
 
-      click_link "Next"
-
-      expected = content_item_audit_path(jemima_puddle_duck, some_filter: "value")
-      expect(current_url).to end_with(expected)
-
-      click_link "Next"
-
-      expected = content_item_audit_path(benjamin_bunny, some_filter: "value")
-      expect(current_url).to end_with(expected)
-
-      expect(page).to have_no_link("Next")
-
       click_link "< All items"
 
       expected = audits_path(some_filter: "value")
@@ -80,17 +68,12 @@ RSpec.feature "Navigation", type: :feature do
     scenario "not continuing to next item if fails to save" do
       visit content_item_audit_path(peter_rabbit, some_filter: "value")
 
-      click_on "Save"
+      click_on "Save and continue"
 
       expected = content_item_audit_path(peter_rabbit, some_filter: "value")
       expect(current_url).to end_with(expected)
 
-      expect(page).to have_content("Please answer Yes or No to each of the questions.")
-
-      click_on "Next"
-
-      expected = content_item_audit_path(jemima_puddle_duck, some_filter: "value")
-      expect(current_url).to end_with(expected)
+      expect(page).to have_content("Please answer all the questions.")
     end
 
     scenario "continuing to the next unadited item on save" do
@@ -113,28 +96,6 @@ RSpec.feature "Navigation", type: :feature do
     end
   end
 
-  context "when there are multiple pages of content items assigned to me" do
-    let!(:content_items) {
-      create_list(:content_item, 30, allocated_to: me)
-        .sort_by(&:base_path)
-        .reverse
-    }
-
-    scenario "Clicking 'Next' to navigate between individual content items" do
-      visit audits_path
-
-      click_link content_items[0].title
-
-      (content_items.count - 1).times do |index|
-        expect(page).to have_content(content_items[index].title)
-        click_link "Next"
-      end
-
-      expect(page).to have_content(content_items.last.title)
-      expect(page).to have_no_content "Next"
-    end
-  end
-
   def answer_question(question, answer)
     find('p', text: question)
       .first(:xpath, '..//..')
@@ -146,11 +107,11 @@ RSpec.feature "Navigation", type: :feature do
     answer_question "Summary", "No"
     answer_question "Page detail", "No"
     answer_question "Attachments", "No"
-    answer_question "Document type", "No"
+    answer_question "Content type", "No"
     answer_question "Is the content out of date?", "No"
     answer_question "Should the content be removed?", "No"
     answer_question "Is this content very similar to other pages?", "No"
 
-    click_on "Save"
+    click_on "Save and continue"
   end
 end

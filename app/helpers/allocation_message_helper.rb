@@ -1,8 +1,4 @@
 module AllocationMessageHelper
-  def show_allocation_message?
-    filter.audit_status == Audits::Audit::NON_AUDITED && filtered_to_specific_user?
-  end
-
   def filtered_to_specific_user?
     filtered_to_current_user? || filtered_user.present?
   end

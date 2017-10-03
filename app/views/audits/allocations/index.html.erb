@@ -6,7 +6,13 @@
     <%= render 'audits/common/navigation' %>
 <% end %>
 
-<%= render 'notice' %>
+<% if flash[:alert] %>
+  <%= render 'alert', message: flash[:alert], notice_class: "alert-danger" %>
+<% end %>
+
+<% if flash[:notice] %>
+  <%= render 'alert', message: flash[:notice], notice_class: "alert-success" %>
+<% end %>
 
 <div class="allocations" data-module="batch-selection">
   <%= form_tag audits_allocations_path, data: { module: "track-allocation-batch-size" } do %>
@@ -18,7 +24,7 @@
         <tr class="table-header">
           <td></td>
           <td>Title</td>
-          <td>Page views (6mth)</td>
+          <td>Page views (6 months)</td>
         </tr>
         </thead>
         <tbody>

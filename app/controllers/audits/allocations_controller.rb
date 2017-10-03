@@ -17,13 +17,21 @@ module Audits
     def create
       allocation = AllocateContent.call(user_uid: user_uid, content_ids: content_ids)
 
-      redirect_to audits_allocations_url(redirect_params), notice: allocation.message
+      if allocation.success?
+        redirect_to redirect_url, notice: allocation.message
+      else
+        redirect_to redirect_url, alert: allocation.message
+      end
     end
 
     def destroy
       unallocation = UnallocateContent.call(content_ids: content_ids)
 
-      redirect_to audits_allocations_url(redirect_params), notice: unallocation.message
+      if unallocation.success?
+        redirect_to redirect_url, notice: unallocation.message
+      else
+        redirect_to redirect_url, alert: unallocation.message
+      end
     end
 
   private
@@ -58,6 +66,10 @@ module Audits
         :user_uid,
         organisations: [],
       )
+    end
+
+    def redirect_url
+      audits_allocations_url(redirect_params)
     end
   end
 end

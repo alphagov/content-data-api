@@ -46,16 +46,16 @@ RSpec.feature "Reporting on audit progress" do
     scenario "Displaying the number of items audited/not audited" do
       visit audits_report_path
 
-      expect(page).to have_content("Items audited 2 67%")
-      expect(page).to have_content("Items still to audit 1 33%")
+      expect(page).to have_content("Audited 2 67%")
+      expect(page).to have_content("Still to audit 1 33%")
       expect(width("#progress")).to eq("width: 66.66667%;")
     end
 
     scenario "Displaying the number of items needing improvement/not needing improvement" do
       visit audits_report_path
 
-      expect(page).to have_content("Items that need improvement 1 50%")
-      expect(page).to have_content("Items that don't need improvement 1 50%")
+      expect(page).to have_content("Need improvement 1 50%")
+      expect(page).to have_content("Don't need improvement 1 50%")
       expect(width("#items-needing-improvement")).to eq("width: 50%;")
     end
   end
