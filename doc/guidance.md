@@ -1,14 +1,6 @@
 # Audit GOV.UK content
-We've created this document to help you understand the questions on the audit tool before your team starts auditing content. We've also provided guidance about things to consider, and examples of good and bad content.
 
----
-
-## Before you start
-Items are ordered by most popular - page views in the past 6 months.
-
-Keep in mind any:
-* upcoming content that could affect older pieces - for example a policy update
-* recently renamed policies or groups - for example Transport Focus (formerly Passenger Focus)
+Guidance to help you understand the questions on the audit tool before you start auditing content.
 
 ---
 
@@ -31,7 +23,7 @@ References: [Style guide (Titles)](https://www.gov.uk/guidance/style-guide/a-to-
 
 Check whether the title would make sense:
 
-* as the link text in the new navigation (where all titles from the topic area are listed together)
+* in a long list
 * in search results
 * in collections
 
@@ -94,7 +86,7 @@ Page detail (body text) should:
 * explain any technical terms
 * be shorter than 500 words if possible
 
-Reference: Structuring your content
+Reference: [Structuring your content](https://www.gov.uk/guidance/content-design/writing-for-gov-uk#structuring-content)
 
 ### Consider
 
@@ -134,7 +126,7 @@ Reason: Doesn’t give any detail on what a user would need this for or what the
 
 ---
 
-## Do the attachments need work?
+## Do the attachments need to change?
 
 This isn’t a priority for the content transformation audit. But while you’re reviewing a page, take note of potential content improvement work, such as attachments that:
 
@@ -191,13 +183,11 @@ Reason: Attachment name is too long and repeats what’s in the page title and s
 * * *
 
 
-## Do we need to change the format?
+## Does the format need to change?
 
-For the content transformation audit it’s particularly important that guidance content is published in one of the guidance formats.
+It’s important that guidance content is published in one of the guidance formats so that users have a more complete journey from start to finish.
 
 User guidance takes a user through completing a task, for example [Become a driving examiner](https://www.gov.uk/guidance/become-a-driving-examiner).
-
-Non-guidance content types will start appearing in the new navigation at the end of 2017, so it’s important to check that content in a guidance format really is guidance.
 
 The main Whitehall guidance formats are:
 
@@ -240,9 +230,9 @@ Reason: It’s informing users of a policy discussion, not taking them through c
 * * *
 
 
-## Do we need to check if the content is current?
+## Do we need to check if the content is out of date?
 
-Content that is no longer current should be:
+Content that is out of date should be:
 
 * withdrawn - if a record of it still needs to be available, for example previous instructions on how to assess an ongoing project
 
@@ -266,43 +256,20 @@ Does it help users complete a task that’s still relevant?
 
 > [Rail passenger franchises from 2005](https://www.gov.uk/government/publications/rail-passenger-franchises)
 
-Reason: It's an old invitation to tender. It needs to be reviewed to check it's still being used, and if there are any other pages it could be merged with. If not, it can be withdrawn.* * *
+Reason: It's an old invitation to tender. It needs to be reviewed to check it's still being used, and if there are any other pages it could be merged with. If not, it can be withdrawn.
 
+---
 
-## What kind of work is required?
-
-The options are:
-
-* none (keep as is) - the content is OK and doesn’t need work
-
-* involved update - we need to consult content owners about the changes, or consider this content together with related content
-
-* simple update - the content contains typos, unknown acronyms, a title or summary that needs work, or something else that the digital team can do without consulting content owners
-
-* withdraw - the content has been superseded, but a record needs to be kept - so please check if the title, summary and details need improving, as the content will still appear on GOV.UK
-
-* outside audit required - this content isn't owned by your organisation, or needs to be reviewed by another department
-
-* out of scope - the content doesn’t fit into this audit's theme
-
-### Consider
-
-Will you be comfortable making updates or do you need content owners to fact check?
-
-* * *
-
-
-## Do we need to remove this as a duplicate or unnecessary page?
+## Should the content be removed?
 
 The options are:
 
 * no - page is unique, up-to-date, and doesn't need to be merged or unpublished
 
-* merge - you can consolidate the content into a new or existing similar page
 
-* unpublish - this content was published in error, or can be merged into another page that we'll redirect to
+* yes - page is a duplicate, contains out of date information, information can be merged with similar page, content was published in error
 
-If you select 'merge' or 'unpublish', add the destination url in the 'Redirect or combine with URL' column.
+If you select 'yes’, add the destination url in the 'Where should users be redirected to? (optional)' text box.
 
 References: [Withdrawing and unpublishing content](https://www.gov.uk/guidance/content-design/gov-uk-content-retention-and-withdrawal-archiving-policy) and [Unpublishing content](https://www.gov.uk/guidance/content-design/gov-uk-content-retention-and-withdrawal-archiving-policy#unpublishing-content)
 
@@ -321,63 +288,4 @@ Does the page contain information that's easily available elsewhere?
 
 ## Notes
 
-Add notes or reminders that will help later in the audit or improvement stage.
-
-* * *
-
-
-## Is work needed?
-
-This column will automatically populate with ‘Yes’ or ‘No’ in the report CSV export based on your answers to the other questions.
-
-* * *
-
-
-## Improvement subject
-
-Use this dropdown to identify groups of similar content.
-
-You can then sort the tool by this column to more easily:
-
-* audit groups of similar content
-
-* assign content for improvement work
-
-If you have a new subject for the dropdown, add it to the list on the ‘improvement-subjects’ tab of the tool.
-
-### Consider
-
-Think about how you might assign improvement work, and add subjects accordingly.
-
-These subjects are only to help coordinate the audit and improvement work - they won't be used for the new taxonomy or navigation.
-
-You can create more granular subjects by adding commas, for example:
-
-* driving instructors
-
-* driving instructors, cars
-
-* driving instructors, motorcycles
-
-* driving instructors, HGV
-
-* driving instructors, PSV
-
-* * *
-
-
-## After the audit: content improvement
-
-When you've completed the audit, we'll make a copy of the tool so you can keep track of content updates and consultations with content owners.
-
-We can discuss additional columns that might help you, such as:
-
-* name of the person making the updates
-
-* name of the content owner or team
-
-* progress - with content owner, 2i check, published...
-
-* automatic 'last time status was updated' column
-
-We can also set up a Trello board to help everyone keep track of progress.
+Add notes or reminders about that will help you to improve the content.
