@@ -33,5 +33,15 @@ RSpec.describe GoogleAnalyticsService do
         }
       ])
     end
+
+    it 'does not process arrays consisting solely of nil values' do
+      base_paths = [nil, nil]
+
+      expect_any_instance_of(GoogleAnalytics::Requests::PageViewsRequest).to_not receive(:build)
+
+      response = subject.page_views(base_paths)
+
+      expect(response).to eq([])
+    end
   end
 end

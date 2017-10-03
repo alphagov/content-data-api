@@ -5,6 +5,8 @@ class GoogleAnalyticsService
 
   def page_views(base_paths)
     raise "base_paths isn't an array" unless base_paths.is_a?(Array)
+    base_paths = base_paths.select(&:present?)
+    return [] if base_paths.empty?
 
     request = GoogleAnalytics::Requests::PageViewsRequest.new.build(
       base_paths: base_paths,

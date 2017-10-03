@@ -62,20 +62,6 @@ module GoogleAnalytics
           expect(request.as_json).to include(page_views_request)
         end
       end
-
-      context "When there are blank base paths" do
-        it "does not include them in the request" do
-          request = PageViewsRequest.new.build(
-            base_paths: ["/foo", "", nil, "/bar"],
-            start_dates: ["2017/09/18"],
-          )
-
-          filters = request.to_h[:report_requests][0][:dimension_filter_clauses][0][:filters]
-          base_paths = filters.map { |filter| filter[:expressions][0] }
-
-          expect(base_paths).to contain_exactly("/foo", "/bar")
-        end
-      end
     end
   end
 end
