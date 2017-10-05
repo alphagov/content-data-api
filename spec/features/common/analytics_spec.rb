@@ -1,7 +1,15 @@
 RSpec.feature "Analytics", type: :feature do
+  let!(:my_organisation) do
+    create(
+      :organisation,
+      base_path: "google-tag-manager",
+    )
+  end
+
   let!(:me) do
     create(
       :user,
+      organisation: my_organisation,
     )
   end
 
@@ -23,6 +31,15 @@ RSpec.feature "Analytics", type: :feature do
           expect(select['data-tracking-id'].blank?).to be(false)
         end
       end
+    end
+  end
+
+  context "Tracking information from the server" do
+    scenario "the user's organisation is in the Google Tag Manager data layer", js: true do
+      visit audits_path
+
+      data_layer = page.evaluate_script("dataLayer")
+      expect(data_layer).to include("organisation" => "google-tag-manager")
     end
   end
 end
