@@ -27,7 +27,6 @@ module Audits
         allocated_to: params[:allocated_to],
         audit_status: params[:audit_status],
         document_type: params[:document_type],
-        organisations: organisations,
         page: params[:page],
         sort: Sort.column(params[:sort_by]),
         sort_direction: Sort.direction(params[:sort_by]),
@@ -40,6 +39,7 @@ module Audits
     def filter_from_blankable_query_parameters
       {}.tap do |options|
         options[:primary_org_only] = primary_org_only? if params.key?(:primary)
+        options[:organisations] = organisations if params.key?(:organisations)
       end
     end
 
