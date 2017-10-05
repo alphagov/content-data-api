@@ -9,6 +9,7 @@ module Audits
         allocated_to: :no_one,
         audit_status: Audits::Audit::NON_AUDITED,
         organisations: [current_user.organisation_content_id],
+        primary_org_only: true,
       }
 
       @content_items = FindContent.paged(filter)

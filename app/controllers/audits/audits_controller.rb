@@ -8,6 +8,7 @@ module Audits
           @default_filter = {
             allocated_to: current_user.uid,
             audit_status: Audits::Audit::NON_AUDITED,
+            primary_org_only: true,
           }
 
           @content_items = FindContent.paged(filter)
