@@ -13,6 +13,7 @@
 <% content_for :head do %>
   <%= csrf_meta_tags %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= render "google_tag_manager" %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
