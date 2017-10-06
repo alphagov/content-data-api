@@ -54,7 +54,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     fill_in "URLs of similar pages", with: "something"
 
     click_on "Save and continue"
-    expect(page).to have_content("Success: Saved successfully.")
+    expect(page).to have_content("Audit saved — no items remaining.")
 
     expect_answer "Title", "No"
     expect_answer "Summary", "Yes"
@@ -73,7 +73,7 @@ RSpec.feature "Auditing a content item", type: :feature do
     answer_question "Is the content out of date?", "Yes"
 
     click_on "Save and continue"
-    expect(page).to have_content("Success: Saved successfully.")
+    expect(page).to have_content("Audit saved — no items remaining.")
 
     expect_answer "Title", "No"
     expect_answer "Summary", "Yes"
