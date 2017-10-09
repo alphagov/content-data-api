@@ -17,7 +17,7 @@ describe('Organisation autocomplete', function () {
     });
 
     it('can autocomplete', function (done) {
-      $fixture.find('input').val('minist');
+      autoCompleteTextInput().val('minist');
 
       waitForElements($fixture, 'li')
         .then(function ($lis) {
@@ -30,7 +30,7 @@ describe('Organisation autocomplete', function () {
         })
         .then(function () {
           return wait(function () {
-            return $fixture.find('input').val() === 'Ministry of Defence';
+            return autoCompleteTextInput().val() === 'Ministry of Defence';
           });
         })
         .then(function () {
@@ -60,7 +60,7 @@ describe('Organisation autocomplete', function () {
 
       wait(
         function () {
-          return !$fixture.find('input').eq(0).val();
+          return !autoCompleteTextInput().eq(0).val();
         })
         .then(function () {
           expect(numberOfOrganisations()).toBe(1);
@@ -104,7 +104,7 @@ describe('Organisation autocomplete', function () {
 
       wait(
         function () {
-          return !$fixture.find('input').eq(0).val();
+          return !autoCompleteTextInput().eq(0).val();
         })
         .then(function () {
           expect(numberOfOrganisations()).toBe(1);
@@ -175,7 +175,7 @@ describe('Organisation autocomplete', function () {
         .eq(filterIndex);
 
     var $select = $wrapper.find('select').first();
-    var $input = $wrapper.find('input').first();
+    var $input = $wrapper.find('input[type=text]').first();
 
     expect($select.val()).toBe(value);
     expect($input.val()).toBe(label);
@@ -186,16 +186,20 @@ describe('Organisation autocomplete', function () {
   }
 
   function addOrganisation() {
-    var numberOfOrganisations = $fixture.find('input').length;
+    var numberOfOrganisations = autoCompleteTextInput().length;
     var $addOrganisation = $fixture.find('.js-add-organisation');
     $addOrganisation.click();
     return wait(function () {
-      return $fixture.find('input').length === numberOfOrganisations + 1;
+      return autoCompleteTextInput().length === numberOfOrganisations + 1;
     });
   }
 
   function removeOrganisation(index) {
     var $removeOrganisation = $fixture.find('.js-remove-organisation').eq(index);
     $removeOrganisation.click();
+  }
+
+  function autoCompleteTextInput() {
+    return $fixture.find('input[type=text]');
   }
 });

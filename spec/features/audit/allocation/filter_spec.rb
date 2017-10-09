@@ -132,5 +132,17 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
 
       expect(page).to have_text("1 item")
     end
+
+    scenario "Clearing the default organisation" do
+      visit audits_allocations_path
+
+      expect(page).to have_select("organisations[]", selected: "Authors")
+      page.unselect "Authors", from: "organisations[]"
+      expect(page).to_not have_select("organisations[]", selected: "Authors")
+
+      click_on "Apply filters"
+
+      expect(page).to_not have_select("organisations[]", selected: "Authors")
+    end
   end
 end
