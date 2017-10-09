@@ -39,11 +39,14 @@ module Audits
       @audit = result.audit
 
       if result.success
+        items_remaining_count = FindContent.paged(filter).total_count
+
         if (next_content_item = FindNextItem.call(@content_item, filter))
-          flash.notice = "Saved successfully and continued to next item."
+          flash.notice = "Audit saved — #{helpers.number_with_delimiter(items_remaining_count)} " \
+                         "#{'item'.pluralize(items_remaining_count)} remaining."
           redirect_to content_item_audit_path(next_content_item, filter_params)
         else
-          flash.now.notice = "Saved successfully."
+          flash.now.notice = "Audit saved — no items remaining."
           render :show
         end
       else

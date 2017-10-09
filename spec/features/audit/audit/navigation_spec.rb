@@ -62,7 +62,7 @@ RSpec.feature "Navigation", type: :feature do
       expected = content_item_audit_path(jemima_puddle_duck, some_filter: "value")
       expect(current_url).to end_with(expected)
 
-      expect(page).to have_content("Success: Saved successfully and continued to next item.")
+      expect(page).to have_content("Audit saved — 2 items remaining.")
     end
 
     scenario "not continuing to next item if fails to save" do
