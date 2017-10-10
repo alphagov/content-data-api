@@ -27,6 +27,7 @@ RSpec.feature "Exporting a CSV from the report page" do
         :content_item,
         title: "Example 1",
         base_path: "/example1",
+        allocated_to: me,
       )
 
       create(
@@ -88,7 +89,7 @@ RSpec.feature "Exporting a CSV from the report page" do
         'filename="Transformation_audit_report_CSV_download.csv"',
       )
       expect(page).to have_content("Example 1")
-      expect(page).to have_content("Example 2")
+      expect(page).to have_no_content("Example 2")
     end
   end
 
@@ -97,6 +98,8 @@ RSpec.feature "Exporting a CSV from the report page" do
 
     scenario "Exporting an unfiltered audit to CSV with all the content items" do
       visit audits_report_path
+      select "Anyone", from: "allocated_to"
+      click_on "Apply filters"
       click_link "Export filtered audit to CSV"
 
       csv = CSV.parse(page.body, headers: true)
