@@ -31,7 +31,7 @@ module Audits
     end
 
     def sort_by
-      Sort.combine(@sort, @sort_direction)
+      Sort.combine(sort, sort_direction)
     end
 
     def allocated_policy
