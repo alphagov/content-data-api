@@ -19,7 +19,7 @@ RSpec.feature "List Content Items to Audit", type: :feature do
 
     expect(page).to have_content("item1")
     expect(page).to have_content("10,000")
-    expect(page).to have_link("item1", href: "/content_items/content-id/audit")
+    expect(page).to have_link("item1", href: "/content_items/content-id/audit?allocated_to=#{me.uid}&audit_status=non_audited&primary=true")
 
     expect(page).to have_content("item2")
   end

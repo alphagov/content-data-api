@@ -44,9 +44,9 @@ module Audits
     end
 
     def filter_params
-      request
-        .query_parameters
-        .deep_symbolize_keys
+      Audits::SerializeFilterToQueryParameters
+        .new(filter)
+        .call
     end
 
     def primary_org_only?
