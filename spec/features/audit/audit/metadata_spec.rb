@@ -27,20 +27,21 @@ RSpec.feature "Audit metadata", type: :feature do
   end
 
   scenario "showing minimal metadata next to the audit quesionnaire" do
-    visit content_item_audit_path(content_item)
+    @audit_content_item = ContentAuditTool.new.audit_content_item
+    @audit_content_item.load(content_id: content_item.content_id)
 
-    within("#metadata") do
-      expect(page).to have_selector("#allocated", text: "Assigned to No one")
-      expect(page).to have_selector("#audited", text: "Not audited yet")
-      expect(page).to have_selector("#organisations", text: "None")
-      expect(page).to have_selector("#last-updated", text: "Never")
-      expect(page).to have_selector("#content-type", text: "Document Collection")
-      expect(page).to have_selector("#guidance", text: "No")
-      expect(page).to have_selector("#topics", text: "None")
-      expect(page).to have_selector("#policy-areas", text: "None")
-      expect(page).to have_selector("#withdrawn", text: "No")
-      expect(page).to have_selector("#pageviews", text: "0 in the last month")
-      expect(page).to have_selector("#pageviews", text: "0 in the last six months")
+    @audit_content_item.metadata do |metadata|
+      expect(metadata).to have_assigned_to(text: 'No one')
+      expect(metadata).to have_audited(text: 'Not audited yet')
+      expect(metadata).to have_content_type(text: 'Document Collection')
+      expect(metadata).to have_guidance(text: 'No')
+      expect(metadata).to have_last_major_update(text: 'Never')
+      expect(metadata).to have_organisations(text: 'None')
+      expect(metadata).to have_policy_areas(text: 'None')
+      expect(metadata).to have_topics(text: 'None')
+      expect(metadata).to have_unique_page_views(text: '0 in the last month')
+      expect(metadata).to have_unique_page_views(text: '0 in the last six months')
+      expect(metadata).to have_withdrawn(text: 'No')
     end
   end
 
@@ -71,25 +72,32 @@ RSpec.feature "Audit metadata", type: :feature do
     create_linked_content("policy_areas", "Borders and Immigration")
 
     cbbc = create(:organisation, title: "CBBC")
-    edd = create(:user, name: "Edd the Duck", organisation: cbbc)
-    create(:allocation, content_item: content_item, user: edd)
+    edd_the_duck = create(:user, name: "Edd the Duck", organisation: cbbc)
 
-    visit content_item_audit_path(content_item)
+    create(:allocation, content_item: content_item, user: edd_the_duck)
 
-    within("#metadata") do
-      allocated_text = "Assigned to Edd the Duck CBBC"
-      audited_text = "Audited 01/01/17 (less than a minute ago) by Harper Lee Authors"
-      expect(page).to have_selector("#allocated", text: allocated_text)
-      expect(page).to have_selector("#audited", text: audited_text)
-      expect(page).to have_selector("#organisations", text: "Organisations Home office")
-      expect(page).to have_selector("#last-updated", text: "03/01/17 (2 days ago)")
-      expect(page).to have_selector("#content-type", text: "Guidance")
-      expect(page).to have_selector("#guidance", text: "Yes")
-      expect(page).to have_selector("#topics", text: "Borders, Immigration")
-      expect(page).to have_selector("#policy-areas", text: "Borders and Immigration")
-      expect(page).to have_selector("#withdrawn", text: "No")
-      expect(page).to have_selector("#pageviews", text: "1,234 in the last month")
-      expect(page).to have_selector("#pageviews", text: "12,345 in the last six months")
+    @audit_content_item = ContentAuditTool.new.audit_content_item
+    @audit_content_item.load(content_id: content_item.content_id)
+
+    @audit_content_item.metadata do |metadata|
+      expect(metadata).to have_assigned_to(
+                            text: 'Edd the Duck CBBC',
+                          )
+
+      expect(metadata).to have_audited(
+                            text: '01/01/17 (less than a minute ago) ' \
+                                  'by Harper Lee Authors',
+                          )
+
+      expect(metadata).to have_organisations(text: 'Home office')
+      expect(metadata).to have_last_major_update(text: '03/01/17 (2 days ago)')
+      expect(metadata).to have_content_type(text: 'Guidance')
+      expect(metadata).to have_guidance(text: 'Yes')
+      expect(metadata).to have_topics(text: 'Borders, Immigration')
+      expect(metadata).to have_policy_areas(text: 'Borders and Immigration')
+      expect(metadata).to have_withdrawn(text: 'No')
+      expect(metadata).to have_unique_page_views(text: '1,234 in the last month')
+      expect(metadata).to have_unique_page_views(text: '12,345 in the last six months')
     end
   end
 end

@@ -27,5 +27,14 @@ class AuditContentItemPage < SitePrism::Page
 
   section :metadata, '#metadata' do
     element :assigned_to, '#allocated'
+    element :audited, '#audited'
+    element :content_type, '#content-type'
+    element :guidance, '#guidance'
+    element :last_major_update, '#last-updated'
+    element :organisations, '#organisations'
+    element :policy_areas, '#policy-areas'
+    element :topics, '#topics'
+    element :unique_page_views, '#pageviews'
+    element :withdrawn, '#withdrawn'
   end
 end
