@@ -3,7 +3,7 @@ module Content
     def initialize(scope = Content::Item.all)
       @scope = scope
       @page = 1
-      @per_page = 25
+      @per_page = 100
       @sort = :six_months_page_views
       @sort_direction = :desc
     end

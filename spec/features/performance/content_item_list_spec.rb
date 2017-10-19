@@ -42,10 +42,10 @@ RSpec.feature "Content Items List", type: :feature do
   end
 
   scenario "Paginate through content items" do
-    FactoryGirl.create_list(:content_item, 26)
+    FactoryGirl.create_list(:content_item, 101)
 
     visit "/content/items"
-    expect(page).to have_selector("main tbody tr", count: 25)
+    expect(page).to have_selector("main tbody tr", count: 100)
 
     within(".pagination") { click_on "2" }
 

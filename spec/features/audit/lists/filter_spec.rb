@@ -241,7 +241,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
       end
 
       scenario "Reseting page to 1 after filtering" do
-        create_list(:content_item, 25)
+        create_list(:content_item, 100)
 
         visit audits_path
         select "Anyone", from: "allocated_to"

@@ -92,13 +92,13 @@ RSpec.describe Content::Query do
     end
   end
 
-  describe "with 26 content items" do
-    let!(:content_items) { create_list(:content_item, 26) }
+  describe "with 101 content items" do
+    let!(:content_items) { create_list(:content_item, 101) }
 
-    it "defaults to the page 1 with 25 per page" do
+    it "defaults to the page 1 with 100 per page" do
       subject.sort_direction(:asc)
-      expect(subject.content_items.count).to eq 25
-      expect(subject.content_items).to match_array(content_items[0..24])
+      expect(subject.content_items.count).to eq 100
+      expect(subject.content_items).to match_array(content_items[0..99])
     end
   end
 
