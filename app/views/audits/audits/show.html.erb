@@ -113,7 +113,7 @@
       <% else %>
         <p><%= audit.last_updated %></p>
         <p>by <%= audit.user.name %></p>
-        <p><%= audit.user.department %></p>
+        <p><%= audit.user.organisation&.title %></p>
       <% end %>
     </div>
 

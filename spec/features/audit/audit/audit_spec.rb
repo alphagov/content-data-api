@@ -9,7 +9,20 @@ RSpec.feature "Auditing a content item", type: :feature do
     )
   end
 
-  let!(:user) { create(:user) }
+  let!(:my_organisation) do
+    create(
+      :organisation,
+      title: "YA Authors",
+    )
+  end
+
+  let!(:me) do
+    create(
+      :user,
+      name: "Garth Nix",
+      organisation: my_organisation,
+    )
+  end
 
   def answer_question(question, answer)
     find('p', text: question)
@@ -135,5 +148,21 @@ RSpec.feature "Auditing a content item", type: :feature do
     answer_question "Is this content very similar to other pages?", "Yes"
     expect(find_field("Where should users be redirected to? (optional)").value).to eq("")
     expect(find_field("URLs of similar pages").value).to eq("")
+  end
+
+  context "a content item is assigned to me" do
+    let!(:sabriel) do
+      create(
+        :content_item,
+        allocated_to: me,
+      )
+    end
+
+    scenario "my name and organisation are shown on the content item" do
+      visit content_item_audit_path(sabriel)
+
+      expect(page).to have_content("Garth Nix")
+      expect(page).to have_content("YA Authors")
+    end
   end
 end

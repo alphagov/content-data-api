@@ -58,7 +58,7 @@ class Content::ItemDecorator < Draper::Decorator
   end
 
   def auditor_org
-    allocation.user.organisation_slug.titleize
+    allocation.user.organisation&.title
   end
 
 private
