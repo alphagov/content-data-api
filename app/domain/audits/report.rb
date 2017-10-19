@@ -19,40 +19,26 @@ module Audits
       CSV.generate do |csv|
         csv << headers
         csv << [report_url, report_timestamp]
-        rows.each { |row| csv << [nil, nil, *row] }
+        rows.each { |row| csv << [nil, nil, *row.values] }
       end
     end
 
   private
 
     def headers
+      first_row = rows.first || {}
+      metadata_headers + first_row.keys
+    end
+
+    def metadata_headers
       [
         "Report URL",
         "Report timestamp",
-        "Title",
-        "URL",
-        "Is work needed?",
-        "Pageviews (last 6 months)",
-        "Change title",
-        "Change description",
-        "Change body",
-        "Change attachments",
-        "Change content type",
-        "Outdated",
-        "Remove",
-        "Similar",
-        "Similar URLs",
-        "Notes",
-        "Primary organisation",
-        "Other organisations",
-        "Content type",
-        "Last major update",
-        "Whitehall URL",
       ]
     end
 
     def rows
-      content_items
+      @rows ||= content_items
         .joins(:report_row)
         .unscope(:order)
         .pluck(:data)

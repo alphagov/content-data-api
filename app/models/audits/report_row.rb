@@ -10,27 +10,27 @@ module Audits
     end
 
     def precompute
-      self.data = [
-        title,
-        url,
-        is_work_needed,
-        page_views,
-        audit&.change_title,
-        audit&.change_description,
-        audit&.change_body,
-        audit&.change_attachments,
-        audit&.reformat,
-        audit&.outdated,
-        audit&.redundant,
-        audit&.similar,
-        audit&.similar_urls,
-        audit&.notes,
-        primary_organisation,
-        other_organisations,
-        content_type,
-        last_major_update,
-        whitehall_url,
-      ]
+      self.data = {
+        "Title" => title,
+        "URL" => url,
+        "Is work needed?" => is_work_needed,
+        "Pageviews (last 6 months)" => page_views,
+        "Change title" => audit&.change_title,
+        "Change description" => audit&.change_description,
+        "Change body" => audit&.change_body,
+        "Change attachments" => audit&.change_attachments,
+        "Change content type" => audit&.reformat,
+        "Outdated" => audit&.outdated,
+        "Remove" => audit&.redundant,
+        "Similar" => audit&.similar,
+        "Similar URLs" => audit&.similar_urls,
+        "Notes" => audit&.notes,
+        "Primary organisation" => primary_organisation,
+        "Other organisations" => other_organisations,
+        "Content type" => content_type,
+        "Last major update" => last_major_update,
+        "Whitehall URL" => whitehall_url,
+      }
 
       save!
       self
