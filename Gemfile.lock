@@ -505,6 +505,7 @@ DEPENDENCIES
   kaminari
   listen
   logstasher
+  nokogiri (~> 1.8)
   pg
   phantomjs
   plek
