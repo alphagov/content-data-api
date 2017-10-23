@@ -29,6 +29,13 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
       )
     end
 
+    let!(:love) do
+      create(
+        :topic,
+        title: "Love",
+      )
+    end
+
     let!(:love_in_the_time_of_cholera) do
       create(
         :content_item,
@@ -36,6 +43,7 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
         content_id: "love-in-the-time-of-cholera",
         allocated_to: me,
         primary_publishing_organisation: authors,
+        topics: love,
       )
     end
 
@@ -143,6 +151,25 @@ RSpec.feature "Filter content by allocated content auditor", type: :feature do
       click_on "Apply filters"
 
       expect(page).to_not have_select("organisations[]", selected: "Authors")
+    end
+
+    scenario "Filtering by topic" do
+      visit audits_allocations_path
+      select "Anyone", from: "allocated_to"
+      click_on "Apply filters"
+
+      expect(page).to have_select("topics[]", selected: nil)
+
+      expect(page).to have_content("Love in the Time of Cholera")
+      expect(page).to have_content("One Hundred Years of Solitude")
+      expect(page).to have_content("Leaf Storm")
+
+      page.select "Love", from: "topics[]"
+      click_on "Apply filters"
+
+      expect(page).to have_content("Love in the Time of Cholera")
+      expect(page).to have_no_content("One Hundred Years of Solitude")
+      expect(page).to have_no_content("Leaf Storm")
     end
   end
 end
