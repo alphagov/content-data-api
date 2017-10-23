@@ -6,13 +6,20 @@ module DropdownHelper
   end
 
   def organisation_options_for_select(selected = nil)
-    organisation_options = Content::Item
-                             .all_organisations
-                             .pluck(:title, :content_id)
-                             .map { |title, content_id| [title.squish, content_id] }
-                             .sort_by { |title, _| title }
+    options_from_content_items(Content::Item.all_organisations, selected)
+  end
 
-    options_for_select(organisation_options, selected)
+  def topic_options_for_select(selected = nil)
+    options_from_content_items(Content::Item.all_topics, selected)
+  end
+
+  def options_from_content_items(content_items, selected)
+    options = content_items
+      .pluck(:title, :content_id)
+      .map { |title, content_id| [title.squish, content_id] }
+      .sort_by { |title, _| title }
+
+    options_for_select(options, selected)
   end
 
   def sort_by_options_for_select(selected = nil)

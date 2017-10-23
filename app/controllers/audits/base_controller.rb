@@ -39,7 +39,8 @@ module Audits
     def filter_from_blankable_query_parameters
       {}.tap do |options|
         options[:primary_org_only] = primary_org_only? if params.key?(:primary)
-        options[:organisations] = organisations if params.key?(:organisations)
+        options[:organisations] = array_param(:organisations) if params.key?(:organisations)
+        options[:topics] = array_param(:topics) if params.key?(:topics)
       end
     end
 
@@ -53,9 +54,9 @@ module Audits
       params[:primary] == "true"
     end
 
-    def organisations
+    def array_param(key)
       params
-        .fetch(:organisations, [])
+        .fetch(key, [])
         .flatten
         .reject(&:blank?)
     end

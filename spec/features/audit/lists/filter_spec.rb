@@ -44,12 +44,12 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     end
   end
 
-  context "With some organisations and documents set up" do
-    # Organisations:
+  context "With some organisations, topics and documents set up" do
     let!(:hmrc) { create(:organisation, title: "HMRC") }
     let!(:dfe) { create(:organisation, title: "DFE") }
 
-    # Policies:
+    let!(:tax) { create(:topic, title: "Tax") }
+
     let!(:flying) { create(:content_item, title: "Flying abroad") }
 
     let!(:insurance) do
@@ -61,7 +61,6 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
       )
     end
 
-    # Content:
     let!(:felling) do
       create(
         :content_item,
@@ -84,10 +83,10 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
         title: "VAT",
         primary_publishing_organisation: hmrc,
         organisations: hmrc,
+        topics: tax,
       )
     end
 
-    # Audit:
     let!(:audit) { create(:audit, content_item: felling) }
 
     scenario "filtering audited content" do
@@ -234,6 +233,21 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
         within("table") do
           expect(page).to have_content("HMRC")
           expect(page).to have_no_content("Flying to countries abroad")
+        end
+      end
+
+      scenario "filtering by topic" do
+        within("table") do
+          expect(page).to have_content("VAT")
+          expect(page).to have_content("Forest management")
+        end
+
+        select "Tax", from: "topics[]"
+        click_on "Apply filters"
+
+        within("table") do
+          expect(page).to have_content("VAT")
+          expect(page).to have_no_content("Forest management")
         end
       end
 
