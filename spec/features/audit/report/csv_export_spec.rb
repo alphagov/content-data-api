@@ -94,7 +94,7 @@ RSpec.feature "Exporting a CSV from the report page" do
   end
 
   context "Multiple pages of content items are in the database" do
-    let!(:content_items) { create_list(:content_item, 50) }
+    let!(:content_items) { create_list(:content_item, 110) }
 
     scenario "Exporting an unfiltered audit to CSV with all the content items" do
       visit audits_report_path

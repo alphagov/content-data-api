@@ -43,19 +43,19 @@ RSpec.feature "List Content Items to Audit", type: :feature do
 
   describe "pagination" do
     let!(:content_items) {
-      create_list(:content_item, 30, allocated_to: me)
+      create_list(:content_item, 110, allocated_to: me)
         .sort_by(&:base_path)
         .reverse
     }
 
-    scenario "Showing 25 items on the first page" do
+    scenario "Showing 100 items on the first page" do
       visit audits_path
 
-      content_items[0..24].each do |content_item|
+      content_items[0..99].each do |content_item|
         expect(page).to have_content(content_item.title)
       end
 
-      content_items[25..29].each do |content_item|
+      content_items[100..109].each do |content_item|
         expect(page).to have_no_content(content_item.title)
       end
     end
@@ -65,11 +65,11 @@ RSpec.feature "List Content Items to Audit", type: :feature do
 
       click_link "Next →"
 
-      content_items[0..24].each do |content_item|
+      content_items[0..99].each do |content_item|
         expect(page).to have_no_content(content_item.title)
       end
 
-      content_items[25..29].each do |content_item|
+      content_items[100..109].each do |content_item|
         expect(page).to have_content(content_item.title)
       end
     end
