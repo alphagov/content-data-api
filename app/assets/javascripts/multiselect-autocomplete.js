@@ -1,17 +1,17 @@
 (function (Modules) {
   "use strict";
 
-  Modules.OrganisationAutocomplete = function () {
+  Modules.MultiselectAutocomplete = function () {
     this.start = function ($element) {
 
-      var template = organisationSelectHTML();
+      var template = selectHTML();
 
       appendAddButton();
       createSelectElementsForSelectedOptions();
       enableAutocomplete();
 
-      function organisationSelectHTML() {
-        var $select = organisationSelects().first();
+      function selectHTML() {
+        var $select = selects().first();
         $select.removeAttr('multiple');
         var $wrapper = wrapper($select);
         var $template = $wrapper.clone();
@@ -22,22 +22,21 @@
       function addButton() {
         return $(
           '<button type="button" ' +
-          '        id="add-organisation" ' +
-          '        class="btn btn-link add-organisation js-add-organisation">' +
-          '  Add another organisation' +
+          '        class="btn btn-link add-select js-add-select">' +
+          '  Add another ' + selectType() +
           '</button>'
-        ).click(addOrganisation);
+        ).click(addSelect);
       }
 
       function removeButton() {
         return $(
           '<button type="button" ' +
-          '        class="remove-organisation js-remove-organisation">' +
+          '        class="remove-select js-remove-select">' +
           '  <span class="glyphicon glyphicon-remove"' +
           '        aria-hidden="true"></span>' +
-          '  <span class="sr-only">Remove organisation</span>' +
+          '  <span class="sr-only">Remove ' + selectType() + '</span>' +
           '</button>'
-        ).click(removeOrganisation);
+        ).click(removeSelect);
       }
 
       function appendAddButton() {
@@ -56,7 +55,7 @@
       }
 
       function enableAutocomplete() {
-        organisationSelects().each(function (index, select) {
+        selects().each(function (index, select) {
 
           // When we have a select with the multiple attribute set and no
           // option is selected, the selectedIndex property will return -1. We
@@ -71,10 +70,6 @@
         });
       }
 
-      function organisationSelects() {
-        return $element.find('.js-organisation-select');
-      }
-
       function enhanceSelectElement(select) {
         accessibleAutocomplete.enhanceSelectElement({
           selectElement: select,
@@ -86,25 +81,25 @@
         wrapper($(select)).append(removeButton());
       }
 
-      function addOrganisation() {
+      function addSelect() {
         var $newSelectWrapper = $(template);
         enhanceSelectElement($newSelectWrapper.find('select')[0]);
         $newSelectWrapper.insertAfter(lastSelectWrapper());
       }
 
-      function removeOrganisation(event) {
+      function removeSelect(event) {
         var $removeButton = $(event.target);
-        var $organisationSelectWrapper = wrapper($removeButton);
+        var $selectWrapper = wrapper($removeButton);
 
-        if (organisationSelects().length === 1) {
-          clearAutocompleteAndSelect($organisationSelectWrapper);
+        if (selects().length === 1) {
+          clearAutocompleteAndSelect($selectWrapper);
         } else {
-          $organisationSelectWrapper.remove();
+          $selectWrapper.remove();
         }
       }
 
-      function clearAutocompleteAndSelect($organisationSelectWrapper) {
-        var $input = $organisationSelectWrapper.find('input');
+      function clearAutocompleteAndSelect($selectWrapper) {
+        var $input = $selectWrapper.find('input');
         $input.val('');
         // Changing the value will expand the autocomplete, but without focus, meaning that
         // it won't close if you click outside it. Here we manually focus and blur it, so
@@ -112,11 +107,11 @@
         $input.click().focus().blur();
         // Clearing the input doesn't reset the select, so we have to reset it manually.
         // See: https://github.com/alphagov/accessible-autocomplete/issues/220
-        $organisationSelectWrapper.find('select').val('');
+        $selectWrapper.find('select').val('');
       }
 
-      function organisationSelects() {
-        return $element.find('.js-organisation-select');
+      function selects() {
+        return $element.find('.js-select');
       }
 
       function selectedOptions() {
@@ -124,15 +119,19 @@
       }
 
       function lastSelectWrapper() {
-        return $element.find('.js-organisation-select-wrapper').last();
+        return $element.find('.js-select-wrapper').last();
       }
 
       function wrapper($wrapped) {
-        return $wrapped.closest('.js-organisation-select-wrapper');
+        return $wrapped.closest('.js-select-wrapper');
       }
 
       function dropdownArrow() {
         return '<span class="caret"></span>';
+      }
+
+      function selectType() {
+        return $element.data('select-type');
       }
     };
   };
