@@ -189,9 +189,8 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
           expect(page).to have_selector("#organisations", visible: :visible)
           expect(page).to have_selector("#organisations-select", visible: :hidden)
-          expect(page).to have_selector("#add-organisation", visible: true)
 
-          page.find("#add-organisation").click
+          click_on "Add another organisation"
 
           page.find_all("#organisations")[1].send_keys("DF", :down, :enter)
           page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
