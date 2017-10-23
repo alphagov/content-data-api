@@ -3,6 +3,7 @@ RSpec.describe Content::Query do
     let!(:organisation_1) { create(:organisation) }
     let!(:organisation_2) { create(:organisation) }
     let!(:policy_1) { create(:policy) }
+    let!(:topic) { create(:topic) }
 
     let!(:content_item_1) do
       create(
@@ -24,6 +25,7 @@ RSpec.describe Content::Query do
         :content_item,
         organisations: organisation_1,
         policies: policy_1,
+        topics: topic,
       )
     end
 
@@ -32,7 +34,7 @@ RSpec.describe Content::Query do
         .per_page(5)
         .page(2)
 
-      expect(subject.content_items).to have_attributes(total_pages: 2, count: 1)
+      expect(subject.content_items).to have_attributes(total_pages: 2, count: 2)
     end
 
     it "can filter by a single organisation" do
@@ -76,7 +78,7 @@ RSpec.describe Content::Query do
       subject.per_page(2)
 
       expect(subject.content_items.size).to eq(2)
-      expect(subject.all_content_items.size).to eq(6)
+      expect(subject.all_content_items.size).to eq(7)
     end
 
     it "can filter by title" do
@@ -89,6 +91,11 @@ RSpec.describe Content::Query do
       foo = create(:content_item, title: "barfoobaz")
       subject.title("Foo")
       expect(subject.content_items).to contain_exactly(foo)
+    end
+
+    it "can filter by topic" do
+      subject.topics(topic.content_id)
+      expect(subject.content_items).to contain_exactly(content_item_3)
     end
   end
 
