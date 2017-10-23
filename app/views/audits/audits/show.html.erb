@@ -63,17 +63,6 @@
 
     <div data-module="show-free-text-question">
       <%= render 'boolean_question', form: form,
-                 attribute: :redundant,
-                 question: 'Should the content be removed?' %>
-
-      <%= render 'free_text_question', form: form,
-                 attribute: :redirect_urls,
-                 question: 'Where should users be redirected to? (optional)',
-                 related_question_answered: audit.redundant %>
-    </div>
-
-    <div data-module="show-free-text-question">
-      <%= render 'boolean_question', form: form,
                  attribute: :similar,
                  question: 'Is this content very similar to other pages?' %>
 
@@ -81,6 +70,17 @@
                  attribute: :similar_urls,
                  question: 'URLs of similar pages',
                  related_question_answered: audit.similar %>
+    </div>
+
+    <div data-module="show-free-text-question">
+      <%= render 'boolean_question', form: form,
+                 attribute: :redundant,
+                 question: 'Should the content be removed?' %>
+
+      <%= render 'free_text_question', form: form,
+                 attribute: :redirect_urls,
+                 question: 'Where should users be redirected to? (optional)',
+                 related_question_answered: audit.redundant %>
     </div>
 
     <%= render 'free_text_question', form: form,
