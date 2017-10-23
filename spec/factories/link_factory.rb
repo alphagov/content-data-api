@@ -15,6 +15,10 @@ class LinkFactory
     add_links(content_item, policy_areas, Content::Link::POLICY_AREAS)
   end
 
+  def self.add_topics(content_item, topics)
+    add_links(content_item, topics, Content::Link::TOPICS)
+  end
+
   def self.add_link(content_item, target, link_type)
     return unless target
 
