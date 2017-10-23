@@ -54,4 +54,8 @@ class Content::Item < ApplicationRecord
       .group(:document_type)
       .sort_by(&:document_type)
   end
+
+  def self.all_topics
+    where(document_type: "topic").order(:title)
+  end
 end
