@@ -61,6 +61,15 @@ module Content
       end
     end
 
+    def topics(topics)
+      builder(verify_presence: topics) do
+        apply_link_filter(
+          link_type: Content::Link::TOPICS,
+          target_ids: topics,
+        )
+      end
+    end
+
     def policies(policies)
       builder(verify_presence: policies) do
         apply_link_filter(
