@@ -1,3 +1,4 @@
 <div class="content-items-counter">
-  <strong><%= format_number(count) %> <%="item".pluralize(count) %></strong>
+  <%= "#{first_item_index} - #{last_item_index} of" if count > 0 -%>
+  <%= "#{format_number(count)} #{'item'.pluralize(count)}" -%>
 </div>
