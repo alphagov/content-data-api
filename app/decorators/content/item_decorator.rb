@@ -54,11 +54,20 @@ class Content::ItemDecorator < Draper::Decorator
   end
 
   def auditor
-    allocation.user.name
+    allocation&.user&.name
   end
 
   def auditor_org
-    allocation.user.organisation_slug.titleize
+    allocation&.user&.organisation_slug&.titleize
+  end
+
+  def auditor_gravatar_hash
+    email = allocation&.user&.email&.downcase&.strip
+    return nil unless email
+
+    md5 = Digest::MD5.new
+    md5 << email
+    md5.hexdigest
   end
 
 private
