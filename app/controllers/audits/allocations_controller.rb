@@ -6,9 +6,8 @@ module Audits
 
     def index
       @default_filter = {
-        allocated_to: :no_one,
-        audit_status: Audits::Audit::NON_AUDITED,
-        organisations: [current_user.organisation_content_id],
+        allocated_to: :anyone,
+        audit_status: Audits::Audit::ALL,
         primary_org_only: true,
       }
 
