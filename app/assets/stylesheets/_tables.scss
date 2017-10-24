@@ -39,23 +39,32 @@ $visited-colour: #337ab7;
   padding-bottom: 10px;
 }
 
-.allocation {
-  display: flex;
-  align-items: center;
-
-  .allocation-avatar {
-    margin-right: 10px;
-
-    img {
-      border-radius: 5px;
+.allocations {
+  .table-header {
+    td {
+      vertical-align: middle;
+      font-weight: bold;
     }
   }
 
-  .allocation-name {
-    line-height: 1;
-  }
-}
+  .allocation {
+    display: flex;
+    align-items: center;
 
-tr.content-item td {
-  vertical-align: middle !important;
+    .allocation-avatar {
+      margin-right: 10px;
+
+      img {
+        border-radius: 5px;
+      }
+    }
+
+    .allocation-name {
+      line-height: 1;
+    }
+  }
+
+  tr.content-item td {
+    vertical-align: middle !important;
+  }
 }
