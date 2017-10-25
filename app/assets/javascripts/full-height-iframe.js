@@ -7,8 +7,14 @@
       initialise();
 
       function initialise() {
+        hackLayout();
         addSpinner();
         $element.load(restyleIframe);
+      }
+
+      function hackLayout() {
+        $('body').addClass('with-iframe');
+        $('html').css('overflow-y', 'hidden');
       }
 
       function addSpinner() {
