@@ -138,4 +138,10 @@ $all-items-link-colour: #000000;
 
 .content-preview {
   border-left: 1px solid #eee;
+  position: fixed;
+  right: 0;
+  width: 50%;
+  top: 57px;
+  bottom: 0;
+  overflow-y: scroll;
 }
