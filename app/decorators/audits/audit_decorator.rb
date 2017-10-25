@@ -6,7 +6,6 @@ module Audits
 
     decorates_association :responses
     decorates_association :content_item
-    decorates_association :user
 
     def incomplete?
       object.new_record?

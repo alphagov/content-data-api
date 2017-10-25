@@ -1,8 +1,16 @@
 RSpec.feature "Audit metadata", type: :feature do
+  let!(:my_organisation) do
+    create(
+      :organisation,
+      title: "Authors",
+    )
+  end
+
   let!(:me) do
     create(
       :user,
       name: "Harper Lee",
+      organisation: my_organisation,
     )
   end
 
@@ -62,14 +70,15 @@ RSpec.feature "Audit metadata", type: :feature do
     create_linked_content("topics", "Borders")
     create_linked_content("policy_areas", "Borders and Immigration")
 
-    user = create(:user, name: "Edd the Duck")
-    create(:allocation, content_item: content_item, user: user)
+    cbbc = create(:organisation, title: "CBBC")
+    edd = create(:user, name: "Edd the Duck", organisation: cbbc)
+    create(:allocation, content_item: content_item, user: edd)
 
     visit content_item_audit_path(content_item)
 
     within("#metadata") do
-      allocated_text = "Assigned to Edd the Duck Government Digital Service"
-      audited_text = "Audited 01/01/17 (less than a minute ago) by Harper Lee Government Digital Service"
+      allocated_text = "Assigned to Edd the Duck CBBC"
+      audited_text = "Audited 01/01/17 (less than a minute ago) by Harper Lee Authors"
       expect(page).to have_selector("#allocated", text: allocated_text)
       expect(page).to have_selector("#audited", text: audited_text)
       expect(page).to have_selector("#organisations", text: "Organisations Home office")
