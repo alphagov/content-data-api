@@ -16,7 +16,7 @@ namespace :heroku do
     ## Create the Heroku app
     heroku_remote = "heroku-#{app_name}"
     system %{heroku apps:create --region eu --remote #{heroku_remote} --app #{app_name}}
-    system %{heroku config:set RAILS_ENV=development RACK_ENV=development --app #{app_name}}
+    system %{heroku config:set RUNNING_IN_HEROKU=true RAILS_ENV=development RACK_ENV=development --app #{app_name}}
 
     ## Push code to Heroku
     current_branch = `git branch | grep "^\*" | cut -d" " -f2`.strip

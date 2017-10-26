@@ -11,7 +11,6 @@ RSpec.describe Heroku do
     let(:environment) { 'development' }
 
     context 'in development' do
-
       it 'returns true if `RUNNING_IN_HEROKU` is present' do
         expect(ENV).to receive(:[]).with("RUNNING_IN_HEROKU").and_return("TRUE")
 
