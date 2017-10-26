@@ -54,6 +54,21 @@ module Audits
       end
     end
 
+    def allocate
+      @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
+      @audit = Audit.find_or_initialize_by(content_item: @content_item)
+
+      allocation = AllocateContent.call(user_uid: params[:allocate_to], content_ids: [params[:content_id]])
+
+      if allocation.success?
+        flash.notice = allocation.message
+      else
+        flash.alert = allocation.message
+      end
+
+      render :show
+    end
+
   private
 
     def audit_params
