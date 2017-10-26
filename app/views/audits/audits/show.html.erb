@@ -163,6 +163,26 @@
 
     <%= form.submit "Save and continue", class: "btn btn-success" %>
   <% end %>
+
+  <div>
+    <hr>
+    <div class="row">
+      <h4>Other functions</h4>
+      <div class="form-group form-inline pull-left">
+        <%= form_tag "allocate" do %>
+          <%= label_tag :allocate_to, "Assign to", class: "items"  %>
+          <%= select_tag "allocate_to",
+                         allocation_options_for_select(params[:allocate_to]),
+                         class: "form-control",
+                         id: "allocate_to"
+          %>
+          <%= hidden_field_tag "content_id", [content_item.content_id] %>
+          <%= filter_to_hidden_fields %>
+          <%= submit_tag "Assign", class: "btn btn-default" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="content-preview">
