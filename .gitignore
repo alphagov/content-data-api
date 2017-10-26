@@ -11,5 +11,8 @@
 .env
 config/local_env.yml
 coverage
-log
-tmp
+
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
