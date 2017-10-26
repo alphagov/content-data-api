@@ -62,6 +62,7 @@ module Audits
 
       if allocation.success?
         flash.notice = allocation.message
+        redirect_to content_item_audit_path(@content_item, filter_params) and return
       else
         flash.alert = allocation.message
       end
