@@ -19,6 +19,7 @@ rake heroku:deploy[10,"HM Revenue & Customs",500]
 ### Heroku limit
 
 [Heroku has a limit of 1000 rows][heroku-limit] in a database, so we have hardcoded the script to only import that many objects. This limit covers content items, links and other rows such as allocations that we would need for testing.
+
 [heroku-cli]: https://devcenter.heroku.com/articles/heroku-cli
 [login-terminal]: https://devcenter.heroku.com/articles/heroku-cli#getting-started
 [heroku-limit]: https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier
