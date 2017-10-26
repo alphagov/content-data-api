@@ -1,4 +1,8 @@
 class Heroku
+  def self.enabled?
+    Rails.env.development? && ENV['RUNNING_IN_HEROKU'].present?
+  end
+
   def self.create_users(organisation_id)
     organisation = Content::Item.find(organisation_id)
 
