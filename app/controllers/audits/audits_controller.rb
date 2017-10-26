@@ -26,6 +26,7 @@ module Audits
     end
 
     def show
+      @next_content_item = FindNextItem.call(@content_item, filter)
     end
 
     def save
