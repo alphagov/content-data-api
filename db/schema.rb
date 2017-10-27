@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026223917) do
+ActiveRecord::Schema.define(version: 20171027145558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20171026223917) do
     t.text "notes"
     t.text "redirect_urls"
     t.boolean "pass"
+    t.string "size"
     t.index ["content_id"], name: "index_audits_on_content_id", unique: true
     t.index ["uid"], name: "index_audits_on_uid"
   end
