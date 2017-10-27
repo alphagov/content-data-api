@@ -11,6 +11,9 @@ if Heroku.enabled?
 
     def current_user
       User.find(session[:heroku_user_id])
+    rescue
+      session.clear
+      User.first
     end
 
     def set_default_user

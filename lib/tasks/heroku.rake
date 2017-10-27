@@ -43,12 +43,12 @@ namespace :heroku do
     system %{heroku pg:psql -c "DELETE FROM CONTENT_ITEMS" --app #{app_name}}
     system %{heroku pg:psql -c "DELETE FROM USERS" --app #{app_name}}
 
-    # Creates default user
-    system %{heroku run rails runner "Heroku.create_users(#{organisation.id})" --app #{app_name}}
-
     #Import Contetn Items and Links
     system %{heroku pg:psql -c "\\COPY CONTENT_ITEMS FROM '#{content_items_file}'" --app #{app_name}}
     system %{heroku pg:psql -c "\\COPY lINKS FROM '#{links_file}'" --app #{app_name}}
+
+    # Creates default user
+    system %{heroku run rails runner "Heroku.create_users '#{organisation.id}'" --app #{app_name}}
   end
 
   def content_items_file
