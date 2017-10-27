@@ -107,9 +107,27 @@
     </div>
   <% end %>
 
-  <h4>Do these things need to change?</h4>
+  <h3>Are changes required?</h3>
 
   <%= form_for audit, url: content_item_audit_path(filter_params) do |form| %>
+    <div class="row pass">
+      <%= form.label :pass_false, class: "radio-inline js-yes-radio" do %>
+        <%= form.radio_button :pass, false %>
+          Changes required
+      <% end %>
+      <%= form.label :pass_true, class: "radio-inline js-no-radio" do %>
+          <%= form.radio_button :pass, true %>
+          No changes required
+      <% end %>
+    </div>
+
+    <h4>Further detail (optional)</h4>
+    <p>
+      Optional detail - may be useful to prioritise improvement work.
+    </p>
+
+    <h5>Items that need changing</h5>
+
     <%= render 'boolean_question', form: form,
         attribute: :change_title,
         question: 'Title' %>
