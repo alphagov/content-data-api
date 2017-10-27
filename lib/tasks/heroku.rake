@@ -49,6 +49,9 @@ namespace :heroku do
 
     # Creates default user
     system %{heroku run rails runner "Heroku.create_users '#{organisation.id}'" --app #{app_name}}
+
+    # Opens the application in the browser
+    system %{heroku open --app #{app_name}}
   end
 
   def content_items_file
