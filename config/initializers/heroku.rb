@@ -20,5 +20,6 @@ if Heroku.enabled?
 
   GovukAdminTemplate.configure do |c|
     c.show_signout = false
+    c.disable_google_analytics = true
   end
 end
