@@ -101,6 +101,7 @@ module Audits
             reformat
             similar
             similar_urls
+            size
           )
         )
     end
