@@ -174,10 +174,33 @@
           related_question_answered: audit.redundant %>
     </div>
 
+    <h4>Size of changes needed</h4>
+    <div class="size">
+      <div class="row">
+        <%= form.label :size_small, class: "radio-inline js-yes-radio pull-left" do %>
+            <%= form.radio_button :size, "small" %>
+            Small - minor grammar or typo changes only
+        <% end %>
+      </div>
+      <div class="row">
+        <%= form.label :size_medium, class: "radio-inline js-no-radio" do %>
+            <%= form.radio_button :size, "medium" %>
+            Medium - moderate work or fact-checking required
+        <% end %>
+      </div>
+      <div class="row">
+        <%= form.label :size_large, class: "radio-inline js-no-radio" do %>
+            <%= form.radio_button :size, "large" %>
+            Large - significant changes or fact-checking required
+        <% end %>
+      </div>
+    </div>
+
     <%= render 'free_text_question', form: form,
         attribute: :notes,
         question: 'Notes',
         related_question_answered: {} %>
+
 
     <%= form.submit "Save and continue", class: "btn btn-success" %>
   <% end %>
