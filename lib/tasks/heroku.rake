@@ -33,24 +33,24 @@ namespace :heroku do
       pluck(:content_id)
     content_item_ids.push(organisation.content_id)
 
-    # Export Content Items and Links
+    ## Export Content Items and Links
     system %{psql content_performance_manager_development -c "COPY (#{content_items_query(content_item_ids)}) TO STDOUT" > '#{content_items_file}'}
     system %{psql content_performance_manager_development -c "COPY (#{links_query(content_item_ids, options)}) TO STDOUT" > '#{links_file}'}
 
-    # Clean-up data if this is a redeployment
+    ## Clean-up data if this is a redeployment
     system %{heroku pg:psql -c "DELETE FROM ALLOCATIONS" --app #{app_name}}
     system %{heroku pg:psql -c "DELETE FROM LINKS" --app #{app_name}}
     system %{heroku pg:psql -c "DELETE FROM CONTENT_ITEMS" --app #{app_name}}
     system %{heroku pg:psql -c "DELETE FROM USERS" --app #{app_name}}
 
-    #Import Contetn Items and Links
+    ## Import Content Items and Links
     system %{heroku pg:psql -c "\\COPY CONTENT_ITEMS FROM '#{content_items_file}'" --app #{app_name}}
     system %{heroku pg:psql -c "\\COPY lINKS FROM '#{links_file}'" --app #{app_name}}
 
-    # Creates default user
+    ## Creates default user
     system %{heroku run rails runner "Heroku.create_users '#{organisation.id}'" --app #{app_name}}
 
-    # Opens the application in the browser
+    ## Opens the application in the browser
     system %{heroku open --app #{app_name}}
   end
 
