@@ -148,14 +148,15 @@
         attribute: :reformat,
         question: 'Content type' %>
 
+    <h4>Other issues</h4>
     <%= render 'boolean_question', form: form,
-        attribute: :outdated,
-        question: 'Is the content out of date?' %>
+       attribute: :outdated,
+       question: 'Content out of date / refers to past event' %>
 
     <div data-module="show-free-text-question">
       <%= render 'boolean_question', form: form,
           attribute: :similar,
-          question: 'Is this content very similar to other pages?' %>
+          question: 'Content is similar to / duplicate of other pages' %>
 
       <%= render 'free_text_question', form: form,
           attribute: :similar_urls,
@@ -165,13 +166,13 @@
 
     <div data-module="show-free-text-question">
       <%= render 'boolean_question', form: form,
-          attribute: :redundant,
-          question: 'Should the content be removed?' %>
+                 attribute: :redundant,
+                 question: 'Content should be removed / archived' %>
 
       <%= render 'free_text_question', form: form,
-          attribute: :redirect_urls,
-          question: 'Where should users be redirected to? (optional)',
-          related_question_answered: audit.redundant %>
+                 attribute: :redirect_urls,
+                 question: 'Where should users be redirected to? (optional)',
+                 related_question_answered: audit.redundant %>
     </div>
 
     <h4>Size of changes needed</h4>
