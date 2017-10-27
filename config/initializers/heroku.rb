@@ -17,4 +17,8 @@ if Heroku.enabled?
       end
     end
   end
+
+  GovukAdminTemplate.configure do |c|
+    c.show_signout = false
+  end
 end
