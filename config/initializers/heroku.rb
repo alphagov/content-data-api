@@ -1,6 +1,7 @@
 if Heroku.enabled?
   ApplicationController.class_eval do
     before_action :force_development!
+    before_action :set_default_user
 
     def authenticate_user!
       user_id = params.dig(:heroku, :user_id)
@@ -10,6 +11,10 @@ if Heroku.enabled?
 
     def current_user
       User.find(session[:heroku_user_id])
+    end
+
+    def set_default_user
+      session[:heroku_user_id] ||= User.first.id
     end
 
     private
