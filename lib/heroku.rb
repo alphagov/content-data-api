@@ -6,7 +6,8 @@ class Heroku
   def self.create_users(organisation_id)
     organisation = Content::Item.find(organisation_id)
 
-    10.times do |index|
+    number_of_users = 10
+    number_of_users.times do |index|
       User.create!(
         name: "user-#{index}",
         email: "email-#{index}@domain.gov.uk",
