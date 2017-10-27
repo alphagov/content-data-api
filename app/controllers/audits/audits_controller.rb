@@ -89,6 +89,7 @@ module Audits
         .require(:audits_audit)
         .permit(
           %i(
+            pass
             change_attachments
             change_body
             change_description
