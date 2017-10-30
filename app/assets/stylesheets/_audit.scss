@@ -37,6 +37,12 @@ $all-items-link-colour: #000000;
   }
 }
 
+.optional-questions {
+  input[type=checkbox], input[type=radio] {
+    margin-left: -30px;
+  }
+}
+
 .audit-content-item form .row.notes {
   margin-top: 1em;
   margin-left: 0;
@@ -137,7 +143,9 @@ $all-items-link-colour: #000000;
   }
 }
 
-.pass {
+.audit-content-item .pass {
+  margin-left: 0 !important;
+
   .radio-inline no {
     margin-left: 2em;
   }
