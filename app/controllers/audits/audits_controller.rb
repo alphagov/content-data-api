@@ -14,7 +14,7 @@ module Audits
           }
 
           @content_items = FindContent.paged(filter)
-          @first_item = @content_items.first
+          @first_item = @content_items.first\
         end
 
         format.csv do
