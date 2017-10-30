@@ -24,11 +24,6 @@
         <span class="assigned-to">
           Assigned to:
         </span>
-        <% if content_item.auditor %>
-            <span class="allocation-avatar">
-              <img src="https://www.gravatar.com/avatar/<%= content_item.auditor_gravatar_hash -%>?r=g&s=20&d=retro"/>
-            </span>
-        <% end %>
         <span class="allocation-name">
           <%= content_item.auditor || "No one" %>
         </span>
