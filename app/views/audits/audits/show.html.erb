@@ -123,79 +123,81 @@
       <% end %>
     </div>
 
-    <h4>Further detail (optional)</h4>
-    <p>
-      Optional detail - may be useful to prioritise improvement work.
-    </p>
+    <div class="optional-questions">
+      <h4>Further detail (optional)</h4>
+      <p>
+        Optional detail - may be useful to prioritise improvement work.
+      </p>
 
-    <h4>Items that need changing</h4>
+      <h4>Items that need changing</h4>
 
-    <%= render 'boolean_question', form: form,
-        attribute: :change_title,
-        question: 'Title' %>
-
-    <%= render 'boolean_question', form: form,
-        attribute: :change_description,
-        question: 'Summary' %>
-
-    <%= render 'boolean_question', form: form,
-        attribute: :change_body,
-        question: 'Page detail' %>
-
-    <%= render 'boolean_question', form: form,
-        attribute: :change_attachments,
-        question: 'Attachments' %>
-
-    <%= render 'boolean_question', form: form,
-        attribute: :reformat,
-        question: 'Content type' %>
-
-    <h4>Other issues</h4>
-    <%= render 'boolean_question', form: form,
-       attribute: :outdated,
-       question: 'Content out of date / refers to past event' %>
-
-    <div data-module="show-free-text-question">
       <%= render 'boolean_question', form: form,
-          attribute: :similar,
-          question: 'Content is similar to / duplicate of other pages' %>
+                 attribute: :change_title,
+                 question: 'Title' %>
 
-      <%= render 'free_text_question', form: form,
-          attribute: :similar_urls,
-          question: 'URLs of similar pages',
-          related_question_answered: audit.similar %>
-    </div>
-
-    <div data-module="show-free-text-question">
       <%= render 'boolean_question', form: form,
-                 attribute: :redundant,
-                 question: 'Content should be removed / archived' %>
+                 attribute: :change_description,
+                 question: 'Summary' %>
 
-      <%= render 'free_text_question', form: form,
-                 attribute: :redirect_urls,
-                 question: 'Where should users be redirected to? (optional)',
-                 related_question_answered: audit.redundant %>
-    </div>
+      <%= render 'boolean_question', form: form,
+                 attribute: :change_body,
+                 question: 'Page detail' %>
 
-    <h4>Size of changes needed</h4>
-    <div class="size">
-      <div class="row">
-        <%= form.label :size_small, class: "radio-inline js-yes-radio pull-left" do %>
-            <%= form.radio_button :size, "small" %>
-            Small - minor grammar or typo changes only
-        <% end %>
+      <%= render 'boolean_question', form: form,
+                 attribute: :change_attachments,
+                 question: 'Attachments' %>
+
+      <%= render 'boolean_question', form: form,
+                 attribute: :reformat,
+                 question: 'Content type' %>
+
+      <h4>Other issues</h4>
+      <%= render 'boolean_question', form: form,
+                 attribute: :outdated,
+                 question: 'Content out of date / refers to past event' %>
+
+      <div data-module="show-free-text-question">
+        <%= render 'boolean_question', form: form,
+                   attribute: :similar,
+                   question: 'Content is similar to / duplicate of other pages' %>
+
+        <%= render 'free_text_question', form: form,
+                   attribute: :similar_urls,
+                   question: 'URLs of similar pages',
+                   related_question_answered: audit.similar %>
       </div>
-      <div class="row">
-        <%= form.label :size_medium, class: "radio-inline js-no-radio" do %>
-            <%= form.radio_button :size, "medium" %>
-            Medium - moderate work or fact-checking required
-        <% end %>
+
+      <div data-module="show-free-text-question">
+        <%= render 'boolean_question', form: form,
+                   attribute: :redundant,
+                   question: 'Content should be removed / archived' %>
+
+        <%= render 'free_text_question', form: form,
+                   attribute: :redirect_urls,
+                   question: 'Where should users be redirected to? (optional)',
+                   related_question_answered: audit.redundant %>
       </div>
-      <div class="row">
-        <%= form.label :size_large, class: "radio-inline js-no-radio" do %>
-            <%= form.radio_button :size, "large" %>
-            Large - significant changes or fact-checking required
-        <% end %>
+
+      <h4>Size of changes needed</h4>
+      <div class="size">
+        <div class="row">
+          <%= form.label :size_small, class: "radio-inline js-yes-radio pull-left" do %>
+              <%= form.radio_button :size, "small" %>
+              Small - minor grammar or typo changes only
+          <% end %>
+        </div>
+        <div class="row">
+          <%= form.label :size_medium, class: "radio-inline js-no-radio" do %>
+              <%= form.radio_button :size, "medium" %>
+              Medium - moderate work or fact-checking required
+          <% end %>
+        </div>
+        <div class="row">
+          <%= form.label :size_large, class: "radio-inline js-no-radio" do %>
+              <%= form.radio_button :size, "large" %>
+              Large - significant changes or fact-checking required
+          <% end %>
+        </div>
       </div>
     </div>
 
