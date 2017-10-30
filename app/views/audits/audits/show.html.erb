@@ -231,10 +231,6 @@
           <%= hidden_field_tag "content_id", [content_item.content_id] %>
           <%= filter_to_hidden_fields %>
           <%= submit_tag "Assign", class: "btn btn-default" %>
-
-          <% if @next_content_item %>
-            <%= link_to "Skip and move to next", content_item_audit_path(@next_content_item, filter_params) %>
-          <% end %>
         <% end %>
       </div>
     </div>
