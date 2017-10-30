@@ -2,18 +2,11 @@
   <td><%= check_box_tag "content_ids[]", content_item.content_id, false, class: 'select-content-item' %></td>
   <td><%= link_to content_item.title, content_item_audit_path(content_item, filter_params) %></td>
   <td>
-    <%= "<a href='?allocated_to=#{content_item.allocation.user.uid}'>".html_safe if content_item.allocation -%>
-      <div class="allocation">
-        <% if content_item.auditor %>
-          <span class="allocation-avatar">
-            <img src="https://www.gravatar.com/avatar/<%= content_item.auditor_gravatar_hash -%>?r=g&s=32&d=retro"/>
-          </span>
-        <% end %>
-        <span class="allocation-name">
-          <%= content_item.auditor || "No one" %>
-        </span>
-      </div>
-    <%= "</a>".html_safe if content_item.allocation -%>
+    <div class="allocation">
+      <span class="allocation-name">
+        <%= content_item.auditor || "No one" %>
+      </span>
+    </div>
   </td>
   <td><%= content_item.six_months_page_views %></td>
 </tr>
