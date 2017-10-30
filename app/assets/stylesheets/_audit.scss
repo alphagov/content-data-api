@@ -24,6 +24,7 @@ $all-items-link-colour: #000000;
   margin-bottom: 2em;
 }
 
+.optional-questions,
 .redirect-urls,
 .similar-urls {
   margin-left: 0;
@@ -36,8 +37,19 @@ $all-items-link-colour: #000000;
   }
 }
 
-.notes {
+.optional-questions {
+  input[type=checkbox], input[type=radio] {
+    margin-left: -30px;
+  }
+}
+
+.audit-content-item form .row.notes {
   margin-top: 1em;
+  margin-left: 0;
+
+  .col-sm-12 {
+    padding: 0;
+  }
 }
 
 .btn-success {
@@ -131,8 +143,10 @@ $all-items-link-colour: #000000;
   }
 }
 
-.pass {
-  .radio-inline {
+.audit-content-item .pass {
+  margin-left: 0 !important;
+
+  .radio-inline no {
     margin-left: 2em;
   }
 }
@@ -154,4 +168,17 @@ $all-items-link-colour: #000000;
 
 .skip-next {
   margin-top: 2em;
+}
+
+.other-functions {
+  margin-left: 0 !important;
+}
+
+.audit-content-item .alert-info {
+  margin-top: 20px;
+  font-size: 14px;
+
+  .form-inline {
+    margin-bottom: 0;
+  }
 }
