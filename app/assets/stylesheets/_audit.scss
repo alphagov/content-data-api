@@ -173,3 +173,12 @@ $all-items-link-colour: #000000;
 .other-functions {
   margin-left: 0 !important;
 }
+
+.audit-content-item .alert-info {
+  margin-top: 20px;
+  font-size: 14px;
+
+  .form-inline {
+    margin-bottom: 0;
+  }
+}

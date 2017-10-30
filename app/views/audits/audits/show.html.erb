@@ -100,141 +100,139 @@
   </div>
 
   <hr/>
-
   <%= link_to "Audit guidance", audits_guidance_path, target: "_blank", rel: "noopener noreferrer" %>
 
-  <% if audit.errors.any? %>
-    <div class="alert alert-danger" role="alert">
-      <p>Please indicate if changes are required.</p>
-    </div>
-  <% end %>
-
-  <h3>Are changes required?</h3>
-
-  <%= form_for audit, url: content_item_audit_path(filter_params) do |form| %>
-    <div class="row pass">
-      <%= form.label :pass_false, class: "radio-inline yes js-yes-radio" do %>
-        <%= form.radio_button :pass, false %>
-          Changes required
-      <% end %>
-      <%= form.label :pass_true, class: "radio-inline no js-no-radio" do %>
-          <%= form.radio_button :pass, true %>
-          No changes required
-      <% end %>
-    </div>
-
-    <div class="optional-questions">
-      <h4>Further detail (optional)</h4>
-      <p>
-        Optional detail - may be useful to prioritise improvement work.
-      </p>
-
-      <h4>Items that need changing</h4>
-
-      <%= render 'boolean_question', form: form,
-                 attribute: :change_title,
-                 question: 'Title' %>
-
-      <%= render 'boolean_question', form: form,
-                 attribute: :change_description,
-                 question: 'Summary' %>
-
-      <%= render 'boolean_question', form: form,
-                 attribute: :change_body,
-                 question: 'Page detail' %>
-
-      <%= render 'boolean_question', form: form,
-                 attribute: :change_attachments,
-                 question: 'Attachments' %>
-
-      <%= render 'boolean_question', form: form,
-                 attribute: :reformat,
-                 question: 'Content type' %>
-
-      <h4>Other issues</h4>
-      <%= render 'boolean_question', form: form,
-                 attribute: :outdated,
-                 question: 'Content out of date / refers to past event' %>
-
-      <div data-module="show-free-text-question">
-        <%= render 'boolean_question', form: form,
-                   attribute: :similar,
-                   question: 'Content is similar to / duplicate of other pages' %>
-
-        <%= render 'free_text_question', form: form,
-                   attribute: :similar_urls,
-                   question: 'URLs of similar pages',
-                   related_question_answered: audit.similar %>
+  <% if content_item.auditor %>
+    <% if audit.errors.any? %>
+      <div class="alert alert-danger" role="alert">
+        <p>Please indicate if changes are required.</p>
       </div>
+    <% end %>
 
-      <div data-module="show-free-text-question">
-        <%= render 'boolean_question', form: form,
-                   attribute: :redundant,
-                   question: 'Content should be removed / archived' %>
+    <h3>Are changes required?</h3>
 
-        <%= render 'free_text_question', form: form,
-                   attribute: :redirect_urls,
-                   question: 'Where should users be redirected to? (optional)',
-                   related_question_answered: audit.redundant %>
-      </div>
-
-      <h4>Size of changes needed</h4>
-      <div class="size">
-        <div class="row">
-          <%= form.label :size_small, class: "radio-inline js-yes-radio pull-left" do %>
-              <%= form.radio_button :size, "small" %>
-              Small - minor grammar or typo changes only
-          <% end %>
-        </div>
-        <div class="row">
-          <%= form.label :size_medium, class: "radio-inline js-no-radio" do %>
-              <%= form.radio_button :size, "medium" %>
-              Medium - moderate work or fact-checking required
-          <% end %>
-        </div>
-        <div class="row">
-          <%= form.label :size_large, class: "radio-inline js-no-radio" do %>
-              <%= form.radio_button :size, "large" %>
-              Large - significant changes or fact-checking required
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <%= render 'free_text_question', form: form,
-        attribute: :notes,
-        question: 'Notes',
-        related_question_answered: {} %>
-
-
-    <%= form.submit "Save and continue", class: "btn btn-success" %>
-  <% end %>
-
-  <% if @next_content_item %>
-    <div class="skip-next">
-      <%= link_to "Skip item and move to next", content_item_audit_path(@next_content_item, filter_params) %>
-    </div>
-  <% end %>
-
-  <div>
-    <hr>
-    <div class="row other-functions">
-      <h4>Other functions</h4>
-      <div class="form-group form-inline pull-left">
-        <%= form_tag "allocate" do %>
-          <%= label_tag :allocate_to, "Assign to", class: "items"  %>
-          <%= select_tag "allocate_to",
-                         allocation_options_for_select(params[:allocate_to]),
-                         class: "form-control",
-                         id: "allocate_to"
-          %>
-          <%= hidden_field_tag "content_id", [content_item.content_id] %>
-          <%= filter_to_hidden_fields %>
-          <%= submit_tag "Assign", class: "btn btn-default" %>
+    <%= form_for audit, url: content_item_audit_path(filter_params) do |form| %>
+      <div class="row pass">
+        <%= form.label :pass_false, class: "radio-inline yes js-yes-radio" do %>
+          <%= form.radio_button :pass, false %>
+            Changes required
+        <% end %>
+        <%= form.label :pass_true, class: "radio-inline no js-no-radio" do %>
+            <%= form.radio_button :pass, true %>
+            No changes required
         <% end %>
       </div>
+
+      <div class="optional-questions">
+        <h4>Further detail (optional)</h4>
+        <p>
+          Optional detail - may be useful to prioritise improvement work.
+        </p>
+
+        <h4>Items that need changing</h4>
+
+        <%= render 'boolean_question', form: form,
+                   attribute: :change_title,
+                   question: 'Title' %>
+
+        <%= render 'boolean_question', form: form,
+                   attribute: :change_description,
+                   question: 'Summary' %>
+
+        <%= render 'boolean_question', form: form,
+                   attribute: :change_body,
+                   question: 'Page detail' %>
+
+        <%= render 'boolean_question', form: form,
+                   attribute: :change_attachments,
+                   question: 'Attachments' %>
+
+        <%= render 'boolean_question', form: form,
+                   attribute: :reformat,
+                   question: 'Content type' %>
+
+        <h4>Other issues</h4>
+        <%= render 'boolean_question', form: form,
+                   attribute: :outdated,
+                   question: 'Content out of date / refers to past event' %>
+
+        <div data-module="show-free-text-question">
+          <%= render 'boolean_question', form: form,
+                     attribute: :similar,
+                     question: 'Content is similar to / duplicate of other pages' %>
+
+          <%= render 'free_text_question', form: form,
+                     attribute: :similar_urls,
+                     question: 'URLs of similar pages',
+                     related_question_answered: audit.similar %>
+        </div>
+
+        <div data-module="show-free-text-question">
+          <%= render 'boolean_question', form: form,
+                     attribute: :redundant,
+                     question: 'Content should be removed / archived' %>
+
+          <%= render 'free_text_question', form: form,
+                     attribute: :redirect_urls,
+                     question: 'Where should users be redirected to? (optional)',
+                     related_question_answered: audit.redundant %>
+        </div>
+
+        <h4>Size of changes needed</h4>
+        <div class="size">
+          <div class="row">
+            <%= form.label :size_small, class: "radio-inline js-yes-radio pull-left" do %>
+                <%= form.radio_button :size, "small" %>
+                Small - minor grammar or typo changes only
+            <% end %>
+          </div>
+          <div class="row">
+            <%= form.label :size_medium, class: "radio-inline js-no-radio" do %>
+                <%= form.radio_button :size, "medium" %>
+                Medium - moderate work or fact-checking required
+            <% end %>
+          </div>
+          <div class="row">
+            <%= form.label :size_large, class: "radio-inline js-no-radio" do %>
+                <%= form.radio_button :size, "large" %>
+                Large - significant changes or fact-checking required
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%= render 'free_text_question', form: form,
+          attribute: :notes,
+          question: 'Notes',
+          related_question_answered: {} %>
+
+
+      <%= form.submit "Save and continue", class: "btn btn-success" %>
+    <% end %>
+
+    <% if @next_content_item %>
+      <div class="skip-next">
+        <%= link_to "Skip item and move to next", content_item_audit_path(@next_content_item, filter_params) %>
+      </div>
+    <% end %>
+
+    <div>
+      <hr>
+      <div class="row other-functions">
+        <h4>Other functions</h4>
+        <div class="form-group form-inline pull-left">
+          <%= render 'allocate_item' %>
+        </div>
+      </div>
     </div>
-  </div>
+  <% else %>
+    <div class="alert alert-info" role="alert">
+      <p>This item is not assigned to anyone.</p>
+      <div class="form-group form-inline">
+        <%= render 'allocate_item' %>
+      </div>
+    </div>
+  <% end %>
 </div>
 
 <div class="content-preview">
