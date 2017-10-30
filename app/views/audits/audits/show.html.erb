@@ -1,4 +1,4 @@
-<div class="audit-content-item col-sm-7">
+<div class="audit-content-item">
   <% if flash.notice %>
     <div class="alert alert-success" role="alert">
       <p>
@@ -14,108 +14,44 @@
     </div>
   <% end %>
 
-  <nav class="all-items-nav">
-    <%= link_to "< All items", audits_path(filter_params.without(:page)), class: "all-items" %>
-  </nav>
+  <div class="top-bar">
+    <nav class="all-items-nav">
+      <%= link_to "< All items", audits_allocations_path(filter_params.without(:page)), class: "all-items" %>
+    </nav>
 
-  <h2><%= link_to content_item.title, content_item.url, target: :_blank %></h2>
+    <div id="allocated">
+      <div class="allocation">
+        <span class="assigned-to">
+          Assigned to:
+        </span>
+        <% if content_item.auditor %>
+            <span class="allocation-avatar">
+              <img src="https://www.gravatar.com/avatar/<%= content_item.auditor_gravatar_hash -%>?r=g&s=20&d=retro"/>
+            </span>
+        <% end %>
+        <span class="allocation-name">
+          <%= content_item.auditor || "No one" %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div id="audited" class="audit-status">
+    <% if audit.incomplete? %>
+      Not audited yet
+    <% else %>
+      Audited on <%= audit.last_updated %> by <%= audit.user.name %>
+    <% end %>
+  </div>
+
+  <h2><%= link_to content_item.title, content_item.url, target: :_blank, rel: "noopener noreferrer" %></h2>
 
   <p class="description">
     <%= content_item.description %>
   </p>
 
-  <hr/>
-
-  <%= link_to "Audit guidance", audits_guidance_path %>
-
-  <% if audit.errors.any? %>
-    <div class="alert alert-danger" role="alert">
-      <p>Please answer all the questions.</p>
-    </div>
-  <% end %>
-
-  <h4>Do these things need to change?</h4>
-
-  <%= form_for audit, url: content_item_audit_path(filter_params) do |form| %>
-    <%= render 'boolean_question', form: form,
-               attribute: :change_title,
-               question: 'Title' %>
-
-    <%= render 'boolean_question', form: form,
-               attribute: :change_description,
-               question: 'Summary' %>
-
-    <%= render 'boolean_question', form: form,
-               attribute: :change_body,
-               question: 'Page detail' %>
-
-    <%= render 'boolean_question', form: form,
-               attribute: :change_attachments,
-               question: 'Attachments' %>
-
-    <%= render 'boolean_question', form: form,
-               attribute: :reformat,
-               question: 'Content type' %>
-
-    <%= render 'boolean_question', form: form,
-               attribute: :outdated,
-               question: 'Is the content out of date?' %>
-
-    <div data-module="show-free-text-question">
-      <%= render 'boolean_question', form: form,
-                 attribute: :similar,
-                 question: 'Is this content very similar to other pages?' %>
-
-      <%= render 'free_text_question', form: form,
-                 attribute: :similar_urls,
-                 question: 'URLs of similar pages',
-                 related_question_answered: audit.similar %>
-    </div>
-
-    <div data-module="show-free-text-question">
-      <%= render 'boolean_question', form: form,
-                 attribute: :redundant,
-                 question: 'Should the content be removed?' %>
-
-      <%= render 'free_text_question', form: form,
-                 attribute: :redirect_urls,
-                 question: 'Where should users be redirected to? (optional)',
-                 related_question_answered: audit.redundant %>
-    </div>
-
-    <%= render 'free_text_question', form: form,
-               attribute: :notes,
-               question: 'Notes',
-               related_question_answered: {} %>
-
-    <%= form.submit "Save and continue", class: "btn btn-success" %>
-  <% end %>
-</div>
-
-<div class="col-sm-1"></div>
-
-<div class="col-sm-4">
   <div id="metadata" class="audit-metadata">
-    <div id="allocated">
-      <h4>Assigned to</h4>
-      <% if content_item.allocation %>
-        <p><%= content_item.auditor %></p>
-        <p><%= content_item.auditor_org %></p>
-     <% else %>
-        <p>No one</p>
-      <% end %>
-    </div>
-    <div id="audited">
-      <h4>Audited</h4>
-
-      <% if audit.incomplete? %>
-        <p>Not audited yet</p>
-      <% else %>
-        <p><%= audit.last_updated %></p>
-        <p>by <%= audit.user.name %></p>
-        <p><%= audit.user.department %></p>
-      <% end %>
-    </div>
+    <h3>Item details</h3>
 
     <div id="organisations">
       <h4>Organisations</h4>
@@ -127,29 +63,9 @@
       <p><%= content_item.last_updated %></p>
     </div>
 
-    <div id="content-type">
-      <h4>Content type</h4>
-      <p><%= content_item.document_type %></p>
-    </div>
-
-    <div id="guidance">
-      <h4>Guidance</h4>
-      <p><%= content_item.guidance %></p>
-    </div>
-
     <div id="topics">
       <h4>Topics</h4>
       <p><%= content_item.topics %></p>
-    </div>
-
-    <div id="policy-areas">
-      <h4>Policy areas</h4>
-      <p><%= content_item.policy_areas %></p>
-    </div>
-
-    <div id="withdrawn">
-      <h4>Withdrawn</h4>
-      <p><%= content_item.withdrawn %></p>
     </div>
 
     <div id="pageviews">
@@ -157,5 +73,178 @@
       <p><%= content_item.one_month_page_views %> in the last month</p>
       <p><%= content_item.six_months_page_views %> in the last six months</p>
     </div>
+
+    <div data-module="expandable-metadata" class="if-js-hide extra-metadata">
+      <div id="content-type">
+        <h4>Content type</h4>
+        <p><%= content_item.document_type %></p>
+      </div>
+
+      <div id="guidance">
+        <h4>Guidance</h4>
+        <p><%= content_item.guidance %></p>
+      </div>
+
+      <div id="policy-areas">
+        <h4>Policy areas</h4>
+        <p><%= content_item.policy_areas %></p>
+      </div>
+
+      <div id="withdrawn">
+        <h4>Withdrawn</h4>
+        <p><%= content_item.withdrawn %></p>
+      </div>
+    </div>
   </div>
+
+  <hr/>
+
+  <%= link_to "Audit guidance", audits_guidance_path %>
+
+  <% if audit.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <p>Please answer all the questions.</p>
+    </div>
+  <% end %>
+
+  <h3>Are changes required?</h3>
+
+  <%= form_for audit, url: content_item_audit_path(filter_params) do |form| %>
+    <div class="row pass">
+      <%= form.label :pass_false, class: "radio-inline js-yes-radio" do %>
+        <%= form.radio_button :pass, false %>
+          Changes required
+      <% end %>
+      <%= form.label :pass_true, class: "radio-inline js-no-radio" do %>
+          <%= form.radio_button :pass, true %>
+          No changes required
+      <% end %>
+    </div>
+
+    <h4>Further detail (optional)</h4>
+    <p>
+      Optional detail - may be useful to prioritise improvement work.
+    </p>
+
+    <h4>Items that need changing</h4>
+
+    <%= render 'boolean_question', form: form,
+        attribute: :change_title,
+        question: 'Title' %>
+
+    <%= render 'boolean_question', form: form,
+        attribute: :change_description,
+        question: 'Summary' %>
+
+    <%= render 'boolean_question', form: form,
+        attribute: :change_body,
+        question: 'Page detail' %>
+
+    <%= render 'boolean_question', form: form,
+        attribute: :change_attachments,
+        question: 'Attachments' %>
+
+    <%= render 'boolean_question', form: form,
+        attribute: :reformat,
+        question: 'Content type' %>
+
+    <h4>Other issues</h4>
+    <%= render 'boolean_question', form: form,
+       attribute: :outdated,
+       question: 'Content out of date / refers to past event' %>
+
+    <div data-module="show-free-text-question">
+      <%= render 'boolean_question', form: form,
+          attribute: :similar,
+          question: 'Content is similar to / duplicate of other pages' %>
+
+      <%= render 'free_text_question', form: form,
+          attribute: :similar_urls,
+          question: 'URLs of similar pages',
+          related_question_answered: audit.similar %>
+    </div>
+
+    <div data-module="show-free-text-question">
+      <%= render 'boolean_question', form: form,
+                 attribute: :redundant,
+                 question: 'Content should be removed / archived' %>
+
+      <%= render 'free_text_question', form: form,
+                 attribute: :redirect_urls,
+                 question: 'Where should users be redirected to? (optional)',
+                 related_question_answered: audit.redundant %>
+    </div>
+
+    <h4>Size of changes needed</h4>
+    <div class="size">
+      <div class="row">
+        <%= form.label :size_small, class: "radio-inline js-yes-radio pull-left" do %>
+            <%= form.radio_button :size, "small" %>
+            Small - minor grammar or typo changes only
+        <% end %>
+      </div>
+      <div class="row">
+        <%= form.label :size_medium, class: "radio-inline js-no-radio" do %>
+            <%= form.radio_button :size, "medium" %>
+            Medium - moderate work or fact-checking required
+        <% end %>
+      </div>
+      <div class="row">
+        <%= form.label :size_large, class: "radio-inline js-no-radio" do %>
+            <%= form.radio_button :size, "large" %>
+            Large - significant changes or fact-checking required
+        <% end %>
+      </div>
+    </div>
+
+    <%= render 'free_text_question', form: form,
+        attribute: :notes,
+        question: 'Notes',
+        related_question_answered: {} %>
+
+
+    <%= form.submit "Save and continue", class: "btn btn-success" %>
+  <% end %>
+
+  <% if @next_content_item %>
+    <div class="skip-next">
+      <%= link_to "Skip item and move to next", content_item_audit_path(@next_content_item, filter_params) %>
+    </div>
+  <% end %>
+
+  <div>
+    <hr>
+    <div class="row">
+      <h4>Other functions</h4>
+      <div class="form-group form-inline pull-left">
+        <%= form_tag "allocate" do %>
+          <%= label_tag :allocate_to, "Assign to", class: "items"  %>
+          <%= select_tag "allocate_to",
+                         allocation_options_for_select(params[:allocate_to]),
+                         class: "form-control",
+                         id: "allocate_to"
+          %>
+          <%= hidden_field_tag "content_id", [content_item.content_id] %>
+          <%= filter_to_hidden_fields %>
+          <%= submit_tag "Assign", class: "btn btn-default" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content-preview">
+  <p>
+    <a href="https://www.gov.uk<%= content_item.base_path %>" target="_blank" rel="noopener noreferrer">
+      https://www.gov.uk<%= content_item.base_path %>
+    </a>
+  </p>
+  <iframe id="content-preview"
+          src="<%= content_item.proxy_url %>"
+          width="100%"
+          height="800"
+          scrolling="yes"
+          frameborder="no"
+          data-module="full-height-iframe"
+          class="if-js-hide"></iframe>
 </div>

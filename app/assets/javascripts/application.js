@@ -20,6 +20,8 @@
 //= require organisation-autocomplete
 //= require batch-selection
 //= require expandable-filters
+//= require expandable-metadata
+//= require full-height-iframe
 
 // --- Analytics ---
 //= require analytics/google-tag-manager

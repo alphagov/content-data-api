@@ -7,11 +7,17 @@
       addEventListener();
 
       function addEventListener() {
-        var $yesRadio = $element.find('.js-yes-radio');
-        var $noRadio = $element.find('.js-no-radio');
+        var $checkbox = $element.find('.js-yes-checkbox input[type=checkbox]');
 
-        $yesRadio.click(showTextBox);
-        $noRadio.click(hideTextBox);
+        $checkbox.click(function () {
+          var isChecked = $checkbox.is(':checked');
+
+          if (isChecked) {
+            showTextBox();
+          } else {
+            hideTextBox();
+          }
+        });
       }
 
       function showTextBox() {
