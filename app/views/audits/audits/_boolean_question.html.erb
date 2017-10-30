@@ -1,18 +1,8 @@
 <div class="row <%= attribute.to_s.dasherize %>">
-  <div class="col-sm-8">
-    <p><%= question %></p>
-  </div>
-  <div class="col-sm-4">
-    <div class="pull-right">
-      <%= form.label "#{attribute}_true", class: "radio-inline js-yes-radio" do %>
-        <%= form.radio_button attribute, true %>
-        Yes
-      <% end %>
-
-      <%= form.label "#{attribute}_false", class: "radio-inline js-no-radio" do %>
-        <%= form.radio_button attribute, false %>
-        No
-      <% end %>
-    </div>
+  <div class="checkbox">
+    <%= form.label "#{attribute}", class: "checkbox-inline js-yes-checkbox" do %>
+      <%= form.check_box attribute %>
+      <%= question %>
+    <% end %>
   </div>
 </div>

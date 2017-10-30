@@ -1,0 +1,24 @@
+body.with-iframe {
+  header.navbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+  }
+
+  main {
+    position: fixed;
+    left: 0;
+    width: 50%;
+    top: 57px;
+    bottom: 0;
+    overflow-y: scroll;
+
+    .phase-banner {
+      margin: 0 10px 10px 10px;
+    }
+
+    .row {
+      margin: 0 20px 20px 20px;
+    }
+  }
+}

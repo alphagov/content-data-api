@@ -1,5 +1,7 @@
 module Audits
   class AuditsController < BaseController
+    before_action :set_content_item, only: %w(show allocate unallocate)
+    before_action :set_audit, only: %w(show allocate unallocate)
     decorates_assigned :audit, :content_item, :content_items
 
     def index
@@ -24,8 +26,7 @@ module Audits
     end
 
     def show
-      @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
-      @audit = Audit.find_or_initialize_by(content_item: @content_item)
+      @next_content_item = FindNextItem.call(@content_item, filter)
     end
 
     def save
@@ -54,6 +55,33 @@ module Audits
       end
     end
 
+    def allocate
+      allocation = AllocateContent.call(
+        user_uid: params.fetch(:allocate_to),
+        content_ids: [params[:content_id]]
+      )
+
+      if allocation.success?
+        flash.notice = allocation.message
+        redirect_to content_item_audit_path(@content_item, filter_params) and return
+      else
+        flash.alert = allocation.message
+    end
+
+      render :show
+    end
+
+    def unallocate
+      unallocation = UnallocateContent.call(content_ids: [params[:content_id]])
+
+      if unallocation.success?
+        flash.notice = unallocation.message
+        redirect_to content_item_audit_path(@content_item, filter_params) and return
+      else
+        flash.alert = unallocation.message
+      end
+    end
+
   private
 
     def audit_params
@@ -61,6 +89,7 @@ module Audits
         .require(:audits_audit)
         .permit(
           %i(
+            pass
             change_attachments
             change_body
             change_description
@@ -72,8 +101,17 @@ module Audits
             reformat
             similar
             similar_urls
+            size
           )
         )
+    end
+
+    def set_content_item
+      @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
+    end
+
+    def set_audit
+      @audit = Audit.find_or_initialize_by(content_item: @content_item)
     end
   end
 end
