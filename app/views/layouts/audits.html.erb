@@ -19,6 +19,7 @@
 
 <% content_for :content do %>
   <%= render 'application/beta_banner' %>
+  <%= render 'application/heroku' if Heroku.enabled?%>
   <div class="row header-row">
     <div class="col-md-12">
       <%= yield :header %>

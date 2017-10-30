@@ -1,19 +1,22 @@
 if Heroku.enabled?
   ApplicationController.class_eval do
-    before_action :ensure_environment
+    before_action :force_development!
 
     def authenticate_user!
+      user_id = params.dig(:heroku, :user_id)
+
+      session[:heroku_user_id] = user_id if user_id.present?
     end
 
     def current_user
-      User.last
+      User.find(session[:heroku_user_id])
     end
 
     private
 
-    def ensure_environment
+    def force_development!
       if Rails.env.production?
-        raise "This code should never run in production"
+        raise 'This code should never run in production'
       end
     end
   end
