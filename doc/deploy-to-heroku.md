@@ -1,4 +1,4 @@
-# Deploy to Heroku
+# Deploy a PR to Heroku
 
 1. Install the [the Heroku Command Line Interface (CLI)][heroku-cli]
 2. [Login][login-terminal] from your terminal: you only need to do it once
