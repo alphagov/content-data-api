@@ -113,11 +113,11 @@
 
   <%= form_for audit, url: content_item_audit_path(filter_params) do |form| %>
     <div class="row pass">
-      <%= form.label :pass_false, class: "radio-inline js-yes-radio" do %>
+      <%= form.label :pass_false, class: "radio-inline yes js-yes-radio" do %>
         <%= form.radio_button :pass, false %>
           Changes required
       <% end %>
-      <%= form.label :pass_true, class: "radio-inline js-no-radio" do %>
+      <%= form.label :pass_true, class: "radio-inline no js-no-radio" do %>
           <%= form.radio_button :pass, true %>
           No changes required
       <% end %>
