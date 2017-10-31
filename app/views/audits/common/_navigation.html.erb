@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs">
   <%= navigation_link "All content", audits_allocations_url, 'allocations' %>
-  <%= navigation_link "My content (#{Audits::FindContent.paged(Audits::Filter.new(allocated_to: current_user.uid, audit_status: Audits::Audit::NON_AUDITED )).count})", audits_url, 'audits'%>
+  <%= navigation_link "My content (#{Audits::FindContent.paged(Audits::Filter.new(allocated_to: current_user.uid, audit_status: Audits::Audit::NON_AUDITED, per_page: 100000 )).count})", audits_url, 'audits'%>
   <%= navigation_link "Audit progress", audits_report_url, 'reports' %>
 </ul>
