@@ -37,6 +37,7 @@
         $iframeDocument.find('a').attr('target', '_blank').attr('rel', 'noopener noreferrer');
         $iframeDocument.find('#search').remove();
         $iframeDocument.find('.header-proposition').remove();
+        $iframeDocument.find('#global-cookie-message').remove();
         removeSpinner();
 
         // We have to remove this class before resizing rather than after, because it causes us to get the wrong height

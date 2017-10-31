@@ -3,6 +3,10 @@ body.with-iframe {
     position: fixed;
     left: 0;
     right: 0;
+
+    .container {
+      width: 100%;
+    }
   }
 
   main {
@@ -14,11 +18,20 @@ body.with-iframe {
     overflow-y: scroll;
 
     .phase-banner {
-      margin: 0 10px 10px 10px;
+      margin: 0 10px;
     }
 
     .row {
       margin: 0 20px 20px 20px;
     }
+  }
+
+  .iframe-link {
+    padding: 10px;
+    margin: 0;
+  }
+
+  .alert {
+    margin: 20px 0;
   }
 }
