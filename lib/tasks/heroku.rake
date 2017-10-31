@@ -2,7 +2,7 @@ namespace :heroku do
   task :deploy, %i[pr_number organisation_name number_of_content_items link_types] => :environment do |_task, options|
     raise 'Invalid parameters' unless options.pr_number && options.organisation_name
     options.with_defaults(
-      link_types: %w(organisations primary_publishing_organisation),
+      link_types: %w(organisations primary_publishing_organisation topics),
       number_of_content_items: 1000,
       organisation_name: 'HM Revenue & Customs',
     )
@@ -32,6 +32,9 @@ namespace :heroku do
       limit(options.number_of_content_items).
       pluck(:content_id)
     content_item_ids.push(organisation.content_id)
+
+    # Add topics
+    content_item_ids.concat(Content::Item.where(document_type: 'topic').pluck(:content_id))
 
     ## Export Content Items and Links
     system %{psql content_performance_manager_development -c "COPY (#{content_items_query(content_item_ids)}) TO STDOUT" > '#{content_items_file}'}
