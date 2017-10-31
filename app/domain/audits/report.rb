@@ -39,9 +39,11 @@ module Audits
 
     def rows
       @rows ||= content_items
-        .joins(:report_row)
+        .includes(:audit)
+        .includes(:linked_primary_publishing_organisation)
+        .includes(:linked_organisations)
         .unscope(:order)
-        .pluck(:data)
+        .map { |item| ReportRow.new(item).to_h }
     end
 
     def report_timestamp

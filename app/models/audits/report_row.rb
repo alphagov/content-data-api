@@ -1,16 +1,15 @@
 module Audits
-  class ReportRow < ApplicationRecord
+  class ReportRow
     include FormatHelper
 
-    belongs_to :content_item, primary_key: :content_id, foreign_key: :content_id,
-               class_name: 'Content::Item'
+    attr_reader :content_item
 
-    def self.precompute(content_item)
-      find_or_initialize_by(content_item: content_item).precompute
+    def initialize(content_item)
+      @content_item = content_item
     end
 
-    def precompute
-      self.data = {
+    def to_h
+      {
         "Title" => title,
         "URL" => url,
         "Is work needed?" => is_work_needed,
@@ -31,9 +30,6 @@ module Audits
         "Last major update" => last_major_update,
         "Whitehall URL" => whitehall_url,
       }
-
-      save!
-      self
     end
 
     def title
