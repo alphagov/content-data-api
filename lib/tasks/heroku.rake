@@ -1,6 +1,6 @@
 namespace :heroku do
   task :deploy, %i[pr_number organisation_name number_of_content_items link_types] => :environment do |_task, options|
-    raise 'Invalid parameters' unless options.pr_number && options.organisation_name
+    raise 'Invalid parameters' unless options.pr_number
     options.with_defaults(
       link_types: %w(organisations primary_publishing_organisation topics),
       number_of_content_items: 1000,
