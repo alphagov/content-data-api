@@ -8,7 +8,7 @@ Guidance to help you understand the questions on the audit tool before you start
 
 Titles should:
 
-* be 65 characters or less (see 'Title length' column)
+* be 65 characters or less
 be unique, clear and descriptive
 * be front-loaded and optimised for search
 * use a colon to break up longer titles
@@ -23,7 +23,7 @@ References: [Style guide (Titles)](https://www.gov.uk/guidance/style-guide/a-to-
 
 Check whether the title would make sense:
 
-* in a long list
+* in a list
 * in search results
 * in collections
 
@@ -48,8 +48,10 @@ Reason: Too long and repeats what’s in the summary.
 
 Summaries should:
 
-* be 140 characters (see 'Desc. length' column)
+* be 160 characters
 * not repeat the title
+
+
 Use terms that you know users are searching for, as you would when you write the content. Summaries are a good place to include alternative search terms that aren’t in the content.
 
 References: [Writing for GOV.UK: titles and summaries](https://www.gov.uk/guidance/content-design/writing-for-gov-uk#titles-and-summaries) and [How to optimise your content for search](https://www.gov.uk/guidance/content-design/data-and-analytics#how-to-optimise-your-content-for-search)
@@ -104,8 +106,6 @@ to
 
 Is there content that's no longer relevant? Or is there content that can be removed or repositioned so that the most important content is at the top?
 
-Look at related links. Do you want to keep links to withdrawn content? (Probably yes, if it’s important for users to be able to find it.)
-
 Has $CTA (call to action markdown) been used to 'highlight' content?
 
 #### Good example
@@ -128,13 +128,13 @@ Reason: Doesn’t give any detail on what a user would need this for or what the
 
 ## Do the attachments need to change?
 
-This isn’t a priority for the content transformation audit. But while you’re reviewing a page, take note of potential content improvement work, such as attachments that:
+An attachment should be flagged for improvement if:
 
-* should have organisation branding - there should at least be a logo; exceptions include reports produced by consultants, but they'll generally include the consultant’s logo
+* there is no organisational branding - there should at least be a logo; exceptions include reports produced by consultants, but they'll generally include the consultant’s logo
 
-* are no longer current - the attachment needs to have a 'withdrawn' message added, such as in this [old webTAG unit](https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/603749/webtag-tag-unit-a1-3-user-and-provider-impacts-november-2014.pdf)
+* it is no longer current - the attachment needs to have a 'withdrawn' message added, such as in this [old webTAG unit](https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/603749/webtag-tag-unit-a1-3-user-and-provider-impacts-november-2014.pdf)
 
-* should be direct links to the document on an agency website
+* it should be a direct link to the document on an agency website
 
 References: [Viewing government documents](https://www.gov.uk/government/publications/open-standards-for-government/viewing-government-documents) and [Open formats](https://www.gov.uk/guidance/content-design/planning-content#open-formats)
 
@@ -185,7 +185,7 @@ Reason: Attachment name is too long and repeats what’s in the page title and s
 
 ## Does the format need to change?
 
-It’s important that guidance content is published in one of the guidance formats so that users have a more complete journey from start to finish.
+It’s important that guidance content is published in one of the guidance formats so that users have a more complete journey from start to finish. 
 
 User guidance takes a user through completing a task, for example [Become a driving examiner](https://www.gov.uk/guidance/become-a-driving-examiner).
 
@@ -230,9 +230,11 @@ Reason: It’s informing users of a policy discussion, not taking them through c
 * * *
 
 
-## Do we need to check if the content is out of date?
+## Is the content is out of date?
 
-Content that is out of date should be:
+Content is out of date if the information is no longer correct or it has been superseded by another document.
+
+Out of date content should be:
 
 * withdrawn - if a record of it still needs to be available, for example previous instructions on how to assess an ongoing project
 
@@ -260,14 +262,33 @@ Reason: It's an old invitation to tender. It needs to be reviewed to check it's 
 
 ---
 
+## Is this content very similar to other pages? 
+
+The content is similar to other pages if:
+
+* there is duplicate content on another page
+* the title matches another page
+
+If you select ‘yes’, add the destination url in the ‘Where should users be redirected to? (optional) text box. 
+
+### Consider
+
+Check if there are similar pages by searching GOV.UK with the title of the content. Have different agencies duplicated the same kind of content?
+
+#### Example
+
+> [Driving tests and instructors statistics notes and definitions](https://www.gov.uk/government/statistics/driver-and-rider-tests-and-instructor-statistics-2012-13) should be merged with [Driver and rider tests and instructor statistics: 2012-13](https://www.gov.uk/government/statistics/driver-and-rider-tests-and-instructor-statistics-2012-13), so the guidance notes are in the same place as the statistics.
+
+---
+
 ## Should the content be removed?
 
-The options are:
+The content should be removed if:
 
-* no - page is unique, up-to-date, and doesn't need to be merged or unpublished
-
-
-* yes - page is a duplicate, contains out of date information, information can be merged with similar page, content was published in error
+* the page is a duplicate
+* information is out-of-date
+* content can be merged with a similar page
+* content was published in error
 
 If you select 'yes’, add the destination url in the 'Where should users be redirected to? (optional)' text box.
 
@@ -275,17 +296,15 @@ References: [Withdrawing and unpublishing content](https://www.gov.uk/guidance/c
 
 ### Consider
 
-Check if there are similar pages by searching GOV.UK with the title of the content. Have different agencies duplicated the same kind of content?
-
 Does the page contain information that's easily available elsewhere?
 
-#### Example
-
-> [Driving tests and instructors statistics notes and definitions](https://www.gov.uk/government/statistics/driver-and-rider-tests-and-instructor-statistics-2012-13) should be merged with [Driver and rider tests and instructor statistics: 2012-13](https://www.gov.uk/government/statistics/driver-and-rider-tests-and-instructor-statistics-2012-13), so the guidance notes are in the same place as the statistics.
 
 * * *
 
 
 ## Notes
 
-Add notes or reminders about that will help you to improve the content.
+Add notes or reminders about that will help you to improve the content. 
+
+
+
