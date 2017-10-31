@@ -1,7 +1,5 @@
 module Audits
   class GuidancesController < BaseController
-    def show
-      @content = Support.get
-    end
+    layout "audits/guidances"
   end
 end
