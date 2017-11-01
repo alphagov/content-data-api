@@ -1,7 +1,7 @@
 module Audits
   class AllocationsController < BaseController
     before_action :set_default_parameters, only: :index
-    before_action :set_batch_value, only: %w(destroy create), if: -> { batch_size > content_ids.size }
+    before_action :set_batch_values, only: %w(destroy create), if: -> { batch_size > content_ids.size }
 
     decorates_assigned :content_items
 
@@ -42,11 +42,13 @@ module Audits
       params.fetch(:allocate_to)
     end
 
-    def set_batch_value
-      filter = params_to_filter
-      filter.per_page = batch_size
-
-      params[:content_ids] = FindContent.paged(filter).pluck(:content_id)
+    def set_batch_values
+      params[:content_ids] = FindContent
+                               .batch(
+                                 params_to_filter,
+                                 batch_size: batch_size,
+                                 from_page: params_to_filter.page,
+                               ).pluck(:content_id)
     end
 
     def batch_size
