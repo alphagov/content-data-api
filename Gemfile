@@ -59,6 +59,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'simplecov', require: false
+  gem 'site_prism'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen'

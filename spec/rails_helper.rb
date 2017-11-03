@@ -18,6 +18,7 @@ require "feature/testing"
 require "gds_api/test_helpers/publishing_api_v2"
 require "pry"
 require "database_cleaner"
+require "site_prism"
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
@@ -54,3 +55,5 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 end
+
+Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
