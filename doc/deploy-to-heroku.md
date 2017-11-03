@@ -2,14 +2,14 @@
 
 1. Install the [the Heroku Command Line Interface (CLI)][heroku-cli]
 2. [Login][login-terminal] from your terminal: you only need to do it once
-3. Deploy your current branch from your VM with: 
+3. Deploy your current branch from your VM with:
 
 ```system
-rake heroku:deploy[PR-NUMBER]`
+rake heroku:deploy[IDENTIFIER]`
 ````
 
 You can also include the following optional parameters: `organisation_name`, `number_of_content_items` and  `link_types`
- 
+
 For example, to import `500` content items from `HMRC`, we would do:
 
 ```system
