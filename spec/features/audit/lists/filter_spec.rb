@@ -1,46 +1,12 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
   let!(:me) { create(:user) }
 
-  context "I have some unaudited content allocated to me" do
-    let!(:famous_five) do
-      create(
-        :content_item,
-        title: "The Famous Five",
-        allocated_to: me,
-      )
-    end
-
-    let!(:secret_seven) do
-      create(
-        :content_item,
-        title: "The Secret Seven",
-      )
-    end
-
-    let!(:wishing_chair) do
-      wishing_chair = create(
-        :content_item,
-        title: "The Wishing Chair",
-        allocated_to: me,
-      )
-
-      create(:audit, content_item: wishing_chair, user: me)
-      wishing_chair
-    end
-
-    scenario "List filters by my unaudited content by default" do
-      filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-      filter_audit_list.load
-
-      filter_audit_list.filter_form do |form|
-        expect(form).to have_select("allocated_to", selected: "Me")
-        expect(form.audit_status).to have_checked_field("Not audited")
-      end
-
-      expect(filter_audit_list).to have_list(text: "The Famous Five")
-      expect(filter_audit_list.list).to have_no_content("The Secret Seven")
-      expect(filter_audit_list.list).to have_no_content("The Wishing Chair")
-    end
+  scenario "List filters by my unaudited content by default" do
+    given_i_have_unaudited_content
+    when_i_go_to_filter_content_to_audit
+    and_we_filter_to_unaudited_content_allocated_to_me_by_default
+    then_the_filtered_list_shows_content_allocated_to_me
+    and_we_do_not_show_unaudited_content_not_allocated_to_me
   end
 
   context "With some organisations and documents set up" do
@@ -310,5 +276,49 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
         expect(page).to have_css(".pagination .active", text: "1")
       end
     end
+  end
+
+private
+
+  def given_i_have_unaudited_content
+    create(
+      :content_item,
+      title: "The Famous Five",
+      allocated_to: me,
+    )
+
+    create(
+      :content_item,
+      title: "The Secret Seven",
+    )
+
+    wishing_chair = create(
+      :content_item,
+      title: "The Wishing Chair",
+      allocated_to: me,
+    )
+
+    create(:audit, content_item: wishing_chair, user: me)
+  end
+
+  def when_i_go_to_filter_content_to_audit
+    @filter_audit_list = ContentAuditTool.new.filter_audit_list_page
+    @filter_audit_list.load
+  end
+
+  def and_we_filter_to_unaudited_content_allocated_to_me_by_default
+    @filter_audit_list.filter_form do |form|
+      expect(form).to have_select("allocated_to", selected: "Me")
+      expect(form.audit_status).to have_checked_field("Not audited")
+    end
+  end
+
+  def then_the_filtered_list_shows_content_allocated_to_me
+    expect(@filter_audit_list).to have_list(text: "The Famous Five")
+  end
+
+  def and_we_do_not_show_unaudited_content_not_allocated_to_me
+    expect(@filter_audit_list.list).to have_no_content("The Secret Seven")
+    expect(@filter_audit_list.list).to have_no_content("The Wishing Chair")
   end
 end
