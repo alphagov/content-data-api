@@ -3,7 +3,7 @@
   <%= select_tag :sort_by,
                  sort_by_options_for_select(params[:sort_by]),
                  include_blank: "Page views",
-                 class: "form-control",
+                 class: "form-control sort-by",
                  data: {
                    tracking_id: "sort-by",
                  }%>
