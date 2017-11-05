@@ -51,33 +51,19 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     the_organisation_filter_options_are_alphabetical
   end
 
+  scenario "using organisation filter option autocomplete", js: true do
+    given_content_belonging_to_departments
+    when_i_go_to_filter_content_to_audit
+    and_i_type_part_of_an_org_name_in_the_organisations_filter_field
+    then_the_field_is_filled_with_the_suggestion_i_chose
+    and_when_we_apply_the_filters
+    then_the_option_is_still_set
+    and_the_url_contains_the_filter_option_in_query_param
+  end
+
   context "With some organisations and documents set up" do
     context "when showing content regardless of audit status" do
       context "filtering by organisation" do
-        scenario "using autocomplete", js: true do
-          given_content_belonging_to_departments
-          when_i_go_to_filter_content_to_audit
-
-          expect(@filter_audit_list.url).not_to include("organisations%5B%5D=#{@hmrc.content_id}")
-
-          @filter_audit_list.filter_form do |form|
-            form.wait_until_organisations_visible
-
-            expect(form).to have_organisations_input(visible: :visible)
-            expect(form).to have_organisations_select(visible: :hidden)
-
-            form.organisations_input.send_keys("HM", :down, :enter)
-
-            expect(form).to have_field("Organisations", with: "HMRC")
-
-            form.apply_filters.click
-
-            expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
-          end
-
-          expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
-        end
-
         scenario "multiple", js: true do
           given_content_belonging_to_departments
           when_i_go_to_filter_content_to_audit
@@ -356,5 +342,40 @@ private
         expect(options.map(&:text)).to eq ["", "DFE", "HMRC"]
       end
     end
+  end
+
+  def and_i_type_part_of_an_org_name_in_the_organisations_filter_field
+    expect(@filter_audit_list.url).not_to include("organisations%5B%5D=#{@hmrc.content_id}")
+
+    @filter_audit_list.filter_form do |form|
+      form.wait_until_organisations_visible
+
+      expect(form).to have_organisations_input(visible: :visible)
+      expect(form).to have_organisations_select(visible: :hidden)
+
+      form.organisations_input.send_keys("HM", :down, :enter)
+    end
+  end
+
+  def then_the_field_is_filled_with_the_suggestion_i_chose
+    @filter_audit_list.filter_form do |form|
+      expect(form).to have_field("Organisations", with: "HMRC")
+    end
+  end
+
+  def and_when_we_apply_the_filters
+    @filter_audit_list.filter_form do |form|
+      form.apply_filters.click
+    end
+  end
+
+  def then_the_option_is_still_set
+    @filter_audit_list.filter_form do |form|
+      expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
+    end
+  end
+
+  def and_the_url_contains_the_filter_option_in_query_param
+    expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
   end
 end
