@@ -71,28 +71,17 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_the_url_contains_the_filter_options_in_query_params
   end
 
+  scenario "searching by title" do
+    given_content_with_known_titles
+    when_i_go_to_filter_content_to_audit
+    and_i_search_by_title_within_all_content_assigned_to_anyone
+    then_the_list_shows_the_one_item_matching
+    and_does_not_show_other_content_that_do_not_match
+  end
+
   context "With some organisations and documents set up" do
     context "when showing content regardless of audit status" do
       context "filtering by title" do
-        scenario "the user enters a text in the search box and retrieves a filtered list" do
-          given_content_belonging_to_departments
-          when_i_go_to_filter_content_to_audit
-
-          create :content_item, title: "some text"
-          create :content_item, title: "another text"
-
-          @filter_audit_list.filter_form do |form|
-            form.allocated_to.select "Anyone"
-            form.audit_status.choose "All"
-
-            form.apply_filters.click
-          end
-
-          @filter_audit_list.filter_form.search.set "some text"
-          @filter_audit_list.filter_form.apply_filters.click
-          expect(@filter_audit_list).to have_listing count: 1
-        end
-
         scenario "show the query entered by the user after filtering" do
           given_content_belonging_to_departments
           when_i_go_to_filter_content_to_audit
@@ -391,5 +380,28 @@ private
   def and_the_url_contains_the_filter_options_in_query_params
     expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@dfe.content_id}")
     expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
+  end
+
+  def given_content_with_known_titles
+    create :content_item, title: "some text"
+    create :content_item, title: "another text"
+  end
+
+  def and_i_search_by_title_within_all_content_assigned_to_anyone
+    @filter_audit_list.filter_form do |form|
+      form.allocated_to.select "Anyone"
+      form.audit_status.choose "All"
+      form.search.set "some text"
+      form.apply_filters.click
+    end
+  end
+
+  def then_the_list_shows_the_one_item_matching
+    expect(@filter_audit_list).to have_listing count: 1
+    expect(@filter_audit_list).to have_listing(text: "some text")
+  end
+
+  def and_does_not_show_other_content_that_do_not_match
+    expect(@filter_audit_list.list).to have_no_content("another text")
   end
 end
