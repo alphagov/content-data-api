@@ -17,23 +17,14 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_the_list_does_not_show_unaudited_content
   end
 
+  scenario "filtering for content regardless of audit status" do
+    given_content_belonging_to_departments
+    when_i_go_to_filter_content_to_audit
+    and_filter_by_all_content_allocated_to_anyone
+    then_the_list_shows_all_content
+  end
+
   context "With some organisations and documents set up" do
-    scenario "filtering for content regardless of audit status" do
-      given_content_belonging_to_departments
-      when_i_go_to_filter_content_to_audit
-
-      @filter_audit_list.filter_form do |form|
-        form.allocated_to.select "Anyone"
-        form.audit_status.choose "All"
-
-        form.apply_filters.click
-      end
-
-      expect(@filter_audit_list).to have_content("Tree felling")
-      expect(@filter_audit_list).to have_content("Forest management")
-      expect(@filter_audit_list.filter_form.audit_status).to have_checked_field("audit_status_all")
-    end
-
     context "when showing content regardless of audit status" do
       scenario "filtering by primary organisation" do
         given_content_belonging_to_departments
@@ -327,5 +318,22 @@ private
 
   def and_the_list_does_not_show_unaudited_content
     expect(@filter_audit_list.list).to have_no_content("Forest management")
+  end
+
+  def and_filter_by_all_content_allocated_to_anyone
+    @filter_audit_list.filter_form do |form|
+      form.allocated_to.select "Anyone"
+      form.audit_status.choose "All"
+
+      form.apply_filters.click
+    end
+
+    expect(@filter_audit_list.filter_form.audit_status).to have_checked_field("audit_status_all")
+  end
+
+  def then_the_list_shows_all_content
+    expect(@filter_audit_list).to have_content("VAT")
+    expect(@filter_audit_list).to have_content("Tree felling")
+    expect(@filter_audit_list).to have_content("Forest management")
   end
 end
