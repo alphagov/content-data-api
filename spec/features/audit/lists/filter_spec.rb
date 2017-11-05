@@ -24,28 +24,16 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     then_the_list_shows_all_content
   end
 
+  scenario "filtering by primary organisation" do
+    given_content_belonging_to_departments
+    when_i_go_to_filter_content_to_audit
+    and_i_filter_to_all_content_for_anyone_belonging_to_a_primary_org
+    then_the_list_shows_primary_org_content
+    and_does_not_show_other_department_content
+  end
+
   context "With some organisations and documents set up" do
     context "when showing content regardless of audit status" do
-      scenario "filtering by primary organisation" do
-        given_content_belonging_to_departments
-        when_i_go_to_filter_content_to_audit
-
-        @filter_audit_list.filter_form do |form|
-          form.allocated_to.select "Anyone"
-          form.audit_status.choose "All"
-          form.apply_filters.click
-
-          expect(form.primary_orgs).to have_checked_field
-
-          form.organisations.select "HMRC"
-          # select "HMRC", from: "Organisations"
-          form.apply_filters.click
-        end
-
-        expect(@filter_audit_list.list).to have_content("VAT")
-        expect(@filter_audit_list.list).to have_no_content("Tree felling")
-      end
-
       scenario "filtering by organisation" do
         given_content_belonging_to_departments
         when_i_go_to_filter_content_to_audit
@@ -335,5 +323,23 @@ private
     expect(@filter_audit_list).to have_content("VAT")
     expect(@filter_audit_list).to have_content("Tree felling")
     expect(@filter_audit_list).to have_content("Forest management")
+  end
+
+  def and_i_filter_to_all_content_for_anyone_belonging_to_a_primary_org
+    @filter_audit_list.filter_form do |form|
+      form.allocated_to.select "Anyone"
+      form.audit_status.choose "All"
+      form.primary_orgs.check "Primary organisation only"
+      form.organisations.select "HMRC"
+      form.apply_filters.click
+    end
+  end
+
+  def then_the_list_shows_primary_org_content
+    expect(@filter_audit_list.list).to have_content("VAT")
+  end
+
+  def and_does_not_show_other_department_content
+    expect(@filter_audit_list.list).to have_no_content("Tree felling")
   end
 end
