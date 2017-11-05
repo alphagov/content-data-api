@@ -40,24 +40,13 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_the_list_does_not_show_content_for_other_orgs
   end
 
+  scenario "toggling the primary org checkbox by clicking its label" do
+    when_i_go_to_filter_content_to_audit
+    the_primary_orgs_checkbox_is_toggled_by_the_label
+  end
+
   context "With some organisations and documents set up" do
     context "when showing content regardless of audit status" do
-      scenario "toggling the primary org checkbox by clicking its label" do
-        filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-        filter_audit_list.load
-
-        filter_audit_list.filter_form do |form|
-          expect(form).to have_primary_orgs_label
-          expect(form).to have_primary_orgs
-
-          form.primary_orgs_label.click
-          expect(form.primary_orgs).not_to have_checked_field
-
-          form.primary_orgs_label.click
-          expect(form.primary_orgs).to have_checked_field
-        end
-      end
-
       context "filtering by organisation" do
         scenario "organisations are in alphabetical order" do
           given_content_belonging_to_departments
@@ -237,6 +226,19 @@ private
   def and_we_do_not_show_unaudited_content_not_allocated_to_me
     expect(@filter_audit_list.list).to have_no_content("The Secret Seven")
     expect(@filter_audit_list.list).to have_no_content("The Wishing Chair")
+  end
+
+  def the_primary_orgs_checkbox_is_toggled_by_the_label
+    @filter_audit_list.filter_form do |form|
+      expect(form).to have_primary_orgs_label
+      expect(form).to have_primary_orgs
+
+      form.primary_orgs_label.click
+      expect(form.primary_orgs).not_to have_checked_field
+
+      form.primary_orgs_label.click
+      expect(form.primary_orgs).to have_checked_field
+    end
   end
 
   def given_content_belonging_to_departments
