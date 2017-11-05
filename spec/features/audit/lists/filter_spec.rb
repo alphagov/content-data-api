@@ -32,25 +32,16 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_does_not_show_other_department_content
   end
 
+  scenario "filtering by primary and non-primary organisation" do
+    given_content_belonging_to_departments
+    when_i_go_to_filter_content_to_audit
+    and_i_filter_to_non_primary_orgs
+    then_the_list_shows_content_for_org
+    and_the_list_does_not_show_content_for_other_orgs
+  end
+
   context "With some organisations and documents set up" do
     context "when showing content regardless of audit status" do
-      scenario "filtering by organisation" do
-        given_content_belonging_to_departments
-        when_i_go_to_filter_content_to_audit
-
-        @filter_audit_list.filter_form do |form|
-          form.allocated_to.select "Anyone"
-          form.audit_status.choose "All"
-          form.primary_orgs.uncheck "Primary organisation only"
-          form.organisations.select "HMRC"
-          form.apply_filters.click
-        end
-
-        expect(@filter_audit_list.list).to have_content("VAT")
-        expect(@filter_audit_list.list).to have_content("Travel insurance")
-        expect(@filter_audit_list.list).to have_no_content("Tree felling")
-      end
-
       scenario "toggling the primary org checkbox by clicking its label" do
         filter_audit_list = ContentAuditTool.new.filter_audit_list_page
         filter_audit_list.load
@@ -340,6 +331,25 @@ private
   end
 
   def and_does_not_show_other_department_content
+    expect(@filter_audit_list.list).to have_no_content("Tree felling")
+  end
+
+  def and_i_filter_to_non_primary_orgs
+    @filter_audit_list.filter_form do |form|
+      form.allocated_to.select "Anyone"
+      form.audit_status.choose "All"
+      form.primary_orgs.uncheck "Primary organisation only"
+      form.organisations.select "HMRC"
+      form.apply_filters.click
+    end
+  end
+
+  def then_the_list_shows_content_for_org
+    expect(@filter_audit_list.list).to have_content("VAT")
+    expect(@filter_audit_list.list).to have_content("Travel insurance")
+  end
+
+  def and_the_list_does_not_show_content_for_other_orgs
     expect(@filter_audit_list.list).to have_no_content("Tree felling")
   end
 end
