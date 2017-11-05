@@ -45,22 +45,15 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     the_primary_orgs_checkbox_is_toggled_by_the_label
   end
 
+  scenario "organisation options are in alphabetical order" do
+    given_content_belonging_to_departments
+    when_i_go_to_filter_content_to_audit
+    the_organisation_filter_options_are_alphabetical
+  end
+
   context "With some organisations and documents set up" do
     context "when showing content regardless of audit status" do
       context "filtering by organisation" do
-        scenario "organisations are in alphabetical order" do
-          given_content_belonging_to_departments
-          when_i_go_to_filter_content_to_audit
-
-          @filter_audit_list.filter_form.wait_until_organisations_visible
-
-          within(@filter_audit_list.filter_form.organisations) do
-            options = page.all("option")
-
-            expect(options.map(&:text)).to eq ["", "DFE", "HMRC"]
-          end
-        end
-
         scenario "using autocomplete", js: true do
           given_content_belonging_to_departments
           when_i_go_to_filter_content_to_audit
@@ -353,5 +346,15 @@ private
 
   def and_the_list_does_not_show_content_for_other_orgs
     expect(@filter_audit_list.list).to have_no_content("Tree felling")
+  end
+
+  def the_organisation_filter_options_are_alphabetical
+    @filter_audit_list.filter_form do |form|
+      within(form.organisations) do
+        options = page.all("option")
+
+        expect(options.map(&:text)).to eq ["", "DFE", "HMRC"]
+      end
+    end
   end
 end
