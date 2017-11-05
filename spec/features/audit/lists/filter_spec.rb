@@ -95,30 +95,13 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_does_not_show_content_of_other_type
   end
 
-  context "With some organisations and documents set up" do
-    context "when showing content regardless of audit status" do
-      scenario "Reseting page to 1 after filtering" do
-        create_list(:content_item, 100)
-
-        given_content_belonging_to_departments
-        when_i_go_to_filter_content_to_audit
-
-        @filter_audit_list.filter_form do |form|
-          form.allocated_to.select "Anyone"
-          form.audit_status.choose "All"
-          form.apply_filters.click
-        end
-
-        @filter_audit_list.pagination.click_on "2"
-
-        @filter_audit_list.filter_form do |form|
-          form.audit_status.choose "Not audited"
-          form.apply_filters.click
-        end
-
-        expect(page).to have_css(".pagination .active", text: "1")
-      end
-    end
+  scenario "Reseting page to 1 after filtering" do
+    given_101_content_items
+    when_i_go_to_filter_content_to_audit
+    and_filter_by_all_content_allocated_to_anyone
+    and_i_click_to_the_second_page_of_results
+    and_i_change_the_filters_to_not_audited
+    then_the_list_goes_down_to_one_page
   end
 
 private
@@ -411,5 +394,24 @@ private
 
   def and_does_not_show_content_of_other_type
     expect(@filter_audit_list.list).to have_no_content("Flying to countries abroad")
+  end
+
+  def given_101_content_items
+    create_list(:content_item, 101)
+  end
+
+  def and_i_click_to_the_second_page_of_results
+    @filter_audit_list.pagination.click_on "2"
+  end
+
+  def and_i_change_the_filters_to_not_audited
+    @filter_audit_list.filter_form do |form|
+      form.audit_status.choose "Not audited"
+      form.apply_filters.click
+    end
+  end
+
+  def then_the_list_goes_down_to_one_page
+    expect(page).to have_css(".pagination .active", text: "1")
   end
 end
