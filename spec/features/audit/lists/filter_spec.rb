@@ -71,7 +71,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_the_url_contains_the_filter_options_in_query_params
   end
 
-  scenario "searching by title" do
+  scenario "filtering by title" do
     given_content_with_known_titles
     when_i_go_to_filter_content_to_audit
     and_i_search_by_title_within_all_content_assigned_to_anyone
@@ -79,42 +79,24 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_does_not_show_other_content_that_do_not_match
   end
 
+  scenario "show the query entered by the user after filtering" do
+    given_content_with_known_titles
+    when_i_go_to_filter_content_to_audit
+    and_i_search_by_title_within_all_content_assigned_to_anyone
+    then_the_search_box_still_shows_the_search_query
+  end
+
+  scenario "filtering by content type" do
+    given_content_belonging_to_departments
+    and_one_of_the_content_is_guidance
+    when_i_go_to_filter_content_to_audit
+    and_filter_by_guide_type_from_all_content_allocated_to_anyone
+    then_the_list_shows_content_for_that_type
+    and_does_not_show_content_of_other_type
+  end
+
   context "With some organisations and documents set up" do
     context "when showing content regardless of audit status" do
-      context "filtering by title" do
-        scenario "show the query entered by the user after filtering" do
-          given_content_belonging_to_departments
-          when_i_go_to_filter_content_to_audit
-
-          @filter_audit_list.filter_form do |form|
-            form.allocated_to.select "Anyone"
-            form.audit_status.choose "All"
-            form.search.set "a search value"
-            form.apply_filters.click
-          end
-
-          expect(@filter_audit_list).to have_field(:query, with: 'a search value')
-        end
-      end
-
-      scenario "filtering by content type" do
-        given_content_belonging_to_departments
-        when_i_go_to_filter_content_to_audit
-
-        @hmrc.update!(document_type: "guide")
-
-        @filter_audit_list.filter_form do |form|
-          form.allocated_to.select "Anyone"
-          form.audit_status.choose "All"
-          form.document_type.select "Guide"
-
-          form.apply_filters.click
-        end
-
-        expect(@filter_audit_list.list).to have_content("HMRC")
-        expect(@filter_audit_list.list).to have_no_content("Flying to countries abroad")
-      end
-
       scenario "Reseting page to 1 after filtering" do
         create_list(:content_item, 100)
 
@@ -403,5 +385,31 @@ private
 
   def and_does_not_show_other_content_that_do_not_match
     expect(@filter_audit_list.list).to have_no_content("another text")
+  end
+
+  def then_the_search_box_still_shows_the_search_query
+    expect(@filter_audit_list).to have_field(:query, with: 'some text')
+  end
+
+  def and_one_of_the_content_is_guidance
+    @hmrc.update!(document_type: "guide")
+  end
+
+  def and_filter_by_guide_type_from_all_content_allocated_to_anyone
+    @filter_audit_list.filter_form do |form|
+      form.allocated_to.select "Anyone"
+      form.audit_status.choose "All"
+      form.document_type.select "Guide"
+
+      form.apply_filters.click
+    end
+  end
+
+  def then_the_list_shows_content_for_that_type
+    expect(@filter_audit_list.list).to have_content("HMRC")
+  end
+
+  def and_does_not_show_content_of_other_type
+    expect(@filter_audit_list.list).to have_no_content("Flying to countries abroad")
   end
 end
