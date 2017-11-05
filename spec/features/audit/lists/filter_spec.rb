@@ -9,90 +9,37 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_we_do_not_show_unaudited_content_not_allocated_to_me
   end
 
+  scenario "filtering audited content" do
+    given_content_belonging_to_departments
+    when_i_go_to_filter_content_to_audit
+    and_i_filter_to_audited_content_allocated_to_anyone
+    then_the_filter_list_shows_audited_item
+    and_the_list_does_not_show_unaudited_content
+  end
+
   context "With some organisations and documents set up" do
-    # Organisations:
-    let!(:hmrc) { create(:organisation, title: "HMRC") }
-    let!(:dfe) { create(:organisation, title: "DFE") }
-
-    # Policies:
-    let!(:flying) { create(:content_item, title: "Flying abroad") }
-
-    let!(:insurance) do
-      create(
-        :content_item,
-        title: "Travel insurance",
-        organisations: hmrc,
-        policies: flying,
-      )
-    end
-
-    # Content:
-    let!(:felling) do
-      create(
-        :content_item,
-        title: "Tree felling",
-        primary_publishing_organisation: dfe,
-        policies: management,
-      )
-    end
-
-    let!(:management) do
-      create(
-        :content_item,
-        title: "Forest management",
-      )
-    end
-
-    let!(:vat) do
-      create(
-        :content_item,
-        title: "VAT",
-        primary_publishing_organisation: hmrc,
-        organisations: hmrc,
-      )
-    end
-
-    # Audit:
-    let!(:audit) { create(:audit, content_item: felling) }
-
-    scenario "filtering audited content" do
-      filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-      filter_audit_list.load
-
-      filter_audit_list.filter_form do |form|
-        form.allocated_to.select "Anyone"
-        form.audit_status.choose "Audited"
-
-        form.apply_filters.click
-      end
-
-      expect(filter_audit_list.list).to have_content("Tree felling")
-      expect(filter_audit_list.list).to have_no_content("Forest management")
-      expect(filter_audit_list.filter_form.audit_status).to have_checked_field("audit_status_audited")
-    end
-
     scenario "filtering for content regardless of audit status" do
-      filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-      filter_audit_list.load
+      given_content_belonging_to_departments
+      when_i_go_to_filter_content_to_audit
 
-      filter_audit_list.filter_form do |form|
+      @filter_audit_list.filter_form do |form|
         form.allocated_to.select "Anyone"
         form.audit_status.choose "All"
 
         form.apply_filters.click
       end
 
-      expect(filter_audit_list).to have_content("Tree felling")
-      expect(filter_audit_list).to have_content("Forest management")
-      expect(filter_audit_list.filter_form.audit_status).to have_checked_field("audit_status_all")
+      expect(@filter_audit_list).to have_content("Tree felling")
+      expect(@filter_audit_list).to have_content("Forest management")
+      expect(@filter_audit_list.filter_form.audit_status).to have_checked_field("audit_status_all")
     end
 
     context "when showing content regardless of audit status" do
       scenario "filtering by primary organisation" do
-        filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-        filter_audit_list.load
+        given_content_belonging_to_departments
+        when_i_go_to_filter_content_to_audit
 
-        filter_audit_list.filter_form do |form|
+        @filter_audit_list.filter_form do |form|
           form.allocated_to.select "Anyone"
           form.audit_status.choose "All"
           form.apply_filters.click
@@ -104,15 +51,15 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
           form.apply_filters.click
         end
 
-        expect(filter_audit_list.list).to have_content("VAT")
-        expect(filter_audit_list.list).to have_no_content("Tree felling")
+        expect(@filter_audit_list.list).to have_content("VAT")
+        expect(@filter_audit_list.list).to have_no_content("Tree felling")
       end
 
       scenario "filtering by organisation" do
-        filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-        filter_audit_list.load
+        given_content_belonging_to_departments
+        when_i_go_to_filter_content_to_audit
 
-        filter_audit_list.filter_form do |form|
+        @filter_audit_list.filter_form do |form|
           form.allocated_to.select "Anyone"
           form.audit_status.choose "All"
           form.primary_orgs.uncheck "Primary organisation only"
@@ -120,9 +67,9 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
           form.apply_filters.click
         end
 
-        expect(filter_audit_list.list).to have_content("VAT")
-        expect(filter_audit_list.list).to have_content("Travel insurance")
-        expect(filter_audit_list.list).to have_no_content("Tree felling")
+        expect(@filter_audit_list.list).to have_content("VAT")
+        expect(@filter_audit_list.list).to have_content("Travel insurance")
+        expect(@filter_audit_list.list).to have_no_content("Tree felling")
       end
 
       scenario "toggling the primary org checkbox by clicking its label" do
@@ -143,12 +90,12 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
       context "filtering by organisation" do
         scenario "organisations are in alphabetical order" do
-          filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-          filter_audit_list.load
+          given_content_belonging_to_departments
+          when_i_go_to_filter_content_to_audit
 
-          filter_audit_list.filter_form.wait_until_organisations_visible
+          @filter_audit_list.filter_form.wait_until_organisations_visible
 
-          within(filter_audit_list.filter_form.organisations) do
+          within(@filter_audit_list.filter_form.organisations) do
             options = page.all("option")
 
             expect(options.map(&:text)).to eq ["", "DFE", "HMRC"]
@@ -156,12 +103,12 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
         end
 
         scenario "using autocomplete", js: true do
-          filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-          filter_audit_list.load
+          given_content_belonging_to_departments
+          when_i_go_to_filter_content_to_audit
 
-          expect(filter_audit_list.url).not_to include("organisations%5B%5D=#{hmrc.content_id}")
+          expect(@filter_audit_list.url).not_to include("organisations%5B%5D=#{@hmrc.content_id}")
 
-          filter_audit_list.filter_form do |form|
+          @filter_audit_list.filter_form do |form|
             form.wait_until_organisations_visible
 
             expect(form).to have_organisations_input(visible: :visible)
@@ -173,76 +120,76 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
             form.apply_filters.click
 
-            expect(form).to have_selector("option[selected][value=\"#{hmrc.content_id}\"]", visible: :hidden)
+            expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
           end
 
-          expect(filter_audit_list.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
+          expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
         end
 
         scenario "multiple", js: true do
-          filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-          filter_audit_list.load
+          given_content_belonging_to_departments
+          when_i_go_to_filter_content_to_audit
 
-          filter_audit_list.filter_form do |form|
+          @filter_audit_list.filter_form do |form|
             form.wait_until_organisations_visible
             form.add_organisations.click
 
             page.find_all("#organisations")[1].send_keys("DF", :down, :enter)
             page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
 
-            expect(filter_audit_list).to have_field("Organisations", with: "DFE")
-            expect(filter_audit_list).to have_field("Organisations", with: "HMRC")
+            expect(@filter_audit_list).to have_field("Organisations", with: "DFE")
+            expect(@filter_audit_list).to have_field("Organisations", with: "HMRC")
 
             form.apply_filters.click
 
-            expect(filter_audit_list.current_url).to include("organisations%5B%5D=#{dfe.content_id}")
-            expect(filter_audit_list.current_url).to include("organisations%5B%5D=#{hmrc.content_id}")
+            expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@dfe.content_id}")
+            expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
           end
         end
       end
 
       context "filtering by title" do
         scenario "the user enters a text in the search box and retrieves a filtered list" do
-          filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-          filter_audit_list.load
+          given_content_belonging_to_departments
+          when_i_go_to_filter_content_to_audit
 
           create :content_item, title: "some text"
           create :content_item, title: "another text"
 
-          filter_audit_list.filter_form do |form|
+          @filter_audit_list.filter_form do |form|
             form.allocated_to.select "Anyone"
             form.audit_status.choose "All"
 
             form.apply_filters.click
           end
 
-          filter_audit_list.filter_form.search.set "some text"
-          filter_audit_list.filter_form.apply_filters.click
-          expect(filter_audit_list).to have_listing count: 1
+          @filter_audit_list.filter_form.search.set "some text"
+          @filter_audit_list.filter_form.apply_filters.click
+          expect(@filter_audit_list).to have_listing count: 1
         end
 
         scenario "show the query entered by the user after filtering" do
-          filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-          filter_audit_list.load
+          given_content_belonging_to_departments
+          when_i_go_to_filter_content_to_audit
 
-          filter_audit_list.filter_form do |form|
+          @filter_audit_list.filter_form do |form|
             form.allocated_to.select "Anyone"
             form.audit_status.choose "All"
             form.search.set "a search value"
             form.apply_filters.click
           end
 
-          expect(filter_audit_list).to have_field(:query, with: 'a search value')
+          expect(@filter_audit_list).to have_field(:query, with: 'a search value')
         end
       end
 
       scenario "filtering by content type" do
-        filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-        filter_audit_list.load
+        given_content_belonging_to_departments
+        when_i_go_to_filter_content_to_audit
 
-        hmrc.update!(document_type: "guide")
+        @hmrc.update!(document_type: "guide")
 
-        filter_audit_list.filter_form do |form|
+        @filter_audit_list.filter_form do |form|
           form.allocated_to.select "Anyone"
           form.audit_status.choose "All"
           form.document_type.select "Guide"
@@ -250,25 +197,25 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
           form.apply_filters.click
         end
 
-        expect(filter_audit_list.list).to have_content("HMRC")
-        expect(filter_audit_list.list).to have_no_content("Flying to countries abroad")
+        expect(@filter_audit_list.list).to have_content("HMRC")
+        expect(@filter_audit_list.list).to have_no_content("Flying to countries abroad")
       end
 
       scenario "Reseting page to 1 after filtering" do
         create_list(:content_item, 100)
 
-        filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-        filter_audit_list.load
+        given_content_belonging_to_departments
+        when_i_go_to_filter_content_to_audit
 
-        filter_audit_list.filter_form do |form|
+        @filter_audit_list.filter_form do |form|
           form.allocated_to.select "Anyone"
           form.audit_status.choose "All"
           form.apply_filters.click
         end
 
-        filter_audit_list.pagination.click_on "2"
+        @filter_audit_list.pagination.click_on "2"
 
-        filter_audit_list.filter_form do |form|
+        @filter_audit_list.filter_form do |form|
           form.audit_status.choose "Not audited"
           form.apply_filters.click
         end
@@ -320,5 +267,65 @@ private
   def and_we_do_not_show_unaudited_content_not_allocated_to_me
     expect(@filter_audit_list.list).to have_no_content("The Secret Seven")
     expect(@filter_audit_list.list).to have_no_content("The Wishing Chair")
+  end
+
+  def given_content_belonging_to_departments
+    # Organisations:
+    @hmrc = create(:organisation, title: "HMRC")
+    @dfe = create(:organisation, title: "DFE")
+
+    # Policies:
+    flying = create(:content_item, title: "Flying abroad")
+
+    create(
+      :content_item,
+      title: "Travel insurance",
+      organisations: @hmrc,
+      policies: flying,
+    )
+
+    # Content:
+    management =
+      create(
+        :content_item,
+        title: "Forest management",
+      )
+
+    felling =
+      create(
+        :content_item,
+        title: "Tree felling",
+        primary_publishing_organisation: @dfe,
+        policies: management,
+      )
+
+    create(
+      :content_item,
+      title: "VAT",
+      primary_publishing_organisation: @hmrc,
+      organisations: @hmrc,
+    )
+
+    # Audit:
+    create(:audit, content_item: felling)
+  end
+
+  def and_i_filter_to_audited_content_allocated_to_anyone
+    @filter_audit_list.filter_form do |form|
+      form.allocated_to.select "Anyone"
+      form.audit_status.choose "Audited"
+
+      form.apply_filters.click
+    end
+
+    expect(@filter_audit_list.filter_form.audit_status).to have_checked_field("audit_status_audited")
+  end
+
+  def then_the_filter_list_shows_audited_item
+    expect(@filter_audit_list.list).to have_content("Tree felling")
+  end
+
+  def and_the_list_does_not_show_unaudited_content
+    expect(@filter_audit_list.list).to have_no_content("Forest management")
   end
 end
