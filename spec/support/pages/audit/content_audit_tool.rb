@@ -4,4 +4,8 @@ class ContentAuditTool
   def audit_content_item
     AuditContentItemPage.new
   end
+
+  def audit_report_item
+    AuditReportPage.new
+  end
 end
