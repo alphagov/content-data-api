@@ -9,7 +9,7 @@ Guidance to help you understand the questions on the audit tool before you start
 Titles should:
 
 * be 65 characters or less
-be unique, clear and descriptive
+* be unique, clear and descriptive
 * be front-loaded and optimised for search
 * use a colon to break up longer titles
 * not contain dashes or slashes
