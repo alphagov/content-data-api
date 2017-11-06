@@ -1,6 +1,4 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
-  let!(:me) { create(:user) }
-
   scenario "List filters by my unaudited content by default" do
     given_i_have_unaudited_content
     when_i_go_to_filter_content_to_audit
@@ -41,6 +39,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   end
 
   scenario "toggling the primary org checkbox by clicking its label" do
+    given_i_am_an_audit_tool_user
     when_i_go_to_filter_content_to_audit
     the_primary_orgs_checkbox_is_toggled_by_the_label
   end
@@ -106,7 +105,13 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
 private
 
+  def given_i_am_an_audit_tool_user
+    create(:user)
+  end
+
   def given_i_have_unaudited_content
+    me = create(:user)
+
     create(
       :content_item,
       title: "The Famous Five",
@@ -348,6 +353,7 @@ private
   end
 
   def given_content_with_known_titles
+    create :user
     create :content_item, title: "some text"
     create :content_item, title: "another text"
   end
@@ -397,6 +403,7 @@ private
   end
 
   def given_101_content_items
+    create :user
     create_list(:content_item, 101)
   end
 
