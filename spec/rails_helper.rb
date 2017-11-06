@@ -22,7 +22,7 @@ require "site_prism"
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.fixture_path = "#{Rails.root}/spec/fixtures"
   config.example_status_persistence_file_path = "#{Rails.root}/tmp/examples.txt"

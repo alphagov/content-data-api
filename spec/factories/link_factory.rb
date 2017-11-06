@@ -18,7 +18,7 @@ class LinkFactory
   def self.add_link(content_item, target, link_type)
     return unless target
 
-    FactoryGirl.create(
+    FactoryBot.create(
       :link,
       source: content_item,
       target: target,
