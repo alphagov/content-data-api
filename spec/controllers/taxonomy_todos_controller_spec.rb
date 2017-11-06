@@ -2,7 +2,7 @@ RSpec.describe TaxonomyTodosController, type: :controller do
   include AuthenticationControllerHelpers
   before do
     login_as_stub_user
-    @taxonomy_todo = FactoryGirl.create(:taxonomy_todo, status: TaxonomyTodo::STATE_TODO)
+    @taxonomy_todo = create(:taxonomy_todo, status: TaxonomyTodo::STATE_TODO)
   end
 
   describe '#show' do

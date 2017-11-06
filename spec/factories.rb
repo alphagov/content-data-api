@@ -1,6 +1,6 @@
 require_relative "./factories/link_factory"
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :content_item, class: Content::Item do
     transient do
       organisations nil
