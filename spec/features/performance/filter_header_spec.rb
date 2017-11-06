@@ -1,6 +1,6 @@
 RSpec.feature "Header of Content Items List", type: :feature do
   before do
-    FactoryGirl.create(:user)
+    create(:user)
   end
 
   context "When no filter is present" do
