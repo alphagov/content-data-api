@@ -24,9 +24,8 @@ RSpec.feature "Content Allocation", type: :feature do
   end
 
   def given_that_I_filter_by_attributes_that_do_not_apply_to_any_content_items
-    # TODO think of a better method name
-    select "No one", from: "allocated_to"
-    click_on "Apply filters"
+    @audit_report_item.allocated_to.select 'No one'
+    @audit_report_item.apply_filters.click
   end
 
   def then_I_see_no_content_items

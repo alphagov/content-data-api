@@ -1,6 +1,7 @@
 <% formatted = format_percentage(percentage, precision: 5) %>
 
-<div class="progress">
+<div class="progress"
+     data-test="<%= data_test %>">
   <div class="progress-bar"
         role="progressbar"
         aria-valuenow="<%= percentage %>"
