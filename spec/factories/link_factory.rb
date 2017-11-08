@@ -4,6 +4,7 @@ class LinkFactory
   end
 
   def self.add_primary_publishing_organisation(content_item, organisation)
+    add_organisations(content_item, organisation)
     add_link(content_item, organisation, Content::Link::PRIMARY_ORG)
   end
 
