@@ -5,11 +5,9 @@ module Audits
     def index
       respond_to do |format|
         format.html do
-          @default_filter = {
-            allocated_to: current_user.uid,
-            audit_status: Audits::Audit::NON_AUDITED,
-            primary_org_only: true,
-          }
+          params[:allocated_to] ||= current_user.uid
+          params[:audit_status] ||= Audits::Audit::NON_AUDITED
+          params[:primary] ||= 'true'
 
           @content_items = FindContent.paged(filter)
         end
