@@ -1,17 +1,11 @@
 module Audits
   class AllocationsController < BaseController
+    before_action :set_default_parameters, only: :index
     before_action :set_batch_value, only: %w(destroy create), if: -> { batch_size > content_ids.size }
 
     decorates_assigned :content_items
 
     def index
-      @default_filter = {
-        allocated_to: :no_one,
-        audit_status: Audits::Audit::NON_AUDITED,
-        organisations: [current_user.organisation_content_id],
-        primary_org_only: true,
-      }
-
       @content_items = FindContent.paged(filter)
     end
 
@@ -36,6 +30,13 @@ module Audits
     end
 
   private
+
+    def set_default_parameters
+      params[:allocated_to] ||= :no_one
+      params[:audit_status] ||= Audits::Audit::NON_AUDITED
+      params[:organisations] ||= [current_user.organisation_content_id]
+      params[:primary] ||= 'true'
+    end
 
     def user_uid
       params.fetch(:allocate_to)
