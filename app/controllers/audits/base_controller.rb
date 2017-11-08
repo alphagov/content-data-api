@@ -4,8 +4,7 @@ module Audits
     helper_method :filter, :filter_params
 
     def filter(override = {})
-      options = default_filter
-        .merge(filter_from_non_blankable_query_parameters)
+      options = filter_from_non_blankable_query_parameters
         .merge(filter_from_blankable_query_parameters)
         .merge(override)
 
@@ -13,12 +12,6 @@ module Audits
     end
 
   private
-
-    def default_filter
-      {
-        primary_org_only: true,
-      }
-    end
 
     def filter_from_non_blankable_query_parameters
       options = {
