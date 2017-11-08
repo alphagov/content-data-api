@@ -9,4 +9,6 @@ class AuditReportPage < SitePrism::Page
   element :content_type, '#document_type'
   element :audit_progress_bar, '[data-test=audit_progress_bar]'
   element :improvement_progress_bar, '[data-test=improvement_progress_bar]'
+  element :export_to_csv, '.report-export'
+  element :organisations, '#organisations'
 end
