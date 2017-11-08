@@ -1,115 +1,115 @@
 RSpec.feature "Filter Content Items to Audit", type: :feature do
   scenario "List filters by my unaudited content by default" do
-    given_i_have_unaudited_content
-    when_i_go_to_filter_content_to_audit
-    and_we_filter_to_unaudited_content_allocated_to_me_by_default
+    given_unaudited_content
+    when_viewing_content_to_audit
+    and_filtering_to_unaudited_content_allocated_to_me_by_default
     then_the_filtered_list_shows_content_allocated_to_me
-    and_we_do_not_show_unaudited_content_not_allocated_to_me
+    and_unaudited_content_not_allocated_to_me_is_not_shown
   end
 
   scenario "filtering audited content" do
     given_content_belonging_to_departments
-    when_i_go_to_filter_content_to_audit
-    and_i_filter_to_audited_content_allocated_to_anyone
+    when_viewing_content_to_audit
+    and_filtering_to_audited_content_allocated_to_anyone
     then_the_filter_list_shows_audited_item
     and_the_list_does_not_show_unaudited_content
   end
 
   scenario "filtering for content regardless of audit status" do
     given_content_belonging_to_departments
-    when_i_go_to_filter_content_to_audit
-    and_filter_by_all_content_allocated_to_anyone
+    when_viewing_content_to_audit
+    and_filtering_by_all_content_allocated_to_anyone
     then_the_list_shows_all_content
   end
 
   scenario "filtering by primary organisation" do
     given_content_belonging_to_departments
-    when_i_go_to_filter_content_to_audit
-    and_i_filter_to_all_content_for_anyone_belonging_to_a_primary_org
+    when_viewing_content_to_audit
+    and_filtering_to_all_content_for_anyone_belonging_to_a_primary_org
     then_the_list_shows_primary_org_content
     and_does_not_show_other_department_content
   end
 
   scenario "filtering by primary and non-primary organisation" do
     given_content_belonging_to_departments
-    when_i_go_to_filter_content_to_audit
-    and_i_filter_to_non_primary_orgs
+    when_viewing_content_to_audit
+    and_filtering_to_non_primary_orgs
     then_the_list_shows_content_for_org
     and_the_list_does_not_show_content_for_other_orgs
   end
 
   scenario "toggling the primary org checkbox by clicking its label" do
-    given_i_am_an_audit_tool_user
-    when_i_go_to_filter_content_to_audit
+    given_an_audit_tool_user
+    when_viewing_content_to_audit
     the_primary_orgs_checkbox_is_toggled_by_the_label
   end
 
   scenario "organisation options are in alphabetical order" do
     given_content_belonging_to_departments
-    when_i_go_to_filter_content_to_audit
+    when_viewing_content_to_audit
     the_organisation_filter_options_are_alphabetical
   end
 
   scenario "using organisation filter option autocomplete", js: true do
     given_content_belonging_to_departments
-    when_i_go_to_filter_content_to_audit
-    and_i_type_part_of_an_org_name_in_the_organisations_filter_field
+    when_viewing_content_to_audit
+    and_part_of_an_org_name_is_typed_in_the_organisations_filter_field
     then_the_field_is_filled_with_the_suggestion_i_chose
-    and_when_we_apply_the_filters
+    and_when_applying_the_filters
     then_the_option_is_still_set
     and_the_url_contains_the_filter_option_in_query_param
   end
 
   scenario "multiple", js: true do
     given_content_belonging_to_departments
-    when_i_go_to_filter_content_to_audit
-    and_i_type_part_of_two_org_names_in_the_organisations_filter_field
+    when_viewing_content_to_audit
+    and_part_of_two_org_names_are_typed_in_the_organisations_filter_field
     then_there_are_fields_filled_with_the_suggestions_chosen
-    and_when_we_apply_the_filters
+    and_when_applying_the_filters
     then_the_options_are_still_set
     and_the_url_contains_the_filter_options_in_query_params
   end
 
   scenario "filtering by title" do
     given_content_with_known_titles
-    when_i_go_to_filter_content_to_audit
-    and_i_search_by_title_within_all_content_assigned_to_anyone
+    when_viewing_content_to_audit
+    and_searching_by_title_within_all_content_assigned_to_anyone
     then_the_list_shows_the_one_item_matching
     and_does_not_show_other_content_that_do_not_match
   end
 
   scenario "show the query entered by the user after filtering" do
     given_content_with_known_titles
-    when_i_go_to_filter_content_to_audit
-    and_i_search_by_title_within_all_content_assigned_to_anyone
+    when_viewing_content_to_audit
+    and_searching_by_title_within_all_content_assigned_to_anyone
     then_the_search_box_still_shows_the_search_query
   end
 
   scenario "filtering by content type" do
     given_content_belonging_to_departments
     and_one_of_the_content_is_guidance
-    when_i_go_to_filter_content_to_audit
-    and_filter_by_guide_type_from_all_content_allocated_to_anyone
+    when_viewing_content_to_audit
+    and_filtering_by_guide_type_from_all_content_allocated_to_anyone
     then_the_list_shows_content_for_that_type
     and_does_not_show_content_of_other_type
   end
 
   scenario "Reseting page to 1 after filtering" do
     given_101_content_items
-    when_i_go_to_filter_content_to_audit
-    and_filter_by_all_content_allocated_to_anyone
-    and_i_click_to_the_second_page_of_results
-    and_i_change_the_filters_to_not_audited
+    when_viewing_content_to_audit
+    and_filtering_by_all_content_allocated_to_anyone
+    and_clicking_to_the_second_page_of_results
+    and_changing_the_filters_to_not_audited
     then_the_list_goes_down_to_one_page
   end
 
 private
 
-  def given_i_am_an_audit_tool_user
+  def given_an_audit_tool_user
     create(:user)
   end
 
-  def given_i_have_unaudited_content
+  def given_unaudited_content
     me = create(:user)
 
     create(
@@ -132,12 +132,12 @@ private
     create(:audit, content_item: wishing_chair, user: me)
   end
 
-  def when_i_go_to_filter_content_to_audit
+  def when_viewing_content_to_audit
     @filter_audit_list = ContentAuditTool.new.filter_audit_list_page
     @filter_audit_list.load
   end
 
-  def and_we_filter_to_unaudited_content_allocated_to_me_by_default
+  def and_filtering_to_unaudited_content_allocated_to_me_by_default
     @filter_audit_list.filter_form do |form|
       expect(form).to have_select("allocated_to", selected: "Me")
       expect(form.audit_status).to have_checked_field("Not audited")
@@ -148,7 +148,7 @@ private
     expect(@filter_audit_list).to have_list(text: "The Famous Five")
   end
 
-  def and_we_do_not_show_unaudited_content_not_allocated_to_me
+  def and_unaudited_content_not_allocated_to_me_is_not_shown
     expect(@filter_audit_list.list).to have_no_content("The Secret Seven")
     expect(@filter_audit_list.list).to have_no_content("The Wishing Chair")
   end
@@ -207,7 +207,7 @@ private
     create(:audit, content_item: felling)
   end
 
-  def and_i_filter_to_audited_content_allocated_to_anyone
+  def and_filtering_to_audited_content_allocated_to_anyone
     @filter_audit_list.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "Audited"
@@ -226,7 +226,7 @@ private
     expect(@filter_audit_list.list).to have_no_content("Forest management")
   end
 
-  def and_filter_by_all_content_allocated_to_anyone
+  def and_filtering_by_all_content_allocated_to_anyone
     @filter_audit_list.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
@@ -243,7 +243,7 @@ private
     expect(@filter_audit_list).to have_content("Forest management")
   end
 
-  def and_i_filter_to_all_content_for_anyone_belonging_to_a_primary_org
+  def and_filtering_to_all_content_for_anyone_belonging_to_a_primary_org
     @filter_audit_list.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
@@ -261,7 +261,7 @@ private
     expect(@filter_audit_list.list).to have_no_content("Tree felling")
   end
 
-  def and_i_filter_to_non_primary_orgs
+  def and_filtering_to_non_primary_orgs
     @filter_audit_list.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
@@ -290,7 +290,7 @@ private
     end
   end
 
-  def and_i_type_part_of_an_org_name_in_the_organisations_filter_field
+  def and_part_of_an_org_name_is_typed_in_the_organisations_filter_field
     expect(@filter_audit_list.url).not_to include("organisations%5B%5D=#{@hmrc.content_id}")
 
     @filter_audit_list.filter_form do |form|
@@ -309,7 +309,7 @@ private
     end
   end
 
-  def and_when_we_apply_the_filters
+  def and_when_applying_the_filters
     @filter_audit_list.filter_form do |form|
       form.apply_filters.click
     end
@@ -325,7 +325,7 @@ private
     expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
   end
 
-  def and_i_type_part_of_two_org_names_in_the_organisations_filter_field
+  def and_part_of_two_org_names_are_typed_in_the_organisations_filter_field
     @filter_audit_list.filter_form do |form|
       form.wait_until_organisations_visible
       form.add_organisations.click
@@ -358,7 +358,7 @@ private
     create :content_item, title: "another text"
   end
 
-  def and_i_search_by_title_within_all_content_assigned_to_anyone
+  def and_searching_by_title_within_all_content_assigned_to_anyone
     @filter_audit_list.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
@@ -384,7 +384,7 @@ private
     @hmrc.update!(document_type: "guide")
   end
 
-  def and_filter_by_guide_type_from_all_content_allocated_to_anyone
+  def and_filtering_by_guide_type_from_all_content_allocated_to_anyone
     @filter_audit_list.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
@@ -407,11 +407,11 @@ private
     create_list(:content_item, 101)
   end
 
-  def and_i_click_to_the_second_page_of_results
+  def and_clicking_to_the_second_page_of_results
     @filter_audit_list.pagination.click_on "2"
   end
 
-  def and_i_change_the_filters_to_not_audited
+  def and_changing_the_filters_to_not_audited
     @filter_audit_list.filter_form do |form|
       form.audit_status.choose "Not audited"
       form.apply_filters.click
