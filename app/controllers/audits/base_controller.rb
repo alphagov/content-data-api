@@ -21,6 +21,7 @@ module Audits
         page: params[:page],
         sort: Sort.column(params[:sort_by]),
         sort_direction: Sort.direction(params[:sort_by]),
+        primary_org_only: params[:primary] == 'true',
         title: params[:query],
       }
 
@@ -29,7 +30,6 @@ module Audits
 
     def filter_from_blankable_query_parameters
       {}.tap do |options|
-        options[:primary_org_only] = primary_org_only? if params.key?(:primary)
         options[:organisations] = organisations if params.key?(:organisations)
       end
     end
@@ -38,10 +38,6 @@ module Audits
       Audits::SerializeFilterToQueryParameters
         .new(filter)
         .call
-    end
-
-    def primary_org_only?
-      params[:primary] == "true"
     end
 
     def organisations
