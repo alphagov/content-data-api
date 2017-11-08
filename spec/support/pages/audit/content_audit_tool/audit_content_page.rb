@@ -1,6 +1,6 @@
 require "site_prism/page"
 
-class FilterAuditListPage < SitePrism::Page
+class AuditContentPage < SitePrism::Page
   set_url "/audits"
 
   section :filter_form, "form" do

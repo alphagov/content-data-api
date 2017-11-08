@@ -5,7 +5,7 @@ class ContentAuditTool
     AuditContentItemPage.new
   end
 
-  def filter_audit_list_page
-    FilterAuditListPage.new
+  def audit_content_page
+    AuditContentPage.new
   end
 end

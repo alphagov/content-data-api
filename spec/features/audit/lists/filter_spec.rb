@@ -133,28 +133,28 @@ private
   end
 
   def when_viewing_content_to_audit
-    @filter_audit_list = ContentAuditTool.new.filter_audit_list_page
-    @filter_audit_list.load
+    @audit_content_page = ContentAuditTool.new.audit_content_page
+    @audit_content_page.load
   end
 
   def and_filtering_to_unaudited_content_allocated_to_me_by_default
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       expect(form).to have_select("allocated_to", selected: "Me")
       expect(form.audit_status).to have_checked_field("Not audited")
     end
   end
 
   def then_the_filtered_list_shows_content_allocated_to_me
-    expect(@filter_audit_list).to have_list(text: "The Famous Five")
+    expect(@audit_content_page).to have_list(text: "The Famous Five")
   end
 
   def and_unaudited_content_not_allocated_to_me_is_not_shown
-    expect(@filter_audit_list.list).to have_no_content("The Secret Seven")
-    expect(@filter_audit_list.list).to have_no_content("The Wishing Chair")
+    expect(@audit_content_page.list).to have_no_content("The Secret Seven")
+    expect(@audit_content_page.list).to have_no_content("The Wishing Chair")
   end
 
   def the_primary_orgs_checkbox_is_toggled_by_the_label
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       expect(form).to have_primary_orgs_label
       expect(form).to have_primary_orgs
 
@@ -208,43 +208,43 @@ private
   end
 
   def and_filtering_to_audited_content_allocated_to_anyone
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "Audited"
 
       form.apply_filters.click
     end
 
-    expect(@filter_audit_list.filter_form.audit_status).to have_checked_field("audit_status_audited")
+    expect(@audit_content_page.filter_form.audit_status).to have_checked_field("audit_status_audited")
   end
 
   def then_the_filter_list_shows_audited_item
-    expect(@filter_audit_list.list).to have_content("Tree felling")
+    expect(@audit_content_page.list).to have_content("Tree felling")
   end
 
   def and_the_list_does_not_show_unaudited_content
-    expect(@filter_audit_list.list).to have_no_content("Forest management")
+    expect(@audit_content_page.list).to have_no_content("Forest management")
   end
 
   def and_filtering_by_all_content_allocated_to_anyone
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
 
       form.apply_filters.click
     end
 
-    expect(@filter_audit_list.filter_form.audit_status).to have_checked_field("audit_status_all")
+    expect(@audit_content_page.filter_form.audit_status).to have_checked_field("audit_status_all")
   end
 
   def then_the_list_shows_all_content
-    expect(@filter_audit_list).to have_content("VAT")
-    expect(@filter_audit_list).to have_content("Tree felling")
-    expect(@filter_audit_list).to have_content("Forest management")
+    expect(@audit_content_page).to have_content("VAT")
+    expect(@audit_content_page).to have_content("Tree felling")
+    expect(@audit_content_page).to have_content("Forest management")
   end
 
   def and_filtering_to_all_content_for_anyone_belonging_to_a_primary_org
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
       form.primary_orgs.check "Primary organisation only"
@@ -254,15 +254,15 @@ private
   end
 
   def then_the_list_shows_primary_org_content
-    expect(@filter_audit_list.list).to have_content("VAT")
+    expect(@audit_content_page.list).to have_content("VAT")
   end
 
   def and_does_not_show_other_department_content
-    expect(@filter_audit_list.list).to have_no_content("Tree felling")
+    expect(@audit_content_page.list).to have_no_content("Tree felling")
   end
 
   def and_filtering_to_non_primary_orgs
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
       form.primary_orgs.uncheck "Primary organisation only"
@@ -272,16 +272,16 @@ private
   end
 
   def then_the_list_shows_content_for_org
-    expect(@filter_audit_list.list).to have_content("VAT")
-    expect(@filter_audit_list.list).to have_content("Travel insurance")
+    expect(@audit_content_page.list).to have_content("VAT")
+    expect(@audit_content_page.list).to have_content("Travel insurance")
   end
 
   def and_the_list_does_not_show_content_for_other_orgs
-    expect(@filter_audit_list.list).to have_no_content("Tree felling")
+    expect(@audit_content_page.list).to have_no_content("Tree felling")
   end
 
   def the_organisation_filter_options_are_alphabetical
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       within(form.organisations) do
         options = page.all("option")
 
@@ -291,9 +291,9 @@ private
   end
 
   def and_part_of_an_org_name_is_typed_in_the_organisations_filter_field
-    expect(@filter_audit_list.url).not_to include("organisations%5B%5D=#{@hmrc.content_id}")
+    expect(@audit_content_page.url).not_to include("organisations%5B%5D=#{@hmrc.content_id}")
 
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.wait_until_organisations_visible
 
       expect(form).to have_organisations_input(visible: :visible)
@@ -304,29 +304,29 @@ private
   end
 
   def then_the_field_is_filled_with_the_suggestion_i_chose
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       expect(form).to have_field("Organisations", with: "HMRC")
     end
   end
 
   def and_when_applying_the_filters
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.apply_filters.click
     end
   end
 
   def then_the_option_is_still_set
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
     end
   end
 
   def and_the_url_contains_the_filter_option_in_query_param
-    expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
+    expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
   end
 
   def and_part_of_two_org_names_are_typed_in_the_organisations_filter_field
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.wait_until_organisations_visible
       form.add_organisations.click
 
@@ -336,20 +336,20 @@ private
   end
 
   def then_there_are_fields_filled_with_the_suggestions_chosen
-    expect(@filter_audit_list).to have_field("Organisations", with: "DFE")
-    expect(@filter_audit_list).to have_field("Organisations", with: "HMRC")
+    expect(@audit_content_page).to have_field("Organisations", with: "DFE")
+    expect(@audit_content_page).to have_field("Organisations", with: "HMRC")
   end
 
   def then_the_options_are_still_set
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
       expect(form).to have_selector("option[selected][value=\"#{@dfe.content_id}\"]", visible: :hidden)
     end
   end
 
   def and_the_url_contains_the_filter_options_in_query_params
-    expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@dfe.content_id}")
-    expect(@filter_audit_list.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
+    expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@dfe.content_id}")
+    expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
   end
 
   def given_content_with_known_titles
@@ -359,7 +359,7 @@ private
   end
 
   def and_searching_by_title_within_all_content_assigned_to_anyone
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
       form.search.set "some text"
@@ -368,16 +368,16 @@ private
   end
 
   def then_the_list_shows_the_one_item_matching
-    expect(@filter_audit_list).to have_listing count: 1
-    expect(@filter_audit_list).to have_listing(text: "some text")
+    expect(@audit_content_page).to have_listing count: 1
+    expect(@audit_content_page).to have_listing(text: "some text")
   end
 
   def and_does_not_show_other_content_that_do_not_match
-    expect(@filter_audit_list.list).to have_no_content("another text")
+    expect(@audit_content_page.list).to have_no_content("another text")
   end
 
   def then_the_search_box_still_shows_the_search_query
-    expect(@filter_audit_list).to have_field(:query, with: 'some text')
+    expect(@audit_content_page).to have_field(:query, with: 'some text')
   end
 
   def and_one_of_the_content_is_guidance
@@ -385,7 +385,7 @@ private
   end
 
   def and_filtering_by_guide_type_from_all_content_allocated_to_anyone
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
       form.document_type.select "Guide"
@@ -395,11 +395,11 @@ private
   end
 
   def then_the_list_shows_content_for_that_type
-    expect(@filter_audit_list.list).to have_content("HMRC")
+    expect(@audit_content_page.list).to have_content("HMRC")
   end
 
   def and_does_not_show_content_of_other_type
-    expect(@filter_audit_list.list).to have_no_content("Flying to countries abroad")
+    expect(@audit_content_page.list).to have_no_content("Flying to countries abroad")
   end
 
   def given_101_content_items
@@ -408,11 +408,11 @@ private
   end
 
   def and_clicking_to_the_second_page_of_results
-    @filter_audit_list.pagination.click_on "2"
+    @audit_content_page.pagination.click_on "2"
   end
 
   def and_changing_the_filters_to_not_audited
-    @filter_audit_list.filter_form do |form|
+    @audit_content_page.filter_form do |form|
       form.audit_status.choose "Not audited"
       form.apply_filters.click
     end
