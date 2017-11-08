@@ -16,8 +16,6 @@ module Audits
 
     def default_filter
       {
-        allocated_to: :anyone,
-        audit_status: Audits::Audit::NON_AUDITED,
         primary_org_only: true,
       }
     end
