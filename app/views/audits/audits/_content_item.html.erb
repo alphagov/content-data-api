@@ -1,8 +1,8 @@
 <tr>
-  <td data-test="title">
+  <td data-test-id="title">
     <%= link_to content_item.title, content_item_audit_path(content_item, filter_params) %>
   </td>
-  <td data-test="page-views">
+  <td data-test-id="page-views">
     <%= content_item.six_months_page_views %>
   </td>
 </tr>

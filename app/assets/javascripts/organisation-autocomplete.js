@@ -24,7 +24,7 @@
           '<button type="button" ' +
           '        id="add-organisation" ' +
           '        class="btn btn-link add-organisation js-add-organisation"' +
-          '        data-test="add-organisation">' +
+          '        data-test-id="add-organisation">' +
           '  Add another organisation' +
           '</button>'
         ).click(addOrganisation);

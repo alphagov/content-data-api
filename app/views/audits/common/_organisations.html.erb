@@ -1,6 +1,6 @@
 <div class="form-group" data-module="organisation-autocomplete">
   <%= label_tag :organisations %>
-  <div class="organisation-select-wrapper js-organisation-select-wrapper" data-test="organisations">
+  <div class="organisation-select-wrapper js-organisation-select-wrapper" data-test-id="organisations">
     <%= hidden_field_tag("organisations[]", [""], id: nil) %>
     <%= select_tag :organisations,
                    organisation_options_for_select(params[:organisations]),
@@ -9,7 +9,7 @@
                    class: "form-control js-organisation-select",
                    data: {
                        tracking_id: "organisations",
-                       test: "organisations-select"
+                       test_id: "organisations-select"
                    } %>
   </div>
 </div>
