@@ -53,7 +53,7 @@ RSpec.feature "Exporting a CSV from the report page" do
     @audit_report.export_to_csv.click
   end
 
-  def then_i_receive_an_audit_progress_report_in_CSV_format
+  def then_i_receive_an_audit_progress_report_in_csv_format
     expect(content_type).to eq("text/csv")
     expect(content_disposition).to start_with("attachment")
     expect(content_disposition).to include(
@@ -90,7 +90,7 @@ RSpec.feature "Exporting a CSV from the report page" do
     @audit_report.export_to_csv.click
   end
 
-  def then_i_receive_an_audit_progress_report_for_filtered_audits_in_CSV_format
+  def then_i_receive_an_audit_progress_report_for_filtered_audits_in_csv_format
     expect(@audit_report).to have_content("Title,URL")
     expect(@audit_report).to have_content("Example 1,https://gov.uk/example1")
     expect(@audit_report).to have_no_content("Example 2,https://gov.uk/example2")
@@ -104,7 +104,7 @@ RSpec.feature "Exporting a CSV from the report page" do
     click_on "Apply filters"
   end
 
-  def then_i_receive_an_audit_progress_report_for_all_audits_in_CSV_format
+  def then_i_receive_an_audit_progress_report_for_all_audits_in_csv_format
     click_link "Export filtered audit to CSV"
     csv = CSV.parse(page.body, headers: true)
     number_of_metadata_rows = 1
@@ -124,7 +124,7 @@ RSpec.feature "Exporting a CSV from the report page" do
            source_content_id: example1.content_id,
            target_content_id: hmrc.content_id,
            link_type: "primary_publishing_organisation")
-  create(:content_item,
+    create(:content_item,
          title: "Example 2",
          base_path: "/example2",
          allocated_to: user)
