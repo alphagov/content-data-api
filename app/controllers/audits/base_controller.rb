@@ -46,9 +46,19 @@ module Audits
     end
 
     def filter_params
-      Audits::SerializeFilterToQueryParameters
-        .new(filter)
-        .call
+      options = {
+        allocated_to: params[:allocated_to],
+        audit_status: params[:audit_status],
+        document_type: params[:document_type],
+        organisations: params.fetch(:organisations, []).flatten.reject(&:blank?),
+        primary: params[:primary],
+        query: params[:title],
+        sort_by: params[:sort_by],
+        title: params[:query],
+      }
+      options.delete_if { |_, v| v.blank? }
+
+      options
     end
   end
 end
