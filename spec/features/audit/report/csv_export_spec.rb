@@ -1,10 +1,4 @@
 RSpec.feature "Exporting a CSV from the report page" do
-  let!(:me) do
-    create(
-      :user,
-    )
-  end
-
   def content_type
     page.response_headers.fetch("Content-Type")
   end
@@ -14,21 +8,28 @@ RSpec.feature "Exporting a CSV from the report page" do
   end
 
   scenario "Exporting a csv file as an attachment" do
-    given_i_am_exporting_an_audit_report
-    then_i_download_a_csv_file
+    given_I_am_exporting_an_audit_report
+    then_I_receive_an_audit_progress_report_in_CSV_format
   end
 
   scenario "Applying the filters to the export" do
-    given_i_have_applied_filters_and_exported_audit
-    then_i_download_a_csv_file_for_the_filtered_audits
+    given_I_have_applied_filters_and_exported_audits
+    then_I_receive_an_audit_progress_report_for_filtered_audits_in_CSV_format
   end
 
-  scenario "Multiple pages of content items are in the database" do
-    given_i_have_multiple_pages_of_content_items_and_do_not_filter_them
-    then_i_download_a_csv_file_for_all_content_items
+  scenario "Multiple pagesincluding_details_of_audit_progress_ of content items are in the database" do
+    given_I_have_multiple_pages_of_content_items_and_do_not_filter_them
+    then_I_receive_an_audit_progress_report_for_all_audits_in_CSV_format
   end
 
-  def given_i_am_exporting_an_audit_report
+  scenario "Discard audit status filter when clicking from content view to report, and then exporting CSV" do
+    given_I_apply_filters_to_the_audit_content_page
+    then_I_see_filtered_audits
+    given_that_I_navigate_to_audits_report_page
+    then_I_see_an_unfiltered_audit_progress_report
+  end
+
+  def given_I_am_exporting_an_audit_report
     user = create(:user)
     hmrc = create(
       :content_item,
@@ -38,7 +39,7 @@ RSpec.feature "Exporting a CSV from the report page" do
     example1 = create(:content_item,
                       title: "Example 1",
                       base_path: "/example1",
-                      allocated_to: me)
+                      allocated_to: user)
     create(:link,
            source_content_id: example1.content_id,
            target_content_id: hmrc.content_id,
@@ -47,23 +48,22 @@ RSpec.feature "Exporting a CSV from the report page" do
            title: "Example 2",
            base_path: "/example2")
     create(:audit, content_item: example1)
-    @audit_report_item = ContentAuditTool.new.audit_report_item
-    @audit_report_item.load(content_id: example2.content_id)
-    @audit_report_item.export_to_csv.click
+    @audit_report = ContentAuditTool.new.audit_report
+    @audit_report.load(content_id: example2.content_id)
+    @audit_report.export_to_csv.click
   end
 
-  def then_i_download_a_csv_file
+  def then_I_receive_an_audit_progress_report_in_CSV_format
     expect(content_type).to eq("text/csv")
     expect(content_disposition).to start_with("attachment")
     expect(content_disposition).to include(
       'filename="Transformation_audit_report_CSV_download.csv"',
     )
-    expect(@audit_report_item).to have_content("Title,URL")
-    expect(@audit_report_item).to have_content("Example 1,https://gov.uk/example1")
-    expect(@audit_report_item).to have_content("Example 1,https://gov.uk/example1")
+    expect(@audit_report).to have_content("Title,URL")
+    expect(@audit_report).to have_content("Example 1,https://gov.uk/example1")
   end
 
-  def given_i_have_applied_filters_and_exported_audit
+  def given_I_have_applied_filters_and_exported_audits
     user = create(:user)
     hmrc = create(
       :content_item,
@@ -73,7 +73,7 @@ RSpec.feature "Exporting a CSV from the report page" do
     example1 = create(:content_item,
                       title: "Example 1",
                       base_path: "/example1",
-                      allocated_to: me)
+                      allocated_to: user)
     create(:link,
            source_content_id: example1.content_id,
            target_content_id: hmrc.content_id,
@@ -82,21 +82,21 @@ RSpec.feature "Exporting a CSV from the report page" do
            title: "Example 2",
            base_path: "/example2")
     create(:audit, content_item: example1)
-    @audit_report_item = ContentAuditTool.new.audit_report_item
-    @audit_report_item.load(content_id: example2.content_id)
-    @audit_report_item.allocated_to.select 'Anyone'
-    @audit_report_item.organisations.select 'HMRC'
-    @audit_report_item.apply_filters.click
-    @audit_report_item.export_to_csv.click
+    @audit_report = ContentAuditTool.new.audit_report
+    @audit_report.load(content_id: example2.content_id)
+    @audit_report.allocated_to.select 'Anyone'
+    @audit_report.organisations.select 'HMRC'
+    @audit_report.apply_filters.click
+    @audit_report.export_to_csv.click
   end
 
-  def then_i_download_a_csv_file_for_the_filtered_audits
-    expect(@audit_report_item).to have_content("Title,URL")
-    expect(@audit_report_item).to have_content("Example 1,https://gov.uk/example1")
-    expect(@audit_report_item).to have_no_content("Example 2,https://gov.uk/example2")
+  def then_I_receive_an_audit_progress_report_for_filtered_audits_in_CSV_format
+    expect(@audit_report).to have_content("Title,URL")
+    expect(@audit_report).to have_content("Example 1,https://gov.uk/example1")
+    expect(@audit_report).to have_no_content("Example 2,https://gov.uk/example2")
   end
 
-  def given_i_have_multiple_pages_of_content_items_and_do_not_filter_them
+  def given_I_have_multiple_pages_of_content_items_and_do_not_filter_them
     user = create(:user)
     create_list(:content_item, 110)
     visit audits_report_path
@@ -104,10 +104,49 @@ RSpec.feature "Exporting a CSV from the report page" do
     click_on "Apply filters"
   end
 
-  def then_i_download_a_csv_file_for_all_content_items
+  def then_I_receive_an_audit_progress_report_for_all_audits_in_CSV_format
     click_link "Export filtered audit to CSV"
     csv = CSV.parse(page.body, headers: true)
     number_of_metadata_rows = 1
     expect(csv.count).to eq(Content::Item.count + number_of_metadata_rows)
+  end
+
+  def given_I_apply_filters_to_the_audit_content_page
+    user = create(:user)
+    hmrc = create(:content_item,
+                  title: "HMRC",
+                  document_type: "organisation",
+                  allocated_to: user)
+    example1 = create(:content_item,
+                      title: "Example 1",
+                      base_path: "/example1")
+    create(:link,
+           source_content_id: example1.content_id,
+           target_content_id: hmrc.content_id,
+           link_type: "primary_publishing_organisation")
+    example2 = create(:content_item,
+           title: "Example 2",
+           base_path: "/example2",
+           allocated_to: user)
+    @audit_content_page = ContentAuditTool.new.audit_content_page
+    @audit_report_page = ContentAuditTool.new.audit_report
+    @audit_content_page.load
+    @audit_content_page.allocated_to.select 'No one'
+    @audit_content_page.apply_filters.click
+
+  end
+
+  def then_I_see_filtered_audits
+    expect(@audit_content_page).to have_content("Example 1")
+    expect(@audit_content_page).to have_no_content("Example 2")
+  end
+
+  def given_that_I_navigate_to_audits_report_page
+    @audit_content_page.audits_progress_tab.click
+  end
+
+  def then_I_see_an_unfiltered_audit_progress_report
+    expect(@audit_report_page).to be_displayed
+    expect(@audit_report_page).to have_no_content('Example 1')
   end
 end

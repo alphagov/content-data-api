@@ -5,11 +5,11 @@ class ContentAuditTool
     AuditContentItemPage.new
   end
 
-  def audit_report_item
+  def audit_report
     AuditReportPage.new
   end
 
-  def audit_content
+  def audit_content_page
     AuditContentPage.new
   end
 end
