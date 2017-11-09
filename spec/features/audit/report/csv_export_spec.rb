@@ -9,17 +9,17 @@ RSpec.feature "Exporting a CSV from the report page" do
 
   scenario "Exporting a csv file as an attachment" do
     given_i_am_exporting_an_audit_report
-    then_i_receive_an_audit_progress_report_in_CSV_format
+    then_i_receive_an_audit_progress_report_in_csv_format
   end
 
   scenario "Applying the filters to the export" do
     given_i_have_applied_filters_and_exported_audits
-    then_i_receive_an_audit_progress_report_for_filtered_audits_in_CSV_format
+    then_i_receive_an_audit_progress_report_for_filtered_audits_in_csv_format
   end
 
   scenario "Multiple pagesincluding_details_of_audit_progress_ of content items are in the database" do
     given_i_have_multiple_pages_of_content_items_and_do_not_filter_them
-    then_i_receive_an_audit_progress_report_for_all_audits_in_CSV_format
+    then_i_receive_an_audit_progress_report_for_all_audits_in_csv_format
   end
 
   scenario "Discard audit status filter when clicking from content view to report, and then exporting CSV" do
