@@ -3,9 +3,8 @@ module Audits
     layout "audits"
     helper_method :filter, :filter_params
 
-    def filter(override = {})
+    def filter
       options = filter_from_non_blankable_query_parameters
-        .merge(override)
 
       Filter.new(options)
     end
@@ -26,7 +25,7 @@ module Audits
       options.delete_if { |_, v| v.blank? }
 
       Filter.new(options)
-    end
+      end
 
   private
 
