@@ -11,22 +11,22 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     given_content_belonging_to_departments
     when_viewing_content_to_audit
     and_filtering_to_audited_content_allocated_to_anyone
-    then_the_filter_list_shows_audited_item
-    and_the_list_does_not_show_unaudited_content
+    then_the_filtered_list_shows_audited_content
+    and_the_filtered_list_does_not_show_unaudited_content
   end
 
   scenario "filtering for content regardless of audit status" do
     given_content_belonging_to_departments
     when_viewing_content_to_audit
     and_filtering_by_all_content_allocated_to_anyone
-    then_the_list_shows_all_content
+    then_the_filtered_list_shows_all_content
   end
 
   scenario "filtering by primary organisation" do
     given_content_belonging_to_departments
     when_viewing_content_to_audit
     and_filtering_to_all_content_for_anyone_belonging_to_a_primary_org
-    then_the_list_shows_primary_org_content
+    then_the_filtered_list_shows_primary_org_content
     and_does_not_show_other_department_content
   end
 
@@ -34,7 +34,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     given_content_belonging_to_departments
     when_viewing_content_to_audit
     and_filtering_to_non_primary_orgs
-    then_the_list_shows_content_for_org
+    then_the_filtered_list_shows_content_for_org
     and_the_list_does_not_show_content_for_other_orgs
   end
 
@@ -54,7 +54,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     given_content_belonging_to_departments
     when_viewing_content_to_audit
     and_part_of_an_org_name_is_typed_in_the_organisations_filter_field
-    then_the_field_is_filled_with_the_suggestion_i_chose
+    then_the_field_is_filled_with_the_suggestion_chosen
     and_when_applying_the_filters
     then_the_option_is_still_set
     and_the_url_contains_the_filter_option_in_query_param
@@ -74,7 +74,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     given_content_with_known_titles
     when_viewing_content_to_audit
     and_searching_by_title_within_all_content_assigned_to_anyone
-    then_the_list_shows_the_one_item_matching
+    then_the_filtered_list_shows_the_one_content_matching
     and_does_not_show_other_content_that_do_not_match
   end
 
@@ -90,8 +90,8 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_one_of_the_content_is_guidance
     when_viewing_content_to_audit
     and_filtering_by_guide_type_from_all_content_allocated_to_anyone
-    then_the_list_shows_content_for_that_type
-    and_does_not_show_content_of_other_type
+    then_the_filtered_list_shows_content_for_that_type
+    and_does_not_show_content_of_other_types
   end
 
   scenario "Reseting page to 1 after filtering" do
@@ -100,7 +100,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_filtering_by_all_content_allocated_to_anyone
     and_clicking_to_the_second_page_of_results
     and_changing_the_filters_to_not_audited
-    then_the_list_goes_down_to_one_page
+    then_the_filtered_list_goes_down_to_one_page
   end
 
 private
@@ -223,14 +223,14 @@ private
     expect(@audit_content_page.filter_form.audit_status).to have_checked_field("audit_status_audited")
   end
 
-  def then_the_filter_list_shows_audited_item
+  def then_the_filtered_list_shows_audited_content
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
     listing = @audits_filter_list.filter_listings.first
 
     expect(listing.title).to have_text("Tree felling")
   end
 
-  def and_the_list_does_not_show_unaudited_content
+  def and_the_filtered_list_does_not_show_unaudited_content
     @audits_filter_list.filter_listings.each do |listing|
       expect(listing.title).to have_no_text("Forest management")
     end
@@ -247,7 +247,7 @@ private
     expect(@audit_content_page.filter_form.audit_status).to have_checked_field("audit_status_all")
   end
 
-  def then_the_list_shows_all_content
+  def then_the_filtered_list_shows_all_content
     expect(@audit_content_page).to have_content("VAT")
     expect(@audit_content_page).to have_content("Tree felling")
     expect(@audit_content_page).to have_content("Forest management")
@@ -263,7 +263,7 @@ private
     end
   end
 
-  def then_the_list_shows_primary_org_content
+  def then_the_filtered_list_shows_primary_org_content
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
     listing = @audits_filter_list.filter_listings.first
 
@@ -286,7 +286,7 @@ private
     end
   end
 
-  def then_the_list_shows_content_for_org
+  def then_the_filtered_list_shows_content_for_org
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
 
     expect(@audits_filter_list.filter_listings.size).to eq(2)
@@ -325,7 +325,7 @@ private
     end
   end
 
-  def then_the_field_is_filled_with_the_suggestion_i_chose
+  def then_the_field_is_filled_with_the_suggestion_chosen
     @audit_content_page.filter_form do |form|
       expect(form).to have_field("Organisations", with: "HMRC")
     end
@@ -389,7 +389,7 @@ private
     end
   end
 
-  def then_the_list_shows_the_one_item_matching
+  def then_the_filtered_list_shows_the_one_content_matching
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
 
     expect(@audits_filter_list).to have_filter_listings
@@ -422,7 +422,7 @@ private
     end
   end
 
-  def then_the_list_shows_content_for_that_type
+  def then_the_filtered_list_shows_content_for_that_type
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
     @audits_filter_list.wait_for_filter_listings
 
@@ -432,7 +432,7 @@ private
     expect(listing.title.text).to eq("HMRC")
   end
 
-  def and_does_not_show_content_of_other_type
+  def and_does_not_show_content_of_other_types
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
     @audits_filter_list.filter_listings.each do |listing|
       expect(listing.title.text).not_to eq("Flying to countries abroad")
@@ -455,7 +455,7 @@ private
     end
   end
 
-  def then_the_list_goes_down_to_one_page
+  def then_the_filtered_list_goes_down_to_one_page
     expect(page).to have_css(".pagination .active", text: "1")
   end
 end
