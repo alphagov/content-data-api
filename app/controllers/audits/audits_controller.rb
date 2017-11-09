@@ -9,12 +9,12 @@ module Audits
           params[:audit_status] ||= Audits::Audit::NON_AUDITED
           params[:primary] ||= 'true'
 
-          @content_items = FindContent.paged(filter)
+          @content_items = FindContent.paged(params_to_filter)
         end
 
         format.csv do
           send_data(
-            Report.generate(filter, request.url),
+            Report.generate(params_to_filter, request.url),
             filename: "Transformation_audit_report_CSV_download.csv"
           )
         end
@@ -37,9 +37,9 @@ module Audits
       @audit = result.audit
 
       if result.success
-        items_remaining_count = FindContent.paged(filter).total_count
+        items_remaining_count = FindContent.paged(params_to_filter).total_count
 
-        if (next_content_item = FindNextItem.call(@content_item, filter))
+        if (next_content_item = FindNextItem.call(@content_item, params_to_filter))
           flash.notice = "Audit saved — #{helpers.number_with_delimiter(items_remaining_count)} " \
                          "#{'item'.pluralize(items_remaining_count)} remaining."
           redirect_to content_item_audit_path(next_content_item, filter_params)

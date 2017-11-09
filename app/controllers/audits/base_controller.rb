@@ -10,6 +10,24 @@ module Audits
       Filter.new(options)
     end
 
+    def params_to_filter
+      options = {
+        allocated_to: params[:allocated_to],
+        audit_status: params[:audit_status],
+        document_type: params[:document_type],
+        page: params[:page],
+        sort: Sort.column(params[:sort_by]),
+        sort_direction: Sort.direction(params[:sort_by]),
+        primary_org_only: params[:primary] == 'true',
+        organisations: params.fetch(:organisations, []).flatten.reject(&:blank?),
+        title: params[:query],
+      }
+
+      options.delete_if { |_, v| v.blank? }
+
+      Filter.new(options)
+    end
+
   private
 
     def filter_from_non_blankable_query_parameters

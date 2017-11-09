@@ -3,7 +3,7 @@ module Audits
     before_action :set_default_parameters, only: :show
 
     def show
-      @monitor = ::Audits::Monitor.new(filter)
+      @monitor = ::Audits::Monitor.new(params_to_filter)
     end
 
   private
