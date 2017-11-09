@@ -12,7 +12,7 @@ module Audits
       params[:allocated_to] ||= current_user.uid
       params[:audit_status] ||= Audits::Audit::ALL
       params[:organisations] ||= [current_user.organisation_content_id]
-      params[:primary] ||= 'true'
+      params[:primary] = 'true' unless params.key?(:primary)
     end
   end
 end

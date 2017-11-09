@@ -1,5 +1,5 @@
 <div class="form-group">
   <%= hidden_field_tag :primary, false, id: nil %>
-  <%= check_box_tag :primary, true, params[:primary] %>
+  <%= check_box_tag :primary, true, params[:primary] == 'true' %>
   <%= label_tag :primary, "Primary organisation only" %>
 </div>

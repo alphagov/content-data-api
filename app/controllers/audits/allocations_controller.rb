@@ -35,7 +35,7 @@ module Audits
       params[:allocated_to] ||= :no_one
       params[:audit_status] ||= Audits::Audit::NON_AUDITED
       params[:organisations] ||= [current_user.organisation_content_id]
-      params[:primary] ||= 'true'
+      params[:primary] = 'true' unless params.key?(:primary)
     end
 
     def user_uid
