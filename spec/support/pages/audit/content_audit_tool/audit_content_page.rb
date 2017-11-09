@@ -17,7 +17,5 @@ class AuditContentPage < SitePrism::Page
     element :apply_filters, "[data-test=apply-filters]"
   end
 
-  element :list, "[data-test=filter-list]"
-  element :listing, "[data-test=filter-list] tbody tr"
   element :pagination, ".pagination"
 end

@@ -145,12 +145,17 @@ private
   end
 
   def then_the_filtered_list_shows_content_allocated_to_me
-    expect(@audit_content_page).to have_list(text: "The Famous Five")
+    @audits_filter_list = ContentAuditTool.new.audits_filter_list
+
+    listing = @audits_filter_list.filter_listings.first
+    expect(listing.title).to have_text("The Famous Five")
   end
 
   def and_unaudited_content_not_allocated_to_me_is_not_shown
-    expect(@audit_content_page.list).to have_no_content("The Secret Seven")
-    expect(@audit_content_page.list).to have_no_content("The Wishing Chair")
+    @audits_filter_list.filter_listings.each do |listing|
+      expect(listing.title).to have_no_text("The Secret Seven")
+      expect(listing.title).to have_no_text("The Wishing Chair")
+    end
   end
 
   def the_primary_orgs_checkbox_is_toggled_by_the_label
@@ -219,11 +224,16 @@ private
   end
 
   def then_the_filter_list_shows_audited_item
-    expect(@audit_content_page.list).to have_content("Tree felling")
+    @audits_filter_list = ContentAuditTool.new.audits_filter_list
+    listing = @audits_filter_list.filter_listings.first
+
+    expect(listing.title).to have_text("Tree felling")
   end
 
   def and_the_list_does_not_show_unaudited_content
-    expect(@audit_content_page.list).to have_no_content("Forest management")
+    @audits_filter_list.filter_listings.each do |listing|
+      expect(listing.title).to have_no_text("Forest management")
+    end
   end
 
   def and_filtering_by_all_content_allocated_to_anyone
@@ -254,11 +264,16 @@ private
   end
 
   def then_the_list_shows_primary_org_content
-    expect(@audit_content_page.list).to have_content("VAT")
+    @audits_filter_list = ContentAuditTool.new.audits_filter_list
+    listing = @audits_filter_list.filter_listings.first
+
+    expect(listing.title).to have_text("VAT")
   end
 
   def and_does_not_show_other_department_content
-    expect(@audit_content_page.list).to have_no_content("Tree felling")
+    @audits_filter_list.filter_listings.each do |listing|
+      expect(listing.title).to have_no_text("Tree felling")
+    end
   end
 
   def and_filtering_to_non_primary_orgs
@@ -272,12 +287,19 @@ private
   end
 
   def then_the_list_shows_content_for_org
-    expect(@audit_content_page.list).to have_content("VAT")
-    expect(@audit_content_page.list).to have_content("Travel insurance")
+    @audits_filter_list = ContentAuditTool.new.audits_filter_list
+
+    expect(@audits_filter_list.filter_listings.size).to eq(2)
+
+    @audits_filter_list.filter_listings.each do |listing|
+      expect(listing.title.text).to eq("VAT").or eq("Travel insurance")
+    end
   end
 
   def and_the_list_does_not_show_content_for_other_orgs
-    expect(@audit_content_page.list).to have_no_content("Tree felling")
+    @audits_filter_list.filter_listings.each do |listing|
+      expect(listing.title).to have_no_content("Tree felling")
+    end
   end
 
   def the_organisation_filter_options_are_alphabetical
@@ -368,12 +390,18 @@ private
   end
 
   def then_the_list_shows_the_one_item_matching
-    expect(@audit_content_page).to have_listing count: 1
-    expect(@audit_content_page).to have_listing(text: "some text")
+    @audits_filter_list = ContentAuditTool.new.audits_filter_list
+
+    expect(@audits_filter_list).to have_filter_listings
+    expect(@audits_filter_list.filter_listings.size).to eq(1)
+    listing = @audits_filter_list.filter_listings.first
+    expect(listing.title).to have_text("some text")
   end
 
   def and_does_not_show_other_content_that_do_not_match
-    expect(@audit_content_page.list).to have_no_content("another text")
+    @audits_filter_list.filter_listings.each do |listing|
+      expect(listing.title).to have_no_text("another text")
+    end
   end
 
   def then_the_search_box_still_shows_the_search_query
@@ -395,11 +423,20 @@ private
   end
 
   def then_the_list_shows_content_for_that_type
-    expect(@audit_content_page.list).to have_content("HMRC")
+    @audits_filter_list = ContentAuditTool.new.audits_filter_list
+    @audits_filter_list.wait_for_filter_listings
+
+    expect(@audits_filter_list.filter_listings.size).to eq(1)
+
+    listing = @audits_filter_list.filter_listings.first
+    expect(listing.title.text).to eq("HMRC")
   end
 
   def and_does_not_show_content_of_other_type
-    expect(@audit_content_page.list).to have_no_content("Flying to countries abroad")
+    @audits_filter_list = ContentAuditTool.new.audits_filter_list
+    @audits_filter_list.filter_listings.each do |listing|
+      expect(listing.title.text).not_to eq("Flying to countries abroad")
+    end
   end
 
   def given_101_content_items
