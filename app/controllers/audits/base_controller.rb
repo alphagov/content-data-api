@@ -19,9 +19,7 @@ module Audits
       options.delete_if { |_, v| v.blank? }
 
       Filter.new(options)
-      end
-
-  private
+    end
 
     def filter_params
       options = {
