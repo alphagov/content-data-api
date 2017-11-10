@@ -18,4 +18,5 @@ class AuditContentPage < SitePrism::Page
   end
 
   element :pagination, ".pagination"
+  element :audits_progress_tab, '[data-test-id=reports]'
 end
