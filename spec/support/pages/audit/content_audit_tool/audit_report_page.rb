@@ -3,12 +3,12 @@ require 'site_prism/page'
 class AuditReportPage < SitePrism::Page
   set_url '/audits/report'
 
-  element :report_section, '.report-section'
-  element :allocated_to, '#allocated_to'
-  element :apply_filters, 'input[type=submit]'
-  element :content_type, '#document_type'
+  element :report_section, '[data-test-id=report-section]'
+  element :allocated_to, '[data-test-id=allocated-to]'
+  element :apply_filters, '[data-test-id=apply-filters]'
+  element :content_type, '[data-test-id=document-type]'
   element :audit_progress_bar, '[data-test-id=audit_progress_bar]'
   element :improvement_progress_bar, '[data-test-id=improvement_progress_bar]'
-  element :export_to_csv, '.report-export'
-  element :organisations, '#organisations'
+  element :export_to_csv, '[data-test-id=report-export]'
+  element :organisations, '[data-test-id=organisations]'
 end

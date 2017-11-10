@@ -6,9 +6,10 @@
     <%= render 'audits/common/navigation' %>
 <% end %>
 
-<%= link_to "Export filtered audit to CSV", audits_path(params: filter_params, format: :csv), class: "report-export" %>
+<%= link_to "Export filtered audit to CSV", audits_path(params: filter_params, format: :csv), class: "report-export", data: { test_id: "report-export" } %>
 
-<div class="report-section">
+<div class="report-section"
+     data-test-id="report-section">
   <h3><%= format_number(@monitor.total_count) %></h3>
   <p>Content items</p>
   <div>

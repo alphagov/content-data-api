@@ -15,6 +15,7 @@ class AuditContentPage < SitePrism::Page
     element :primary_orgs, "[data-test-id=primary-orgs]"
     element :document_type, "[data-test-id=document-type]"
     element :apply_filters, "[data-test-id=apply-filters]"
+    element :audits_progress_tab, '[data-test-id=reports]'
   end
 
   element :pagination, ".pagination"
