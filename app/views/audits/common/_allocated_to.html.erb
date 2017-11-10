@@ -1,7 +1,7 @@
 <div class="form-group">
   <%= label_tag :allocated_to, "Assigned to" %>
   <%= select_tag :allocated_to,
-                 allocation_options_for_select(filter.allocated_to),
+                 allocation_options_for_select(params[:allocated_to]),
                  class: "form-control",
                  data: {
                    tracking_id: "allocated-to",

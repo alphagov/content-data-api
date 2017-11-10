@@ -1,7 +1,7 @@
 <div class="form-group">
   <%= label_tag :sort_by, "Sort by" %>
   <%= select_tag :sort_by,
-                 sort_by_options_for_select(filter.sort_by),
+                 sort_by_options_for_select(params[:sort_by]),
                  include_blank: "Page views",
                  class: "form-control",
                  data: {

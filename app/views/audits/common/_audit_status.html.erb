@@ -2,6 +2,6 @@
   <%= label_tag :audit_status, 'Audit status' %>
 
   <%= render partial: "components/radio_button",
-             collection: audit_status_radio_button_options(filter.audit_status),
+             collection: audit_status_radio_button_options(params[:audit_status]),
              as: :option %>
 </div>
