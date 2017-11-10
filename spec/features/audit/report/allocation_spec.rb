@@ -1,31 +1,34 @@
 RSpec.feature "Content Allocation", type: :feature do
-  let!(:my_organisation) do
-    create(
-      :organisation,
-    )
-  end
-
-  let!(:me) do
-    create(
-      :user,
-      organisation: my_organisation,
-    )
-  end
-
   scenario "Filter allocated content" do
-    create(
+    given_i_am_auditing_a_content_item
+    then_i_see_all_content_items
+    given_that_i_filter_by_attributes_that_do_not_apply_to_any_content_items
+    then_i_see_no_content_items
+  end
+
+  def given_i_am_auditing_a_content_item
+    organisation = create(:organisation)
+    user = create(:user, organisation: organisation)
+    content_item = create(
       :content_item,
       title: "Do Androids Dream of Electric Sheep",
-      allocated_to: me,
-      primary_publishing_organisation: my_organisation,
+      allocated_to: user,
+      primary_publishing_organisation: organisation,
     )
+    @audit_report_page = ContentAuditTool.new.audit_report_page
+    @audit_report_page.load(content_id: content_item.content_id)
+  end
 
-    visit audits_report_path
+  def then_i_see_all_content_items
+    expect(@audit_report_page).to have_report_section(text: '1')
+  end
 
-    expect(page).to have_selector(".report-section", text: "1")
+  def given_that_i_filter_by_attributes_that_do_not_apply_to_any_content_items
+    @audit_report_page.allocated_to.select 'No one'
+    @audit_report_page.apply_filters.click
+  end
 
-    select "No one", from: "allocated_to"
-    click_on "Apply filters"
-    expect(page).to have_selector(".report-section", text: "0")
+  def then_i_see_no_content_items
+    expect(@audit_report_page).to have_report_section(text: '0')
   end
 end

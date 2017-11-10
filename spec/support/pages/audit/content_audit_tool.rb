@@ -12,4 +12,8 @@ class ContentAuditTool
   def audits_filter_list
     AuditsFilterList.new
   end
+
+  def audit_report_page
+    AuditReportPage.new
+  end
 end
