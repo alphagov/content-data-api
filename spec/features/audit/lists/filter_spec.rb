@@ -60,7 +60,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_the_url_contains_the_filter_option_in_query_param
   end
 
-  scenario "multiple", js: true do
+  scenario "multiple organisations", js: true do
     given_content_belonging_to_departments
     when_viewing_content_to_audit
     and_part_of_two_org_names_are_typed_in_the_organisations_filter_field
@@ -87,7 +87,6 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
 
   scenario "filtering by content type" do
     given_content_belonging_to_departments
-    and_one_of_the_content_is_guidance
     when_viewing_content_to_audit
     and_filtering_by_guide_type_from_all_content_allocated_to_anyone
     then_the_filtered_list_shows_content_for_that_type
@@ -146,15 +145,15 @@ private
 
   def then_the_filtered_list_shows_content_allocated_to_me
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
+    listing = @audits_filter_list.listings.first
 
-    listing = @audits_filter_list.filter_listings.first
     expect(listing.title).to have_text("The Famous Five")
   end
 
   def and_unaudited_content_not_allocated_to_me_is_not_shown
-    @audits_filter_list.filter_listings.each do |listing|
-      expect(listing.title).to have_no_text("The Secret Seven")
-      expect(listing.title).to have_no_text("The Wishing Chair")
+    @audits_filter_list.listings.each do |listing|
+      expect(listing).to have_no_title(text: "The Secret Seven")
+      expect(listing).to have_no_title(text: "The Wishing Chair")
     end
   end
 
@@ -174,7 +173,7 @@ private
   def given_content_belonging_to_departments
     # Organisations:
     @hmrc = create(:organisation, title: "HMRC")
-    @dfe = create(:organisation, title: "DFE")
+    @defra = create(:organisation, title: "DEFRA")
 
     # Policies:
     flying = create(:content_item, title: "Flying abroad")
@@ -191,14 +190,16 @@ private
       create(
         :content_item,
         title: "Forest management",
+        document_type: "answer",
       )
 
     felling =
       create(
         :content_item,
         title: "Tree felling",
-        primary_publishing_organisation: @dfe,
+        primary_publishing_organisation: @defra,
         policies: management,
+        document_type: "guide",
       )
 
     create(
@@ -225,14 +226,15 @@ private
 
   def then_the_filtered_list_shows_audited_content
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
-    listing = @audits_filter_list.filter_listings.first
 
-    expect(listing.title).to have_text("Tree felling")
+    expect(@audits_filter_list.list).to have_text("Tree felling")
   end
 
   def and_the_filtered_list_does_not_show_unaudited_content
-    @audits_filter_list.filter_listings.each do |listing|
-      expect(listing.title).to have_no_text("Forest management")
+    @audits_filter_list.listings.each do |listing|
+      expect(listing).to have_no_title(text: "Forest management")
+      expect(listing).to have_no_title(text: "Travel insurance")
+      expect(listing).to have_no_title(text: "VAT")
     end
   end
 
@@ -248,9 +250,12 @@ private
   end
 
   def then_the_filtered_list_shows_all_content
-    expect(@audit_content_page).to have_content("VAT")
-    expect(@audit_content_page).to have_content("Tree felling")
-    expect(@audit_content_page).to have_content("Forest management")
+    @audits_filter_list = ContentAuditTool.new.audits_filter_list
+
+    expect(@audits_filter_list.list).to have_content("VAT")
+    expect(@audits_filter_list.list).to have_content("Tree felling")
+    expect(@audits_filter_list.list).to have_content("Forest management")
+    expect(@audits_filter_list.list).to have_content("Travel insurance")
   end
 
   def and_filtering_to_all_content_for_anyone_belonging_to_a_primary_org
@@ -265,14 +270,16 @@ private
 
   def then_the_filtered_list_shows_primary_org_content
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
-    listing = @audits_filter_list.filter_listings.first
+    listing = @audits_filter_list.listings.first
 
     expect(listing.title).to have_text("VAT")
   end
 
   def and_does_not_show_other_department_content
-    @audits_filter_list.filter_listings.each do |listing|
-      expect(listing.title).to have_no_text("Tree felling")
+    @audits_filter_list.listings.each do |listing|
+      expect(listing).to have_no_title(text: "Tree felling")
+      expect(listing).to have_no_title(text: "Forest management")
+      expect(listing).to have_no_title(text: "Travel insurance")
     end
   end
 
@@ -289,16 +296,17 @@ private
   def then_the_filtered_list_shows_content_for_org
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
 
-    expect(@audits_filter_list.filter_listings.size).to eq(2)
+    expect(@audits_filter_list).to have_listings(count: 2)
 
-    @audits_filter_list.filter_listings.each do |listing|
+    @audits_filter_list.listings.each do |listing|
       expect(listing.title.text).to eq("VAT").or eq("Travel insurance")
     end
   end
 
   def and_the_list_does_not_show_content_for_other_orgs
-    @audits_filter_list.filter_listings.each do |listing|
-      expect(listing.title).to have_no_content("Tree felling")
+    @audits_filter_list.listings.each do |listing|
+      expect(listing).to have_no_title(text: "Tree felling")
+      expect(listing).to have_no_title(text: "Forest management")
     end
   end
 
@@ -307,7 +315,7 @@ private
       within(form.organisations) do
         options = page.all("option")
 
-        expect(options.map(&:text)).to eq ["", "DFE", "HMRC"]
+        expect(options.map(&:text)).to eq ["", "DEFRA", "HMRC"]
       end
     end
   end
@@ -349,28 +357,30 @@ private
 
   def and_part_of_two_org_names_are_typed_in_the_organisations_filter_field
     @audit_content_page.filter_form do |form|
-      form.wait_until_organisations_visible
+      form.wait_until_organisations_visible(5)
       form.add_organisations.click
 
-      page.find_all("#organisations")[1].send_keys("DF", :down, :enter)
+      page.find_all("#organisations")[1].send_keys("DE", :down, :enter)
       page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
     end
   end
 
   def then_there_are_fields_filled_with_the_suggestions_chosen
-    expect(@audit_content_page).to have_field("Organisations", with: "DFE")
-    expect(@audit_content_page).to have_field("Organisations", with: "HMRC")
+    using_wait_time 10 do
+      expect(@audit_content_page).to have_field("Organisations", with: "DEFRA")
+      expect(@audit_content_page).to have_field("Organisations", with: "HMRC")
+    end
   end
 
   def then_the_options_are_still_set
     @audit_content_page.filter_form do |form|
       expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
-      expect(form).to have_selector("option[selected][value=\"#{@dfe.content_id}\"]", visible: :hidden)
+      expect(form).to have_selector("option[selected][value=\"#{@defra.content_id}\"]", visible: :hidden)
     end
   end
 
   def and_the_url_contains_the_filter_options_in_query_params
-    expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@dfe.content_id}")
+    expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@defra.content_id}")
     expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
   end
 
@@ -392,24 +402,21 @@ private
   def then_the_filtered_list_shows_the_one_content_matching
     @audits_filter_list = ContentAuditTool.new.audits_filter_list
 
-    expect(@audits_filter_list).to have_filter_listings
-    expect(@audits_filter_list.filter_listings.size).to eq(1)
-    listing = @audits_filter_list.filter_listings.first
+    expect(@audits_filter_list).to have_listings(count: 1)
+
+    listing = @audits_filter_list.listings.first
+
     expect(listing.title).to have_text("some text")
   end
 
   def and_does_not_show_other_content_that_do_not_match
-    @audits_filter_list.filter_listings.each do |listing|
-      expect(listing.title).to have_no_text("another text")
+    @audits_filter_list.listings.each do |listing|
+      expect(listing).to have_no_title(text: "another text")
     end
   end
 
   def then_the_search_box_still_shows_the_search_query
     expect(@audit_content_page).to have_field(:query, with: 'some text')
-  end
-
-  def and_one_of_the_content_is_guidance
-    @hmrc.update!(document_type: "guide")
   end
 
   def and_filtering_by_guide_type_from_all_content_allocated_to_anyone
@@ -423,20 +430,16 @@ private
   end
 
   def then_the_filtered_list_shows_content_for_that_type
-    @audits_filter_list = ContentAuditTool.new.audits_filter_list
-    @audits_filter_list.wait_for_filter_listings
+    using_wait_time 5 do
+      @audits_filter_list = ContentAuditTool.new.audits_filter_list
+    end
 
-    expect(@audits_filter_list.filter_listings.size).to eq(1)
-
-    listing = @audits_filter_list.filter_listings.first
-    expect(listing.title.text).to eq("HMRC")
+    expect(@audits_filter_list.wait_for_listings(count: 1))
+    expect(@audits_filter_list.list).to have_text("Tree felling")
   end
 
   def and_does_not_show_content_of_other_types
-    @audits_filter_list = ContentAuditTool.new.audits_filter_list
-    @audits_filter_list.filter_listings.each do |listing|
-      expect(listing.title.text).not_to eq("Flying to countries abroad")
-    end
+    expect(@audits_filter_list.list).to have_no_text("Forest management")
   end
 
   def given_101_content_items
