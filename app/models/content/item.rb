@@ -8,14 +8,13 @@ class Content::Item < ApplicationRecord
 
   after_save { Audits::ReportRow.precompute(self) }
 
-  Content::Link.all_link_types.each do |link_type|
-    has_many(
-      :"linked_#{link_type}",
-      -> { where(links: { link_type: link_type }) },
-      through: :links,
-      source: :target,
-    )
-  end
+  has_many :linked_policy_areas, -> { where(links: { link_type: Content::Link::POLICY_AREAS }) }, through: :links, source: :target
+  has_many :linked_policies, -> { where(links: { link_type: Content::Link::POLICIES }) }, through: :links, source: :target
+  has_many :linked_primary_publishing_organisation, -> { where(links: { link_type: Content::Link::PRIMARY_ORG }) }, through: :links, source: :target
+  has_many :linked_organisations, -> { where(links: { link_type: Content::Link::ALL_ORGS }) }, through: :links, source: :target
+  has_many :linked_mainstream_browse_pages, -> { where(links: { link_type: Content::Link::MAINSTREAM }) }, through: :links, source: :target
+  has_many :linked_topics, -> { where(links: { link_type: Content::Link::TOPICS }) }, through: :links, source: :target
+  has_many :linked_taxons, -> { where(links: { link_type: Content::Link::TAXONOMIES }) }, through: :links, source: :target
 
   attr_accessor :details
 
