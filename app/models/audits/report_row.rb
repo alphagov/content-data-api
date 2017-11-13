@@ -53,7 +53,7 @@ module Audits
     end
 
     def primary_organisation
-      primary = content_item.linked_primary_publishing_organisation.first
+      primary = content_item.linked_primary_org.first
       primary.title if primary
     end
 

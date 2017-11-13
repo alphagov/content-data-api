@@ -13,7 +13,7 @@ class Content::Item < ApplicationRecord
   with_options through: :links, source: :target do |assoc|
     assoc.has_many :linked_policy_areas, -> { linked_by Content::Link::POLICY_AREAS }
     assoc.has_many :linked_policies, -> { linked_by Content::Link::POLICIES }
-    assoc.has_many :linked_primary_publishing_organisation, -> { linked_by Content::Link::PRIMARY_ORG }
+    assoc.has_many :linked_primary_org, -> { linked_by Content::Link::PRIMARY_ORG }
     assoc.has_many :linked_organisations, -> { linked_by Content::Link::ALL_ORGS }
     assoc.has_many :linked_mainstream_browse_pages, -> { linked_by Content::Link::MAINSTREAM }
     assoc.has_many :linked_topics, -> { linked_by Content::Link::TOPICS }
