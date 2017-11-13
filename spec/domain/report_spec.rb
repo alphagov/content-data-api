@@ -1,45 +1,50 @@
 module Audits
   RSpec.describe Report do
     before do
-      create(:content_item, title: "Example")
+      create(:content_item, title: 'Example')
     end
 
-    after do
-      ActiveRecord.enable
+    let(:filter) { build(:filter) }
+    let(:url) { 'http://example.com' }
+
+    it 'outputs a header row' do
+      csv = Report.generate(filter, url)
+
+      expect(csv.lines.first).to start_with('Report URL,Report timestamp')
     end
 
-    subject! { described_class.new(build(:filter), "http://example.com") }
-
-    let(:csv) { subject.generate }
-    let(:lines) { csv.split("\n") }
-    let(:data) { lines.map { |l| l.split(",") } }
-
-    it "outputs a header row" do
-      expect(data.first).to start_with("Report URL", "Report timestamp")
-    end
-
-    it "outputs a report metadata row" do
+    it 'outputs a report metadata row' do
       Timecop.freeze(2017, 1, 30) do
-        expect(data.second).to eq %w(http://example.com 30/01/17)
+        csv = Report.generate(filter, url)
+
+        expect(csv.lines.second).to eq "http://example.com,30/01/17\n"
       end
     end
 
-    it "outputs a row for each content item" do
-      expect(data.third).to start_with("", "", "Example")
+    it 'outputs a row for each content item' do
+      csv = Report.generate(filter, url)
+
+      expect(csv.lines.third).to start_with(',,Example')
     end
 
     it "doesn't execute N+1 queries" do
       ActiveRecord.disable
 
-      expect { subject.generate }.not_to raise_error,
-        "Should not have tried to execute a query after initializing Report"
+      expect { Report.generate(filter, url) }.not_to raise_error,
+        'Should not have tried to execute a query after initializing Report'
     end
 
-    it "returns all items regardless of the audit status" do
+    it 'returns all items regardless of the audit status' do
       create(:passing_audit)
       create(:failing_audit)
 
-      expect(data.length).to eq(5)
+      expect(Report.generate(filter, url).lines.length).to eq(5)
+    end
+
+    it 'returns all items filtered by '
+
+    after do
+      ActiveRecord.enable
     end
   end
 end
