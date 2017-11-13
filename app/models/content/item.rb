@@ -8,13 +8,15 @@ class Content::Item < ApplicationRecord
 
   after_save { Audits::ReportRow.precompute(self) }
 
-  has_many :linked_policy_areas, -> { where(links: { link_type: Content::Link::POLICY_AREAS }) }, through: :links, source: :target
-  has_many :linked_policies, -> { where(links: { link_type: Content::Link::POLICIES }) }, through: :links, source: :target
-  has_many :linked_primary_publishing_organisation, -> { where(links: { link_type: Content::Link::PRIMARY_ORG }) }, through: :links, source: :target
-  has_many :linked_organisations, -> { where(links: { link_type: Content::Link::ALL_ORGS }) }, through: :links, source: :target
-  has_many :linked_mainstream_browse_pages, -> { where(links: { link_type: Content::Link::MAINSTREAM }) }, through: :links, source: :target
-  has_many :linked_topics, -> { where(links: { link_type: Content::Link::TOPICS }) }, through: :links, source: :target
-  has_many :linked_taxons, -> { where(links: { link_type: Content::Link::TAXONOMIES }) }, through: :links, source: :target
+  with_options through: :links, source: :target do |assoc|
+    assoc.has_many :linked_policy_areas, -> { where(links: { link_type: Content::Link::POLICY_AREAS }) }
+    assoc.has_many :linked_policies, -> { where(links: { link_type: Content::Link::POLICIES }) }
+    assoc.has_many :linked_primary_publishing_organisation, -> { where(links: { link_type: Content::Link::PRIMARY_ORG }) }
+    assoc.has_many :linked_organisations, -> { where(links: { link_type: Content::Link::ALL_ORGS }) }
+    assoc.has_many :linked_mainstream_browse_pages, -> { where(links: { link_type: Content::Link::MAINSTREAM }) }
+    assoc.has_many :linked_topics, -> { where(links: { link_type: Content::Link::TOPICS }) }
+    assoc.has_many :linked_taxons, -> { where(links: { link_type: Content::Link::TAXONOMIES }) }
+  end
 
   attr_accessor :details
 
