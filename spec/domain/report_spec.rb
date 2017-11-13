@@ -34,5 +34,12 @@ module Audits
       expect { subject.generate }.not_to raise_error,
         "Should not have tried to execute a query after initializing Report"
     end
+
+    it "returns all items regardless of the audit status" do
+      create(:passing_audit)
+      create(:failing_audit)
+
+      expect(data.length).to eq(5)
+    end
   end
 end
