@@ -15,7 +15,6 @@ class Content::Item < ApplicationRecord
     assoc.has_many :linked_policies, -> { linked_by Content::Link::POLICIES }
     assoc.has_many :linked_primary_org, -> { linked_by Content::Link::PRIMARY_ORG }
     assoc.has_many :linked_organisations, -> { linked_by Content::Link::ALL_ORGS }
-    assoc.has_many :linked_mainstream_browse_pages, -> { linked_by Content::Link::MAINSTREAM }
     assoc.has_many :linked_topics, -> { linked_by Content::Link::TOPICS }
     assoc.has_many :linked_taxons, -> { linked_by Content::Link::TAXONOMIES }
   end

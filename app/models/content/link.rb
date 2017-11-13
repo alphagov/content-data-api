@@ -3,7 +3,6 @@ class Content::Link < ApplicationRecord
   POLICIES = "policies".freeze
   PRIMARY_ORG = "primary_publishing_organisation".freeze
   ALL_ORGS = "organisations".freeze
-  MAINSTREAM = "mainstream_browse_pages".freeze
   TOPICS = "topics".freeze
   TAXONOMIES = "taxons".freeze
 
