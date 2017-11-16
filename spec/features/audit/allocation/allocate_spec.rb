@@ -126,7 +126,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     let!(:books) do
       create_list(
         :content_item,
-        20,
+        60,
         primary_publishing_organisation: novelists,
       )
     end
@@ -134,28 +134,28 @@ RSpec.feature "Allocate multiple content items", type: :feature do
     let!(:paintings) do
       create_list(
         :content_item,
-        20,
+        60,
         primary_publishing_organisation: painters,
       )
     end
 
-    scenario "I can assign 26 content items to myself from both organisations" do
+    scenario "I can assign 101 content items to myself from both organisations" do
       visit audits_allocations_path
 
-      expect(page).to have_content("20 items")
+      expect(page).to have_content("60 items")
 
       page.select "Painters", from: "organisations[]"
       click_on "Apply filters"
 
       expect(page).to have_select("organisations[]", selected: %w[Novelists Painters])
-      expect(page).to have_content("40 items")
+      expect(page).to have_content("120 items")
 
       select "Me", from: "allocate_to"
-      fill_in "batch_size", with: "26"
+      fill_in "batch_size", with: "101"
       click_on "Assign"
 
-      expect(page).to have_content("26 items assigned to Jane Austen")
-      expect(page).to have_content("14 items")
+      expect(page).to have_content("101 items assigned to Jane Austen")
+      expect(page).to have_content("19 items")
     end
   end
 end

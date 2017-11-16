@@ -16,6 +16,10 @@ module Content
       set(:per_page, per_page)
     end
 
+    def current_per_page
+      @per_page
+    end
+
     def sort(sort)
       set(:sort, sort)
     end
