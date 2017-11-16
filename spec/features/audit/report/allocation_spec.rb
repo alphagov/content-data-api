@@ -24,7 +24,7 @@ RSpec.feature "Content Allocation", type: :feature do
   end
 
   def then_i_can_see_the_content_item_i_have_been_allocated
-    expect(@audit_report_page).to have_report_section(text: '1')
+    expect(@audit_report_page).to have_content_item_count(1)
   end
 
   def when_i_select_no_one_in_the_allocated_to_filter

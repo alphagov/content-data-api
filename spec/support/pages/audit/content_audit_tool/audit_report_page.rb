@@ -11,4 +11,5 @@ class AuditReportPage < SitePrism::Page
   element :improvement_progress_bar, '[data-test-id=improvement-progress-bar]'
   element :export_to_csv, '[data-test-id=report-export]'
   element :organisations, '[data-test-id=organisations]'
+  element :content_item_count, '[data-test-id=content-item-count]'
 end
