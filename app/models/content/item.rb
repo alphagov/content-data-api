@@ -8,13 +8,15 @@ class Content::Item < ApplicationRecord
 
   after_save { Audits::ReportRow.precompute(self) }
 
-  Content::Link.all_link_types.each do |link_type|
-    has_many(
-      :"linked_#{link_type}",
-      -> { where(links: { link_type: link_type }) },
-      through: :links,
-      source: :target,
-    )
+  scope :linked_by, ->(link_type) { where(links: { link_type: link_type }) }
+
+  with_options through: :links, source: :target do |assoc|
+    assoc.has_many :linked_policy_areas, -> { linked_by Content::Link::POLICY_AREAS }
+    assoc.has_many :linked_policies, -> { linked_by Content::Link::POLICIES }
+    assoc.has_many :linked_primary_org, -> { linked_by Content::Link::PRIMARY_ORG }
+    assoc.has_many :linked_organisations, -> { linked_by Content::Link::ALL_ORGS }
+    assoc.has_many :linked_topics, -> { linked_by Content::Link::TOPICS }
+    assoc.has_many :linked_taxons, -> { linked_by Content::Link::TAXONOMIES }
   end
 
   attr_accessor :details

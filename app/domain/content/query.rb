@@ -110,10 +110,9 @@ module Content
 
   private
 
-    def apply_link_filter(link_type:, source_ids: nil, target_ids: nil)
+    def apply_link_filter(link_type:, target_ids: nil)
       filter = LinkFilter.new(
         link_type: link_type,
-        source_ids: source_ids,
         target_ids: target_ids,
       )
 
