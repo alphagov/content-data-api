@@ -17,7 +17,7 @@
     <div id="progress">
       <h3>Audit progress</h3>
 
-      <%= render "progress_bar", percentage: @monitor.audited_percentage, data_test_id: 'audit_progress_bar' %>
+      <%= render "progress_bar", percentage: @monitor.audited_percentage, data_test_id: 'audit-progress-bar' %>
 
       <table class="table">
         <tr>
@@ -36,7 +36,7 @@
     <div id="items-needing-improvement">
       <h3>Items needing improvement</h3>
 
-      <%= render "progress_bar", percentage: @monitor.passing_percentage, data_test_id: 'improvement_progress_bar' %>
+      <%= render "progress_bar", percentage: @monitor.passing_percentage, data_test_id: 'improvement-progress-bar' %>
 
       <table class="table">
         <tr>
