@@ -9,8 +9,6 @@ module Audits
     attr_accessor :content_items, :report_url
 
     def initialize(filter, report_url)
-      filter.audit_status = Audit::ALL
-
       self.content_items = FindContent.all(filter)
       self.report_url = report_url
     end

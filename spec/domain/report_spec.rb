@@ -41,7 +41,18 @@ module Audits
       expect(Report.generate(filter, url).lines.length).to eq(5)
     end
 
-    it 'returns all items filtered by '
+    it 'returns items filtered by audit status' do
+      create(:passing_audit)
+
+      filter.audit_status = Audit::AUDITED
+      expect(Report.generate(filter, url).lines.length).to eq(3)
+
+      filter.audit_status = Audit::NON_AUDITED
+      expect(Report.generate(filter, url).lines.length).to eq(3)
+
+      filter.audit_status = Audit::ALL
+      expect(Report.generate(filter, url).lines.length).to eq(4)
+    end
 
     after do
       ActiveRecord.enable
