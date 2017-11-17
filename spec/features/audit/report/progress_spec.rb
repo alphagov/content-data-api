@@ -1,12 +1,13 @@
 RSpec.feature "Reporting on audit progress" do
   scenario "Displaying the number of items included in the audit" do
     given_i_am_an_auditor_belonging_to_an_organisation_with_three_content_items
+    and_they_are_all_transaction_type_documents
     and_one_content_item_needs_improvement_and_one_does_not
     when_i_visit_the_report_page
     then_i_see_the_report_includes_all_three_content_items
-    when_i_select_a_document_type_that_does_not_apply_to_any_content_item
+    when_filter_by_guide_document_type
     then_i_see_the_report_includes_no_content_items
-    when_i_select_a_document_type_that_applies_to_all_three_content_items
+    when_i_filter_by_transaction_document_type
     then_i_see_the_report_includes_all_three_content_items
   end
 
@@ -33,11 +34,11 @@ RSpec.feature "Reporting on audit progress" do
   end
 
   def then_i_see_the_report_includes_all_three_content_items
-    expect(@audit_report_page).to have_report_section(text: '3 Content items')
+    expect(@audit_report_page.content_item_count.text).to eq('3')
   end
 
   def then_i_see_the_report_includes_no_content_items
-    expect(@audit_report_page).to have_report_section(text: '0 Content items')
+    expect(@audit_report_page.content_item_count.text).to eq('0')
   end
 
   def then_i_do_not_see_audit_status_filter
@@ -50,10 +51,13 @@ RSpec.feature "Reporting on audit progress" do
     @content_items = create_list(
       :content_item,
       3,
-      document_type: "transaction",
       allocated_to: user,
       primary_publishing_organisation: organisation,
     )
+  end
+
+  def and_they_are_all_transaction_type_documents
+    @content_items.each { |item| item.update_attributes(document_type: 'transaction') }
   end
 
   def and_one_content_item_needs_improvement_and_one_does_not
@@ -71,13 +75,12 @@ RSpec.feature "Reporting on audit progress" do
     @audit_report_page.load(content_id: Content::Item.last.content_id)
   end
 
-  def when_i_select_a_document_type_that_does_not_apply_to_any_content_item
-    @audit_report_page.allocated_to.select 'Anyone'
+  def when_filter_by_guide_document_type
     @audit_report_page.content_type.select 'Guide'
     @audit_report_page.apply_filters.click
   end
 
-  def when_i_select_a_document_type_that_applies_to_all_three_content_items
+  def when_i_filter_by_transaction_document_type
     @audit_report_page.content_type.select 'Transaction'
     @audit_report_page.apply_filters.click
   end
