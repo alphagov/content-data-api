@@ -13,6 +13,15 @@ module Audits
       expect(csv.lines.first).to start_with('Report URL,Report timestamp')
     end
 
+    it 'outputs whether the item has been audited or not' do
+      csv = Report.generate(filter, url)
+      header = csv.lines.first
+      first_row = csv.lines.third
+
+      expect(header).to match(/Audited/)
+      expect(first_row).to match(/Not audited/)
+    end
+
     it 'outputs a report metadata row' do
       Timecop.freeze(2017, 1, 30) do
         csv = Report.generate(filter, url)
