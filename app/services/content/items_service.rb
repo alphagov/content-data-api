@@ -27,7 +27,7 @@ class Content::ItemsService
       publishing_app
       locale
     ]
-    all_attributes = client.fetch(content_id, locale)
+    all_attributes = client.fetch(content_id, locale: locale)
 
     Content::Item.new(all_attributes.slice(*attribute_names))
   end
