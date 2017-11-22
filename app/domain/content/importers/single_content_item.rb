@@ -13,6 +13,7 @@ module Content
 
     def run(content_id, locale)
       content_item = content_items_service.fetch(content_id, locale)
+      return unless content_item.present?
       links = content_items_service.links(content_id)
 
       set_metrics(content_item)

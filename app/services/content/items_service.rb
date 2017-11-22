@@ -27,7 +27,8 @@ class Content::ItemsService
       publishing_app
       locale
     ]
-    all_attributes = client.fetch(content_id, locale)
+    all_attributes = client.fetch_latest_published(content_id, locale)
+    return nil unless all_attributes.present?
 
     Content::Item.new(all_attributes.slice(*attribute_names))
   end
