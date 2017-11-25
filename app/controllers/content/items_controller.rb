@@ -12,6 +12,13 @@ class Content::ItemsController < ApplicationController
     render json: @content_items, status: :ok
   end
 
+  def update_review
+    @content_item = Content::Item.find_by(content_id: params[:content_id])
+    @content_item.review_by = params[:review_by]
+    @content_item.save!
+    render json: @content_item, status: :ok
+  end
+
   def show
     @content_item = Content::Item.find_by!(content_id: params[:content_id])
   end

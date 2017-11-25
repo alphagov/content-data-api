@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
   namespace :content do
     get :reviews, to: "items#review"
+    patch :reviews, to: "items#update_review"
   end
 
   namespace :audits do
