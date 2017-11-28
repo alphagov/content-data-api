@@ -13,6 +13,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :content do
+    get :reviews, to: "items#review"
+  end
+
   namespace :audits do
     get '/', to: "audits#index"
     resource :report, only: :show

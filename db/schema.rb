@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170912052927) do
+ActiveRecord::Schema.define(version: 20171122150829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,9 @@ ActiveRecord::Schema.define(version: 20170912052927) do
     t.text "similar_urls"
     t.text "notes"
     t.text "redirect_urls"
+    t.boolean "pass"
+    t.string "size"
+    t.date "review_by"
     t.index ["content_id"], name: "index_audits_on_content_id", unique: true
     t.index ["uid"], name: "index_audits_on_uid"
   end
@@ -58,6 +61,7 @@ ActiveRecord::Schema.define(version: 20170912052927) do
     t.integer "six_months_page_views", default: 0
     t.string "publishing_app"
     t.string "locale", null: false
+    t.date "review_by"
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
     t.index ["title"], name: "index_content_items_on_title"
   end
@@ -95,6 +99,15 @@ ActiveRecord::Schema.define(version: 20170912052927) do
     t.datetime "updated_at", null: false
     t.index ["audit_id"], name: "index_responses_on_audit_id"
     t.index ["question_id"], name: "index_responses_on_question_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.string "content_id", null: false
+    t.date "by", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["by"], name: "index_reviews_on_by"
+    t.index ["content_id"], name: "index_reviews_on_content_id", unique: true
   end
 
   create_table "taxonomy_projects", force: :cascade do |t|

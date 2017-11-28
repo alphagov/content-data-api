@@ -7,6 +7,11 @@ class Content::ItemsController < ApplicationController
     @content_items = search.content_items
   end
 
+  def review
+    @content_items = Content::Item.where(review_by: Date.today..1.week.from_now).order(:review_by).limit(10)
+    render json: @content_items, status: :ok
+  end
+
   def show
     @content_item = Content::Item.find_by!(content_id: params[:content_id])
   end
