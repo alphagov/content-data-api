@@ -1,66 +1,68 @@
 module Audits
   RSpec.describe Report do
-    before do
-      create(:content_item, title: 'Example')
-    end
-
     let(:filter) { build(:filter) }
     let(:url) { 'http://example.com' }
 
-    it 'outputs a header row' do
-      csv = Report.generate(filter, url)
-
-      expect(csv.lines.first).to start_with('Report URL,Report timestamp')
-    end
-
-    it 'outputs whether the item has been audited or not' do
-      csv = Report.generate(filter, url)
-      header = csv.lines.first
-      first_row = csv.lines.third
-
-      expect(header).to match(/Audited/)
-      expect(first_row).to match(/Not audited/)
-    end
-
-    it 'outputs a report metadata row' do
-      Timecop.freeze(2017, 1, 30) do
+    describe 'Layout' do
+      it 'outputs a header row' do
         csv = Report.generate(filter, url)
 
-        expect(csv.lines.second).to eq "http://example.com,30/01/17\n"
+        expect(csv.lines.first).to start_with('Report URL,Report timestamp')
+      end
+
+      it 'outputs a report metadata row' do
+        Timecop.freeze(2017, 1, 30) do
+          csv = Report.generate(filter, url)
+
+          expect(csv.lines.second).to eq "http://example.com,30/01/17\n"
+        end
       end
     end
 
-    it 'outputs a row for each content item' do
-      csv = Report.generate(filter, url)
+    describe 'Row content' do
+      before do
+        create(:content_item, title: 'Example')
+      end
 
-      expect(csv.lines.third).to start_with(',,Example')
+      let(:csv) { Report.generate(filter, url) }
+      let(:first_row) { csv.lines.third }
+
+      it 'outputs whether the item has been audited or not' do
+        header = csv.lines.first
+
+        expect(header).to match(/Audited/)
+        expect(first_row).to match(/Not audited/)
+      end
+
+      it 'outputs a row for each content item' do
+        expect(first_row).to start_with(',,Example')
+      end
+
+      it "doesn't execute N+1 queries" do
+        ActiveRecord.disable
+
+        expect { Report.generate(filter, url) }.not_to raise_error,
+          'Should not have tried to execute a query after initializing Report'
+      end
     end
 
-    it "doesn't execute N+1 queries" do
-      ActiveRecord.disable
 
-      expect { Report.generate(filter, url) }.not_to raise_error,
-        'Should not have tried to execute a query after initializing Report'
-    end
+    describe 'Filter content' do
+      it 'returns items filtered by audit status' do
+        create(:content_item)
+        create(:passing_audit)
 
-    it 'returns all items regardless of the audit status' do
-      create(:passing_audit)
-      create(:failing_audit)
+        header_rows = 2
 
-      expect(Report.generate(filter, url).lines.length).to eq(5)
-    end
+        filter.audit_status = Audit::AUDITED
+        expect(Report.generate(filter, url).lines.length).to eq(header_rows + 1)
 
-    it 'returns items filtered by audit status' do
-      create(:passing_audit)
+        filter.audit_status = Audit::NON_AUDITED
+        expect(Report.generate(filter, url).lines.length).to eq(header_rows + 1)
 
-      filter.audit_status = Audit::AUDITED
-      expect(Report.generate(filter, url).lines.length).to eq(3)
-
-      filter.audit_status = Audit::NON_AUDITED
-      expect(Report.generate(filter, url).lines.length).to eq(3)
-
-      filter.audit_status = Audit::ALL
-      expect(Report.generate(filter, url).lines.length).to eq(4)
+        filter.audit_status = Audit::ALL
+        expect(Report.generate(filter, url).lines.length).to eq(header_rows + 2)
+      end
     end
 
     after do
