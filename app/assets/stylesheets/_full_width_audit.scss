@@ -1,0 +1,22 @@
+.full-width-audit {
+  overflow-y: hidden;
+
+  .audit-pane,
+  .preview-pane {
+    overflow-y: auto;
+    height: calc(100vh - 57px);
+    margin-top: -20px;
+  }
+
+  .audit-pane {
+    padding-bottom: 20px;
+  }
+
+  .phase-banner {
+    margin-top: 0;
+  }
+
+  .page-footer {
+    display: none;
+  }
+}
