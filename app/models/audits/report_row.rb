@@ -30,10 +30,15 @@ module Audits
         "Content type" => content_type,
         "Last major update" => last_major_update,
         "Whitehall URL" => whitehall_url,
+        "Audited" => audited,
       }
 
       save!
       self
+    end
+
+    def audited
+      content_item.audit.present? ? 'Audited' : 'Not audited'
     end
 
     def title
