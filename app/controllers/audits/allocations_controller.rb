@@ -6,6 +6,7 @@ module Audits
     decorates_assigned :content_items
 
     def index
+      @my_content_items_count = FindContent.my_content(current_user.uid).count
       @content_items = FindContent.paged(params_to_filter)
     end
 
