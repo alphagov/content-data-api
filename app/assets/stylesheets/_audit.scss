@@ -60,12 +60,13 @@ $all-items-link-colour: #000000;
 }
 
 .audit-metadata {
-  h4 {
-    margin-top: 2em;
+  p {
+    font-size: 14px;
+    margin: 0;
   }
 
-  p {
-    margin: 0;
+  .row {
+    padding-bottom: 12px;
   }
 }
 
