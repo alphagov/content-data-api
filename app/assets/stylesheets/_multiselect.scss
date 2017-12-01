@@ -1,11 +1,11 @@
-[data-module="organisation-autocomplete"] {
+[data-module="multiselect-autocomplete"] {
   $black: #000;
 
-  .organisation-select[multiple] {
+  .multiselect {
     height: 300px;
   }
 
-  .organisation-select-wrapper {
+  .multiselect-wrapper {
     position: relative;
     margin-bottom: 6px;
 
@@ -13,7 +13,7 @@
       width: 85%;
     }
 
-    .remove-organisation {
+    .remove-multiselect {
       @extend %legend-reset;
 
       position: absolute;
@@ -24,7 +24,7 @@
     }
   }
 
-  .add-organisation {
+  .add-multiselect {
     padding: 0;
   }
 }

@@ -1,14 +1,14 @@
-describe('Organisation autocomplete', function () {
+describe('Multiselect autocomplete', function () {
   var $fixture;
 
-  describe('with no organisation selected', function () {
-    fixture.preload("organisation_autocomplete/none_selected.html.erb");
+  describe('with no organsation selected', function () {
+    fixture.preload("multiselect_autocomplete/none_selected.html.erb");
 
     beforeEach(function () {
-      fixture.load("organisation_autocomplete/none_selected.html.erb");
+      fixture.load("multiselect_autocomplete/none_selected.html.erb");
       $fixture = $(fixture.el)
-        .find('[data-module="organisation-autocomplete"]');
-      new GOVUKAdmin.Modules.OrganisationAutocomplete().start($fixture);
+        .find('[data-module="multiselect-autocomplete"]');
+      new GOVUKAdmin.Modules.MultiselectAutocomplete().start($fixture);
     });
 
     it('has nothing selected', function () {
@@ -70,13 +70,13 @@ describe('Organisation autocomplete', function () {
   });
 
   describe('with one organisation selected', function () {
-    fixture.preload("organisation_autocomplete/one_selected.html.erb");
+    fixture.preload("multiselect_autocomplete/one_selected.html.erb");
 
     beforeEach(function () {
-      fixture.load("organisation_autocomplete/one_selected.html.erb");
+      fixture.load("multiselect_autocomplete/one_selected.html.erb");
       $fixture = $(fixture.el)
-        .find('[data-module="organisation-autocomplete"]');
-      new GOVUKAdmin.Modules.OrganisationAutocomplete().start($fixture);
+        .find('[data-module="multiselect-autocomplete"]');
+      new GOVUKAdmin.Modules.MultiselectAutocomplete().start($fixture);
     });
 
     it('has an element selected', function () {
@@ -114,13 +114,13 @@ describe('Organisation autocomplete', function () {
   });
 
   describe('with two organisations selected', function () {
-    fixture.preload("organisation_autocomplete/two_selected.html.erb");
+    fixture.preload("multiselect_autocomplete/two_selected.html.erb");
 
     beforeEach(function () {
-      fixture.load("organisation_autocomplete/two_selected.html.erb");
+      fixture.load("multiselect_autocomplete/two_selected.html.erb");
       $fixture = $(fixture.el)
-        .find('[data-module="organisation-autocomplete"]');
-      new GOVUKAdmin.Modules.OrganisationAutocomplete().start($fixture);
+        .find('[data-module="multiselect-autocomplete"]');
+      new GOVUKAdmin.Modules.MultiselectAutocomplete().start($fixture);
     });
 
     it('has two elements selected', function () {
@@ -171,7 +171,7 @@ describe('Organisation autocomplete', function () {
   function assertNthFilterHasValue(filterIndex, value, label) {
     var $wrapper =
       $fixture
-        .find('.js-organisation-select-wrapper')
+        .find('.js-multiselect-wrapper')
         .eq(filterIndex);
 
     var $select = $wrapper.find('select').first();
@@ -182,12 +182,12 @@ describe('Organisation autocomplete', function () {
   }
 
   function numberOfOrganisations() {
-    return $fixture.find('.js-organisation-select-wrapper').length;
+    return $fixture.find('.js-multiselect-wrapper').length;
   }
 
   function addOrganisation() {
     var numberOfOrganisations = autoCompleteTextInput().length;
-    var $addOrganisation = $fixture.find('.js-add-organisation');
+    var $addOrganisation = $fixture.find('.js-add-multiselect');
     $addOrganisation.click();
     return wait(function () {
       return autoCompleteTextInput().length === numberOfOrganisations + 1;
@@ -195,7 +195,7 @@ describe('Organisation autocomplete', function () {
   }
 
   function removeOrganisation(index) {
-    var $removeOrganisation = $fixture.find('.js-remove-organisation').eq(index);
+    var $removeOrganisation = $fixture.find('.js-remove-multiselect').eq(index);
     $removeOrganisation.click();
   }
 
