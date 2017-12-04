@@ -20,6 +20,7 @@
 //= require organisation-autocomplete
 //= require batch-selection
 //= require expandable-filters
+//= require content-preview
 
 // --- Analytics ---
 //= require analytics/google-tag-manager
