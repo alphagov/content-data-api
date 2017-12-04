@@ -3,17 +3,24 @@
 
   .audit-pane,
   .preview-pane {
-    overflow-y: auto;
     height: calc(100vh - 57px);
     margin-top: -20px;
   }
 
-  .audit-pane {
-    padding-bottom: 20px;
+  &.lte-ie7,
+  &.ie8 {
+    .audit-pane,
+    .preview-pane {
+      height: 500px;
+    }
   }
 
-  .phase-banner {
-    margin-top: 0;
+  .audit-pane {
+    overflow-y: auto;
+
+    .phase-banner {
+      margin-top: 0;
+    }
   }
 
   .page-footer {

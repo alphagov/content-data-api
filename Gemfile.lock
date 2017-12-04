@@ -155,7 +155,7 @@ GEM
     govuk-lint (3.2.0)
       rubocop (~> 0.49.0)
       scss_lint
-    govuk_admin_template (6.3.0)
+    govuk_admin_template (6.4.0)
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.3.1)
       rails (>= 3.2.0)
@@ -498,7 +498,7 @@ DEPENDENCIES
   google-api-client (~> 0.9)
   govspeak
   govuk-lint (~> 3.2)
-  govuk_admin_template (~> 6.3)
+  govuk_admin_template (~> 6.4)
   govuk_app_config
   govuk_sidekiq
   guard-rspec

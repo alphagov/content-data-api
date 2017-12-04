@@ -1,0 +1,15 @@
+<p class="preview-url">
+  <%= link_to("https://www.gov.uk#{content_item.base_path}",
+    "https://www.gov.uk#{content_item.base_path}",
+    target: "_blank",
+    rel: "noopener noreferrer",
+  ) %>
+</p>
+
+<%= tag(:iframe,
+  id: "content-preview",
+  title: "Content as shown on GOV.UK",
+  src: content_item.proxy_url,
+  scrolling: "yes",
+  frameborder: "no",
+) %>
