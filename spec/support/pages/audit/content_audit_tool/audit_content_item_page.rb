@@ -5,6 +5,7 @@ class AuditContentItemPage < SitePrism::Page
 
   element :error_message, '[data-test-id=audit-error-message]'
   element :success_message, '[data-test-id=audit-success-message]'
+  element :all_items_link, '[data-test-id=all-items-link]'
 
   element :assigned_to, '[data-test-id=allocated]'
   element :audited, '[data-test-id=audited]'

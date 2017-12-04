@@ -4,7 +4,7 @@ module MenuHelper
 
     content_tag :li, role: "presentation", class: status do
       link_to_unless_current text, url, aria_controls: "home", role: "tab", data: { test_id: scope } do
-        link_to text, "#", aria_controls: "home", role: "tab"
+        link_to text, "#", aria_controls: "home", role: "tab", data: { test_id: scope }
       end
     end
   end

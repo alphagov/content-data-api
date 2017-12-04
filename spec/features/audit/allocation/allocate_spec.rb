@@ -68,6 +68,29 @@ RSpec.feature "Allocate multiple content items", type: :feature do
       expect(page).to_not have_content("Sense and Sensibility")
     end
 
+    scenario "Allocate content within current page and apply filters" do
+      visit audits_allocations_path
+      expect(page).to have_content("My content (0)")
+
+      check option: "emma"
+      check option: "sense-and-sensibility"
+
+      select "Me", from: "allocate_to"
+      click_on "Assign"
+
+      expect(page).to have_content("My content (2)")
+
+      select "Me", from: "allocated_to"
+      click_on "Apply filters"
+
+      expect(page).to have_content("My content (2)")
+
+      select "No one", from: "allocated_to"
+      click_on "Apply filters"
+
+      expect(page).to have_content("My content (2)")
+    end
+
     scenario "Allocate using the batch input" do
       visit audits_allocations_path
 
