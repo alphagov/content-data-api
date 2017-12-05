@@ -10,35 +10,54 @@ RSpec.describe Proxies::IframeAllowingProxy do
       before :each do
         @headers['content-type'] = ['text/html; charset=utf-8']
       end
-      it 'prepends base url to all absolute URLs - href' do
-        body = ['<tag>href="/absolute/path"</tag>']
-        expect(@proxy.rewrite_response([@status, @headers, body])[-1]).to eq(['<tag>href="/iframe-proxy/absolute/path"</tag>'])
-      end
-      it 'prepends base url to all absolute URLs - different quotes' do
-        body = ['<tag>href=\'/absolute/path\'</tag>']
-        expect(@proxy.rewrite_response([@status, @headers, body])[-1]).to eq(['<tag>href="/iframe-proxy/absolute/path"</tag>'])
-      end
-      it 'replaces gov.uk to an absolute path and prepends base url' do
-        body = ['<tag>href="https://gov.uk/absolute/path"</tag>']
-        expect(@proxy.rewrite_response([@status, @headers, body])[-1]).to eq(['<tag>href="/iframe-proxy/absolute/path"</tag>'])
-      end
-      it 'replaces www.gov.uk to an absolute path and prepends base url' do
-        body = ['<tag>href="https://www.gov.uk/absolute/path"</tag>']
-        expect(@proxy.rewrite_response([@status, @headers, body])[-1]).to eq(['<tag>href="/iframe-proxy/absolute/path"</tag>'])
-      end
-      it 'does not rewrite urls from other domains' do
-        body = ['<link href="https://assets.publishing.service.gov.uk/static/>']
-        expect(@proxy.rewrite_response([@status, @headers, body])[-1]).to eq(body)
-      end
-    end
 
-    context 'the page contains a pdf' do
-      before :each do
-        @headers['content-type'] = ['application/x-pdf']
+      context 'body contains an <a> tag with an absolute URL' do
+        before :each do
+          @response_body = proxied_body('<a href="/absolute/path"></a>')
+        end
+
+        it 'prepends the URL with GOV.UK' do
+          expect(@response_body).to include('href="https://www.gov.uk/absolute/path"')
+        end
+
+        it 'opens the URL in a new tab' do
+          expect(@response_body).to include('target="_blank"')
+          expect(@response_body).to include('rel="noopener noreferrer"')
+        end
       end
-      it 'does not rewrite urls' do
-        body = ['<tag>href="/absolute/path"</tag>']
-        expect(@proxy.rewrite_response([@status, @headers, body])[-1]).to eq(['<tag>href="/absolute/path"</tag>'])
+
+      context 'body contains an <a> tag with a full URL' do
+        before :each do
+          @response_body = proxied_body('<a href="https://assets.publishing.service.gov.uk/static/"></a>')
+        end
+
+        it 'does not rewrite the URL' do
+          expect(@response_body).to include('href="https://assets.publishing.service.gov.uk/static/"')
+        end
+
+        it 'opens the URL in a new tab' do
+          expect(@response_body).to include('target="_blank"')
+          expect(@response_body).to include('rel="noopener noreferrer"')
+        end
+      end
+
+      context 'body contains an <a> tag with an anchor' do
+        before :each do
+          @response_body = proxied_body('<a href="#content"></a>')
+        end
+
+        it 'does not rewrite the URL' do
+          expect(@response_body).to include('href="#content"')
+        end
+
+        it 'does not open the URL in a new tab' do
+          expect(@response_body).to_not include('target="_blank"')
+        end
+      end
+
+      def proxied_body(original_body)
+        response = @proxy.rewrite_response([@status, @headers, original_body])
+        response[-1][0]
       end
     end
   end
