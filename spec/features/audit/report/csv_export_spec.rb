@@ -1,12 +1,4 @@
 RSpec.feature "Exporting a CSV from the report page" do
-  def content_type
-    page.response_headers.fetch("Content-Type")
-  end
-
-  def content_disposition
-    page.response_headers.fetch("Content-Disposition")
-  end
-
   scenario "Exporting a csv file as an attachment" do
     given_i_am_an_auditor_belonging_to_an_organisation
     and_there_are_three_content_items
@@ -80,6 +72,9 @@ RSpec.feature "Exporting a CSV from the report page" do
   end
 
   def then_i_receive_the_report_in_csv_format
+    content_type = page.response_headers.fetch("Content-Type")
+    content_disposition = page.response_headers.fetch("Content-Disposition")
+
     expect(content_type).to eq("text/csv")
     expect(content_disposition).to start_with("attachment")
     expect(content_disposition).to include(
