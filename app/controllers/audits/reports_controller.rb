@@ -4,6 +4,7 @@ module Audits
 
     def show
       @monitor = ::Audits::Monitor.new(params_to_filter)
+      @my_content_items_count = FindContent.users_unaudited_content(current_user.uid).count
     end
 
   private

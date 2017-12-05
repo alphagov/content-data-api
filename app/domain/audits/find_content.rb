@@ -22,7 +22,7 @@ module Audits
       end
     end
 
-    def self.my_content(current_user_uid)
+    def self.users_unaudited_content(current_user_uid)
       filter = Filter.new(
         allocated_to: current_user_uid,
         audit_status: Audits::Audit::NON_AUDITED

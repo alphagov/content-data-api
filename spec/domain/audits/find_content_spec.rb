@@ -47,16 +47,16 @@ module Audits
     end
 
     describe '#my_content' do
-      subject(:relation) { described_class.my_content(user.uid) }
+      subject(:relation) { described_class.users_unaudited_content(user.uid) }
 
       before do
-        Audits::Allocation.create(uid: user.uid, content_id: Content::Item.first.content_id)
-        Audits::Allocation.create(uid: user.uid, content_id: Content::Item.second.content_id)
-        Audits::Allocation.create(uid: user.uid, content_id: Content::Item.third.content_id)
+        create(:allocation, user: user, content_item: Content::Item.first)
+        create(:allocation, user: user, content_item: Content::Item.second)
+        create(:allocation, user: user, content_item: Content::Item.third)
       end
 
       it 'returns my content' do
-        expect(relation).to match_array(content_items.sort_by(&:id)[0...3])
+        expect(relation).to match_array(content_items.first(3))
       end
     end
 
