@@ -10,6 +10,7 @@ module Audits
           params[:primary] = 'true' unless params.key?(:primary)
 
           @content_items = FindContent.paged(params_to_filter)
+          render layout: "audits"
         end
 
         format.csv do
@@ -24,6 +25,7 @@ module Audits
     def show
       @content_item = Content::Item.find_by!(content_id: params.fetch(:content_item_content_id))
       @audit = Audit.find_or_initialize_by(content_item: @content_item)
+      render layout: "audit"
     end
 
     def save
