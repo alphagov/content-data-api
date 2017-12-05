@@ -53,21 +53,21 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   scenario "using organisation filter option autocomplete", js: true do
     given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
-    and_part_of_an_org_name_is_typed_in_the_organisations_filter_field
-    then_the_field_is_filled_with_the_suggestion_chosen
+    and_part_of_an_organisation_name_is_typed
+    then_the_organisation_filter_is_filled_with_the_suggestion_chosen
     and_when_applying_the_filters
-    then_the_option_is_still_set
-    and_the_url_contains_the_filter_option_in_query_param
+    then_the_organisation_filter_is_still_set
+    and_the_url_contains_the_organisation_filter_option_in_query_params
   end
 
   scenario "multiple organisations", js: true do
     given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
-    and_part_of_two_org_names_are_typed_in_the_organisations_filter_field
-    then_there_are_fields_filled_with_the_suggestions_chosen
+    and_part_of_two_organisation_names_are_typed
+    then_there_are_organisation_fields_filled_with_the_suggestions_chosen
     and_when_applying_the_filters
-    then_the_options_are_still_set
-    and_the_url_contains_the_filter_options_in_query_params
+    then_the_organisation_filters_are_still_set
+    and_the_url_contains_the_organisation_filters_in_the_query_params
   end
 
   scenario "filtering by title" do
@@ -319,7 +319,7 @@ private
     end
   end
 
-  def and_part_of_an_org_name_is_typed_in_the_organisations_filter_field
+  def and_part_of_an_organisation_name_is_typed
     expect(@audit_content_page.url).not_to include("organisations%5B%5D=#{@hmrc.content_id}")
 
     @audit_content_page.filter_form do |form|
@@ -332,7 +332,7 @@ private
     end
   end
 
-  def then_the_field_is_filled_with_the_suggestion_chosen
+  def then_the_organisation_filter_is_filled_with_the_suggestion_chosen
     @audit_content_page.filter_form do |form|
       expect(form).to have_field("Organisations", with: "HMRC")
     end
@@ -344,17 +344,17 @@ private
     end
   end
 
-  def then_the_option_is_still_set
+  def then_the_organisation_filter_is_still_set
     @audit_content_page.filter_form do |form|
       expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
     end
   end
 
-  def and_the_url_contains_the_filter_option_in_query_param
+  def and_the_url_contains_the_organisation_filter_option_in_query_params
     expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
   end
 
-  def and_part_of_two_org_names_are_typed_in_the_organisations_filter_field
+  def and_part_of_two_organisation_names_are_typed
     @audit_content_page.filter_form do |form|
       form.wait_until_organisations_visible(5)
       form.add_organisations.click
@@ -364,21 +364,21 @@ private
     end
   end
 
-  def then_there_are_fields_filled_with_the_suggestions_chosen
+  def then_there_are_organisation_fields_filled_with_the_suggestions_chosen
     using_wait_time 10 do
       expect(@audit_content_page).to have_field("Organisations", with: "DEFRA")
       expect(@audit_content_page).to have_field("Organisations", with: "HMRC")
     end
   end
 
-  def then_the_options_are_still_set
+  def then_the_organisation_filters_are_still_set
     @audit_content_page.filter_form do |form|
       expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
       expect(form).to have_selector("option[selected][value=\"#{@defra.content_id}\"]", visible: :hidden)
     end
   end
 
-  def and_the_url_contains_the_filter_options_in_query_params
+  def and_the_url_contains_the_organisation_filters_in_the_query_params
     expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@defra.content_id}")
     expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
   end
