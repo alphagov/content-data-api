@@ -27,8 +27,7 @@ module Audits
         allocated_to: current_user_uid,
         audit_status: Audits::Audit::NON_AUDITED
       )
-      scope = query(filter).all_content_items
-      do_filter!(filter, scope)
+      self.all(filter)
     end
 
     def self.do_filter!(filter, scope)
