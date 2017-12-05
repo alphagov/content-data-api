@@ -70,26 +70,10 @@ RSpec.feature "`My content` tab", type: :feature do
   end
 
   def and_i_have_5_content_items_assigned_to_me
-    create(:content_item,
-           allocated_to: @user,
-           title: "content item",
-           primary_publishing_organisation: @organisation)
-    create(:content_item,
-           allocated_to: @user,
-           title: "content item2",
-           primary_publishing_organisation: @organisation)
-    create(:content_item,
-           allocated_to: @user,
-           title: "content item3",
-           primary_publishing_organisation: @organisation)
-    create(:content_item,
-           allocated_to: @user,
-           title: "content item4",
-           primary_publishing_organisation: @organisation)
-    create(:content_item,
-           allocated_to: @user,
-           title: "content item5",
-           primary_publishing_organisation: @organisation)
+    create_list(:content_item,
+                5,
+                allocated_to: @user,
+                primary_publishing_organisation: @organisation)
   end
 
   def then_i_can_see_that_i_have_5_content_items_to_audit
@@ -97,7 +81,7 @@ RSpec.feature "`My content` tab", type: :feature do
   end
 
   def when_i_audit_one_of_my_content_items
-    content_item = Content::Item.find_by(title: 'content item5')
+    content_item = Content::Item.last
     @audit_content_item = ContentAuditTool.new.audit_content_item
     @audit_content_item.load(
       content_id: content_item.content_id,
@@ -106,17 +90,7 @@ RSpec.feature "`My content` tab", type: :feature do
         audit_status: 'non_audited'
       }
     )
-    @audit_content_item.audit_form do |form|
-      form.title.choose 'No'
-      form.summary.choose 'No'
-      form.page_detail.choose 'No'
-      form.attachments.choose 'No'
-      form.content_type.choose 'No'
-      form.content_out_of_date.choose 'No'
-      form.content_should_be_removed.choose 'No'
-      form.content_similar.choose 'No'
-      form.save_and_continue.click
-    end
+    @audit_content_item.fill_in_audit_form
     @audit_content_item.all_items_link.click
   end
 

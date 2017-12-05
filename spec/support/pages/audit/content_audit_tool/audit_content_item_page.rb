@@ -41,4 +41,18 @@ class AuditContentItemPage < SitePrism::Page
     element :unique_page_views, '[data-test-id=pageviews]'
     element :withdrawn, '[data-test-id=withdrawn]'
   end
+
+  def fill_in_audit_form
+    audit_form do |form|
+      form.title.choose 'No'
+      form.summary.choose 'No'
+      form.page_detail.choose 'No'
+      form.attachments.choose 'No'
+      form.content_type.choose 'No'
+      form.content_out_of_date.choose 'No'
+      form.content_should_be_removed.choose 'No'
+      form.content_similar.choose 'No'
+      form.save_and_continue.click
+    end
+  end
 end

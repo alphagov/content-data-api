@@ -68,7 +68,7 @@ RSpec.feature "Allocate multiple content items", type: :feature do
       expect(page).to_not have_content("Sense and Sensibility")
     end
 
-    scenario "Allocate content within current page and apply filters" do
+    scenario "My content tab shows number of items allocated to me regardless of page filters" do
       visit audits_allocations_path
       expect(page).to have_content("My content (0)")
 
