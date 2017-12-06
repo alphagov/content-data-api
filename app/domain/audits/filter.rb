@@ -11,7 +11,8 @@ module Audits
     :sort,
     :sort_direction,
     :theme_id,
-    :title
+    :title,
+    :topics
   ) do
 
     def initialize(hash = {})
@@ -20,6 +21,7 @@ module Audits
       end
 
       self[:organisations] = [] if self[:organisations].blank?
+      self[:topics] = [] if self[:topics].blank?
     end
 
     def audit_status

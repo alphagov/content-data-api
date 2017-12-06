@@ -1,4 +1,5 @@
 class Content::Link < ApplicationRecord
+  PARENT = "parent".freeze
   POLICY_AREAS = "policy_areas".freeze
   POLICIES = "policies".freeze
   PRIMARY_ORG = "primary_publishing_organisation".freeze

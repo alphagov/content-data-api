@@ -3,6 +3,10 @@ class LinkFactory
     add_links(content_item, organisations, Content::Link::ALL_ORGS)
   end
 
+  def self.add_parent(content_item, parent)
+    add_links(content_item, parent, Content::Link::PARENT)
+  end
+
   def self.add_primary_publishing_organisation(content_item, organisation)
     add_organisations(content_item, organisation)
     add_link(content_item, organisation, Content::Link::PRIMARY_ORG)

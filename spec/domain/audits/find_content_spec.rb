@@ -75,6 +75,7 @@ module Audits
         expect(query).to have_received(:document_types).with(*Plan.document_type_ids)
         expect(query).to have_received(:document_types).with(filter.document_type)
         expect(query).to have_received(:organisations).with(filter.organisations, filter.primary_org_only)
+        expect(query).to have_received(:topics).with(filter.topics)
         expect(query).to have_received(:page).with(filter.page)
         expect(query).to have_received(:per_page).with(filter.per_page)
         expect(query).to have_received(:sort).with(filter.sort)

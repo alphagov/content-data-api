@@ -5,6 +5,7 @@ FactoryBot.define do
     transient do
       organisations nil
       primary_publishing_organisation nil
+      parent nil
       policies nil
       policy_areas nil
       topics nil
@@ -20,6 +21,7 @@ FactoryBot.define do
 
     after(:create) do |content_item, evaluator|
       LinkFactory.add_organisations(content_item, evaluator.organisations)
+      LinkFactory.add_parent(content_item, evaluator.parent)
       LinkFactory.add_primary_publishing_organisation(content_item, evaluator.primary_publishing_organisation)
       LinkFactory.add_policies(content_item, evaluator.policies)
       LinkFactory.add_policy_areas(content_item, evaluator.policy_areas)

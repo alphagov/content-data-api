@@ -12,11 +12,18 @@ module Audits
     it { is_expected.to respond_to(:sort_direction) }
     it { is_expected.to respond_to(:theme_id) }
     it { is_expected.to respond_to(:title) }
+    it { is_expected.to respond_to(:topics) }
 
     context 'initialized with blank organisations' do
       subject { described_class.new(organisations: '') }
 
       it { is_expected.to have_attributes(organisations: []) }
+    end
+
+    context 'initialized with blank topics' do
+      subject { described_class.new(topics: '') }
+
+      it { is_expected.to have_attributes(topics: []) }
     end
 
     describe '.allocated_policy' do

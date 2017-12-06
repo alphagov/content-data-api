@@ -71,6 +71,7 @@ module Audits
         :primary,
         :user_uid,
         organisations: [],
+        topics: [],
       )
     end
 

@@ -13,6 +13,7 @@ module Audits
         sort_direction: Sort.direction(params[:sort_by]),
         primary_org_only: params[:primary] == 'true',
         organisations: params.fetch(:organisations, []).flatten.reject(&:blank?),
+        topics: params.fetch(:topics, []).flatten.reject(&:blank?),
         title: params[:query],
       }
 
@@ -27,6 +28,7 @@ module Audits
         audit_status: params[:audit_status],
         document_type: params[:document_type],
         organisations: params.fetch(:organisations, []).flatten.reject(&:blank?),
+        topics: params.fetch(:topics, []).flatten.reject(&:blank?),
         primary: params[:primary],
         query: params[:title],
         sort_by: params[:sort_by],
