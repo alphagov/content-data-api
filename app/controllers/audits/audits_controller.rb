@@ -7,6 +7,7 @@ module Audits
         format.html do
           params[:allocated_to] ||= current_user.uid
           params[:audit_status] ||= Audits::Audit::NON_AUDITED
+          params[:organisations] ||= [current_user.organisation_content_id]
           params[:primary] = 'true' unless params.key?(:primary)
 
           @content_items = FindContent.paged(params_to_filter)

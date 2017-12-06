@@ -2,36 +2,36 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   scenario "List filters by my unaudited content by default" do
     given_unaudited_content
     when_viewing_content_to_audit
-    and_filtering_to_unaudited_content_allocated_to_me_by_default
+    and_filtering_to_unaudited_content_by_default
     then_the_filtered_list_shows_content_allocated_to_me
     and_unaudited_content_not_allocated_to_me_is_not_shown
   end
 
   scenario "filtering audited content" do
-    given_content_belonging_to_departments
+    given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
-    and_filtering_to_audited_content_allocated_to_anyone
+    and_filtering_to_audited_content
     then_the_filtered_list_shows_audited_content
     and_the_filtered_list_does_not_show_unaudited_content
   end
 
   scenario "filtering for content regardless of audit status" do
-    given_content_belonging_to_departments
+    given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
-    and_filtering_by_all_content_allocated_to_anyone
+    and_filtering_by_all_content
     then_the_filtered_list_shows_all_content
   end
 
   scenario "filtering by primary organisation" do
-    given_content_belonging_to_departments
+    given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
-    and_filtering_to_all_content_for_anyone_belonging_to_a_primary_org
+    and_filtering_to_all_content_belonging_to_a_primary_org
     then_the_filtered_list_shows_primary_org_content
     and_does_not_show_other_department_content
   end
 
   scenario "filtering by primary and non-primary organisation" do
-    given_content_belonging_to_departments
+    given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
     and_filtering_to_non_primary_orgs
     then_the_filtered_list_shows_content_for_org
@@ -45,13 +45,13 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   end
 
   scenario "organisation options are in alphabetical order" do
-    given_content_belonging_to_departments
+    given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
     the_organisation_filter_options_are_alphabetical
   end
 
   scenario "using organisation filter option autocomplete", js: true do
-    given_content_belonging_to_departments
+    given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
     and_part_of_an_org_name_is_typed_in_the_organisations_filter_field
     then_the_field_is_filled_with_the_suggestion_chosen
@@ -61,7 +61,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   end
 
   scenario "multiple organisations", js: true do
-    given_content_belonging_to_departments
+    given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
     and_part_of_two_org_names_are_typed_in_the_organisations_filter_field
     then_there_are_fields_filled_with_the_suggestions_chosen
@@ -73,7 +73,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   scenario "filtering by title" do
     given_content_with_known_titles
     when_viewing_content_to_audit
-    and_searching_by_title_within_all_content_assigned_to_anyone
+    and_searching_by_title_within_all_content
     then_the_filtered_list_shows_the_one_content_matching
     and_does_not_show_other_content_that_do_not_match
   end
@@ -81,14 +81,14 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   scenario "show the query entered by the user after filtering" do
     given_content_with_known_titles
     when_viewing_content_to_audit
-    and_searching_by_title_within_all_content_assigned_to_anyone
+    and_searching_by_title_within_all_content
     then_the_search_box_still_shows_the_search_query
   end
 
   scenario "filtering by content type" do
-    given_content_belonging_to_departments
+    given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
-    and_filtering_by_guide_type_from_all_content_allocated_to_anyone
+    and_filtering_by_guide_type_from_all_content
     then_the_filtered_list_shows_content_for_that_type
     and_does_not_show_content_of_other_types
   end
@@ -96,7 +96,7 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
   scenario "Reseting page to 1 after filtering" do
     given_101_content_items
     when_viewing_content_to_audit
-    and_filtering_by_all_content_allocated_to_anyone
+    and_filtering_by_all_content
     and_clicking_to_the_second_page_of_results
     and_changing_the_filters_to_not_audited
     then_the_filtered_list_goes_down_to_one_page
@@ -136,9 +136,8 @@ private
     @audit_content_page.load
   end
 
-  def and_filtering_to_unaudited_content_allocated_to_me_by_default
+  def and_filtering_to_unaudited_content_by_default
     @audit_content_page.filter_form do |form|
-      expect(form).to have_select("allocated_to", selected: "Me")
       expect(form.audit_status).to have_checked_field("Not audited")
     end
   end
@@ -170,7 +169,9 @@ private
     end
   end
 
-  def given_content_belonging_to_departments
+  def given_content_belonging_to_departments_and_allocated_to_me
+    me = create(:user)
+
     # Organisations:
     @hmrc = create(:organisation, title: "HMRC")
     @defra = create(:organisation, title: "DEFRA")
@@ -183,6 +184,7 @@ private
       title: "Travel insurance",
       organisations: @hmrc,
       policies: flying,
+      allocated_to: me,
     )
 
     # Content:
@@ -191,6 +193,7 @@ private
         :content_item,
         title: "Forest management",
         document_type: "answer",
+        allocated_to: me,
       )
 
     felling =
@@ -200,6 +203,7 @@ private
         primary_publishing_organisation: @defra,
         policies: management,
         document_type: "guide",
+        allocated_to: me,
       )
 
     create(
@@ -207,17 +211,16 @@ private
       title: "VAT",
       primary_publishing_organisation: @hmrc,
       organisations: @hmrc,
+      allocated_to: me,
     )
 
     # Audit:
     create(:audit, content_item: felling)
   end
 
-  def and_filtering_to_audited_content_allocated_to_anyone
+  def and_filtering_to_audited_content
     @audit_content_page.filter_form do |form|
-      form.allocated_to.select "Anyone"
       form.audit_status.choose "Audited"
-
       form.apply_filters.click
     end
 
@@ -238,11 +241,9 @@ private
     end
   end
 
-  def and_filtering_by_all_content_allocated_to_anyone
+  def and_filtering_by_all_content
     @audit_content_page.filter_form do |form|
-      form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
-
       form.apply_filters.click
     end
 
@@ -258,9 +259,8 @@ private
     expect(@audits_filter_list.list).to have_content("Travel insurance")
   end
 
-  def and_filtering_to_all_content_for_anyone_belonging_to_a_primary_org
+  def and_filtering_to_all_content_belonging_to_a_primary_org
     @audit_content_page.filter_form do |form|
-      form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
       form.primary_orgs.check "Primary organisation only"
       form.organisations.select "HMRC"
@@ -285,7 +285,6 @@ private
 
   def and_filtering_to_non_primary_orgs
     @audit_content_page.filter_form do |form|
-      form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
       form.primary_orgs.uncheck "Primary organisation only"
       form.organisations.select "HMRC"
@@ -385,14 +384,13 @@ private
   end
 
   def given_content_with_known_titles
-    create :user
-    create :content_item, title: "some text"
-    create :content_item, title: "another text"
+    me = create(:user)
+    create(:content_item, title: "some text", allocated_to: me)
+    create(:content_item, title: "another text", allocated_to: me)
   end
 
-  def and_searching_by_title_within_all_content_assigned_to_anyone
+  def and_searching_by_title_within_all_content
     @audit_content_page.filter_form do |form|
-      form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
       form.search.set "some text"
       form.apply_filters.click
@@ -419,9 +417,8 @@ private
     expect(@audit_content_page).to have_field(:query, with: 'some text')
   end
 
-  def and_filtering_by_guide_type_from_all_content_allocated_to_anyone
+  def and_filtering_by_guide_type_from_all_content
     @audit_content_page.filter_form do |form|
-      form.allocated_to.select "Anyone"
       form.audit_status.choose "All"
       form.document_type.select "Guide"
 
@@ -443,8 +440,8 @@ private
   end
 
   def given_101_content_items
-    create :user
-    create_list(:content_item, 101)
+    me = create(:user)
+    create_list(:content_item, 101, allocated_to: me)
   end
 
   def and_clicking_to_the_second_page_of_results
