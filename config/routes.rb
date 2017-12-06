@@ -13,8 +13,10 @@ Rails.application.routes.draw do
     end
   end
 
+
   namespace :audits do
-    get '/', to: "audits#index"
+    get '/', to: "allocations#index"
+    get '/my-content', to: "audits#index", as: 'my_content'
     resource :report, only: :show
     resource :guidance, only: :show
 

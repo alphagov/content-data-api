@@ -1,7 +1,7 @@
 require "site_prism/page"
 
 class AuditAssignmentPage < SitePrism::Page
-  set_url "/audits/allocations"
+  set_url "/audits"
 
   section :filter_form, "[data-test-id=allocations-sidebar]" do
     element :search, "[data-test-id=search]"
