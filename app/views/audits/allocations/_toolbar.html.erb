@@ -4,7 +4,8 @@
       <%= label_tag :allocate_to, "Assign", class: "allocate" %>
       <%= text_field_tag :batch_size,
           "",
-          class: "form-control",
+          class: "form-control js-batch-size",
+          value: 0,
           data: {
             tracking_id: "allocation-batch-size",
           } %>
