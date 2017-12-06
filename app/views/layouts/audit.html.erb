@@ -8,7 +8,8 @@
     <%= render 'application/beta_banner' %>
     <%= yield %>
   </div>
-  <div class="preview-pane col-md-6 hidden-xs hidden-sm">
+  <div class="preview-pane col-md-6 hidden-xs hidden-sm" data-module="content-preview">
+    <%= render "content_preview" %>
   </div>
 </div>
 <% end %>

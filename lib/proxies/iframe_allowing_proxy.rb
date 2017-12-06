@@ -22,14 +22,32 @@ module Proxies
 
       result = []
       if headers['content-type'].any? { |header| header.include?('text/html') }
-        body.each { |body_part|
-          result << body_part.gsub(%r{href=["'](https://(www\.)?gov\.uk)?/([^'"]*)["']}, %[href="#{Proxies::IframeAllowingProxy::PROXY_BASE_PATH}\\3"])
-        }
+        document = Nokogiri::HTML(body.to_s)
+
+        document.css("a").each do |link|
+          rewrite_relative_link!(link)
+          open_link_in_new_tab!(link)
+        end
+
+        result = [document.to_html]
       else
         result = body
       end
 
       [status, headers.tap { |h| h['x-frame-options'] = 'ALLOWALL' }, result]
+    end
+
+    def rewrite_relative_link!(link)
+      url = link['href']
+      matches = %r{^/(?<path>.*)}.match(url)
+      return unless matches
+      link['href'] = "https://www.gov.uk/#{matches[:path]}"
+    end
+
+    def open_link_in_new_tab!(link)
+      return if link['href'].start_with?('#')
+      link['target'] = "_blank"
+      link['rel'] = [link['rel'], "noopener noreferrer"].join
     end
   end
 end

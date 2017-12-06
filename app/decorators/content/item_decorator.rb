@@ -61,6 +61,10 @@ class Content::ItemDecorator < Draper::Decorator
     allocation.user.organisation&.title
   end
 
+  def proxy_url
+    File.join(Proxies::IframeAllowingProxy::PROXY_BASE_PATH, base_path)
+  end
+
 private
 
   def titles(content_items)
