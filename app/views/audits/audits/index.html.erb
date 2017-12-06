@@ -7,7 +7,9 @@
     <%= render 'audits/common/navigation' %>
 <% end %>
 
-<button type="button" class="btn btn-success">Start audit of first item</button>
+<% if !content_items.empty? %>
+	<button type="button" class="btn btn-success">Start audit of first item</button>
+<% end %>
 
 <%= render "no_content_to_audit" if content_items.empty? %>
 <%= render "content_items", locals: { content_items: content_items } if content_items.any? %>
