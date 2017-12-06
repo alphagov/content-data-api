@@ -3,7 +3,7 @@ require "site_prism/page"
 class AuditAssignmentPage < SitePrism::Page
   set_url "/audits/allocations"
 
-  section :filter_form, "form" do
+  section :filter_form, "[data-test-id=allocations-sidebar]" do
     element :search, "[data-test-id=search]"
     element :allocated_to, "[data-test-id=allocated-to]"
     element :audit_status, "[data-test-id=audit-status]"
@@ -25,4 +25,5 @@ class AuditAssignmentPage < SitePrism::Page
   element :my_content_tab, '[data-test-id=audits]'
   element :assign_content_tab, '[data-test-id=allocations]'
   element :checkbox, '.select-content-item'
+  elements :assigned_to_columns, "[data-test-id=item-assigned-to]"
 end
