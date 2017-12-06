@@ -7,6 +7,7 @@ FactoryBot.define do
       primary_publishing_organisation nil
       policies nil
       policy_areas nil
+      topics nil
       allocated_to nil
     end
 
@@ -22,6 +23,7 @@ FactoryBot.define do
       LinkFactory.add_primary_publishing_organisation(content_item, evaluator.primary_publishing_organisation)
       LinkFactory.add_policies(content_item, evaluator.policies)
       LinkFactory.add_policy_areas(content_item, evaluator.policy_areas)
+      LinkFactory.add_topics(content_item, evaluator.topics)
       create(:allocation, content_item: content_item, user: evaluator.allocated_to) unless evaluator.allocated_to.nil?
     end
 
@@ -31,6 +33,10 @@ FactoryBot.define do
 
     factory :policy do
       document_type "policy"
+    end
+
+    factory :topic do
+      document_type "topic"
     end
   end
 
