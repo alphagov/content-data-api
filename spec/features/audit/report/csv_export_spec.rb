@@ -95,9 +95,9 @@ RSpec.feature "Exporting a CSV from the report page" do
     @audit_report.export_to_csv.click
   end
 
-  def and_there_are_multiple_pages_of_unfiltered_content_items
-    content_items_per_page = 100
-    create_list(:content_item, content_items_per_page * 2)
+  def and_there_are_multiple_pages_of_content_items
+    content_items_per_page = 101
+    create_list(:content_item, content_items_per_page)
   end
 
   def when_i_export_all_the_reports
