@@ -9,7 +9,7 @@ RSpec.feature "Export to CSV" do
   scenario "Apply filters" do
     given_i_am_an_auditor_belonging_to_an_organisation
     and_there_are_three_content_items
-    and_a_filter_is_applied_to_show_only_hmrc_content_items
+    and_a_filter_is_applied_to_show_only_audited_hmrc_content_items
     when_i_export_the_reports
     then_i_receive_only_hmrc_related_content_items_in_the_report
   end
@@ -84,10 +84,11 @@ RSpec.feature "Export to CSV" do
     expect(@audit_report).to have_content("Assigned HMRC content,https://gov.uk/example1")
   end
 
-  def and_a_filter_is_applied_to_show_only_hmrc_content_items
+  def and_a_filter_is_applied_to_show_only_audited_hmrc_content_items
     @audit_report = ContentAuditTool.new.audit_report_page
     @audit_report.load
     @audit_report.organisations.select 'HMRC'
+    @audit_report.audit_status.choose 'Audited'
     @audit_report.apply_filters.click
   end
 
@@ -134,6 +135,7 @@ RSpec.feature "Export to CSV" do
            base_path: "/example2")
     create(:content_item,
            title: "Unassigned content 3",
-           base_path: "/example3")
+           base_path: "/example3",
+           primary_publishing_organisation: @hmrc)
   end
 end
