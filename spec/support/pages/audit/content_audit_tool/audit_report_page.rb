@@ -4,6 +4,7 @@ class AuditReportPage < SitePrism::Page
   set_url '/audits/report'
 
   element :report_section, '[data-test-id=report-section]'
+  element :audit_status, '[data-test-id=audit-status]'
   element :allocated_to, '[data-test-id=allocated-to]'
   element :apply_filters, '[data-test-id=apply-filters]'
   element :content_type, '[data-test-id=document-type]'
