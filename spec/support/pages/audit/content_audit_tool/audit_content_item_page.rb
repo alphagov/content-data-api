@@ -6,6 +6,9 @@ class AuditContentItemPage < SitePrism::Page
   element :error_message, '[data-test-id=audit-error-message]'
   element :success_message, '[data-test-id=audit-success-message]'
 
+  element :assigned_to, '[data-test-id=allocated]'
+  element :audited, '[data-test-id=audited]'
+
   element :content_item_description, '[data-test-id=content-item-description]'
   element :content_item_title, '[data-test-id=content-item-title]'
   element :questions_title, '[data-test-id=questions-title]'
@@ -28,8 +31,6 @@ class AuditContentItemPage < SitePrism::Page
   end
 
   section :metadata, '#metadata' do
-    element :assigned_to, '[data-test-id=allocated]'
-    element :audited, '[data-test-id=audited]'
     element :content_type, '[data-test-id=content-type]'
     element :guidance, '[data-test-id=guidance]'
     element :last_major_update, '[data-test-id=last-updated]'

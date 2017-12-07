@@ -71,6 +71,15 @@ $all-items-link-colour: #000000;
   }
 }
 
+.allocation-metadata {
+  text-align: right;
+  font-size: 15px;
+
+  p {
+    margin-bottom: 6px;
+  }
+}
+
 .alert-heading {
   font-size: 18px;
   margin-top: 0;

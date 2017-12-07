@@ -54,7 +54,7 @@ class Content::ItemDecorator < Draper::Decorator
   end
 
   def auditor
-    allocation.user.name
+    allocation&.user&.name
   end
 
   def auditor_org
