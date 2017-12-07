@@ -47,6 +47,7 @@ $all-items-link-colour: #000000;
 
 .audit-content-item {
   font-size: 19px;
+  padding-bottom: 20px;
 
   h4 {
     margin-top: 1em;
@@ -60,12 +61,13 @@ $all-items-link-colour: #000000;
 }
 
 .audit-metadata {
-  h4 {
-    margin-top: 2em;
+  p {
+    font-size: 14px;
+    margin: 0;
   }
 
-  p {
-    margin: 0;
+  .row {
+    padding-bottom: 12px;
   }
 }
 

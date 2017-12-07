@@ -6,7 +6,7 @@ ruby File.read('.ruby-version').chomp
 gem 'gds-api-adapters'
 gem 'gds-sso'
 gem 'govspeak'
-gem 'govuk_admin_template'
+gem 'govuk_admin_template', '~> 6.4'
 gem 'govuk_app_config'
 gem 'govuk_sidekiq'
 gem 'plek'

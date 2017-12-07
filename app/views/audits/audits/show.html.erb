@@ -1,4 +1,4 @@
-<div class="audit-content-item col-sm-7">
+<div class="audit-content-item">
   <% if flash.notice %>
     <div class="alert alert-success" role="alert" data-test-id="audit-success-message">
       <p>
@@ -25,6 +25,10 @@
   <p class="description" data-test-id="content-item-description">
     <%= content_item.description %>
   </p>
+
+  <hr/>
+
+  <%= render "metadata" %>
 
   <hr/>
 
@@ -92,72 +96,4 @@
 
     <%= form.submit "Save and continue", class: "btn btn-success", data: { test_id: 'save-audit-form'} %>
   <% end %>
-</div>
-
-<div class="col-sm-1"></div>
-
-<div class="col-sm-4">
-  <div id="metadata" class="audit-metadata">
-    <div id="allocated" data-test-id="allocated" >
-      <h4>Assigned to</h4>
-      <% if content_item.allocation %>
-        <p><%= content_item.auditor %></p>
-        <p><%= content_item.auditor_org %></p>
-     <% else %>
-        <p>No one</p>
-      <% end %>
-    </div>
-    <div id="audited" data-test-id="audited">
-      <h4>Audited</h4>
-
-      <% if audit.incomplete? %>
-        <p>Not audited yet</p>
-      <% else %>
-        <p><%= audit.last_updated %></p>
-        <p>by <%= audit.user.name %></p>
-        <p><%= audit.user.organisation&.title %></p>
-      <% end %>
-    </div>
-
-    <div id="organisations" data-test-id="organisations">
-      <h4>Organisations</h4>
-      <p><%= content_item.organisations %></p>
-    </div>
-
-    <div id="last-updated" data-test-id="last-updated">
-      <h4>Last major update</h4>
-      <p><%= content_item.last_updated %></p>
-    </div>
-
-    <div id="content-type" data-test-id="content-type">
-      <h4>Content type</h4>
-      <p><%= content_item.document_type %></p>
-    </div>
-
-    <div id="guidance" data-test-id="guidance">
-      <h4>Guidance</h4>
-      <p><%= content_item.guidance %></p>
-    </div>
-
-    <div id="topics" data-test-id="topics">
-      <h4>Topics</h4>
-      <p><%= content_item.topics %></p>
-    </div>
-
-    <div id="policy-areas" data-test-id="policy-areas">
-      <h4>Policy areas</h4>
-      <p><%= content_item.policy_areas %></p>
-    </div>
-
-    <div id="withdrawn" data-test-id="withdrawn">
-      <h4>Withdrawn</h4>
-      <p><%= content_item.withdrawn %></p>
-    </div>
-
-    <div id="pageviews" data-test-id="pageviews">
-      <h4>Unique pageviews</h4>
-      <p><%= content_item.one_month_page_views %> in the last month</p>
-      <p><%= content_item.six_months_page_views %> in the last six months</p>
-    </div>
-  </div>
 </div>
