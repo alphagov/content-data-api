@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170912052927) do
+ActiveRecord::Schema.define(version: 20171207164824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -71,6 +71,19 @@ ActiveRecord::Schema.define(version: 20170912052927) do
     t.index ["link_type"], name: "index_links_on_link_type"
     t.index ["source_content_id"], name: "index_links_on_source_content_id"
     t.index ["target_content_id"], name: "index_links_on_target_content_id"
+  end
+
+  create_table "metrics", force: :cascade do |t|
+    t.date "date", null: false
+    t.string "content_id", null: false
+    t.integer "title_length"
+    t.float "reading_grade"
+    t.integer "word_count"
+    t.datetime "last_updated_at"
+    t.string "phase"
+    t.string "publication_state"
+    t.integer "version_number"
+    t.index ["content_id", "date"], name: "metrics_unique_content_id_date", unique: true
   end
 
   create_table "questions", id: :serial, force: :cascade do |t|
@@ -142,8 +155,12 @@ ActiveRecord::Schema.define(version: 20170912052927) do
     t.boolean "disabled", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
+  add_foreign_key "allocations", "content_items", column: "content_id", primary_key: "content_id"
+  add_foreign_key "allocations", "users", column: "uid", primary_key: "uid"
+  add_foreign_key "metrics", "content_items", column: "content_id", primary_key: "content_id"
   add_foreign_key "taxonomy_todos", "content_items"
   add_foreign_key "taxonomy_todos", "taxonomy_projects"
 end
