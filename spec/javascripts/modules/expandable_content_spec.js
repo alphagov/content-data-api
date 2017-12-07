@@ -1,17 +1,17 @@
-describe("Expandable filters", function () {
+describe("Expandable content", function () {
   "use strict";
 
   var $fixture;
 
   describe("with default settings", function () {
     beforeEach(function () {
-      fixture.load("expandable_filters/default.html.erb");
-      $fixture = $(fixture.el).find('[data-module="expandable-filters"]');
-      new GOVUKAdmin.Modules.ExpandableFilters().start($fixture);
+      fixture.load("expandable_content/default.html.erb");
+      $fixture = $(fixture.el).find('[data-module="expandable-content"]');
+      new GOVUKAdmin.Modules.ExpandableContent().start($fixture);
     });
 
-    it("starts with the options collapsed", function () {
-      expect(filters()).not.toHaveClass("in");
+    it("starts with the content collapsed", function () {
+      expect(content()).not.toHaveClass("in");
     });
 
     it("shows the expansion button", function () {
@@ -25,13 +25,13 @@ describe("Expandable filters", function () {
 
   describe("starting expanded", function () {
     beforeEach(function () {
-      fixture.load("expandable_filters/start_expanded.html.erb");
-      $fixture = $(fixture.el).find('[data-module="expandable-filters"]');
-      new GOVUKAdmin.Modules.ExpandableFilters().start($fixture);
+      fixture.load("expandable_content/start_expanded.html.erb");
+      $fixture = $(fixture.el).find('[data-module="expandable-content"]');
+      new GOVUKAdmin.Modules.ExpandableContent().start($fixture);
     });
 
-    it("starts with the options expanded", function () {
-      expect(filters()).toHaveClass("in");
+    it("starts with the content expanded", function () {
+      expect(content()).toHaveClass("in");
     });
 
     it("shows the expansion button", function () {
@@ -51,7 +51,7 @@ describe("Expandable filters", function () {
     return $fixture.find("button").first();
   }
 
-  function filters() {
-    return $fixture.find("#additionalFilters").first();
+  function content() {
+    return $fixture.find("#additionalContent").first();
   }
 });

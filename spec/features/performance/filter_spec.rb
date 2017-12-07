@@ -70,23 +70,23 @@ RSpec.feature "Filter in content items", type: :feature do
     scenario "the user cannot see the additional filters by default", js: true do
       visit "/content/items"
 
-      expect(page).to have_selector('#additionalFilters', visible: false)
+      expect(page).to have_selector('#additionalContent', visible: false)
     end
 
     scenario "the user can see the additional filters if JavaScript is disabled", js: false do
       visit "/content/items"
 
-      expect(page).to have_selector('#additionalFilters', visible: true)
+      expect(page).to have_selector('#additionalContent', visible: true)
     end
 
     scenario "the user can toggle the visibility of the additional filters", js: true do
       visit "/content/items"
 
       click_on "More options"
-      expect(page).to have_selector('#additionalFilters', visible: true)
+      expect(page).to have_selector('#additionalContent', visible: true)
 
       click_on "Fewer options"
-      expect(page).to have_selector('#additionalFilters', visible: false)
+      expect(page).to have_selector('#additionalContent', visible: false)
     end
 
     scenario "the user can see the additional filters if they are currently filtering by one of them", js: true do
@@ -96,7 +96,7 @@ RSpec.feature "Filter in content items", type: :feature do
 
       visit "/content/items?taxons=#{content.content_id}"
 
-      expect(page).to have_selector('#additionalFilters', visible: true)
+      expect(page).to have_selector('#additionalContent', visible: true)
     end
   end
 end

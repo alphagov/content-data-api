@@ -19,7 +19,7 @@
 //= require accessible-autocomplete.min
 //= require organisation-autocomplete
 //= require batch-selection
-//= require expandable-filters
+//= require expandable-content
 //= require content-preview
 
 // --- Analytics ---

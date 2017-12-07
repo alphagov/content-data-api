@@ -1,0 +1,23 @@
+<%
+  start_expanded ||= false
+  open_label ||= "More details"
+  close_label ||= "Fewer details"
+%>
+
+<div data-module="expandable-content" data-start-expanded="<%= start_expanded -%>" class="if-js-hide">
+  <div id="additionalContent" class="js-additional-content collapse in">
+    <%= yield %>
+  </div>
+
+  <div class="form-group js-expand-button-wrapper hidden">
+    <button type="button"
+            class="btn btn-link <%= "collapsed" unless start_expanded -%>"
+            data-toggle="collapse"
+            data-target="#additionalContent"
+            aria-expanded="<%= start_expanded -%>"
+            aria-controls="additionalContent">
+      <span class="data-open-label"><%= open_label %></span>
+      <span class="data-close-label"><%= close_label %></span>
+    </button>
+  </div>
+</div>

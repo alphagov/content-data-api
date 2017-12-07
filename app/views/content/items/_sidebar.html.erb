@@ -22,7 +22,10 @@
       <%= label_tag :primary, "Primary organisation only" %>
     </div>
 
-    <%= render 'components/expandable_filters', start_expanded: advanced_filter_enabled? do %>
+    <%= render 'components/expandable_content',
+      start_expanded: advanced_filter_enabled?,
+      open_label: "More options",
+      close_label: "Fewer options" do %>
       <div class="form-group">
         <div class="form-group">
           <%= label_tag :taxons, "Taxons" %>
