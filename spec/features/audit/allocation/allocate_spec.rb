@@ -158,4 +158,10 @@ RSpec.feature "Allocate multiple content items", type: :feature do
       expect(page).to have_content("19 items")
     end
   end
+
+  scenario "I cannot assign items to 'anyone'" do
+    visit audits_allocations_path
+    allocation_select = page.first("[data-tracking-id='allocate-to']")
+    expect(allocation_select).to_not have_content("Anyone")
+  end
 end

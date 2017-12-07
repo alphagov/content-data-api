@@ -31,8 +31,15 @@ module DropdownHelper
     options_for_select(document_type_options, selected)
   end
 
-  def allocation_options_for_select(selected = nil)
+  def allocation_options_for_select(selected = nil, include_anyone: true)
     selected = current_user.uid if selected.nil?
+
+    additional_options = [
+      ['Me', current_user.uid],
+      ['No one', :no_one],
+    ]
+
+    additional_options << ['Anyone', :anyone] if include_anyone
 
     allocation_options = FindOrganisationUsers
                            .call(organisation_slug: current_user.organisation_slug)
@@ -40,11 +47,7 @@ module DropdownHelper
                            .map { |name, uid| [name.squish, uid] }
                            .reject { |_, uid| uid == current_user.uid }
                            .sort_by { |name, _| name }
-                           .unshift(
-                             ['Me', current_user.uid],
-                             ['No one', :no_one],
-                             ['Anyone', :anyone],
-                           )
+                           .unshift(*additional_options)
 
     options_for_select(allocation_options, selected)
   end
