@@ -22,6 +22,7 @@ RSpec.feature 'Auditing a content item', type: :feature do
     when_i_answer_all_of_the_questions
     then_a_success_message_is_shown
     and_my_answers_to_the_questions_are_remembered
+    and_i_can_still_see_the_content_preview
   end
 
   scenario 'clicking on yes and no buttons for redundant/similar content questions', js: true do
@@ -156,6 +157,10 @@ private
       expect(form).to have_similar_urls(text: 'https://example.com/similar')
       expect(form).to have_notes(text: 'something')
     end
+  end
+
+  def and_i_can_still_see_the_content_preview
+    expect(@audit_content_item).to have_content_preview
   end
 
   def then_i_am_prompted_to_specify_redirect_urls_if_the_content_should_be_removed

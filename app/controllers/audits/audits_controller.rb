@@ -47,10 +47,10 @@ module Audits
           redirect_to content_item_audit_path(next_content_item, filter_params)
         else
           flash.now.notice = "Audit saved — no items remaining."
-          render :show
+          render :show, layout: "audit"
         end
       else
-        render :show
+        render :show, layout: "audit"
       end
     end
 

@@ -10,6 +10,8 @@ class AuditContentItemPage < SitePrism::Page
   element :content_item_title, '[data-test-id=content-item-title]'
   element :questions_title, '[data-test-id=questions-title]'
 
+  element :content_preview, '[data-test-id=content-preview]'
+
   section :audit_form, 'form' do
     element :attachments, '[data-test-id=change-attachments]'
     element :content_out_of_date, '[data-test-id=outdated]'
