@@ -16,6 +16,24 @@ module Content::ItemsHelper
         test_id: "audited",
       },
       {
+        title: "Topics",
+        content: content_item.topics,
+        test_id: "topics",
+      },
+      {
+        title: "Unique pageviews",
+        content: [
+          "#{content_item.one_month_page_views} in the  last month",
+          "#{content_item.six_months_page_views} in the last six months",
+        ],
+        test_id: "pageviews",
+      },
+    ]
+  end
+
+  def hidden_content_metadata
+    [
+      {
         title: "Organisations",
         content: content_item.organisations,
         test_id: "organisations",
@@ -36,11 +54,6 @@ module Content::ItemsHelper
         test_id: "guidance",
       },
       {
-        title: "Topics",
-        content: content_item.topics,
-        test_id: "topics",
-      },
-      {
         title: "Policy areas",
         content: content_item.policy_areas,
         test_id: "policy-areas",
@@ -49,14 +62,6 @@ module Content::ItemsHelper
         title: "Withdrawn",
         content: content_item.withdrawn,
         test_id: "withdrawn",
-      },
-      {
-        title: "Unique pageviews",
-        content: [
-          "#{content_item.one_month_page_views} in the  last month",
-          "#{content_item.six_months_page_views} in the last six months",
-        ],
-        test_id: "pageviews",
       },
     ]
   end
