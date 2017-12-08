@@ -11,11 +11,12 @@
           } %>
       <%= label_tag :allocate_to, "items to", class: "items"  %>
       <%= select_tag "allocate_to",
-        allocation_options_for_select(params[:allocate_to]),
+        allocation_options_for_select(params[:allocate_to], include_anyone: false),
         class: "form-control",
         id: "allocate_to",
         data: {
-            tracking_id: "allocate-to",
+          tracking_id: "allocate-to",
+          test_id: "allocate-to",
         } %>
       <%= filter_to_hidden_fields %>
       <%= submit_tag "Assign", class: "btn btn-default" %>
