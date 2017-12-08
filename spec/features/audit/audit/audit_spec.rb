@@ -38,6 +38,27 @@ RSpec.feature 'Auditing a content item', type: :feature do
     then_the_urls_i_previously_specified_are_discarded
   end
 
+  scenario 'I must allocate content before auditing it' do
+    given_i_am_logged_in
+    and_there_is_unallocated_content_item
+    when_i_view_it
+    then_i_cannot_audit_it
+    and_i_can_see_the_allocation_form
+    when_i_allocate_it_to_myself
+    then_i_am_still_on_the_audit_page
+    and_i_can_see_a_success_banner_informing_me_it_has_been_allocated
+    and_i_can_audit_the_content_item
+    and_i_cannot_see_the_allocation_form
+  end
+
+  scenario 'I cannot audit content allocated to someone else' do
+    given_i_am_logged_in
+    and_there_is_a_content_item_allocated_to_someone_else
+    when_i_view_it
+    then_i_cannot_audit_it
+    and_i_can_see_the_allocation_form
+  end
+
 private
 
   def given_i_am_auditing_a_content_item
@@ -206,5 +227,64 @@ private
       expect(form).to have_redirect_urls(text: '')
       expect(form).to have_similar_urls(text: '')
     end
+  end
+
+  def given_i_am_logged_in
+    @me = create(
+      :user,
+      name: "Garth Nix",
+    )
+  end
+
+  def and_there_is_unallocated_content_item
+    @content_item = create(
+      :content_item,
+      allocated_to: nil,
+    )
+  end
+
+  def when_i_view_it
+    @audit_content_item = ContentAuditTool.new.audit_content_item
+    @audit_content_item.load(content_id: @content_item.content_id)
+  end
+
+  def then_i_cannot_audit_it
+    expect(@audit_content_item).to_not have_audit_form
+  end
+
+  def and_i_can_see_the_allocation_form
+    expect(@audit_content_item).to have_allocation_form
+  end
+
+  def when_i_allocate_it_to_myself
+    @audit_content_item.allocation_form do |form|
+      form.allocate_to.select "Me"
+      form.allocate.click
+    end
+  end
+
+  def then_i_am_still_on_the_audit_page
+    expect(page.current_path).to eq(content_item_audit_path(@content_item))
+  end
+
+  def and_i_can_see_a_success_banner_informing_me_it_has_been_allocated
+    expect(@audit_content_item).to have_success_message(text: "1 item assigned to Garth Nix")
+  end
+
+  def and_i_can_audit_the_content_item
+    expect(@audit_content_item).to have_audit_form
+  end
+
+  def and_i_cannot_see_the_allocation_form
+    expect(@audit_content_item).to_not have_allocation_form
+  end
+
+  def and_there_is_a_content_item_allocated_to_someone_else
+    other_user = create(:user)
+
+    @content_item = create(
+      :content_item,
+      allocated_to: other_user,
+    )
   end
 end
