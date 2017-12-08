@@ -1,13 +1,13 @@
 (function (Modules) {
   "use strict";
 
-  Modules.ExpandableFilters = function () {
+  Modules.ExpandableContent = function () {
     this.start = function ($element) {
       initialise();
 
       function initialise() {
         if (startCollapsed()) {
-          collapseFilters();
+          collapse();
         }
 
         showExpansionButton();
@@ -18,8 +18,8 @@
         return !$element.data('start-expanded');
       }
 
-      function collapseFilters() {
-        var $additional = $element.find('.js-additional-filters').first();
+      function collapse() {
+        var $additional = $element.find('.js-additional-content').first();
         $additional.removeClass('in');
       }
 

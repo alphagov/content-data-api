@@ -1,0 +1,34 @@
+<%
+  start_expanded ||= false
+  open_label ||= "More details"
+  close_label ||= "Fewer details"
+  button_at_top ||= false
+
+  toggle_button = content_tag(:div, class: "form-group js-expand-button-wrapper hidden") do
+    button_tag(
+      type: "button",
+      class: "btn btn-link #{"collapsed" unless start_expanded}",
+      data: {
+        toggle: "collapse",
+        target: "#additionalContent",
+      },
+      aria: {
+        expanded: start_expanded,
+        controls: "additionalContent",
+      }
+    ) do
+      content_tag(:span, open_label.html_safe, class: "data-open-label") +
+      content_tag(:span, close_label.html_safe, class: "data-close-label")
+    end
+  end
+%>
+
+<div data-module="expandable-content" data-start-expanded="<%= start_expanded -%>" class="if-js-hide">
+  <%= toggle_button if button_at_top %>
+
+  <div id="additionalContent" class="js-additional-content collapse in">
+    <%= yield %>
+  </div>
+
+  <%= toggle_button unless button_at_top %>
+</div>
