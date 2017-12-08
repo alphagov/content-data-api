@@ -16,7 +16,7 @@ module DropdownHelper
   end
 
   def topic_options_for_select(selected = nil)
-    topic_option_attributes = ->(topic) do
+    topic_option_attributes = lambda do |topic|
       [
         *topic.links.map { |link| link.target.title.squish },
         topic.title.squish,
