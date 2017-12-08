@@ -63,8 +63,8 @@ private
   end
 
   def then_the_name_of_the_assignee_is_shown
-    expect(@audit_content_item.metadata)
-      .to have_assigned_to(text: 'Garth Nix YA Authors')
+    expect(@audit_content_item)
+      .to have_assigned_to(text: 'Garth Nix')
   end
 
   def when_i_answer_some_of_the_questions

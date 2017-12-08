@@ -6,16 +6,6 @@ module Content::ItemsHelper
   def content_metadata
     [
       {
-        title: "Assigned to",
-        content: assigned_to_metadata,
-        test_id: "allocated",
-      },
-      {
-        title: "Audited",
-        content: audited_metadata,
-        test_id: "audited",
-      },
-      {
         title: "Topics",
         content: content_item.topics,
         test_id: "topics",
@@ -63,25 +53,6 @@ module Content::ItemsHelper
         content: content_item.withdrawn,
         test_id: "withdrawn",
       },
-    ]
-  end
-
-  def assigned_to_metadata
-    return "No one" unless content_item.allocation
-
-    [
-      content_item.auditor,
-      content_item.auditor_org,
-    ]
-  end
-
-  def audited_metadata
-    return "Not audited yet" if audit.incomplete?
-
-    [
-      audit.last_updated,
-      "by #{audit.user.name}",
-      audit.user.organisation&.title,
     ]
   end
 end

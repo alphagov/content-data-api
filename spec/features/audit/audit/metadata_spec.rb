@@ -102,23 +102,23 @@ RSpec.feature 'Audit metadata', type: :feature do
   end
 
   def then_i_am_shown_that_the_content_item_is_assigned_to_no_one
-    expect(@audit_content_item.metadata).to have_assigned_to(text: 'No one')
+    expect(@audit_content_item).to have_assigned_to(text: 'No one')
   end
 
   def then_i_am_shown_that_the_content_item_has_been_assigned
-    expect(@audit_content_item.metadata)
-      .to have_assigned_to(text: 'Edd The Duck CBBC')
+    expect(@audit_content_item)
+      .to have_assigned_to(text: 'Edd The Duck')
   end
 
   def and_i_am_shown_that_the_content_item_is_not_audited_yet
-    expect(@audit_content_item.metadata)
+    expect(@audit_content_item)
       .to have_audited(text: 'Not audited yet')
   end
 
   def and_i_am_shown_that_the_content_item_has_been_audited
-    expect(@audit_content_item.metadata)
-      .to have_audited(text: '01/01/17 (less than a minute ago) ' \
-                             'by Harper Lee Authors')
+    expect(@audit_content_item)
+      .to have_audited(text: 'by Harper Lee ' \
+                             'on 01/01/17 (less than a minute ago)')
   end
 
   def and_i_am_shown_the_content_type
