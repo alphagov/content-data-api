@@ -83,6 +83,15 @@ module Content
       end
     end
 
+    def topics(topics)
+      builder(verify_presence: topics) do
+        apply_link_filter(
+          link_type: Content::Link::TOPICS,
+          target_ids: topics,
+        )
+      end
+    end
+
     def after(content_item)
       builder(verify_presence: content_item) do
         @after = content_item

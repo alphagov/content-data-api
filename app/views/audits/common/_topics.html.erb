@@ -1,0 +1,15 @@
+<div class="form-group" data-module="multiselect-autocomplete" data-multiselect-type="topic">
+  <%= label_tag :topics %>
+  <div class="multiselect-wrapper js-multiselect-wrapper" data-test-id="topics">
+    <%= hidden_field_tag("topics[]", [""], id: nil) %>
+    <%= select_tag :topics,
+                   topic_options_for_select(params[:topics]),
+                   include_blank: true,
+                   multiple: true,
+                   class: "form-control multiselect js-multiselect",
+                   data: {
+                       tracking_id: "topics",
+                       test_id: "topics-select"
+                   } %>
+  </div>
+</div>

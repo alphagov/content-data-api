@@ -3,6 +3,10 @@ class LinkFactory
     add_links(content_item, organisations, Content::Link::ALL_ORGS)
   end
 
+  def self.add_parent(content_item, parent)
+    add_links(content_item, parent, Content::Link::PARENT)
+  end
+
   def self.add_primary_publishing_organisation(content_item, organisation)
     add_organisations(content_item, organisation)
     add_link(content_item, organisation, Content::Link::PRIMARY_ORG)
@@ -14,6 +18,10 @@ class LinkFactory
 
   def self.add_policy_areas(content_item, policy_areas)
     add_links(content_item, policy_areas, Content::Link::POLICY_AREAS)
+  end
+
+  def self.add_topics(content_item, topics)
+    add_links(content_item, topics, Content::Link::TOPICS)
   end
 
   def self.add_link(content_item, target, link_type)

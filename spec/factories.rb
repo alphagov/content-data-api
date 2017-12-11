@@ -5,8 +5,10 @@ FactoryBot.define do
     transient do
       organisations nil
       primary_publishing_organisation nil
+      parent nil
       policies nil
       policy_areas nil
+      topics nil
       allocated_to nil
     end
 
@@ -19,9 +21,11 @@ FactoryBot.define do
 
     after(:create) do |content_item, evaluator|
       LinkFactory.add_organisations(content_item, evaluator.organisations)
+      LinkFactory.add_parent(content_item, evaluator.parent)
       LinkFactory.add_primary_publishing_organisation(content_item, evaluator.primary_publishing_organisation)
       LinkFactory.add_policies(content_item, evaluator.policies)
       LinkFactory.add_policy_areas(content_item, evaluator.policy_areas)
+      LinkFactory.add_topics(content_item, evaluator.topics)
       create(:allocation, content_item: content_item, user: evaluator.allocated_to) unless evaluator.allocated_to.nil?
     end
 
@@ -31,6 +35,10 @@ FactoryBot.define do
 
     factory :policy do
       document_type "policy"
+    end
+
+    factory :topic do
+      document_type "topic"
     end
   end
 

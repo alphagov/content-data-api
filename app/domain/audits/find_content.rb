@@ -40,6 +40,7 @@ module Audits
         .page(filter.page)
         .per_page(filter.per_page)
         .organisations(filter.organisations, filter.primary_org_only)
+        .topics(filter.topics)
         .title(filter.title)
         .document_types(filter.document_type)
         .document_types(*Plan.document_type_ids)

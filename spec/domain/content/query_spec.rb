@@ -1,8 +1,10 @@
 RSpec.describe Content::Query do
-  describe "with some content tagged to organisations and policies" do
+  describe "with some content tagged to organisations, policies and topics" do
     let!(:organisation_1) { create(:organisation) }
     let!(:organisation_2) { create(:organisation) }
     let!(:policy_1) { create(:policy) }
+    let!(:topic_1) { create(:topic) }
+    let!(:topic_2) { create(:topic) }
 
     let!(:content_item_1) do
       create(
@@ -16,6 +18,7 @@ RSpec.describe Content::Query do
         :content_item,
         organisations: organisation_2,
         policies: policy_1,
+        topics: topic_1,
       )
     end
 
@@ -24,6 +27,7 @@ RSpec.describe Content::Query do
         :content_item,
         organisations: organisation_1,
         policies: policy_1,
+        topics: topic_2,
       )
     end
 
@@ -32,7 +36,7 @@ RSpec.describe Content::Query do
         .per_page(5)
         .page(2)
 
-      expect(subject.content_items).to have_attributes(total_pages: 2, count: 1)
+      expect(subject.content_items).to have_attributes(total_pages: 2, count: 3)
     end
 
     it "can filter by a single organisation" do
@@ -53,10 +57,23 @@ RSpec.describe Content::Query do
       expect(subject.content_items).to contain_exactly(content_item_3)
     end
 
-    it "can filter by multiple organisations and a policy" do
+    it "can filter by multiple organisations, a topic and a policy" do
       subject
         .organisations([organisation_1, organisation_2].map(&:content_id))
         .policies(policy_1.content_id)
+        .topics(topic_2.content_id)
+
+      expect(subject.content_items).to contain_exactly(content_item_3)
+    end
+
+    it "can filter by a single topic" do
+      subject.topics(topic_1.content_id)
+
+      expect(subject.content_items).to contain_exactly(content_item_2)
+    end
+
+    it "can filter by multiple topics" do
+      subject.topics([topic_1, topic_2].map(&:content_id))
 
       expect(subject.content_items).to contain_exactly(content_item_2, content_item_3)
     end
@@ -76,7 +93,7 @@ RSpec.describe Content::Query do
       subject.per_page(2)
 
       expect(subject.content_items.size).to eq(2)
-      expect(subject.all_content_items.size).to eq(6)
+      expect(subject.all_content_items.size).to eq(8)
     end
 
     it "can filter by title" do
