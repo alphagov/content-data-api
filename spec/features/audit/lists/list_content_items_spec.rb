@@ -32,6 +32,17 @@ RSpec.feature "List Content Items to Audit", type: :feature do
     expect(page).to have_text("2 items")
   end
 
+  scenario "start audit button goes to first audit item" do
+    create(:content_item, title: "item1", six_months_page_views: 10_000, content_id: "content-id", allocated_to: me)
+    create(:content_item, title: "item2", allocated_to: me)
+
+    visit audits_path
+    click_link("Start audit")
+
+    expect(page).to have_content("item1")
+    expect(page).to have_content("Do these things need to change?")
+  end
+
   scenario "List content items of auditable formats" do
     create(:content_item, document_type: "guide", allocated_to: me)
     create(:content_item, document_type: "other-format", allocated_to: me)

@@ -9,7 +9,7 @@
 
 <% if !content_items.empty? %>
 	<a class="btn btn-success" href=<%=content_item_audit_path(content_items.first, filter_params) %>
-		role="button">Start audit of first item</a>
+		role="button">Start audit</a>
 <% end %>
 
 <%= render "no_content_to_audit" if content_items.empty? %>
