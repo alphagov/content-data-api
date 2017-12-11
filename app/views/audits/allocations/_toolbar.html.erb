@@ -8,6 +8,7 @@
           value: 0,
           data: {
             tracking_id: "allocation-batch-size",
+            test_id: "allocation-batch-size",
           } %>
       <%= label_tag :allocate_to, "items to", class: "items"  %>
       <%= select_tag "allocate_to",
@@ -19,7 +20,7 @@
           test_id: "allocate-to",
         } %>
       <%= filter_to_hidden_fields %>
-      <%= submit_tag "Assign", class: "btn btn-default" %>
+      <%= submit_tag "Assign", class: "btn btn-default", data: { test_id: 'allocate-button'} %>
     </div>
   </div>
 </div>

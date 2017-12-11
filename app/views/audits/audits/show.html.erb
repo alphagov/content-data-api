@@ -16,7 +16,7 @@
 
   <div class="row">
     <nav class="all-items-nav col-sm-6">
-      <%= link_to "< All items", audits_path(filter_params.without(:page)), class: "all-items" %>
+      <%= link_to "< All items", audits_path(filter_params.without(:page)), class: "all-items", data: { test_id: 'all-items-link' }  %>
     </nav>
 
     <div class="allocation-metadata col-sm-6">

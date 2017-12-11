@@ -10,6 +10,7 @@ module Audits
           params[:organisations] ||= [current_user.organisation_content_id]
           params[:primary] = 'true' unless params.key?(:primary)
 
+          @my_content_items_count = FindContent.users_unaudited_content(current_user.uid).count
           @content_items = FindContent.paged(params_to_filter)
           render layout: "audits"
         end

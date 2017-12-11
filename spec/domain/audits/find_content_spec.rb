@@ -1,6 +1,7 @@
 module Audits
   RSpec.describe FindContent do
     let!(:content_items) { create_list(:content_item, 210) }
+    let!(:user) { create(:user) }
 
     describe '#all' do
       subject(:relation) { described_class.all(filter) }
@@ -42,6 +43,20 @@ module Audits
       it 'returns the next page of filtered content items' do
         expect(relation)
           .to match_array(content_items.sort_by(&:id)[20...30])
+      end
+    end
+
+    describe '#my_content' do
+      subject(:relation) { described_class.users_unaudited_content(user.uid) }
+
+      before do
+        create(:allocation, user: user, content_item: Content::Item.first)
+        create(:allocation, user: user, content_item: Content::Item.second)
+        create(:allocation, user: user, content_item: Content::Item.third)
+      end
+
+      it 'returns my content' do
+        expect(relation).to match_array(content_items.first(3))
       end
     end
 

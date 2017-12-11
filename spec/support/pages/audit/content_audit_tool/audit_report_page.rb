@@ -13,4 +13,5 @@ class AuditReportPage < SitePrism::Page
   element :export_to_csv, '[data-test-id=report-export]'
   element :organisations, '[data-test-id=organisations]'
   element :content_item_count, '[data-test-id=content-item-count]'
+  element :my_content_tab, '[data-test-id=audits]'
 end

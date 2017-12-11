@@ -16,4 +16,8 @@ class ContentAuditTool
   def audit_report_page
     AuditReportPage.new
   end
+
+  def audit_assignment_page
+    AuditAssignmentPage.new
+  end
 end
