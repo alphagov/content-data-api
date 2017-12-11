@@ -109,36 +109,6 @@ RSpec.feature "Navigation", type: :feature do
 
       expect(page).to have_content("Please answer all the questions.")
     end
-
-    scenario "continuing to the next unaudited item on save" do
-      visit audits_path
-      click_link "Squirrel Nutkin"
-      perform_audit
-
-      visit audits_path
-      select "Anyone", from: "allocated_to"
-
-      choose "Not audited"
-      click_on "Apply filters"
-
-      expect(page).to have_content("Peter Rabbit")
-      expect(page).to have_content("Jemima Puddle-Duck")
-      expect(page).to have_content("Benjamin Bunny")
-      expect(page).to_not have_content("Squirrel Nutkin")
-      expect(page).to have_content("Timmy Tiptoes")
-      expect(page).to have_content("Miss Moppet")
-
-      click_link "Peter Rabbit"
-      perform_audit
-
-      expected = content_item_audit_path(jemima_puddle_duck,
-                                         allocated_to: 'anyone',
-                                         audit_status: 'non_audited',
-                                         primary: true)
-      expect(current_url).to end_with(expected)
-
-      expect(page).to have_content("Audit saved — 4 items remaining.")
-    end
   end
 
   def answer_question(question, answer)

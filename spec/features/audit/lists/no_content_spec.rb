@@ -24,11 +24,6 @@ RSpec.feature "Notifying of no content to audit", type: :feature do
     end
 
     context "viewing content assigned to me" do
-      before(:each) do
-        select "Me", from: :allocated_to
-        click_on "Apply filters"
-      end
-
       scenario "not audited content should show a banner" do
         choose "Not audited"
         click_on "Apply filters"
@@ -48,56 +43,6 @@ RSpec.feature "Notifying of no content to audit", type: :feature do
         choose "All"
         click_on "Apply filters"
         expect(page).to have_content("You have no content to audit.")
-        expect(page).to have_css(".alert")
-      end
-    end
-
-    context "viewing content assigned to someone else" do
-      let!(:aslan) do
-        create(
-          :user,
-          name: "Aslan",
-          organisation: narnia,
-        )
-      end
-
-      before(:each) do
-        visit audits_path
-        select "Aslan", from: :allocated_to
-        click_on "Apply filters"
-      end
-
-      scenario "not audited content should show a banner" do
-        choose "Not audited"
-        click_on "Apply filters"
-        expect(page).to have_content("Aslan has no content to audit.")
-        expect(page).to have_css(".alert")
-        expect(page).to have_css(".alert a")
-      end
-    end
-
-    context "viewing content assigned to no one" do
-      before(:each) do
-        select "No one", from: :allocated_to
-        click_on "Apply filters"
-      end
-
-      scenario "not audited content should show a banner" do
-        choose "Not audited"
-        click_on "Apply filters"
-        expect(page).to have_css(".alert")
-      end
-    end
-
-    context "viewing content assigned to anyone" do
-      before(:each) do
-        select "Anyone", from: :allocated_to
-        click_on "Apply filters"
-      end
-
-      scenario "not audited content should show a banner" do
-        choose "Not audited"
-        click_on "Apply filters"
         expect(page).to have_css(".alert")
       end
     end
