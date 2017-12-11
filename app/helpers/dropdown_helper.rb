@@ -26,15 +26,10 @@ module DropdownHelper
 
     topic_options = Content::Item
                       .includes(links: %i(target))
-                      .where(
-                        document_type: 'topic',
-                        links: { link_type: Content::Link::PARENT },
-                      )
+                      .where(document_type: 'topic', links: { link_type: Content::Link::PARENT })
                       .map(&topic_option_attributes)
                       .sort_by { |parent_title, title, _| [parent_title, title] }
-                      .map { |parent_title, title, content_id|
-                        ["#{parent_title}: #{title}", content_id]
-                      }
+                      .map { |parent_title, title, content_id| ["#{parent_title}: #{title}", content_id] }
 
     options_for_select(topic_options, selected)
   end
