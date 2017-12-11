@@ -1,4 +1,4 @@
-<%= form_tag audits_allocations_path, method: :get do %>
+<%= form_tag audits_allocations_path, data: { test_id: 'allocations-sidebar' }, method: :get do %>
   <%= render 'audits/common/title' %>
   <%= render 'audits/common/allocated_to' %>
   <%= render 'audits/common/audit_status' %>
