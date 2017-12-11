@@ -6,7 +6,7 @@
     <%= render 'audits/common/navigation' %>
 <% end %>
 
-<%= link_to "Export filtered audit to CSV", audits_path(params: filter_params, format: :csv), class: "report-export", data: { test_id: "report-export" } %>
+<%= link_to "Export filtered audit to CSV", audits_my_content_path(params: filter_params, format: :csv), class: "report-export", data: { test_id: "report-export" } %>
 
 <div class="report-section"
      data-test-id="report-section">

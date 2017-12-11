@@ -1,7 +1,7 @@
 require "site_prism/page"
 
 class AuditContentPage < SitePrism::Page
-  set_url "/audits"
+  set_url "/audits/my-content"
 
   section :filter_form, "form" do
     element :search, "[data-test-id=search]"

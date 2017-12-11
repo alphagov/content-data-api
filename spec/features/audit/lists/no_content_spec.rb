@@ -20,7 +20,7 @@ RSpec.feature "Notifying of no content to audit", type: :feature do
 
   context "there is no content for my organisation to audit" do
     before(:each) do
-      visit audits_path
+      visit audits_my_content_path
     end
 
     context "viewing content assigned to me" do

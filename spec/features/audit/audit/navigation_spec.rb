@@ -67,7 +67,7 @@ RSpec.feature "Navigation", type: :feature do
     end
 
     scenario "navigating between audits and the index page" do
-      visit audits_path
+      visit audits_my_content_path
       click_link "Peter Rabbit"
 
       expected = content_item_audit_path(peter_rabbit, **filter_params)
@@ -80,7 +80,7 @@ RSpec.feature "Navigation", type: :feature do
     end
 
     scenario "returning to the first page of the index" do
-      visit audits_path
+      visit audits_my_content_path
       click_link "Peter Rabbit"
       click_link "< All items"
 
@@ -89,7 +89,7 @@ RSpec.feature "Navigation", type: :feature do
     end
 
     scenario "continuing to next item on save" do
-      visit audits_path
+      visit audits_my_content_path
       click_link "Peter Rabbit"
       perform_audit
 
@@ -100,7 +100,7 @@ RSpec.feature "Navigation", type: :feature do
     end
 
     scenario "not continuing to next item if fails to save" do
-      visit audits_path
+      visit audits_my_content_path
       click_link "Peter Rabbit"
       click_on "Save and continue"
 
@@ -108,6 +108,36 @@ RSpec.feature "Navigation", type: :feature do
       expect(current_url).to end_with(expected)
 
       expect(page).to have_content("Please answer all the questions.")
+    end
+
+    scenario "continuing to the next unaudited item on save" do
+      visit audits_my_content_path
+      click_link "Squirrel Nutkin"
+      perform_audit
+
+      visit audits_path
+      select "Anyone", from: "allocated_to"
+
+      choose "Not audited"
+      click_on "Apply filters"
+
+      expect(page).to have_content("Peter Rabbit")
+      expect(page).to have_content("Jemima Puddle-Duck")
+      expect(page).to have_content("Benjamin Bunny")
+      expect(page).to_not have_content("Squirrel Nutkin")
+      expect(page).to have_content("Timmy Tiptoes")
+      expect(page).to have_content("Miss Moppet")
+
+      click_link "Peter Rabbit"
+      perform_audit
+
+      expected = content_item_audit_path(jemima_puddle_duck,
+                                         allocated_to: 'anyone',
+                                         audit_status: 'non_audited',
+                                         primary: true)
+      expect(current_url).to end_with(expected)
+
+      expect(page).to have_content("Audit saved — 4 items remaining.")
     end
   end
 
