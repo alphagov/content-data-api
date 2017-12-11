@@ -12,6 +12,7 @@ RSpec.feature "Using guidance while auditing a content item", type: :feature do
       description: "All about flooding.",
       base_path: "/flooding",
       publishing_app: "whitehall",
+      allocated_to: me,
     )
   end
 

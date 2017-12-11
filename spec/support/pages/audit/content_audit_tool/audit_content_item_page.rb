@@ -16,7 +16,7 @@ class AuditContentItemPage < SitePrism::Page
 
   element :content_preview, '[data-test-id=content-preview]'
 
-  section :audit_form, 'form' do
+  section :audit_form, '[data-test-id=audit-form]' do
     element :attachments, '[data-test-id=change-attachments]'
     element :content_out_of_date, '[data-test-id=outdated]'
     element :content_should_be_removed, '[data-test-id=redundant]'
@@ -54,5 +54,10 @@ class AuditContentItemPage < SitePrism::Page
       form.content_similar.choose 'No'
       form.save_and_continue.click
     end
+  end
+
+  section :allocation_form, '[data-test-id=allocation-form]' do
+    element :allocate_to, '[data-test-id=allocate-to]'
+    element :allocate, '[data-test-id=allocate]'
   end
 end

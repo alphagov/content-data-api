@@ -76,7 +76,11 @@ module Audits
     end
 
     def redirect_url
-      audits_allocations_url(redirect_params)
+      if params[:redirect_to_content_item] && content_ids.count == 1
+        content_item_audit_path(content_ids.first)
+      else
+        audits_allocations_url(redirect_params)
+      end
     end
   end
 end
