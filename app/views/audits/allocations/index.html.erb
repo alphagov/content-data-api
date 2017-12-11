@@ -17,7 +17,7 @@
 <div class="allocations" data-module="batch-selection">
   <%= form_tag audits_allocations_path, data: { module: "track-allocation-batch-size" } do %>
       <%= render 'toolbar' %>
-      <%= render 'audits/common/counter', count: content_items.total_count  %>
+      <%= render 'audits/common/counter', count: content_items.total_count %>
 
       <table class="table table-bordered table-hover">
         <thead>
@@ -40,5 +40,6 @@
         </tbody>
       </table>
   <% end %>
+  <%= render 'audits/common/counter', count: content_items.total_count %>
   <%= paginate content_items, window: 2 %>
 </div>

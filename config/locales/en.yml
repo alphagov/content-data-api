@@ -35,3 +35,11 @@ en:
   term_generation_states:
     dont-know: "Don't know"
     not-relevant: "Not relevant to theme"
+  helpers:
+    page_entries_info:
+      one_page:
+        display_entries:
+          one: "1&nbsp;-&nbsp;%{count} of %{count} %{entry_name}"
+          other: "1&nbsp;-&nbsp;%{count} of %{count} %{entry_name}"
+      more_pages:
+        display_entries: "%{first}&nbsp;-&nbsp;%{last} of %{total} %{entry_name}"

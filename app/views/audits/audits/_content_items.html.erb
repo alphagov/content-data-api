@@ -11,5 +11,5 @@
   <%= render collection: content_items, partial: "content_item" %>
   </tbody>
 </table>
-
+<%= render 'audits/common/counter', count: content_items.total_count  %>
 <%= paginate content_items, :window => 2 %>
