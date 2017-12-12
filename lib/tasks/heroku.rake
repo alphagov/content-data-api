@@ -8,7 +8,7 @@ namespace :heroku do
     )
 
     ## Find the organisation
-    (organisation = Content::Item.find_by(title: options.organisation_name)) || raise("Error -> Organisation not found: #{options.organisation_name}")
+    organisation = Content::Item.find_by!(title: options.organisation_name, document_type: "organisation")
 
     ## Application name
     app_name = "cpm-prototype-#{options.identifier}"
