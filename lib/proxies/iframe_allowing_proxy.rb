@@ -34,7 +34,7 @@ module Proxies
         result = body
       end
 
-      [status, headers.tap { |h| h['x-frame-options'] = 'ALLOWALL' }, result]
+      [status, headers.tap { |h| h['x-frame-options'] = 'SAMEORIGIN' }, result]
     end
 
     def rewrite_relative_link!(link)
