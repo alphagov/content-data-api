@@ -26,8 +26,18 @@ module Clients
         .flatten
     end
 
-    def fetch(content_id, locale)
-      normalise(publishing_api.get_content(content_id, locale: locale))
+    def fetch(content_id, options = {})
+      normalise(publishing_api.get_content(content_id, options))
+    end
+
+    def fetch_latest_published(content_id, locale)
+      content_item = fetch(content_id, locale: locale)
+      return content_item if content_item[:publication_state] == "published"
+
+      preceding_version = content_item[:user_facing_version] - 1
+      return nil if preceding_version < 1
+
+      fetch(content_id, locale: locale, version: preceding_version)
     end
 
     def links(content_id)

@@ -47,7 +47,7 @@ RSpec.describe Content::ItemsService do
 
   describe "#fetch" do
     it "returns a new content item object" do
-      allow(subject.client).to receive(:fetch).with("id-123", "en").and_return(
+      allow(subject.client).to receive(:fetch_latest_published).with("id-123", "en").and_return(
         content_id: "id-123",
         title: "title",
         description: "description",

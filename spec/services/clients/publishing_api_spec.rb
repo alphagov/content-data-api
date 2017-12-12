@@ -43,8 +43,37 @@ RSpec.describe Clients::PublishingAPI do
     end
 
     it "fetches a content item by content id" do
-      result = subject.fetch("id-123", "en")
+      result = subject.fetch("id-123", locale: "en")
       expect(result).to eq(content_item)
+    end
+  end
+
+  describe "#fetch_latest_published" do
+    let(:published) do
+      {
+        content_id: "id-123",
+        title: "Published title",
+        user_facing_version: 1,
+        publication_state: "published",
+      }
+    end
+
+    let(:draft) do
+      published.merge(
+        title: "Draft title",
+        user_facing_version: 2,
+        publication_state: "draft",
+      )
+    end
+
+    before do
+      publishing_api_has_item(draft)
+      publishing_api_has_item(published, "version" => "1")
+    end
+
+    it "fetches the latest published edition" do
+      result = subject.fetch_latest_published("id-123", "en")
+      expect(result).to eq(published)
     end
   end
 
