@@ -21,7 +21,7 @@ RSpec.describe Content::ItemsService do
 
     before do
       allow(client).to receive(:fetch_all)
-        .with(%w[content_id locale])
+        .with(%w[content_id locale user_facing_version])
         .and_return(editions)
     end
 
@@ -47,7 +47,7 @@ RSpec.describe Content::ItemsService do
 
   describe "#fetch" do
     it "returns a new content item object" do
-      allow(subject.client).to receive(:fetch).with("id-123", "en").and_return(
+      allow(subject.client).to receive(:fetch).with("id-123", locale: "en", version: "9").and_return(
         content_id: "id-123",
         title: "title",
         description: "description",
@@ -57,7 +57,7 @@ RSpec.describe Content::ItemsService do
         locale: "en",
       )
 
-      content_item = subject.fetch("id-123", "en")
+      content_item = subject.fetch("id-123", "en", "9")
       expect(content_item).to be_a(Content::Item)
 
       expect(content_item.content_id).to eq("id-123")

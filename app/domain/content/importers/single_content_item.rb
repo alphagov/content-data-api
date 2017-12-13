@@ -11,8 +11,8 @@ module Content
       self.metric_builder = Performance::MetricBuilder.new
     end
 
-    def run(content_id, locale)
-      content_item = content_items_service.fetch(content_id, locale)
+    def run(content_id, locale, version)
+      content_item = content_items_service.fetch(content_id, locale, version)
       links = content_items_service.links(content_id)
 
       set_metrics(content_item)

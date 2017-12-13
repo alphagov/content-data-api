@@ -43,7 +43,7 @@ RSpec.describe Clients::PublishingAPI do
     end
 
     it "fetches a content item by content id" do
-      result = subject.fetch("id-123", "en")
+      result = subject.fetch("id-123", locale: "en")
       expect(result).to eq(content_item)
     end
   end
