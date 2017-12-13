@@ -7,7 +7,7 @@ RSpec.feature "Import a single content item", type: :feature do
     publishing_api_has_links(content_id: "id-123", links: { organisation: ["org-123"] })
     publishing_api_has_item(build(:content_item, content_id: "id-123", title: "title"))
 
-    expect { Content::ImportItemJob.new.perform("id-123", "en") }
+    expect { Content::ImportItemJob.new.perform("id-123", "en", "10") }
       .to change(Content::Item, :count).by(1)
       .and change(Content::Link, :count).by(1)
   end

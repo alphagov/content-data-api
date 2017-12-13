@@ -7,7 +7,7 @@ class Content::ItemsService
 
   def fetch_all_with_default_locale_only
     client
-      .fetch_all(%w[content_id locale])
+      .fetch_all(%w[content_id locale user_facing_version])
       .group_by { |content_item| content_item[:content_id] }
       .values
       .map do |content_items_with_the_same_id|
@@ -15,7 +15,7 @@ class Content::ItemsService
       end
   end
 
-  def fetch(content_id, locale)
+  def fetch(content_id, locale, version)
     attribute_names = %i[
       public_updated_at
       base_path
@@ -27,7 +27,7 @@ class Content::ItemsService
       publishing_app
       locale
     ]
-    all_attributes = client.fetch(content_id, locale)
+    all_attributes = client.fetch(content_id, locale: locale, version: version)
 
     Content::Item.new(all_attributes.slice(*attribute_names))
   end
