@@ -13,7 +13,7 @@ FactoryBot.define do
     end
 
     sequence(:content_id) { |index| "content-id-%04i" % index }
-    sequence(:title) { |index| "content-item-title-#{index}" }
+    sequence(:title) { |index| "content-item-title-%04i" % index }
     document_type { Audits::Plan.document_type_ids.sample }
     sequence(:base_path) { |index| "api/content/item/path-%04i" % index }
     public_updated_at { Time.now }
