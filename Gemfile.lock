@@ -111,7 +111,7 @@ GEM
     feature (1.4.0)
     ffi (1.9.18)
     formatador (0.2.5)
-    gds-api-adapters (50.1.0)
+    gds-api-adapters (50.6.0)
       link_header
       lrucache (~> 0.1.1)
       null_logger
