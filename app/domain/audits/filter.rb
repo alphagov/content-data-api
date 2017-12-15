@@ -32,6 +32,14 @@ module Audits
       self[:allocated_to]&.to_s
     end
 
+    def page
+      self[:page]&.to_i
+    end
+
+    def per_page
+      self[:per_page]&.to_i
+    end
+
     def sort_by
       Sort.combine(sort, sort_direction)
     end
