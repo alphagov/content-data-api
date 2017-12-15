@@ -60,11 +60,10 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_the_url_contains_the_organisation_filter_option_in_query_params
   end
 
-  scenario "multiple organisations", js: true do
+  scenario "multiple organisations" do
     given_content_belonging_to_departments_and_allocated_to_me
     when_viewing_content_to_audit
-    and_part_of_two_organisation_names_are_typed
-    then_there_are_organisation_fields_filled_with_the_suggestions_chosen
+    and_selecting_two_organisations
     and_when_applying_the_filters
     then_the_organisation_filters_are_still_set
     and_the_url_contains_the_organisation_filters_in_the_query_params
@@ -80,11 +79,10 @@ RSpec.feature "Filter Content Items to Audit", type: :feature do
     and_the_url_contains_the_topic_filter_option_in_query_params
   end
 
-  scenario "multiple topics", js: true do
+  scenario "multiple topics" do
     given_content_with_known_topics
     when_viewing_content_to_audit
-    and_part_of_two_topic_names_are_typed
-    then_there_are_topic_fields_filled_with_the_suggestions_chosen
+    and_selecting_two_topics
     and_when_applying_the_filters
     then_the_topic_filters_are_still_set
     and_the_url_contains_the_topic_filters_in_the_query_params
@@ -403,62 +401,42 @@ private
     expect(@audit_content_page.current_url).to include("topics%5B%5D=#{@paye.content_id}")
   end
 
-  def and_part_of_two_organisation_names_are_typed
+  def and_selecting_two_organisations
     @audit_content_page.filter_form do |form|
-      form.wait_until_organisations_visible(5)
-      form.add_organisations.click
-
-      page.find_all("#organisations")[1].send_keys("DE", :down, :enter)
-      page.find_all("#organisations")[0].send_keys("HM", :down, :enter)
+      form.organisations.select "DEFRA"
+      form.organisations.select "HMRC"
     end
   end
 
-  def and_part_of_two_topic_names_are_typed
+  def and_selecting_two_topics
     @audit_content_page.filter_form do |form|
-      form.wait_until_topics_visible(5)
-      form.add_topics.click
-
-      page.find_all("#topics")[1].send_keys('PAYE', :down, :enter)
-      page.find_all("#topics")[0].send_keys('VAT', :down, :enter)
-    end
-  end
-
-  def then_there_are_organisation_fields_filled_with_the_suggestions_chosen
-    using_wait_time 10 do
-      expect(@audit_content_page).to have_field("Organisations", with: "DEFRA")
-      expect(@audit_content_page).to have_field("Organisations", with: "HMRC")
-    end
-  end
-
-  def then_there_are_topic_fields_filled_with_the_suggestions_chosen
-    using_wait_time 10 do
-      expect(@audit_content_page).to have_field("Topics", with: 'Business tax: PAYE')
-      expect(@audit_content_page).to have_field("Topics", with: 'Business tax: VAT')
+      form.topics.select "PAYE"
+      form.topics.select "VAT"
     end
   end
 
   def then_the_organisation_filters_are_still_set
     @audit_content_page.filter_form do |form|
-      expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]", visible: :hidden)
-      expect(form).to have_selector("option[selected][value=\"#{@defra.content_id}\"]", visible: :hidden)
+      expect(form).to have_selector("option[selected][value=\"#{@hmrc.content_id}\"]")
+      expect(form).to have_selector("option[selected][value=\"#{@defra.content_id}\"]")
     end
   end
 
   def then_the_topic_filters_are_still_set
     @audit_content_page.filter_form do |form|
-      expect(form).to have_selector("option[selected][value=\"#{@paye.content_id}\"]", visible: :hidden)
-      expect(form).to have_selector("option[selected][value=\"#{@vat.content_id}\"]", visible: :hidden)
+      expect(form).to have_selector("option[selected][value=\"#{@paye.content_id}\"]")
+      expect(form).to have_selector("option[selected][value=\"#{@vat.content_id}\"]")
     end
   end
 
   def and_the_url_contains_the_organisation_filters_in_the_query_params
-    expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@defra.content_id}")
-    expect(@audit_content_page.current_url).to include("organisations%5B%5D=#{@hmrc.content_id}")
+    expect(@audit_content_page.current_url).to include("organisations[]=#{@defra.content_id}")
+    expect(@audit_content_page.current_url).to include("organisations[]=#{@hmrc.content_id}")
   end
 
   def and_the_url_contains_the_topic_filters_in_the_query_params
-    expect(@audit_content_page.current_url).to include("topics%5B%5D=#{@paye.content_id}")
-    expect(@audit_content_page.current_url).to include("topics%5B%5D=#{@vat.content_id}")
+    expect(@audit_content_page.current_url).to include("topics[]=#{@paye.content_id}")
+    expect(@audit_content_page.current_url).to include("topics[]=#{@vat.content_id}")
   end
 
   def given_content_with_known_titles
