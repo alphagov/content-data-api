@@ -12,9 +12,9 @@ module Audits
     end
 
     def call
-      Allocation.transaction { create_or_update_allocation! }
+      result = Allocation.transaction { create_or_update_allocation! }
 
-      AllocationResult.new(user.name, content_ids.count)
+      AllocationResult.new(user.name, result.ids.size)
     end
 
   private

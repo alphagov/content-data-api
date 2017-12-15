@@ -11,9 +11,9 @@ module Audits
     end
 
     def call
-      Allocation.where(content_id: content_ids).delete_all
+      deleted_items = Allocation.where(content_id: content_ids).delete_all
 
-      AllocationResult.new("no one", content_ids.count)
+      AllocationResult.new("no one", deleted_items)
     end
   end
 end
