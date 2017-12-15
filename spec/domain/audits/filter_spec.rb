@@ -48,6 +48,12 @@ module Audits
 
         it { is_expected.to have_attributes(allocated_policy: Policies::Allocated) }
       end
+
+      context 'allocated to not available' do
+        let(:allocated_to) { nil }
+
+        it { is_expected.to have_attributes(allocated_policy: Policies::NoPolicy) }
+      end
     end
 
     describe '.audited_policy' do

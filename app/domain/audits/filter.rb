@@ -47,7 +47,7 @@ module Audits
     def allocated_policy
       if allocated_to == 'no_one'
         Policies::Unallocated
-      elsif allocated_to == 'anyone'
+      elsif allocated_to == 'anyone' || allocated_to.blank?
         Policies::NoPolicy
       else
         Policies::Allocated
