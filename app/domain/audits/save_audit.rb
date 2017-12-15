@@ -4,7 +4,8 @@ module Audits
       new(*args).call
     end
 
-    attr_accessor :attributes, :audit, :content_item, :success, :user
+    attr_reader :attributes
+    attr_accessor :audit, :content_item, :success, :user
 
     def attributes=(attribute)
       @attributes = attribute.to_h

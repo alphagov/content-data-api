@@ -43,7 +43,7 @@ module Audits
     end
 
     def report_timestamp
-      format_datetime(DateTime.now, relative: false)
+      format_datetime(Time.now, relative: false)
     end
   end
 end
