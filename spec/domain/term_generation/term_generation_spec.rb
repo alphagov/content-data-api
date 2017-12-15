@@ -2,11 +2,11 @@ RSpec.describe TermGeneration::TaxonomyProjectBuilder do
   before :each do
     @url = 'http://www.example.com/my_csv'
     csv =
-      <<~EOCSV
+      <<~CSV
         content_id
         xxx
         yyy
-    EOCSV
+    CSV
 
     create(:content_item, content_id: 'xxx')
     create(:content_item, content_id: 'yyy')

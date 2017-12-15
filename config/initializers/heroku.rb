@@ -11,7 +11,7 @@ if Heroku.enabled?
 
     def current_user
       User.find(session[:heroku_user_id])
-    rescue
+    rescue ActiveRecord::RecordNotFound
       session.clear
       User.first
     end

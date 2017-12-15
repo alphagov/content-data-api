@@ -26,11 +26,11 @@ RSpec.feature "Taxonomy generation", type: :feature do
     create(:content_item, title: "Page Foo", content_id: "5d18871a-6d63-49aa-9c60-3bf7856aab84")
     create(:content_item, title: "Page Bar", content_id: "5b4b844c-cf63-4a27-814c-a03b2c4b16ae")
 
-    csv = <<~doc
+    csv = <<~DOC
       content_id
       5d18871a-6d63-49aa-9c60-3bf7856aab84
       5b4b844c-cf63-4a27-814c-a03b2c4b16ae
-    doc
+    DOC
 
     stub_request(:get, "https://example.org/spreadsheet.csv").
       to_return(status: 200, body: csv)

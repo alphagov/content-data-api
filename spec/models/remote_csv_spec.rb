@@ -5,11 +5,11 @@ RSpec.describe RemoteCsv do
 
   let(:csv_url) { 'http://www.example.com/my_csv' }
   let(:csv) do
-    <<~EOCSV
+    <<~CSV
       content_id
       xxx
       yyy
-    EOCSV
+    CSV
   end
 
   before do
