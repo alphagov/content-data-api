@@ -30,6 +30,37 @@ module Audits
         expect(relation)
           .to match_array(content_items.sort_by(&:id)[100...205])
       end
+
+      context 'with a complex filter' do
+        let!(:content_items) do
+          Array.new(500) do
+            [
+              -> { create(:content_item) },
+              -> { create(:content_item, allocated_to: user) },
+              -> { create(:audit).content_item },
+            ].sample.call
+          end
+        end
+
+        let(:filter) do
+          Filter.new(
+            allocated_to: :no_one,
+            audit_status: :non_audited,
+            sort: 'id',
+            sort_direction: 'asc'
+          )
+        end
+
+        it 'returns a batch of filtered content items' do
+          expected_content_items = content_items
+                                     .map(&:reload)
+                                     .reject { |content_item| content_item.allocation.present? }
+                                     .reject { |content_item| content_item.audit.present? }
+                                     .sort_by(&:id)[100...205]
+
+          expect(relation).to match_array(expected_content_items)
+        end
+      end
     end
 
     describe '#paged' do

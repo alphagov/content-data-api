@@ -48,6 +48,12 @@ module Audits
 
         it { is_expected.to have_attributes(allocated_policy: Policies::Allocated) }
       end
+
+      context 'allocated to not available' do
+        let(:allocated_to) { nil }
+
+        it { is_expected.to have_attributes(allocated_policy: Policies::NoPolicy) }
+      end
     end
 
     describe '.audited_policy' do
@@ -84,6 +90,18 @@ module Audits
       subject { described_class.new(audit_status: 'double') }
 
       it { is_expected.to have_attributes(audit_status: :double) }
+    end
+
+    context 'with page' do
+      subject { described_class.new(page: '1') }
+
+      it { is_expected.to have_attributes(page: 1) }
+    end
+
+    context 'with per page' do
+      subject { described_class.new(per_page: '10') }
+
+      it { is_expected.to have_attributes(per_page: 10) }
     end
 
     context 'with sort criteria' do

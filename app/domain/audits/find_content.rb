@@ -12,14 +12,17 @@ module Audits
 
     def self.batch(filter, from_page:, batch_size:)
       query = query(filter)
-      scope = query.all_content_items.limit(batch_size)
-      do_filter!(filter, scope)
 
-      if from_page&.positive?
-        scope.offset(from_page * query.current_per_page - query.current_per_page)
-      else
-        scope.offset(from_page)
-      end
+      offset = if from_page&.positive?
+                 from_page * query.current_per_page - query.current_per_page
+               end
+
+      scope = query
+                .all_content_items
+                .limit(batch_size)
+                .offset(offset)
+
+      do_filter!(filter, scope)
     end
 
     def self.users_unaudited_content(current_user_uid)

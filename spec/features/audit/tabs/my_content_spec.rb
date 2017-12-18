@@ -7,6 +7,7 @@ RSpec.feature "`My content` tab", type: :feature do
     when_i_navigate_to_assign_content_page
     and_i_assign_2_content_items_to_myself
     then_i_can_see_that_i_have_2_content_items_to_audit
+    when_i_filter_on_my_content_items
     when_i_unassign_1_of_my_content_items
     then_i_can_see_that_i_have_1_content_items_to_audit
   end
@@ -68,6 +69,13 @@ RSpec.feature "`My content` tab", type: :feature do
     @audit_assignment_page = ContentAuditTool.new.audit_assignment_page
     @audit_content_page.assign_content_tab.click
     @audit_assignment_page.load
+  end
+
+  def when_i_filter_on_my_content_items
+    @audit_assignment_page.filter_form do |form|
+      form.select 'Me', from: 'Assigned to'
+      form.apply_filters.click
+    end
   end
 
   def and_i_assign_2_content_items_to_myself

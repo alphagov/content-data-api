@@ -32,6 +32,14 @@ module Audits
       self[:allocated_to]&.to_s
     end
 
+    def page
+      self[:page]&.to_i
+    end
+
+    def per_page
+      self[:per_page]&.to_i
+    end
+
     def sort_by
       Sort.combine(sort, sort_direction)
     end
@@ -39,7 +47,7 @@ module Audits
     def allocated_policy
       if allocated_to == 'no_one'
         Policies::Unallocated
-      elsif allocated_to == 'anyone'
+      elsif allocated_to == 'anyone' || allocated_to.blank?
         Policies::NoPolicy
       else
         Policies::Allocated
