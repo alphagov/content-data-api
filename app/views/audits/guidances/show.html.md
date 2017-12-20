@@ -27,7 +27,7 @@ Check whether the title would make sense:
 * in search results
 * in collections
 
-Are there acronyms that are widely known that don’t need spelling out? For example, RAIB, DVLA, DVSA.
+Are there acronyms that are widely known that don’t need spelling out? For example, HMRC, DVLA.
 
 #### Good example
 
@@ -81,7 +81,7 @@ Reason: It’s not clear what or who the permit is for.
 Page detail (body text) should:
 
 * begin with what’s most important to users (not to government)
-* be concise and easy to scan (with subheads every 3-5 paragraphs)
+* be concise and easy to scan (with subheadings every 3-5 paragraphs)
 * be written in plain English (no jargon) and be easy to understand
 * use short sentences - ideally no more than 25 words
 * define acronyms and abbreviations the first time they’re used (with Markdown)
@@ -134,7 +134,7 @@ An attachment should be flagged for improvement if:
 
 * it is no longer current - the attachment needs to have a 'withdrawn' message added, such as in this [old webTAG unit](https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/603749/webtag-tag-unit-a1-3-user-and-provider-impacts-november-2014.pdf)
 
-* it should be a direct link to the document on an agency website
+* it links to the incorrect place on an agency website, e.g. a generic homepage instead of the specific document required
 
 References: [Viewing government documents](https://www.gov.uk/government/publications/open-standards-for-government/viewing-government-documents) and [Open formats](https://www.gov.uk/guidance/content-design/planning-content#open-formats)
 
@@ -162,7 +162,7 @@ With a PDF, can you:
 
 * longer term, consider removing it entirely if there's an HTML version?
 
-With a form, can you replace it with an editable PDF, ODT, ODS or an online form?
+With a form, you can replace it with an editable PDF, ODT, ODS or an online form.
 
 With a spreadsheet, can you:
 
@@ -178,7 +178,7 @@ With a spreadsheet, can you:
 
 > [Format 2 - PDF - Times and heights of high and low waters, split into morning and afternoon, one month per page, with a table drawn around the date (A4 portrait)](https://www.gov.uk/government/publications/ukho-tidal-prediction-service-sample-pdf-format-two)
 
-Reason: Attachment name is too long and repeats what’s in the page title and summary. The PDF doesn’t have the organisation branding, and should be in HTML table format for better accessibility.
+Reason: Attachment name is front loaded incorrectly and is too long, it repeats what’s in the page title and summary. The PDF doesn’t have the organisation branding, and should be in HTML table format for better accessibility.
 
 * * *
 
@@ -189,7 +189,7 @@ It’s important that guidance content is published in one of the guidance forma
 
 User guidance takes a user through completing a task, for example [Become a driving examiner](https://www.gov.uk/guidance/become-a-driving-examiner).
 
-The main Whitehall guidance formats are:
+The main guidance formats in Whitehall Publisher are:
 
 * [Detailed guide](https://www.gov.uk/guidance/content-design/content-types#detailed-guide) - answers a specific, task-oriented user need
 
@@ -240,8 +240,6 @@ Out of date content should be:
 
 * merged or consolidated into another page, and unpublished - if there is duplicate content, or using the old content will cause legal problems; for example, superseded instructions
 
-If you're unsure, select 'Yes' to flag the page for checking with content owners.
-
 Reference: [Withdrawing and unpublishing content](https://www.gov.uk/guidance/content-design/gov-uk-content-retention-and-withdrawal-archiving-policy)
 
 ### Consider
@@ -269,7 +267,7 @@ The content is similar to other pages if:
 * there is duplicate content on another page
 * the title matches another page
 
-If you select ‘yes’, add the destination url in the ‘Where should users be redirected to? (optional) text box. 
+If you select ‘yes’, add the destination url in the ‘Where should users be redirected to?’ (optional) text box. 
 
 ### Consider
 
