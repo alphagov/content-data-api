@@ -56,6 +56,13 @@ RSpec.configure do |config|
   end
 end
 
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.library :rails
+    with.test_framework :rspec
+  end
+end
+
 SitePrism.configure do |config|
   config.use_implicit_waits = true
 end
