@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171207164824) do
+ActiveRecord::Schema.define(version: 20171220091851) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,28 @@ ActiveRecord::Schema.define(version: 20171207164824) do
     t.string "locale", null: false
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
     t.index ["title"], name: "index_content_items_on_title"
+  end
+
+  create_table "dimensions_dates", primary_key: "date", id: :date, force: :cascade do |t|
+    t.string "date_name", null: false
+    t.string "date_name_abbreviated", null: false
+    t.integer "year", null: false
+    t.integer "quarter", null: false
+    t.integer "month", null: false
+    t.string "month_name", null: false
+    t.string "month_name_abbreviated", null: false
+    t.integer "week", null: false
+    t.integer "day_of_year", null: false
+    t.integer "day_of_quarter", null: false
+    t.integer "day_of_month", null: false
+    t.integer "day_of_week", null: false
+    t.string "day_name", null: false
+    t.string "day_name_abbreviated", null: false
+    t.string "weekday_weekend", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date_name"], name: "index_dimensions_dates_on_date_name"
+    t.index ["date_name_abbreviated"], name: "index_dimensions_dates_on_date_name_abbreviated"
   end
 
   create_table "links", id: :serial, force: :cascade do |t|
