@@ -11,4 +11,10 @@ RSpec.describe ETL::Dates do
 
     expect(Dimensions::Date.count).to eq(1)
   end
+
+  it 'returns the date' do
+    result = ETL::Dates.new.process
+
+    expect(Dimensions::Date.first).to eq(result)
+  end
 end

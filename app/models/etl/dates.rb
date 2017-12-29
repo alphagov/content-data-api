@@ -4,5 +4,6 @@ class ETL::Dates
   rescue ActiveRecord::RecordNotFound
     date = Dimensions::Date.build(Date.today)
     date.save!
+    date
   end
 end
