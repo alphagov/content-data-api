@@ -7,7 +7,7 @@ RSpec.describe ETL::Organisations do
   end
 
   it 'extracts organisations dimension from Search API' do
-    stub_request(:get, query).to_return(body: new_policies_results)
+    stub_request(:get, query).to_return(body: rummager_response)
     result = subject.process
 
     expect(Dimensions::Organisation.count).to eq(2)
@@ -15,7 +15,7 @@ RSpec.describe ETL::Organisations do
   end
 
   it 'transforms and load an Organisation in the Dimensions table' do
-    stub_request(:get, query).to_return(body: new_policies_results)
+    stub_request(:get, query).to_return(body: rummager_response)
     subject.process
 
     organisation = Dimensions::Organisation.first
@@ -38,7 +38,7 @@ RSpec.describe ETL::Organisations do
 
   context 'when organisations already exist' do
     before do
-      stub_request(:get, query).to_return(body: new_policies_results)
+      stub_request(:get, query).to_return(body: rummager_response)
       subject.process
     end
 
@@ -64,13 +64,13 @@ RSpec.describe ETL::Organisations do
   end
 
   it 'returns the list of persisted items' do
-    stub_request(:get, query).to_return(body: new_policies_results)
+    stub_request(:get, query).to_return(body: rummager_response)
     result = subject.process
 
     expect(Dimensions::Organisation.all).to match_array(result)
   end
 
-  def new_policies_results
+  def rummager_response
     <<-JSON
       {
          "results":[
