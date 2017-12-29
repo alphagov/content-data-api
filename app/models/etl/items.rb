@@ -36,7 +36,7 @@ private
 
   def load(items)
     new_records = items.select(&:new_record?)
-    new_records.each { |record| record.save! }
+    Dimensions::Item.import(new_records, validate: false)
   end
 
   def rummager
