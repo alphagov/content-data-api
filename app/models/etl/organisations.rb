@@ -24,15 +24,20 @@ private
     organisations.map do |result|
       attributes = %w(title slug description link organisation_state content_id)
 
-      Dimensions::Organisation.new(result.slice(*attributes))
+      Dimensions::Organisation.find_or_initialize_by(result.slice(*attributes))
     end
   end
 
   def load(transformed_orgs)
     validate!(transformed_orgs)
 
-    result = Dimensions::Organisation.import(transformed_orgs, validate: false)
-    Dimensions::Organisation.where(id: result.ids)
+    new_records = transformed_orgs.select(&:new_record?)
+    result = Dimensions::Organisation.import(new_records, validate: false)
+
+    existing_records = transformed_orgs - new_records
+    all_ids = result.ids + existing_records.pluck(:id)
+
+    Dimensions::Organisation.where(id: all_ids)
   end
 
   def validate!(transformed_orgs)

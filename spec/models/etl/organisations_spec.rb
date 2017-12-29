@@ -36,6 +36,40 @@ RSpec.describe ETL::Organisations do
     expect(-> { subject.process }).to raise_error(ActiveRecord::RecordInvalid)
   end
 
+  context 'when organisations already exist' do
+    before do
+      stub_request(:get, query).to_return(body: new_policies_results)
+      subject.process
+    end
+
+    it 'does not store duplicated organisations' do
+      subject.process
+
+      expect(Dimensions::Organisation.count).to eq(2)
+    end
+
+    it 'adds a new item if an attribute changed' do
+      Dimensions::Organisation.first.update(title: 'old title')
+      subject.process
+
+      expect(Dimensions::Organisation.count).to eq(3)
+    end
+
+    it 'returns the latest version of each item' do
+      Dimensions::Organisation.first.update(title: 'old title')
+      result = subject.process
+
+      expect(result.pluck(:title)).to include('Companies House', 'HM Revenue & Customs')
+    end
+  end
+
+  it 'returns the list of persisted items' do
+    stub_request(:get, query).to_return(body: new_policies_results)
+    result = subject.process
+
+    expect(Dimensions::Organisation.all).to match_array(result)
+  end
+
   def new_policies_results
     <<-JSON
       {
