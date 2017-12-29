@@ -21,7 +21,7 @@ RSpec.describe ETL::Organisations do
     organisation = Dimensions::Organisation.first
     expect(organisation).to have_attributes(
       content_id: 'c36bd301-d0c5-4492-86ad-ee7843b8383b',
-      title: 'Companies House ',
+      title: 'Companies House',
       slug: 'companies-house',
       description: 'The home of Companies House  on GOV.UK. We incorporate and dissolve limited companies. We register company information and make it available to the public.',
       link: '/government/organisations/companies-house',
@@ -76,7 +76,7 @@ RSpec.describe ETL::Organisations do
          "results":[
             {
                "content_id":"c36bd301-d0c5-4492-86ad-ee7843b8383b",
-               "title":"Companies House ",
+               "title":"Companies House",
                "slug":"companies-house",
                "description":"The home of Companies House  on GOV.UK. We incorporate and dissolve limited companies. We register company information and make it available to the public.",
                "link":"/government/organisations/companies-house",
