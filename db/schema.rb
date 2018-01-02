@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171220091851) do
+ActiveRecord::Schema.define(version: 20171229163406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,40 @@ ActiveRecord::Schema.define(version: 20171220091851) do
     t.datetime "updated_at", null: false
     t.index ["date_name"], name: "index_dimensions_dates_on_date_name"
     t.index ["date_name_abbreviated"], name: "index_dimensions_dates_on_date_name_abbreviated"
+  end
+
+  create_table "dimensions_items", force: :cascade do |t|
+    t.string "content_id"
+    t.string "title"
+    t.string "link"
+    t.string "description"
+    t.string "organisation_id"
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "dimensions_organisations", force: :cascade do |t|
+    t.string "title"
+    t.string "slug"
+    t.string "description"
+    t.string "link"
+    t.string "organisation_id"
+    t.string "state"
+    t.string "content_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "facts_metrics", force: :cascade do |t|
+    t.date "dimensions_date_id"
+    t.bigint "dimensions_item_id"
+    t.bigint "dimensions_organisation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dimensions_date_id"], name: "index_facts_metrics_on_dimensions_date_id"
+    t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
+    t.index ["dimensions_organisation_id"], name: "index_facts_metrics_on_dimensions_organisation_id"
   end
 
   create_table "links", id: :serial, force: :cascade do |t|
@@ -169,6 +203,9 @@ ActiveRecord::Schema.define(version: 20171220091851) do
 
   add_foreign_key "allocations", "content_items", column: "content_id", primary_key: "content_id"
   add_foreign_key "allocations", "users", column: "uid", primary_key: "uid"
+  add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
+  add_foreign_key "facts_metrics", "dimensions_items"
+  add_foreign_key "facts_metrics", "dimensions_organisations"
   add_foreign_key "taxonomy_todos", "content_items"
   add_foreign_key "taxonomy_todos", "taxonomy_projects"
 end

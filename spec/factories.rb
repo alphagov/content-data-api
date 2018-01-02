@@ -118,4 +118,23 @@ FactoryBot.define do
     audit_status :all
     allocated_to :anyone
   end
+
+  factory :dimensions_organisation, class: Dimensions::Organisation do
+    sequence(:title) { |i| "title - #{i}" }
+    sequence(:slug) { |i| "slug - #{i}" }
+    sequence(:description) { |i| "description - #{i}" }
+    sequence(:link) { |i| "link - #{i}" }
+    sequence(:organisation_id) { |i| "organisation_id - #{i}" }
+    sequence(:state) { |i| "state - #{i}" }
+    sequence(:content_id) { |i| "content_id - #{i}" }
+  end
+
+  factory :dimensions_item, class: Dimensions::Item do
+    sequence(:content) { |i| "text - #{i}" }
+    sequence(:content_id) { |i| "content_id - #{i}" }
+    sequence(:title) { |i| "title - #{i}" }
+    sequence(:link) { |i| "link - #{i}" }
+    sequence(:description) { |i| "description - #{i}" }
+    sequence(:organisation_id) { |i| "organisation_id - #{i}" }
+  end
 end
