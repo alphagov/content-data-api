@@ -48,6 +48,20 @@ RSpec.describe ETL::Items do
 
       expect(Dimensions::Item.count).to eq(3)
     end
+
+    it 'returns the latest version of each item' do
+      Dimensions::Item.first.update(title: 'old title')
+      result = subject.process
+
+      expect(result.pluck(:title)).to include('Tax your vehicle', 'Companies House')
+    end
+  end
+
+  it 'returns the list of persisted items' do
+    stub_request(:get, query).to_return(body: rummager_response)
+    result = subject.process
+
+    expect(Dimensions::Item.all).to match_array(result)
   end
 
   def rummager_response
