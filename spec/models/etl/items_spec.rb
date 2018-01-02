@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'gds-api-adapters'
 
 RSpec.describe ETL::Items do
+  subject { described_class }
+
   let(:query) do
     %r{search.json\?.*(fields=content_id,title,link,description,organisations,indexable_content)}
   end

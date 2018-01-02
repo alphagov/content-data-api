@@ -2,6 +2,8 @@ require 'rails_helper'
 require 'gds-api-adapters'
 
 RSpec.describe ETL::Organisations do
+  subject { described_class }
+
   let(:query) do
     %r{search.json\?.*(fields=title,slug,description,link,organisation_state,content_id).*(filter_format=organisation)}
   end

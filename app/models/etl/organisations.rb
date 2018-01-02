@@ -1,6 +1,10 @@
 require 'gds_api/rummager'
 
 class ETL::Organisations
+  def self.process(*args)
+    new(*args).process
+  end
+
   def process
     raw_data = extract
     organisations = transform(raw_data)
