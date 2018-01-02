@@ -27,7 +27,7 @@ RSpec.describe ETL::Organisations do
       slug: 'companies-house',
       description: 'The home of Companies House  on GOV.UK. We incorporate and dissolve limited companies. We register company information and make it available to the public.',
       link: '/government/organisations/companies-house',
-      organisation_state: 'live',
+      state: 'live',
     )
   end
 

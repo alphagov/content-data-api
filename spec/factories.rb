@@ -125,7 +125,7 @@ FactoryBot.define do
     sequence(:description) { |i| "description - #{i}" }
     sequence(:link) { |i| "link - #{i}" }
     sequence(:organisation_id) { |i| "organisation_id - #{i}" }
-    sequence(:organisation_state) { |i| "organisation_state - #{i}" }
+    sequence(:state) { |i| "state - #{i}" }
     sequence(:content_id) { |i| "content_id - #{i}" }
   end
 

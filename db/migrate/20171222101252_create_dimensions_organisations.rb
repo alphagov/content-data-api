@@ -6,7 +6,7 @@ class CreateDimensionsOrganisations < ActiveRecord::Migration[5.1]
       t.string :description
       t.string :link
       t.string :organisation_id
-      t.string :organisation_state
+      t.string :state
       t.string :content_id
 
       t.timestamps

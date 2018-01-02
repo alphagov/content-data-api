@@ -3,6 +3,5 @@ class Dimensions::Organisation < ApplicationRecord
   validates :slug, presence: true
   validates :link, presence: true
   validates :content_id, presence: true
-  validates :organisation_state, presence: true
-  validates :content_id, presence: true
+  validates :state, presence: true
 end

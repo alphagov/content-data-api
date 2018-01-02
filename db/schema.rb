@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 20171229163406) do
     t.string "description"
     t.string "link"
     t.string "organisation_id"
-    t.string "organisation_state"
+    t.string "state"
     t.string "content_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

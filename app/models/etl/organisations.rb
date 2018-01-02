@@ -26,9 +26,11 @@ private
 
   def transform(organisations)
     organisations.map do |result|
-      attributes = %w(title slug description link organisation_state content_id)
+      names = %w(title slug description link organisation_state content_id)
+      result = result.slice(*names)
+      result['state'] = result.delete('organisation_state')
 
-      Dimensions::Organisation.find_or_initialize_by(result.slice(*attributes))
+      Dimensions::Organisation.find_or_initialize_by(result)
     end
   end
 
