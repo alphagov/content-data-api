@@ -22,4 +22,9 @@ namespace :import do
     importer.run
     puts "Imported #{importer.completed.size} with #{importer.errors.size} errors"
   end
+
+  desc 'Load all metric facts'
+  task daily_metrics: :environment do
+    ETL::Metrics.process
+  end
 end
