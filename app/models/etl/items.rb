@@ -16,7 +16,7 @@ private
   def extract
     rummager.search_enum(
       {
-        fields: 'content_id,title,link,description,organisations,indexable_content',
+        fields: 'content_id,title,link,description,organisations',
       },
       page_size: 1000,
       additional_headers: {},
@@ -31,7 +31,6 @@ private
         link: item['link'],
         description: item['description'],
         organisation_id: item.fetch('organisations', [{}]).first['content_id'],
-        content: item['indexable_content'],
       }
     end
 
