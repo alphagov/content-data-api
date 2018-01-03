@@ -39,8 +39,7 @@ private
 
   def load(items)
     new_records = items.select(&:new_record?)
-    result = Dimensions::Item.import(new_records, validate: false)
-
+    result = Dimensions::Item.import(new_records, validate: false, batch_size: 5000)
     existing_records = items - new_records
     all_ids = result.ids + existing_records.pluck(:id)
 
