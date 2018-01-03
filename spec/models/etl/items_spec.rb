@@ -19,8 +19,8 @@ RSpec.describe ETL::Items do
     stub_request(:get, query).to_return(body: rummager_response)
     subject.process
 
-    organisation = Dimensions::Item.first
-    expect(organisation).to have_attributes(
+    item = Dimensions::Item.find_by(title: 'Tax your vehicle')
+    expect(item).to have_attributes(
       content_id: 'fa748fae-3de4-4266-ae85-0797ada3f40c',
       title: 'Tax your vehicle',
       link: '/vehicle-tax',
