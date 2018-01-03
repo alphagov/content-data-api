@@ -6,18 +6,23 @@ class ETL::Metrics
   def process
     items = ETL::Items.process
 
-    items.each { |item| create_metric(item) }
+    create_metric(items)
   end
-
 
 private
 
-  def create_metric(item)
-    Facts::Metric.find_or_create_by!(
-      dimensions_date: date,
-      dimensions_item: item,
-      dimensions_organisation: dimension_organisation(item, organisations)
-    )
+  def create_metric(items)
+    Facts::Metric.where(dimensions_date: date).delete_all
+
+    metrics = items.map do |item|
+      Facts::Metric.new(
+        dimensions_date: date,
+        dimensions_item: item,
+        dimensions_organisation: dimension_organisation(item, organisations)
+      )
+    end
+
+    Facts::Metric.import(metrics, validate: false, batch_size: 5000)
   end
 
   def date

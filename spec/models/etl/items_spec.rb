@@ -5,7 +5,7 @@ RSpec.describe ETL::Items do
   subject { described_class }
 
   let(:query) do
-    %r{search.json\?.*(fields=content_id,title,link,description,organisations,indexable_content)}
+    %r{search.json\?.*(fields=content_id,title,link,description,organisations)}
   end
 
   it 'saves an item per entry in Search API' do
@@ -26,7 +26,6 @@ RSpec.describe ETL::Items do
       link: '/vehicle-tax',
       description: "Renew or tax your vehicle for the first time using a reminder letter, your log book, the 'new keeper's details' section of a log book - and how to tax if you don't have any documents",
       organisation_id: '70580624-93b5-4aed-823b-76042486c769',
-      content: 'Some content'
     )
   end
 

@@ -130,7 +130,6 @@ FactoryBot.define do
   end
 
   factory :dimensions_item, class: Dimensions::Item do
-    sequence(:content) { |i| "text - #{i}" }
     sequence(:content_id) { |i| "content_id - #{i}" }
     sequence(:title) { |i| "title - #{i}" }
     sequence(:link) { |i| "link - #{i}" }
