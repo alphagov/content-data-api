@@ -4,4 +4,6 @@ class Dimensions::Organisation < ApplicationRecord
   validates :link, presence: true
   validates :content_id, presence: true
   validates :state, presence: true
+
+  validates_uniqueness_of :title, scope: %i[slug link content_id state]
 end
