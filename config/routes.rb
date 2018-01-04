@@ -3,6 +3,10 @@ Rails.application.routes.draw do
 
   namespace :content do
     resources :items, only: %w(index show), param: :content_id
+
+    scope 'reports' do
+      resource :live_pages_report, only: %w(show), path: 'live-pages'
+    end
   end
 
   resources :content_items, only: %w(index show), param: :content_id do

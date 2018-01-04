@@ -5,4 +5,9 @@ class Facts::Metric < ApplicationRecord
 
   validates :dimensions_date, presence: true
   validates :dimensions_item, presence: true
+
+  scope :by_date_name, -> do
+    joins(:dimensions_date)
+      .group(:date_name)
+  end
 end

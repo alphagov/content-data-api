@@ -12,6 +12,19 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
 <% end %>
 
+<% content_for :navbar_items do %>
+  <li>
+    <%= link_to 'Home',
+                root_path,
+                data: { 'test-id' => 'home' } %>
+  </li>
+  <li>
+    <%= link_to 'Reports',
+                content_live_pages_report_path,
+                data: { 'test-id' => 'reports' } %>
+  </li>
+<% end %>
+
 <% content_for :content do %>
   <%= render 'application/heroku' if Heroku.enabled?%>
   <%= render 'application/alpha_banner' %>

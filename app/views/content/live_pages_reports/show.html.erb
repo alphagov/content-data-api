@@ -1,0 +1,40 @@
+<div class="row add-bottom-margin">
+  <div class="col-md-12">
+    <h1>Live pages</h1>
+  </div>
+</div>
+
+<div class="row add-bottom-margin">
+  <div class="col-md-12" data-test-id="line-chart">
+    <%= line_chart @live_pages %>
+  </div>
+</div>
+
+<div class="row add-bottom-margin" data-test-id="summary-table">
+  <div class="col-md-12">
+    <table class="table table-condensed table-hover">
+      <thead>
+      <tr class="table-header">
+        <th>
+          Date
+        </th>
+        <th>
+          Live pages
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @live_pages.each do |date, count| %>
+        <tr>
+          <td data-test-class="date">
+            <%= date %>
+          </td>
+          <td data-test-class="live-pages">
+            <%= number_with_delimiter count %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
