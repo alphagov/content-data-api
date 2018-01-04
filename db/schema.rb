@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20180103115527) do
     t.integer "six_months_page_views", default: 0
     t.string "publishing_app"
     t.string "locale", null: false
+    t.integer "number_of_word_files", default: 0
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
     t.index ["title"], name: "index_content_items_on_title"
   end

@@ -18,5 +18,9 @@
       <span class="summary-item-value"><%= number_with_precision @metrics[:pages_with_pdfs][:percentage], precision: 1 %>%</span>
       <span class="summary-item-label">Pages that contain PDF content</span>
     </div>
+    <div class="summary-item col-xs-4">
+      <span class="summary-item-value"><%= number_with_precision @metrics[:pages_with_word_files][:percentage], precision: 1 %>%</span>
+      <span class="summary-item-label">Pages that contain Word attachments</span>
+    </div>
   </div>
 </div>

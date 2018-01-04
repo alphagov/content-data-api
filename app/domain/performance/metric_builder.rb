@@ -19,7 +19,8 @@ module Performance
 
     def content_item_metrics
       [
-        Metrics::NumberOfPdfs
+        Metrics::NumberOfPdfs,
+        Metrics::NumberOfWordFiles
       ]
     end
 
@@ -28,7 +29,8 @@ module Performance
         Metrics::TotalPages,
         Metrics::ZeroPageViews,
         Metrics::PagesNotUpdated,
-        Metrics::PagesWithPdfs
+        Metrics::PagesWithPdfs,
+        Metrics::PagesWithWordFiles
       ]
     end
   end
