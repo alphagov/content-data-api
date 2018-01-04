@@ -4,6 +4,26 @@
   </div>
 </div>
 
+<div class="row add-bottom-margin pull-right" data-test-id="filter-form">
+  <div class="col-md-12">
+    <%= form_tag content_live_pages_report_path, class: 'form-inline', method: :get do %>
+      <div class="form-group">
+        <%= label_tag :organisation %>
+        <%= select_tag :organisation,
+                       organisation_dimension_options_for_select(params[:organisation]),
+                       include_blank: 'All',
+                       class: 'form-control',
+                       data: {
+                           'test-id' => 'organisation-select',
+                       } %>
+      </div>
+      <button type="submit" class="btn btn-default" data-test-id="submit-button">
+        Filter
+      </button>
+    <% end %>
+  </div>
+</div>
+
 <div class="row add-bottom-margin">
   <div class="col-md-12" data-test-id="line-chart">
     <%= line_chart @live_pages %>

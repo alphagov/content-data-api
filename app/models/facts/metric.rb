@@ -10,4 +10,15 @@ class Facts::Metric < ApplicationRecord
     joins(:dimensions_date)
       .group(:date_name)
   end
+
+  scope :for_organisation, ->(content_id:) do
+    return unless content_id.present?
+
+    joins(:dimensions_organisation)
+      .where(
+        dimensions_organisations: {
+          content_id: content_id
+        }
+      )
+  end
 end

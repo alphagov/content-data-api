@@ -12,6 +12,13 @@ RSpec.feature 'Live pages report', type: :feature do
     then_i_can_see_the_total_live_pages_each_day
   end
 
+  scenario 'Filtering by organisation' do
+    given_i_am_logged_in
+    and_there_is_historical_page_data
+    when_i_navigate_to_the_live_pages_report
+    then_i_can_filter_the_report_by_organisation
+  end
+
   around(:example) do |example|
     Timecop.freeze(Time.local(2018, 1, 1)) do
       example.run
@@ -82,6 +89,27 @@ RSpec.feature 'Live pages report', type: :feature do
 
       expect(summary_table.live_pages.collect(&:text))
         .to contain_exactly('14', '12', '10', '8', '6', '4', '2')
+    end
+  end
+
+  def then_i_can_filter_the_report_by_organisation
+    @live_pages_report.filter do |filter|
+      filter.organisation.select 'Ministry of Peace'
+      filter.submit.click
+    end
+
+    @live_pages_report.summary_table do |summary_table|
+      expect(summary_table.dates.collect(&:text))
+        .to contain_exactly('31 December 2017',
+                            '30 December 2017',
+                            '29 December 2017',
+                            '28 December 2017',
+                            '27 December 2017',
+                            '26 December 2017',
+                            '25 December 2017')
+
+      expect(summary_table.live_pages.collect(&:text))
+        .to contain_exactly('7', '6', '5', '4', '3', '2', '1')
     end
   end
 end
