@@ -49,18 +49,20 @@ RSpec.describe ETL::Items do
     end
 
     it 'returns the latest version of each item' do
-      Dimensions::Item.first.update(title: 'old title')
-      result = subject.process
+      Dimensions::Item.first.update(title: 'old title', latest: true)
+      subject.process
 
-      expect(result.pluck(:title)).to include('Tax your vehicle', 'Companies House')
+      latest_items = Dimensions::Item.where(latest: true)
+      expect(latest_items.pluck(:title)).to include('Tax your vehicle', 'Companies House')
     end
   end
 
-  it 'returns the list of persisted items' do
+  it 'Update the latest version of the content items' do
     stub_request(:get, query).to_return(body: rummager_response)
-    result = subject.process
+    subject.process
 
-    expect(Dimensions::Item.all).to match_array(result)
+    latest_items = Dimensions::Item.where(latest: true).pluck(:title)
+    expect(latest_items).to match_array(['Tax your vehicle', 'Companies House'])
   end
 
   def rummager_response

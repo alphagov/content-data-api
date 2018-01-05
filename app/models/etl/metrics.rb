@@ -4,25 +4,27 @@ class ETL::Metrics
   end
 
   def process
-    items = ETL::Items.process
+    ETL::Items.process
 
-    create_metric(items)
+    create_metrics
   end
 
 private
 
-  def create_metric(items)
+  def create_metrics
     Facts::Metric.where(dimensions_date: date).delete_all
 
-    metrics = items.map do |item|
-      Facts::Metric.new(
-        dimensions_date: date,
-        dimensions_item: item,
-        dimensions_organisation: dimension_organisation(item, organisations)
-      )
+    Dimensions::Item.where(latest: true).find_in_batches(batch_size: 50000) do |batch|
+      values = batch.pluck(:id, :organisation_id)
+      metrics = values.map do |value|
+        {
+          dimensions_date_id: date.date,
+          dimensions_item_id: value[0],
+          dimensions_organisation_id: dimension_organisation(value[1], organisations).try(:id)
+        }
+      end
+      Facts::Metric.import(metrics, validate: false)
     end
-
-    Facts::Metric.import(metrics, validate: false, batch_size: 5000)
   end
 
   def date
@@ -33,7 +35,7 @@ private
     @organisations ||= ETL::Organisations.process
   end
 
-  def dimension_organisation(item, organisations)
-    organisations.detect { |org| org.content_id == item.organisation_id }
+  def dimension_organisation(organisation_id, organisations)
+    organisations.detect { |org| org.content_id == organisation_id }
   end
 end

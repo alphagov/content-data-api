@@ -47,8 +47,6 @@ private
     import_new_items
 
     load_cleanup
-
-    return_latest_items
   end
 
   def rummager
@@ -75,10 +73,6 @@ private
 
   def import_new_items
     Dimensions::Item.import(new_items, batch_size: 5000)
-  end
-
-  def return_latest_items
-    Dimensions::Item.where(latest: true)
   end
 
   def load_cleanup
