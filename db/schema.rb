@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180103115527) do
+ActiveRecord::Schema.define(version: 20180105112615) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,17 @@ ActiveRecord::Schema.define(version: 20180103115527) do
     t.string "organisation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "latest"
+    t.index ["content_id", "link", "organisation_id"], name: "dimensions_items_natural_key"
+  end
+
+  create_table "dimensions_items_temps", id: false, force: :cascade do |t|
+    t.string "content_id"
+    t.string "title"
+    t.string "link"
+    t.string "description"
+    t.string "organisation_id"
+    t.index ["content_id", "link", "organisation_id"], name: "dimensions_items_temps_natual_key"
   end
 
   create_table "dimensions_organisations", force: :cascade do |t|
