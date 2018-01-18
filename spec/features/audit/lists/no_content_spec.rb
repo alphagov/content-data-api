@@ -14,10 +14,6 @@ RSpec.feature "Notifying of no content to audit", type: :feature do
     )
   end
 
-  around(:each) do |example|
-    Feature.run_with_activated(:auditing_allocation) { example.run }
-  end
-
   context "there is no content for my organisation to audit" do
     before(:each) do
       visit audits_my_content_path

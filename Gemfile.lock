@@ -108,7 +108,6 @@ GEM
       railties (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    feature (1.4.0)
     ffi (1.9.18)
     formatador (0.2.5)
     gds-api-adapters (50.6.0)
@@ -504,7 +503,6 @@ DEPENDENCIES
   database_cleaner
   draper
   factory_bot_rails
-  feature
   gds-api-adapters
   gds-sso
   google-api-client (~> 0.18)
