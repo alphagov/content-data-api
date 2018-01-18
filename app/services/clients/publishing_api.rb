@@ -34,25 +34,6 @@ module Clients
       normalise(publishing_api.get_links(content_id)).fetch(:links)
     end
 
-    def find_each(fields, options = {})
-      current_page = 1
-      query = build_base_query(fields, options)
-
-      loop do
-        query = build_current_page_query(query, current_page)
-        response = publishing_api.get_content_items(query)
-        response["results"].each do |result|
-          if options[:links]
-            result[:links] = links(result["content_id"])
-          end
-          yield result.deep_symbolize_keys
-        end
-
-        break if last_page?(response)
-        current_page = response["current_page"] + 1
-      end
-    end
-
   private
 
     def build_base_query(fields, options)
