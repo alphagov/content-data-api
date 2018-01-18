@@ -24,15 +24,6 @@ Rails.application.routes.draw do
     resources :allocations, only: %w(index create)
   end
 
-  resources :taxonomy_projects, path: '/taxonomy-projects', only: %w(index show new create) do
-    get 'next', on: :member
-  end
-
-  resources :taxonomy_todos, only: %w(show update) do
-    post 'dont_know', on: :member
-    post 'not_relevant', on: :member
-  end
-
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end
