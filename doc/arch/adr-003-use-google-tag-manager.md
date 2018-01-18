@@ -1,4 +1,4 @@
-# ADR 003:
+# ADR 003: Use Google Tag Manager
 
 25-10-2017
  
