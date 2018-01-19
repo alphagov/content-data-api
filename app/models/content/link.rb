@@ -7,8 +7,6 @@ class Content::Link < ApplicationRecord
   TOPICS = "topics".freeze
   TAXONOMIES = "taxons".freeze
 
-  after_save { Audits::ReportRow.precompute(source) }
-
   belongs_to :source,
     class_name: 'Content::Item',
     foreign_key: :source_content_id,
