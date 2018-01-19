@@ -15,35 +15,6 @@ ActiveRecord::Schema.define(version: 20180205162236) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "allocations", force: :cascade do |t|
-    t.string "content_id", null: false
-    t.string "uid", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["content_id"], name: "index_allocations_on_content_id", unique: true
-    t.index ["uid"], name: "index_allocations_on_uid"
-  end
-
-  create_table "audits", id: :serial, force: :cascade do |t|
-    t.string "content_id", null: false
-    t.string "uid", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "change_title"
-    t.boolean "change_description"
-    t.boolean "change_body"
-    t.boolean "change_attachments"
-    t.boolean "outdated"
-    t.boolean "redundant"
-    t.boolean "reformat"
-    t.boolean "similar"
-    t.text "similar_urls"
-    t.text "notes"
-    t.text "redirect_urls"
-    t.index ["content_id"], name: "index_audits_on_content_id", unique: true
-    t.index ["uid"], name: "index_audits_on_uid"
-  end
-
   create_table "content_items", id: :serial, force: :cascade do |t|
     t.string "content_id"
     t.datetime "created_at", null: false
@@ -122,30 +93,6 @@ ActiveRecord::Schema.define(version: 20180205162236) do
     t.index ["target_content_id"], name: "index_links_on_target_content_id"
   end
 
-  create_table "questions", id: :serial, force: :cascade do |t|
-    t.string "type", null: false
-    t.text "text", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["type"], name: "index_questions_on_type"
-  end
-
-  create_table "report_rows", force: :cascade do |t|
-    t.string "content_id"
-    t.json "data"
-    t.index ["content_id"], name: "index_report_rows_on_content_id", unique: true
-  end
-
-  create_table "responses", id: :serial, force: :cascade do |t|
-    t.integer "audit_id"
-    t.integer "question_id"
-    t.text "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["audit_id"], name: "index_responses_on_audit_id"
-    t.index ["question_id"], name: "index_responses_on_question_id"
-  end
-
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -159,7 +106,4 @@ ActiveRecord::Schema.define(version: 20180205162236) do
     t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
-
-  add_foreign_key "allocations", "content_items", column: "content_id", primary_key: "content_id"
-  add_foreign_key "allocations", "users", column: "uid", primary_key: "uid"
 end
