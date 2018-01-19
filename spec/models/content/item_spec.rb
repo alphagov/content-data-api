@@ -1,13 +1,4 @@
 RSpec.describe Content::Item, type: :model do
-  describe "callbacks" do
-    subject { build(:content_item) }
-
-    it "precomputes the content_item's report row after saving" do
-      expect { subject.save! }.to change(Audits::ReportRow, :count).by(1)
-      expect { subject.save! }.not_to change(Audits::ReportRow, :count)
-    end
-  end
-
   describe ".to_param" do
     let!(:content_item) { build(:content_item, content_id: "content-id-1") }
 

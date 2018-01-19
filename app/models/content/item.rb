@@ -1,12 +1,7 @@
 class Content::Item < ApplicationRecord
   self.table_name = 'content_items'
 
-  has_one :audit, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::Audit"
-  has_one :allocation, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::Allocation"
-  has_one :report_row, primary_key: :content_id, foreign_key: :content_id, class_name: "Audits::ReportRow"
   has_many :links, primary_key: :content_id, foreign_key: :source_content_id, class_name: "Content::Link"
-
-  after_save { Audits::ReportRow.precompute(self) }
 
   scope :linked_by, ->(link_type) { where(links: { link_type: link_type }) }
 
