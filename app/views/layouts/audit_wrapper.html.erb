@@ -10,6 +10,10 @@
   <%= audits_path %>
 <% end %>
 
+<% content_for :navbar_items do %>
+
+<% end %>
+
 <% content_for :head do %>
   <%= csrf_meta_tags %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>

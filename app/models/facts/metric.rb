@@ -5,4 +5,20 @@ class Facts::Metric < ApplicationRecord
 
   validates :dimensions_date, presence: true
   validates :dimensions_item, presence: true
+
+  scope :by_date_name, -> do
+    joins(:dimensions_date)
+      .group(:date_name)
+  end
+
+  scope :for_organisation, ->(content_id:) do
+    return unless content_id.present?
+
+    joins(:dimensions_organisation)
+      .where(
+        dimensions_organisations: {
+          content_id: content_id
+        }
+      )
+  end
 end
