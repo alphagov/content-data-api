@@ -55,8 +55,4 @@ module Content::ItemsHelper
       },
     ]
   end
-
-  def assigned_to_current_user
-    content_item.allocation&.user == current_user
-  end
 end
