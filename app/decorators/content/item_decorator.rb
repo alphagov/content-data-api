@@ -57,18 +57,6 @@ class Content::ItemDecorator < Draper::Decorator
     object.document_type.titleize
   end
 
-  def auditor
-    allocation&.user&.name
-  end
-
-  def auditor_org
-    allocation.user.organisation&.title
-  end
-
-  def proxy_url
-    File.join(Proxies::IframeAllowingProxy::PROXY_BASE_PATH, base_path)
-  end
-
 private
 
   def titles(content_items)
