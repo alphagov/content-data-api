@@ -13,17 +13,6 @@ Rails.application.routes.draw do
     end
   end
 
-
-  namespace :audits do
-    get '/', to: "allocations#index"
-    get '/my-content', to: "audits#index", as: 'my_content'
-    resource :report, only: :show
-    resource :guidance, only: :show
-
-    post :allocations, to: "allocations#destroy", constraints: ->(req) { req.parameters["allocate_to"] == "no_one" }
-    resources :allocations, only: %w(index create)
-  end
-
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end
