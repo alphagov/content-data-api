@@ -11,18 +11,9 @@
 // about supported directives.
 //
 //= require polyfills/bind
-//= require bootstrap-tagsinput
 //= require cable
-//= require namespaces
-//= require selectize
-//= require show-free-text-question
-//= require accessible-autocomplete.min
-//= require multiselect-autocomplete
-//= require batch-selection
 //= require expandable-content
-//= require content-preview
+//= require namespaces
 
 // --- Analytics ---
 //= require analytics/google-tag-manager
-//= require analytics/track-select-change
-//= require analytics/track-allocation-batch-size
