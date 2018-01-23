@@ -1,4 +1,4 @@
-RSpec.describe Content::Item, type: :model do
+RSpec.describe Item, type: :model do
   describe ".to_param" do
     let!(:content_item) { build(:content_item, content_id: "content-id-1") }
 

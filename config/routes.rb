@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
-  root to: 'content/items#index'
+  root to: 'items#index'
 
-  namespace :content do
-    resources :items, only: %w(index show), param: :content_id
-  end
+  resources :items, only: %w(index show), param: :content_id
 
   get '/api/v1/metrics/:content_id', to: "metrics#show"
 

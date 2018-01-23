@@ -15,7 +15,7 @@ private
 
   def extract
     fields = %w[content_id base_path title description]
-    Content::ItemsService.new.fetch_all_with_default_locale_only(fields)
+    ItemsService.new.fetch_all_with_default_locale_only(fields)
   end
 
   def transform(raw_data)

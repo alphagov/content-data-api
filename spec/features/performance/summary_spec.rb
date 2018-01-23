@@ -6,7 +6,7 @@ RSpec.feature "Summary area", type: :feature do
   scenario "user can see the total number of pages" do
     create_list :content_item, 3
 
-    visit 'content/items'
+    visit '/items'
 
     expect(page).to have_selector('.summary-item-value', text: 3)
   end
@@ -15,7 +15,7 @@ RSpec.feature "Summary area", type: :feature do
     create :content_item, one_month_page_views: 1
     create :content_item, one_month_page_views: 0
 
-    visit 'content/items'
+    visit '/items'
 
     expect(page).to have_selector('.summary-item-value', text: 1)
   end
@@ -24,7 +24,7 @@ RSpec.feature "Summary area", type: :feature do
     create :content_item, public_updated_at: 7.months.ago
     create :content_item, public_updated_at: Date.today
 
-    visit 'content/items'
+    visit '/items'
 
     expect(page).to have_selector('.summary-item-value', text: 1)
   end
@@ -33,7 +33,7 @@ RSpec.feature "Summary area", type: :feature do
     create :content_item, number_of_pdfs: 1
     create :content_item, number_of_pdfs: 0
 
-    visit 'content/items'
+    visit '/items'
 
     expect(page).to have_selector('.summary-item-value', text: "50.0%")
   end
@@ -42,7 +42,7 @@ RSpec.feature "Summary area", type: :feature do
     create :content_item, number_of_word_files: 0
     create :content_item, number_of_word_files: 10
 
-    visit 'content/items'
+    visit '/items'
 
     expect(page).to have_selector('.summary-item-value', text: "50.0%")
   end

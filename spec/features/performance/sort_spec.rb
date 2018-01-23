@@ -8,7 +8,7 @@ RSpec.feature "Sort Content Items", type: :feature do
     create :content_item, title: "non-popular", six_months_page_views: 0
     create :content_item, title: "popular", six_months_page_views: 100
 
-    visit "/content/items"
+    visit "/items"
 
     click_on "Filter"
 
@@ -23,7 +23,7 @@ RSpec.feature "Sort Content Items", type: :feature do
     create :content_item, title: "AAA"
     create :content_item, title: "BBB"
 
-    visit "/content/items"
+    visit "/items"
 
     within("table tr.table-header") { click_on "Title" }
 

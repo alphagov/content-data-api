@@ -6,10 +6,10 @@ RSpec.feature "Content Item Details", type: :feature do
   scenario "the user clicks on the view content item link and is redirected to the content item show page" do
     create :content_item, content_id: "content-id-1", title: "content item title"
 
-    visit "/content/items"
+    visit "/items"
     click_on "content item title"
 
-    expected_path = "/content/items/content-id-1"
+    expected_path = "/items/content-id-1"
     expect(current_path).to eq(expected_path)
   end
 
@@ -21,7 +21,7 @@ RSpec.feature "Content Item Details", type: :feature do
       description: "a-description",
       public_updated_at: 2.months.ago,)
 
-    visit "/content/items/#{content_item.content_id}"
+    visit "/items/#{content_item.content_id}"
     expect(page).to have_text("a-title")
     expect(page).to have_link("a-title", href: "https://gov.uk/content/1/path")
     expect(page).to have_text("Guidance")
@@ -32,7 +32,7 @@ RSpec.feature "Content Item Details", type: :feature do
   scenario "Renders the number of PDFs" do
     content_item = create :content_item, number_of_pdfs: 99
 
-    visit "/content/items/#{content_item.content_id}"
+    visit "/items/#{content_item.content_id}"
 
     expect(page).to have_text("99")
   end
@@ -46,7 +46,7 @@ RSpec.feature "Content Item Details", type: :feature do
     create(:link, source: content, target: taxonomy1, link_type: "taxons")
     create(:link, source: content, target: taxonomy2, link_type: "taxons")
 
-    visit "/content/items/#{content.content_id}"
+    visit "/items/#{content.content_id}"
 
     expect(page).to have_text('Education')
     expect(page).to have_text('Health')
@@ -55,7 +55,7 @@ RSpec.feature "Content Item Details", type: :feature do
   scenario "Renders stats for Google Analytics" do
     content_item = create :content_item, one_month_page_views: 77
 
-    visit "/content/items/#{content_item.content_id}"
+    visit "/items/#{content_item.content_id}"
 
     expect(page).to have_text("77")
   end
@@ -63,7 +63,7 @@ RSpec.feature "Content Item Details", type: :feature do
   scenario "Renders feedex details" do
     content_item = create :content_item, base_path: '/the-base-path'
 
-    visit "/content/items/#{content_item.content_id}"
+    visit "/items/#{content_item.content_id}"
 
     feedex_link = "http://support.dev.gov.uk/anonymous_feedback?path=/the-base-path"
     expect(page).to have_link('View feedback on FeedEx', href: feedex_link)
@@ -78,7 +78,7 @@ RSpec.feature "Content Item Details", type: :feature do
     create(:link, source: content, target: organisation1, link_type: "organisations")
     create(:link, source: content, target: organisation2, link_type: "organisations")
 
-    visit "/content/items/#{content.content_id}"
+    visit "/items/#{content.content_id}"
 
     expect(page).to have_text('Education')
     expect(page).to have_text('Health')
@@ -90,7 +90,7 @@ RSpec.feature "Content Item Details", type: :feature do
   scenario "Renders when an item has not been published" do
     content_item = create :content_item, public_updated_at: nil
 
-    visit "/content/items/#{content_item.content_id}"
+    visit "/items/#{content_item.content_id}"
 
     expect(page).to have_text("Never")
   end
