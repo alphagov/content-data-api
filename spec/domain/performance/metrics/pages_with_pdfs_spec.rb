@@ -9,19 +9,19 @@ module Performance
     }
 
     it "returns the number of items with pdfs in the collection" do
-      result = subject.new(Content::Item.all).run
+      result = subject.new(Item.all).run
 
       expect(result[:pages_with_pdfs][:value]).to eq(1)
     end
 
     it "returns zero percent if there are no content items with pdfs" do
-      result = subject.new(Content::Item.where("number_of_pdfs = ?", 0)).run
+      result = subject.new(Item.where("number_of_pdfs = ?", 0)).run
 
       expect(result[:pages_with_pdfs][:percentage]).to eq(0)
     end
 
     it "returns the number of items with pdfs as a percentage of the collection" do
-      result = subject.new(Content::Item.all).run
+      result = subject.new(Item.all).run
 
       expect(result[:pages_with_pdfs][:percentage]).to eq(50)
     end

@@ -6,7 +6,7 @@ module TableHelper
   class SortTable
     attr_accessor :view, :heading, :attribute
 
-    delegate :content_tag, :params, :link_to, :content_items_path, to: :view
+    delegate :content_tag, :params, :link_to, :items_path, to: :view
 
     def initialize(view, heading, attribute)
       @view = view
@@ -28,7 +28,7 @@ module TableHelper
         order: order
       )
 
-      link_to content_items_path(link_options) do
+      link_to items_path(link_options) do
         "#{heading}#{content_tag :span, '', class: 'rm'}".html_safe
       end
     end

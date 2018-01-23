@@ -4,13 +4,13 @@ RSpec.feature "Content Items List", type: :feature do
   end
 
   scenario "User does can see CPM feedback survey link in banner" do
-    visit "/content/items"
+    visit "/items"
 
     expect(page).to have_link("these quick questions")
   end
 
   scenario "Renders the table header" do
-    visit "/content/items"
+    visit "/items"
 
     expect(page).to have_selector('thead', text: 'Title')
     expect(page).to have_selector('thead tr:first-child th', text: 'Doc type')
@@ -25,7 +25,7 @@ RSpec.feature "Content Items List", type: :feature do
       one_month_page_views: "99",
       public_updated_at: 2.months.ago)
 
-    visit "/content/items"
+    visit "/items"
 
     expect(page).to have_text("a-title")
     expect(page).to have_text("Guide")
@@ -36,7 +36,7 @@ RSpec.feature "Content Items List", type: :feature do
   scenario "Renders all content items" do
     create_list :content_item, 2
 
-    visit "/content/items"
+    visit "/items"
 
     expect(page).to have_selector('table tbody tr', count: 2)
   end
@@ -44,7 +44,7 @@ RSpec.feature "Content Items List", type: :feature do
   scenario "Paginate through content items" do
     create_list(:content_item, 101)
 
-    visit "/content/items"
+    visit "/items"
     expect(page).to have_selector("main tbody tr", count: 100)
 
     within(".pagination") { click_on "2" }

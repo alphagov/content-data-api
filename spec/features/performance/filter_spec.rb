@@ -8,7 +8,7 @@ RSpec.feature "Filter in content items", type: :feature do
       create :content_item, title: "some text"
       create :content_item, title: "another text"
 
-      visit "/content/items"
+      visit "/items"
       fill_in "query", with: "some text"
       click_on "Filter"
 
@@ -19,7 +19,7 @@ RSpec.feature "Filter in content items", type: :feature do
       create :content_item, title: "title - a"
       create :content_item, title: "title - b"
 
-      visit "/content/items?order=desc&sort=title"
+      visit "/items?order=desc&sort=title"
       fill_in "query", with: "title -"
       click_on "Filter"
 
@@ -27,7 +27,7 @@ RSpec.feature "Filter in content items", type: :feature do
     end
 
     scenario "show the query entered by the user after filtering" do
-      visit "/content/items"
+      visit "/items"
       fill_in 'query', with: 'a search value'
       click_on "Filter"
 
@@ -49,7 +49,7 @@ RSpec.feature "Filter in content items", type: :feature do
     end
 
     scenario "filtering by organisation" do
-      visit "/content/items"
+      visit "/items"
       select "HMRC", from: "organisations"
       click_on "Filter"
 
@@ -58,7 +58,7 @@ RSpec.feature "Filter in content items", type: :feature do
     end
 
     scenario "the user's previously filtered organisation is selected after filtering" do
-      visit "/content/items"
+      visit "/items"
       select "HMRC", from: "organisations"
       click_on "Filter"
 
@@ -68,19 +68,19 @@ RSpec.feature "Filter in content items", type: :feature do
 
   context "additional filters" do
     scenario "the user cannot see the additional filters by default", js: true do
-      visit "/content/items"
+      visit "/items"
 
       expect(page).to have_selector('#additionalContent', visible: false)
     end
 
     scenario "the user can see the additional filters if JavaScript is disabled", js: false do
-      visit "/content/items"
+      visit "/items"
 
       expect(page).to have_selector('#additionalContent', visible: true)
     end
 
     scenario "the user can toggle the visibility of the additional filters", js: true do
-      visit "/content/items"
+      visit "/items"
 
       click_on "More options"
       expect(page).to have_selector('#additionalContent', visible: true)
@@ -94,7 +94,7 @@ RSpec.feature "Filter in content items", type: :feature do
       taxonomy = create(:content_item, title: "Education")
       create(:link, source: content, target: taxonomy, link_type: "taxons")
 
-      visit "/content/items?taxons=#{content.content_id}"
+      visit "/items?taxons=#{content.content_id}"
 
       expect(page).to have_selector('#additionalContent', visible: true)
     end

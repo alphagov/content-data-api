@@ -15,7 +15,7 @@ module Performance
         create :content_item, number_of_pdfs: 1, number_of_word_files: 1
         create :content_item, one_month_page_views: 2
 
-        result = subject.run_collection(Content::Item.all)
+        result = subject.run_collection(Item.all)
         expected_result = {
           total_pages: { value: 4 },
           zero_page_views: { value: 3 },

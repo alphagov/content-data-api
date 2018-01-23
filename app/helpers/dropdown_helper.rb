@@ -1,16 +1,16 @@
 module DropdownHelper
   def taxon_options_for_select(selected = nil)
-    taxon_options = Content::Item.all_taxons.pluck(:title, :content_id)
+    taxon_options = Item.all_taxons.pluck(:title, :content_id)
 
     options_for_select(taxon_options, selected)
   end
 
   def organisation_options_for_select(selected = nil)
-    organisation_options = Content::Item
-                             .all_organisations
-                             .pluck(:title, :content_id)
-                             .map { |title, content_id| [title.squish, content_id] }
-                             .sort_by { |title, _| title }
+    organisation_options = Item
+                           .all_organisations
+                           .pluck(:title, :content_id)
+                           .map { |title, content_id| [title.squish, content_id] }
+                           .sort_by { |title, _| title }
 
     options_for_select(organisation_options, selected)
   end
@@ -24,12 +24,12 @@ module DropdownHelper
       ]
     end
 
-    topic_options = Content::Item
-                      .includes(links: %i(target))
-                      .where(document_type: 'topic', links: { link_type: Content::Link::PARENT })
-                      .map(&topic_option_attributes)
-                      .sort_by { |parent_title, title, _| [parent_title, title] }
-                      .map { |parent_title, title, content_id| ["#{parent_title}: #{title}", content_id] }
+    topic_options = Item
+                    .includes(links: %i(target))
+                    .where(document_type: 'topic', links: { link_type: link::PARENT })
+                    .map(&topic_option_attributes)
+                    .sort_by { |parent_title, title, _| [parent_title, title] }
+                    .map { |parent_title, title, content_id| ["#{parent_title}: #{title}", content_id] }
 
     options_for_select(topic_options, selected)
   end

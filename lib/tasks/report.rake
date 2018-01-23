@@ -1,10 +1,10 @@
 namespace :report do
   desc "Precompute report rows for all content items"
   task precompute: :environment do
-    out_of = Content::Item.count
+    out_of = item.count
     count = 0
 
-    Content::Item.find_each do |content_item|
+    item.find_each do |content_item|
       Audits::ReportRow.precompute(content_item)
 
       count += 1
