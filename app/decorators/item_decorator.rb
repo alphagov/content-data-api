@@ -17,16 +17,8 @@ class ItemDecorator < Draper::Decorator
     names.join(', ').html_safe
   end
 
-  def assigned_to_name
-    object.allocation ? object.allocation.user.name : 'No one'
-  end
-
   def taxons_as_string
     object.linked_taxons.map(&:title).join(', ')
-  end
-
-  def topics
-    titles(object.linked_topics)
   end
 
   def organisations
