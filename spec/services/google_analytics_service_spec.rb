@@ -18,7 +18,9 @@ RSpec.describe GoogleAnalyticsService do
           {
             base_path: '/path-1',
             one_month_page_views: 5,
+            one_month_unique_page_views: 3,
             six_months_page_views: 60,
+            six_months_unique_page_views: 30,
           }
         ]
       )
@@ -29,7 +31,9 @@ RSpec.describe GoogleAnalyticsService do
         {
           base_path: '/path-1',
           one_month_page_views: 5,
+          one_month_unique_page_views: 3,
           six_months_page_views: 60,
+          six_months_unique_page_views: 30,
         }
       ])
     end

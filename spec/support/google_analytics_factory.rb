@@ -12,14 +12,12 @@ module GoogleAnalyticsFactory
                   ],
                   metrics: [
                     Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
-                      values: [
-                        response.fetch(:one_month_page_views)
-                      ]
-                    ),
+                      values: response.values_at(:one_month_page_views,
+                                                 :one_month_unique_page_views),
+                      ),
                     Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
-                      values: [
-                        response.fetch(:six_months_page_views)
-                      ]
+                      values: response.values_at(:six_months_page_views,
+                                                 :six_months_unique_page_views),
                     )
                   ]
                 )
