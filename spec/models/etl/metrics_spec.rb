@@ -8,6 +8,25 @@ RSpec.describe ETL::Metrics do
 
   let(:organisation) { create(:dimensions_organisation, content_id: 'id1') }
 
+  let(:pageviews_response) do
+    GoogleAnalyticsFactory
+      .build_pageviews_response(
+        [
+          {
+            base_path: "/link1",
+            page_views: 20,
+            unique_page_views: 10,
+          },
+        ]
+      )
+  end
+
+  before do
+    allow_any_instance_of(GoogleAnalytics::Client).to receive(:build) do
+      double(batch_get_reports: pageviews_response)
+    end
+  end
+
   it 'creates a Metrics fact per content item' do
     expect(ETL::Items).to receive(:process) do
       create :dimensions_item, latest: true, organisation_id: 'id1'
@@ -47,7 +66,7 @@ RSpec.describe ETL::Metrics do
   it 'creates a metrics fact with the associated dimensions' do
     allow(ETL::Organisations).to receive(:process).and_return([organisation])
     expect(ETL::Items).to receive(:process) do
-      create(:dimensions_item, organisation_id: 'id1', latest: true, content_id: 'cid1')
+      create(:dimensions_item, organisation_id: 'id1', latest: true, content_id: 'cid1', link: '/link1')
     end
 
     subject.process
@@ -56,6 +75,8 @@ RSpec.describe ETL::Metrics do
       dimensions_date: date,
       dimensions_organisation: organisation,
       dimensions_item: Dimensions::Item.find_by(content_id: 'cid1'),
+      pageviews: 20,
+      unique_pageviews: 10,
     )
   end
 

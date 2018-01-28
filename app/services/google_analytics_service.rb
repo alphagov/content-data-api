@@ -3,6 +3,18 @@ class GoogleAnalyticsService
     @client ||= GoogleAnalytics::Client.new.build
   end
 
+  def pageviews_for_date(date, *base_paths)
+    formatted_date = date.strftime("%Y-%m-%d")
+
+    request = GoogleAnalytics::Requests::PageViewsRequest.new.build(
+      base_paths: base_paths,
+      start_dates: [formatted_date],
+      end_date: formatted_date
+    )
+    response = client.batch_get_reports(request)
+    GoogleAnalytics::Responses::PageviewsResponse.new.parse(response)
+  end
+
   def one_and_six_month_pageviews(base_paths)
     raise "base_paths isn't an array" unless base_paths.is_a?(Array)
     base_paths = base_paths.select(&:present?)
