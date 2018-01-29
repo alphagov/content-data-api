@@ -5,4 +5,6 @@ class Facts::Metric < ApplicationRecord
 
   validates :dimensions_date, presence: true
   validates :dimensions_item, presence: true
+  validates :pageviews, numericality: { only_integer: true }
+  validates :unique_pageviews, numericality: { only_integer: true }
 end
