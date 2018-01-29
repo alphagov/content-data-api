@@ -10,7 +10,7 @@ class Importers::AllGoogleAnalyticsMetrics
       base_paths = content_items
         .map(&:base_path)
         .select(&:present?)
-      ImportPageviewsJob.perform_async(base_paths)
+      ImportOneAndSixMonthPageviewsJob.perform_async(base_paths)
     end
   end
 end

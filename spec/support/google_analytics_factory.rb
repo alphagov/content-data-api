@@ -1,5 +1,5 @@
 module GoogleAnalyticsFactory
-  def self.build_page_views_response(rows)
+  def self.build_one_and_six_month_pageviews_response(rows)
     Google::Apis::AnalyticsreportingV4::GetReportsResponse.new(
       reports: [
         Google::Apis::AnalyticsreportingV4::Report.new(

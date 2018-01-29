@@ -3,7 +3,7 @@ require 'google/apis/analyticsreporting_v4'
 
 module GoogleAnalytics
   module Responses
-    class PageViewsResponse
+    class OneAndSixMonthPageviewsResponse
       include Google::Apis::AnalyticsreportingV4
 
       def parse(response)
