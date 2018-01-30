@@ -17,6 +17,9 @@ module GoogleAnalytics
               {
                 metrics: [
                   {
+                    expression: "ga:pageviews"
+                  },
+                  {
                     expression: "ga:uniquePageviews"
                   }
                 ],

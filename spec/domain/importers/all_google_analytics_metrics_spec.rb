@@ -3,7 +3,7 @@ RSpec.describe Importers::AllGoogleAnalyticsMetrics do
     it "creates a job to import pageviews for content items" do
       content_items = [create(:content_item)]
       base_paths = content_items.map(&:base_path)
-      expect(ImportPageviewsJob).to receive(:perform_async).with(base_paths)
+      expect(ImportOneAndSixMonthPageviewsJob).to receive(:perform_async).with(base_paths)
 
       subject.run
     end
@@ -12,7 +12,7 @@ RSpec.describe Importers::AllGoogleAnalyticsMetrics do
       create_list(:content_item, 2)
       subject.batch_size = 1
 
-      expect(ImportPageviewsJob).to receive(:perform_async).twice
+      expect(ImportOneAndSixMonthPageviewsJob).to receive(:perform_async).twice
 
       subject.run
     end
@@ -21,7 +21,7 @@ RSpec.describe Importers::AllGoogleAnalyticsMetrics do
       create(:content_item, base_path: '/base-path')
       create(:content_item, base_path: nil)
 
-      expect(ImportPageviewsJob).to receive(:perform_async).with(['/base-path'])
+      expect(ImportOneAndSixMonthPageviewsJob).to receive(:perform_async).with(['/base-path'])
 
       subject.run
     end
