@@ -12,9 +12,9 @@ RSpec.describe 'Number of publishing items per organisation' do
 
     date = Dimensions::Date.build(Date.today)
 
-    Facts::Metric.create(dimensions_organisation: org1, dimensions_item: item1, dimensions_date: date, pageviews: 0, unique_pageviews: 0)
-    Facts::Metric.create(dimensions_organisation: org1, dimensions_item: item2, dimensions_date: date, pageviews: 0, unique_pageviews: 0)
-    Facts::Metric.create(dimensions_organisation: org2, dimensions_item: item3, dimensions_date: date, pageviews: 0, unique_pageviews: 0)
+    Facts::Metric.create(dimensions_organisation: org1, dimensions_item: item1, dimensions_date: date)
+    Facts::Metric.create(dimensions_organisation: org1, dimensions_item: item2, dimensions_date: date)
+    Facts::Metric.create(dimensions_organisation: org2, dimensions_item: item3, dimensions_date: date)
 
     total_metrics = Facts::Metric.
       joins(:dimensions_organisation, :dimensions_item, :dimensions_date).
