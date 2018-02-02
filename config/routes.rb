@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     resources :allocations, only: %w(index create)
   end
 
+  get '/api/v1/metrics/:content_id', to: "metrics#show"
+
   if Rails.env.development?
     mount GovukAdminTemplate::Engine, at: "/style-guide"
   end
