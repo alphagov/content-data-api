@@ -15,6 +15,16 @@ class Content::ItemsService
       end
   end
 
+  def fetch_all_with_id_and_path
+    client
+      .fetch_all(%w[content_id base_path title description])
+      .group_by { |content_item| content_item[:content_id] }
+      .values
+      .map do |content_items_with_the_same_id|
+        content_item_with_en_locale_or_first_other(content_items_with_the_same_id)
+      end
+  end
+
   def fetch(content_id, locale, version)
     attribute_names = %i[
       public_updated_at
