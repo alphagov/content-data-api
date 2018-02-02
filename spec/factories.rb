@@ -119,6 +119,12 @@ FactoryBot.define do
     allocated_to :anyone
   end
 
+  factory :dimensions_date, class: Dimensions::Date do
+    sequence(:date) { |i| i.days.ago.to_date }
+
+    initialize_with { Dimensions::Date.build(date) }
+  end
+
   factory :dimensions_organisation, class: Dimensions::Organisation do
     sequence(:title) { |i| "title - #{i}" }
     sequence(:slug) { |i| "slug - #{i}" }
@@ -135,5 +141,11 @@ FactoryBot.define do
     sequence(:link) { |i| "link - #{i}" }
     sequence(:description) { |i| "description - #{i}" }
     sequence(:organisation_id) { |i| "organisation_id - #{i}" }
+  end
+
+  factory :facts_metric, class: Facts::Metric do
+    dimensions_date
+    dimensions_item
+    dimensions_organisation
   end
 end
