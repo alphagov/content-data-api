@@ -30,11 +30,7 @@ private
   def transform(raw_data)
     raw_data.map do |item|
       {
-        content_id: item['content_id'],
-        title: item['title'],
-        link: item['link'],
-        description: item['description'],
-        organisation_id: item.fetch('organisations', [{}]).first['content_id'],
+        content_id: item['content_id']
       }
     end
   end
@@ -81,10 +77,10 @@ private
 
   def new_items_sql
     <<~SQL
-      SELECT content_id, title, link, description, organisation_id
+      SELECT content_id
       FROM dimensions_items_temps
        EXCEPT
-      SELECT content_id, title, link, description, organisation_id
+      SELECT content_id
       FROM dimensions_items
     SQL
   end

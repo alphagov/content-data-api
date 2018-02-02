@@ -19,50 +19,10 @@ RSpec.describe ETL::Items do
     stub_request(:get, query).to_return(body: rummager_response)
     subject.process
 
-    item = Dimensions::Item.find_by(title: 'Tax your vehicle')
+    item = Dimensions::Item.find_by(content_id: 'fa748fae-3de4-4266-ae85-0797ada3f40c')
     expect(item).to have_attributes(
-      content_id: 'fa748fae-3de4-4266-ae85-0797ada3f40c',
-      title: 'Tax your vehicle',
-      link: '/vehicle-tax',
-      description: "Renew or tax your vehicle for the first time using a reminder letter, your log book, the 'new keeper's details' section of a log book - and how to tax if you don't have any documents",
-      organisation_id: '70580624-93b5-4aed-823b-76042486c769',
+      content_id: 'fa748fae-3de4-4266-ae85-0797ada3f40c'
     )
-  end
-
-  context 'when items already exist' do
-    before do
-      stub_request(:get, query).to_return(body: rummager_response)
-      subject.process
-    end
-
-    it 'does not store duplicated items' do
-      subject.process
-
-      expect(Dimensions::Item.count).to eq(2)
-    end
-
-    it 'adds a new item if an attribute changed' do
-      Dimensions::Item.first.update(title: 'old title')
-      subject.process
-
-      expect(Dimensions::Item.count).to eq(3)
-    end
-
-    it 'returns the latest version of each item' do
-      Dimensions::Item.first.update(title: 'old title', latest: true)
-      subject.process
-
-      latest_items = Dimensions::Item.where(latest: true)
-      expect(latest_items.pluck(:title)).to include('Tax your vehicle', 'Companies House')
-    end
-  end
-
-  it 'Update the latest version of the content items' do
-    stub_request(:get, query).to_return(body: rummager_response)
-    subject.process
-
-    latest_items = Dimensions::Item.where(latest: true).pluck(:title)
-    expect(latest_items).to match_array(['Tax your vehicle', 'Companies House'])
   end
 
   def rummager_response

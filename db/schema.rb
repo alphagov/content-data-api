@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180128183042) do
+ActiveRecord::Schema.define(version: 20180131114516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,48 +87,32 @@ ActiveRecord::Schema.define(version: 20180128183042) do
 
   create_table "dimensions_items", force: :cascade do |t|
     t.string "content_id"
-    t.string "title"
-    t.string "link"
-    t.string "description"
-    t.string "organisation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "latest"
-    t.index ["content_id", "link", "organisation_id"], name: "dimensions_items_natural_key"
+    t.string "organisation_id"
+    t.string "description"
+    t.string "link"
+    t.string "title"
+    t.string "base_path"
   end
 
   create_table "dimensions_items_temps", id: false, force: :cascade do |t|
     t.string "content_id"
-    t.string "title"
-    t.string "link"
-    t.string "description"
     t.string "organisation_id"
-    t.index ["content_id", "link", "organisation_id"], name: "dimensions_items_temps_natual_key"
-  end
-
-  create_table "dimensions_organisations", force: :cascade do |t|
-    t.string "title"
-    t.string "slug"
     t.string "description"
     t.string "link"
-    t.string "organisation_id"
-    t.string "state"
-    t.string "content_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "title"
+    t.string "base_path"
   end
 
   create_table "facts_metrics", force: :cascade do |t|
     t.date "dimensions_date_id"
     t.bigint "dimensions_item_id"
-    t.bigint "dimensions_organisation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "pageviews"
     t.integer "unique_pageviews"
-    t.index ["dimensions_date_id"], name: "index_facts_metrics_on_dimensions_date_id"
-    t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
-    t.index ["dimensions_organisation_id"], name: "index_facts_metrics_on_dimensions_organisation_id"
   end
 
   create_table "links", id: :serial, force: :cascade do |t|
@@ -182,7 +166,4 @@ ActiveRecord::Schema.define(version: 20180128183042) do
 
   add_foreign_key "allocations", "content_items", column: "content_id", primary_key: "content_id"
   add_foreign_key "allocations", "users", column: "uid", primary_key: "uid"
-  add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
-  add_foreign_key "facts_metrics", "dimensions_items"
-  add_foreign_key "facts_metrics", "dimensions_organisations"
 end

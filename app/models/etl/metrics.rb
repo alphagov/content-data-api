@@ -20,7 +20,6 @@ private
         {
           dimensions_date_id: date.date,
           dimensions_item_id: value[0],
-          dimensions_organisation_id: dimension_organisation(value[1], organisations).try(:id)
         }
       end
       Facts::Metric.import(metrics, validate: false)
@@ -29,13 +28,5 @@ private
 
   def date
     @date ||= ETL::Dates.process
-  end
-
-  def organisations
-    @organisations ||= ETL::Organisations.process
-  end
-
-  def dimension_organisation(organisation_id, organisations)
-    organisations.detect { |org| org.content_id == organisation_id }
   end
 end
