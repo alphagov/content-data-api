@@ -5,19 +5,9 @@ class Content::ItemsService
     self.client = Clients::PublishingAPI.new
   end
 
-  def fetch_all_with_default_locale_only
+  def fetch_all_with_default_locale_only(fields)
     client
-      .fetch_all(%w[content_id locale user_facing_version])
-      .group_by { |content_item| content_item[:content_id] }
-      .values
-      .map do |content_items_with_the_same_id|
-        content_item_with_en_locale_or_first_other(content_items_with_the_same_id)
-      end
-  end
-
-  def fetch_all_with_id_and_path
-    client
-      .fetch_all(%w[content_id base_path title description])
+      .fetch_all(fields)
       .group_by { |content_item| content_item[:content_id] }
       .values
       .map do |content_items_with_the_same_id|

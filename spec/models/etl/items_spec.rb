@@ -36,7 +36,7 @@ RSpec.describe ETL::Items do
     item = Dimensions::Item.find_by(content_id: 'xyz789')
     expect(item).to have_attributes(
       content_id: 'xyz789',
-      path: '/xyz',
+      base_path: '/xyz',
       latest: true
     )
   end

@@ -14,14 +14,15 @@ class ETL::Items
 private
 
   def extract
-    Content::ItemsService.new.fetch_all_with_id_and_path
+    fields = %w[content_id base_path title description]
+    Content::ItemsService.new.fetch_all_with_default_locale_only(fields)
   end
 
   def transform(raw_data)
     raw_data.map do |item|
       {
         content_id: item[:content_id],
-        path: item[:base_path],
+        base_path: item[:base_path],
         latest: true,
       }
     end
