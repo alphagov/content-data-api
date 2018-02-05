@@ -127,6 +127,9 @@ FactoryBot.define do
 
   factory :dimensions_item, class: Dimensions::Item do
     sequence(:content_id) { |i| "content_id - #{i}" }
+    sequence(:title) { |i| "title - #{i}" }
+    sequence(:base_path) { |i| "link - #{i}" }
+    sequence(:description) { |i| "description - #{i}" }
   end
 
   factory :facts_metric, class: Facts::Metric do
