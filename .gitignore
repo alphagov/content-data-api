@@ -9,6 +9,7 @@
 .bundle
 .byebug_history
 .env
+.DS_Store
 config/local_env.yml
 coverage
 
