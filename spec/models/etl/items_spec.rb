@@ -2,110 +2,42 @@ require 'rails_helper'
 require 'gds-api-adapters'
 
 RSpec.describe ETL::Items do
+  include GdsApi::TestHelpers::PublishingApiV2
   subject { described_class }
-
-  let(:query) do
-    %r{search.json\?.*(fields=content_id,title,link,description,organisations)}
+  let(:fields) { %i[base_path content_id description title] }
+  let(:content_items) do
+    [
+      {
+        content_id: 'abc123',
+        base_path: '/abc',
+        description: 'Description of content with the title of abc.',
+        title: 'abc'
+      },
+      {
+        content_id: 'xyz789',
+        base_path: '/xyz',
+        description: 'Description of content with the title of xyz.',
+        title: 'xyz'
+      }
+    ]
   end
 
   it 'saves an item per entry in Search API' do
-    stub_request(:get, query).to_return(body: rummager_response)
+    publishing_api_get_editions(content_items, fields: fields, per_page: 700, states: ['published'])
     subject.process
 
     expect(Dimensions::Item.count).to eq(2)
   end
 
-  it 'transform an entry in SearchAPI into a Dimension::Item' do
-    stub_request(:get, query).to_return(body: rummager_response)
+  it 'transform an entry in PublishingAPI into a Dimensions::Item' do
+    publishing_api_get_editions(content_items, fields: fields, per_page: 700, states: ['published'])
     subject.process
 
-    item = Dimensions::Item.find_by(title: 'Tax your vehicle')
+    item = Dimensions::Item.find_by(content_id: 'xyz789')
     expect(item).to have_attributes(
-      content_id: 'fa748fae-3de4-4266-ae85-0797ada3f40c',
-      title: 'Tax your vehicle',
-      link: '/vehicle-tax',
-      description: "Renew or tax your vehicle for the first time using a reminder letter, your log book, the 'new keeper's details' section of a log book - and how to tax if you don't have any documents",
-      organisation_id: '70580624-93b5-4aed-823b-76042486c769',
+      content_id: 'xyz789',
+      base_path: '/xyz',
+      latest: true
     )
-  end
-
-  context 'when items already exist' do
-    before do
-      stub_request(:get, query).to_return(body: rummager_response)
-      subject.process
-    end
-
-    it 'does not store duplicated items' do
-      subject.process
-
-      expect(Dimensions::Item.count).to eq(2)
-    end
-
-    it 'adds a new item if an attribute changed' do
-      Dimensions::Item.first.update(title: 'old title')
-      subject.process
-
-      expect(Dimensions::Item.count).to eq(3)
-    end
-
-    it 'returns the latest version of each item' do
-      Dimensions::Item.first.update(title: 'old title', latest: true)
-      subject.process
-
-      latest_items = Dimensions::Item.where(latest: true)
-      expect(latest_items.pluck(:title)).to include('Tax your vehicle', 'Companies House')
-    end
-  end
-
-  it 'Update the latest version of the content items' do
-    stub_request(:get, query).to_return(body: rummager_response)
-    subject.process
-
-    latest_items = Dimensions::Item.where(latest: true).pluck(:title)
-    expect(latest_items).to match_array(['Tax your vehicle', 'Companies House'])
-  end
-
-  def rummager_response
-    <<-JSON
-    {
-      "results": [
-        {
-          "content_id": "fa748fae-3de4-4266-ae85-0797ada3f40c",
-          "title": "Tax your vehicle",
-          "link": "/vehicle-tax",
-          "description": "Renew or tax your vehicle for the first time using a reminder letter, your log book, the 'new keeper's details' section of a log book - and how to tax if you don't have any documents",
-          "organisations": [
-            {
-              "content_id": "70580624-93b5-4aed-823b-76042486c769",
-              "acronym": "DVLA",
-              "link": "/government/organisations/driver-and-vehicle-licensing-agency",
-              "slug": "driver-and-vehicle-licensing-agency",
-              "organisation_type": "executive_agency",
-              "organisation_state": "live"
-            }
-          ],
-          "indexable_content": "Some content"
-        },
-        {
-          "content_id": "c36bd301-d0c5-4492-86ad-ee7843b8383b",
-          "title": "Companies House",
-          "link": "/government/organisations/companies-house",
-          "description": "The home of Companies House  on GOV.UK. We incorporate and dissolve limited companies. We register company information and make it available to the public.",
-          "organisations": [
-            {
-              "title": "Companies House ",
-              "content_id": "c36bd301-d0c5-4492-86ad-ee7843b8383b",
-              "acronym": "Companies House",
-              "link": "/government/organisations/companies-house",
-              "slug": "companies-house",
-              "organisation_type": "executive_agency",
-              "organisation_state": "live"
-            }
-          ],
-          "indexable_content": "another content"
-        }
-      ]
-    }
-    JSON
   end
 end
