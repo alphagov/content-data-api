@@ -4,7 +4,7 @@ require 'gds-api-adapters'
 RSpec.describe ETL::Metrics do
   subject { described_class }
 
-  let!(:date) { Dimensions::Date.build(Date.today) }
+  let!(:date) { Dimensions::Date.build(Date.yesterday) }
 
   let(:organisation) { create(:dimensions_organisation, content_id: 'id1') }
 
@@ -13,6 +13,7 @@ RSpec.describe ETL::Metrics do
       create :dimensions_item, latest: true, organisation_id: 'id1'
       create :dimensions_item, latest: true, organisation_id: 'id1'
     end
+    allow(ETL::GoogleAnalyticsReportDataJob).to receive(:perform_async)
     allow(ETL::Organisations).to receive(:process).and_return([organisation])
 
     subject.process
@@ -21,6 +22,7 @@ RSpec.describe ETL::Metrics do
   end
 
   it 'does not duplicate facts' do
+    allow(ETL::GoogleAnalyticsReportDataJob).to receive(:perform_async)
     allow(ETL::Organisations).to receive(:process).and_return([organisation])
     expect(ETL::Items).to receive(:process).twice do
       Dimensions::Item.update(latest: false)
@@ -34,6 +36,7 @@ RSpec.describe ETL::Metrics do
   end
 
   it 'does not raise an exception if the content item has no organisation' do
+    allow(ETL::GoogleAnalyticsReportDataJob).to receive(:perform_async)
     allow(ETL::Organisations).to receive(:process).and_return([organisation])
     expect(ETL::Items).to receive(:process) do
       create :dimensions_item, latest: true, organisation_id: nil
@@ -45,6 +48,7 @@ RSpec.describe ETL::Metrics do
   end
 
   it 'creates a metrics fact with the associated dimensions' do
+    allow(ETL::GoogleAnalyticsReportDataJob).to receive(:perform_async)
     allow(ETL::Organisations).to receive(:process).and_return([organisation])
     expect(ETL::Items).to receive(:process) do
       create(:dimensions_item, organisation_id: 'id1', latest: true, content_id: 'cid1')
@@ -60,6 +64,8 @@ RSpec.describe ETL::Metrics do
   end
 
   it 'creates multiple items for multiple organisations' do
+    allow(ETL::GoogleAnalyticsReportDataJob).to receive(:perform_async)
+
     expect(ETL::Items).to receive(:process) do
       create(:dimensions_item, organisation_id: 'id1', latest: true, content_id: 'cid1')
       create(:dimensions_item, organisation_id: 'id2', latest: true, content_id: 'cid2')

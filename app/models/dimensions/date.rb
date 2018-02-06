@@ -22,6 +22,14 @@ class Dimensions::Date < ApplicationRecord
       )
   end
 
+  def self.for(date)
+    where(date: date).first || begin
+      date_dimension = build(date)
+      date_dimension.save
+      date_dimension
+    end
+  end
+
   validates :date, presence: true
 
   validates :date_name, presence: true
