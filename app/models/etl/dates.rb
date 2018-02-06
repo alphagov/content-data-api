@@ -4,6 +4,6 @@ class ETL::Dates
   end
 
   def process
-    Dimensions::Date.for(Date.today)
+    Dimensions::Date.for(Date.yesterday)
   end
 end

@@ -4,7 +4,7 @@ require 'gds-api-adapters'
 RSpec.describe ETL::Metrics do
   subject { described_class }
 
-  let!(:date) { Dimensions::Date.build(Date.today) }
+  let!(:date) { Dimensions::Date.build(Date.yesterday) }
 
   let(:organisation) { create(:dimensions_organisation, content_id: 'id1') }
 
