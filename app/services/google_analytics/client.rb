@@ -6,7 +6,7 @@ module GoogleAnalytics
     include Google::Apis::AnalyticsreportingV4
     include Google::Auth
 
-    def build(scope: "https://www.googleapis.com/auth/analytics.readonly")
+    def build(scope: AUTH_ANALYTICS_READONLY)
       @client ||= AnalyticsReportingService.new
       @client.authorization ||= ServiceAccountCredentials.make_creds(scope: scope)
       @client
