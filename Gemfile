@@ -5,7 +5,6 @@ ruby File.read('.ruby-version').chomp
 # GOV.UK gems and forks
 gem 'gds-api-adapters'
 gem 'gds-sso'
-gem 'govspeak'
 gem 'govuk_admin_template', '~> 6.4'
 gem 'govuk_app_config'
 gem 'govuk_sidekiq'
@@ -26,7 +25,6 @@ gem 'puma'
 gem 'rack-proxy'
 gem 'rails', '~> 5.1'
 gem 'sass-rails'
-gem 'selectize-rails'
 gem 'turbolinks'
 gem 'uglifier'
 gem 'unicorn'
@@ -44,7 +42,6 @@ group :test do
 end
 
 group :development, :test do
-  gem 'active_record_disabler'
   gem 'byebug'
   gem 'capybara'
   gem 'database_cleaner'
@@ -59,11 +56,9 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
-  gem 'site_prism'
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen'
-  gem 'teaspoon-jasmine'
   gem 'timecop'
   gem 'webmock'
 end

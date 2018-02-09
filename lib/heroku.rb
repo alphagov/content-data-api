@@ -4,7 +4,7 @@ class Heroku
   end
 
   def self.create_users(organisation_id)
-    organisation = Content::Item.find(organisation_id)
+    organisation = item.find(organisation_id)
 
     number_of_users = 10
     number_of_users.times do |index|

@@ -12,24 +12,11 @@
  * It is generally better to create a new file per style scope.
  *
  *= require_self
- *= require selectize
- *= require selectize.bootstrap3
  */
 // scss-lint:enable Comment
 
 @import 'govuk_admin_template';
-@import 'tables';
-@import 'pagination';
-@import 'phase_banner';
-@import 'summary';
-@import 'audit';
-@import 'report';
-@import 'term_generation';
-@import 'accessible-autocomplete';
-@import 'multiselect';
-@import 'allocation';
-@import 'guidance';
 @import 'expandable_content';
-@import 'full_width_audit';
-@import 'content_preview';
-@import 'spinner';
+@import 'phase_banner';
+@import 'tables';
+@import 'summary';

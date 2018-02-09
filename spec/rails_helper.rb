@@ -17,7 +17,6 @@ require "capybara/poltergeist"
 require "gds_api/test_helpers/publishing_api_v2"
 require "pry"
 require "database_cleaner"
-require "site_prism"
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
@@ -60,10 +59,6 @@ Shoulda::Matchers.configure do |config|
     with.library :rails
     with.test_framework :rspec
   end
-end
-
-SitePrism.configure do |config|
-  config.use_implicit_waits = true
 end
 
 Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
