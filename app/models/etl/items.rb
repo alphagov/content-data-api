@@ -30,5 +30,12 @@ private
 
   def load(items)
     Dimensions::Item.import(items, batch_size: 5000)
+    create_import_detail_job(items)
+  end
+
+  def create_import_detail_job(items)
+    items.each do |item|
+      ImportItemJob.perform_async(item[:content_id], item[:base_path])
+    end
   end
 end

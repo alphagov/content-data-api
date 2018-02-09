@@ -1,8 +1,8 @@
 RSpec.describe ItemsService do
-  let(:client) { double('client') }
+  let(:publishing_api_client) { double('publishing_api_client') }
 
   before do
-    subject.client = client
+    subject.publishing_api_client = publishing_api_client
   end
 
   describe "#fetch_all_with_default_locale_only" do
@@ -21,7 +21,7 @@ RSpec.describe ItemsService do
     let(:fields) { %w[content_id locale user_facing_version] }
 
     before do
-      allow(client).to receive(:fetch_all)
+      allow(publishing_api_client).to receive(:fetch_all)
         .with(fields)
         .and_return(editions)
     end
@@ -48,7 +48,7 @@ RSpec.describe ItemsService do
 
   describe "#fetch" do
     it "returns a new content item object" do
-      allow(subject.client).to receive(:fetch).with("id-123", locale: "en", version: "9").and_return(
+      allow(subject.publishing_api_client).to receive(:fetch).with("id-123", locale: "en", version: "9").and_return(
         content_id: "id-123",
         title: "title",
         description: "description",
@@ -72,7 +72,7 @@ RSpec.describe ItemsService do
 
   describe "#links" do
     it "returns an array of link objects" do
-      allow(subject.client).to receive(:links).with("id-123").and_return(
+      allow(subject.publishing_api_client).to receive(:links).with("id-123").and_return(
         organisations: ["id-456", "id-789"],
         policies: ["id-111"],
       )
