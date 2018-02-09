@@ -7,7 +7,7 @@ gem 'gds-api-adapters'
 gem 'gds-sso'
 gem 'govuk_admin_template', '~> 6.4'
 gem 'govuk_app_config'
-gem 'govuk_sidekiq'
+gem 'govuk_sidekiq', '~> 3'
 gem 'plek'
 
 # Third party gems
