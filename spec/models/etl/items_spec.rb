@@ -22,22 +22,27 @@ RSpec.describe ETL::Items do
     ]
   end
 
-  it 'saves an item per entry in Search API' do
+  before :each do
     publishing_api_get_editions(content_items, fields: fields, per_page: 700, states: ['published'])
+    allow(ImportItemJob).to receive(:perform_async)
     subject.process
+  end
 
+  it 'saves an item per entry in Search API' do
     expect(Dimensions::Item.count).to eq(2)
   end
 
   it 'transform an entry in PublishingAPI into a Dimensions::Item' do
-    publishing_api_get_editions(content_items, fields: fields, per_page: 700, states: ['published'])
-    subject.process
-
     item = Dimensions::Item.find_by(content_id: 'xyz789')
     expect(item).to have_attributes(
       content_id: 'xyz789',
       base_path: '/xyz',
       latest: true
     )
+  end
+
+  it 'creates a ImportItemJob for each item' do
+    expect(ImportItemJob).to have_received(:perform_async).with('abc123', '/abc')
+    expect(ImportItemJob).to have_received(:perform_async).with('xyz789', '/xyz')
   end
 end
