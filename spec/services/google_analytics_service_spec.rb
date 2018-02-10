@@ -75,23 +75,23 @@ RSpec.describe GoogleAnalyticsService do
       it 'should yield successive report data' do
         arg1 = [
           a_hash_including(
-            'ga:pagePath' => '/foo',
-            'ga:pageviews' => 1,
-            'ga:uniquePageviews' => 1,
+            'page_path' => '/foo',
+            'pageviews' => 1,
+            'unique_pageviews' => 1,
             'date' => '2018-02-20',
           ),
           a_hash_including(
-            'ga:pagePath' => '/bar',
-            'ga:pageviews' => 2,
-            'ga:uniquePageviews' => 2,
+            'page_path' => '/bar',
+            'pageviews' => 2,
+            'unique_pageviews' => 2,
             'date' => '2018-02-20',
           )
         ]
         arg2 = [
           a_hash_including(
-            'ga:pagePath' => '/cool',
-            'ga:pageviews' => 3,
-            'ga:uniquePageviews' => 3,
+            'page_path' => '/cool',
+            'pageviews' => 3,
+            'unique_pageviews' => 3,
             'date' => '2018-02-20',
           )
         ]

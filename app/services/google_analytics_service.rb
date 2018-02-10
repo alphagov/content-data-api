@@ -33,9 +33,9 @@ private
     page_path, pageviews, unique_pageviews = *values
 
     {
-      'ga:pagePath' => page_path,
-      'ga:pageviews' => pageviews,
-      'ga:uniquePageviews' => unique_pageviews,
+      'page_path' => page_path,
+      'pageviews' => pageviews,
+      'unique_pageviews' => unique_pageviews,
     }
   end
 
