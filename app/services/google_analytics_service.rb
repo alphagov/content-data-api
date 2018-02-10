@@ -23,6 +23,7 @@ class GoogleAnalyticsService
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_data_labels))
+      .map { |h| h['date'] = date.strftime('%F'); h }
       .each_slice(batch_size) { |slice| yield slice }
   end
 

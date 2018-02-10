@@ -53,6 +53,8 @@ RSpec.describe GoogleAnalyticsService do
   end
 
   describe "#find_in_batches" do
+    let(:date) { Date.new(2018, 2, 20) }
+
     before do
       allow(subject.client).to receive(:fetch_all) do
         [
@@ -72,12 +74,17 @@ RSpec.describe GoogleAnalyticsService do
     context 'when called with a block' do
       it 'should yield successive report data' do
         arg1 = [
-          a_hash_including('ga:pagePath' => '/foo', 'ga:pageviews' => 1, 'ga:uniquePageviews' => 1,
+          a_hash_including(
+            'ga:pagePath' => '/foo',
+            'ga:pageviews' => 1,
+            'ga:uniquePageviews' => 1,
+            'date' => '2018-02-20',
           ),
           a_hash_including(
             'ga:pagePath' => '/bar',
             'ga:pageviews' => 2,
             'ga:uniquePageviews' => 2,
+            'date' => '2018-02-20',
           )
         ]
         arg2 = [
@@ -85,10 +92,11 @@ RSpec.describe GoogleAnalyticsService do
             'ga:pagePath' => '/cool',
             'ga:pageviews' => 3,
             'ga:uniquePageviews' => 3,
+            'date' => '2018-02-20',
           )
         ]
 
-        expect { |probe| subject.find_in_batches(date: Date.today, batch_size: 2, &probe) }
+        expect { |probe| subject.find_in_batches(date: date, batch_size: 2, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
     end
@@ -111,4 +119,3 @@ RSpec.describe GoogleAnalyticsService do
     end
   end
 end
-
