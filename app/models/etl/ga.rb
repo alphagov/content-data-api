@@ -25,6 +25,7 @@ private
     date_to_s = date.strftime("%F")
 
     conn.execute(load_metrics_query(date_to_s))
+    conn.execute(clean_up_query)
   end
 
   def load_metrics_query(date_to_s)
@@ -40,6 +41,19 @@ private
         WHERE page_path = base_path AND latest = 'true'
       ) AS s
       WHERE dimensions_item_id = s.id AND dimensions_date_id = '#{date_to_s}'
+    SQL
+  end
+
+  def clean_up_query
+    date_to_s = date.strftime("%F")
+    <<~SQL
+      DELETE FROM events_gas
+      WHERE date = '#{date_to_s}' AND
+        page_path in (
+           SELECT base_path
+           FROM dimensions_items
+           WHERE latest = 'true'
+        )
     SQL
   end
 

@@ -41,6 +41,14 @@ RSpec.describe ETL::GA do
       expect(fact.reload).to have_attributes(pageviews: 99, unique_pageviews: 90)
     end
 
+    it 'deletes the events that matches the base_path of an item' do
+      item2.destroy
+      create :facts_metric, dimensions_item: item1, dimensions_date: dimensions_date
+
+      described_class.process(date: date)
+
+      expect(Events::GA.count).to eq(1)
+    end
   end
 
 private
