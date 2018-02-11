@@ -58,19 +58,21 @@ ActiveRecord::Schema.define(version: 20180207103905) do
 
   create_table "dimensions_items", force: :cascade do |t|
     t.string "content_id"
+    t.string "title"
+    t.string "link"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "latest"
-    t.string "description"
-    t.string "title"
     t.string "base_path"
     t.json "raw_json"
   end
 
   create_table "dimensions_items_temps", id: false, force: :cascade do |t|
     t.string "content_id"
-    t.string "description"
     t.string "title"
+    t.string "link"
+    t.string "description"
     t.string "base_path"
   end
 
