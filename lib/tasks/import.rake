@@ -11,6 +11,6 @@ namespace :import do
 
   desc 'Load all metric facts'
   task daily_metrics: :environment do
-    ETL::Metrics.process
+    ETL::Master.process
   end
 end

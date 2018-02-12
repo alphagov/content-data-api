@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'gds-api-adapters'
 
-RSpec.describe ETL::Metrics do
+RSpec.describe ETL::Master do
   subject { described_class }
 
   let!(:date) { Dimensions::Date.build(Date.today) }

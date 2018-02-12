@@ -1,4 +1,4 @@
-class ETL::Metrics
+class ETL::Master
   def self.process(*args)
     new(*args).process
   end
