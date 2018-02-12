@@ -11,14 +11,13 @@ private
 
   def initialize_facts_table
     Dimensions::Item.where(latest: true).find_in_batches(batch_size: 50000) do |batch|
-      values = batch.pluck(:id)
-      metrics = values.map do |value|
+      values = batch.pluck(:id).map do |value|
         {
           dimensions_date_id: date.date,
-          dimensions_item_id: value[0],
+          dimensions_item_id: value,
         }
       end
-      Facts::Metric.import(metrics, validate: false)
+      Facts::Metric.import(values, validate: false)
     end
   end
 
