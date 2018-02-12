@@ -12,8 +12,6 @@ class ETL::Master
 private
 
   def create_metrics
-    Facts::Metric.where(dimensions_date: date).delete_all
-
     Dimensions::Item.where(latest: true).find_in_batches(batch_size: 50000) do |batch|
       values = batch.pluck(:id, :organisation_id)
       metrics = values.map do |value|

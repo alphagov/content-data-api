@@ -16,18 +16,6 @@ RSpec.describe ETL::Master do
     expect(Facts::Metric.count).to eq(2)
   end
 
-  it 'does not duplicate facts' do
-    expect(ETL::Items).to receive(:process).twice do
-      Dimensions::Item.update(latest: false)
-      create :dimensions_item, latest: true
-      create :dimensions_item, latest: true
-    end
-
-    2.times { subject.process }
-
-    expect(Facts::Metric.count).to eq(2)
-  end
-
   it 'does not raise an exception if the content item has no organisation' do
     expect(ETL::Items).to receive(:process) do
       create :dimensions_item, latest: true
