@@ -11,7 +11,7 @@ private
 
   def initialize_facts_table
     Dimensions::Item.where(latest: true).find_in_batches(batch_size: 50000) do |batch|
-      values = batch.pluck(:id, :organisation_id)
+      values = batch.pluck(:id)
       metrics = values.map do |value|
         {
           dimensions_date_id: date.date,
