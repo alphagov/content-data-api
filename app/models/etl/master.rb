@@ -4,8 +4,6 @@ class ETL::Master
   end
 
   def process
-    ETL::Items.process
-
     create_metrics
   end
 
