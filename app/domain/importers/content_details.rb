@@ -1,6 +1,10 @@
 class Importers::ContentDetails
   attr_reader :items_service, :content_id, :base_path
 
+  def self.run(*args)
+    new(*args).run
+  end
+
   def initialize(content_id, base_path)
     @content_id = content_id
     @base_path = base_path
