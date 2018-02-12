@@ -35,7 +35,7 @@ private
 
   def create_import_detail_job(items)
     items.each do |item|
-      ImportItemJob.perform_async(item[:content_id], item[:base_path])
+      ImportContentDetailsJob.perform_async(item[:content_id], item[:base_path])
     end
   end
 end

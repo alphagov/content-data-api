@@ -24,7 +24,7 @@ RSpec.describe ETL::Items do
 
   before :each do
     publishing_api_get_editions(content_items, fields: fields, per_page: 700, states: ['published'])
-    allow(ImportItemJob).to receive(:perform_async)
+    allow(ImportContentDetailsJob).to receive(:perform_async)
     subject.process
   end
 
@@ -42,7 +42,7 @@ RSpec.describe ETL::Items do
   end
 
   it 'creates a ImportItemJob for each item' do
-    expect(ImportItemJob).to have_received(:perform_async).with('abc123', '/abc')
-    expect(ImportItemJob).to have_received(:perform_async).with('xyz789', '/xyz')
+    expect(ImportContentDetailsJob).to have_received(:perform_async).with('abc123', '/abc')
+    expect(ImportContentDetailsJob).to have_received(:perform_async).with('xyz789', '/xyz')
   end
 end
