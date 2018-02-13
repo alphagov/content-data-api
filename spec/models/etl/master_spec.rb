@@ -9,7 +9,7 @@ RSpec.describe ETL::Master do
   around do |example|
     Timecop.freeze(date) { example.run }
   end
-  
+
   before { allow(ETL::GA).to receive(:process) }
 
   it 'creates a Metrics fact per content item' do
@@ -20,7 +20,7 @@ RSpec.describe ETL::Master do
 
     expect(Facts::Metric.count).to eq(2)
     expect(Facts::Metric.find_by(dimensions_item: item)).to have_attributes(
-      dimensions_date: Dimensions::Date.for(Date.new(2018,2,19)),
+      dimensions_date: Dimensions::Date.for(Date.new(2018, 2, 19)),
       dimensions_item: item,
     )
   end
@@ -35,8 +35,20 @@ RSpec.describe ETL::Master do
   end
 
   it 'update GA metrics in the Facts table' do
-    expect(ETL::GA).to receive(:process).with(date: Date.new(2018,2,19))
+    expect(ETL::GA).to receive(:process).with(date: Date.new(2018, 2, 19))
 
     subject.process
+  end
+
+  it 'can run the process for other days' do
+    expect(ETL::GA).to receive(:process).with(date: Date.new(2018, 2, 25))
+    item = create(:dimensions_item, latest: true, content_id: 'cid1')
+
+    subject.process(date: Date.new(2018, 2, 25))
+
+    expect(Facts::Metric.find_by(dimensions_item: item)).to have_attributes(
+      dimensions_date: Dimensions::Date.for(Date.new(2018, 2, 25)),
+      dimensions_item: item,
+    )
   end
 end

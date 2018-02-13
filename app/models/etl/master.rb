@@ -3,6 +3,10 @@ class ETL::Master
     new(*args).process
   end
 
+  def initialize(date: Date.yesterday)
+    @date = date
+  end
+
   def process
     initialize_facts_table
     update_with_google_analytics_metrics
@@ -27,6 +31,8 @@ private
   end
 
   def dimensions_date
-    @dimensions_date ||= Dimensions::Date.for(Date.yesterday)
+    @dimensions_date ||= Dimensions::Date.for(date)
   end
+
+  attr_reader :date
 end
