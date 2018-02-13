@@ -4,10 +4,6 @@ class ETL::Dates
   end
 
   def process
-    Dimensions::Date.find(Date.today)
-  rescue ActiveRecord::RecordNotFound
-    date = Dimensions::Date.build(Date.today)
-    date.save!
-    date
+    Dimensions::Date.for(Date.today)
   end
 end

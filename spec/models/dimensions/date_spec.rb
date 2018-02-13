@@ -105,4 +105,26 @@ RSpec.describe Dimensions::Date, type: :model do
       )
     end
   end
+
+  describe '.for' do
+    let(:date) { ::Date.new(2017, 12, 21) }
+
+    context 'when a dimension exists for the given date' do
+      it 'should return the existing dimension' do
+        dimension_date = Dimensions::Date.build(date)
+        dimension_date.save!
+
+        expect(Dimensions::Date.for(date)).to eq(dimension_date)
+      end
+    end
+
+    context 'when a dimension does not exist for the given date' do
+      it 'should return the newly created dimension' do
+        dimension_date = Dimensions::Date.for(date)
+
+        expect(Dimensions::Date.count).to eq(1)
+        expect(dimension_date.date).to eq(date)
+      end
+    end
+  end
 end
