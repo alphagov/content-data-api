@@ -26,3 +26,18 @@ This will make "1234567" available as `ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"]`
 `GOOGLE_ANALYTICS_GOVUK_VIEW_ID` is the view id on Google Analytics for `www.gov.uk`
 
 See "Option Three" in [Rails Environment Variables](http://railsapps.github.io/rails-environment-variables.html) for more information
+
+### Update facts table with GA metrics
+
+To populate GA metrics for a given day, open a Rails console and run:
+
+```
+> ETL::GA.process(Date.today) 
+```
+
+It is recommended you disable logging to speed up the process:
+
+```
+Google::Apis.logger.level = Logger::ERROR
+ActiveRecord::Base.logger = nil
+```
