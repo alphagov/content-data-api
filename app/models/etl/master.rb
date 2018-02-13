@@ -14,7 +14,7 @@ private
     Dimensions::Item.where(latest: true).find_in_batches(batch_size: 50000) do |batch|
       values = batch.pluck(:id).map do |value|
         {
-          dimensions_date_id: date.date,
+          dimensions_date_id: dimensions_date.date,
           dimensions_item_id: value,
         }
       end
@@ -23,10 +23,10 @@ private
   end
 
   def update_with_google_analytics_metrics
-    ETL::GA.process(date: date)
+    ETL::GA.process(date: dimensions_date.date)
   end
 
-  def date
-    @date ||= Dimensions::Date.for(Date.yesterday)
+  def dimensions_date
+    @dimensions_date ||= Dimensions::Date.for(Date.yesterday)
   end
 end
