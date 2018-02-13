@@ -22,6 +22,6 @@ private
   end
 
   def date
-    @date ||= ETL::Dates.process
+    @date ||= Dimensions::Date.for(Date.yesterday)
   end
 end

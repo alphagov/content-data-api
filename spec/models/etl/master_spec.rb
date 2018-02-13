@@ -4,7 +4,12 @@ require 'gds-api-adapters'
 RSpec.describe ETL::Master do
   subject { described_class }
 
-  let!(:date) { Dimensions::Date.build(Date.today) }
+  let(:date) { Date.new(2018, 2, 20) }
+
+  around do |example|
+    Timecop.freeze(date) { example.run }
+  end
+  
 
   it 'creates a Metrics fact per content item' do
     create :dimensions_item, latest: true
@@ -14,7 +19,7 @@ RSpec.describe ETL::Master do
 
     expect(Facts::Metric.count).to eq(2)
     expect(Facts::Metric.find_by(dimensions_item: item)).to have_attributes(
-      dimensions_date: date,
+      dimensions_date: Dimensions::Date.for(Date.new(2018,2,19)),
       dimensions_item: item,
     )
   end
