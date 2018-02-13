@@ -5,6 +5,7 @@ class ETL::Master
 
   def process
     initialize_facts_table
+    update_with_google_analytics_metrics
   end
 
 private
@@ -19,6 +20,10 @@ private
       end
       Facts::Metric.import(values, validate: false)
     end
+  end
+
+  def update_with_google_analytics_metrics
+    ETL::GA.process(date: date)
   end
 
   def date

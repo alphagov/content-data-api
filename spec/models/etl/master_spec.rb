@@ -10,6 +10,7 @@ RSpec.describe ETL::Master do
     Timecop.freeze(date) { example.run }
   end
   
+  before { allow(ETL::GA).to receive(:process) }
 
   it 'creates a Metrics fact per content item' do
     create :dimensions_item, latest: true
@@ -31,5 +32,11 @@ RSpec.describe ETL::Master do
     subject.process
 
     expect(Facts::Metric.count).to eq(1)
+  end
+
+  it 'update GA metrics in the Facts table' do
+    expect(ETL::GA).to receive(:process).with(date: Date.new(2018,2,19))
+
+    subject.process
   end
 end
