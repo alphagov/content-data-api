@@ -23,7 +23,7 @@ RSpec.describe ETL::Items do
   end
 
   before :each do
-    publishing_api_get_editions(content_items, fields: fields, per_page: 700, states: ['published'])
+    publishing_api_get_editions(content_items, fields: fields, per_page: 350, states: ['published'])
     allow(ImportContentDetailsJob).to receive(:perform_async)
     subject.process
   end
