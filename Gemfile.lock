@@ -47,6 +47,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
+    amq-protocol (2.3.0)
     arel (8.0.0)
     ast (2.3.0)
     autoprefixer-rails (7.2.1)
@@ -62,6 +63,8 @@ GEM
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.3.0)
     builder (3.2.3)
+    bunny (2.2.2)
+      amq-protocol (>= 2.0.1)
     byebug (9.1.0)
     capybara (2.16.1)
       addressable
@@ -152,6 +155,8 @@ GEM
       sentry-raven (~> 2.7.1)
       statsd-ruby (~> 1.4.0)
       unicorn (~> 5.3.1)
+    govuk_message_queue_consumer (3.2.0)
+      bunny (~> 2.2.0)
     govuk_sidekiq (3.0.0)
       gds-api-adapters (>= 19.1.0)
       govuk_app_config (>= 1.1)
@@ -481,6 +486,7 @@ DEPENDENCIES
   govuk-lint (= 3.4.0)
   govuk_admin_template (~> 6.4)
   govuk_app_config
+  govuk_message_queue_consumer (~> 3.2)
   govuk_sidekiq (~> 3)
   guard-rspec
   httparty
@@ -517,4 +523,4 @@ RUBY VERSION
    ruby 2.4.2p198
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
