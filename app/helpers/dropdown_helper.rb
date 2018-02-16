@@ -15,13 +15,6 @@ module DropdownHelper
     options_for_select(organisation_options, selected)
   end
 
-  def document_type_options_for_select(selected = nil)
-    document_type_options = Audits::Plan
-                              .document_types
-                              .sort_by { |key, _value| key.split(/\s>\s/) }
-    options_for_select(document_type_options, selected)
-  end
-
   def allocation_options_for_select(selected = nil, include_anyone: true)
     selected = current_user.uid if selected.nil?
 
