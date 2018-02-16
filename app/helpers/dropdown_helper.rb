@@ -15,15 +15,6 @@ module DropdownHelper
     options_for_select(organisation_options, selected)
   end
 
-  def sort_by_options_for_select(selected = nil)
-    sort_by_options = {
-      "Title A-Z" => "title_asc",
-      "Title Z-A" => "title_desc",
-    }
-
-    options_for_select(sort_by_options, selected)
-  end
-
   def document_type_options_for_select(selected = nil)
     document_type_options = Audits::Plan
                               .document_types
