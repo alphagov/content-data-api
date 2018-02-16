@@ -9,7 +9,6 @@ FactoryBot.define do
       policies nil
       policy_areas nil
       topics nil
-      allocated_to nil
     end
 
     sequence(:content_id) { |index| "content-id-%04i" % index }
@@ -26,7 +25,6 @@ FactoryBot.define do
       LinkFactory.add_policies(content_item, evaluator.policies)
       LinkFactory.add_policy_areas(content_item, evaluator.policy_areas)
       LinkFactory.add_topics(content_item, evaluator.topics)
-      create(:allocation, content_item: content_item, user: evaluator.allocated_to) unless evaluator.allocated_to.nil?
     end
 
     factory :organisation do
@@ -58,12 +56,6 @@ FactoryBot.define do
     email 'user@example.com'
     permissions { ['signin'] }
     organisation_slug "government-digital-service"
-
-    trait :with_allocated_content do
-      after(:create) do |user|
-        create :allocation, user: user
-      end
-    end
 
     before(:create) do |user, evaluator|
       unless evaluator.organisation.nil?
