@@ -15,25 +15,6 @@ module DropdownHelper
     options_for_select(organisation_options, selected)
   end
 
-  def topic_options_for_select(selected = nil)
-    topic_option_attributes = lambda do |topic|
-      [
-        topic.links.map { |link| link.target.title.squish }.first,
-        topic.title.squish,
-        topic.content_id,
-      ]
-    end
-
-    topic_options = Item
-                    .includes(links: %i(target))
-                    .where(document_type: 'topic', links: { link_type: link::PARENT })
-                    .map(&topic_option_attributes)
-                    .sort_by { |parent_title, title, _| [parent_title, title] }
-                    .map { |parent_title, title, content_id| ["#{parent_title}: #{title}", content_id] }
-
-    options_for_select(topic_options, selected)
-  end
-
   def sort_by_options_for_select(selected = nil)
     sort_by_options = {
       "Title A-Z" => "title_asc",
