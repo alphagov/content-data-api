@@ -112,6 +112,7 @@ FactoryBot.define do
     sequence(:title) { |i| "title - #{i}" }
     sequence(:base_path) { |i| "link - #{i}" }
     sequence(:description) { |i| "description - #{i}" }
+    number_of_pdfs 0
   end
 
   factory :facts_metric, class: Facts::Metric do
