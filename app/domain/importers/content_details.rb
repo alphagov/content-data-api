@@ -13,7 +13,8 @@ class Importers::ContentDetails
 
   def run
     response = items_service.fetch_raw_json(base_path)
+    number_of_pdfs = Performance::Metrics::NumberOfPdfs.parse(response.to_h['details'])
     item = Dimensions::Item.find_by(content_id: content_id, latest: true)
-    item.update_attributes(raw_json: response)
+    item.update_attributes(raw_json: response, number_of_pdfs: number_of_pdfs)
   end
 end

@@ -1,27 +1,29 @@
-require 'gds_api/test_helpers/content_store'
-
 RSpec.describe Importers::ContentDetails do
-  include GdsApi::TestHelpers::ContentStore
+  let(:base_path) { '/base_path' }
+  let(:content_id) { 'content_id' }
 
-  subject { Importers::ContentDetails.new(latest_dimension_item.content_id, latest_dimension_item.base_path) }
+  subject { Importers::ContentDetails.new(content_id, base_path) }
 
   context 'Import contents' do
-    let(:base_path) { '/base_path' }
-    let(:latest_dimension_item) { create(:dimensions_item, latest: true, raw_json: nil) }
-    let(:older_dimension_item) do
-      create(:dimensions_item, content_id: latest_dimension_item.content_id,
-                               base_path: latest_dimension_item.base_path,
-                               latest: false,
-                               raw_json: nil)
+    let!(:latest_dimension_item) { create(:dimensions_item, content_id: content_id, base_path: base_path, latest: true, raw_json: nil) }
+    let!(:older_dimension_item) { create(:dimensions_item, content_id: content_id, base_path: base_path, latest: false, raw_json: nil) }
+
+    before do
+      allow(subject.items_service).to receive(:fetch_raw_json).and_return('details' => 'the-json')
     end
-    let(:content_store_response) { content_item_for_base_path(base_path) }
 
     it 'populates raw_json field of latest version of dimensions_items' do
-      allow(subject.items_service).to receive(:fetch_raw_json)
-      .and_return(content_store_response)
       subject.run
-      expect(latest_dimension_item.reload.raw_json).to eq content_store_response
+
+      expect(latest_dimension_item.reload.raw_json).to eq 'details' => 'the-json'
       expect(older_dimension_item.reload.raw_json).to eq nil
+    end
+
+    it 'stores the number of PDF attachments' do
+      allow(Performance::Metrics::NumberOfPdfs).to receive(:parse).with('the-json').and_return(99)
+
+      subject.run
+      expect(latest_dimension_item.reload.number_of_pdfs).to eq 99
     end
   end
 end
