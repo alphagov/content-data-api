@@ -50,7 +50,7 @@ GEM
     amq-protocol (2.3.0)
     arel (8.0.0)
     ast (2.4.0)
-    autoprefixer-rails (7.2.1)
+    autoprefixer-rails (8.0.0)
       execjs
     better_errors (2.4.0)
       coderay (>= 1.0.0)
@@ -146,7 +146,7 @@ GEM
       rubocop (~> 0.51.0)
       rubocop-rspec (~> 1.19.0)
       scss_lint
-    govuk_admin_template (6.4.0)
+    govuk_admin_template (6.5.0)
       bootstrap-sass (= 3.3.5.1)
       jquery-rails (~> 4.3.1)
       rails (>= 3.2.0)
@@ -485,7 +485,7 @@ DEPENDENCIES
   gds-sso
   google-api-client (~> 0.18)
   govuk-lint (= 3.6.0)
-  govuk_admin_template (~> 6.4)
+  govuk_admin_template (~> 6.5)
   govuk_app_config
   govuk_message_queue_consumer (~> 3.2)
   govuk_sidekiq (~> 3)
