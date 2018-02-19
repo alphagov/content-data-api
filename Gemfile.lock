@@ -49,7 +49,7 @@ GEM
       public_suffix (>= 2.0.2, < 4.0)
     amq-protocol (2.3.0)
     arel (8.0.0)
-    ast (2.3.0)
+    ast (2.4.0)
     autoprefixer-rails (7.2.1)
       execjs
     better_errors (2.4.0)
@@ -107,7 +107,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.18)
+    ffi (1.9.21)
     formatador (0.2.5)
     gds-api-adapters (51.2.0)
       addressable
@@ -142,7 +142,7 @@ GEM
       multi_json (~> 1.11)
       os (~> 0.9)
       signet (~> 0.7)
-    govuk-lint (3.4.0)
+    govuk-lint (3.6.0)
       rubocop (~> 0.51.0)
       rubocop-rspec (~> 1.19.0)
       scss_lint
@@ -267,9 +267,9 @@ GEM
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
     os (0.9.6)
-    parallel (1.12.0)
-    parser (2.4.0.2)
-      ast (~> 2.3)
+    parallel (1.12.1)
+    parser (2.5.0.0)
+      ast (~> 2.4.0)
     pg (0.21.0)
     phantomjs (2.1.1.0)
     plek (2.1.1)
@@ -375,7 +375,7 @@ GEM
     ruby-progressbar (1.9.0)
     ruby_dep (1.5.0)
     safe_yaml (1.0.4)
-    sass (3.5.3)
+    sass (3.5.5)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -484,7 +484,7 @@ DEPENDENCIES
   gds-api-adapters
   gds-sso
   google-api-client (~> 0.18)
-  govuk-lint (= 3.4.0)
+  govuk-lint (= 3.6.0)
   govuk_admin_template (~> 6.4)
   govuk_app_config
   govuk_message_queue_consumer (~> 3.2)
