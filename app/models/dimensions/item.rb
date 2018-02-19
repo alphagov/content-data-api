@@ -3,10 +3,34 @@ require 'json'
 class Dimensions::Item < ApplicationRecord
   validates :content_id, presence: true
 
+  scope :dirty, -> { where(dirty: true) }
+
   def get_content
     json_object = JSON.parse(self.raw_json)
     return if json_object.blank?
     extract_by_schema_type(json_object)
+  end
+
+  def new_version!
+    new_version = self.dup
+    ActiveRecord::Base.transaction do
+      update(latest: false, dirty: false)
+      new_version.update(latest: true, dirty: false)
+    end
+    new_version
+  end
+
+  def dirty!
+    update_attributes!(dirty: true)
+  end
+
+  def self.create_empty(content_id, base_path)
+    create(
+      content_id: content_id,
+      base_path: base_path,
+      latest: true,
+      dirty: true
+    )
   end
 
 private

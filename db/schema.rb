@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180220163110) do
+ActiveRecord::Schema.define(version: 20180221151608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20180220163110) do
     t.datetime "public_updated_at"
     t.integer "number_of_word_files"
     t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest"
+    t.string "status", default: "live"
     t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path"
   end
 

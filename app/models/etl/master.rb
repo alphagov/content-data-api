@@ -8,11 +8,19 @@ class ETL::Master
   end
 
   def process
+    create_new_version_for_dirty_items
     initialize_facts_table
     update_with_google_analytics_metrics
   end
 
 private
+
+  def create_new_version_for_dirty_items
+    Dimensions::Item.dirty.each do |item|
+      new_item = item.new_version!
+      ImportContentDetailsJob.perform_async(new_item.content_id, new_item.base_path)
+    end
+  end
 
   def initialize_facts_table
     Dimensions::Item.where(latest: true).find_in_batches(batch_size: 50000) do |batch|
