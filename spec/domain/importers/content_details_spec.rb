@@ -23,5 +23,13 @@ RSpec.describe Importers::ContentDetails do
       expect(latest_dimension_item.reload.raw_json).to eq content_store_response
       expect(older_dimension_item.reload.raw_json).to eq nil
     end
+
+    it 'stores the number of PDF attachments' do
+      allow(subject.items_service).to receive(:fetch_raw_json).and_return({'details' => :the_details})
+      allow(Performance::Metrics::NumberOfPdfs).to receive(:parse).with(:the_details).and_return(99)
+
+      subject.run
+      expect(latest_dimension_item.reload.number_of_pdfs).to eq 99
+    end
   end
 end
