@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180214145821) do
+ActiveRecord::Schema.define(version: 20180219151742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,10 @@ ActiveRecord::Schema.define(version: 20180214145821) do
     t.string "base_path"
     t.json "raw_json"
     t.integer "number_of_pdfs"
+    t.string "document_type"
+    t.string "content_purpose_supertype"
+    t.datetime "first_published_at"
+    t.datetime "public_updated_at"
     t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest"
     t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path"
   end
