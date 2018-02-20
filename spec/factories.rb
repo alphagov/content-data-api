@@ -112,6 +112,7 @@ FactoryBot.define do
     sequence(:title) { |i| "title - #{i}" }
     sequence(:base_path) { |i| "link - #{i}" }
     sequence(:description) { |i| "description - #{i}" }
+    sequence(:raw_json) { |i| "json - #{i}" }
     number_of_pdfs 0
   end
 
