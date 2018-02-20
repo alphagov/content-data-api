@@ -13,7 +13,7 @@ gem 'plek'
 # Third party gems
 gem 'activerecord-import'
 gem 'draper'
-gem 'google-api-client', '~> 0.18'
+gem 'google-api-client', '~> 0.19'
 gem 'govuk_message_queue_consumer', '~> 3.2'
 gem 'httparty'
 gem 'jbuilder'
