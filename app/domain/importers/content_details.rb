@@ -13,10 +13,7 @@ class Importers::ContentDetails
 
   def run
     response = items_service.fetch_raw_json(base_path)
-    number_of_pdfs = Performance::Metrics::NumberOfPdfs.parse(response.to_h['details'])
-    number_of_word_files = Performance::Metrics::NumberOfWordFiles.parse(response.to_h['details'])
-    metadata = format_metadata(response.to_h)
-    attributes =  metadata.merge(raw_json: response, number_of_pdfs: number_of_pdfs, number_of_word_files: number_of_word_files)
+    attributes = format_response(response)
     item = Dimensions::Item.find_by(content_id: content_id, latest: true)
     item.update_attributes(attributes)
   end
@@ -34,7 +31,20 @@ private
     )
   end
 
-  def number_of_pdfs(formatted_response)
-    Performance::Metrics::NumberOfPdfs.parse(formatted_response['details'])
+  def format_response(response)
+    metadata = format_metadata(response.to_h)
+    metadata.merge(
+      raw_json: response,
+      number_of_pdfs: number_of_pdfs(response.to_h['details']),
+      number_of_word_files: number_of_word_files(response.to_h['details'])
+    )
+  end
+
+  def number_of_pdfs(response_details)
+    Performance::Metrics::NumberOfPdfs.parse(response_details)
+  end
+
+  def number_of_word_files(response_details)
+    Performance::Metrics::NumberOfWordFiles.parse(response_details)
   end
 end
