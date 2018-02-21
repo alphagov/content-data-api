@@ -13,5 +13,11 @@ module Performance::Metrics
       documents = NumberOfFiles.parse documents_string
       { number_of_word_files: NumberOfFiles.number_of_files(documents, DOC_XPATH) }
     end
+
+    def self.parse(details)
+      documents_string = NumberOfFiles.extract_documents(details)
+      documents = NumberOfFiles.parse documents_string
+      NumberOfFiles.number_of_files(documents, DOC_XPATH)
+    end
   end
 end
