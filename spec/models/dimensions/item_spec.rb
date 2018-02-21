@@ -73,10 +73,6 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#dirty' do
-     # todo
-  end
-
   describe '#new_version!' do
     let(:dirty_item) { create(:dimensions_item, dirty: true, latest: true) }
 
@@ -104,6 +100,14 @@ RSpec.describe Dimensions::Item, type: :model do
       item = create(:dimensions_item, dirty: false)
       item.dirty!
       expect(item.reload.dirty?).to be true
+    end
+  end
+
+  describe '#gone!' do
+    it 'sets the status to "gone"' do
+      item = create(:dimensions_item, dirty: false)
+      item.gone!
+      expect(item.reload.status).to eq 'gone'
     end
   end
 
