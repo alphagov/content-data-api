@@ -25,7 +25,7 @@ module Performance
     let(:content_without_document_keys) { build(:content_item, details: {}) }
     let(:content_without_details_key) { build(:content_item) }
 
-    context "#run" do
+    describe "#run" do
       it "returns the number of word files present" do
         expect(subject.new(content_with_word_files).run).to eq(number_of_word_files: 3)
       end
@@ -43,7 +43,7 @@ module Performance
       end
     end
 
-    context "#parse" do
+    describe "#parse" do
       it "returns the number of word files present" do
         details = {
           'documents' => '<div class=\"attachment-details\">\n<a href=\"link.doc\">1</a>\n\n\n\n</div>'

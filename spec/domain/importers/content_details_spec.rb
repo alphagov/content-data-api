@@ -26,6 +26,13 @@ RSpec.describe Importers::ContentDetails do
       expect(latest_dimension_item.reload.number_of_pdfs).to eq 99
     end
 
+    it 'stores the number of Word file attachments' do
+      allow(Performance::Metrics::NumberOfWordFiles).to receive(:parse).with('the-json').and_return(94)
+
+      subject.run
+      expect(latest_dimension_item.reload.number_of_word_files).to eq 94
+    end
+
     it 'populates the metadata' do
       allow(subject.items_service).to receive(:fetch_raw_json).and_return(
         'content_id' => '09hjasdfoj234',
