@@ -4,7 +4,7 @@ namespace :publishing_api do
   task consumer: :environment do
     GovukMessageQueueConsumer::Consumer.new(
       queue_name: "content_performance_manager",
-      processor: PublisingApiConsumer.new,
+      processor: PublishingApiConsumer.new,
       ).run
   end
 end

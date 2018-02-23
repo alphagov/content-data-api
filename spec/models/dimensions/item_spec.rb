@@ -63,4 +63,65 @@ RSpec.describe Dimensions::Item, type: :model do
       end
     end
   end
+
+  describe '.dirty' do
+    it 'only returns the dirty items' do
+      dirty_item = create(:dimensions_item, dirty: true)
+      create(:dimensions_item, dirty: false)
+
+      expect(Dimensions::Item.dirty).to match_array(dirty_item)
+    end
+  end
+
+  describe '#new_version!' do
+    let(:dirty_item) { create(:dimensions_item, dirty: true, latest: true) }
+
+    it 'duplicates the item with latest?: true, dirty?: false' do
+      new_item = dirty_item.new_version!
+
+      expect(new_item).to have_attributes(
+        latest: true,
+        dirty: false
+      )
+    end
+
+    it 'sets latest? and dirty? to false on the old item' do
+      dirty_item.new_version!
+
+      expect(dirty_item.reload).to have_attributes(
+        latest: false,
+        dirty: false
+      )
+    end
+  end
+
+  describe '#dirty!' do
+    it 'sets the dirty? flag to true' do
+      item = create(:dimensions_item, dirty: false)
+      item.dirty!
+      expect(item.reload.dirty?).to be true
+    end
+  end
+
+  describe '#gone!' do
+    it 'sets the status to "gone"' do
+      item = create(:dimensions_item, dirty: false)
+      item.gone!
+      expect(item.reload.status).to eq 'gone'
+    end
+  end
+
+  describe '##create_empty' do
+    let(:content_id) { 'new-item' }
+    let(:base_path) { '/path/to/new-item' }
+    it 'creates a new item with the correct attributes' do
+      item = Dimensions::Item.create_empty content_id, base_path
+      expect(item.reload).to have_attributes(
+        content_id: content_id,
+        base_path: base_path,
+        dirty: true,
+        latest: true
+      )
+    end
+  end
 end
