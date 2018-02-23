@@ -107,7 +107,7 @@ GEM
       railties (>= 3.0.0)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.21)
+    ffi (1.9.22)
     formatador (0.2.5)
     gds-api-adapters (51.2.0)
       addressable
