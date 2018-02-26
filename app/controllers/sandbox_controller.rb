@@ -3,7 +3,7 @@ class SandboxController < ApplicationController
     metrics = Facts::Metric.
       joins(:dimensions_date).
       joins(:dimensions_item).
-      where('dimensions_dates.date in (?)', from..to)
+      where('dimensions_dates.date BETWEEN ? AND ?', from, to)
 
     @pageviews = metrics.sum("facts_metrics.pageviews")
     @unique_pageviews = metrics.average("facts_metrics.unique_pageviews")
@@ -12,10 +12,10 @@ class SandboxController < ApplicationController
 private
 
   def from
-    @from ||= params[:from]
+    params[:from] || 1.month.ago.to_date
   end
 
   def to
-    @to ||= params[:to]
+    params[:to] || Date.yesterday
   end
 end

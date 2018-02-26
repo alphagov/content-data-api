@@ -1,4 +1,7 @@
+<% content_for :sidebar do %>
+    <%= render 'sidebar', locals: { search: @search} %>
+<% end %>
+
+
 <%= "#{@pageviews} pageviews (total)"  %>
 <%= "#{@unique_pageviews} unique pageviews (avg)"  %>
-
-
