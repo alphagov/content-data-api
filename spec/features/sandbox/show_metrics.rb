@@ -22,7 +22,7 @@ RSpec.feature 'Show metrics', type: :feature do
     fill_in 'To:', with: '2018-01-15'
     click_button 'Filter'
 
-    expect(page).to have_text('80 pageviews (total)')
-    expect(page).to have_text('20.0 unique pageviews (avg)')
+    expect(page).to have_selector('.pageviews', text: '80 pageviews (total)')
+    expect(page).to have_selector('.unique_pageviews', text: '20.0 unique pageviews (avg)')
   end
 end
