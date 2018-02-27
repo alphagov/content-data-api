@@ -7,10 +7,10 @@ RSpec.describe "/api/v1/metrics/:content_id", type: :request do
     day4 = Dimensions::Date.build(Date.new(2018, 1, 16))
     item1 = create(:dimensions_item, content_id: 'id1')
 
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day1, pageviews: 20, unique_pageviews: 10)
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day2, pageviews: 10, unique_pageviews: 5)
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day3, pageviews: 20, unique_pageviews: 10)
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day4, pageviews: 20, unique_pageviews: 10)
+    create(:metric, dimensions_item: item1, dimensions_date: day1, pageviews: 20, unique_pageviews: 10)
+    create(:metric, dimensions_item: item1, dimensions_date: day2, pageviews: 10, unique_pageviews: 5)
+    create(:metric, dimensions_item: item1, dimensions_date: day3, pageviews: 20, unique_pageviews: 10)
+    create(:metric, dimensions_item: item1, dimensions_date: day4, pageviews: 20, unique_pageviews: 10)
 
     query_params = {
       metric: 'pageviews',

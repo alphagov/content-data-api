@@ -14,8 +14,8 @@ RSpec.describe ETL::GA do
 
   context 'When the base_path matches the GA path' do
     it 'update the facts with the GA metrics' do
-      fact1 = create :facts_metric, dimensions_item: item1, dimensions_date: dimensions_date
-      fact2 = create :facts_metric, dimensions_item: item2, dimensions_date: dimensions_date
+      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+      fact2 = create :metric, dimensions_item: item2, dimensions_date: dimensions_date
 
       described_class.process(date: date)
 
@@ -24,7 +24,7 @@ RSpec.describe ETL::GA do
     end
 
     it 'does not update metrics for other days' do
-      fact1 = create :facts_metric, dimensions_item: item1, dimensions_date: dimensions_date, pageviews: 20, unique_pageviews: 10
+      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date, pageviews: 20, unique_pageviews: 10
 
       day_before = date - 1
       described_class.process(date: day_before)
@@ -34,7 +34,7 @@ RSpec.describe ETL::GA do
 
     it 'does not update metrics for other items' do
       item = create :dimensions_item, base_path: '/non-matching-path', latest: true
-      fact = create :facts_metric, dimensions_item: item, dimensions_date: dimensions_date, pageviews: 99, unique_pageviews: 90
+      fact = create :metric, dimensions_item: item, dimensions_date: dimensions_date, pageviews: 99, unique_pageviews: 90
 
       described_class.process(date: date)
 
@@ -43,7 +43,7 @@ RSpec.describe ETL::GA do
 
     it 'deletes the events that matches the base_path of an item' do
       item2.destroy
-      create :facts_metric, dimensions_item: item1, dimensions_date: dimensions_date
+      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
 
       described_class.process(date: date)
 
