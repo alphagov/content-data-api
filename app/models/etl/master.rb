@@ -38,6 +38,10 @@ private
     ETL::GA.process(date: dimensions_date.date)
   end
 
+  def update_with_feedex_metrics
+    ETL::Feedex.process(date: dimensions_date.date)
+  end
+
   def dimensions_date
     @dimensions_date ||= Dimensions::Date.for(date)
   end
