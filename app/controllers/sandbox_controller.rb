@@ -1,13 +1,6 @@
 class SandboxController < ApplicationController
   def index
-    metrics = Facts::Metric.
-      joins(:dimensions_date).
-      joins(:dimensions_item).
-      where('dimensions_dates.date BETWEEN ? AND ?', from, to)
-
-    if base_path.present?
-      metrics = metrics.where('dimensions_items.latest = true AND dimensions_items.base_path like (?)', base_path)
-    end
+    metrics = Reports::Metrics.run(from: from, to: to, base_path: base_path)
 
     @pageviews = metrics.sum("facts_metrics.pageviews")
     @unique_pageviews = metrics.average("facts_metrics.unique_pageviews")
