@@ -15,11 +15,11 @@ RSpec.feature 'Show metrics', type: :feature do
     item1 = create(:dimensions_item, content_id: 'id1')
     item2 = create(:dimensions_item, content_id: 'id2')
 
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day0, pageviews: 10, unique_pageviews: 10)
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day1, pageviews: 10, unique_pageviews: 10)
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day2, pageviews: 20, unique_pageviews: 20)
-    Facts::Metric.create!(dimensions_item: item2, dimensions_date: day1, pageviews: 20, unique_pageviews: 20)
-    Facts::Metric.create!(dimensions_item: item2, dimensions_date: day2, pageviews: 30, unique_pageviews: 30)
+    create(:metric, dimensions_item: item1, dimensions_date: day0, pageviews: 10, unique_pageviews: 10)
+    create(:metric, dimensions_item: item1, dimensions_date: day1, pageviews: 10, unique_pageviews: 10)
+    create(:metric, dimensions_item: item1, dimensions_date: day2, pageviews: 20, unique_pageviews: 20)
+    create(:metric, dimensions_item: item2, dimensions_date: day1, pageviews: 20, unique_pageviews: 20)
+    create(:metric, dimensions_item: item2, dimensions_date: day2, pageviews: 30, unique_pageviews: 30)
 
     visit '/sandbox'
 
@@ -37,9 +37,9 @@ RSpec.feature 'Show metrics', type: :feature do
     item1 = create(:dimensions_item, content_id: 'id1', base_path: '/path')
     item2 = create(:dimensions_item, content_id: 'id2', base_path: '/path2')
 
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day1, pageviews: 10)
-    Facts::Metric.create!(dimensions_item: item1, dimensions_date: day2, pageviews: 20)
-    Facts::Metric.create!(dimensions_item: item2, dimensions_date: day2, pageviews: 30)
+    create(:metric, dimensions_item: item1, dimensions_date: day1, pageviews: 10)
+    create(:metric, dimensions_item: item1, dimensions_date: day2, pageviews: 20)
+    create(:metric, dimensions_item: item2, dimensions_date: day2, pageviews: 30)
 
     visit '/sandbox'
 

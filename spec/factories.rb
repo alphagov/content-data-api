@@ -91,7 +91,7 @@ FactoryBot.define do
     number_of_pdfs 0
   end
 
-  factory :facts_metric, class: Facts::Metric do
+  factory :metric, class: Facts::Metric do
     dimensions_date
     dimensions_item
     pageviews 10
