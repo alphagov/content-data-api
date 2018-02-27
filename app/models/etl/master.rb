@@ -11,6 +11,7 @@ class ETL::Master
     create_new_version_for_dirty_items
     initialize_facts_table
     update_with_google_analytics_metrics
+    update_with_feedex_metrics
   end
 
 private
@@ -36,6 +37,10 @@ private
 
   def update_with_google_analytics_metrics
     ETL::GA.process(date: dimensions_date.date)
+  end
+
+  def update_with_feedex_metrics
+    ETL::Feedex.process(date: dimensions_date.date)
   end
 
   def dimensions_date
