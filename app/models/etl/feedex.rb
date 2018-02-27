@@ -14,9 +14,11 @@ class ETL::Feedex
 
 private
 
+  BATCH_SIZE = 10_000
+
   def extract_events
     feedex_service.find_in_batches(date: date) do |events|
-      Events::Feedex.import(events, batch_size: 10_000)
+      Events::Feedex.import(events, batch_size: BATCH_SIZE)
     end
   end
 
@@ -59,6 +61,6 @@ private
   attr_reader :date
 
   def feedex_service
-    @feedex_service ||= FeedexService.new
+    @feedex_service ||= FeedexService.new(BATCH_SIZE)
   end
 end
