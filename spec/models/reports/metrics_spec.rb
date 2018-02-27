@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Reports::Metrics do
-
   subject { described_class }
 
   it 'returns the metrics between two dates' do
@@ -31,5 +30,5 @@ RSpec.describe Reports::Metrics do
     Facts::Metric.create!(dimensions_item: item2, dimensions_date: day2)
 
     expect(subject.run(from: day1, to: day2, base_path: '/path1')).to match_array([metric2, metric3])
-    end
+  end
 end
