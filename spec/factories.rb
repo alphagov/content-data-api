@@ -96,5 +96,6 @@ FactoryBot.define do
     dimensions_item
     pageviews 10
     unique_pageviews 5
+    number_of_issues 1
   end
 end
