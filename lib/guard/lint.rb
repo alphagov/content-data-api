@@ -10,7 +10,7 @@ if defined?(Guard)
       end
 
       def run_on_modifications(files)
-        system("#{CMD} #{files.join(' ')}")
+        system(CMD, files.join(' '))
       end
     end
   end
