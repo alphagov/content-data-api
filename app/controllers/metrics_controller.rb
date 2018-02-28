@@ -1,6 +1,8 @@
 class MetricsController < ApplicationController
   skip_before_action :authenticate_user!
 
+  before_action :validate_metric!
+
   def show
     @metrics = Facts::Metric
       .joins(:dimensions_date)
@@ -13,6 +15,8 @@ class MetricsController < ApplicationController
   end
 
 private
+
+  METRIC_WHITELIST = %w[pageviews unique_pageviews].freeze
 
   def content_id
     @content_id ||= params[:content_id]
@@ -28,5 +32,9 @@ private
 
   def metric
     @metric ||= params[:metric]
+  end
+
+  def validate_metric!
+    head :bad_request unless METRIC_WHITELIST.include? metric
   end
 end
