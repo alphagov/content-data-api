@@ -38,7 +38,8 @@ private
                unique_pageviews,
                dimensions_items.id
         FROM events_gas, dimensions_items
-        WHERE page_path = base_path 
+        WHERE page_path = base_path
+              AND events_gas.date = '#{date_to_s}'
       ) AS s
       WHERE dimensions_item_id = s.id AND dimensions_date_id = '#{date_to_s}'
     SQL

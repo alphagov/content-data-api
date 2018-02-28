@@ -49,6 +49,21 @@ RSpec.describe ETL::GA do
 
       expect(Events::GA.count).to eq(1)
     end
+
+    context 'when there are events from other days' do
+      before do
+        Events::GA.create(date: date - 1, page_path: '/path1', pageviews: 10, unique_pageviews: 20)
+        Events::GA.create(date: date - 2, page_path: '/path1', pageviews: 10, unique_pageviews: 20)
+      end
+
+      it 'only updates metrics for the current day' do
+        fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+
+        described_class.process(date: date)
+
+        expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1)
+      end
+    end
   end
 
 private
