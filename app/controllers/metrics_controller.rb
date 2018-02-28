@@ -8,7 +8,7 @@ class MetricsController < ApplicationController
       .joins(:dimensions_date)
       .joins(:dimensions_item)
       .where(dimensions_items: { content_id: content_id })
-      .where('dimensions_dates.date in (?)', from..to)
+      .where('dimensions_dates.date between ? and ?', from, to)
       .order('dimensions_dates.date asc')
       .group('dimensions_dates.date')
       .sum("facts_metrics.#{metric}")
