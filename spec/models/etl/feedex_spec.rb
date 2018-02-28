@@ -4,8 +4,8 @@ require 'gds-api-adapters'
 RSpec.describe ETL::Feedex do
   subject { described_class }
 
-  let(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
-  let(:item2) { create :dimensions_item, base_path: '/path2', latest: true }
+  let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
+  let!(:item2) { create :dimensions_item, base_path: '/path2', latest: true }
 
   let(:date) { Date.new(2018, 2, 20) }
   let(:dimensions_date) { Dimensions::Date.for(date) }
@@ -47,6 +47,29 @@ RSpec.describe ETL::Feedex do
       described_class.process(date: date)
 
       expect(Events::Feedex.count).to eq(1)
+    end
+  end
+
+  context 'when there are events from other days' do
+    before do
+      Events::Feedex.create(date: date - 1, page_path: '/path1', number_of_issues: 1)
+      Events::Feedex.create(date: date - 2, page_path: '/path1', number_of_issues: 2)
+    end
+
+    it 'only updates metrics for the current day' do
+      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+
+      described_class.process(date: date)
+
+      expect(fact1.reload).to have_attributes(number_of_issues: 21)
+    end
+
+    it 'only deletes the events for the current day that matches' do
+      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+
+      described_class.process(date: date)
+
+      expect(Events::Feedex.count).to eq(3)
     end
   end
 
