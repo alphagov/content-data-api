@@ -52,7 +52,9 @@ private
       WHERE date = '#{date_to_s}' AND
         page_path in (
            SELECT base_path
-           FROM dimensions_items
+           FROM dimensions_items, facts_metrics
+           WHERE dimensions_items.id = facts_metrics.dimensions_item_id
+           AND facts_metrics.dimensions_date_id = '#{date_to_s}'
         )
     SQL
   end
