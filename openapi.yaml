@@ -1,0 +1,59 @@
+openapi: '3.0.0'
+
+info:
+  title: GOV.UK Content Performance API
+  description: |
+    GOV.UK Content Performance API provides metrics about GOV.UK content.
+
+    This API accepts HTTP requests and responds with
+    [JSON](https://en.wikipedia.org/wiki/JSON).
+
+  version: '1.0.0'
+
+servers:
+  - url: https://content-performance-manager.publishing.service.gov.uk/api/
+
+paths:
+  /metrics/{content_id}:
+    get:
+      summary: Get metric values for a single content item over a date range.
+      description: |
+        Returns an array of values. Each item represents a metric value at
+        a single point in time.
+      tags:
+        - Metrics
+      parameters:
+        - name: 'content_id'
+          in: path
+          required: true
+          description: |
+            A GOV.UK content ID. This is a UUID value as used in the Content API.
+          schema:
+            type: string
+            example: 'f838c22a-b2aa-49be-bd95-153f593293a3'
+        - name: 'from'
+          in: query
+          required: true
+          description: |
+            From date.
+          schema:
+            type: date
+            example: '2018-01-01'
+        - name: 'to'
+          in: query
+          required: true
+          description: |
+            To date.
+          schema:
+            type: date
+            example: '2018-01'
+      responses:
+        200:
+          description: |
+            An array of items where each item represents a value of the metric at a single point in time. The array may be empty.
+        400:
+          description: The API request is invalid.
+      x-code-samples:
+        "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
+          lang: shell
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-27&to=2018-02-27&metric=pageviews'
