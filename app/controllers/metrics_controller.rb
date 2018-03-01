@@ -1,6 +1,4 @@
 class MetricsController < ApplicationController
-  skip_before_action :authenticate_user!
-
   before_action :validate_metric!
 
   def show
