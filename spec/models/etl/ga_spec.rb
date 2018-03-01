@@ -4,8 +4,8 @@ require 'gds-api-adapters'
 RSpec.describe ETL::GA do
   subject { described_class }
 
-  let(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
-  let(:item2) { create :dimensions_item, base_path: '/path2', latest: true }
+  let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
+  let!(:item2) { create :dimensions_item, base_path: '/path2', latest: true }
 
   let(:date) { Date.new(2018, 2, 20) }
   let(:dimensions_date) { Dimensions::Date.for(date) }
@@ -48,6 +48,29 @@ RSpec.describe ETL::GA do
       described_class.process(date: date)
 
       expect(Events::GA.count).to eq(1)
+    end
+
+    context 'when there are events from other days' do
+      before do
+        Events::GA.create(date: date - 1, page_path: '/path1', pageviews: 10, unique_pageviews: 20)
+        Events::GA.create(date: date - 2, page_path: '/path1', pageviews: 10, unique_pageviews: 20)
+      end
+
+      it 'only updates metrics for the current day' do
+        fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+
+        described_class.process(date: date)
+
+        expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1)
+      end
+
+      it 'only deletes the events for the current day that matches' do
+        create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+
+        described_class.process(date: date)
+
+        expect(Events::GA.count).to eq(3)
+      end
     end
   end
 

@@ -38,7 +38,8 @@ private
                unique_pageviews,
                dimensions_items.id
         FROM events_gas, dimensions_items
-        WHERE page_path = base_path AND latest = 'true'
+        WHERE page_path = base_path
+              AND events_gas.date = '#{date_to_s}'
       ) AS s
       WHERE dimensions_item_id = s.id AND dimensions_date_id = '#{date_to_s}'
     SQL
@@ -51,8 +52,9 @@ private
       WHERE date = '#{date_to_s}' AND
         page_path in (
            SELECT base_path
-           FROM dimensions_items
-           WHERE latest = 'true'
+           FROM dimensions_items, facts_metrics
+           WHERE dimensions_items.id = facts_metrics.dimensions_item_id
+           AND facts_metrics.dimensions_date_id = '#{date_to_s}'
         )
     SQL
   end
