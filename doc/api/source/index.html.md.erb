@@ -1,0 +1,118 @@
+---
+title: About
+---
+
+# GOV.UK Content Performance API
+
+<div class="phase-tag">
+  <p>
+    <strong class="phase-banner"><%= config[:tech_docs][:phase] %></strong>
+    <span>
+      This is a trial service. <a href="#alpha-software">Find out what
+      this means</a>.
+    </span>
+  </p>
+</div>
+
+
+This guide introduces the Content Performance API.
+
+All examples use [curl](https://curl.haxx.se/) for interfacing with the API on
+the command line. You may prefer the structured output of using [HTTPie](https://httpie.org/)
+or piping the curl responses through [jq](https://stedolan.github.io/jq/).
+
+GOV.UK Content API is accessed via [HTTP][] and returns data in a [JSON][]
+format. The [reference documentation](reference.html) provides a thorough
+overview of the endpoints and the response format.
+
+## What you can do with this API
+
+This API provides access to metrics about the performance of GOV.UK content.
+Each metric is a time series, so you can see how the content performance has
+changed over time.
+
+## What you can't do with this API
+
+This API does not expose the content itself. For that you should use the [GOV.UK Content API][].
+
+Not all content is available. For example, content that is generated
+dynamically (such as through a search) is not available.
+
+## Getting Started
+
+To query the API you need to know the content ID for the piece of content you
+are interested in.
+
+You can find out the content ID for most GOV.UK pages using the [GOV.UK Content API][].
+
+For example
+
+```shell
+curl https://www.gov.uk/api/content/vat-rates
+```
+
+Then you can use the `/metrics/[content-id]` endpoint to query the number of page views:
+
+```shell
+http://content-performance-manager.dev.gov.uk/api/v1/metrics/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-28&to=2018-02-28&metric=pageviews
+```
+
+The `from` and `to` query parameters specify the date range to query.
+
+## Alpha software
+
+GOV.UK Content Performance API is currently alpha software and is likely to
+change significantly between versions.
+
+This means that you may use the API and build applications that use
+it, but live services should not rely on it.
+
+As we learn from feedback we may make changes to the software.
+We will communicate those via our [mailing list](#keep-informed).
+
+## Keep informed
+
+We intend to use a mailing list to communicate any breaking changes or updates to
+the support status of this API. This will be linked from this documentation.
+
+## Authentication
+
+Usage of GOV.UK Content Performance API does not require authentication.
+
+## Security and compliance
+
+### Reporting vulnerabilities
+
+If you believe there is a security issue with GOV.UK Content Performance API, please
+[contact us immediately](#support).
+
+Please don’t disclose the suspected breach publicly until it has been fixed.
+
+### HTTPS
+
+GOV.UK Content Performance API follows government HTTPS security guidelines. The
+Hypertext Transfer Protocol Secure (HTTPS), which involves the Transport Layer
+Security (TLS) protocol, is used by the platform to provide secure connections.
+
+## Rate limiting
+
+There is a maximum limit of 10 requests per second per client. If you exceed
+this your request won't be processed until the limit is no longer exceeded
+and you may see timeout errors.
+
+We think this should be sufficient for all users of GOV.UK Content Performance API but
+if you believe you need the limit increasing you can [contact support](#support).
+
+## Support
+
+If you experience any issues or have questions regarding GOV.UK Content Performance API
+please:
+
+- **If you are a government department:** Raise a ticket with [GOV.UK Support][]
+- **Otherwise:** [Contact GOV.UK][] with your query
+
+[HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+[JSON]: https://en.wikipedia.org/wiki/JSON
+[GOV.UK Support]: https://support.publishing.service.gov.uk
+[Contact GOV.UK]: https://www.gov.uk/contact/govuk
+[GOV.UK Content API]: https://content-api.publishing.service.gov.uk
