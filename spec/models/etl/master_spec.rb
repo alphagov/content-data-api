@@ -11,6 +11,7 @@ RSpec.describe ETL::Master do
   end
 
   before { allow(ETL::GA).to receive(:process) }
+  before { allow(ETL::Feedex).to receive(:process) }
 
   it 'creates a Metrics fact per content item' do
     create :dimensions_item, latest: true
@@ -36,6 +37,12 @@ RSpec.describe ETL::Master do
 
   it 'update GA metrics in the Facts table' do
     expect(ETL::GA).to receive(:process).with(date: Date.new(2018, 2, 19))
+
+    subject.process
+  end
+
+  it 'update Feedex metrics in the Facts table' do
+    expect(ETL::Feedex).to receive(:process).with(date: Date.new(2018, 2, 19))
 
     subject.process
   end
