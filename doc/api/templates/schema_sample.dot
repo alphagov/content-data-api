@@ -1,0 +1,9 @@
+<details>
+
+<summary>Sample JSON</summary>
+
+```json
+{{=JSON.stringify(data.schema,null,2)}}
+```
+
+</details>
