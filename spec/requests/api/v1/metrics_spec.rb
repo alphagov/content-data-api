@@ -20,7 +20,7 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
         from: Date.new(2018, 1, 13),
         to: Date.new(2018, 1, 15),
       }
-      get '/api/v1/metrics/id1.json', params: query_params
+      get '/api/v1/metrics/id1', params: query_params
 
       json = JSON.parse(response.body)
       expect(json.deep_symbolize_keys).to eq(pageviews_response)
