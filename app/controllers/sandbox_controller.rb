@@ -9,7 +9,7 @@ class SandboxController < ApplicationController
 private
 
   def from
-    params[:from] ||= 1.month.ago.to_date
+    params[:from] ||= 5.days.ago.to_date
   end
 
   def to
