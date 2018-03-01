@@ -1,5 +1,7 @@
 require 'rails_helper'
 RSpec.describe '/api/v1/metrics/:content_id', type: :request do
+  before { create(:user) }
+
   context 'with valid parmeters' do
     it 'List a metric for a content item between two dates' do
       day1 = Dimensions::Date.build(Date.new(2018, 1, 13))
