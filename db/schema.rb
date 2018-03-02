@@ -82,7 +82,6 @@ ActiveRecord::Schema.define(version: 20180301230712) do
     t.integer "simplify_count"
     t.integer "spell_count"
     t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path"
-    t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest"
   end
 
   create_table "dimensions_items_temps", id: false, force: :cascade do |t|
@@ -96,7 +95,6 @@ ActiveRecord::Schema.define(version: 20180301230712) do
     t.date "date"
     t.string "page_path"
     t.integer "number_of_issues"
-    t.index ["page_path", "date"], name: "index_events_feedexes_on_page_path_and_date"
   end
 
   create_table "events_gas", force: :cascade do |t|
@@ -119,7 +117,6 @@ ActiveRecord::Schema.define(version: 20180301230712) do
     t.integer "number_of_issues", default: 0
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_unique", unique: true
     t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
-    t.integer "number_of_issues", default: 0
   end
 
   create_table "links", id: :serial, force: :cascade do |t|
@@ -147,6 +144,4 @@ ActiveRecord::Schema.define(version: 20180301230712) do
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
-  add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
-  add_foreign_key "facts_metrics", "dimensions_items"
 end

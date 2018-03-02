@@ -1,0 +1,38 @@
+class ContentQualityService
+  def run(content)
+    parsed_response = fetch(content)
+    convert_results(parsed_response)
+  end
+
+private
+
+  URL = 'https://gov-quality-metrics.herokuapp.com/metrics'.freeze
+
+  def fetch(content)
+    response = HTTParty.post(
+      URL,
+      body: { content: content }.to_json,
+      headers: { 'Content-Type' => 'application/json' }
+    )
+    response.parsed_response
+  end
+
+  def convert_results(response)
+    {}.tap do |results|
+      results[:readability_count] = count_metric(response, 'readability')
+      results[:contractions_count] = count_metric(response, 'contractions')
+      results[:equality_count] = count_metric(response, 'equality')
+      results[:indefinite_article_count] = count_metric(response, 'indefinite_article')
+      results[:passive_count] = count_metric(response, 'passive')
+      results[:profanities_count] = count_metric(response, 'profanities')
+      results[:redundant_acronyms_count] = count_metric(response, 'redundant_acronyms')
+      results[:repeated_words_count] = count_metric(response, 'repeated_words')
+      results[:simplify_count] = count_metric(response, 'simplify')
+      results[:spell_count] = count_metric(response, 'spell')
+    end
+  end
+
+  def count_metric(response, metric_name)
+    response.dig(metric_name, 'count') || 0
+  end
+end
