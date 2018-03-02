@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305112605) do
-
+ActiveRecord::Schema.define(version: 20180301230712) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -72,7 +71,25 @@ ActiveRecord::Schema.define(version: 20180305112605) do
     t.integer "number_of_word_files"
     t.boolean "dirty", default: false
     t.string "status", default: "live"
-    t.index ["latest"], name: "index_dimensions_items_on_latest"
+    t.integer "readability_score"
+    t.integer "contractions_count"
+    t.integer "equality_count"
+    t.integer "indefinite_article_count"
+    t.integer "passive_count"
+    t.integer "profanities_count"
+    t.integer "redundant_acronyms_count"
+    t.integer "repeated_words_count"
+    t.integer "simplify_count"
+    t.integer "spell_count"
+    t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path"
+    t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest"
+  end
+
+  create_table "dimensions_items_temps", id: false, force: :cascade do |t|
+    t.string "content_id"
+    t.string "description"
+    t.string "title"
+    t.string "base_path"
   end
 
   create_table "events_feedexes", force: :cascade do |t|
@@ -102,6 +119,7 @@ ActiveRecord::Schema.define(version: 20180305112605) do
     t.integer "number_of_issues", default: 0
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_unique", unique: true
     t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
+    t.integer "number_of_issues", default: 0
   end
 
   create_table "links", id: :serial, force: :cascade do |t|
