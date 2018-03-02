@@ -4,9 +4,9 @@ RSpec.describe Reports::Metrics do
   subject { described_class }
 
   it 'returns the metrics between two dates' do
-    day0 = Dimensions::Date.build(Date.new(2018, 1, 12))
-    day1 = Dimensions::Date.build(Date.new(2018, 1, 13))
-    day2 = Dimensions::Date.build(Date.new(2018, 1, 14))
+    day0 = create(:dimensions_date, date: Date.new(2018, 1, 12))
+    day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
+    day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
     item1 = create(:dimensions_item, content_id: 'id1')
 
     create(:metric, dimensions_item: item1, dimensions_date: day0)
@@ -17,9 +17,9 @@ RSpec.describe Reports::Metrics do
   end
 
   it 'returns the metrics between two dates filtered by path' do
-    day0 = Dimensions::Date.build(Date.new(2018, 1, 12))
-    day1 = Dimensions::Date.build(Date.new(2018, 1, 13))
-    day2 = Dimensions::Date.build(Date.new(2018, 1, 14))
+    day0 = create(:dimensions_date, date: Date.new(2018, 1, 12))
+    day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
+    day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
     item1 = create(:dimensions_item, content_id: 'id1', base_path: '/path1')
     item2 = create(:dimensions_item, content_id: 'id2', base_path: '/path2')
 

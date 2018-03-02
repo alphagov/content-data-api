@@ -4,10 +4,10 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
 
   context 'with valid parmeters' do
     it 'List a metric for a content item between two dates' do
-      day1 = Dimensions::Date.build(Date.new(2018, 1, 13))
-      day2 = Dimensions::Date.build(Date.new(2018, 1, 14))
-      day3 = Dimensions::Date.build(Date.new(2018, 1, 15))
-      day4 = Dimensions::Date.build(Date.new(2018, 1, 16))
+      day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
+      day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
+      day3 = create(:dimensions_date, date: Date.new(2018, 1, 15))
+      day4 = create(:dimensions_date, date: Date.new(2018, 1, 16))
       item1 = create(:dimensions_item, content_id: 'id1')
 
       create(:metric, dimensions_item: item1, dimensions_date: day1, pageviews: 20, unique_pageviews: 10)
