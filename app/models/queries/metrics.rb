@@ -1,12 +1,9 @@
 class Queries::Metrics
   def self.run(from:, to:, base_path: nil)
-    metrics = new.between(from, to)
-
-    if base_path.present?
-      metrics = metrics.where('dimensions_items.base_path like (?)', base_path)
-    end
-
-    metrics
+    new
+      .between(from, to)
+      .by_base_path(base_path)
+      .relation
   end
 
   attr_reader :relation
@@ -18,6 +15,23 @@ class Queries::Metrics
   end
 
   def between(from, to)
-    relation.where('dimensions_dates.date BETWEEN ? AND ?', from, to)
+    join(from, to) do
+      relation.where('dimensions_dates.date BETWEEN ? AND ?', from, to)
+    end
+  end
+
+  def by_base_path(base_path)
+    join(base_path) do
+      relation.where('dimensions_items.base_path like (?)', base_path)
+    end
+  end
+
+private
+
+  def join(*params)
+    return self unless params.all?(&:present?)
+
+    @relation = yield
+    self
   end
 end
