@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Reports::Metrics do
+RSpec.describe Queries::Metrics do
   subject { described_class }
 
   it 'returns the metrics between two dates' do

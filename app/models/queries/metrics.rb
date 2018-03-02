@@ -1,4 +1,4 @@
-module Reports
+module Queries
   class Metrics
     def self.run(from:, to:, base_path: nil)
       metrics = Facts::Metric.
@@ -14,3 +14,4 @@ module Reports
     end
   end
 end
+\
