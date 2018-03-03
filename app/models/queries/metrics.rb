@@ -19,6 +19,12 @@ class Queries::Metrics
     end
   end
 
+  def by_content_id(content_id)
+    join(content_id) do
+      relation.where(dimensions_items: { content_id: content_id })
+    end
+  end
+
   def build
     relation
   end

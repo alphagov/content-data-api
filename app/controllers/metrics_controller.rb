@@ -4,9 +4,10 @@ class MetricsController < ApplicationController
   def show
     query = Queries::Metrics.new
                  .between(from, to)
+                 .by_content_id(content_id)
                  .build
 
-    @metrics = query.where(dimensions_items: { content_id: content_id })
+    @metrics = query
       .order('dimensions_dates.date asc')
       .group('dimensions_dates.date')
       .sum("facts_metrics.#{metric}")
