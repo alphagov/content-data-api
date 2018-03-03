@@ -2,11 +2,11 @@ class MetricsController < ApplicationController
   before_action :validate_metric!
 
   def show
-    @metrics = Facts::Metric
-      .joins(:dimensions_date)
-      .joins(:dimensions_item)
-      .where(dimensions_items: { content_id: content_id })
-      .where('dimensions_dates.date between ? and ?', from, to)
+    query = Queries::Metrics.new
+                 .between(from, to)
+                 .build
+
+    @metrics = query.where(dimensions_items: { content_id: content_id })
       .order('dimensions_dates.date asc')
       .group('dimensions_dates.date')
       .sum("facts_metrics.#{metric}")
