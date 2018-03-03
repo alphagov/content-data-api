@@ -2,10 +2,9 @@ class MetricsController < ApplicationController
   before_action :validate_metric!
 
   def show
-    query = Queries::Metrics.new
+    query = Facts::Metric
                  .between(from, to)
                  .by_content_id(content_id)
-                 .build
 
     @metrics = query
       .order('dimensions_dates.date asc')

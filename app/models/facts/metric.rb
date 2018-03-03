@@ -4,4 +4,21 @@ class Facts::Metric < ApplicationRecord
 
   validates :dimensions_date, presence: true
   validates :dimensions_item, presence: true
+
+  scope :between, ->(from, to) do
+    joins(:dimensions_date)
+      .where('dimensions_dates.date BETWEEN ? AND ?', from, to)
+  end
+
+  scope :by_base_path, ->(base_path) do
+    if base_path.present?
+      joins(:dimensions_item)
+        .where('dimensions_items.base_path like (?)', base_path)
+    end
+  end
+
+  scope :by_content_id, ->(content_id) do
+    joins(:dimensions_item)
+      .where(dimensions_items: { content_id: content_id })
+  end
 end
