@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe Queries::Metrics do
   subject { described_class }
 
+  let(:day0) { create(:dimensions_date, date: Date.new(2018, 1, 12)) }
+  let(:day1) { create(:dimensions_date, date: Date.new(2018, 1, 13)) }
+  let(:day2) { create(:dimensions_date, date: Date.new(2018, 1, 14)) }
+
   it '.between' do
-    day0 = create(:dimensions_date, date: Date.new(2018, 1, 12))
-    day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
-    day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
-    item1 = create(:dimensions_item, content_id: 'id1')
+    item1 = create(:dimensions_item)
 
     create(:metric, dimensions_item: item1, dimensions_date: day0)
     metric2 = create(:metric, dimensions_item: item1, dimensions_date: day1)
@@ -17,11 +18,8 @@ RSpec.describe Queries::Metrics do
   end
 
   it '.by_base_path' do
-    day0 = create(:dimensions_date, date: Date.new(2018, 1, 12))
-    day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
-    day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
-    item1 = create(:dimensions_item, content_id: 'id1', base_path: '/path1')
-    item2 = create(:dimensions_item, content_id: 'id2', base_path: '/path2')
+    item1 = create(:dimensions_item, base_path: '/path1')
+    item2 = create(:dimensions_item, base_path: '/path2')
 
     metric1 = create(:metric, dimensions_item: item1, dimensions_date: day0)
     metric2 = create(:metric, dimensions_item: item1, dimensions_date: day1)
@@ -33,11 +31,8 @@ RSpec.describe Queries::Metrics do
   end
 
   it '.by_content_id' do
-    day0 = create(:dimensions_date, date: Date.new(2018, 1, 12))
-    day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
-    day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
-    item1 = create(:dimensions_item, content_id: 'id1', base_path: '/path1')
-    item2 = create(:dimensions_item, content_id: 'id2', base_path: '/path2')
+    item1 = create(:dimensions_item, content_id: 'id1')
+    item2 = create(:dimensions_item, content_id: 'id2')
 
     metric1 = create(:metric, dimensions_item: item1, dimensions_date: day0)
     metric2 = create(:metric, dimensions_item: item1, dimensions_date: day1)
