@@ -33,6 +33,6 @@ private
   end
 
   def validate_metric!
-    head :bad_request unless METRIC_WHITELIST.include? metric
+    head :bad_request unless Facts::Metric.valid_metric? metric
   end
 end

@@ -21,4 +21,11 @@ class Facts::Metric < ApplicationRecord
     joins(:dimensions_item)
       .where(dimensions_items: { content_id: content_id })
   end
+
+  def self.valid_metric?(metric)
+    METRIC_WHITELIST.include? metric
+  end
+
+  METRIC_WHITELIST = %w[pageviews unique_pageviews].freeze
+  private_constant :METRIC_WHITELIST
 end
