@@ -19,6 +19,10 @@ class Queries::Metrics
     end
   end
 
+  def build
+    relation
+  end
+
 private
 
   def join(*params)
