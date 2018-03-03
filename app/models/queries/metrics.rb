@@ -1,6 +1,4 @@
 class Queries::Metrics
-  attr_reader :relation
-
   def initialize(relation = Facts::Metric.all)
     @relation = relation.
       joins(:dimensions_date).
@@ -30,6 +28,8 @@ class Queries::Metrics
   end
 
 private
+
+  attr_reader :relation
 
   def join(*params)
     return self unless params.all?(&:present?)
