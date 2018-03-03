@@ -1,11 +1,4 @@
 class Queries::Metrics
-  def self.run(from:, to:, base_path: nil)
-    new
-      .between(from, to)
-      .by_base_path(base_path)
-      .relation
-  end
-
   attr_reader :relation
 
   def initialize(relation = Facts::Metric.all)
