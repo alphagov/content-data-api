@@ -35,24 +35,16 @@
 
 <div class="trends">
   <div class="total_items">
-    <h3>Total of <%= @total_items %> items</h3>
-    <%= line_chart [
-      { name: "Total items", data: @metrics.group_by_day('facts_metrics.dimensions_date_id').count }
-    ] %>
+    <h3>Number of Content Items</h3>
+    <%= line_chart @metrics.group('facts_metrics.dimensions_date_id').count %>
   </div>
   <div class="pageviews">
-    <h3>Feedex trend (<%= @pageviews %> in <%= 4 %> days )</h3>
-    <%= line_chart [
-      { name: "Pageviews", data: @metrics.group_by_day(:dimensions_date_id).count(:pageviews) },
-      { name: "Average", data: @metrics.group_by_day(:dimensions_date_id).average(:pageviews) }
-    ] %>
+    <h3>Number of Pageviews</h3>
+    <%= line_chart @metrics.group(:dimensions_date_id).sum(:pageviews) %>
   </div>
   <div class="feedex">
-    <h3>Feedex trend (<%= @feedex_issues %> issues in <%= 4 %> days )</h3>
-    <%= line_chart [
-      { name: "Feedex Issues", data: @metrics.group_by_day(:dimensions_date_id).count(:number_of_issues) },
-      { name: "Average", data: @metrics.group_by_day(:dimensions_date_id).average(:number_of_issues) }
-    ] %>
+    <h3>Number of Feedex issues</h3>
+    <%= line_chart @metrics.group(:dimensions_date_id).sum(:number_of_issues) %>
   </div>
 </div>
 
