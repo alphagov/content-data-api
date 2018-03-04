@@ -1,5 +1,5 @@
 <% content_for :sidebar do %>
-    <%= render 'sidebar', locals: { search: @search} %>
+    <%= render 'sidebar', locals: { search: @search } %>
 <% end %>
 
 <div class="summary">
@@ -32,3 +32,14 @@
     </div>
   </div>
 </div>
+
+<div class="trends">
+  <div class="feedex">
+    <h3>Feedex trend (<%= @feedex_issues %> issues in <%= 4 %> days )</h3>
+    <%= line_chart [
+      { name: "Feedex Issues", data: @metrics.group_by_day(:dimensions_date_id).count(:number_of_issues) },
+      { name: "Average Issues", data: @metrics.group_by_day(:dimensions_date_id).average(:number_of_issues) }
+    ] %>
+  </div>
+</div>
+
