@@ -53,6 +53,39 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
     end
   end
 
+  describe 'feedex issues' do
+    before do
+      metric1.update number_of_issues: 10
+      metric2.update number_of_issues: 20
+      metric3.update number_of_issues: 30
+      metric4.update number_of_issues: 40
+    end
+
+    it 'returns metric values between two dates' do
+      get '/api/v1/metrics/id1', params: { metric: 'number_of_issues', from: '2018-01-13', to: '2018-01-15' }
+
+      json = JSON.parse(response.body)
+      expect(json.deep_symbolize_keys).to eq(api_reponse)
+    end
+
+    def api_reponse
+      {
+        metadata: {
+          metric: 'number_of_issues',
+          total: 60,
+          from: '2018-01-13',
+          to: '2018-01-15',
+          content_id: 'id1',
+        },
+        results: [
+          { content_id: 'id1', date: '2018-01-13', value: 10 },
+          { content_id: 'id1', date: '2018-01-14', value: 20 },
+          { content_id: 'id1', date: '2018-01-15', value: 30 },
+        ]
+      }
+    end
+  end
+
   describe 'number_of_pdfs' do
     before do
       old_version = create :dimensions_item, content_id: 'id1', number_of_pdfs: 30, latest: false

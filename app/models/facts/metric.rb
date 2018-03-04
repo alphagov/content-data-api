@@ -26,6 +26,6 @@ class Facts::Metric < ApplicationRecord
     METRIC_WHITELIST.include? metric
   end
 
-  METRIC_WHITELIST = %w[pageviews unique_pageviews number_of_pdfs].freeze
+  METRIC_WHITELIST = %w[pageviews unique_pageviews number_of_pdfs number_of_issues].freeze
   private_constant :METRIC_WHITELIST
 end
