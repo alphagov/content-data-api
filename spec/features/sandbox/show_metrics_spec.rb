@@ -36,6 +36,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     fill_in 'To:', with: '2018-01-15'
     click_button 'Filter'
 
+    expect(page).to have_selector('.total_items', text: '2 items')
     expect(page).to have_selector('.pageviews', text: '80 pageviews (total)')
     expect(page).to have_selector('.unique_pageviews', text: '20.0 unique pageviews (avg)')
     expect(page).to have_selector('.feedex_issues', text: '28 Feedex issues (total)')
