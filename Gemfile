@@ -12,9 +12,11 @@ gem 'plek'
 
 # Third party gems
 gem 'activerecord-import'
+gem 'chartkick'
 gem 'draper'
 gem 'google-api-client', '~> 0.18'
 gem 'govuk_message_queue_consumer', '~> 3.2'
+gem 'groupdate'
 gem 'httparty'
 gem 'jbuilder'
 gem 'jquery-rails'
