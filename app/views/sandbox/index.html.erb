@@ -42,6 +42,10 @@
     <h3>Number of Pageviews</h3>
     <%= line_chart @metrics.group(:dimensions_date_id).sum(:pageviews) %>
   </div>
+  <div class="unique_pageviews">
+    <h3>Number of Unique Pageviews</h3>
+    <%= line_chart @metrics.group(:dimensions_date_id).sum(:unique_pageviews) %>
+  </div>
   <div class="feedex">
     <h3>Number of Feedex issues</h3>
     <%= line_chart @metrics.group(:dimensions_date_id).sum(:number_of_issues) %>
