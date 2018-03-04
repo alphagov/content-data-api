@@ -9,7 +9,7 @@ class Api::MetricsController < ApplicationController
     @metrics = query
                  .order('dimensions_dates.date asc')
                  .group('dimensions_dates.date')
-                 .sum("facts_metrics.#{metric}")
+                 .sum(metric)
   end
 
 private
