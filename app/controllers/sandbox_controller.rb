@@ -5,6 +5,7 @@ class SandboxController < ApplicationController
                 .by_base_path(base_path)
 
     @pageviews = query.sum(:pageviews)
+    @feedex_issues = query.sum(:number_of_issues)
     @unique_pageviews = query.average(:unique_pageviews)
   end
 

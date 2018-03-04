@@ -21,11 +21,11 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
   let(:metric5) { create :metric, dimensions_item: item2, dimensions_date: day2 }
 
   scenario 'Show aggregated metrics' do
-    metric1.update pageviews: 10, unique_pageviews: 10
-    metric2.update pageviews: 10, unique_pageviews: 10
-    metric3.update pageviews: 20, unique_pageviews: 20
-    metric4.update pageviews: 20, unique_pageviews: 20
-    metric5.update pageviews: 30, unique_pageviews: 30
+    metric1.update pageviews: 10, unique_pageviews: 10, number_of_issues: 2
+    metric2.update pageviews: 10, unique_pageviews: 10, number_of_issues: 4
+    metric3.update pageviews: 20, unique_pageviews: 20, number_of_issues: 6
+    metric4.update pageviews: 20, unique_pageviews: 20, number_of_issues: 8
+    metric5.update pageviews: 30, unique_pageviews: 30, number_of_issues: 10
 
     visit '/sandbox'
 
@@ -35,6 +35,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
 
     expect(page).to have_selector('.pageviews', text: '80 pageviews (total)')
     expect(page).to have_selector('.unique_pageviews', text: '20.0 unique pageviews (avg)')
+    expect(page).to have_selector('.feedex_issues', text: '28 Feedex issues (total)')
   end
 
   describe 'Filtering' do
