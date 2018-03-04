@@ -118,4 +118,38 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
       }
     end
   end
+
+  describe 'number_of_word_files' do
+    before do
+      old_version = create :dimensions_item, content_id: 'id1', number_of_word_files: 30, latest: false
+      metric1.update dimensions_item: old_version
+
+      item.update number_of_word_files: 20
+    end
+
+    it 'returns metric values between two dates' do
+      get '/api/v1/metrics/id1', params: { metric: 'number_of_word_files', from: '2018-01-13', to: '2018-01-15' }
+
+
+      json = JSON.parse(response.body)
+      expect(json.deep_symbolize_keys).to eq(api_reponse)
+    end
+
+    def api_reponse
+      {
+        metadata: {
+          metric: 'number_of_word_files',
+          total: 70,
+          from: '2018-01-13',
+          to: '2018-01-15',
+          content_id: 'id1',
+        },
+        results: [
+          { content_id: 'id1', date: '2018-01-13', value: 30 },
+          { content_id: 'id1', date: '2018-01-14', value: 20 },
+          { content_id: 'id1', date: '2018-01-15', value: 20 },
+        ]
+      }
+    end
+  end
 end
