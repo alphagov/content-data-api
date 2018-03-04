@@ -6,6 +6,8 @@ class SandboxController < ApplicationController
 
     @pageviews = query.sum(:pageviews)
     @feedex_issues = query.sum(:number_of_issues)
+    @number_of_pdfs = query.joins(:dimensions_item).sum(:number_of_pdfs)
+    @number_of_word_files= query.joins(:dimensions_item).sum(:number_of_word_files)
     @unique_pageviews = query.average(:unique_pageviews)
   end
 

@@ -27,6 +27,9 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     metric4.update pageviews: 20, unique_pageviews: 20, number_of_issues: 8
     metric5.update pageviews: 30, unique_pageviews: 30, number_of_issues: 10
 
+    item1.update number_of_pdfs: 2, number_of_word_files: 1
+    item2.update number_of_pdfs: 4, number_of_word_files: 2
+
     visit '/sandbox'
 
     fill_in 'From:', with: '2018-01-13'
@@ -36,6 +39,8 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.pageviews', text: '80 pageviews (total)')
     expect(page).to have_selector('.unique_pageviews', text: '20.0 unique pageviews (avg)')
     expect(page).to have_selector('.feedex_issues', text: '28 Feedex issues (total)')
+    expect(page).to have_selector('.number_of_pdfs', text: '12 pdfs (total)')
+    expect(page).to have_selector('.number_of_word_files', text: '6 Word files (total)')
   end
 
   describe 'Filtering' do
