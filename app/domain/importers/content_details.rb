@@ -18,9 +18,13 @@ class Importers::ContentDetails
     item.update_attributes(attributes)
   rescue GdsApi::HTTPGone
     item.gone!
+  rescue GdsApi::HTTPNotFound
+    do_nothing
   end
 
 private
+
+  def do_nothing() end
 
   def format_metadata(formatted_response)
     formatted_response.slice(
