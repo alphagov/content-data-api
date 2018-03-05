@@ -9,11 +9,11 @@ class SandboxController < ApplicationController
     @pageviews = @metrics.sum(:pageviews)
     @feedex_issues = @metrics.sum(:number_of_issues)
     @number_of_pdfs = @metrics.sum(:number_of_pdfs)
-    @number_of_word_files= @metrics.sum(:number_of_word_files)
+    @number_of_word_files = @metrics.sum(:number_of_word_files)
     @unique_pageviews = @metrics.average(:unique_pageviews)
   end
 
-  private
+private
 
   def from
     params[:from] ||= 5.days.ago.to_date
