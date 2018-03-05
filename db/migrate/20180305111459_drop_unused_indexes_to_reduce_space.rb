@@ -10,7 +10,7 @@ class DropUnusedIndexesToReduceSpace < ActiveRecord::Migration[5.1]
     remove_index :dimensions_dates, :date_name_abbreviated
 
     # We don't need an index on both fields, only on `latest`
-    remove_index :dimensions_items, %i[latest base_path]
+    remove_index :dimensions_items, [:latest, :base_path]
     add_index :dimensions_items, :latest
   end
 end

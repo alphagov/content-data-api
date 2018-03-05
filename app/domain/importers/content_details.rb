@@ -1,7 +1,5 @@
-require 'odyssey'
-
 class Importers::ContentDetails
-  attr_reader :items_service, :content_id, :base_path, :content_quality_service
+  attr_reader :items_service, :content_id, :base_path
 
   def self.run(*args)
     new(*args).run
@@ -11,15 +9,13 @@ class Importers::ContentDetails
     @content_id = content_id
     @base_path = base_path
     @items_service = ItemsService.new
-    @content_quality_service = ContentQualityService.new
   end
 
   def run
     item = Dimensions::Item.find_by(content_id: content_id, latest: true)
-    item_raw_json = items_service.fetch_raw_json(base_path)
-    metadata = format_response(item_raw_json)
-    quality_metrics = content_quality_service.run(item.get_content)
-    item.update_attributes(metadata.merge(quality_metrics))
+    response = items_service.fetch_raw_json(base_path)
+    attributes = format_response(response)
+    item.update_attributes(attributes)
   rescue GdsApi::HTTPGone
     item.gone!
   rescue GdsApi::HTTPNotFound
@@ -28,7 +24,7 @@ class Importers::ContentDetails
 
 private
 
-  def do_nothing; end
+  def do_nothing() end
 
   def format_metadata(formatted_response)
     formatted_response.slice(
@@ -41,12 +37,12 @@ private
     )
   end
 
-  def format_response(item_raw_json)
-    metadata = format_metadata(item_raw_json.to_h)
+  def format_response(response)
+    metadata = format_metadata(response.to_h)
     metadata.merge(
-      raw_json: item_raw_json,
-      number_of_pdfs: number_of_pdfs(item_raw_json.to_h['details']),
-      number_of_word_files: number_of_word_files(item_raw_json.to_h['details'])
+      raw_json: response,
+      number_of_pdfs: number_of_pdfs(response.to_h['details']),
+      number_of_word_files: number_of_word_files(response.to_h['details'])
     )
   end
 
