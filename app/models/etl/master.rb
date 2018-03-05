@@ -17,10 +17,7 @@ class ETL::Master
 private
 
   def create_new_version_for_dirty_items
-    Dimensions::Item.dirty.each do |item|
-      new_item = item.new_version!
-      ImportContentDetailsJob.perform_async(new_item.content_id, new_item.base_path)
-    end
+    ETL::Dirty.process(date: dimensions_date.date)
   end
 
   def initialize_facts_table
