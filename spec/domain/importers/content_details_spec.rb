@@ -10,6 +10,19 @@ RSpec.describe Importers::ContentDetails do
 
     before do
       allow(subject.items_service).to receive(:fetch_raw_json).and_return('details' => 'the-json')
+      allow_any_instance_of(Dimensions::Item).to receive(:get_content).and_return('the-entire-body')
+      allow(subject.content_quality_service).to receive(:run).with('the-entire-body').and_return(
+        readability_score: 1,
+        contractions_count: 2,
+        equality_count: 3,
+        indefinite_article_count: 4,
+        passive_count: 5,
+        profanities_count: 6,
+        redundant_acronyms_count: 7,
+        repeated_words_count: 8,
+        simplify_count: 9,
+        spell_count: 10
+      )
     end
 
     it 'populates raw_json field of latest version of dimensions_items' do
@@ -31,6 +44,22 @@ RSpec.describe Importers::ContentDetails do
 
       subject.run
       expect(latest_dimension_item.reload.number_of_word_files).to eq 94
+    end
+
+    it 'stores the given quality metrics' do
+      subject.run
+      expect(latest_dimension_item.reload).to have_attributes(
+        spell_count: 10,
+        readability_score: 1,
+        contractions_count: 2,
+        equality_count: 3,
+        passive_count: 5,
+        indefinite_article_count: 4,
+        profanities_count: 6,
+        redundant_acronyms_count: 7,
+        repeated_words_count: 8,
+        simplify_count: 9,
+      )
     end
 
     it 'populates the metadata' do
