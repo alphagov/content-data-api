@@ -7,14 +7,14 @@ RSpec.describe Dimensions::Item, type: :model do
       details: {
         body: "This is a test"
       }
-    }.to_json
+    }.to_a
   end
 
   it { is_expected.to validate_presence_of(:content_id) }
 
   describe "#get_content" do
     it "returns nil if json is empty" do
-      item = create(:dimensions_item, raw_json: {}.to_json)
+      item = create(:dimensions_item, raw_json: {}.to_a)
       expect(item.get_content).to eq(nil)
     end
 
@@ -27,7 +27,7 @@ RSpec.describe Dimensions::Item, type: :model do
       end
 
       it "returns nil if details.body does NOT exist" do
-        valid_schema_json = { schema_name: "answer", details: {} }.to_json
+        valid_schema_json = { schema_name: "answer", details: {} }.to_a
         item = create(:dimensions_item, raw_json: valid_schema_json)
         expect(item.get_content).to eq(nil)
       end
@@ -41,26 +41,26 @@ RSpec.describe Dimensions::Item, type: :model do
 
       it "returns content json if schema is 'licence'" do
         json = { schema_name: "licence",
-          details: { licence_overview: "licence expired" } }.to_json
+                 details: { licence_overview: "licence expired" } }.to_a
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq('licence expired')
       end
 
       it "returns content json if schema is 'place'" do
         json = { schema_name: "place",
-          details: { introduction: "Introduction",
-            more_information: "Enter your postcode" } }.to_json
+                 details: { introduction: "Introduction",
+                 more_information: "Enter your postcode" } }.to_a
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq('Introduction Enter your postcode')
       end
 
       it "returns content json if schema_name is 'guide'" do
         json = { schema_name: "guide",
-          details: { parts:
-            [
-              { title: "Schools", body: "Local council" },
-              { title: "Appeal", body: "No placement" }
-            ] } }.to_json
+                 details: { parts:
+                   [{ title: "Schools",
+                      body: "Local council" },
+                    { title: "Appeal",
+                      body: "No placement" }] } }.to_a
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq("Schools Local council Appeal No placement")
       end
@@ -71,19 +71,19 @@ RSpec.describe Dimensions::Item, type: :model do
           details: {
             body: body
           }
-        }.to_json
+        }.to_a
       end
     end
 
     context "when invalid schema" do
       it "raise InvalidSchemaError if json schema_name is not known" do
-        no_schema_json = { schema_name: "blah" }.to_json
+        no_schema_json = { schema_name: "blah" }.to_a
         item = create(:dimensions_item, raw_json: no_schema_json)
         expect { item.get_content }.to raise_error(InvalidSchemaError)
       end
 
       it "raises InvalidSchemaError if non-empty json does not have a schema_name" do
-        invalid_schema = { document_type: "answer" }.to_json
+        invalid_schema = { document_type: "answer" }.to_a
         item = create(:dimensions_item, raw_json: invalid_schema)
         expect { item.get_content }.to raise_error(InvalidSchemaError)
       end

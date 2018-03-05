@@ -17,6 +17,7 @@ class Importers::ContentDetails
   def run
     item = Dimensions::Item.find_by(content_id: content_id, latest: true)
     item_raw_json = items_service.fetch_raw_json(base_path)
+    item.update_attributes(raw_json: item_raw_json)
     metadata = format_response(item_raw_json)
     item.update_attributes(metadata)
       # quality_metrics = content_quality_service.run(item.get_content)
