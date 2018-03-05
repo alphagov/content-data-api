@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180301230712) do
+ActiveRecord::Schema.define(version: 20180305161014) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,21 +56,20 @@ ActiveRecord::Schema.define(version: 20180301230712) do
 
   create_table "dimensions_items", force: :cascade do |t|
     t.string "content_id"
+    t.string "title"
+    t.string "base_path"
+    t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "latest"
-    t.string "description"
-    t.string "title"
-    t.string "base_path"
     t.json "raw_json"
     t.integer "number_of_pdfs"
-    t.datetime "last_updated_time"
+    t.boolean "dirty", default: false
     t.string "document_type"
     t.string "content_purpose_supertype"
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
     t.integer "number_of_word_files"
-    t.boolean "dirty", default: false
     t.string "status", default: "live"
     t.integer "readability_score"
     t.integer "contractions_count"
@@ -81,20 +81,17 @@ ActiveRecord::Schema.define(version: 20180301230712) do
     t.integer "repeated_words_count"
     t.integer "simplify_count"
     t.integer "spell_count"
-    t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path"
-  end
-
-  create_table "dimensions_items_temps", id: false, force: :cascade do |t|
-    t.string "content_id"
-    t.string "description"
-    t.string "title"
-    t.string "base_path"
+    t.integer "string_length", default: 0
+    t.integer "sentence_count", default: 0
+    t.integer "word_count", default: 0
+    t.index ["latest"], name: "index_dimensions_items_on_latest"
   end
 
   create_table "events_feedexes", force: :cascade do |t|
     t.date "date"
     t.string "page_path"
     t.integer "number_of_issues"
+    t.index ["page_path", "date"], name: "index_events_feedexes_on_page_path_and_date"
   end
 
   create_table "events_gas", force: :cascade do |t|
@@ -115,7 +112,6 @@ ActiveRecord::Schema.define(version: 20180301230712) do
     t.integer "pageviews", default: 0
     t.integer "unique_pageviews", default: 0
     t.integer "number_of_issues", default: 0
-    t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_unique", unique: true
     t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
   end
 
@@ -144,4 +140,6 @@ ActiveRecord::Schema.define(version: 20180301230712) do
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
+  add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
+  add_foreign_key "facts_metrics", "dimensions_items"
 end

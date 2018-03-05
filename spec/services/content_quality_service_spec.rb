@@ -26,4 +26,14 @@ RSpec.describe ContentQualityService do
       readability_score: 82.4,
     )
   end
+
+  it 'calcualte metrics around content length' do
+    allow(subject).to receive(:fetch).with(content).and_return({})
+
+    expect(subject.run(content)).to include(
+      string_length: 46,
+      sentence_count: 1,
+      word_count: 8,
+    )
+  end
 end

@@ -20,8 +20,12 @@ private
   end
 
   def convert_results(response, content)
+    result = Odyssey.flesch_kincaid_re(content, true)
     {
-      readability_score: Odyssey.flesch_kincaid_re(content, true).fetch('score')
+      readability_score: result.fetch('score'),
+      string_length: result.fetch('string_length'),
+      sentence_count: result.fetch('sentence_count'),
+      word_count: result.fetch('word_count'),
     }.tap do |results|
       results[:contractions_count] = count_metric(response, 'contractions')
       results[:equality_count] = count_metric(response, 'equality')
