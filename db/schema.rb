@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305111459) do
+ActiveRecord::Schema.define(version: 20180305112605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,13 +73,6 @@ ActiveRecord::Schema.define(version: 20180305111459) do
     t.boolean "dirty", default: false
     t.string "status", default: "live"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
-  end
-
-  create_table "dimensions_items_temps", id: false, force: :cascade do |t|
-    t.string "content_id"
-    t.string "description"
-    t.string "title"
-    t.string "base_path"
   end
 
   create_table "events_feedexes", force: :cascade do |t|
