@@ -53,4 +53,18 @@ RSpec.describe Importers::ContentDetails do
       expect(latest_dimension_item.public_updated_at).to eq(Time.new.strftime('2015-06-03T11:13:44.000+00:00'))
     end
   end
+
+  context 'when items are gone' do
+    let!(:existing_content_item) { create :dimensions_item, content_id: content_id, status: 'something' }
+
+    before :each do
+      expect(subject.items_service).to receive(:fetch_raw_json).and_raise(GdsApi::HTTPGone.new(410))
+
+      subject.run
+    end
+
+    it 'should set the status to gone' do
+      expect(existing_content_item.reload.status).to eq('gone')
+    end
+  end
 end
