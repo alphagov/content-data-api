@@ -10,9 +10,9 @@ RSpec.describe Importers::ContentDetails do
 
     before do
       allow(subject.items_service).to receive(:fetch_raw_json).and_return('details' => 'the-json')
-      allow(subject).to receive(:content).and_return('the-entire-body')
+      allow_any_instance_of(Dimensions::Item).to receive(:get_content).and_return('the-entire-body')
       allow(subject.content_quality_service).to receive(:run).with('the-entire-body').and_return(
-        readability_count: 1,
+        readability_score: 1,
         contractions_count: 2,
         equality_count: 3,
         indefinite_article_count: 4,
@@ -50,7 +50,7 @@ RSpec.describe Importers::ContentDetails do
       subject.run
       expect(latest_dimension_item.reload).to have_attributes(
         spell_count: 10,
-        readability_count: 1,
+        readability_score: 1,
         contractions_count: 2,
         equality_count: 3,
         passive_count: 5,

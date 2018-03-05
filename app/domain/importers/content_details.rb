@@ -1,3 +1,5 @@
+require 'odyssey'
+
 class Importers::ContentDetails
   attr_reader :items_service, :content_id, :base_path, :content_quality_service
 
@@ -16,7 +18,7 @@ class Importers::ContentDetails
     item = Dimensions::Item.find_by(content_id: content_id, latest: true)
     item_raw_json = items_service.fetch_raw_json(base_path)
     metadata = format_response(item_raw_json)
-    quality_metrics = content_quality_service.run(content(item))
+    quality_metrics = content_quality_service.run(item.get_content)
     item.update_attributes(metadata.merge(quality_metrics))
   rescue GdsApi::HTTPGone
     item.gone!
@@ -27,10 +29,6 @@ class Importers::ContentDetails
 private
 
   def do_nothing; end
-
-  def content(item)
-    item.get_content
-  end
 
   def format_metadata(formatted_response)
     formatted_response.slice(

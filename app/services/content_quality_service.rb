@@ -1,7 +1,9 @@
+require 'odyssey'
+
 class ContentQualityService
   def run(content)
     parsed_response = fetch(content)
-    convert_results(parsed_response)
+    convert_results(parsed_response, content)
   end
 
 private
@@ -17,9 +19,10 @@ private
     response.parsed_response
   end
 
-  def convert_results(response)
-    {}.tap do |results|
-      results[:readability_count] = count_metric(response, 'readability')
+  def convert_results(response, content)
+    {
+      readability_score: Odyssey.flesch_kincaid_re(content, true).fetch('score')
+    }.tap do |results|
       results[:contractions_count] = count_metric(response, 'contractions')
       results[:equality_count] = count_metric(response, 'equality')
       results[:indefinite_article_count] = count_metric(response, 'indefinite_article')
