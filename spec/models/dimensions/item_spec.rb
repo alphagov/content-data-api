@@ -39,6 +39,32 @@ RSpec.describe Dimensions::Item, type: :model do
         expect(item.get_content).to eq("Lorem ipsum dolor sit amet.")
       end
 
+      it "returns content json if schema is 'licence'" do
+        json = { schema_name: "licence",
+                 details: { licence_overview: "licence expired" } }.to_json
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq('licence expired')
+      end
+
+      it "returns content json if schema is 'place'" do
+        json = { schema_name: "place",
+                 details: { introduction: "Introduction",
+                 more_information: "Enter your postcode" } }.to_json
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq('Introduction Enter your postcode')
+      end
+
+      it "returns content json if schema_name is 'guide'" do
+        json = { schema_name: "guide",
+                 details: { parts:
+                   [{ title: "Schools",
+                      body: "Local council" },
+                    { title: "Appeal",
+                      body: "No placement" }] } }.to_json
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq("Schools Local council Appeal No placement")
+      end
+
       def build_raw_json(body:)
         {
           schema_name: :detailed_guide,
