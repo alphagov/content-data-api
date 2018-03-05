@@ -111,7 +111,7 @@ RSpec.describe Dimensions::Date, type: :model do
 
     context 'when a dimension exists for the given date' do
       it 'should return the existing dimension' do
-        dimension_date = Dimensions::Date.build(date)
+        dimension_date = create(:dimensions_date, date: date)
         dimension_date.save!
 
         expect(Dimensions::Date.for(date)).to eq(dimension_date)

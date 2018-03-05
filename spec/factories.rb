@@ -71,16 +71,6 @@ FactoryBot.define do
     initialize_with { Dimensions::Date.build(date) }
   end
 
-  factory :dimensions_organisation, class: Dimensions::Organisation do
-    sequence(:title) { |i| "title - #{i}" }
-    sequence(:slug) { |i| "slug - #{i}" }
-    sequence(:description) { |i| "description - #{i}" }
-    sequence(:link) { |i| "link - #{i}" }
-    sequence(:organisation_id) { |i| "organisation_id - #{i}" }
-    sequence(:state) { |i| "state - #{i}" }
-    sequence(:content_id) { |i| "content_id - #{i}" }
-  end
-
   factory :dimensions_item, class: Dimensions::Item do
     latest true
     sequence(:content_id) { |i| "content_id - #{i}" }

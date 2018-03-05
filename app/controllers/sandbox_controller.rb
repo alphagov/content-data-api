@@ -1,9 +1,11 @@
 class SandboxController < ApplicationController
   def index
-    metrics = Reports::Metrics.run(from: from, to: to, base_path: base_path)
+    query = Facts::Metric
+                .between(from, to)
+                .by_base_path(base_path)
 
-    @pageviews = metrics.sum("facts_metrics.pageviews")
-    @unique_pageviews = metrics.average("facts_metrics.unique_pageviews")
+    @pageviews = query.sum(:pageviews)
+    @unique_pageviews = query.average(:unique_pageviews)
   end
 
 private

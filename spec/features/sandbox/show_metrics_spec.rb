@@ -9,9 +9,9 @@ RSpec.feature 'Show metrics', type: :feature do
 
 
   scenario 'Show totals for GA metrics between two dates' do
-    day0 = Dimensions::Date.build(Date.new(2018, 1, 12))
-    day1 = Dimensions::Date.build(Date.new(2018, 1, 13))
-    day2 = Dimensions::Date.build(Date.new(2018, 1, 14))
+    day0 = create(:dimensions_date, date: Date.new(2018, 1, 12))
+    day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
+    day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
     item1 = create(:dimensions_item, content_id: 'id1')
     item2 = create(:dimensions_item, content_id: 'id2')
 
@@ -32,8 +32,8 @@ RSpec.feature 'Show metrics', type: :feature do
   end
 
   scenario 'Show aggregated numbers between two dates' do
-    day1 = Dimensions::Date.build(Date.new(2018, 1, 13))
-    day2 = Dimensions::Date.build(Date.new(2018, 1, 14))
+    day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
+    day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
     item1 = create(:dimensions_item, content_id: 'id1', base_path: '/path')
     item2 = create(:dimensions_item, content_id: 'id2', base_path: '/path2')
 
