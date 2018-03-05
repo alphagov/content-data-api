@@ -54,7 +54,7 @@ RSpec.describe Importers::ContentDetails do
     end
   end
 
-  context 'when items are gone' do
+  context 'when GdsApi::HTTPGone is raised' do
     let!(:existing_content_item) { create :dimensions_item, content_id: content_id, status: 'something' }
 
     before :each do
@@ -65,6 +65,24 @@ RSpec.describe Importers::ContentDetails do
 
     it 'should set the status to gone' do
       expect(existing_content_item.reload.status).to eq('gone')
+    end
+  end
+
+  context 'when GdsApi::HTTPNotFound is raised' do
+    let!(:existing_content_item) do
+      create :dimensions_item, content_id: content_id, status: 'something', raw_json: { existing: 'content' }
+    end
+
+    before :each do
+      expect(subject.items_service).to receive(:fetch_raw_json).and_raise(GdsApi::HTTPNotFound.new(404))
+
+      subject.run
+    end
+
+    it 'should set leave everything alone' do
+      existing_content_item.reload
+      expect(existing_content_item.status).to eq('something')
+      expect(existing_content_item.raw_json).to eq('existing' => 'content')
     end
   end
 end
