@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226111742) do
+ActiveRecord::Schema.define(version: 20180305112605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,7 +31,6 @@ ActiveRecord::Schema.define(version: 20180226111742) do
     t.string "locale", null: false
     t.integer "number_of_word_files", default: 0
     t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
-    t.index ["title"], name: "index_content_items_on_title"
   end
 
   create_table "dimensions_dates", primary_key: "date", id: :date, force: :cascade do |t|
@@ -53,7 +52,6 @@ ActiveRecord::Schema.define(version: 20180226111742) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["date_name"], name: "index_dimensions_dates_on_date_name"
-    t.index ["date_name_abbreviated"], name: "index_dimensions_dates_on_date_name_abbreviated"
   end
 
   create_table "dimensions_items", force: :cascade do |t|
@@ -74,15 +72,7 @@ ActiveRecord::Schema.define(version: 20180226111742) do
     t.integer "number_of_word_files"
     t.boolean "dirty", default: false
     t.string "status", default: "live"
-    t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest"
-    t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path"
-  end
-
-  create_table "dimensions_items_temps", id: false, force: :cascade do |t|
-    t.string "content_id"
-    t.string "description"
-    t.string "title"
-    t.string "base_path"
+    t.index ["latest"], name: "index_dimensions_items_on_latest"
   end
 
   create_table "events_feedexes", force: :cascade do |t|
@@ -111,7 +101,6 @@ ActiveRecord::Schema.define(version: 20180226111742) do
     t.integer "unique_pageviews", default: 0
     t.integer "number_of_issues", default: 0
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_unique", unique: true
-    t.index ["dimensions_date_id"], name: "index_facts_metrics_on_dimensions_date_id"
     t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
   end
 
