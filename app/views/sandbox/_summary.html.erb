@@ -1,0 +1,30 @@
+<div class="summary">
+  <div class="row">
+    <div class="summary-item col-xs-3 total_items">
+      <span class="summary-item-value"><%= number_with_delimiter @total_items %></span>
+      <span class="summary-item-label">items</span>
+    </div>
+    <div class="summary-item col-xs-3 pageviews">
+      <span class="summary-item-value"><%= number_with_delimiter @pageviews %></span>
+      <span class="summary-item-label">pageviews (total)</span>
+    </div>
+    <div class="summary-item col-xs-3 unique_pageviews">
+      <span class="summary-item-value"><%= number_with_delimiter @unique_pageviews %></span>
+      <span class="summary-item-label">unique pageviews (avg)</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="summary-item col-xs-3 feedex_issues">
+      <span class="summary-item-value"><%= number_with_delimiter @feedex_issues %></span>
+      <span class="summary-item-label">Feedex issues (total)</span>
+    </div>
+    <div class="summary-item col-xs-3 number_of_pdfs">
+      <span class="summary-item-value"><%= number_with_delimiter @number_of_pdfs %></span>
+      <span class="summary-item-label">pdfs (total)</span>
+    </div>
+    <div class="summary-item col-xs-3 number_of_word_files">
+      <span class="summary-item-value"><%= number_with_delimiter @number_of_word_files %></span>
+      <span class="summary-item-label">Word files (total)</span>
+    </div>
+  </div>
+</div>

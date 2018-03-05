@@ -17,3 +17,6 @@
 
 // --- Analytics ---
 //= require analytics/google-tag-manager
+
+//= require Chart.bundle
+//= require chartkick
