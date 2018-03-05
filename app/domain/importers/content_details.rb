@@ -12,10 +12,12 @@ class Importers::ContentDetails
   end
 
   def run
+    item = Dimensions::Item.find_by(content_id: content_id, latest: true)
     response = items_service.fetch_raw_json(base_path)
     attributes = format_response(response)
-    item = Dimensions::Item.find_by(content_id: content_id, latest: true)
     item.update_attributes(attributes)
+  rescue GdsApi::HTTPGone
+    item.gone!
   end
 
 private
