@@ -9,7 +9,7 @@ class Dimensions::Item < ApplicationRecord
   end
 
   def get_content
-    json_object = raw_json.to_h
+    json_object = raw_json
     return if json_object.blank?
     extract_by_schema_type(json_object)
   end

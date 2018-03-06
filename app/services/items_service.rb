@@ -18,7 +18,7 @@ class ItemsService
   end
 
   def fetch_raw_json(base_path)
-    content_store_client.content_item(base_path)
+    content_store_client.content_item(base_path).to_hash
   end
 
   def fetch(content_id, locale, version)
