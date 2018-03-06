@@ -26,6 +26,18 @@ page are controlled by templates which are stored in the
 Other HTML pages are in the [`/source`][source-dir] of this repository and are
 authored using Markdown.
 
+## Updating the template
+
+You can update to the latest version of [tech-docs-template][] by running:
+
+```
+bundle update govuk_tech_docs
+```
+
+Read [the changelog for the gem][gem-changelog] for the latest changes.
+
+[gem-changelog]: https://github.com/alphagov/tech-docs-gem/blob/master/CHANGELOG.md
+
 ## Running documentation locally
 
 ### Installing dependencies
