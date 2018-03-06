@@ -26,6 +26,8 @@ class Importers::ContentDetails
     item.gone!
   rescue GdsApi::HTTPNotFound
     do_nothing
+  rescue InvalidSchemaError
+    do_nothing
   end
 
 private
