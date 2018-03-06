@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ETL::Dirty do
+RSpec.describe ETL::OutdatedItems do
   let(:content_id) { 'dirty1' }
   let(:later_content_id) { 'dirty_next_day' }
   let(:base_path) { '/the/base/path' }

@@ -17,7 +17,7 @@ class ETL::Master
 private
 
   def create_new_version_for_dirty_items
-    ETL::Dirty.process(date: dimensions_date.date)
+    ETL::OutdatedItems.process(date: dimensions_date.date)
   end
 
   def initialize_facts_table

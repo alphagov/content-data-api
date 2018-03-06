@@ -12,7 +12,7 @@ RSpec.describe ETL::Master do
 
   before { allow(ETL::GA).to receive(:process) }
   before { allow(ETL::Feedex).to receive(:process) }
-  before { allow(ETL::Dirty).to receive(:process) }
+  before { allow(ETL::OutdatedItems).to receive(:process) }
 
   it 'creates a Metrics fact per content item' do
     create :dimensions_item, latest: true
@@ -39,7 +39,7 @@ RSpec.describe ETL::Master do
   it 'updates the dirty items' do
     subject.process
 
-    expect(ETL::Dirty).to have_received(:process)
+    expect(ETL::OutdatedItems).to have_received(:process)
   end
 
   it 'update GA metrics in the Facts table' do
