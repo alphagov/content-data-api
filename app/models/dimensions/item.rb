@@ -9,9 +9,8 @@ class Dimensions::Item < ApplicationRecord
   end
 
   def get_content
-    json_object = raw_json
-    return if json_object.blank?
-    extract_by_schema_type(json_object)
+    return if raw_json.blank?
+    extract_by_schema_type(raw_json)
   end
 
   def new_version
