@@ -41,26 +41,26 @@ RSpec.describe Dimensions::Item, type: :model do
 
       it "returns content json if schema is 'licence'" do
         json = { schema_name: "licence",
-                 details: { licence_overview: "licence expired" } }.to_json
+          details: { licence_overview: "licence expired" } }.to_json
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq('licence expired')
       end
 
       it "returns content json if schema is 'place'" do
         json = { schema_name: "place",
-                 details: { introduction: "Introduction",
-                 more_information: "Enter your postcode" } }.to_json
+          details: { introduction: "Introduction",
+            more_information: "Enter your postcode" } }.to_json
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq('Introduction Enter your postcode')
       end
 
       it "returns content json if schema_name is 'guide'" do
         json = { schema_name: "guide",
-                 details: { parts:
-                   [{ title: "Schools",
-                      body: "Local council" },
-                    { title: "Appeal",
-                      body: "No placement" }] } }.to_json
+          details: { parts:
+            [
+              { title: "Schools", body: "Local council" },
+              { title: "Appeal", body: "No placement" }
+            ] } }.to_json
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq("Schools Local council Appeal No placement")
       end
@@ -98,6 +98,16 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(Dimensions::Item.dirty).to match_array(dirty_item)
     end
   end
+
+  describe '.dirty_before' do
+    let(:date) { Date.new(2018, 2, 2) }
+    it 'returns the dirty items updated before the given date' do
+      expected_item = create(:dimensions_item, dirty: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
+      create(:dimensions_item, dirty: true, updated_at: Time.utc(2018, 2, 2))
+      expect(Dimensions::Item.dirty_before(date)).to match_array(expected_item)
+    end
+  end
+
 
   describe '#new_version!' do
     let(:dirty_item) { create(:dimensions_item, dirty: true, latest: true) }

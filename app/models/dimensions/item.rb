@@ -5,6 +5,8 @@ class Dimensions::Item < ApplicationRecord
 
   scope :dirty, -> { where(dirty: true) }
 
+  scope :dirty_before, ->(date) { dirty.where('updated_at < ?', date) }
+
   def get_content
     json_object = JSON.parse(self.raw_json)
     return if json_object.blank?
