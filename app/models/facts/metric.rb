@@ -22,6 +22,14 @@ class Facts::Metric < ApplicationRecord
       .where(dimensions_items: { content_id: content_id })
   end
 
+  scope :metric_summary, -> do
+    array = pluck('COUNT(DISTINCT dimensions_items.id)', 'SUM(pageviews)').first
+    {
+      total_items: array[0],
+      pageviews: array[1]
+    }
+  end
+
   def self.valid_metric?(metric)
     METRIC_WHITELIST.include? metric
   end

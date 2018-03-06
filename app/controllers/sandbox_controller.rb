@@ -5,8 +5,7 @@ class SandboxController < ApplicationController
               .between(from, to)
               .by_base_path(base_path)
 
-    @total_items = @metrics.select('dimensions_items.id').distinct.count
-    @pageviews = @metrics.sum(:pageviews)
+    @summary = @metrics.metric_summary
     @feedex_issues = @metrics.sum(:number_of_issues)
     @number_of_pdfs = @metrics.sum(:number_of_pdfs)
     @number_of_word_files = @metrics.sum(:number_of_word_files)

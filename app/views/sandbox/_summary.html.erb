@@ -1,11 +1,11 @@
 <div class="summary">
   <div class="row">
     <div class="summary-item col-xs-3 total_items">
-      <span class="summary-item-value"><%= number_with_delimiter @total_items %></span>
+      <span class="summary-item-value"><%= number_with_delimiter @summary[:total_items] %></span>
       <span class="summary-item-label">items</span>
     </div>
     <div class="summary-item col-xs-3 pageviews">
-      <span class="summary-item-value"><%= number_with_delimiter @pageviews %></span>
+      <span class="summary-item-value"><%= number_with_delimiter @summary[:pageviews] %></span>
       <span class="summary-item-label">pageviews (total)</span>
     </div>
     <div class="summary-item col-xs-3 unique_pageviews">
