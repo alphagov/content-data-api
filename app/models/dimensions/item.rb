@@ -71,7 +71,7 @@ private
   def extract_by_schema_type(json)
     schema = json.dig("schema_name")
     if schema.nil? || !VALID_SCHEMA_TYPES.include?(schema)
-      raise InvalidSchemaError, "Schema does not exist"
+      raise InvalidSchemaError, "Schema does not exist: #{schema}"
     end
 
     case schema
