@@ -56,13 +56,14 @@ RSpec.describe Facts::Metric, type: :model do
     it 'returns the correct numbers' do
       item1 = create(:dimensions_item, base_path: base_path)
       item2 = create(:dimensions_item, base_path: base_path)
-      create(:metric, dimensions_item: item1, dimensions_date: day0, pageviews: 3)
-      create(:metric, dimensions_item: item2, dimensions_date: day0, pageviews: 5)
-      create(:metric, dimensions_item: item2, dimensions_date: day1, pageviews: 2)
+      create(:metric, dimensions_item: item1, dimensions_date: day0, pageviews: 3, unique_pageviews: 2)
+      create(:metric, dimensions_item: item2, dimensions_date: day0, pageviews: 5, unique_pageviews: 2)
+      create(:metric, dimensions_item: item2, dimensions_date: day1, pageviews: 2, unique_pageviews: 2)
       results = subject.between(day0, day1).by_base_path(base_path).metric_summary
       expect(results).to eq(
         total_items: 2,
-        pageviews: 10
+        pageviews: 10,
+        unique_pageviews: 2
       )
     end
   end
