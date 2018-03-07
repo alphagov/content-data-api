@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305161014) do
+ActiveRecord::Schema.define(version: 20180307113805) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20180305161014) do
     t.integer "number_of_pdfs"
     t.boolean "dirty", default: false
     t.string "document_type"
-    t.string "content_purpose_supertype"
+    t.string "content_purpose_document_supertype"
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
     t.integer "number_of_word_files"
