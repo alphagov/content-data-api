@@ -40,7 +40,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.pageviews', text: '80 pageviews (total)')
     expect(page).to have_selector('.unique_pageviews', text: '20.0 unique pageviews (avg)')
     expect(page).to have_selector('.feedex_issues', text: '28 Feedex issues (total)')
-    expect(page).to have_selector('.number_of_pdfs', text: '12 pdfs (total)')
+    expect(page).to have_selector('.number_of_pdfs', text: '3.0 pdfs (avg)')
     expect(page).to have_selector('.number_of_word_files', text: '6 Word files (total)')
   end
 
