@@ -1,10 +1,11 @@
 class SandboxController < ApplicationController
   def index
-    @summary = Facts::Metric
+    @metrics = Facts::Metric
       .joins(:dimensions_item)
       .between(from, to)
       .by_base_path(base_path)
-      .metric_summary
+
+    @summary = @metrics.metric_summary
   end
 
 private
