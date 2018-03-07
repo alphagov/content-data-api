@@ -63,10 +63,5 @@ class Facts::Metric < ApplicationRecord
     ]
   end
 
-  def self.valid_metric?(metric)
-    METRIC_WHITELIST.include? metric
-  end
-
   METRIC_WHITELIST = %w[pageviews unique_pageviews number_of_pdfs number_of_issues number_of_word_files].freeze
-  private_constant :METRIC_WHITELIST
 end

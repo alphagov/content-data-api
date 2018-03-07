@@ -1,5 +1,5 @@
 class Api::MetricsController < ApplicationController
-  before_action :validate_metric!
+  before_action :validate_params!
 
   def show
     query = Facts::Metric
@@ -10,29 +10,26 @@ class Api::MetricsController < ApplicationController
                  .order('dimensions_dates.date asc')
                  .group('dimensions_dates.date')
                  .sum(metric)
+
+    @metric_params = metric_params
   end
 
 private
 
-  METRIC_WHITELIST = %w[pageviews unique_pageviews].freeze
+  delegate :from, :to, :metric, :content_id, to: :metric_params
 
-  def content_id
-    @content_id ||= params[:content_id]
+  def metric_params
+    @metric_params ||= Api::Metric.new(params)
   end
 
-  def from
-    @from ||= params[:from]
-  end
-
-  def to
-    @to ||= params[:to]
-  end
-
-  def metric
-    @metric ||= params[:metric]
-  end
-
-  def validate_metric!
-    head :bad_request unless Facts::Metric.valid_metric? metric
+  def validate_params!
+    unless metric_params.valid?
+      response = {
+        type: "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        title: "One or more parameters is invalid",
+        invalid_params: metric_params.errors.to_hash
+      }
+      render json: response, status: :bad_request, content_type: "application/problem+json"
+    end
   end
 end
