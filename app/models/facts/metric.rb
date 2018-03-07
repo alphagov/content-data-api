@@ -23,11 +23,17 @@ class Facts::Metric < ApplicationRecord
   end
 
   scope :metric_summary, -> do
-    array = pluck('COUNT(DISTINCT dimensions_items.id)', 'SUM(pageviews)', 'AVG(unique_pageviews)').first
+    array = pluck(
+      'COUNT(DISTINCT dimensions_items.id)',
+      'SUM(pageviews)',
+      'AVG(unique_pageviews)',
+      'SUM(number_of_issues)'
+    ).first
     {
       total_items: array[0],
       pageviews: array[1],
-      unique_pageviews: array[2]
+      unique_pageviews: array[2],
+      number_of_issues: array[3]
     }
   end
 
