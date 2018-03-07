@@ -28,14 +28,16 @@ class Facts::Metric < ApplicationRecord
       'SUM(pageviews)',
       'AVG(unique_pageviews)',
       'SUM(number_of_issues)',
-      'AVG(number_of_pdfs)'
+      'AVG(number_of_pdfs)',
+      'AVG(number_of_word_files)'
     ).first
     {
       total_items: array[0],
       pageviews: array[1],
       unique_pageviews: array[2],
       number_of_issues: array[3],
-      number_of_pdfs: array[4]
+      number_of_pdfs: array[4],
+      number_of_word_files: array[5]
     }
   end
 

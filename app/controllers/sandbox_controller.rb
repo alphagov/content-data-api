@@ -1,12 +1,10 @@
 class SandboxController < ApplicationController
   def index
-    @metrics = Facts::Metric
-              .joins(:dimensions_item)
-              .between(from, to)
-              .by_base_path(base_path)
-
-    @summary = @metrics.metric_summary
-    @number_of_word_files = @metrics.sum(:number_of_word_files)
+    @summary = Facts::Metric
+      .joins(:dimensions_item)
+      .between(from, to)
+      .by_base_path(base_path)
+      .metric_summary
   end
 
 private
