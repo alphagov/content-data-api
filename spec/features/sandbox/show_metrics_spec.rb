@@ -44,6 +44,20 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.number_of_word_files', text: '1.5 Word files (avg)')
   end
 
+  describe 'Charts' do
+    scenario 'Show charts' do
+      visit '/sandbox'
+
+      fill_in 'From:', with: '2018-01-13'
+      fill_in 'To:', with: '2018-01-15'
+      check 'total_items'
+
+      click_button 'Filter'
+
+      expect(page).to have_selector('.trends .total_items', text: 'Number of Content Items')
+    end
+  end
+
   describe 'Filtering' do
     scenario 'by base_path' do
       item1.update base_path: '/path'
