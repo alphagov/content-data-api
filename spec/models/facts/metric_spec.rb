@@ -4,12 +4,11 @@ RSpec.describe Facts::Metric, type: :model do
   it { is_expected.to validate_presence_of(:dimensions_date) }
   it { is_expected.to validate_presence_of(:dimensions_item) }
 
+  let(:day0) { create(:dimensions_date, date: Date.new(2018, 1, 12)) }
+  let(:day1) { create(:dimensions_date, date: Date.new(2018, 1, 13)) }
+  let(:day2) { create(:dimensions_date, date: Date.new(2018, 1, 14)) }
   describe 'Filtering' do
     subject { described_class }
-
-    let(:day0) { create(:dimensions_date, date: Date.new(2018, 1, 12)) }
-    let(:day1) { create(:dimensions_date, date: Date.new(2018, 1, 13)) }
-    let(:day2) { create(:dimensions_date, date: Date.new(2018, 1, 14)) }
 
     it '.between' do
       item1 = create(:dimensions_item)
@@ -48,6 +47,42 @@ RSpec.describe Facts::Metric, type: :model do
 
       results = subject.by_content_id('id1')
       expect(results).to match_array([metric1, metric2, metric3])
+    end
+  end
+
+  describe '.metric_summary' do
+    subject { described_class }
+    let(:base_path) { '/the/base/path' }
+    it 'returns the correct numbers' do
+      item1 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1)
+      item2 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1)
+      create(:metric,
+        dimensions_item: item1,
+        dimensions_date: day0,
+        pageviews: 3,
+        unique_pageviews: 2,
+        number_of_issues: 4)
+      create(:metric,
+        dimensions_item: item2,
+        dimensions_date: day0,
+        pageviews: 5,
+        unique_pageviews: 2,
+        number_of_issues: 3)
+      create(:metric,
+        dimensions_item: item2,
+        dimensions_date: day1,
+        pageviews: 2,
+        unique_pageviews: 2,
+        number_of_issues: 2)
+      results = subject.between(day0, day1).by_base_path(base_path).metric_summary
+      expect(results).to eq(
+        total_items: 2,
+        pageviews: 10,
+        unique_pageviews: 2,
+        number_of_issues: 9,
+        number_of_pdfs: 3,
+        number_of_word_files: 1
+      )
     end
   end
 end
