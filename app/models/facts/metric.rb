@@ -41,6 +41,28 @@ class Facts::Metric < ApplicationRecord
     }
   end
 
+  def self.csv_fields
+    %i[
+      date
+      content_id
+      base_path
+      title
+      description
+      document_type
+      content_purpose_document_supertype
+      first_published_at
+      public_updated_at
+      status
+      pageviews
+      unique_pageviews
+      number_of_issues
+      number_of_pdfs
+      number_of_word_files
+      readability_score
+      spell_count
+    ]
+  end
+
   def self.valid_metric?(metric)
     METRIC_WHITELIST.include? metric
   end
