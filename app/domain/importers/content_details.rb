@@ -36,7 +36,7 @@ private
       'content_id',
       'title',
       'document_type',
-      'content_purpose_supertype',
+      'content_purpose_document_supertype',
       'first_published_at',
       'public_updated_at',
     )
