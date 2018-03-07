@@ -41,26 +41,26 @@ RSpec.describe Dimensions::Item, type: :model do
 
       it "returns content json if schema is 'licence'" do
         json = { schema_name: "licence",
-                 details: { licence_overview: "licence expired" } }.to_json
+          details: { licence_overview: "licence expired" } }.to_json
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq('licence expired')
       end
 
       it "returns content json if schema is 'place'" do
         json = { schema_name: "place",
-                 details: { introduction: "Introduction",
-                 more_information: "Enter your postcode" } }.to_json
+          details: { introduction: "Introduction",
+            more_information: "Enter your postcode" } }.to_json
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq('Introduction Enter your postcode')
       end
 
       it "returns content json if schema_name is 'guide'" do
         json = { schema_name: "guide",
-                 details: { parts:
-                   [{ title: "Schools",
-                      body: "Local council" },
-                    { title: "Appeal",
-                      body: "No placement" }] } }.to_json
+          details: { parts:
+            [
+              { title: "Schools", body: "Local council" },
+              { title: "Appeal", body: "No placement" }
+            ] } }.to_json
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq("Schools Local council Appeal No placement")
       end
@@ -90,34 +90,32 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '.dirty' do
-    it 'only returns the dirty items' do
-      dirty_item = create(:dimensions_item, dirty: true)
-      create(:dimensions_item, dirty: false)
-
-      expect(Dimensions::Item.dirty).to match_array(dirty_item)
+  describe '.dirty_before' do
+    let(:date) { Date.new(2018, 2, 2) }
+    it 'returns the dirty items updated before the given date' do
+      expected_item = create(:dimensions_item, dirty: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
+      create(:dimensions_item, dirty: true, updated_at: Time.utc(2018, 2, 2))
+      expect(Dimensions::Item.dirty_before(date)).to match_array(expected_item)
     end
   end
 
-  describe '#new_version!' do
-    let(:dirty_item) { create(:dimensions_item, dirty: true, latest: true) }
-
-    it 'duplicates the item with latest?: true, dirty?: false' do
-      new_item = dirty_item.new_version!
-
-      expect(new_item).to have_attributes(
+  describe '#new_version' do
+    it 'duplicates the old item with latest: true, dirty: false but does not save' do
+      old_item = build(:dimensions_item,
+        dirty: true,
         latest: true,
-        dirty: false
+        raw_json: { 'the' => 'content' },
+        content_id: 'c-id',
+        base_path: '/the/path')
+      new_version = old_item.new_version
+      expect(new_version).to have_attributes(
+        dirty: false,
+        latest: true,
+        raw_json: { 'the' => 'content' },
+        content_id: 'c-id',
+        base_path: '/the/path'
       )
-    end
-
-    it 'sets latest? and dirty? to false on the old item' do
-      dirty_item.new_version!
-
-      expect(dirty_item.reload).to have_attributes(
-        latest: false,
-        dirty: false
-      )
+      expect(new_version.new_record?).to eq(true)
     end
   end
 

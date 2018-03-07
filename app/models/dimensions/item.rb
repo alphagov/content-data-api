@@ -3,7 +3,10 @@ require 'json'
 class Dimensions::Item < ApplicationRecord
   validates :content_id, presence: true
 
-  scope :dirty, -> { where(dirty: true) }
+
+  scope :dirty_before, ->(date) do
+    where('updated_at < ?', date).where(dirty: true)
+  end
 
   def get_content
     json_object = JSON.parse(self.raw_json)
@@ -11,12 +14,9 @@ class Dimensions::Item < ApplicationRecord
     extract_by_schema_type(json_object)
   end
 
-  def new_version!
+  def new_version
     new_version = self.dup
-    ActiveRecord::Base.transaction do
-      update(latest: false, dirty: false)
-      new_version.update(latest: true, dirty: false)
-    end
+    new_version.assign_attributes(latest: true, dirty: false)
     new_version
   end
 

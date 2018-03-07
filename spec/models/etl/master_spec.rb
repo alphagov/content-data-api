@@ -12,6 +12,7 @@ RSpec.describe ETL::Master do
 
   before { allow(ETL::GA).to receive(:process) }
   before { allow(ETL::Feedex).to receive(:process) }
+  before { allow(ETL::OutdatedItems).to receive(:process) }
 
   it 'creates a Metrics fact per content item' do
     create :dimensions_item, latest: true
@@ -33,6 +34,12 @@ RSpec.describe ETL::Master do
     subject.process
 
     expect(Facts::Metric.count).to eq(1)
+  end
+
+  it 'updates the dirty items' do
+    subject.process
+
+    expect(ETL::OutdatedItems).to have_received(:process)
   end
 
   it 'update GA metrics in the Facts table' do
@@ -57,33 +64,5 @@ RSpec.describe ETL::Master do
       dimensions_date: Dimensions::Date.for(Date.new(2018, 2, 25)),
       dimensions_item: item,
     )
-  end
-
-  context 'when dirty items are present' do
-    let(:content_id) { 'dirty1' }
-    let(:base_path) { '/the/base/path' }
-
-    before :each do
-      allow(ImportContentDetailsJob).to receive(:perform_async)
-      create(:dimensions_item,
-             latest:     true,
-             dirty:      true,
-             content_id: content_id,
-             base_path: base_path)
-      subject.process
-    end
-
-    it 'resets the dirty flag on the item' do
-      expect(Dimensions::Item.where(content_id: content_id, dirty: true).count).to eq(0)
-    end
-
-    it 'resets the latest flag on the old item' do
-      expect(Dimensions::Item.where(content_id: content_id, latest: true).count).to eq(1)
-      expect(Dimensions::Item.where(content_id: content_id, latest: false).count).to eq(1)
-    end
-
-    it 'fires a Sidekiq job for the new item' do
-      expect(ImportContentDetailsJob).to have_received(:perform_async).with(content_id, base_path)
-    end
   end
 end
