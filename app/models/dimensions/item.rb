@@ -9,9 +9,8 @@ class Dimensions::Item < ApplicationRecord
   end
 
   def get_content
-    json_object = JSON.parse(self.raw_json)
-    return if json_object.blank?
-    extract_by_schema_type(json_object)
+    return if raw_json.blank?
+    extract_by_schema_type(raw_json)
   end
 
   def new_version
@@ -72,7 +71,7 @@ private
   def extract_by_schema_type(json)
     schema = json.dig("schema_name")
     if schema.nil? || !VALID_SCHEMA_TYPES.include?(schema)
-      raise InvalidSchemaError, "Schema does not exist"
+      raise InvalidSchemaError, "Schema does not exist: #{schema}"
     end
 
     case schema

@@ -11,6 +11,7 @@ RSpec.describe Importers::ContentDetails do
     before do
       allow(subject.items_service).to receive(:fetch_raw_json).and_return('details' => 'the-json')
       allow_any_instance_of(Dimensions::Item).to receive(:get_content).and_return('the-entire-body')
+      allow(ImportQualityMetricsJob).to receive(:perform_async)
       allow(subject.content_quality_service).to receive(:run).with('the-entire-body').and_return(
         readability_score: 1,
         contractions_count: 2,
@@ -46,41 +47,30 @@ RSpec.describe Importers::ContentDetails do
       expect(latest_dimension_item.reload.number_of_word_files).to eq 94
     end
 
-    # it 'stores the given quality metrics' do
-    #   subject.run
-    #   expect(latest_dimension_item.reload).to have_attributes(
-    #     spell_count: 10,
-    #     readability_score: 1,
-    #     contractions_count: 2,
-    #     equality_count: 3,
-    #     passive_count: 5,
-    #     indefinite_article_count: 4,
-    #     profanities_count: 6,
-    #     redundant_acronyms_count: 7,
-    #     repeated_words_count: 8,
-    #     simplify_count: 9,
-    #   )
-    # end
-    #
-    # it 'populates the metadata' do
-    #   allow(subject.items_service).to receive(:fetch_raw_json).and_return(
-    #     'content_id' => '09hjasdfoj234',
-    #     'title' => 'A guide to coding',
-    #     'document_type' => 'answer',
-    #     'content_purpose_document_supertype' => 'guide',
-    #     'first_published_at' => '2012-10-03T13:19:55.000+00:00',
-    #     'public_updated_at' => '2015-06-03T11:13:44.000+00:00',
-    #   )
-    #
-    #   subject.run
-    #   latest_dimension_item.reload
-    #   expect(latest_dimension_item.title).to eq('A guide to coding')
-    #   expect(latest_dimension_item.content_id).to eq('09hjasdfoj234')
-    #   expect(latest_dimension_item.document_type).to eq('answer')
-    #   expect(latest_dimension_item.content_purpose_document_supertype).to eq('guide')
-    #   expect(latest_dimension_item.first_published_at).to eq(Time.new.strftime('2012-10-03T13:19:55.000+00:00'))
-    #   expect(latest_dimension_item.public_updated_at).to eq(Time.new.strftime('2015-06-03T11:13:44.000+00:00'))
-    # end
+    it 'triggers a quality metrics job' do
+      expect(ImportQualityMetricsJob).to receive(:perform_async).with(latest_dimension_item.id)
+      subject.run
+    end
+
+    it 'populates the metadata' do
+      allow(subject.items_service).to receive(:fetch_raw_json).and_return(
+        'content_id' => '09hjasdfoj234',
+        'title' => 'A guide to coding',
+        'document_type' => 'answer',
+        'content_purpose_document_supertype' => 'guide',
+        'first_published_at' => '2012-10-03T13:19:55.000+00:00',
+        'public_updated_at' => '2015-06-03T11:13:44.000+00:00',
+      )
+
+      subject.run
+      latest_dimension_item.reload
+      expect(latest_dimension_item.title).to eq('A guide to coding')
+      expect(latest_dimension_item.content_id).to eq('09hjasdfoj234')
+      expect(latest_dimension_item.document_type).to eq('answer')
+      expect(latest_dimension_item.content_purpose_document_supertype).to eq('guide')
+      expect(latest_dimension_item.first_published_at).to eq(Time.new.strftime('2012-10-03T13:19:55.000+00:00'))
+      expect(latest_dimension_item.public_updated_at).to eq(Time.new.strftime('2015-06-03T11:13:44.000+00:00'))
+    end
   end
 
   context 'when GdsApi::HTTPGone is raised' do
