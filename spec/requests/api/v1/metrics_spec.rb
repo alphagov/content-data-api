@@ -22,7 +22,7 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
     expected_error_response = {
       "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
       "title" => "One or more parameters is invalid",
-      "invalid_params" => {"metric" => ["is not included in the list"]}
+      "invalid_params" => { "metric" => ["is not included in the list"] }
     }
 
     expect(json).to eq(expected_error_response)
@@ -38,7 +38,7 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
     expected_error_response = {
       "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
       "title" => "One or more parameters is invalid",
-      "invalid_params" => {"from" => ["Dates should use the format YYYY-MM-DD"]}
+      "invalid_params" => { "from" => ["Dates should use the format YYYY-MM-DD"] }
     }
 
     expect(json).to eq(expected_error_response)
@@ -54,7 +54,23 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
     expected_error_response = {
       "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
       "title" => "One or more parameters is invalid",
-      "invalid_params" => {"from,to" => ["`from` parameter can't be after the `to` parameter"]}
+      "invalid_params" => { "from,to" => ["`from` parameter can't be after the `to` parameter"] }
+    }
+
+    expect(json).to eq(expected_error_response)
+  end
+
+  it 'returns an error for unknown parameters' do
+    get "/api/v1/metrics/#{content_id}", params: { metric: "pageviews", from: '2018-01-14', to: '2018-01-15', extra: "bla" }
+
+    expect(response.status).to eq(400)
+
+    json = JSON.parse(response.body)
+
+    expected_error_response = {
+      "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#unknown-parameter",
+      "title" => "One or more parameter names are invalid",
+      "invalid_params" => ["extra"]
     }
 
     expect(json).to eq(expected_error_response)

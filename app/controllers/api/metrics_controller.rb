@@ -14,22 +14,34 @@ class Api::MetricsController < ApplicationController
     @metric_params = metric_params
   end
 
+  rescue_from(ActionController::UnpermittedParameters) do |pme|
+    error_response(
+      "unknown-parameter",
+      title: "One or more parameter names are invalid",
+      invalid_params: pme.params
+    )
+  end
+
 private
 
   delegate :from, :to, :metric, :content_id, to: :metric_params
 
   def metric_params
-    @metric_params ||= Api::Metric.new(params)
+    @metric_params ||= Api::Metric.new(params.permit(:from, :to, :metric, :content_id, :format))
   end
 
   def validate_params!
     unless metric_params.valid?
-      response = {
-        type: "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+      error_response(
+        "validation-error",
         title: "One or more parameters is invalid",
         invalid_params: metric_params.errors.to_hash
-      }
-      render json: response, status: :bad_request, content_type: "application/problem+json"
+      )
     end
+  end
+
+  def error_response(type, error_hash)
+    error_hash.merge!(type: "https://content-performance-api.publishing.service.gov.uk/errors/##{type}")
+    render json: error_hash, status: :bad_request, content_type: "application/problem+json"
   end
 end

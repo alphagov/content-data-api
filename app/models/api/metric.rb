@@ -6,14 +6,14 @@ class Api::Metric
 
   attr_reader :metric, :from, :to, :content_id
 
-  validates :metric, presence: true, inclusion: {in: Facts::Metric::METRIC_WHITELIST}
-  validates :from, presence: true, format: {with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD"}
-  validates :to, presence: true, format: {with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD"}
-  validates :content_id, presence: true, format: {with: CONTENT_ID_REGEX, message: "Content ID must be a UUID."}
+  validates :metric, presence: true, inclusion: { in: Facts::Metric::METRIC_WHITELIST }
+  validates :from, presence: true, format: { with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD" }
+  validates :to, presence: true, format: { with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD" }
+  validates :content_id, presence: true, format: { with: CONTENT_ID_REGEX, message: "Content ID must be a UUID." }
   validate :from_before_to, if: :have_a_date_range?
 
   def initialize(params)
-    @metric  = params[:metric]
+    @metric = params[:metric]
     @from = params[:from]
     @to = params[:to]
     @content_id = params[:content_id]
