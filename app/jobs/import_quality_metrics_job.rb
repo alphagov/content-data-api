@@ -1,5 +1,5 @@
 class ImportQualityMetricsJob < ApplicationJob
-  sidekiq_options queue: 'publishing_api'
+  sidekiq_options queue: 'quality_metrics'
 
   def run(*args)
     Importers::QualityMetrics.run(*args)
