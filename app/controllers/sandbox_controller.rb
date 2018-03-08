@@ -6,7 +6,10 @@ class SandboxController < ApplicationController
       .by_base_path(base_path)
 
     respond_to do |format|
-      format.html { @summary = @metrics.metric_summary }
+      format.html do
+        @summary = @metrics.metric_summary
+        @query_params = params.permit(:from, :to, :base_path)
+      end
       format.csv { stream_data_as_csv(@metrics) }
     end
   end

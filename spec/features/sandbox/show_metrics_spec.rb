@@ -53,9 +53,10 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     )
     metric1.update pageviews: 10
     metric2.update pageviews: 10
+    metric3.update pageviews: 5
     visit '/sandbox'
-    fill_in 'From:', with: '2018-01-13'
-    fill_in 'To:', with: '2018-01-15'
+    fill_in 'From:', with: '2018-01-12'
+    fill_in 'To:', with: '2018-01-13'
 
     click_button 'Filter'
 
@@ -65,6 +66,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page.response_headers['Content-disposition']).to eq 'attachment; filename="metrics.csv"'
     expect(page.body).to include('2018-01-12,cont-id,/really-interesing,Really interesting,desc,')
     expect(page.body).to include('2018-01-13,cont-id,/really-interesing,Really interesting,desc,')
+    expect(page.body).not_to include('2018-01-14')
   end
 
   describe 'Charts' do
