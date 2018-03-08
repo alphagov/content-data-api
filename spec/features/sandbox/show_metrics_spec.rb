@@ -44,6 +44,29 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.number_of_word_files', text: '1.5 Word files (avg)')
   end
 
+  scenario 'Download metrics as csv' do
+    item1.update(
+      title: 'Really interesting',
+      description: 'desc',
+      content_id: 'cont-id',
+      base_path: '/really-interesing'
+    )
+    metric1.update pageviews: 10
+    metric2.update pageviews: 10
+    visit '/sandbox'
+    fill_in 'From:', with: '2018-01-13'
+    fill_in 'To:', with: '2018-01-15'
+
+    click_button 'Filter'
+
+    click_on 'Export to CSV'
+
+    expect(page.response_headers['Content-Type']).to eq "text/csv"
+    expect(page.response_headers['Content-disposition']).to eq 'attachment; filename="metrics.csv"'
+    expect(page.body).to include('2018-01-12,cont-id,/really-interesing,Really interesting,desc,')
+    expect(page.body).to include('2018-01-13,cont-id,/really-interesing,Really interesting,desc,')
+  end
+
   describe 'Charts' do
     scenario 'Show charts' do
       visit '/sandbox'
