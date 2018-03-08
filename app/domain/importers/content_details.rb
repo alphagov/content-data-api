@@ -19,15 +19,12 @@ class Importers::ContentDetails
 
     item_raw_json = items_service.fetch_raw_json(base_path)
     metadata = format_response(item_raw_json)
-    item.update_attributes(metadata.merge! raw_json: item_raw_json)
+    item.update_attributes(metadata.merge!(raw_json: item_raw_json))
 
-    quality_metrics = content_quality_service.run(item.get_content)
-    item.update_attributes(quality_metrics)
+    ImportQualityMetricsJob.perform_async(item.id)
   rescue GdsApi::HTTPGone
     item.gone!
   rescue GdsApi::HTTPNotFound
-    do_nothing
-  rescue InvalidSchemaError
     do_nothing
   end
 
