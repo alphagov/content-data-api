@@ -26,7 +26,7 @@ private
     new_items = items.map(&:new_version)
     ActiveRecord::Base.transaction do
       Dimensions::Item.import(new_items)
-      Dimensions::Item.where(id: items.pluck('id')).update(dirty: false, latest: false)
+      Dimensions::Item.where(id: items.pluck('id')).update_all(dirty: false, latest: false)
     end
     new_items
   end
