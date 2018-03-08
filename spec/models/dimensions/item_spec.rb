@@ -56,6 +56,54 @@ RSpec.describe Dimensions::Item, type: :model do
         expect(item.get_content).to eq('Schools Local council Appeal No placement')
       end
 
+      it "returns content json if schema_name is 'transaction'" do
+        json = { schema_name: "transaction",
+          details: { introductory_paragraph: "Report changes",
+                    start_button_text: "Start",
+                    will_continue_on: "Carer's Allowance service",
+                    more_information: "Facts" } }
+        item = create(:dimensions_item, raw_json: json)
+        expected = "Report changes Start Carer's Allowance service Facts"
+        expect(item.get_content).to eq(expected)
+      end
+
+      it "returns content json if schema_name is 'email_alert_signup'" do
+        json = { schema_name: "email_alert_signup",
+          details: { breadcrumbs: [{ title: "The title" }],
+                     summary: "Summary" } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq("The title Summary")
+      end
+
+      it "returns content json if schema_name is 'finder_email_signup'" do
+        json = { schema_name: "finder_email_signup",
+                 description: "Use buttons",
+                 details: { email_signup_choice:
+                   [{ radio_button_name: "Yes" },
+                    { radio_button_name: "No" }] } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq("Yes No Use buttons")
+      end
+
+      it "returns content json if schema_name is 'location_transaction'" do
+        json = { schema_name: "location_transaction",
+                 details: { introduction: "Greetings", need_to_know: "A Name",
+                            more_information: "An Address" } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq("Greetings A Name An Address")
+      end
+
+      it "returns content json if schema_name is 'service_manual_topic'" do
+        json = { schema_name: "service_manual_topic",
+                 description: "Blogs",
+                 details: { groups: [{ name: "Design",
+                                       description: "thinking" },
+                                     { name: "Performance",
+                                       description: "analysis" }] } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq("Blogs Design thinking Performance analysis")
+      end
+
       def build_raw_json(body:)
         {
           schema_name: :detailed_guide,
