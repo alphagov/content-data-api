@@ -2,6 +2,9 @@ class Api::Metric
   DATE_REGEX = /\A\d\d\d\d-\d\d-\d\d\Z/
   CONTENT_ID_REGEX = /\A[0-9A-F]{8}-[0-9A-F]{4}-[1-5][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\Z/i
 
+  private_constant :DATE_REGEX
+  private_constant :CONTENT_ID_REGEX
+
   include ActiveModel::Validations
 
   attr_reader :metric, :from, :to, :content_id
