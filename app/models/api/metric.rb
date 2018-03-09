@@ -9,7 +9,7 @@ class Api::Metric
 
   attr_reader :metric, :from, :to, :content_id
 
-  validates :metric, presence: true, inclusion: { in: Facts::Metric::METRIC_WHITELIST }
+  validates :metric, presence: true, inclusion: { in: Rails.configuration.valid_metric_names }
   validates :from, presence: true, format: { with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD" }
   validates :to, presence: true, format: { with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD" }
   validates :content_id, presence: true, format: { with: CONTENT_ID_REGEX, message: "Content ID must be a UUID." }
