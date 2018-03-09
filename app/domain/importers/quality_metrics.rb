@@ -7,7 +7,7 @@ class Importers::QualityMetrics
     new(*args).run
   end
 
-  def initialize(item_id)
+  def initialize(item_id, _ = {})
     @item_id = item_id
     @content_quality_service = ContentQualityService.new
   end
