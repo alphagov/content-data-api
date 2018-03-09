@@ -22,6 +22,13 @@ class Facts::Metric < ApplicationRecord
       .where(dimensions_items: { content_id: content_id })
   end
 
+  scope :by_organisation_id, ->(organisation_id) do
+    if organisation_id.present?
+      joins(:dimensions_item)
+        .where(dimensions_items: { primary_organisation_content_id: organisation_id })
+    end
+  end
+
   scope :metric_summary, -> do
     array = pluck(
       'COUNT(DISTINCT dimensions_items.content_id)',
@@ -54,6 +61,8 @@ class Facts::Metric < ApplicationRecord
       public_updated_at
       status
       pageviews
+      primary_organisation_title
+      primary_organisation_content_id
       unique_pageviews
       number_of_issues
       number_of_pdfs

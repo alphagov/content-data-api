@@ -49,7 +49,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       title: 'Really interesting',
       description: 'desc',
       content_id: 'cont-id',
-      base_path: '/really-interesing'
+      base_path: '/really-interesting'
     )
     metric1.update pageviews: 10
     metric2.update pageviews: 10
@@ -64,8 +64,8 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
 
     expect(page.response_headers['Content-Type']).to eq "text/csv"
     expect(page.response_headers['Content-disposition']).to eq 'attachment; filename="metrics.csv"'
-    expect(page.body).to include('2018-01-12,cont-id,/really-interesing,Really interesting,desc,')
-    expect(page.body).to include('2018-01-13,cont-id,/really-interesing,Really interesting,desc,')
+    expect(page.body).to include('2018-01-12,cont-id,/really-interesting,Really interesting,desc')
+    expect(page.body).to include('2018-01-13,cont-id,/really-interesting,Really interesting,desc,')
     expect(page.body).not_to include('2018-01-14')
   end
 
@@ -98,6 +98,20 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       click_button 'Filter'
 
       expect(page).to have_selector('.pageviews', text: '30 pageviews (total)')
+    end
+
+    scenario 'by organisation' do
+      item1.update primary_organisation_content_id: 'org-1'
+      item2.update primary_organisation_content_id: 'org-2'
+      create :metric, dimensions_item: item1, dimensions_date: day1, pageviews: 10
+      create :metric, dimensions_item: item2, dimensions_date: day1, pageviews: 30
+
+      visit '/sandbox'
+
+      fill_in 'Organisation ID:', with: 'org-1'
+      click_button 'Filter'
+
+      expect(page).to have_selector('.pageviews', text: '10 pageviews (total)')
     end
   end
 end
