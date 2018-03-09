@@ -44,11 +44,11 @@ private
   end
 
   def format_response(item_raw_json)
-    metadata = format_metadata(item_raw_json.to_h)
+    metadata = format_metadata(item_raw_json)
     metadata.merge(
       raw_json: item_raw_json,
-      number_of_pdfs: number_of_pdfs(item_raw_json.to_h['details']),
-      number_of_word_files: number_of_word_files(item_raw_json.to_h['details'])
+      number_of_pdfs: number_of_pdfs(item_raw_json['details']),
+      number_of_word_files: number_of_word_files(item_raw_json['details'])
     )
   end
 
