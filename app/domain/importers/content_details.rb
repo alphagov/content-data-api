@@ -46,10 +46,13 @@ private
   def format_response(item_raw_json)
     metadata = format_metadata(item_raw_json)
     metadata.merge(
-      raw_json: item_raw_json,
       number_of_pdfs: number_of_pdfs(item_raw_json['details']),
       number_of_word_files: number_of_word_files(item_raw_json['details'])
-    )
+    ).merge(extract_primary_organisation(item_raw_json['links']))
+  end
+
+  def extract_primary_organisation(links)
+    Importers::PrimaryOrganisation.parse(links)
   end
 
   def number_of_pdfs(response_details)

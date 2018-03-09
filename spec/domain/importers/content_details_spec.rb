@@ -71,6 +71,24 @@ RSpec.describe Importers::ContentDetails do
       expect(latest_dimension_item.first_published_at).to eq(Time.new.strftime('2012-10-03T13:19:55.000+00:00'))
       expect(latest_dimension_item.public_updated_at).to eq(Time.new.strftime('2015-06-03T11:13:44.000+00:00'))
     end
+
+    it 'populates the primary_organisation' do
+      allow(subject.items_service).to receive(:fetch_raw_json).and_return(
+        'links' => {
+          'primary_publishing_organisation' => {
+            'title' => 'Home Office',
+            'content_id' => 'cont-id-1',
+            'withdrawn' => false
+          }
+        }
+      )
+      subject.run
+      expect(latest_dimension_item.reload).to have_attributes(
+        primary_organisation_title: 'Home Office',
+        primary_organisation_content_id: 'cont-id-1',
+        primary_organisation_withdrawn: false
+      )
+    end
   end
 
   context 'when GdsApi::HTTPGone is raised' do
