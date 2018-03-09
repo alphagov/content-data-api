@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180307113805) do
+ActiveRecord::Schema.define(version: 20180309120223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,9 @@ ActiveRecord::Schema.define(version: 20180307113805) do
     t.integer "string_length", default: 0
     t.integer "sentence_count", default: 0
     t.integer "word_count", default: 0
+    t.string "primary_organisation_title"
+    t.string "primary_organisation_content_id"
+    t.boolean "primary_organisation_withdrawn"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
   end
 
