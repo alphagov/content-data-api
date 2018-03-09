@@ -8,7 +8,9 @@ class SandboxController < ApplicationController
     respond_to do |format|
       format.html do
         @summary = @metrics.metric_summary
-        @query_params = params.permit(:from, :to, :base_path)
+        @query_params = params.permit(:from, :to, :base_path, :utf8,
+          :total_items, :pageviews, :unique_pageviews, :feedex_issues,
+          :number_of_pdfs, :number_of_word_files, :filter)
       end
       format.csv { stream_data_as_csv(@metrics) }
     end
