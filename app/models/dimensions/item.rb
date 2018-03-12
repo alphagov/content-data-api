@@ -83,8 +83,6 @@ private
 
     html =
       case schema
-      when 'email_alert_signup'
-        extract_email_signup(json)
       when 'finder_email_signup'
         extract_finder(json)
       when 'location_transaction'
@@ -95,15 +93,6 @@ private
         extract_main(json)
       end
     parse_html(html)
-  end
-
-  def extract_email_signup(json)
-    html = []
-    json.dig("details", "breadcrumbs").each do |crumb|
-      html << crumb["title"]
-    end
-    html << json.dig("details", "summary")
-    html.join(" ")
   end
 
   def extract_finder(json)
