@@ -1,5 +1,6 @@
 require 'json'
 
+
 class Dimensions::Item < ApplicationRecord
   validates :content_id, presence: true
 
@@ -48,16 +49,13 @@ private
     email_alert_signup
     fatality_notice
     finder_email_signup
-    guide
     help
     hmrc_manual_section
     html_publication
-    licence
     location_transaction
     manual
     manual_section
     news_article
-    place
     publication
     service_manual_guide
     service_manual_topic
@@ -68,67 +66,35 @@ private
     take_part
     topical_event_about_page
     transaction
-    travel_advice
     working_group
     world_location_news_article
   ].freeze
 
   def extract_by_schema_type(json)
     schema = json.dig("schema_name")
+    if Parsers::ContentExtractors.for_schema(schema)
+      html = Parsers::ContentExtractors.for_schema(schema).parse(json)
+      return parse_html(html)
+    end
+
     if schema.nil? || !VALID_SCHEMA_TYPES.include?(schema)
       raise InvalidSchemaError, "Schema does not exist: #{schema}"
     end
 
-    case schema
-    when 'licence'
-      html = extract_licence(json)
-    when 'place'
-      html = extract_place(json)
-    when 'guide', 'travel_advice'
-      html = extract_parts(json)
-    when 'transaction'
-      html = extract_transaction(json)
-    when 'email_alert_signup'
-      html = extract_email_signup(json)
-    when 'finder_email_signup'
-      html = extract_finder(json)
-    when 'location_transaction'
-      html = extract_location_transaction(json)
-    when 'service_manual_topic'
-      html = extract_manual_topic(json)
-    else
-      html = extract_main(json)
-    end
+    html =
+      case schema
+      when 'email_alert_signup'
+        extract_email_signup(json)
+      when 'finder_email_signup'
+        extract_finder(json)
+      when 'location_transaction'
+        extract_location_transaction(json)
+      when 'service_manual_topic'
+        extract_manual_topic(json)
+      else
+        extract_main(json)
+      end
     parse_html(html)
-  end
-
-  def extract_licence(json)
-    json.dig("details", "licence_overview")
-  end
-
-  def extract_place(json)
-    html = []
-    html << json.dig("details", "introduction")
-    html << json.dig("details", "more_information")
-    html.join(" ")
-  end
-
-  def extract_parts(json)
-    html = []
-    json.dig("details", "parts").each do |part|
-      html << part["title"]
-      html << part["body"]
-    end
-    html.join(" ")
-  end
-
-  def extract_transaction(json)
-    html = []
-    html << json.dig("details", "introductory_paragraph")
-    html << json.dig("details", "start_button_text")
-    html << json.dig("details", "will_continue_on")
-    html << json.dig("details", "more_information")
-    html.join(" ")
   end
 
   def extract_email_signup(json)
