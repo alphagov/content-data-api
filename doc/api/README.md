@@ -72,7 +72,7 @@ You should now be able to view a live preview at http://localhost:4567.
 You can deploy with the following command:
 
 ```
-make publish API_SPEC=../../openapi.yaml>
+make publish API_SPEC=../../openapi.yaml
 ```
 
 This will push to the `gh-pages` branch and therefore deploy to GitHub Pages.

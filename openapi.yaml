@@ -14,14 +14,13 @@ servers:
   - url: https://content-performance-manager.publishing.service.gov.uk/api/
 
 paths:
-  /metrics/{content_id}:
+  /metrics/{metric}/{content_id}:
     get:
-      summary: Get metric values for a single content item over a date range.
+      summary: Get summarised metrics for a content item.
       description: |
-        Returns an array of values. Each item represents a metric value at
-        a single point in time.
+        Returns a summary of a metric based on data collected over a time period.
       tags:
-        - Metrics
+        - Aggregations
       parameters:
         - name: 'content_id'
           in: path
@@ -31,11 +30,19 @@ paths:
           schema:
             type: string
             example: 'f838c22a-b2aa-49be-bd95-153f593293a3'
+        - name: 'metric'
+          in: path
+          required: true
+          description: |
+            The name of a metric.
+          schema:
+            type: string
+            example: "pageviews"
         - name: 'from'
           in: query
           required: true
           description: |
-            From date.
+            From date in the format 'YYYY-MM-DD'. Only data collected on or after this date will be included.
           schema:
             type: date
             example: '2018-01-01'
@@ -43,17 +50,69 @@ paths:
           in: query
           required: true
           description: |
-            To date.
+            To date in the format 'YYYY-MM-DD'. Only data collected on or before this date will be included.
           schema:
             type: date
-            example: '2018-01'
+            example: '2018-01-01'
       responses:
         200:
           description: |
-            An array of items where each item represents a value of the metric at a single point in time. The array may be empty.
+            A summary of each metric.
         400:
           description: The API request is invalid.
       x-code-samples:
         "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
           lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-27&to=2018-02-27&metric=pageviews'
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/pageviews/f838c22a-b2aa-49be-bd95-153f593293a3/summary?from=2018-02-27&to=2018-02-27'
+
+  /metrics/{metric}/{content_id}/time-series:
+    get:
+      summary: Get metric values for a single content item over a date range.
+      description: |
+        Returns an array of values for each metric. Each item represents a
+        metric value at a single point in time.
+      tags:
+        - Time series
+      parameters:
+        - name: 'content_id'
+          in: path
+          required: true
+          description: |
+            A GOV.UK content ID. This is a UUID value as used in the Content API.
+          schema:
+            type: string
+            example: 'f838c22a-b2aa-49be-bd95-153f593293a3'
+        - name: 'metric'
+          in: path
+          required: true
+          description: |
+            The name of a metric.
+          schema:
+            type: string
+            example: "pageviews"
+        - name: 'from'
+          in: query
+          required: true
+          description: |
+            From date in the format 'YYYY-MM-DD'. Only data collected on or after this date will be returned.
+          schema:
+            type: date
+            example: '2018-01-01'
+        - name: 'to'
+          in: query
+          required: true
+          description: |
+            To date in the format 'YYYY-MM-DD'. Only data collected on or before this date will be returned.
+          schema:
+            type: date
+            example: '2018-01-01'
+      responses:
+        200:
+          description: |
+            A time series for each metric. Each series is an array of objects containing the value of the metric at a single point in time. The array may be empty.
+        400:
+          description: The API request is invalid.
+      x-code-samples:
+        "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
+          lang: shell
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/f838c22a-b2aa-49be-bd95-153f593293a3/time-series?from=2018-02-27&to=2018-02-27&metric=pageviews'

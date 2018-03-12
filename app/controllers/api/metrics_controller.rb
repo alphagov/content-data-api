@@ -1,20 +1,26 @@
 class Api::MetricsController < ApiController
   before_action :validate_params!
 
-  def show
-    query = Facts::Metric
-              .between(from, to)
-              .by_content_id(content_id)
+  def time_series
+    @metrics = query_series
+    @metric_params = metric_params
+  end
 
-    @metrics = query
-                 .order('dimensions_dates.date asc')
-                 .group('dimensions_dates.date')
-                 .sum(metric)
-
+  def summary
+    @metrics = query_series
     @metric_params = metric_params
   end
 
 private
+
+  def query_series
+    Facts::Metric
+      .between(from, to)
+      .by_content_id(content_id)
+      .order('dimensions_dates.date asc')
+      .group('dimensions_dates.date')
+      .sum(metric)
+  end
 
   delegate :from, :to, :metric, :content_id, to: :metric_params
 

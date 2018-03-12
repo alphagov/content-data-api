@@ -13,7 +13,7 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
   let!(:item) { create :dimensions_item, content_id: content_id }
 
   it 'returns an error for metrics not on the whitelist' do
-    get "/api/v1/metrics/#{content_id}", params: { metric: 'something-else', from: '2018-01-13', to: '2018-01-15' }
+    get "/api/v1/metrics/number_of_puns/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
     expect(response.status).to eq(400)
 
@@ -29,7 +29,7 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
   end
 
   it 'returns an error for badly formatted dates' do
-    get "/api/v1/metrics/#{content_id}", params: { metric: "pageviews", from: 'today', to: '2018-01-15' }
+    get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: 'today', to: '2018-01-15' }
 
     expect(response.status).to eq(400)
 
@@ -45,7 +45,7 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
   end
 
   it 'returns an error for bad date ranges' do
-    get "/api/v1/metrics/#{content_id}", params: { metric: "pageviews", from: '2018-01-16', to: '2018-01-15' }
+    get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-16', to: '2018-01-15' }
 
     expect(response.status).to eq(400)
 
@@ -61,7 +61,7 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
   end
 
   it 'returns an error for unknown parameters' do
-    get "/api/v1/metrics/#{content_id}", params: { metric: "pageviews", from: '2018-01-14', to: '2018-01-15', extra: "bla" }
+    get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla" }
 
     expect(response.status).to eq(400)
 
@@ -85,32 +85,41 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
     end
 
     it 'returns `pageviews` values between two dates' do
-      get "/api/v1/metrics/#{content_id}", params: { metric: 'pageviews', from: '2018-01-13', to: '2018-01-15' }
+      get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
       json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json).to eq(build_api_response('pageviews'))
+      expect(json).to eq(build_time_series_response('pageviews'))
     end
 
     it 'returns `feedex issues` between two dates' do
-      get "/api/v1/metrics/#{content_id}", params: { metric: 'number_of_issues', from: '2018-01-13', to: '2018-01-15' }
+      get "/api/v1/metrics/number_of_issues/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
       json = JSON.parse(response.body)
-      expect(json.deep_symbolize_keys).to eq(build_api_response('number_of_issues'))
+      expect(json.deep_symbolize_keys).to eq(build_time_series_response('number_of_issues'))
     end
 
-    def build_api_response(metric_name)
+    describe "Summary information" do
+      it 'returns sums and latest values' do
+        get "//api/v1/metrics/number_of_issues/#{content_id}", params: { from: '2018-01-13', to: '2018-01-15' }
+
+        json = JSON.parse(response.body)
+
+        expected_response = {
+          number_of_issues: {
+            total: 60,
+            latest: 30
+          }
+        }
+        expect(json.deep_symbolize_keys).to eq(expected_response)
+      end
+    end
+
+    def build_time_series_response(metric_name)
       {
-        metadata: {
-          metric: metric_name,
-          total: 60,
-          from: '2018-01-13',
-          to: '2018-01-15',
-          content_id: content_id,
-        },
-        results: [
-          { content_id: content_id, date: '2018-01-13', value: 10 },
-          { content_id: content_id, date: '2018-01-14', value: 20 },
-          { content_id: content_id, date: '2018-01-15', value: 30 },
+        metric_name.to_sym => [
+          { date: '2018-01-13', value: 10 },
+          { date: '2018-01-14', value: 20 },
+          { date: '2018-01-15', value: 30 },
         ]
       }
     end
@@ -128,14 +137,14 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
     end
 
     it 'returns the `number of pdfs` between two dates' do
-      get "/api/v1/metrics/#{content_id}", params: { metric: 'number_of_pdfs', from: '2018-01-13', to: '2018-01-15' }
+      get "/api/v1/metrics/number_of_pdfs/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
       json = JSON.parse(response.body)
       expect(json.deep_symbolize_keys).to eq(api_reponse('number_of_pdfs'))
     end
 
     it 'returns the `number of word documents` between two dates' do
-      get "/api/v1/metrics/#{content_id}", params: { metric: 'number_of_word_files', from: '2018-01-13', to: '2018-01-15' }
+      get "/api/v1/metrics/number_of_word_files/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
       json = JSON.parse(response.body)
       expect(json.deep_symbolize_keys).to eq(api_reponse('number_of_word_files'))
@@ -143,17 +152,10 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
 
     def api_reponse(metric_name)
       {
-        metadata: {
-          metric: metric_name,
-          total: 70,
-          from: '2018-01-13',
-          to: '2018-01-15',
-          content_id: content_id,
-        },
-        results: [
-          { content_id: content_id, date: '2018-01-13', value: 30 },
-          { content_id: content_id, date: '2018-01-14', value: 20 },
-          { content_id: content_id, date: '2018-01-15', value: 20 },
+        metric_name.to_sym => [
+          { date: '2018-01-13', value: 30 },
+          { date: '2018-01-14', value: 20 },
+          { date: '2018-01-15', value: 20 },
         ]
       }
     end
