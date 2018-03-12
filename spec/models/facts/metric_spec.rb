@@ -48,6 +48,20 @@ RSpec.describe Facts::Metric, type: :model do
       results = subject.by_content_id('id1')
       expect(results).to match_array([metric1, metric2, metric3])
     end
+
+    it '.by_organisation_id' do
+      item1 = create(:dimensions_item, primary_organisation_content_id: 'org-1')
+      item2 = create(:dimensions_item, primary_organisation_content_id: 'org-2')
+
+      metric1 = create(:metric, dimensions_item: item1, dimensions_date: day0)
+      metric2 = create(:metric, dimensions_item: item1, dimensions_date: day1)
+      create(:metric, dimensions_item: item2, dimensions_date: day2)
+      create(:metric, dimensions_item: item2, dimensions_date: day1)
+      create(:metric, dimensions_item: item2, dimensions_date: day2)
+
+      results = subject.by_organisation_id('org-1')
+      expect(results).to match_array([metric1, metric2])
+    end
   end
 
   describe '.metric_summary' do

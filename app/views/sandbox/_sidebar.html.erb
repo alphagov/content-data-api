@@ -1,6 +1,10 @@
 <div class="col-sm-3 sidebar">
   <%= form_tag sandbox_path, method: :get do %>
     <div class="form-group">
+      <%= label_tag 'organisation', 'Organisation ID:', class: '' %>
+      <%= text_field_tag 'organisation', params[:organisation], placeholder: 'Enter organisation ID...', class: 'form-control' %>
+    </div>
+    <div class="form-group">
       <%= label_tag 'base_path', 'Base path:', class: '' %>
       <%= text_field_tag 'base_path', params[:base_path], placeholder: 'Enter base path...', class: 'form-control' %>
     </div>
