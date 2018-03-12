@@ -62,6 +62,4 @@ class Facts::Metric < ApplicationRecord
       spell_count
     ]
   end
-
-  METRIC_WHITELIST = %w[pageviews unique_pageviews number_of_pdfs number_of_issues number_of_word_files].freeze
 end
