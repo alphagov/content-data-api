@@ -75,11 +75,11 @@ RSpec.describe Importers::ContentDetails do
     it 'populates the primary_organisation' do
       allow(subject.items_service).to receive(:fetch_raw_json).and_return(
         'links' => {
-          'primary_publishing_organisation' => {
+          'primary_publishing_organisation' => [{
             'title' => 'Home Office',
             'content_id' => 'cont-id-1',
             'withdrawn' => false
-          }
+          }]
         }
       )
       subject.run

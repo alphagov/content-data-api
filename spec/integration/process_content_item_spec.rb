@@ -80,11 +80,11 @@ RSpec.describe 'Process content item' do
         'body' => item_content,
       },
       'links' => {
-        'primary_publishing_organisation' => {
+        'primary_publishing_organisation' => [{
           'title' => 'Home Office',
           'content_id' => 'cont-id-1',
           'withdrawn' => false
-        }
+        }]
       }
     )
     content_store_has_item(base_path, response, {})
