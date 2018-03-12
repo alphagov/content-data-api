@@ -49,6 +49,12 @@ RSpec.describe 'Process content item' do
       simplify_count: 9,
       spell_count: 10,
     )
+
+    expect(item).to have_attributes(
+      primary_organisation_title: 'Home Office',
+      primary_organisation_content_id: 'cont-id-1',
+      primary_organisation_withdrawn: false
+    )
   end
 
   def stub_item_metadata_in_content_store
@@ -72,6 +78,13 @@ RSpec.describe 'Process content item' do
           '<div class=\"attachment-details\">\n<a href=\"link.docx\">1</a>\n\n\n\n</div>',
         ],
         'body' => item_content,
+      },
+      'links' => {
+        'primary_publishing_organisation' => {
+          'title' => 'Home Office',
+          'content_id' => 'cont-id-1',
+          'withdrawn' => false
+        }
       }
     )
     content_store_has_item(base_path, response, {})
