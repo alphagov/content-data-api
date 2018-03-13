@@ -38,10 +38,10 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
 
     expect(page).to have_selector('.total_items', text: '2 items')
     expect(page).to have_selector('.pageviews', text: '80 pageviews (total)')
-    expect(page).to have_selector('.unique_pageviews', text: '20.0 unique pageviews (avg)')
+    expect(page).to have_selector('.unique_pageviews', text: '20.00 unique pageviews (avg)')
     expect(page).to have_selector('.feedex_issues', text: '28 Feedex issues (total)')
-    expect(page).to have_selector('.number_of_pdfs', text: '3.0 pdfs (avg)')
-    expect(page).to have_selector('.number_of_word_files', text: '1.5 Word files (avg)')
+    expect(page).to have_selector('.number_of_pdfs', text: '3.00 pdfs (avg)')
+    expect(page).to have_selector('.number_of_word_files', text: '1.50 Word files (avg)')
   end
 
   scenario 'Download metrics as csv' do
