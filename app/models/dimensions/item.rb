@@ -11,7 +11,7 @@ class Dimensions::Item < ApplicationRecord
 
   def get_content
     return if raw_json.blank?
-    extract_by_schema_type(raw_json)
+    Parsers::ContentExtractors.extract_content(raw_json)
   end
 
   def new_version
@@ -35,23 +35,6 @@ class Dimensions::Item < ApplicationRecord
       latest: true,
       dirty: true
     )
-  end
-
-private
-
-  def extract_by_schema_type(json)
-    schema = json.dig("schema_name")
-    if Parsers::ContentExtractors.for_schema(schema)
-      html = Parsers::ContentExtractors.for_schema(schema).parse(json)
-      return parse_html(html)
-    end
-    raise InvalidSchemaError, "Schema does not exist: #{schema}"
-  end
-
-  def parse_html(html)
-    return if html.nil?
-    html.delete!("\n")
-    Nokogiri::HTML.parse(html).text
   end
 end
 
