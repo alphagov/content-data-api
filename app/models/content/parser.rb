@@ -29,6 +29,7 @@ module Content
         Parsers::Parts,
         Parsers::Place,
         Parsers::ServiceManualStandard,
+        Parsers::ServiceManualServiceToolkit,
         Parsers::ServiceManualTopic,
         Parsers::StatisticsAnnouncement,
         Parsers::Taxon,

@@ -172,6 +172,26 @@ RSpec.describe Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('sm title the main body ch1 title ch1 desc ch2 title ch2 desc')
       end
 
+      it "returns content if schema name is 'service_manual_service_toolkit'" do
+        json = {
+          schema_name: 'service_manual_service_toolkit',
+          details: {
+            collections: [
+              {
+                title: 'main title 1',
+                description: 'main desc 1',
+                links: [
+                  { title: 'title link 1', description: 'desc link 1' },
+                  { title: 'title link 2', description: 'desc link 2' }
+                ]
+              }
+            ]
+          }
+        }
+        item = build(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq('main title 1 main desc 1 title link 1 desc link 1 title link 2 desc link 2')
+      end
+
       def build_raw_json(body:, schema_name:)
         {
           schema_name: schema_name,
