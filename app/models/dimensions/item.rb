@@ -65,10 +65,13 @@ private
     specialist_document
     speech
     statistical_data_set
+    statistics_announcement
     take_part
+    taxon
     topical_event_about_page
     transaction
     travel_advice
+    unpublished
     working_group
     world_location_news_article
   ].freeze
@@ -96,6 +99,12 @@ private
       html = extract_location_transaction(json)
     when 'service_manual_topic'
       html = extract_manual_topic(json)
+    when 'unpublished'
+      html = extract_unpublished(json)
+    when 'statistics_announcement'
+      html = extract_statistics_announcement(json)
+    when 'taxon'
+      html = extract_taxon(json)
     else
       html = extract_main(json)
     end
@@ -163,6 +172,30 @@ private
     json.dig("details", "groups").each do |group|
       html << group["name"]
       html << group["description"]
+    end
+    html.join(" ")
+  end
+
+  def extract_unpublished(json)
+    json.dig("details", "explanation")
+  end
+
+  def extract_statistics_announcement(json)
+    html = []
+    html << json.dig("description")
+    html << json.dig("details", "display_date")
+    html << json.dig("details", "state")
+    html.join(" ")
+  end
+
+  def extract_taxon(json)
+    html = []
+    html << json.dig("description")
+    return unless json.dig("links").include?("child_taxons")
+    children = json.dig("links", "child_taxons")
+    children.each do |child|
+      html << child["title"]
+      html << child["description"]
     end
     html.join(" ")
   end

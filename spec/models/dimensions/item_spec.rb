@@ -104,6 +104,32 @@ RSpec.describe Dimensions::Item, type: :model do
         expect(item.get_content).to eq("Blogs Design thinking Performance analysis")
       end
 
+      it "returns content json if schema_name is 'unpublished'" do
+        json = { schema_name: "unpublished",
+                  details: { explanation: "This content has been removed" } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq("This content has been removed")
+      end
+
+      it "returns content json if schema_name is 'statistics_announcement'" do
+        json = { schema_name: "statistics_announcement",
+                 description: "Announcement",
+                 details: { display_date: "25 December 2017", state: "closed" } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq("Announcement 25 December 2017 closed")
+      end
+
+      it "returns content json if schema_name is 'taxon'" do
+        json = { schema_name: "taxon",
+                 description: "Blogs",
+                 links: { child_taxons: [
+                            { title: "One", description: "first" },
+                            { title: "Two", description: "second" }
+                        ] } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq("Blogs One first Two second")
+      end
+
       def build_raw_json(body:)
         {
           schema_name: :detailed_guide,
