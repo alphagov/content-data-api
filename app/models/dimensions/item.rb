@@ -11,7 +11,7 @@ class Dimensions::Item < ApplicationRecord
 
   def get_content
     return if raw_json.blank?
-    Parsers::ContentExtractors.extract_content(raw_json)
+    ContentExtraction::ContentParser.extract_content(raw_json)
   end
 
   def new_version

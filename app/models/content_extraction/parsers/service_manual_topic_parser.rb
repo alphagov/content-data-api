@@ -1,4 +1,4 @@
-class Parsers::ServiceManualTopicParser
+class ContentExtraction::Parsers::ServiceManualTopicParser
   def parse(json)
     html = []
     html << json.dig("description")
@@ -9,4 +9,4 @@ class Parsers::ServiceManualTopicParser
     html.join(" ")
   end
 end
-Parsers::ContentExtractors.register 'service_manual_topic', Parsers::ServiceManualTopicParser.new
+ContentExtraction::ContentParser.register 'service_manual_topic', ContentExtraction::Parsers::ServiceManualTopicParser.new

@@ -1,4 +1,4 @@
-class Parsers::TransactionParser
+class ContentExtraction::Parsers::TransactionParser
   def parse(json)
     html = []
     html << json.dig("details", "introductory_paragraph")
@@ -8,4 +8,4 @@ class Parsers::TransactionParser
     html.join(" ")
   end
 end
-Parsers::ContentExtractors.register('transaction', Parsers::TransactionParser.new)
+ContentExtraction::ContentParser.register('transaction', ContentExtraction::Parsers::TransactionParser.new)

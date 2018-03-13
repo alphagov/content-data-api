@@ -1,4 +1,4 @@
-class Parsers::BodyContentParser
+class ContentExtraction::Parsers::BodyContentParser
   def parse(json)
     json.dig("details", "body")
   end
@@ -30,5 +30,5 @@ schemas_with_body = %w[
   ].freeze
 
 schemas_with_body.each do |schema|
-  Parsers::ContentExtractors.register(schema, Parsers::BodyContentParser.new)
+  ContentExtraction::ContentParser.register(schema, ContentExtraction::Parsers::BodyContentParser.new)
 end

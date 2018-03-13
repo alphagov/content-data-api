@@ -1,5 +1,5 @@
-module Parsers
-  class ContentExtractors
+module ContentExtraction
+  class ContentParser
     include Singleton
 
     def self.register(*args)
@@ -38,5 +38,5 @@ module Parsers
     end
   end
 
-  Dir[File.dirname(__FILE__) + '/*.rb'].each { |file| require file }
+  Dir[File.dirname(__FILE__) + '/parsers/*.rb'].each { |file| require file }
 end

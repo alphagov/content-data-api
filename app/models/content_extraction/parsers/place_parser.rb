@@ -1,4 +1,4 @@
-class Parsers::PlaceParser
+class ContentExtraction::Parsers::PlaceParser
   def parse(json)
     html = []
     html << json.dig("details", "introduction")
@@ -6,4 +6,4 @@ class Parsers::PlaceParser
     html.join(" ")
   end
 end
-Parsers::ContentExtractors.register('place', Parsers::PlaceParser.new)
+ContentExtraction::ContentParser.register('place', ContentExtraction::Parsers::PlaceParser.new)
