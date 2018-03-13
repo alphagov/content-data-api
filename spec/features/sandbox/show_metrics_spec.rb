@@ -36,12 +36,12 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     fill_in 'To:', with: '2018-01-15'
     click_button 'Filter'
 
-    expect(page).to have_selector('.total_items', text: '2 items')
-    expect(page).to have_selector('.pageviews', text: '80 pageviews (total)')
-    expect(page).to have_selector('.unique_pageviews', text: '20.00 unique pageviews (avg)')
-    expect(page).to have_selector('.feedex_issues', text: '28 Feedex issues (total)')
-    expect(page).to have_selector('.number_of_pdfs', text: '3.00 pdfs (avg)')
-    expect(page).to have_selector('.number_of_word_files', text: '1.50 Word files (avg)')
+    expect(page).to have_selector('.total_items', text: '2 Content Items')
+    expect(page).to have_selector('.pageviews', text: '80 Total pageviews')
+    expect(page).to have_selector('.unique_pageviews', text: '20.00 Unique pageviews (avg)')
+    expect(page).to have_selector('.feedex_issues', text: '28 Feedex issues')
+    expect(page).to have_selector('.number_of_pdfs', text: '3.00 PDFs (avg)')
+    expect(page).to have_selector('.number_of_word_files', text: '1.50 Word (avg)')
   end
 
   scenario 'Download metrics as csv' do
@@ -97,7 +97,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       fill_in 'Base path:', with: '/path'
       click_button 'Filter'
 
-      expect(page).to have_selector('.pageviews', text: '30 pageviews (total)')
+      expect(page).to have_selector('.pageviews', text: '30 Total pageviews')
     end
 
     scenario 'by organisation' do
@@ -111,7 +111,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       fill_in 'Organisation ID:', with: 'org-1'
       click_button 'Filter'
 
-      expect(page).to have_selector('.pageviews', text: '10 pageviews (total)')
+      expect(page).to have_selector('.pageviews', text: '10 Total pageviews')
     end
   end
 end
