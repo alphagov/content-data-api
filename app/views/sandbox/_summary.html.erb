@@ -27,4 +27,10 @@
       <span class="summary-item-label">Word (avg)</span>
     </div>
   </div>
+  <div class="row">
+    <div class="summary-item col-xs-3 spell_count">
+      <span class="summary-item-value"><%= number_with_delimiter (@summary[:spell_count] || 0), precision: 2 %></span>
+      <span class="summary-item-label">Spelling errors</span>
+    </div>
+  </div>
 </div>
