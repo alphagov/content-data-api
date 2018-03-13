@@ -188,8 +188,19 @@ RSpec.describe Content::Parser do
             ]
           }
         }
-        item = build(:dimensions_item, raw_json: json)
-        expect(item.get_content).to eq('main title 1 main desc 1 title link 1 desc link 1 title link 2 desc link 2')
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq('main title 1 main desc 1 title link 1 desc link 1 title link 2 desc link 2')
+      end
+
+      it "returns content if schema name is 'need'" do
+        json = {
+          schema_name: 'need',
+          details: {
+            role: 'the role',
+            goal: 'the goal',
+            benefit: 'the benefit'
+          }
+        }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq('the role the goal the benefit')
       end
 
       def build_raw_json(body:, schema_name:)

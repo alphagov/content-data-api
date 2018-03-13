@@ -26,6 +26,7 @@ module Content
         Parsers::FinderEmailSignup,
         Parsers::Licence,
         Parsers::LocationTransaction,
+        Parsers::Need,
         Parsers::Parts,
         Parsers::Place,
         Parsers::ServiceManualStandard,
