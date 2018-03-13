@@ -43,7 +43,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.number_of_pdfs', text: '3.00 PDFs (avg)')
     expect(page).to have_selector('.number_of_word_files', text: '1.50 Word (avg)')
     expect(page).to have_selector('.spell_count', text: '16 Spelling errors')
-    expect(page).to have_selector('.readability_score', text: '3.0 Readability score (avg)')
+    expect(page).to have_selector('.readability_score', text: '3.00 Readability score (avg)')
   end
 
   scenario 'Summary panel when no data' do

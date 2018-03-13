@@ -43,7 +43,7 @@
   <% end %>
   <% if params[:readability_score].present? %>
       <div class="readability_score">
-        <h3>Reading score (avg)</h3>
+        <h3>Reading score</h3>
         <%= line_chart(@metrics.group(:dimensions_date_id).sum(:readability_score), height: '150px') %>
       </div>
   <% end %>

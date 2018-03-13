@@ -33,7 +33,7 @@
       <span class="summary-item-label">Spelling errors</span>
     </div>
     <div class="summary-item col-xs-3 readability_score">
-      <span class="summary-item-value"><%= number_with_delimiter (@summary[:readability_score] || 0), precision: 2 %></span>
+      <span class="summary-item-value"><%= number_with_precision (@summary[:readability_score] || 0), precision: 2 %></span>
       <span class="summary-item-label">Readability score (avg)</span>
     </div>
   </div>
