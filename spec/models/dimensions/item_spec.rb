@@ -56,6 +56,17 @@ RSpec.describe Dimensions::Item, type: :model do
         expect(item.get_content).to eq('Schools Local council Appeal No placement')
       end
 
+      it "returns content json if schema_name is 'travel_advise'" do
+        json = { schema_name: 'guide',
+          details: { parts:
+            [{ title: 'Some',
+              body: 'Advise' },
+             { title: 'For',
+               body: 'Some Travel' }] } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq('Some Advise For Some Travel')
+      end
+
       it "returns content json if schema_name is 'transaction'" do
         json = { schema_name: "transaction",
           details: { introductory_paragraph: "Report changes",

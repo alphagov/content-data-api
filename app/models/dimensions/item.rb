@@ -46,19 +46,15 @@ private
     corporate_information_page
     detailed_guide
     document_collection
-    email_alert_signup
     fatality_notice
-    finder_email_signup
     help
     hmrc_manual_section
     html_publication
-    location_transaction
     manual
     manual_section
     news_article
     publication
     service_manual_guide
-    service_manual_topic
     simple_smart_answer
     specialist_document
     speech
@@ -81,45 +77,8 @@ private
       raise InvalidSchemaError, "Schema does not exist: #{schema}"
     end
 
-    html =
-      case schema
-      when 'finder_email_signup'
-        extract_finder(json)
-      when 'location_transaction'
-        extract_location_transaction(json)
-      when 'service_manual_topic'
-        extract_manual_topic(json)
-      else
-        extract_main(json)
-      end
+    html = extract_main(json)
     parse_html(html)
-  end
-
-  def extract_finder(json)
-    html = []
-    json.dig("details", "email_signup_choice").each do |choice|
-      html << choice["radio_button_name"]
-    end
-    html << json.dig("description")
-    html.join(" ")
-  end
-
-  def extract_location_transaction(json)
-    html = []
-    html << json.dig("details", "introduction")
-    html << json.dig("details", "need_to_know")
-    html << json.dig("details", "more_information")
-    html.join(" ")
-  end
-
-  def extract_manual_topic(json)
-    html = []
-    html << json.dig("description")
-    json.dig("details", "groups").each do |group|
-      html << group["name"]
-      html << group["description"]
-    end
-    html.join(" ")
   end
 
   def extract_main(json)

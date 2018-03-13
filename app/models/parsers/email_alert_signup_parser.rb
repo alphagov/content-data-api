@@ -1,4 +1,4 @@
-class Parsers::EmailSignupParser
+class Parsers::EmailAlertSignupParser
   def parse(json)
     html = []
     json.dig("details", "breadcrumbs").each do |crumb|
@@ -8,4 +8,4 @@ class Parsers::EmailSignupParser
     html.join(" ")
   end
 end
-Parsers::ContentExtractors.register('email_alert_signup', Parsers::EmailSignupParser.new)
+Parsers::ContentExtractors.register('email_alert_signup', Parsers::EmailAlertSignupParser.new)
