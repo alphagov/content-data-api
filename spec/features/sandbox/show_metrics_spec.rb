@@ -27,8 +27,8 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     metric4.update pageviews: 20, unique_pageviews: 20, number_of_issues: 8
     metric5.update pageviews: 30, unique_pageviews: 30, number_of_issues: 10
 
-    item1.update number_of_pdfs: 2, number_of_word_files: 1, spell_count: 2
-    item2.update number_of_pdfs: 4, number_of_word_files: 2, spell_count: 6
+    item1.update number_of_pdfs: 2, number_of_word_files: 1, spell_count: 2, readability_score: 1
+    item2.update number_of_pdfs: 4, number_of_word_files: 2, spell_count: 6, readability_score: 5
 
     visit '/sandbox'
 
@@ -43,6 +43,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.number_of_pdfs', text: '3.00 PDFs (avg)')
     expect(page).to have_selector('.number_of_word_files', text: '1.50 Word (avg)')
     expect(page).to have_selector('.spell_count', text: '16 Spelling errors')
+    expect(page).to have_selector('.readability_score', text: '3.0 Readability score (avg)')
   end
 
   scenario 'Summary panel when no data' do

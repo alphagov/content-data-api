@@ -68,8 +68,8 @@ RSpec.describe Facts::Metric, type: :model do
     subject { described_class }
     let(:base_path) { '/the/base/path' }
     it 'returns the correct numbers' do
-      item1 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 5)
-      item2 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 1)
+      item1 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 5, readability_score: 4)
+      item2 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 1, readability_score: 4)
       create(:metric,
         dimensions_item: item1,
         dimensions_date: day0,
@@ -96,7 +96,8 @@ RSpec.describe Facts::Metric, type: :model do
         number_of_issues: 9,
         number_of_pdfs: 3,
         number_of_word_files: 1,
-        spell_count: 7
+        spell_count: 7,
+        readability_score: 4,
       )
     end
   end
