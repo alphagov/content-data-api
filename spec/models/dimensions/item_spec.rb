@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Dimensions::Item, type: :model do
   it { is_expected.to validate_presence_of(:content_id) }
 
-
   describe '.dirty_before' do
     let(:date) { Date.new(2018, 2, 2) }
     it 'returns the dirty items updated before the given date' do

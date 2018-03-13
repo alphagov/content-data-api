@@ -28,6 +28,7 @@ module Content
         Parsers::LocationTransaction,
         Parsers::Parts,
         Parsers::Place,
+        Parsers::ServiceManualStandard,
         Parsers::ServiceManualTopic,
         Parsers::StatisticsAnnouncement,
         Parsers::Taxon,
