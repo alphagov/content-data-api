@@ -1,29 +1,29 @@
 <div class="summary">
   <div class="row">
     <div class="summary-item col-xs-3 total_items">
-      <span class="summary-item-value"><%= number_with_delimiter @summary[:total_items] %></span>
+      <span class="summary-item-value"><%= number_with_delimiter (@summary[:total_items] || 0) %></span>
       <span class="summary-item-label">Content Items</span>
     </div>
     <div class="summary-item col-xs-3 pageviews">
-      <span class="summary-item-value"><%= number_with_delimiter @summary[:pageviews] %></span>
+      <span class="summary-item-value"><%= number_with_delimiter (@summary[:pageviews] || 0) %></span>
       <span class="summary-item-label">Total pageviews</span>
     </div>
     <div class="summary-item col-xs-3 unique_pageviews">
-      <span class="summary-item-value"><%= number_with_precision @summary[:unique_pageviews], precision: 2 %></span>
+      <span class="summary-item-value"><%= number_with_precision (@summary[:unique_pageviews] || 0), precision: 2 %></span>
       <span class="summary-item-label">Unique pageviews (avg)</span>
     </div>
   </div>
   <div class="row">
     <div class="summary-item col-xs-3 feedex_issues">
-      <span class="summary-item-value"><%= number_with_delimiter @summary[:number_of_issues], precision: 2 %></span>
+      <span class="summary-item-value"><%= number_with_delimiter (@summary[:number_of_issues] || 0), precision: 2 %></span>
       <span class="summary-item-label">Feedex issues</span>
     </div>
     <div class="summary-item col-xs-3 number_of_pdfs">
-      <span class="summary-item-value"><%= number_with_precision @summary[:number_of_pdfs], precision: 2 %></span>
+      <span class="summary-item-value"><%= number_with_precision (@summary[:number_of_pdfs] || 0), precision: 2 %></span>
       <span class="summary-item-label">PDFs (avg)</span>
     </div>
     <div class="summary-item col-xs-3 number_of_word_files">
-      <span class="summary-item-value"><%= number_with_precision @summary[:number_of_word_files], precision: 2 %></span>
+      <span class="summary-item-value"><%= number_with_precision (@summary[:number_of_word_files] || 0), precision: 2 %></span>
       <span class="summary-item-label">Word (avg)</span>
     </div>
   </div>

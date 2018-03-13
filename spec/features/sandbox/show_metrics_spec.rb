@@ -44,6 +44,21 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.number_of_word_files', text: '1.50 Word (avg)')
   end
 
+  scenario 'Summary panel when no data' do
+    visit '/sandbox'
+
+    fill_in 'From:', with: '2018-01-13'
+    fill_in 'To:', with: '2018-01-15'
+    click_button 'Filter'
+
+    expect(page).to have_selector('.total_items', text: '0 Content Items')
+    expect(page).to have_selector('.pageviews', text: '0 Total pageviews')
+    expect(page).to have_selector('.unique_pageviews', text: '0 Unique pageviews (avg)')
+    expect(page).to have_selector('.feedex_issues', text: '0 Feedex issues')
+    expect(page).to have_selector('.number_of_pdfs', text: '0 PDFs (avg)')
+    expect(page).to have_selector('.number_of_word_files', text: '0 Word (avg)')
+  end
+
   scenario 'Download metrics as csv' do
     item1.update(
       title: 'Really interesting',
