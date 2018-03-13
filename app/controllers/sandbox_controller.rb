@@ -11,7 +11,8 @@ class SandboxController < ApplicationController
         @summary = @metrics.metric_summary
         @query_params = params.permit(:from, :to, :base_path, :utf8,
           :total_items, :pageviews, :unique_pageviews, :feedex_issues,
-          :number_of_pdfs, :number_of_word_files, :filter, :organisation)
+          :number_of_pdfs, :number_of_word_files, :filter, :organisation, :spell_count,
+          :readability_score)
       end
       format.csv { stream_data_as_csv(@metrics) }
     end

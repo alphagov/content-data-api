@@ -35,4 +35,16 @@
         <%= line_chart(@metrics.group(:dimensions_date_id).sum(:number_of_word_files), height: '150px') %>
       </div>
   <% end %>
+  <% if params[:spell_count].present? %>
+      <div class="number_of_word_files">
+        <h3>Spelling errors</h3>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:spell_count), height: '150px') %>
+      </div>
+  <% end %>
+  <% if params[:readability_score].present? %>
+      <div class="readability_score">
+        <h3>Reading score (avg)</h3>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:readability_score), height: '150px') %>
+      </div>
+  <% end %>
 </div>
