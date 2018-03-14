@@ -9,6 +9,6 @@ class Content::Parsers::Parts
   end
 
   def schemas
-    %w[guide travel_advise]
+    %w[guide travel_advice]
   end
 end

@@ -74,8 +74,8 @@ RSpec.describe Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('Schools Local council Appeal No placement')
       end
 
-      it "returns content json if schema_name is 'travel_advise'" do
-        json = { schema_name: 'travel_advise',
+      it "returns content json if schema_name is 'travel_advice'" do
+        json = { schema_name: 'travel_advice',
           details: { parts:
             [
               { title: 'Some',
