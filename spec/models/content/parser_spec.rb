@@ -235,6 +235,12 @@ RSpec.describe Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('the role the goal the benefit')
       end
 
+      it "returns content json if schema_name is 'gone'" do
+        json = { schema_name: "gone",
+          details: { explanation: "No page here" } }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq("No page here")
+      end
+
       def build_raw_json(body:, schema_name:)
         {
           schema_name: schema_name,
