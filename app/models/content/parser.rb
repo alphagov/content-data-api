@@ -1,5 +1,5 @@
-module ContentExtraction
-  class ContentParser
+module Content
+  class Parser
     include Singleton
 
     def self.register(*args)

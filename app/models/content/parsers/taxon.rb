@@ -1,4 +1,4 @@
-class ContentExtraction::Parsers::TaxonParser
+class Content::Parsers::Taxon
   def parse(json)
     html = []
     html << json.dig("description")
@@ -11,5 +11,5 @@ class ContentExtraction::Parsers::TaxonParser
     html.join(" ")
   end
 end
-ContentExtraction::ContentParser.register('taxon',
-  ContentExtraction::Parsers::TaxonParser.new)
+Content::Parser.register('taxon',
+  Content::Parsers::Taxon.new)

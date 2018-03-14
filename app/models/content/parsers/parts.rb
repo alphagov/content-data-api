@@ -1,4 +1,4 @@
-class ContentExtraction::Parsers::PartsParser
+class Content::Parsers::Parts
   def parse(json)
     html = []
     json.dig("details", "parts").each do |part|
@@ -9,5 +9,5 @@ class ContentExtraction::Parsers::PartsParser
   end
 end
 %w[guide travel_advise].each do |schema|
-  ContentExtraction::ContentParser.register(schema, ContentExtraction::Parsers::PartsParser.new)
+  Content::Parser.register(schema, Content::Parsers::Parts.new)
 end

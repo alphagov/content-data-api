@@ -1,4 +1,4 @@
-class ContentExtraction::Parsers::FinderEmailSignupParser
+class Content::Parsers::FinderEmailSignup
   def parse(json)
     html = []
     json.dig("details", "email_signup_choice").each do |choice|
@@ -8,4 +8,4 @@ class ContentExtraction::Parsers::FinderEmailSignupParser
     html.join(" ")
   end
 end
-ContentExtraction::ContentParser.register('finder_email_signup', ContentExtraction::Parsers::FinderEmailSignupParser.new)
+Content::Parser.register('finder_email_signup', Content::Parsers::FinderEmailSignup.new)
