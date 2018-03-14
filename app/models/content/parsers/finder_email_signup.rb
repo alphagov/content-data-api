@@ -7,5 +7,8 @@ class Content::Parsers::FinderEmailSignup
     html << json.dig("description")
     html.join(" ")
   end
+
+  def schemas
+    ['finder_email_signup']
+  end
 end
-Content::Parser.register('finder_email_signup', Content::Parsers::FinderEmailSignup.new)

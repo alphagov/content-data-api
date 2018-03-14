@@ -5,5 +5,8 @@ class Content::Parsers::Place
     html << json.dig("details", "more_information")
     html.join(" ")
   end
+
+  def schemas
+    ['place']
+  end
 end
-Content::Parser.register('place', Content::Parsers::Place.new)

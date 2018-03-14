@@ -10,6 +10,8 @@ class Content::Parsers::Taxon
     end
     html.join(" ")
   end
+
+  def schemas
+    ['taxon']
+  end
 end
-Content::Parser.register('taxon',
-  Content::Parsers::Taxon.new)

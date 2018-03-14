@@ -2,8 +2,8 @@ module Content
   class Parser
     include Singleton
 
-    def self.register(*args)
-      instance.register(*args)
+    def initialize
+      register_parsers
     end
 
     def self.extract_content(*args)
@@ -17,11 +17,35 @@ module Content
       parse_html parser.parse(json)
     end
 
+  private
+
+    def register_parsers
+      [
+        Parsers::BodyContent,
+        Parsers::EmailAlertSignup,
+        Parsers::FinderEmailSignup,
+        Parsers::Licence,
+        Parsers::LocationTransaction,
+        Parsers::Parts,
+        Parsers::Place,
+        Parsers::ServiceManualTopic,
+        Parsers::StatisticsAnnouncement,
+        Parsers::Taxon,
+        Parsers::Transaction,
+        Parsers::Unpublished
+      ].each(&method(:register_parser))
+    end
+
+    def register_parser(parser_class)
+      parser = parser_class.new
+      parser.schemas.each do |schema|
+        register schema, parser
+      end
+    end
+
     def register(schema_name, parser)
       parsers[schema_name] = parser
     end
-
-  private
 
     def for_schema(schema_name)
       parsers[schema_name]
@@ -37,6 +61,4 @@ module Content
       @parsers ||= {}
     end
   end
-
-  Dir[File.dirname(__FILE__) + '/parsers/*.rb'].each { |file| require file }
 end

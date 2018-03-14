@@ -7,7 +7,8 @@ class Content::Parsers::Parts
     end
     html.join(" ")
   end
-end
-%w[guide travel_advise].each do |schema|
-  Content::Parser.register(schema, Content::Parsers::Parts.new)
+
+  def schemas
+    %w[guide travel_advise]
+  end
 end

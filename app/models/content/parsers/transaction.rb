@@ -7,5 +7,8 @@ class Content::Parsers::Transaction
     html << json.dig("details", "more_information")
     html.join(" ")
   end
+
+  def schemas
+    ['transaction']
+  end
 end
-Content::Parser.register('transaction', Content::Parsers::Transaction.new)

@@ -6,5 +6,8 @@ class Content::Parsers::LocationTransaction
     html << json.dig("details", "more_information")
     html.join(" ")
   end
+
+  def schemas
+    ['location_transaction']
+  end
 end
-Content::Parser.register('location_transaction', Content::Parsers::LocationTransaction.new)

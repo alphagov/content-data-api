@@ -6,6 +6,8 @@ class Content::Parsers::StatisticsAnnouncement
     html << json.dig("details", "state")
     html.join(" ")
   end
+
+  def schemas
+    ['statistics_announcement']
+  end
 end
-Content::Parser.register('statistics_announcement',
-  Content::Parsers::StatisticsAnnouncement.new)

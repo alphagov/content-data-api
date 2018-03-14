@@ -7,5 +7,8 @@ class Content::Parsers::EmailAlertSignup
     html << json.dig("details", "summary")
     html.join(" ")
   end
+
+  def schemas
+    ['email_alert_signup']
+  end
 end
-Content::Parser.register('email_alert_signup', Content::Parsers::EmailAlertSignup.new)

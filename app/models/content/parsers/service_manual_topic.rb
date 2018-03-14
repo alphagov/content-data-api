@@ -8,5 +8,8 @@ class Content::Parsers::ServiceManualTopic
     end
     html.join(" ")
   end
+
+  def schemas
+    ['service_manual_topic']
+  end
 end
-Content::Parser.register 'service_manual_topic', Content::Parsers::ServiceManualTopic.new
