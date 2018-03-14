@@ -10,11 +10,37 @@ RSpec.describe Dimensions::Item, type: :model do
     end
 
     context "when valid schema" do
-      it "returns content json if details.body exists" do
-        json = build_raw_json(body: 'the-body')
-
-        item = create(:dimensions_item, raw_json: json)
-        expect(item.get_content).to eq('the-body')
+      it 'returns content json from :body for all valid formats' do
+        valid_types = %w[
+          answer
+          case_study
+          consultation
+          corporate_information_page
+          detailed_guide
+          document_collection
+          fatality_notice
+          help
+          hmrc_manual_section
+          html_publication
+          manual
+          manual_section
+          news_article
+          publication
+          service_manual_guide
+          simple_smart_answer
+          specialist_document
+          speech
+          statistical_data_set
+          take_part
+          topical_event_about_page
+          working_group
+          world_location_news_article
+        ].freeze
+        valid_types.each do |schema|
+          json = build_raw_json(schema_name: schema, body: "Body for #{schema}")
+          item = build(:dimensions_item, raw_json: json)
+          expect(item.get_content).to eq("Body for #{schema}"), "Incorrect body for schema: '#{schema}'"
+        end
       end
 
       it 'returns nil if details.body does NOT exist' do
@@ -24,7 +50,10 @@ RSpec.describe Dimensions::Item, type: :model do
       end
 
       it 'does not fail with unicode characters' do
-        json = build_raw_json(body: %{\u003cdiv class="govspeak"\u003e\u003cp\u003eLorem ipsum dolor sit amet.})
+        json = build_raw_json(
+          body: %{\u003cdiv class="govspeak"\u003e\u003cp\u003eLorem ipsum dolor sit amet.},
+          schema_name: 'case_study'
+        )
 
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq('Lorem ipsum dolor sit amet.')
@@ -48,20 +77,35 @@ RSpec.describe Dimensions::Item, type: :model do
       it "returns content json if schema_name is 'guide'" do
         json = { schema_name: 'guide',
           details: { parts:
-            [{ title: 'Schools',
-              body: 'Local council' },
-             { title: 'Appeal',
-               body: 'No placement' }] } }
+            [
+              { title: 'Schools',
+                body: 'Local council' },
+              { title: 'Appeal',
+                body: 'No placement' }
+            ] } }
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq('Schools Local council Appeal No placement')
+      end
+
+      it "returns content json if schema_name is 'travel_advise'" do
+        json = { schema_name: 'travel_advise',
+          details: { parts:
+            [
+              { title: 'Some',
+                body: 'Advise' },
+              { title: 'For',
+                body: 'Some Travel' }
+            ] } }
+        item = create(:dimensions_item, raw_json: json)
+        expect(item.get_content).to eq('Some Advise For Some Travel')
       end
 
       it "returns content json if schema_name is 'transaction'" do
         json = { schema_name: "transaction",
           details: { introductory_paragraph: "Report changes",
-                    start_button_text: "Start",
-                    will_continue_on: "Carer's Allowance service",
-                    more_information: "Facts" } }
+            start_button_text: "Start",
+            will_continue_on: "Carer's Allowance service",
+            more_information: "Facts" } }
         item = create(:dimensions_item, raw_json: json)
         expected = "Report changes Start Carer's Allowance service Facts"
         expect(item.get_content).to eq(expected)
@@ -70,43 +114,48 @@ RSpec.describe Dimensions::Item, type: :model do
       it "returns content json if schema_name is 'email_alert_signup'" do
         json = { schema_name: "email_alert_signup",
           details: { breadcrumbs: [{ title: "The title" }],
-                     summary: "Summary" } }
+            summary: "Summary" } }
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq("The title Summary")
       end
 
       it "returns content json if schema_name is 'finder_email_signup'" do
         json = { schema_name: "finder_email_signup",
-                 description: "Use buttons",
-                 details: { email_signup_choice:
-                   [{ radio_button_name: "Yes" },
-                    { radio_button_name: "No" }] } }
+          description: "Use buttons",
+          details: { email_signup_choice:
+            [
+              { radio_button_name: "Yes" },
+              { radio_button_name: "No" }
+            ] } }
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq("Yes No Use buttons")
       end
 
       it "returns content json if schema_name is 'location_transaction'" do
         json = { schema_name: "location_transaction",
-                 details: { introduction: "Greetings", need_to_know: "A Name",
-                            more_information: "An Address" } }
+          details: { introduction: "Greetings", need_to_know: "A Name",
+            more_information: "An Address" } }
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq("Greetings A Name An Address")
       end
 
       it "returns content json if schema_name is 'service_manual_topic'" do
         json = { schema_name: "service_manual_topic",
-                 description: "Blogs",
-                 details: { groups: [{ name: "Design",
-                                       description: "thinking" },
-                                     { name: "Performance",
-                                       description: "analysis" }] } }
+          description: "Blogs",
+          details: { groups:
+            [
+              { name: "Design",
+                description: "thinking" },
+              { name: "Performance",
+                description: "analysis" }
+            ] } }
         item = create(:dimensions_item, raw_json: json)
         expect(item.get_content).to eq("Blogs Design thinking Performance analysis")
       end
 
-      def build_raw_json(body:)
+      def build_raw_json(body:, schema_name:)
         {
-          schema_name: :detailed_guide,
+          schema_name: schema_name,
           details: {
             body: body
           }
