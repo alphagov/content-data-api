@@ -22,6 +22,7 @@ module Content
     def register_parsers
       [
         Parsers::BodyContent,
+        Parsers::Contact,
         Parsers::EmailAlertSignup,
         Parsers::FinderEmailSignup,
         Parsers::Licence,
