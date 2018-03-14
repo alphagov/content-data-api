@@ -7,7 +7,7 @@ default: &default
     description: "Number of unique pageviews"
     source: Google Analytics
 
-  number_of_issues:
+  feedex_comments:
     description: "Number of reported content issues"
     source: Feedback explorer
 

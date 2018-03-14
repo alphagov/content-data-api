@@ -54,36 +54,36 @@ RSpec.describe FeedexService do
           {
             date: expected_date,
             page_path: '/path/1',
-            number_of_issues: 3
+            feedex_comments: 3
           },
           {
             date: expected_date,
             page_path: '/path/2',
-            number_of_issues: 1
+            feedex_comments: 1
           }
         ],
         [
           {
             date: expected_date,
             page_path: '/path/3',
-            number_of_issues: 5
+            feedex_comments: 5
           },
           {
             date: expected_date,
             page_path: '/path/4',
-            number_of_issues: 2
+            feedex_comments: 2
           }
         ],
         [
           {
             date: expected_date,
             page_path: '/path/5',
-            number_of_issues: 1
+            feedex_comments: 1
           },
           {
             date: expected_date,
             page_path: '/path/6',
-            number_of_issues: 7
+            feedex_comments: 7
           }
         ]
 

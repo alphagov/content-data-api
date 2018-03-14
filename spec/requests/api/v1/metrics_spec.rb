@@ -78,10 +78,10 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
 
   describe 'Daily metrics' do
     before do
-      create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, number_of_issues: 10
-      create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, number_of_issues: 20
-      create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, number_of_issues: 30
-      create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, number_of_issues: 40
+      create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, feedex_comments: 10
+      create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, feedex_comments: 20
+      create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, feedex_comments: 30
+      create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, feedex_comments: 40
     end
 
     it 'returns `pageviews` values between two dates' do
@@ -92,20 +92,20 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
     end
 
     it 'returns `feedex issues` between two dates' do
-      get "/api/v1/metrics/number_of_issues/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+      get "/api/v1/metrics/feedex_comments/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
       json = JSON.parse(response.body)
-      expect(json.deep_symbolize_keys).to eq(build_time_series_response('number_of_issues'))
+      expect(json.deep_symbolize_keys).to eq(build_time_series_response('feedex_comments'))
     end
 
     describe "Summary information" do
       it 'returns sums and latest values' do
-        get "//api/v1/metrics/number_of_issues/#{content_id}", params: { from: '2018-01-13', to: '2018-01-15' }
+        get "//api/v1/metrics/feedex_comments/#{content_id}", params: { from: '2018-01-13', to: '2018-01-15' }
 
         json = JSON.parse(response.body)
 
         expected_response = {
-          number_of_issues: {
+          feedex_comments: {
             total: 60,
             latest: 30
           }

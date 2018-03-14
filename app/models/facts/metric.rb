@@ -34,7 +34,7 @@ class Facts::Metric < ApplicationRecord
       'COUNT(DISTINCT dimensions_items.content_id)',
       'SUM(pageviews)',
       'AVG(unique_pageviews)',
-      'SUM(number_of_issues)',
+      'SUM(feedex_comments)',
       'AVG(number_of_pdfs)',
       'AVG(number_of_word_files)',
       'SUM(spell_count)',
@@ -44,7 +44,7 @@ class Facts::Metric < ApplicationRecord
       total_items: array[0],
       pageviews: array[1],
       unique_pageviews: array[2],
-      number_of_issues: array[3],
+      feedex_comments: array[3],
       number_of_pdfs: array[4],
       number_of_word_files: array[5],
       spell_count: array[6],
@@ -68,7 +68,7 @@ class Facts::Metric < ApplicationRecord
       primary_organisation_title
       primary_organisation_content_id
       unique_pageviews
-      number_of_issues
+      feedex_comments
       number_of_pdfs
       number_of_word_files
       readability_score

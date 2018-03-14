@@ -74,7 +74,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def validate_feedex!
-    expect(latest_metric).to have_attributes(number_of_issues: 21)
+    expect(latest_metric).to have_attributes(feedex_comments: 21)
   end
 
   def validate_quality_metrics

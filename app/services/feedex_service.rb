@@ -27,7 +27,7 @@ private
       {
         date: date,
         page_path: result['path'],
-        number_of_issues: result['count']
+        feedex_comments: result['count']
       }
     end
   end

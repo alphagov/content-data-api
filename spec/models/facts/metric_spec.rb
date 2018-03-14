@@ -75,25 +75,25 @@ RSpec.describe Facts::Metric, type: :model do
         dimensions_date: day0,
         pageviews: 3,
         unique_pageviews: 2,
-        number_of_issues: 4)
+        feedex_comments: 4)
       create(:metric,
         dimensions_item: item2,
         dimensions_date: day0,
         pageviews: 5,
         unique_pageviews: 2,
-        number_of_issues: 3)
+        feedex_comments: 3)
       create(:metric,
         dimensions_item: item2,
         dimensions_date: day1,
         pageviews: 2,
         unique_pageviews: 2,
-        number_of_issues: 2)
+        feedex_comments: 2)
       results = subject.between(day0, day1).by_base_path(base_path).metric_summary
       expect(results).to eq(
         total_items: 2,
         pageviews: 10,
         unique_pageviews: 2,
-        number_of_issues: 9,
+        feedex_comments: 9,
         number_of_pdfs: 3,
         number_of_word_files: 1,
         spell_count: 7,
