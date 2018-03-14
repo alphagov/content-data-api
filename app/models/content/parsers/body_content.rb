@@ -1,9 +1,10 @@
-class ContentExtraction::Parsers::BodyContentParser
+class Content::Parsers::BodyContent
   def parse(json)
     json.dig("details", "body")
   end
-end
-schemas_with_body = %w[
+
+  def schemas
+    %w[
     answer
     case_study
     consultation
@@ -27,8 +28,6 @@ schemas_with_body = %w[
     topical_event_about_page
     working_group
     world_location_news_article
-  ].freeze
-
-schemas_with_body.each do |schema|
-  ContentExtraction::ContentParser.register(schema, ContentExtraction::Parsers::BodyContentParser.new)
+  ]
+  end
 end

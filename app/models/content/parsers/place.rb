@@ -1,9 +1,12 @@
-class ContentExtraction::Parsers::PlaceParser
+class Content::Parsers::Place
   def parse(json)
     html = []
     html << json.dig("details", "introduction")
     html << json.dig("details", "more_information")
     html.join(" ")
   end
+
+  def schemas
+    ['place']
+  end
 end
-ContentExtraction::ContentParser.register('place', ContentExtraction::Parsers::PlaceParser.new)
