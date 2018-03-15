@@ -1,6 +1,0 @@
-<% content_for :navbar_right do %>
-  <%= form_tag audits_path, method: 'get' do %>
-    <%= select("heroku", "user_id", User.all.collect { |p| [p.name, p.id] }, { selected: session[:heroku_user_id] }) %>
-    <%= submit_tag "Go" %>
-  <% end %>
-<% end %>
