@@ -34,6 +34,7 @@ module Content
         Parsers::ServiceManualStandard,
         Parsers::ServiceManualServiceToolkit,
         Parsers::ServiceManualTopic,
+        Parsers::ServiceSignIn,
         Parsers::StatisticsAnnouncement,
         Parsers::Taxon,
         Parsers::Transaction,
