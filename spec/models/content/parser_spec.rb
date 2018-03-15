@@ -74,8 +74,8 @@ RSpec.describe Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('Schools Local council Appeal No placement')
       end
 
-      it "returns content json if schema_name is 'travel_advise'" do
-        json = { schema_name: 'travel_advise',
+      it "returns content json if schema_name is 'travel_advice'" do
+        json = { schema_name: 'travel_advice',
           details: { parts:
             [
               { title: 'Some',
@@ -233,6 +233,43 @@ RSpec.describe Content::Parser do
           }
         }
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('the role the goal the benefit')
+      end
+
+      it "returns content json if schema_name is 'gone'" do
+        json = { schema_name: "gone",
+          details: { explanation: "No page here" } }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq("No page here")
+      end
+
+      it "returns content json if schema_name is 'generic_with_external_related_links'" do
+        json = { schema_name: "generic_with_external_related_links",
+          details: { external_related_links: [
+            { title: "Check your Council Tax band" }
+          ] } }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Check your Council Tax band")
+      end
+
+      it "returns content json if schema_name is 'travel_advice_index'" do
+        json = { schema_name: "travel_advice_index",
+          links: { children: [
+              { country: { name: "Portugal" } },
+              { country: { name: "Brazil" } }
+            ] } }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Portugal Brazil")
+      end
+
+      it "returns content json if schema_name is 'service_sign_in'" do
+        json = { schema_name: "service_sign_in",
+          details: {
+            choose_sign_in: { title: "Proof",
+              options: [
+                { text: "Use Gateway", hint_text: "You have a user ID" },
+                { text: "Use Verify", hint_text: "You have an account" },
+              ] },
+            create_new_account: { title: "Create", body: "Click here" }
+          } }
+        expected = "Proof Use Gateway You have a user ID Use Verify You have an account Create Click here"
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
       end
 
       def build_raw_json(body:, schema_name:)

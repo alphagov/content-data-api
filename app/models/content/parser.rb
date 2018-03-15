@@ -25,6 +25,7 @@ module Content
         Parsers::Contact,
         Parsers::EmailAlertSignup,
         Parsers::FinderEmailSignup,
+        Parsers::GenericWithLinks,
         Parsers::Licence,
         Parsers::LocationTransaction,
         Parsers::Need,
@@ -33,9 +34,11 @@ module Content
         Parsers::ServiceManualStandard,
         Parsers::ServiceManualServiceToolkit,
         Parsers::ServiceManualTopic,
+        Parsers::ServiceSignIn,
         Parsers::StatisticsAnnouncement,
         Parsers::Taxon,
         Parsers::Transaction,
+        Parsers::TravelAdviceIndex,
         Parsers::Unpublished
       ].each(&method(:register_parser))
     end
