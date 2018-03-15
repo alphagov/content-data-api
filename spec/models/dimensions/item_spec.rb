@@ -5,24 +5,24 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '.dirty_before' do
     let(:date) { Date.new(2018, 2, 2) }
-    it 'returns the dirty items updated before the given date' do
-      expected_item = create(:dimensions_item, dirty: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
-      create(:dimensions_item, dirty: true, updated_at: Time.utc(2018, 2, 2))
-      expect(Dimensions::Item.dirty_before(date)).to match_array(expected_item)
+    it 'returns the outdated items updated before the given date' do
+      expected_item = create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
+      create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 2))
+      expect(Dimensions::Item.outdated_before(date)).to match_array(expected_item)
     end
   end
 
   describe '#new_version' do
-    it 'duplicates the old item with latest: true, dirty: false but does not save' do
+    it 'duplicates the old item with latest: true, outdated: false but does not save' do
       old_item = build(:dimensions_item,
-        dirty: true,
+        outdated: true,
         latest: true,
         raw_json: { 'the' => 'content' },
         content_id: 'c-id',
         base_path: '/the/path')
       new_version = old_item.new_version
       expect(new_version).to have_attributes(
-        dirty: false,
+        outdated: false,
         latest: true,
         raw_json: { 'the' => 'content' },
         content_id: 'c-id',
@@ -32,17 +32,17 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#dirty!' do
-    it 'sets the dirty? flag to true' do
-      item = create(:dimensions_item, dirty: false)
-      item.dirty!
-      expect(item.reload.dirty?).to be true
+  describe '#outdated!' do
+    it 'sets the outdated? flag to true' do
+      item = create(:dimensions_item, outdated: false)
+      item.outdated!
+      expect(item.reload.outdated?).to be true
     end
   end
 
   describe '#gone!' do
     it 'sets the status to "gone"' do
-      item = create(:dimensions_item, dirty: false)
+      item = create(:dimensions_item, outdated: false)
       item.gone!
       expect(item.reload.status).to eq 'gone'
     end
@@ -63,7 +63,7 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(item.reload).to have_attributes(
         content_id: content_id,
         base_path: base_path,
-        dirty: true,
+        outdated: true,
         latest: true
       )
     end

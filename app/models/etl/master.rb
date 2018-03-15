@@ -8,7 +8,7 @@ class ETL::Master
   end
 
   def process
-    create_new_version_for_dirty_items
+    create_new_version_for_outdated_items
     initialize_facts_table
     update_with_google_analytics_metrics
     update_with_feedex_metrics
@@ -16,7 +16,7 @@ class ETL::Master
 
 private
 
-  def create_new_version_for_dirty_items
+  def create_new_version_for_outdated_items
     ETL::OutdatedItems.process(date: dimensions_date.date)
   end
 

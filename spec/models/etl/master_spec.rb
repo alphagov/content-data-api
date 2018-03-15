@@ -36,7 +36,7 @@ RSpec.describe ETL::Master do
     expect(Facts::Metric.count).to eq(1)
   end
 
-  it 'updates the dirty items' do
+  it 'updates the outdated items' do
     subject.process
 
     expect(ETL::OutdatedItems).to have_received(:process)

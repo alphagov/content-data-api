@@ -16,7 +16,7 @@ class PublishingApiConsumer
 private
 
   def handle_existing(item, routing_key)
-    item.dirty!
+    item.outdated!
     item.gone! if routing_key.include? 'unpublished'
   end
 end
