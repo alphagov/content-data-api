@@ -249,6 +249,15 @@ RSpec.describe Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("Check your Council Tax band")
       end
 
+      it "returns content json if schema_name is 'travel_advice_index'" do
+        json = { schema_name: "travel_advice_index",
+          links: { children: [
+              { country: { name: "Portugal" } },
+              { country: { name: "Brazil" } }
+            ] } }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Portugal Brazil")
+      end
+
       def build_raw_json(body:, schema_name:)
         {
           schema_name: schema_name,

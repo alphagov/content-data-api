@@ -37,6 +37,7 @@ module Content
         Parsers::StatisticsAnnouncement,
         Parsers::Taxon,
         Parsers::Transaction,
+        Parsers::TravelAdviceIndex,
         Parsers::Unpublished
       ].each(&method(:register_parser))
     end
