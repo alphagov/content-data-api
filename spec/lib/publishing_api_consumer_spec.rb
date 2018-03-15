@@ -8,16 +8,16 @@ RSpec.describe PublishingApiConsumer do
   it_behaves_like 'a message queue processor'
 
   context 'when the Dimensions::Item already exists - all events but unpublish' do
-    let(:latest_item) { create(:dimensions_item, latest: true, dirty: false) }
+    let(:latest_item) { create(:dimensions_item, latest: true, outdated: false) }
 
     let(:older_item) do
       create(:dimensions_item,
         content_id: latest_item.content_id,
         base_path: latest_item.base_path,
         latest: false,
-        dirty: false)
+        outdated: false)
     end
-    let(:different_item) { create(:dimensions_item, latest: true, dirty: false) }
+    let(:different_item) { create(:dimensions_item, latest: true, outdated: false) }
     let(:base_path) { '/some/path/to' }
     let(:payload) do
       {
@@ -36,10 +36,10 @@ RSpec.describe PublishingApiConsumer do
       subject.process(message)
     end
 
-    it 'updates the latest content item with a dirty flag' do
-      expect(latest_item.reload.dirty?).to be true
-      expect(older_item.reload.dirty?).to be false
-      expect(different_item.reload.dirty?).to be false
+    it 'updates the latest content item with a outdated flag' do
+      expect(latest_item.reload.outdated?).to be true
+      expect(older_item.reload.outdated?).to be false
+      expect(different_item.reload.outdated?).to be false
     end
 
     it 'leaves the status as "live"' do
@@ -52,7 +52,7 @@ RSpec.describe PublishingApiConsumer do
   end
 
   context 'on an unpublish event' do
-    let(:latest_item) { create(:dimensions_item, latest: true, dirty: false) }
+    let(:latest_item) { create(:dimensions_item, latest: true, outdated: false) }
     let(:payload) do
       {
         'base_path' => latest_item.base_path,
@@ -70,8 +70,8 @@ RSpec.describe PublishingApiConsumer do
       subject.process(message)
     end
 
-    it 'updates the latest content item with a dirty flag' do
-      expect(latest_item.reload.dirty?).to be true
+    it 'updates the latest content item with a outdated flag' do
+      expect(latest_item.reload.outdated?).to be true
     end
 
     it 'sets the status to "gone"' do
@@ -103,7 +103,7 @@ RSpec.describe PublishingApiConsumer do
       expect(item).to have_attributes(
         base_path: payload['base_path'],
         latest: true,
-        dirty: true,
+        outdated: true,
       )
     end
 

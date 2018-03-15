@@ -8,15 +8,15 @@ class ETL::OutdatedItems
   end
 
   def process
-    create_new_version_for_dirty_items
+    create_new_version_for_outdated_items
   end
 
 private
 
   attr_reader :date
 
-  def create_new_version_for_dirty_items
-    Dimensions::Item.dirty_before(date).find_in_batches do |items|
+  def create_new_version_for_outdated_items
+    Dimensions::Item.outdated_before(date).find_in_batches do |items|
       new_items = create_new_items(items)
       import_content_details(new_items)
     end
@@ -26,7 +26,7 @@ private
     new_items = items.map(&:new_version)
     ActiveRecord::Base.transaction do
       Dimensions::Item.import(new_items)
-      Dimensions::Item.where(id: items.pluck('id')).update_all(dirty: false, latest: false)
+      Dimensions::Item.where(id: items.pluck('id')).update_all(outdated: false, latest: false)
     end
     new_items
   end

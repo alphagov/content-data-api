@@ -4,8 +4,8 @@ class Dimensions::Item < ApplicationRecord
   validates :content_id, presence: true
 
 
-  scope :dirty_before, ->(date) do
-    where('updated_at < ?', date).where(dirty: true)
+  scope :outdated_before, ->(date) do
+    where('updated_at < ?', date).where(outdated: true)
   end
 
   def get_content
@@ -15,12 +15,12 @@ class Dimensions::Item < ApplicationRecord
 
   def new_version
     new_version = self.dup
-    new_version.assign_attributes(latest: true, dirty: false)
+    new_version.assign_attributes(latest: true, outdated: false)
     new_version
   end
 
-  def dirty!
-    update_attributes!(dirty: true)
+  def outdated!
+    update_attributes!(outdated: true)
   end
 
   def gone!
@@ -32,7 +32,7 @@ class Dimensions::Item < ApplicationRecord
       content_id: content_id,
       base_path: base_path,
       latest: true,
-      dirty: true
+      outdated: true
     )
   end
 end
