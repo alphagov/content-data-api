@@ -22,12 +22,16 @@ module Content
     def register_parsers
       [
         Parsers::BodyContent,
+        Parsers::Contact,
         Parsers::EmailAlertSignup,
         Parsers::FinderEmailSignup,
         Parsers::Licence,
         Parsers::LocationTransaction,
+        Parsers::Need,
         Parsers::Parts,
         Parsers::Place,
+        Parsers::ServiceManualStandard,
+        Parsers::ServiceManualServiceToolkit,
         Parsers::ServiceManualTopic,
         Parsers::StatisticsAnnouncement,
         Parsers::Taxon,

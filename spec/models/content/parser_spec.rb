@@ -30,7 +30,7 @@ RSpec.describe Content::Parser do
           world_location_news_article
         ].freeze
         valid_types.each do |schema|
-          json = build_raw_json(schema_name: schema, body: "Body for #{schema}")
+          json = build_raw_json(schema_name: schema, body: "<p>Body for #{schema}</p>")
           expect(subject.extract_content(json.deep_stringify_keys)).to eq("Body for #{schema}"), "Incorrect body for schema: '#{schema}'"
         end
       end
@@ -155,6 +155,84 @@ RSpec.describe Content::Parser do
             { title: "Two", description: "second" }
           ] } }
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs One first Two second")
+      end
+
+      it "returns content if schema_name is 'service_manual_service_standard'" do
+        json = {
+          schema_name: 'service_manual_service_standard',
+          title: 'sm title',
+          details: { body: 'the main body' },
+          links: {
+            children: [
+              { title: 'ch1 title', description: 'ch1 desc' },
+              { title: 'ch2 title', description: 'ch2 desc' }
+            ]
+          }
+        }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq('sm title the main body ch1 title ch1 desc ch2 title ch2 desc')
+      end
+
+      it "returns content if schema name is 'service_manual_service_toolkit'" do
+        json = {
+          schema_name: 'service_manual_service_toolkit',
+          details: {
+            collections: [
+              {
+                title: 'main title 1',
+                description: 'main desc 1',
+                links: [
+                  { title: 'title link 1', description: 'desc link 1' },
+                  { title: 'title link 2', description: 'desc link 2' }
+                ]
+              }
+            ]
+          }
+        }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq('main title 1 main desc 1 title link 1 desc link 1 title link 2 desc link 2')
+      end
+
+      it "returns content if schema name is 'contact'" do
+        json = {
+          schema_name: 'contact',
+          details: {
+            description: 'main desc',
+            email_addresses: [
+              { title: 'title 1', description: '<p>desc 1</p>' },
+              { title: 'title 2', description: '<p>desc 2</p>' }
+            ],
+            more_info_email_address: '<p>more info</p>',
+            post_addresses: [
+              { title: 'post1 title', description: '<p>post1 desc</p>' },
+              { title: 'post2 title', description: '<p>post2 desc</p>' }
+            ],
+            more_info_post_address: '<p>more info post</p>',
+            phone_numbers: [
+              { title: 'phone1 title', description: '<p>phone1 desc</p>' },
+              { title: 'phone2 title', description: '<p>phone2 desc</p>' }
+            ],
+            more_info_phone_number: '<p>more info phone</p>'
+          }
+        }
+        expected = [
+          'main desc title 1 desc 1 title 2 desc 2',
+          'more info',
+          'post1 title post1 desc post2 title post2 desc',
+          'more info post',
+          'phone1 title phone1 desc phone2 title phone2 desc more info phone'
+        ].join(' ')
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
+      end
+
+      it "returns content if schema name is 'need'" do
+        json = {
+          schema_name: 'need',
+          details: {
+            role: 'the role',
+            goal: 'the goal',
+            benefit: 'the benefit'
+          }
+        }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq('the role the goal the benefit')
       end
 
       def build_raw_json(body:, schema_name:)
