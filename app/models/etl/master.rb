@@ -12,7 +12,7 @@ class ETL::Master
   def process
     time(process: :master) do
       ETL::OutdatedItems.process(date: dimensions_date.date)
-      ETL::Facts.process(date: dimensions_date.date)
+      ETL::Metrics.process(date: dimensions_date.date)
       ETL::GA.process(date: dimensions_date.date)
       ETL::Feedex.process(date: dimensions_date.date)
     end

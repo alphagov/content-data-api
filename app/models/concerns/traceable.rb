@@ -11,5 +11,9 @@ module Concerns::Traceable
       ended = Time.now
       logger.info "Process: '#{process}' ended at #{ended}, duration: #{ended - started}"
     end
+
+    def log(message:)
+      logger.info message
+    end
   end
 end

@@ -1,11 +1,13 @@
-RSpec.describe ETL::Facts do
+RSpec.describe ETL::Metrics do
   let(:date) { Date.new(2018, 3, 15) }
+
+  subject { described_class.new(date: date) }
 
   it 'creates a Metrics fact per content item' do
     create :dimensions_item, latest: true
     item = create(:dimensions_item, latest: true, content_id: 'cid1')
 
-    subject.process date: date
+    subject.process
 
     expect(Facts::Metric.count).to eq(2)
     expect(Facts::Metric.find_by(dimensions_item: item)).to have_attributes(
@@ -18,7 +20,7 @@ RSpec.describe ETL::Facts do
     create(:dimensions_item, latest: true, content_id: 'cid1')
     create(:dimensions_item, latest: false, content_id: 'cid1')
 
-    subject.process date: date
+    subject.process
 
     expect(Facts::Metric.count).to eq(1)
   end
