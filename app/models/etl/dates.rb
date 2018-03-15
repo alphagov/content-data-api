@@ -1,3 +1,5 @@
+#TODO do we need this class?
+
 class ETL::Dates
   def self.process(*args)
     new(*args).process

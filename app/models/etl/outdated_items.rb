@@ -1,4 +1,6 @@
 class ETL::OutdatedItems
+  include Concerns::Traceable
+
   def self.process(*args)
     new(*args).process
   end
@@ -8,7 +10,9 @@ class ETL::OutdatedItems
   end
 
   def process
-    create_new_version_for_outdated_items
+    time(process: :outdated_items) do
+      create_new_version_for_outdated_items
+    end
   end
 
 private

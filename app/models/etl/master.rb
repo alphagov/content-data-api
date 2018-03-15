@@ -1,4 +1,6 @@
 class ETL::Master
+  include Concerns::Traceable
+
   def self.process(*args)
     new(*args).process
   end
@@ -8,10 +10,12 @@ class ETL::Master
   end
 
   def process
-    ETL::OutdatedItems.process(date: dimensions_date.date)
-    ETL::Facts.process(date: dimensions_date.date)
-    ETL::GA.process(date: dimensions_date.date)
-    ETL::Feedex.process(date: dimensions_date.date)
+    time(process: :master) do
+      ETL::OutdatedItems.process(date: dimensions_date.date)
+      ETL::Facts.process(date: dimensions_date.date)
+      ETL::GA.process(date: dimensions_date.date)
+      ETL::Feedex.process(date: dimensions_date.date)
+    end
   end
 
 private

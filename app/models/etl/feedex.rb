@@ -1,4 +1,6 @@
 class ETL::Feedex
+  include Concerns::Traceable
+
   def self.process(*args)
     new(*args).process
   end
@@ -8,8 +10,10 @@ class ETL::Feedex
   end
 
   def process
-    extract_events
-    load_metrics
+    time(process: :feedex) do
+      extract_events
+      load_metrics
+    end
   end
 
 private

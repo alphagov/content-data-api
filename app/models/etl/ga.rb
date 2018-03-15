@@ -1,4 +1,6 @@
 class ETL::GA
+  include Concerns::Traceable
+
   def self.process(*args)
     new(*args).process
   end
@@ -8,8 +10,10 @@ class ETL::GA
   end
 
   def process
-    extract_events
-    load_metrics
+    time(process: :ga) do
+      extract_events
+      load_metrics
+    end
   end
 
 private
