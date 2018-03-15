@@ -241,6 +241,14 @@ RSpec.describe Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("No page here")
       end
 
+      it "returns content json if schema_name is 'generic_with_external_related_links'" do
+        json = { schema_name: "generic_with_external_related_links",
+          details: { external_related_links: [
+            { title: "Check your Council Tax band" }
+          ] } }
+        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Check your Council Tax band")
+      end
+
       def build_raw_json(body:, schema_name:)
         {
           schema_name: schema_name,

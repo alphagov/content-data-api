@@ -25,6 +25,7 @@ module Content
         Parsers::Contact,
         Parsers::EmailAlertSignup,
         Parsers::FinderEmailSignup,
+        Parsers::GenericWithLinks,
         Parsers::Licence,
         Parsers::LocationTransaction,
         Parsers::Need,
