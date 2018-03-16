@@ -12,11 +12,8 @@
 //
 //= require polyfills/bind
 //= require cable
-//= require expandable-content
-//= require namespaces
 
 // --- Analytics ---
-//= require analytics/google-tag-manager
 
 //= require Chart.bundle
 //= require chartkick

@@ -11,7 +11,6 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require "rspec/rails"
 require "support/authentication"
-require "support/google_analytics_factory"
 require "webmock/rspec"
 require "capybara/poltergeist"
 require "gds_api/test_helpers/publishing_api_v2"

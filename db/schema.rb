@@ -10,28 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180309144814) do
+ActiveRecord::Schema.define(version: 20180309144816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "content_items", id: :serial, force: :cascade do |t|
-    t.string "content_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "public_updated_at"
-    t.string "base_path"
-    t.string "title"
-    t.string "document_type"
-    t.string "description"
-    t.integer "one_month_page_views", default: 0
-    t.integer "number_of_pdfs", default: 0
-    t.integer "six_months_page_views", default: 0
-    t.string "publishing_app"
-    t.string "locale", null: false
-    t.integer "number_of_word_files", default: 0
-    t.index ["content_id"], name: "index_content_items_on_content_id", unique: true
-  end
 
   create_table "dimensions_dates", primary_key: "date", id: :date, force: :cascade do |t|
     t.string "date_name", null: false
@@ -117,17 +99,6 @@ ActiveRecord::Schema.define(version: 20180309144814) do
     t.integer "unique_pageviews", default: 0
     t.integer "number_of_issues", default: 0
     t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
-  end
-
-  create_table "links", id: :serial, force: :cascade do |t|
-    t.string "source_content_id"
-    t.string "link_type"
-    t.string "target_content_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["link_type"], name: "index_links_on_link_type"
-    t.index ["source_content_id"], name: "index_links_on_source_content_id"
-    t.index ["target_content_id"], name: "index_links_on_target_content_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
