@@ -10,36 +10,23 @@ RSpec.describe ETL::Master do
     Timecop.freeze(date) { example.run }
   end
 
-  before { allow(ETL::GA).to receive(:process) }
-  before { allow(ETL::Feedex).to receive(:process) }
-  before { allow(ETL::OutdatedItems).to receive(:process) }
-
-  it 'creates a Metrics fact per content item' do
-    create :dimensions_item, latest: true
-    item = create(:dimensions_item, latest: true, content_id: 'cid1')
-
-    subject.process
-
-    expect(Facts::Metric.count).to eq(2)
-    expect(Facts::Metric.find_by(dimensions_item: item)).to have_attributes(
-      dimensions_date: Dimensions::Date.for(Date.new(2018, 2, 19)),
-      dimensions_item: item,
-    )
+  before do
+    allow(ETL::GA).to receive(:process)
+    allow(ETL::Feedex).to receive(:process)
+    allow(ETL::OutdatedItems).to receive(:process)
+    allow(ETL::Metrics).to receive(:process)
   end
 
-  it 'only create a Metrics Fact entry for Content Items with latest = `true`' do
-    create(:dimensions_item, latest: true, content_id: 'cid1')
-    create(:dimensions_item, latest: false, content_id: 'cid1')
 
+  it 'creates a Metrics fact per content item' do
     subject.process
-
-    expect(Facts::Metric.count).to eq(1)
+    expect(ETL::Metrics).to have_received(:process).with(date: Date.new(2018, 2, 19))
   end
 
   it 'updates the outdated items' do
     subject.process
 
-    expect(ETL::OutdatedItems).to have_received(:process)
+    expect(ETL::OutdatedItems).to have_received(:process).with(date: Date.new(2018, 2, 19))
   end
 
   it 'update GA metrics in the Facts table' do
@@ -55,14 +42,11 @@ RSpec.describe ETL::Master do
   end
 
   it 'can run the process for other days' do
-    expect(ETL::GA).to receive(:process).with(date: Date.new(2018, 2, 25))
-    item = create(:dimensions_item, latest: true, content_id: 'cid1')
-
-    subject.process(date: Date.new(2018, 2, 25))
-
-    expect(Facts::Metric.find_by(dimensions_item: item)).to have_attributes(
-      dimensions_date: Dimensions::Date.for(Date.new(2018, 2, 25)),
-      dimensions_item: item,
-    )
+    another_date = Date.new(2017, 12, 30)
+    subject.process(date: another_date)
+    expect(ETL::Metrics).to have_received(:process).with(date: another_date)
+    expect(ETL::OutdatedItems).to have_received(:process).with(date: another_date)
+    expect(ETL::GA).to have_received(:process).with(date: another_date)
+    expect(ETL::Feedex).to have_received(:process).with(date: another_date)
   end
 end

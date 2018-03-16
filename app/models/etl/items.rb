@@ -1,4 +1,6 @@
 class ETL::Items
+  include Concerns::Traceable
+
   def self.process(*args)
     new(*args).process
   end
@@ -6,9 +8,11 @@ class ETL::Items
   attr_reader :content_items_service
 
   def process
-    raw_data = extract
-    items = transform(raw_data)
-    load(items)
+    time(process: :items) do
+      raw_data = extract
+      items = transform(raw_data)
+      load(items)
+    end
   end
 
 private

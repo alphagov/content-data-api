@@ -1,4 +1,6 @@
 class ETL::GA
+  include Concerns::Traceable
+
   def self.process(*args)
     new(*args).process
   end
@@ -8,15 +10,20 @@ class ETL::GA
   end
 
   def process
-    extract_events
-    load_metrics
+    time(process: :ga) do
+      extract_events
+      load_metrics
+    end
   end
 
 private
 
   def extract_events
+    batch = 1
     ga_service.find_in_batches(date: date) do |events|
+      log message: "Processing #{events.length} GA events in batch #{batch}"
       Events::GA.import(events, batch_size: 10_000)
+      batch += 1
     end
   end
 

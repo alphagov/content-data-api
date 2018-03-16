@@ -1,4 +1,6 @@
 class ETL::OutdatedItems
+  include Concerns::Traceable
+
   def self.process(*args)
     new(*args).process
   end
@@ -8,7 +10,9 @@ class ETL::OutdatedItems
   end
 
   def process
-    create_new_version_for_outdated_items
+    time(process: :outdated_items) do
+      create_new_version_for_outdated_items
+    end
   end
 
 private
@@ -16,7 +20,8 @@ private
   attr_reader :date
 
   def create_new_version_for_outdated_items
-    Dimensions::Item.outdated_before(date).find_in_batches do |items|
+    Dimensions::Item.outdated_before(date).find_in_batches.with_index do |items, index|
+      log message: "processing #{items.length} outdated items in batch: #{index}"
       new_items = create_new_items(items)
       import_content_details(new_items)
     end

@@ -1,4 +1,6 @@
 class ETL::Feedex
+  include Concerns::Traceable
+
   def self.process(*args)
     new(*args).process
   end
@@ -8,8 +10,10 @@ class ETL::Feedex
   end
 
   def process
-    extract_events
-    load_metrics
+    time(process: :feedex) do
+      extract_events
+      load_metrics
+    end
   end
 
 private
@@ -17,8 +21,11 @@ private
   BATCH_SIZE = 10_000
 
   def extract_events
+    batch = 1
     feedex_service.find_in_batches do |events|
+      log message: "Processing #{events.length} feedex events in batch #{batch}"
       Events::Feedex.import(events, batch_size: BATCH_SIZE)
+      batch += 1
     end
   end
 
