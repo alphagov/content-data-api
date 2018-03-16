@@ -20,7 +20,6 @@ class ETL::Master
 
 private
 
-
   def dimensions_date
     @dimensions_date ||= Dimensions::Date.for(date)
   end

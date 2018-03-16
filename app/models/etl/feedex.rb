@@ -23,7 +23,7 @@ private
   def extract_events
     batch = 1
     feedex_service.find_in_batches do |events|
-      log message: "Processing #{events.length} feedex events in batch #{batch}"
+      log process: :feedex, message: "Processing #{events.length} events in batch #{batch}"
       Events::Feedex.import(events, batch_size: BATCH_SIZE)
       batch += 1
     end
