@@ -7,7 +7,7 @@ class Importers::ContentDetails
     new(*args).run
   end
 
-  def initialize(content_id, base_path)
+  def initialize(content_id, base_path, _ = {})
     @content_id = content_id
     @base_path = base_path
     @items_service = ItemsService.new
