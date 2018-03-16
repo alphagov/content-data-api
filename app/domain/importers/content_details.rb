@@ -1,7 +1,7 @@
 require 'odyssey'
 
 class Importers::ContentDetails
-  attr_reader :items_service, :content_id, :base_path, :content_quality_service
+  attr_reader :items_service, :content_id, :base_path
 
   def self.run(*args)
     new(*args).run
@@ -11,7 +11,6 @@ class Importers::ContentDetails
     @content_id = content_id
     @base_path = base_path
     @items_service = ItemsService.new
-    @content_quality_service = ContentQualityService.new
   end
 
   def run

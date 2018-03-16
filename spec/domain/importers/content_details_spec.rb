@@ -12,18 +12,6 @@ RSpec.describe Importers::ContentDetails do
       allow(subject.items_service).to receive(:fetch_raw_json).and_return('details' => 'the-json')
       allow_any_instance_of(Dimensions::Item).to receive(:get_content).and_return('the-entire-body')
       allow(ImportQualityMetricsJob).to receive(:perform_async)
-      allow(subject.content_quality_service).to receive(:run).with('the-entire-body').and_return(
-        readability_score: 1,
-        contractions_count: 2,
-        equality_count: 3,
-        indefinite_article_count: 4,
-        passive_count: 5,
-        profanities_count: 6,
-        redundant_acronyms_count: 7,
-        repeated_words_count: 8,
-        simplify_count: 9,
-        spell_count: 10
-      )
     end
 
     it 'populates raw_json field of latest version of dimensions_items' do
