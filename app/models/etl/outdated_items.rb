@@ -21,7 +21,7 @@ private
 
   def create_new_version_for_outdated_items
     Dimensions::Item.outdated_before(date).find_in_batches.with_index do |items, index|
-      log message: "processing #{items.length} outdated items in batch: #{index}"
+      log process: :outdated_items, message: "processing #{items.length} items in batch: #{index}"
       new_items = create_new_items(items)
       import_content_details(new_items)
     end
