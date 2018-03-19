@@ -12,7 +12,7 @@ RSpec.describe Importers::ContentDetails do
     before do
       allow(subject.items_service).to receive(:fetch_raw_json).and_return(raw_json)
       allow(ImportQualityMetricsJob).to receive(:perform_async)
-      allow(Importers::ContentParser).to receive(:parse).and_return(
+      allow(Metadata::Parser).to receive(:parse).and_return(
         raw_json: raw_json,
         number_of_pdfs: 99,
         number_of_word_files: 94,

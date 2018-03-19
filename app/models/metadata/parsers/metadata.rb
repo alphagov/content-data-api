@@ -1,4 +1,4 @@
-class Importers::Metadata
+class Metadata::Parsers::Metadata
   def self.parse(formatted_response)
     formatted_response.slice(
       'content_id',

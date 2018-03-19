@@ -1,4 +1,4 @@
-RSpec.describe Importers::PrimaryOrganisation do
+RSpec.describe Metadata::Parsers::PrimaryOrganisation do
   subject { described_class }
   it 'populates the primary org' do
     raw_json = {

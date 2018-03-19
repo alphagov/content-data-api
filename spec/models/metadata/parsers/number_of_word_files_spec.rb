@@ -1,6 +1,6 @@
 module Performance
-  RSpec.describe Metrics::NumberOfWordFiles do
-    subject { Metrics::NumberOfWordFiles }
+  RSpec.describe Metadata::Parsers::NumberOfWordFiles do
+    subject { Metadata::Parsers::NumberOfWordFiles }
 
     describe "#parse" do
       it "returns the number of word files present" do

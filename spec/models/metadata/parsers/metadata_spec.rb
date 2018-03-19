@@ -1,4 +1,4 @@
-RSpec.describe Importers::Metadata do
+RSpec.describe Metadata::Parsers::Metadata do
   subject { described_class }
   let(:raw_json) do
     { 'content_id' => '09hjasdfoj234',

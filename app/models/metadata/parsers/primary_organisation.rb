@@ -1,4 +1,4 @@
-class Importers::PrimaryOrganisation
+class Metadata::Parsers::PrimaryOrganisation
   def self.parse(raw_json)
     return {} unless raw_json
     links = raw_json['links']

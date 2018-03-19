@@ -17,7 +17,7 @@ class Importers::ContentDetails
     item = Dimensions::Item.find_by(content_id: content_id, latest: true)
 
     item_raw_json = items_service.fetch_raw_json(base_path)
-    attributes = Importers::ContentParser.parse(item_raw_json)
+    attributes = Metadata::Parser.parse(item_raw_json)
     item.update_attributes(attributes)
 
     ImportQualityMetricsJob.perform_async(item.id)

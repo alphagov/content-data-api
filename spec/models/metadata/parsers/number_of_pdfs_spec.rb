@@ -1,8 +1,8 @@
 require 'gds_api/test_helpers/content_store'
 module Performance
-  RSpec.describe Metrics::NumberOfPdfs do
+  RSpec.describe Metadata::Parsers::NumberOfPdfs do
     include GdsApi::TestHelpers::ContentStore
-    subject { Metrics::NumberOfPdfs }
+    subject { Metadata::Parsers::NumberOfPdfs }
 
     let(:response_without_document_keys) do
       {

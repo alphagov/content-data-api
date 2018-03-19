@@ -1,11 +1,11 @@
-class Importers::ContentParser
+class Metadata::Parser
   include Singleton
   def initialize
     @parsers = [
-      Performance::Metrics::NumberOfPdfs,
-      Performance::Metrics::NumberOfWordFiles,
-      Importers::Metadata,
-      Importers::PrimaryOrganisation
+      Metadata::Parsers::NumberOfPdfs,
+      Metadata::Parsers::NumberOfWordFiles,
+      Metadata::Parsers::Metadata,
+      Metadata::Parsers::PrimaryOrganisation
     ]
   end
 
