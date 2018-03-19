@@ -4,7 +4,8 @@ class Importers::ContentParser
     @parsers = [
       Performance::Metrics::NumberOfPdfs,
       Performance::Metrics::NumberOfWordFiles,
-      Importers::Metadata
+      Importers::Metadata,
+      Importers::PrimaryOrganisation
     ]
   end
 

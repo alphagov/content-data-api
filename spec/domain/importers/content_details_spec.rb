@@ -21,6 +21,9 @@ RSpec.describe Importers::ContentDetails do
         'content_purpose_document_supertype' => 'guide',
         'first_published_at' => '2012-10-03T13:19:55.000+00:00',
         'public_updated_at' => '2015-06-03T11:13:44.000+00:00',
+        primary_organisation_title: 'Home Office',
+        primary_organisation_content_id: 'cont-id-1',
+        primary_organisation_withdrawn: false
       )
     end
 

@@ -32,10 +32,6 @@ private
   def do_nothing; end
 
   def format_response(item_raw_json)
-    Importers::ContentParser.parse(item_raw_json).merge(extract_primary_organisation(item_raw_json['links']))
-  end
-
-  def extract_primary_organisation(links)
-    Importers::PrimaryOrganisation.parse(links)
+    Importers::ContentParser.parse(item_raw_json)
   end
 end
