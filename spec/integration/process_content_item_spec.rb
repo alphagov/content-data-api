@@ -103,7 +103,7 @@ RSpec.describe 'Process content item' do
       simplify: { 'count' => 9 },
       spell: { 'count' => 10 }
     }
-    stub_request(:post, 'https://gov-quality-metrics.herokuapp.com/metrics').
+    stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics').
       with(
         body: "{\"content\":\"#{item_content}\"}",
         headers: { 'Content-Type' => 'application/json' }

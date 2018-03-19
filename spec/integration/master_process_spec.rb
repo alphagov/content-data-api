@@ -104,7 +104,7 @@ RSpec.describe 'Master process spec' do
       passive: { 'count' => 5 },
       repeated_words: { 'count' => 8 },
     }
-    stub_request(:post, 'https://gov-quality-metrics.herokuapp.com/metrics').
+    stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics').
       with(
         body: { content: item_content }.to_json,
         headers: { 'Content-Type' => 'application/json' }
