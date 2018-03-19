@@ -8,7 +8,7 @@ class ContentQualityService
 
 private
 
-  URL = 'https://gov-quality-metrics.herokuapp.com/metrics'.freeze
+  URL = 'https://govuk-content-quality-metrics.cloudapps.digital/metrics'.freeze
 
   def fetch(content)
     response = HTTParty.post(
