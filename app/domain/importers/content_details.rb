@@ -31,27 +31,11 @@ private
 
   def do_nothing; end
 
-  def format_metadata(raw_json)
-    Importers::Metadata.parse(raw_json)
-  end
-
   def format_response(item_raw_json)
-    metadata = format_metadata(item_raw_json)
-    metadata.merge(
-      number_of_pdfs: number_of_pdfs(item_raw_json['details']),
-      number_of_word_files: number_of_word_files(item_raw_json['details'])
-    ).merge(extract_primary_organisation(item_raw_json['links']))
+    Importers::ContentParser.parse(item_raw_json).merge(extract_primary_organisation(item_raw_json['links']))
   end
 
   def extract_primary_organisation(links)
     Importers::PrimaryOrganisation.parse(links)
-  end
-
-  def number_of_pdfs(response_details)
-    Performance::Metrics::NumberOfPdfs.parse(response_details)
-  end
-
-  def number_of_word_files(response_details)
-    Performance::Metrics::NumberOfWordFiles.parse(response_details)
   end
 end

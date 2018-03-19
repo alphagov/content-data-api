@@ -12,6 +12,16 @@ RSpec.describe Importers::ContentDetails do
       allow(subject.items_service).to receive(:fetch_raw_json).and_return('details' => 'the-json')
       allow_any_instance_of(Dimensions::Item).to receive(:get_content).and_return('the-entire-body')
       allow(ImportQualityMetricsJob).to receive(:perform_async)
+      allow(Importers::ContentParser).to receive(:parse).and_return(
+        number_of_pdfs: 99,
+        number_of_word_files: 94,
+        'content_id' => '09hjasdfoj234',
+        'title' => 'A guide to coding',
+        'document_type' => 'answer',
+        'content_purpose_document_supertype' => 'guide',
+        'first_published_at' => '2012-10-03T13:19:55.000+00:00',
+        'public_updated_at' => '2015-06-03T11:13:44.000+00:00',
+      )
     end
 
     it 'populates raw_json field of latest version of dimensions_items' do
@@ -22,15 +32,11 @@ RSpec.describe Importers::ContentDetails do
     end
 
     it 'stores the number of PDF attachments' do
-      allow(Performance::Metrics::NumberOfPdfs).to receive(:parse).with('the-json').and_return(99)
-
       subject.run
       expect(latest_dimension_item.reload.number_of_pdfs).to eq 99
     end
 
     it 'stores the number of Word file attachments' do
-      allow(Performance::Metrics::NumberOfWordFiles).to receive(:parse).with('the-json').and_return(94)
-
       subject.run
       expect(latest_dimension_item.reload.number_of_word_files).to eq 94
     end
@@ -41,15 +47,6 @@ RSpec.describe Importers::ContentDetails do
     end
 
     it 'populates the metadata' do
-      allow(Importers::Metadata).to receive(:parse).and_return(
-        'content_id' => '09hjasdfoj234',
-        'title' => 'A guide to coding',
-        'document_type' => 'answer',
-        'content_purpose_document_supertype' => 'guide',
-        'first_published_at' => '2012-10-03T13:19:55.000+00:00',
-        'public_updated_at' => '2015-06-03T11:13:44.000+00:00',
-      )
-
       subject.run
       latest_dimension_item.reload
       expect(latest_dimension_item).to have_attributes(
