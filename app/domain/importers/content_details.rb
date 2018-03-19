@@ -17,8 +17,8 @@ class Importers::ContentDetails
     item = Dimensions::Item.find_by(content_id: content_id, latest: true)
 
     item_raw_json = items_service.fetch_raw_json(base_path)
-    metadata = format_response(item_raw_json)
-    item.update_attributes(metadata.merge!(raw_json: item_raw_json))
+    attributes = Importers::ContentParser.parse(item_raw_json)
+    item.update_attributes(attributes)
 
     ImportQualityMetricsJob.perform_async(item.id)
   rescue GdsApi::HTTPGone
@@ -31,7 +31,4 @@ private
 
   def do_nothing; end
 
-  def format_response(item_raw_json)
-    Importers::ContentParser.parse(item_raw_json)
-  end
 end
