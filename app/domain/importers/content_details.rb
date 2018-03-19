@@ -31,15 +31,8 @@ private
 
   def do_nothing; end
 
-  def format_metadata(formatted_response)
-    formatted_response.slice(
-      'content_id',
-      'title',
-      'document_type',
-      'content_purpose_document_supertype',
-      'first_published_at',
-      'public_updated_at',
-    )
+  def format_metadata(raw_json)
+    Importers::Metadata.parse(raw_json)
   end
 
   def format_response(item_raw_json)

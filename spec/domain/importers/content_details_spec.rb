@@ -41,7 +41,7 @@ RSpec.describe Importers::ContentDetails do
     end
 
     it 'populates the metadata' do
-      allow(subject.items_service).to receive(:fetch_raw_json).and_return(
+      allow(Importers::Metadata).to receive(:parse).and_return(
         'content_id' => '09hjasdfoj234',
         'title' => 'A guide to coding',
         'document_type' => 'answer',
@@ -52,12 +52,14 @@ RSpec.describe Importers::ContentDetails do
 
       subject.run
       latest_dimension_item.reload
-      expect(latest_dimension_item.title).to eq('A guide to coding')
-      expect(latest_dimension_item.content_id).to eq('09hjasdfoj234')
-      expect(latest_dimension_item.document_type).to eq('answer')
-      expect(latest_dimension_item.content_purpose_document_supertype).to eq('guide')
-      expect(latest_dimension_item.first_published_at).to eq(Time.new.strftime('2012-10-03T13:19:55.000+00:00'))
-      expect(latest_dimension_item.public_updated_at).to eq(Time.new.strftime('2015-06-03T11:13:44.000+00:00'))
+      expect(latest_dimension_item).to have_attributes(
+        'content_id' => '09hjasdfoj234',
+        'title' => 'A guide to coding',
+        'document_type' => 'answer',
+        'content_purpose_document_supertype' => 'guide',
+        'first_published_at' => Time.new(2012, 10, 3, 13, 19, 55),
+        'public_updated_at' => Time.new(2015, 6, 3, 11, 13, 44)
+      )
     end
 
     it 'populates the primary_organisation' do
