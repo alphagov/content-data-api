@@ -30,5 +30,4 @@ class Importers::ContentDetails
 private
 
   def do_nothing; end
-
 end

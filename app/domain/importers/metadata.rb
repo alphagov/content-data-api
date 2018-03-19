@@ -7,6 +7,6 @@ class Importers::Metadata
       'content_purpose_document_supertype',
       'first_published_at',
       'public_updated_at',
-    )
+    ).symbolize_keys
   end
 end
