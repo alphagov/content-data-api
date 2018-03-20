@@ -1,4 +1,4 @@
-module Performance::Metrics::NumberOfFiles
+module Metadata::Parsers::NumberOfFiles
   def self.extract_documents(content_item_details)
     if content_item_details.is_a?(Hash)
       details = content_item_details.symbolize_keys
