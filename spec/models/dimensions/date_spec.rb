@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Dimensions::Date, type: :model do
+  let(:date) { ::Date.new(2017, 12, 21) }
   it { is_expected.to validate_presence_of(:date) }
 
   it { is_expected.to validate_presence_of(:date_name) }
@@ -82,8 +83,6 @@ RSpec.describe Dimensions::Date, type: :model do
   describe '.build' do
     subject { described_class.build(date) }
 
-    let(:date) { ::Date.new(2017, 12, 21) }
-
     it "builds a date dimension from the date" do
       is_expected.to have_attributes(
         date: ::Date.new(2017, 12, 21),
@@ -124,6 +123,20 @@ RSpec.describe Dimensions::Date, type: :model do
 
         expect(Dimensions::Date.count).to eq(1)
         expect(dimension_date.date).to eq(date)
+      end
+    end
+  end
+
+  describe '.exists?' do
+    context 'when a dimension exists for the the given date' do
+      it 'returns true' do
+        create(:dimensions_date, date: date)
+        expect(Dimensions::Date.exists?(date)).to eq true
+      end
+    end
+    context 'when a dimension does not exist for the the given date' do
+      it 'returns false' do
+        expect(Dimensions::Date.exists?(date)).to eq false
       end
     end
   end
