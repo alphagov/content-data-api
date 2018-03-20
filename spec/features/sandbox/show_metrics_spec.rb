@@ -21,11 +21,11 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
   let(:metric5) { create :metric, dimensions_item: item2, dimensions_date: day2 }
 
   scenario 'Show aggregated metrics' do
-    metric1.update pageviews: 10, unique_pageviews: 10, number_of_issues: 2
-    metric2.update pageviews: 10, unique_pageviews: 10, number_of_issues: 4
-    metric3.update pageviews: 20, unique_pageviews: 20, number_of_issues: 6
-    metric4.update pageviews: 20, unique_pageviews: 20, number_of_issues: 8
-    metric5.update pageviews: 30, unique_pageviews: 30, number_of_issues: 10
+    metric1.update pageviews: 10, unique_pageviews: 10, feedex_comments: 2
+    metric2.update pageviews: 10, unique_pageviews: 10, feedex_comments: 4
+    metric3.update pageviews: 20, unique_pageviews: 20, feedex_comments: 6
+    metric4.update pageviews: 20, unique_pageviews: 20, feedex_comments: 8
+    metric5.update pageviews: 30, unique_pageviews: 30, feedex_comments: 10
 
     item1.update number_of_pdfs: 2, number_of_word_files: 1, spell_count: 2, readability_score: 1
     item2.update number_of_pdfs: 4, number_of_word_files: 2, spell_count: 6, readability_score: 5

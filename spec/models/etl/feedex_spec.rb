@@ -19,25 +19,25 @@ RSpec.describe ETL::Feedex do
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(number_of_issues: 21)
-      expect(fact2.reload).to have_attributes(number_of_issues: 11)
+      expect(fact1.reload).to have_attributes(feedex_comments: 21)
+      expect(fact2.reload).to have_attributes(feedex_comments: 11)
     end
 
     it 'does not update metrics for other days' do
-      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date, number_of_issues: 1
+      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date, feedex_comments: 1
       day_before = date - 1
       described_class.process(date: day_before)
 
-      expect(fact1.reload).to have_attributes(number_of_issues: 1)
+      expect(fact1.reload).to have_attributes(feedex_comments: 1)
     end
 
     it 'does not update metrics for other items' do
       item = create :dimensions_item, base_path: '/non-matching-path', latest: true
-      fact = create :metric, dimensions_item: item, dimensions_date: dimensions_date, number_of_issues: 9
+      fact = create :metric, dimensions_item: item, dimensions_date: dimensions_date, feedex_comments: 9
 
       described_class.process(date: date)
 
-      expect(fact.reload).to have_attributes(number_of_issues: 9)
+      expect(fact.reload).to have_attributes(feedex_comments: 9)
     end
 
     it 'deletes the events that matches the base_path of an item' do
@@ -52,8 +52,8 @@ RSpec.describe ETL::Feedex do
 
   context 'when there are events from other days' do
     before do
-      Events::Feedex.create(date: date - 1, page_path: '/path1', number_of_issues: 1)
-      Events::Feedex.create(date: date - 2, page_path: '/path1', number_of_issues: 2)
+      Events::Feedex.create(date: date - 1, page_path: '/path1', feedex_comments: 1)
+      Events::Feedex.create(date: date - 2, page_path: '/path1', feedex_comments: 2)
     end
 
     it 'only updates metrics for the current day' do
@@ -61,7 +61,7 @@ RSpec.describe ETL::Feedex do
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(number_of_issues: 21)
+      expect(fact1.reload).to have_attributes(feedex_comments: 21)
     end
 
     it 'only deletes the events for the current day that matches' do
@@ -80,12 +80,12 @@ private
       {
         'date' => '2018-02-20',
         'page_path' => '/path1',
-        'number_of_issues' => '21'
+        'feedex_comments' => '21'
       },
       {
         'date' => '2018-02-20',
         'page_path' => '/path2',
-        'number_of_issues' => '11'
+        'feedex_comments' => '11'
       },
     ]
   end

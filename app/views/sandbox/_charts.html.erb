@@ -20,7 +20,7 @@
   <% if params[:feedex_issues].present? %>
       <div class="feedex">
         <h3>Number of Feedex issues</h3>
-        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:number_of_issues), height: '150px') %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:feedex_comments), height: '150px') %>
       </div>
   <% end %>
   <% if params[:number_of_pdfs].present? %>

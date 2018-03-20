@@ -40,10 +40,10 @@ private
   def load_metrics_query(date_to_s)
     <<~SQL
       UPDATE facts_metrics
-      SET number_of_issues = s.number_of_issues
+      SET feedex_comments = s.feedex_comments
       FROM (
         SELECT base_path,
-               number_of_issues,
+               feedex_comments,
                dimensions_items.id
         FROM events_feedexes, dimensions_items
         WHERE page_path = base_path
