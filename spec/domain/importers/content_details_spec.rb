@@ -20,8 +20,8 @@ RSpec.describe Importers::ContentDetails do
         title: 'A guide to coding',
         document_type: 'answer',
         content_purpose_document_supertype: 'guide',
-        first_published_at: '2012-10-03T13:19:55.000+00:00',
-        public_updated_at: '2015-06-03T11:13:44.000+00:00',
+        first_published_at: Time.new(2012, 10, 3, 13, 19, 55),
+        public_updated_at: Time.new(2015, 6, 3, 11, 13, 44),
         primary_organisation_title: 'Home Office',
         primary_organisation_content_id: 'cont-id-1',
         primary_organisation_withdrawn: false
