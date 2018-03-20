@@ -55,6 +55,10 @@ RSpec.describe 'Process content item' do
       primary_organisation_content_id: 'cont-id-1',
       primary_organisation_withdrawn: false
     )
+
+    expect(item).to have_attributes(
+      content_hash: 'bfce49ef213b4f9f82a6a46caae2d81a4bcda1f2'
+    )
   end
 
   def stub_item_metadata_in_content_store

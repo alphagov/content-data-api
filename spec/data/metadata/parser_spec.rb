@@ -1,6 +1,6 @@
 RSpec.describe Metadata::Parser do
   let(:raw_json) { { 'details' => 'the-json' } }
-
+  let(:content_hash) { '94e66df8cd09d410c62d9e0dc59d3a884e458e05' }
   subject { described_class.instance }
   before :each do
     allow(Metadata::Parsers::NumberOfPdfs).to receive(:parse).with(raw_json).and_return(number_of_pdfs: 99)
@@ -13,6 +13,7 @@ RSpec.describe Metadata::Parser do
       'first_published_at' => '2012-10-03T13:19:55.000+00:00',
       'public_updated_at' => '2015-06-03T11:13:44.000+00:00',
     )
+    allow(Metadata::Parsers::ContentHash).to receive(:parse).and_return(content_hash: content_hash)
   end
 
   it 'populates raw_json field of latest version of dimensions_items' do
@@ -45,5 +46,12 @@ RSpec.describe Metadata::Parser do
       'public_updated_at' => '2015-06-03T11:13:44.000+00:00'
     )
     expect(Metadata::Parsers::Metadata).to have_received(:parse).with(raw_json)
+  end
+
+  it 'populates the content hash' do
+    expect(subject.parse(raw_json)).to include(
+      content_hash: content_hash
+    )
+    expect(Metadata::Parsers::ContentHash).to have_received(:parse).with(raw_json)
   end
 end

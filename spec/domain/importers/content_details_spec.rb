@@ -24,7 +24,8 @@ RSpec.describe Importers::ContentDetails do
         public_updated_at: Time.new(2015, 6, 3, 11, 13, 44),
         primary_organisation_title: 'Home Office',
         primary_organisation_content_id: 'cont-id-1',
-        primary_organisation_withdrawn: false
+        primary_organisation_withdrawn: false,
+        content_hash: 'ContentHashContentHash'
       )
     end
 
@@ -49,7 +50,8 @@ RSpec.describe Importers::ContentDetails do
         public_updated_at: Time.new(2015, 6, 3, 11, 13, 44),
         primary_organisation_title: 'Home Office',
         primary_organisation_content_id: 'cont-id-1',
-        primary_organisation_withdrawn: false
+        primary_organisation_withdrawn: false,
+        content_hash: 'ContentHashContentHash'
       )
     end
 
