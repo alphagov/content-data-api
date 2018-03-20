@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 RSpec.describe ETL::Metrics do
   let(:date) { Date.new(2018, 3, 15) }
 
