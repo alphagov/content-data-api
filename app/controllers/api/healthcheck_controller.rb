@@ -8,7 +8,7 @@ class Api::HealthcheckController < ApiController
       checks: {
         database: database
       },
-      status: database
+      status: :ok
     }
 
     render json: healthcheck
