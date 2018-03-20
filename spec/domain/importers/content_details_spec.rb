@@ -5,7 +5,13 @@ RSpec.describe Importers::ContentDetails do
   subject { Importers::ContentDetails.new(content_id, base_path) }
 
   context 'Import contents' do
-    let!(:latest_dimension_item) { create(:dimensions_item, content_id: content_id, base_path: base_path, latest: true, raw_json: nil) }
+    let(:existing_content_hash) { 'ContentHashContentHash' }
+    let(:parsed_content_hash) { 'NewContentHash' }
+    let!(:latest_dimension_item) do
+      create(:dimensions_item,
+        content_id: content_id, base_path: base_path,
+        latest: true, raw_json: nil, content_hash: existing_content_hash)
+    end
     let!(:older_dimension_item) { create(:dimensions_item, content_id: content_id, base_path: base_path, latest: false, raw_json: nil) }
     let(:raw_json) { { 'details' => 'the-json' } }
 
@@ -25,7 +31,7 @@ RSpec.describe Importers::ContentDetails do
         primary_organisation_title: 'Home Office',
         primary_organisation_content_id: 'cont-id-1',
         primary_organisation_withdrawn: false,
-        content_hash: 'ContentHashContentHash'
+        content_hash: parsed_content_hash,
       )
     end
 
@@ -51,13 +57,24 @@ RSpec.describe Importers::ContentDetails do
         primary_organisation_title: 'Home Office',
         primary_organisation_content_id: 'cont-id-1',
         primary_organisation_withdrawn: false,
-        content_hash: 'ContentHashContentHash'
+        content_hash: parsed_content_hash,
       )
     end
 
-    it 'triggers a quality metrics job' do
-      expect(ImportQualityMetricsJob).to receive(:perform_async).with(latest_dimension_item.id)
-      subject.run
+    context 'when the content has changed' do
+      let(:parsed_content_hash) { 'ADifferentContentHash' }
+      it 'triggers a quality metrics job' do
+        subject.run
+        expect(ImportQualityMetricsJob).to have_received(:perform_async).with(latest_dimension_item.id)
+      end
+    end
+
+    context 'when the content has not changed' do
+      let(:parsed_content_hash) { existing_content_hash }
+      it "doesn't run a quality metrics job" do
+        subject.run
+        expect(ImportQualityMetricsJob).not_to have_received(:perform_async)
+      end
     end
   end
 

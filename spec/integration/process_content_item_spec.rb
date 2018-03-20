@@ -13,8 +13,13 @@ RSpec.describe 'Process content item' do
   let(:content_id) { 'id1' }
   let(:base_path) { '/the-base-path' }
   let(:item_content) { 'This is the content.' }
+  let(:content_hash) { 'bfce49ef213b4f9f82a6a46caae2d81a4bcda1f2' }
 
-  let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path }
+  let!(:item) {
+    create :dimensions_item,
+    content_id: content_id, base_path: base_path,
+    content_hash: 'OldContentHash'
+  }
 
   it 'stores metadata in quality metrics for a content item' do
     stub_item_metadata_in_content_store
@@ -57,7 +62,7 @@ RSpec.describe 'Process content item' do
     )
 
     expect(item).to have_attributes(
-      content_hash: 'bfce49ef213b4f9f82a6a46caae2d81a4bcda1f2'
+      content_hash: content_hash
     )
   end
 

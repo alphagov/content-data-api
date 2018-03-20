@@ -6,7 +6,7 @@ class Metadata::Parser
       Metadata::Parsers::NumberOfWordFiles,
       Metadata::Parsers::Metadata,
       Metadata::Parsers::PrimaryOrganisation,
-      Metadata::Parsers::ContentHash
+      Metadata::Parsers::ContentHash,
     ]
   end
 
