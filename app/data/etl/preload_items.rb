@@ -18,8 +18,7 @@ class ETL::PreloadItems
 private
 
   def extract
-    fields = %w[content_id base_path title description]
-    ItemsService.new.fetch_all_with_default_locale_only(fields)
+    ItemsService.new.fetch_all
   end
 
   def transform(raw_data)
@@ -27,6 +26,7 @@ private
       {
         content_id: item[:content_id],
         base_path: item[:base_path],
+        locale: item[:locale],
         latest: true,
       }
     end

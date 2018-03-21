@@ -4,7 +4,7 @@ require 'gds-api-adapters'
 RSpec.describe ETL::PreloadItems do
   include GdsApi::TestHelpers::PublishingApiV2
   subject { described_class }
-  let(:fields) { %i[base_path content_id description title] }
+  let(:fields) { %i[base_path content_id locale] }
   let(:content_items) do
     [
       {
