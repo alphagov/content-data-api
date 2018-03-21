@@ -70,8 +70,8 @@ ActiveRecord::Schema.define(version: 20180323170720) do
     t.string "primary_organisation_content_id"
     t.boolean "primary_organisation_withdrawn"
     t.string "content_hash"
+    t.string "locale"
     t.datetime "outdated_at"
-    t.index ["latest", "content_id"], name: "idx_latest_content_id"
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
@@ -102,7 +102,6 @@ ActiveRecord::Schema.define(version: 20180323170720) do
     t.integer "pageviews", default: 0
     t.integer "unique_pageviews", default: 0
     t.integer "feedex_comments", default: 0
-    t.index ["dimensions_date_id", "dimensions_item_id"], name: "idx_facts_metrics_on_dimensions_date_id_dimensios_items_id"
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_date_item_id"
     t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
   end
