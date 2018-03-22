@@ -16,7 +16,7 @@ RSpec.describe 'Initial load from publishing api' do
   end
 
   it 'something' do
-    ETL::Items.process
+    ETL::PreloadItems.process
 
     expect(Dimensions::Item.where(content_id: 'cont-1').count).to eq(2)
     expect(Dimensions::Item.where(locale: 'en').count).to eq(2)

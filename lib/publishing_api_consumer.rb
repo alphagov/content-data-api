@@ -2,8 +2,9 @@ class PublishingApiConsumer
   def process(message)
     content_id = message.payload['content_id']
     base_path = message.payload['base_path']
+    locale = message.payload['locale']
 
-    item = Dimensions::Item.find_by(content_id: content_id, latest: true)
+    item = Dimensions::Item.by_natural_key(content_id: content_id, locale: locale).first
     if item
       handle_existing(item, message.delivery_info.routing_key)
     else

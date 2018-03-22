@@ -5,6 +5,10 @@ class Dimensions::Item < ApplicationRecord
 
   validates :content_id, presence: true
 
+  scope :by_natural_key, ->(content_id:, locale:) do
+    where(content_id: content_id, locale: locale, latest: true)
+  end
+
   def get_content
     return if raw_json.blank?
     Content::Parser.extract_content(raw_json)
