@@ -5,7 +5,8 @@ class Metadata::Parser
       Metadata::Parsers::NumberOfPdfs,
       Metadata::Parsers::NumberOfWordFiles,
       Metadata::Parsers::Metadata,
-      Metadata::Parsers::PrimaryOrganisation
+      Metadata::Parsers::PrimaryOrganisation,
+      Metadata::Parsers::ContentHash,
     ]
   end
 

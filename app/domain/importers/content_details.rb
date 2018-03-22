@@ -22,9 +22,10 @@ class Importers::ContentDetails
 
         item_raw_json = items_service.fetch_raw_json(base_path)
         attributes = Metadata::Parser.parse(item_raw_json)
+        content_changed = item.content_hash != attributes[:content_hash]
         item.update_attributes(attributes)
 
-        ImportQualityMetricsJob.perform_async(item.id)
+        ImportQualityMetricsJob.perform_async(item.id) if content_changed
       end
     rescue GdsApi::HTTPGone
       item.gone!

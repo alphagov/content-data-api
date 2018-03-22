@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180315144816) do
+ActiveRecord::Schema.define(version: 20180319161814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20180315144816) do
     t.string "primary_organisation_title"
     t.string "primary_organisation_content_id"
     t.boolean "primary_organisation_withdrawn"
+    t.string "content_hash"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
   end

@@ -39,7 +39,7 @@ module Content
         Parsers::Taxon,
         Parsers::Transaction,
         Parsers::TravelAdviceIndex,
-        Parsers::Unpublished
+        Parsers::Unpublished,
       ].each(&method(:register_parser))
     end
 
