@@ -8,7 +8,7 @@ class PublishingApiConsumer
     if item
       handle_existing(item, message.delivery_info.routing_key)
     else
-      Dimensions::Item.create_empty(content_id, base_path)
+      Dimensions::Item.create_empty(content_id: content_id, base_path: base_path, locale: locale)
     end
 
     message.ack

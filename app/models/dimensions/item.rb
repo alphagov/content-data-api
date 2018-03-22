@@ -24,10 +24,11 @@ class Dimensions::Item < ApplicationRecord
     update_attributes(status: 'gone')
   end
 
-  def self.create_empty(content_id, base_path)
+  def self.create_empty(content_id:, base_path:, locale:)
     create(
       content_id: content_id,
       base_path: base_path,
+      locale: locale,
       latest: true,
       outdated: true
     )

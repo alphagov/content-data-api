@@ -14,18 +14,20 @@ RSpec.describe 'Process content item' do
   let(:base_path) { '/the-base-path' }
   let(:item_content) { 'This is the content.' }
   let(:content_hash) { 'bfce49ef213b4f9f82a6a46caae2d81a4bcda1f2' }
+  let(:locale) { 'en' }
 
   let!(:item) {
     create :dimensions_item,
-    content_id: content_id, base_path: base_path,
-    content_hash: 'OldContentHash'
+      content_id: content_id, base_path: '/old/base/path',
+      locale: locale,
+      content_hash: 'OldContentHash'
   }
 
   it 'stores metadata in quality metrics for a content item' do
     stub_item_metadata_in_content_store
     stub_quality_metrics_in_heroku
 
-    Importers::ContentDetails.run(content_id, base_path)
+    Importers::ContentDetails.run(content_id, base_path, locale)
 
     expect(item.reload).to have_attributes(
       content_id: content_id,

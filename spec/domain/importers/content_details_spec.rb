@@ -2,14 +2,21 @@ RSpec.describe Importers::ContentDetails do
   let(:base_path) { '/base_path' }
   let(:content_id) { 'content_id' }
 
-  subject { Importers::ContentDetails.new(content_id, base_path) }
+
+  subject { Importers::ContentDetails.new(content_id, base_path, locale) }
 
   context 'Import contents' do
-    let(:existing_content_hash) { 'ContentHashContentHash' }
-    let(:parsed_content_hash) { 'NewContentHash' }
+    let(:locale) { 'en' }
+    let!(:existing_content_hash) { 'ContentHashContentHash' }
+    let!(:parsed_content_hash) { 'NewContentHash' }
+    let!(:latest_dimension_item_fr) do
+      create(:dimensions_item,
+        content_id: content_id, base_path: base_path, locale: 'fr',
+        latest: true, raw_json: nil, content_hash: existing_content_hash)
+    end
     let!(:latest_dimension_item) do
       create(:dimensions_item,
-        content_id: content_id, base_path: base_path,
+        content_id: content_id, base_path: base_path, locale: 'en',
         latest: true, raw_json: nil, content_hash: existing_content_hash)
     end
     let!(:older_dimension_item) { create(:dimensions_item, content_id: content_id, base_path: base_path, latest: false, raw_json: nil) }
@@ -23,6 +30,7 @@ RSpec.describe Importers::ContentDetails do
         number_of_pdfs: 99,
         number_of_word_files: 94,
         content_id: '09hjasdfoj234',
+        locale: locale,
         title: 'A guide to coding',
         document_type: 'answer',
         content_purpose_document_supertype: 'guide',
@@ -61,25 +69,41 @@ RSpec.describe Importers::ContentDetails do
       )
     end
 
-    context 'when the content has changed' do
-      let(:parsed_content_hash) { 'ADifferentContentHash' }
-      it 'triggers a quality metrics job' do
-        subject.run
-        expect(ImportQualityMetricsJob).to have_received(:perform_async).with(latest_dimension_item.id)
+    context "when the locale is 'en'" do
+      let(:locale) { 'en' }
+
+      context 'and the content has changed' do
+        let(:parsed_content_hash) { 'ADifferentContentHash' }
+        it 'triggers a quality metrics job' do
+          subject.run
+          expect(ImportQualityMetricsJob).to have_received(:perform_async).with(latest_dimension_item.id)
+          expect(ImportQualityMetricsJob).not_to have_received(:perform_async).with(latest_dimension_item_fr.id)
+        end
+      end
+
+      context 'and the content has not changed' do
+        let(:parsed_content_hash) { existing_content_hash }
+        it "doesn't run a quality metrics job" do
+          subject.run
+          expect(ImportQualityMetricsJob).not_to have_received(:perform_async)
+        end
       end
     end
 
-    context 'when the content has not changed' do
-      let(:parsed_content_hash) { existing_content_hash }
+    context "when the locale is not 'en' and the content has changed" do
+      let(:locale) { 'fr' }
+      let(:parsed_content_hash) { 'ADifferentContentHash' }
       it "doesn't run a quality metrics job" do
         subject.run
-        expect(ImportQualityMetricsJob).not_to have_received(:perform_async)
+        expect(ImportQualityMetricsJob).not_to have_received(:perform_async).with(latest_dimension_item.id)
+        expect(ImportQualityMetricsJob).not_to have_received(:perform_async).with(latest_dimension_item_fr.id)
       end
     end
   end
 
   context 'when GdsApi::HTTPGone is raised' do
-    let!(:existing_content_item) { create :dimensions_item, content_id: content_id, status: 'something' }
+    let(:locale) { 'en' }
+    let!(:existing_content_item) { create :dimensions_item, content_id: content_id, status: 'something', locale: locale }
 
     before :each do
       expect(subject.items_service).to receive(:fetch_raw_json).and_raise(GdsApi::HTTPGone.new(410))
@@ -93,6 +117,7 @@ RSpec.describe Importers::ContentDetails do
   end
 
   context 'when GdsApi::HTTPNotFound is raised' do
+    let(:locale) { 'en' }
     let!(:existing_content_item) do
       create :dimensions_item, content_id: content_id, status: 'something', raw_json: { existing: 'content' }
     end

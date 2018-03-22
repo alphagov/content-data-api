@@ -53,12 +53,13 @@ RSpec.describe Dimensions::Item, type: :model do
     let(:content_id) { 'new-item' }
     let(:base_path) { '/path/to/new-item' }
     it 'creates a new item with the correct attributes' do
-      item = Dimensions::Item.create_empty content_id, base_path
+      item = Dimensions::Item.create_empty content_id: content_id, base_path: base_path, locale: 'fr'
       expect(item.reload).to have_attributes(
         content_id: content_id,
         base_path: base_path,
+        locale: 'fr',
         outdated: true,
-        latest: true
+        latest: true,
       )
     end
   end
