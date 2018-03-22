@@ -4,6 +4,7 @@ class SandboxController < ApplicationController
   def index
     @metrics = Facts::Metric
       .joins(:dimensions_item)
+      .by_locale('en')
       .between(from, to)
       .by_base_path(base_path)
       .by_organisation_id(organisation)

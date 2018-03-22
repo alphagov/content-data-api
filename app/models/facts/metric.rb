@@ -29,6 +29,11 @@ class Facts::Metric < ApplicationRecord
     end
   end
 
+  scope :by_locale, ->(locale) do
+    joins(:dimensions_item)
+      .where(dimensions_items: { locale: locale })
+  end
+
   scope :metric_summary, -> do
     array = pluck(
       'COUNT(DISTINCT dimensions_items.content_id)',
@@ -57,6 +62,7 @@ class Facts::Metric < ApplicationRecord
       date
       content_id
       base_path
+      locale
       title
       description
       document_type
