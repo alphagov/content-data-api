@@ -16,11 +16,20 @@ RSpec.describe 'Master process spec' do
 
   let(:content_id) { 'id1' }
   let(:base_path) { '/the-base-path' }
+  let(:locale) { 'en' }
   let(:item_content) { 'This is the content.' }
 
-  let!(:an_item) { create :dimensions_item, content_id: 'a-content-id' }
-  let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path, latest: false }
-  let!(:outdated_item) { create :outdated_item, content_id: content_id, base_path: base_path }
+
+  let!(:an_item) { create :dimensions_item, content_id: 'a-content-id', locale: locale }
+  let!(:outdated_item) do
+    create :dimensions_item, content_id: content_id,
+      base_path: '/old/base/path', locale: locale, latest: false
+  end
+  let!(:item) do
+    create :dimensions_item,
+      content_id: content_id, base_path: base_path,
+      locale: locale, outdated: true, updated_at: 2.days.ago
+  end
 
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response
@@ -56,8 +65,8 @@ RSpec.describe 'Master process spec' do
 
   def validate_outdated_items!
     expect(Dimensions::Item.count).to eq(4)
-    expect(Dimensions::Item.where(latest: true, content_id: 'id1').count).to eq(1)
-    expect(Dimensions::Item.where(latest: false, content_id: 'id1').count).to eq(2)
+
+    expect(Dimensions::Item.where(latest: true, content_id: 'id1', base_path: base_path).count).to eq(1)
   end
 
   def validate_metadata!
@@ -109,8 +118,12 @@ RSpec.describe 'Master process spec' do
       with(
         body: { content: item_content }.to_json,
         headers: { 'Content-Type' => 'application/json' }
-      ).
-      to_return(status: 200, body: quality_metrics_response.to_json, headers: { 'Content-Type' => 'application/json' })
+      )
+      .to_return(
+        status: 200,
+        body: quality_metrics_response.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
   end
 
   def stub_google_analytics_response
@@ -129,7 +142,7 @@ RSpec.describe 'Master process spec' do
           'date' => '2018-02-20',
         },
       ]
-)
+    )
   end
 
   def stub_feedex_response
