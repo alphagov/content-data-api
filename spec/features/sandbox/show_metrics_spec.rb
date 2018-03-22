@@ -11,11 +11,13 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
   let(:day1) { create :dimensions_date, date: Date.new(2018, 1, 13) }
   let(:day2) { create :dimensions_date, date: Date.new(2018, 1, 14) }
 
-  let(:item1) { create :dimensions_item, content_id: 'id1' }
-  let(:item2) { create :dimensions_item, content_id: 'id2' }
+  let(:item1) { create :dimensions_item, content_id: 'id1', locale: 'en' }
+  let!(:item1_fr) { create :dimensions_item, content_id: 'id1', locale: 'fr' }
+  let(:item2) { create :dimensions_item, content_id: 'id2', locale: 'en' }
 
   let(:metric1) { create :metric, dimensions_item: item1, dimensions_date: day0 }
   let(:metric2) { create :metric, dimensions_item: item1, dimensions_date: day1 }
+  let(:metric2_fr) { create :metric, dimensions_item: item1_fr, dimensions_date: day1 }
   let(:metric3) { create :metric, dimensions_item: item1, dimensions_date: day2 }
   let(:metric4) { create :metric, dimensions_item: item2, dimensions_date: day1 }
   let(:metric5) { create :metric, dimensions_item: item2, dimensions_date: day2 }
@@ -26,6 +28,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     metric3.update pageviews: 20, unique_pageviews: 20, feedex_comments: 6
     metric4.update pageviews: 20, unique_pageviews: 20, feedex_comments: 8
     metric5.update pageviews: 30, unique_pageviews: 30, feedex_comments: 10
+    metric2_fr.update pageviews: 5, unique_pageviews: 5, feedex_comments: 25
 
     item1.update number_of_pdfs: 2, number_of_word_files: 1, spell_count: 2, readability_score: 1
     item2.update number_of_pdfs: 4, number_of_word_files: 2, spell_count: 6, readability_score: 5
@@ -47,6 +50,8 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
   end
 
   scenario 'Summary panel when no data' do
+    metric2_fr.update pageviews: 5, unique_pageviews: 5, feedex_comments: 25
+
     visit '/sandbox'
 
     fill_in 'From:', with: '2018-01-13'
@@ -71,6 +76,8 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     metric1.update pageviews: 10
     metric2.update pageviews: 10
     metric3.update pageviews: 5
+    metric2_fr.update pageviews: 5, unique_pageviews: 5, feedex_comments: 25
+
     visit '/sandbox'
     fill_in 'From:', with: '2018-01-12'
     fill_in 'To:', with: '2018-01-13'
@@ -80,10 +87,12 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     click_on 'Export to CSV'
 
     expect(page.response_headers['Content-Type']).to eq "text/csv"
+
     expect(page.response_headers['Content-disposition']).to eq 'attachment; filename="download.csv"'
-    expect(page.body).to include('2018-01-12,cont-id,/really-interesting,Really interesting,desc')
-    expect(page.body).to include('2018-01-13,cont-id,/really-interesting,Really interesting,desc,')
+    expect(page.body).to include('2018-01-12,cont-id,/really-interesting,en,Really interesting,desc')
+    expect(page.body).to include('2018-01-13,cont-id,/really-interesting,en,Really interesting,desc,')
     expect(page.body).not_to include('2018-01-14')
+    expect(page.body).not_to include('fr')
   end
 
   describe 'Charts' do

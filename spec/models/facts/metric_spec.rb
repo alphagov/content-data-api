@@ -62,6 +62,15 @@ RSpec.describe Facts::Metric, type: :model do
       results = subject.by_organisation_id('org-1')
       expect(results).to match_array([metric1, metric2])
     end
+
+    it '.by_locale' do
+      item1 = create(:dimensions_item, locale: 'fr')
+      item2 = create(:dimensions_item, locale: 'de')
+      metric1 = create(:metric, dimensions_item: item1, dimensions_date: day0)
+      create(:metric, dimensions_item: item2, dimensions_date: day0)
+      results = subject.by_locale('fr')
+      expect(results).to match_array(metric1)
+    end
   end
 
   describe '.metric_summary' do
