@@ -1,4 +1,4 @@
-class Api::HealthcheckController < ApiController
+class Api::HealthcheckController < Api::BaseController
   skip_before_action :authenticate_user!
 
   def index

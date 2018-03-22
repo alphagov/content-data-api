@@ -1,4 +1,4 @@
-class Api::MetricsController < ApiController
+class Api::MetricsController < Api::BaseController
   before_action :validate_params!
 
   def time_series

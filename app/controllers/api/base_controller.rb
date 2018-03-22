@@ -1,4 +1,4 @@
-class ApiController < ApplicationController
+class Api::BaseController < ApplicationController
   rescue_from(ActionController::UnpermittedParameters) do |pme|
     error_response(
       "unknown-parameter",
