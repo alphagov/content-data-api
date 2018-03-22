@@ -8,24 +8,26 @@ RSpec.describe PublishingApiConsumer do
   it_behaves_like 'a message queue processor'
 
   context 'when the Dimensions::Item already exists - all events but unpublish' do
-    let(:latest_item) { create(:dimensions_item, latest: true, outdated: false) }
+    let!(:latest_item_en) { create(:dimensions_item, latest: true, outdated: false, locale: 'en') }
+    let!(:latest_item_de) { create(:dimensions_item, latest: true, outdated: false, locale: 'de') }
 
-    let(:older_item) do
+    let!(:older_item) do
       create(:dimensions_item,
-        content_id: latest_item.content_id,
-        base_path: latest_item.base_path,
+        content_id: latest_item_en.content_id,
+        base_path: latest_item_en.base_path,
         latest: false,
         outdated: false)
     end
-    let(:different_item) { create(:dimensions_item, latest: true, outdated: false) }
-    let(:base_path) { '/some/path/to' }
-    let(:payload) do
+    let!(:different_item) { create(:dimensions_item, latest: true, outdated: false) }
+    let!(:base_path) { '/some/path/to' }
+    let!(:payload) do
       {
-        'base_path' => latest_item.base_path,
-        'content_id' => latest_item.content_id
+        'base_path' => latest_item_de.base_path,
+        'content_id' => latest_item_de.content_id,
+        'locale' => 'de'
       }
     end
-    let(:message) do
+    let!(:message) do
       double('message',
         payload: payload,
         delivery_info: double('del_info', routing_key: 'news_story.major'))
@@ -36,14 +38,15 @@ RSpec.describe PublishingApiConsumer do
       subject.process(message)
     end
 
-    it 'updates the latest content item with a outdated flag' do
-      expect(latest_item.reload.outdated?).to be true
+    it 'updates the latest content of the correct locale with an outdated flag' do
+      expect(latest_item_de.reload.outdated?).to be true
+      expect(latest_item_en.reload.outdated?).to be false
       expect(older_item.reload.outdated?).to be false
       expect(different_item.reload.outdated?).to be false
     end
 
     it 'leaves the status as "live"' do
-      expect(latest_item.reload.status).to eq('live')
+      expect(latest_item_en.reload.status).to eq('live')
     end
 
     it "ack's the message" do
@@ -52,14 +55,16 @@ RSpec.describe PublishingApiConsumer do
   end
 
   context 'on an unpublish event' do
-    let(:latest_item) { create(:dimensions_item, latest: true, outdated: false) }
-    let(:payload) do
+    let!(:latest_item_en) { create(:dimensions_item, latest: true, outdated: false, locale: 'en') }
+    let!(:latest_item_fr) { create(:dimensions_item, latest: true, outdated: false, locale: 'fr') }
+    let!(:payload) do
       {
-        'base_path' => latest_item.base_path,
-        'content_id' => latest_item.content_id
+        'base_path' => latest_item_en.base_path,
+        'content_id' => latest_item_en.content_id,
+        'locale' => 'en'
       }
     end
-    let(:message) do
+    let!(:message) do
       double('message',
         payload: payload,
         delivery_info: double('del_info', routing_key: 'gone.unpublished'))
@@ -71,11 +76,13 @@ RSpec.describe PublishingApiConsumer do
     end
 
     it 'updates the latest content item with a outdated flag' do
-      expect(latest_item.reload.outdated?).to be true
+      expect(latest_item_en.reload.outdated?).to be true
+      expect(latest_item_fr.reload.outdated?).to be false
     end
 
     it 'sets the status to "gone"' do
-      expect(latest_item.reload.status).to eq('gone')
+      expect(latest_item_en.reload.status).to eq('gone')
+      expect(latest_item_fr.reload.status).to eq('live')
     end
 
     it "ack's the message" do
@@ -84,13 +91,13 @@ RSpec.describe PublishingApiConsumer do
   end
 
   context 'when the Dimensions::Item does not exist yet' do
-    let(:payload) do
+    let!(:payload) do
       {
         'base_path' => '/path/to/new/content',
         'content_id' => 'does-not-exist-yet',
       }
     end
-    let(:message) { double('message', payload: payload) }
+    let!(:message) { double('message', payload: payload) }
 
     before :each do
       allow(message).to receive(:ack)
