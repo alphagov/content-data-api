@@ -80,7 +80,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     click_on 'Export to CSV'
 
     expect(page.response_headers['Content-Type']).to eq "text/csv"
-    expect(page.response_headers['Content-disposition']).to eq 'attachment; filename="metrics.csv"'
+    expect(page.response_headers['Content-disposition']).to eq 'attachment; filename="download.csv"'
     expect(page.body).to include('2018-01-12,cont-id,/really-interesting,Really interesting,desc')
     expect(page.body).to include('2018-01-13,cont-id,/really-interesting,Really interesting,desc,')
     expect(page.body).not_to include('2018-01-14')
