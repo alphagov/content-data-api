@@ -20,7 +20,7 @@ RSpec.describe 'Master process spec' do
 
   let!(:an_item) { create :dimensions_item, content_id: 'a-content-id' }
   let!(:outdated_item) { create :dimensions_item, content_id: content_id, base_path: base_path, latest: false }
-  let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path, outdated: true, updated_at: 2.days.ago }
+  let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path, outdated: true, outdated_at: 2.days.ago }
 
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response

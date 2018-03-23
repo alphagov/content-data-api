@@ -15,7 +15,7 @@ RSpec.describe ETL::OutdatedItems do
       outdated: true,
       content_id: content_id,
       base_path: base_path,
-      updated_at: date
+      outdated_at: date
     )
     create(
       :dimensions_item,
@@ -23,7 +23,7 @@ RSpec.describe ETL::OutdatedItems do
       outdated: true,
       content_id: later_content_id,
       base_path: base_path,
-      updated_at: date + 1.day
+      outdated_at: date + 1.day
     )
     subject.process
   end

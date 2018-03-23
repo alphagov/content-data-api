@@ -1,27 +1,27 @@
 require 'rails_helper'
 
-RSpec.describe Dimensions::Item, type: :model do
-  describe '.oudated' do
-    subject { described_class.outdated }
+RSpec.describe Concerns::Outdateable, type: :model do
+  subject { Dimensions::Item }
 
+  describe '.oudated' do
     let(:item) { create(:dimensions_item) }
 
     it 'returns true if outdated? and latest?' do
       item.update(latest: true, outdated: true)
 
-      expect(subject).to match_array(item)
+      expect(subject.outdated).to match_array(item)
     end
 
     it 'returns false if outdated? and not latest?' do
       item.update(latest: false, outdated: true)
 
-      expect(subject).to be_empty
+      expect(subject.outdated).to be_empty
     end
 
     it 'returns false if not outdated? and latest?' do
       item.update(latest: true, outdated: false)
 
-      expect(subject).to be_empty
+      expect(subject.outdated).to be_empty
     end
   end
 
@@ -29,15 +29,16 @@ RSpec.describe Dimensions::Item, type: :model do
     let(:date) { Date.new(2018, 2, 2) }
 
     it 'only returns outdated items in their latest version' do
-      create(:dimensions_item, latest: false, outdated: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
+      create(:dimensions_item, latest: false, outdated: true, outdated_at: Time.utc(2018, 2, 1, 23, 59, 59))
+      create(:dimensions_item, outdated: true, outdated_at: Time.utc(2018, 2, 2))
 
-      create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 2))
       expect(Dimensions::Item.outdated_before(date)).to be_empty
     end
 
     it 'returns the outdated items updated before the given date' do
-      expected_item = create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
-      create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 2))
+      expected_item = create(:dimensions_item, outdated: true, outdated_at: Time.utc(2018, 2, 1, 23, 59, 59))
+      create(:dimensions_item, outdated: true, outdated_at: Time.utc(2018, 2, 2))
+
       expect(Dimensions::Item.outdated_before(date)).to match_array(expected_item)
     end
   end
@@ -52,11 +53,10 @@ RSpec.describe Dimensions::Item, type: :model do
     end
 
     it 'sets the oudated_at time' do
-      time = Time.zone.now
-      Timecop.freeze(time) do
+      Timecop.freeze(Time.new(2018,3,3)) do
         item.outdate!
 
-        expect(item.reload.outdated_at).to eq(time)
+        expect(item.reload.outdated_at).to eq(Time.new(2018,3,3))
       end
     end
   end
