@@ -19,7 +19,7 @@ class Importers::ContentDetails
     item = nil
     begin
       time(process: :content_details) do
-        item = Dimensions::Item.by_natural_key(content_id: content_id, locale: locale).first
+        item = Dimensions::Item.by_natural_key(content_id: content_id, locale: locale)
         item_raw_json = items_service.fetch_raw_json(base_path)
         attributes = Metadata::Parser.parse(item_raw_json)
         content_changed = item.content_hash != attributes[:content_hash]

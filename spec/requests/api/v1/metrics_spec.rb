@@ -10,7 +10,8 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   let!(:day4) { create :dimensions_date, date: Date.new(2018, 1, 16) }
   let!(:content_id) { SecureRandom.uuid }
 
-  let!(:item) { create :dimensions_item, content_id: content_id }
+  let!(:item) { create :dimensions_item, content_id: content_id, locale: 'en' }
+  let!(:item_fr) { create :dimensions_item, content_id: content_id, locale: 'de' }
 
   describe "an API response" do
     it "should be cacheable until the end of the day" do
@@ -110,6 +111,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   describe 'Daily metrics' do
     before do
       create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, feedex_comments: 10
+      create :metric, dimensions_item: item_fr, dimensions_date: day2, pageviews: 100, feedex_comments: 200
       create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, feedex_comments: 20
       create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, feedex_comments: 30
       create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, feedex_comments: 40
@@ -158,10 +160,13 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
   describe 'Content metrics' do
     before do
-      item1_old = create :dimensions_item, content_id: content_id, number_of_pdfs: 30, number_of_word_files: 30, latest: false
+      item1_old = create :dimensions_item,
+        content_id: content_id, locale: 'en', number_of_pdfs: 30, number_of_word_files: 30, latest: false
       item.update number_of_pdfs: 20, number_of_word_files: 20
+      item_fr.update number_of_pdfs: 200, number_of_word_files: 100
 
       create :metric, dimensions_item: item1_old, dimensions_date: day1
+      create :metric, dimensions_item: item_fr, dimensions_date: day2, pageviews: 10, feedex_comments: 10
       create :metric, dimensions_item: item, dimensions_date: day2
       create :metric, dimensions_item: item, dimensions_date: day3
       create :metric, dimensions_item: item, dimensions_date: day4

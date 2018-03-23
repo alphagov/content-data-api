@@ -10,7 +10,7 @@ RSpec.describe Dimensions::Item, type: :model do
       create(:dimensions_item, content_id: content_id, latest: false, locale: 'en')
       create(:dimensions_item, content_id: content_id, latest: true, locale: 'de')
       create(:dimensions_item, content_id: content_id, latest: true, locale: 'fr')
-      expect(Dimensions::Item.by_natural_key(content_id: content_id, locale: 'en')).to match_array(expected_item)
+      expect(Dimensions::Item.by_natural_key(content_id: content_id, locale: 'en')).to eq(expected_item)
     end
   end
 
