@@ -19,7 +19,7 @@ class Dimensions::Item < ApplicationRecord
     new_version
   end
 
-  def outdated!
+  def outdate!
     update_attributes!(outdated: true)
   end
 

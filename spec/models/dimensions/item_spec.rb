@@ -32,10 +32,10 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#outdated!' do
+  describe '#outdate!' do
     it 'sets the outdated? flag to true' do
       item = create(:dimensions_item, outdated: false)
-      item.outdated!
+      item.outdate!
       expect(item.reload.outdated?).to be true
     end
   end
