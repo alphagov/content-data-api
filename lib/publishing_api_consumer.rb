@@ -4,7 +4,7 @@ class PublishingApiConsumer
     base_path = message.payload['base_path']
     locale = message.payload['locale']
 
-    item = Dimensions::Item.by_natural_key(content_id: content_id, locale: locale).first
+    item = Dimensions::Item.by_natural_key(content_id: content_id, locale: locale)
     if item
       handle_existing(item, message.delivery_info.routing_key)
     else

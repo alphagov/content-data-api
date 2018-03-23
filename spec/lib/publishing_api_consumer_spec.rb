@@ -95,6 +95,7 @@ RSpec.describe PublishingApiConsumer do
       {
         'base_path' => '/path/to/new/content',
         'content_id' => 'does-not-exist-yet',
+        'locale' => 'en',
       }
     end
     let!(:message) { double('message', payload: payload) }

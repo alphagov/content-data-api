@@ -17,6 +17,7 @@ private
     Facts::Metric
       .between(from, to)
       .by_content_id(content_id)
+      .by_locale('en')
       .order('dimensions_dates.date asc')
       .group('dimensions_dates.date')
       .sum(metric)

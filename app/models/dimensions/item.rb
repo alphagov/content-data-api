@@ -5,8 +5,8 @@ class Dimensions::Item < ApplicationRecord
 
   validates :content_id, presence: true
 
-  scope :by_natural_key, ->(content_id:, locale:) do
-    where(content_id: content_id, locale: locale, latest: true)
+  def self.by_natural_key(content_id:, locale:)
+    find_by(content_id: content_id, locale: locale, latest: true)
   end
 
   def get_content
