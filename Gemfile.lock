@@ -74,7 +74,6 @@ GEM
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
     chartkick (2.3.2)
-    cliver (0.3.2)
     coderay (1.1.2)
     coffee-script (2.4.1)
       coffee-script-source
@@ -278,10 +277,6 @@ GEM
     pg (1.0.0)
     phantomjs (2.1.1.0)
     plek (2.1.1)
-    poltergeist (1.17.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -509,7 +504,6 @@ DEPENDENCIES
   pg
   phantomjs
   plek
-  poltergeist
   pry-rails
   puma
   rack-proxy

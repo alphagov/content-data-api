@@ -12,7 +12,6 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 require "support/authentication"
 require "webmock/rspec"
-require "capybara/poltergeist"
 require "gds_api/test_helpers/publishing_api_v2"
 require "pry"
 require "database_cleaner"
@@ -35,16 +34,11 @@ RSpec.configure do |config|
     ActiveRecord::Migration.maintain_test_schema!
     Rails.application.load_tasks
     WebMock.disable_net_connect!(allow_localhost: true)
-    Capybara.javascript_driver = :poltergeist
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  def use_truncation?
-    Capybara.current_driver != :rack_test
-  end
-
   config.before(:each) do
-    DatabaseCleaner.strategy = use_truncation? ? :truncation : :transaction
+    DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.start
   end
 
