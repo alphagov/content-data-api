@@ -3,6 +3,30 @@ require 'rails_helper'
 RSpec.describe Dimensions::Item, type: :model do
   it { is_expected.to validate_presence_of(:content_id) }
 
+  describe '.oudated' do
+    subject { described_class.outdated }
+
+    let(:item) { create(:dimensions_item) }
+
+    it 'returns true if outdated? and latest?' do
+      item.update(latest: true, outdated: true)
+
+      expect(subject).to match_array(item)
+    end
+
+    it 'returns false if outdated? and not latest?' do
+      item.update(latest: false, outdated: true)
+
+      expect(subject).to be_empty
+    end
+
+    it 'returns false if not outdated? and latest?' do
+      item.update(latest: true, outdated: false)
+
+      expect(subject).to be_empty
+    end
+  end
+
   describe '.outdated_before' do
     let(:date) { Date.new(2018, 2, 2) }
 

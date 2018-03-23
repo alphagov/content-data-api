@@ -3,10 +3,8 @@ require 'json'
 class Dimensions::Item < ApplicationRecord
   validates :content_id, presence: true
 
-
-  scope :outdated_before, ->(date) do
-    where('updated_at < ?', date).where(outdated: true, latest: true)
-  end
+  scope :outdated, -> { where(outdated: true, latest: true) }
+  scope :outdated_before, ->(date) { outdated. where('updated_at < ?', date) }
 
   def get_content
     return if raw_json.blank?
