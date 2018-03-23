@@ -5,7 +5,7 @@ module Concerns::Outdateable
 
   included do
     scope :outdated, -> { where(outdated: true, latest: true) }
-    scope :outdated_before, ->(date) { outdated. where('outdated_at < ?', date) }
+    scope :outdated_before, ->(date) { outdated.where('outdated_at < ?', date) }
 
     def outdate!
       update_attributes!(outdated: true, outdated_at: Time.zone.now)
