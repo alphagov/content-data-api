@@ -33,10 +33,21 @@ RSpec.describe Dimensions::Item, type: :model do
   end
 
   describe '#outdate!' do
+    let(:item) { create(:dimensions_item, outdated: false) }
+
     it 'sets the outdated? flag to true' do
-      item = create(:dimensions_item, outdated: false)
       item.outdate!
+
       expect(item.reload.outdated?).to be true
+    end
+
+    it 'sets the oudated_at time' do
+      time = Time.zone.now
+      Timecop.freeze(time) do
+        item.outdate!
+
+        expect(item.reload.outdated_at).to eq(time)
+      end
     end
   end
 

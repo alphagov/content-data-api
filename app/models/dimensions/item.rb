@@ -20,7 +20,7 @@ class Dimensions::Item < ApplicationRecord
   end
 
   def outdate!
-    update_attributes!(outdated: true)
+    update_attributes!(outdated: true, outdated_at: Time.zone.now)
   end
 
   def gone!
