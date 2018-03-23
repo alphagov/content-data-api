@@ -1,10 +1,9 @@
 require 'json'
 
 class Dimensions::Item < ApplicationRecord
-  validates :content_id, presence: true
+  include Concerns::Outdateable
 
-  scope :outdated, -> { where(outdated: true, latest: true) }
-  scope :outdated_before, ->(date) { outdated. where('updated_at < ?', date) }
+  validates :content_id, presence: true
 
   def get_content
     return if raw_json.blank?
@@ -15,10 +14,6 @@ class Dimensions::Item < ApplicationRecord
     new_version = self.dup
     new_version.assign_attributes(latest: true, outdated: false)
     new_version
-  end
-
-  def outdate!
-    update_attributes!(outdated: true, outdated_at: Time.zone.now)
   end
 
   def gone!
