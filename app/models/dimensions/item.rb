@@ -5,7 +5,7 @@ class Dimensions::Item < ApplicationRecord
 
 
   scope :outdated_before, ->(date) do
-    where('updated_at < ?', date).where(outdated: true)
+    where('updated_at < ?', date).where(outdated: true, latest: true)
   end
 
   def get_content

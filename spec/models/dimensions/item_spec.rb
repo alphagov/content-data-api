@@ -5,6 +5,14 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '.outdated_before' do
     let(:date) { Date.new(2018, 2, 2) }
+
+    it 'only returns outdated items in their latest version' do
+      create(:dimensions_item, latest: false, outdated: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
+
+      create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 2))
+      expect(Dimensions::Item.outdated_before(date)).to be_empty
+    end
+
     it 'returns the outdated items updated before the given date' do
       expected_item = create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
       create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 2))
@@ -52,7 +60,7 @@ RSpec.describe Dimensions::Item, type: :model do
   end
 
   describe '#gone!' do
-    it 'sets the status to "gone"' do
+    it 'sets the status  to "gone"' do
       item = create(:dimensions_item, outdated: false)
       item.gone!
       expect(item.reload.status).to eq 'gone'
