@@ -19,8 +19,8 @@ RSpec.describe 'Master process spec' do
   let(:item_content) { 'This is the content.' }
 
   let!(:an_item) { create :dimensions_item, content_id: 'a-content-id' }
-  let!(:outdated_item) { create :dimensions_item, content_id: content_id, base_path: base_path, latest: false }
-  let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path, outdated: true, outdated_at: 2.days.ago }
+  let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path, latest: false }
+  let!(:outdated_item) { create :outdated_item, content_id: content_id, base_path: base_path }
 
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response
@@ -57,6 +57,7 @@ RSpec.describe 'Master process spec' do
   def validate_outdated_items!
     expect(Dimensions::Item.count).to eq(4)
     expect(Dimensions::Item.where(latest: true, content_id: 'id1').count).to eq(1)
+    expect(Dimensions::Item.where(latest: false, content_id: 'id1').count).to eq(2)
   end
 
   def validate_metadata!
