@@ -10,6 +10,7 @@ class ETL::Master
   end
 
   def process
+    raise DuplicateDateError if Dimensions::Date.exists?(date)
     time(process: :master) do
       ETL::OutdatedItems.process(date: dimensions_date.date)
       ETL::Metrics.process(date: dimensions_date.date)
@@ -25,4 +26,7 @@ private
   end
 
   attr_reader :date
+
+  class DuplicateDateError < StandardError;
+  end
 end

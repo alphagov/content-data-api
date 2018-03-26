@@ -30,6 +30,10 @@ class Dimensions::Date < ApplicationRecord
     end
   end
 
+  def self.exists?(date)
+    Dimensions::Date.where(date: date).exists?
+  end
+
   validates :date, presence: true
 
   validates :date_name, presence: true

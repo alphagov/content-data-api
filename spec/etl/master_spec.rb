@@ -17,6 +17,11 @@ RSpec.describe ETL::Master do
     allow(ETL::Metrics).to receive(:process)
   end
 
+  it 'does not process if already processed for date' do
+    create(:dimensions_date, date: Date.yesterday)
+
+    expect { subject.process }.to raise_error(ETL::Master::DuplicateDateError)
+  end
 
   it 'creates a Metrics fact per content item' do
     subject.process
