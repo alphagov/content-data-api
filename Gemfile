@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby File.read('.ruby-version').chomp
 
 # GOV.UK gems and forks
-gem 'gds-api-adapters', '~> 52.2.1'
+gem 'gds-api-adapters', '~> 52.4.0'
 gem 'gds-sso'
 gem 'govuk_admin_template', '~> 6.5'
 gem 'govuk_app_config'
