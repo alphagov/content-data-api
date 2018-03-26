@@ -36,9 +36,15 @@ RSpec.describe 'new content from the publishing feed' do
     Timecop.freeze(today - 1.day) do
       PublishingApiConsumer.new.process(message)
     end
-    stub_google_analytics_response base_path: base_path, date: '2018-02-21', request_date: today
+    stub_google_analytics_response(
+      base_path: base_path,
+      date: '2018-02-21',
+      request_date: today,
+      pageviews: 11,
+      unique_pageviews: 5
+    )
     stub_feedex_response(base_path: base_path, date: '2018-02-20', request_date: "2018-02-21", comments: 21)
-    stub_quality_metrics_response
+    stub_quality_metrics_response(content: item_content, passive_count: 6, repeated_count: 8)
     stub_content_store_response(title: 'title1', content: item_content, base_path: base_path)
 
     ETL::Master.process date: today
@@ -53,15 +59,16 @@ RSpec.describe 'new content from the publishing feed' do
       )
       validate_facts_metrics!(count: 1, dates: [Date.new(2018, 2, 21)], ids: [latest_version.id])
       validate_outdated_items!(total: 2, base_path: base_path)
-      validate_metadata!
-      validate_quality_metrics!
-      validate_google_analytics!
+      validate_metadata!(title: 'title1')
+      validate_quality_metrics!(passive_count: 6, repeated_count: 8)
+      validate_google_analytics!(pageviews: 11, unique_pageviews: 5)
       validate_feedex!(comments: 21)
     end
   end
 
   context 'once updated by another publishing event' do
     let(:new_base_path) { '/updated/base/path' }
+    let(:updated_content) { 'updated content' }
     let(:new_message) do
       double('new_message',
         payload: payload.merge('base_path' => new_base_path),
@@ -70,9 +77,16 @@ RSpec.describe 'new content from the publishing feed' do
     before do
       allow(new_message).to receive(:ack)
       PublishingApiConsumer.new.process(new_message)
-      stub_google_analytics_response base_path: new_base_path, date: '2018-02-22', request_date: today + 1.day
+      stub_google_analytics_response(
+        base_path: new_base_path,
+        date: '2018-02-22',
+        request_date: today + 1.day,
+        pageviews: 25,
+        unique_pageviews: 12
+      )
       stub_feedex_response(base_path: new_base_path, date: '2018-02-21', request_date: "2018-02-22", comments: 18)
-      stub_content_store_response(title: 'title1', content: item_content, base_path: new_base_path)
+      stub_quality_metrics_response(content: updated_content, passive_count: 10, repeated_count: 5)
+      stub_content_store_response(title: 'updated title', content: updated_content, base_path: new_base_path)
     end
 
     it 'creates a new item with the updated data' do
@@ -89,9 +103,9 @@ RSpec.describe 'new content from the publishing feed' do
         dates: [Date.new(2018, 2, 21), Date.new(2018, 2, 22)],
         ids: [original_version_id, latest_version.id])
       validate_outdated_items!(total: 3, base_path: new_base_path)
-      validate_metadata!
-      validate_quality_metrics!
-      validate_google_analytics!
+      validate_metadata!(title: 'updated title')
+      validate_quality_metrics!(passive_count: 10, repeated_count: 5)
+      validate_google_analytics!(pageviews: 25, unique_pageviews: 12)
       validate_feedex!(comments: 18)
     end
   end
@@ -114,22 +128,21 @@ RSpec.describe 'new content from the publishing feed' do
   end
 
   def validate_outdated_items!(total:, base_path:)
-    # p Dimensions::Item.all.map{|i|{id: i.id, content_id: i.content_id, title: i.title, base_path: i.base_path}}
     expect(Dimensions::Item.count).to eq(total)
     expect(Dimensions::Item.where(latest: true, content_id: content_id, base_path: base_path).count).to eq(1)
   end
 
-  def validate_metadata!
+  def validate_metadata!(title:)
     expect(latest_version).to have_attributes(
-      title: 'title1',
+      title: title,
       document_type: 'document_type1',
     )
   end
 
-  def validate_google_analytics!
+  def validate_google_analytics!(pageviews:, unique_pageviews:)
     expect(latest_metric).to have_attributes(
-      pageviews: 11,
-      unique_pageviews: 12,
+      pageviews: pageviews,
+      unique_pageviews: unique_pageviews,
     )
   end
 
@@ -137,10 +150,10 @@ RSpec.describe 'new content from the publishing feed' do
     expect(latest_metric).to have_attributes(feedex_comments: comments)
   end
 
-  def validate_quality_metrics!
+  def validate_quality_metrics!(passive_count:, repeated_count:)
     expect(latest_version).to have_attributes(
-      repeated_words_count: 8,
-      passive_count: 6,
+      repeated_words_count: repeated_count,
+      passive_count: passive_count,
     )
   end
 
@@ -159,14 +172,14 @@ RSpec.describe 'new content from the publishing feed' do
     content_store_has_item(base_path, response, {})
   end
 
-  def stub_quality_metrics_response
+  def stub_quality_metrics_response(content:, passive_count:, repeated_count:)
     quality_metrics_response = {
-      passive: { 'count' => 6 },
-      repeated_words: { 'count' => 8 },
+      passive: { 'count' => passive_count },
+      repeated_words: { 'count' => repeated_count },
     }
     stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics').
       with(
-        body: { content: item_content }.to_json,
+        body: { content: content }.to_json,
         headers: { 'Content-Type' => 'application/json' }
       )
       .to_return(
@@ -176,13 +189,13 @@ RSpec.describe 'new content from the publishing feed' do
       )
   end
 
-  def stub_google_analytics_response(base_path:, date:, request_date:)
+  def stub_google_analytics_response(base_path:, date:, request_date:, pageviews:, unique_pageviews:)
     allow_any_instance_of(GoogleAnalyticsService).to receive(:find_in_batches).with(date: request_date).and_yield(
       [
         {
           'page_path' => base_path,
-          'pageviews' => 11,
-          'unique_pageviews' => 12,
+          'pageviews' => pageviews,
+          'unique_pageviews' => unique_pageviews,
           'date' => date,
         },
         {
