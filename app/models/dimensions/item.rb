@@ -20,10 +20,6 @@ class Dimensions::Item < ApplicationRecord
     new_version
   end
 
-  def outdated!(base_path:)
-    update_attributes!(outdated: true, base_path: base_path)
-  end
-
   def gone!
     update_attributes(status: 'gone')
   end
@@ -34,7 +30,8 @@ class Dimensions::Item < ApplicationRecord
       base_path: base_path,
       locale: locale,
       latest: true,
-      outdated: true
+      outdated: true,
+      outdated_at: Time.zone.now
     )
   end
 end

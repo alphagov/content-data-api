@@ -16,9 +16,8 @@ RSpec.describe ETL::OutdatedItems do
       outdated: true,
       content_id: content_id,
       base_path: base_path,
-
       locale: locale,
-      updated_at: date
+      outdated_at: date
     )
     create(
       :dimensions_item,
@@ -33,7 +32,6 @@ RSpec.describe ETL::OutdatedItems do
   end
 
   it 'resets the outdated flag on the item' do
-    p Dimensions::Item.where(content_id: content_id, outdated: true, locale: locale).all
     expect(Dimensions::Item.where(content_id: content_id, outdated: true, locale: locale).count).to eq(0)
   end
 

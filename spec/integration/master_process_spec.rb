@@ -28,7 +28,7 @@ RSpec.describe 'Master process spec' do
   let!(:item) do
     create :dimensions_item,
       content_id: content_id, base_path: base_path,
-      locale: locale, outdated: true, updated_at: 2.days.ago
+      locale: locale, outdated: true, outdated_at: 2.days.ago
   end
 
   it 'orchestrates all ETL processes' do

@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Dimensions::Item, type: :model do
+  let(:now) { Time.new(2018, 2, 21, 12, 31, 2) }
+
   it { is_expected.to validate_presence_of(:content_id) }
 
   describe '##by_natural_key' do
@@ -33,17 +35,6 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(new_version.new_record?).to eq(true)
     end
   end
-  
-  describe '#outdated!' do
-    it 'sets the outdated? flag to true and sets the base path' do
-      item = create(:dimensions_item, outdated: false)
-      item.outdated! base_path: '/new/base/path'
-      expect(item.reload).to have_attributes(
-        outdated: true,
-        base_path: '/new/base/path'
-      )
-    end
-  end
 
   describe '#gone!' do
     it 'sets the status  to "gone"' do
@@ -64,13 +55,16 @@ RSpec.describe Dimensions::Item, type: :model do
     let(:content_id) { 'new-item' }
     let(:base_path) { '/path/to/new-item' }
     it 'creates a new item with the correct attributes' do
-      item = Dimensions::Item.create_empty content_id: content_id, base_path: base_path, locale: 'fr'
+      item = Timecop.freeze(now) do
+        Dimensions::Item.create_empty content_id: content_id, base_path: base_path, locale: 'fr'
+      end
       expect(item.reload).to have_attributes(
         content_id: content_id,
         base_path: base_path,
         locale: 'fr',
         outdated: true,
         latest: true,
+        outdated_at: now,
       )
     end
   end

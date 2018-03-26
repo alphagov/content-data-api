@@ -48,20 +48,26 @@ RSpec.describe Concerns::Outdateable, type: :model do
   end
 
   describe '#outdate!' do
+    let(:new_base_path) { '/new/base/path' }
     let(:item) { create(:dimensions_item, outdated: false) }
 
     it 'sets the outdated? flag to true' do
-      item.outdate!
+      item.outdate! base_path: new_base_path
 
       expect(item.reload.outdated?).to be true
     end
 
     it 'sets the oudated_at time' do
       Timecop.freeze(Time.new(2018, 3, 3)) do
-        item.outdate!
+        item.outdate! base_path: new_base_path
 
         expect(item.reload.outdated_at).to eq(Time.new(2018, 3, 3))
       end
+    end
+
+    it 'sets the new base path' do
+      item.outdate! base_path: new_base_path
+      expect(item.reload.base_path).to eq(new_base_path)
     end
   end
 end
