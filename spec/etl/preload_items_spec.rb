@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'gds-api-adapters'
 
-RSpec.describe ETL::Items do
+RSpec.describe ETL::PreloadItems do
   include GdsApi::TestHelpers::PublishingApiV2
   subject { described_class }
   let(:fields) { %i[base_path content_id description title] }

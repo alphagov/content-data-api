@@ -1,4 +1,4 @@
-class ETL::Items
+class ETL::PreloadItems
   include Concerns::Traceable
 
   def self.process(*args)
