@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'securerandom'
 
-RSpec.describe '/api/v1/metrics/:content_id', type: :request do
+RSpec.describe '/api/v1/metrics/', type: :request do
   before { create(:user) }
 
   let!(:day1) { create :dimensions_date, date: Date.new(2018, 1, 13) }
