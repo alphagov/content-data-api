@@ -4,12 +4,6 @@ require 'gds_api/test_helpers/content_store'
 RSpec.describe 'new content from the publishing feed' do
   include GdsApi::TestHelpers::ContentStore
 
-  let(:content_id) { 'id1' }
-  let(:base_path) { '/the-base-path' }
-  let(:locale) { 'en' }
-  let(:today) { Date.new(2018, 2, 21) }
-  let(:item_content) { 'the content' }
-
   around do |example|
     Sidekiq::Testing.inline! do
       Timecop.freeze(today) do
@@ -17,6 +11,12 @@ RSpec.describe 'new content from the publishing feed' do
       end
     end
   end
+
+  let(:content_id) { 'id1' }
+  let(:base_path) { '/the-base-path' }
+  let(:locale) { 'en' }
+  let(:today) { Date.new(2018, 2, 21) }
+  let(:item_content) { 'the content' }
 
   let!(:payload) do
     {
