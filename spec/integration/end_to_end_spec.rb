@@ -57,12 +57,8 @@ RSpec.describe 'new content from the publishing feed' do
         base_path: base_path,
         locale: locale
       )
-      validate_facts_metrics!(count: 1, dates: [Date.new(2018, 2, 21)], ids: [latest_version.id])
       validate_outdated_items!(total: 2, base_path: base_path)
       validate_metadata!(title: 'title1')
-      validate_quality_metrics!(passive_count: 6, repeated_count: 8)
-      validate_google_analytics!(pageviews: 11, unique_pageviews: 5)
-      validate_feedex!(comments: 21)
     end
   end
 
@@ -99,14 +95,8 @@ RSpec.describe 'new content from the publishing feed' do
         locale: locale
       )
 
-      validate_facts_metrics!(count: 2,
-        dates: [Date.new(2018, 2, 21), Date.new(2018, 2, 22)],
-        ids: [original_version_id, latest_version.id])
       validate_outdated_items!(total: 3, base_path: new_base_path)
       validate_metadata!(title: 'updated title')
-      validate_quality_metrics!(passive_count: 10, repeated_count: 5)
-      validate_google_analytics!(pageviews: 25, unique_pageviews: 12)
-      validate_feedex!(comments: 18)
     end
   end
 
@@ -121,12 +111,6 @@ RSpec.describe 'new content from the publishing feed' do
       .first
   end
 
-  def validate_facts_metrics!(count:, dates:, ids:)
-    expect(Facts::Metric.count).to eq(count)
-    expect(Facts::Metric.pluck(:dimensions_item_id)).to match_array(ids)
-    expect(Facts::Metric.pluck(:dimensions_date_id).uniq).to match_array(dates)
-  end
-
   def validate_outdated_items!(total:, base_path:)
     expect(Dimensions::Item.count).to eq(total)
     expect(Dimensions::Item.where(latest: true, content_id: content_id, base_path: base_path).count).to eq(1)
@@ -136,24 +120,6 @@ RSpec.describe 'new content from the publishing feed' do
     expect(latest_version).to have_attributes(
       title: title,
       document_type: 'document_type1',
-    )
-  end
-
-  def validate_google_analytics!(pageviews:, unique_pageviews:)
-    expect(latest_metric).to have_attributes(
-      pageviews: pageviews,
-      unique_pageviews: unique_pageviews,
-    )
-  end
-
-  def validate_feedex!(comments:)
-    expect(latest_metric).to have_attributes(feedex_comments: comments)
-  end
-
-  def validate_quality_metrics!(passive_count:, repeated_count:)
-    expect(latest_version).to have_attributes(
-      repeated_words_count: repeated_count,
-      passive_count: passive_count,
     )
   end
 
