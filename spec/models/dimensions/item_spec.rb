@@ -33,6 +33,17 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(new_version.new_record?).to eq(true)
     end
   end
+  
+  describe '#outdated!' do
+    it 'sets the outdated? flag to true and sets the base path' do
+      item = create(:dimensions_item, outdated: false)
+      item.outdated! base_path: '/new/base/path'
+      expect(item.reload).to have_attributes(
+        outdated: true,
+        base_path: '/new/base/path'
+      )
+    end
+  end
 
   describe '#gone!' do
     it 'sets the status  to "gone"' do

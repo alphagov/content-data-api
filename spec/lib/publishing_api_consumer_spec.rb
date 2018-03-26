@@ -19,10 +19,10 @@ RSpec.describe PublishingApiConsumer do
         outdated: false)
     end
     let!(:different_item) { create(:dimensions_item, latest: true, outdated: false) }
-    let!(:base_path) { '/some/path/to' }
+    let!(:updated_base_path) { '/updated/base/path' }
     let!(:payload) do
       {
-        'base_path' => latest_item_de.base_path,
+        'base_path' => updated_base_path,
         'content_id' => latest_item_de.content_id,
         'locale' => 'de'
       }
@@ -43,6 +43,10 @@ RSpec.describe PublishingApiConsumer do
       expect(latest_item_en.reload.outdated?).to be false
       expect(older_item.reload.outdated?).to be false
       expect(different_item.reload.outdated?).to be false
+    end
+
+    it 'sets the new base path on the outdated item' do
+      expect(latest_item_de.reload.base_path).to eq(updated_base_path)
     end
 
     it 'leaves the status as "live"' do
