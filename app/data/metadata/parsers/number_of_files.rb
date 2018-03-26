@@ -1,23 +1,30 @@
 module Metadata::Parsers::NumberOfFiles
+  def self.number_of_files(body, extensions_regex)
+    documents = extract_documents(body)
+    all_links = all_links(documents)
+    filter_links all_links, extensions_regex
+  end
+
+  ALL_LINKS_XPATH = "//*[contains(@class, 'attachment-details')]//a/@href".freeze
+
   def self.extract_documents(content_item_details)
-    if content_item_details.is_a?(Hash)
-      details = content_item_details.symbolize_keys
-      documents = document_keys.map do |k|
-        details.fetch(k, nil)
-      end
-      documents.join('')
-    end
+    return nil unless content_item_details.is_a?(Hash)
+
+    document_keys = %w(documents final_outcome_documents)
+    document = document_keys.map { |key| content_item_details.dig('details', key) }
+
+    Nokogiri::HTML(document.join(''))
   end
 
-  def self.document_keys
-    %i(documents final_outcome_documents)
+  def self.all_links(documents)
+    all_links = documents.xpath(ALL_LINKS_XPATH)
+    all_links.map { |node| node.value.gsub('\\"', '') }
   end
 
-  def self.parse(string)
-    Nokogiri::HTML(string)
-  end
+  def self.filter_links(all_links, extensions_regex)
+    # Sample: \.(doc|docx|docm)$
+    regex = /\.(#{extensions_regex.join('|')})$/
 
-  def self.number_of_files(html_fragment, path)
-    html_fragment.xpath(path).length
+    all_links.grep(regex).length
   end
 end

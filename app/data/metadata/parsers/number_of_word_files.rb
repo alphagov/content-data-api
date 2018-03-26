@@ -1,23 +1,9 @@
 module Metadata::Parsers
   class NumberOfWordFiles
-    attr_accessor :content_item
-
-    DOC_XPATH = "//*[contains(@class, 'attachment-details')]//a[contains(@href, '.doc')]".freeze
-
-    def initialize(content_item)
-      @content_item = content_item
-    end
-
-    def run
-      documents_string = NumberOfFiles.extract_documents(content_item.details)
-      documents = NumberOfFiles.parse documents_string
-      { number_of_word_files: NumberOfFiles.number_of_files(documents, DOC_XPATH) }
-    end
-
     def self.parse(raw_json)
-      documents_string = NumberOfFiles.extract_documents(raw_json['details'])
-      documents = NumberOfFiles.parse documents_string
-      { number_of_word_files: NumberOfFiles.number_of_files(documents, DOC_XPATH) }
+      extensions = %w(doc docx docm)
+
+      { number_of_word_files: NumberOfFiles.number_of_files(raw_json, extensions) }
     end
   end
 end
