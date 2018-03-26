@@ -3,15 +3,6 @@ require 'rails_helper'
 RSpec.describe Dimensions::Item, type: :model do
   it { is_expected.to validate_presence_of(:content_id) }
 
-  describe '.outdated_before' do
-    let(:date) { Date.new(2018, 2, 2) }
-    it 'returns the outdated items updated before the given date' do
-      expected_item = create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 1, 23, 59, 59))
-      create(:dimensions_item, outdated: true, updated_at: Time.utc(2018, 2, 2))
-      expect(Dimensions::Item.outdated_before(date)).to match_array(expected_item)
-    end
-  end
-
   describe '#new_version' do
     it 'duplicates the old item with latest: true, outdated: false but does not save' do
       old_item = build(:dimensions_item,
@@ -32,16 +23,8 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#outdated!' do
-    it 'sets the outdated? flag to true' do
-      item = create(:dimensions_item, outdated: false)
-      item.outdated!
-      expect(item.reload.outdated?).to be true
-    end
-  end
-
   describe '#gone!' do
-    it 'sets the status to "gone"' do
+    it 'sets the status  to "gone"' do
       item = create(:dimensions_item, outdated: false)
       item.gone!
       expect(item.reload.status).to eq 'gone'

@@ -25,6 +25,11 @@ FactoryBot.define do
     sequence(:description) { |i| "description - #{i}" }
     sequence(:raw_json) { |i| "json - #{i}" }
     number_of_pdfs 0
+
+    factory :outdated_item do
+      outdated true
+      outdated_at { 2.days.ago }
+    end
   end
 
   factory :metric, class: Facts::Metric do
