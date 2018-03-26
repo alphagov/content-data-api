@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'securerandom'
 
-RSpec.describe '/api/v1/metrics/:content_id', type: :request do
+RSpec.describe '/api/v1/metrics/', type: :request do
   before { create(:user) }
 
   let!(:day1) { create :dimensions_date, date: Date.new(2018, 1, 13) }
@@ -12,68 +12,99 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
 
   let!(:item) { create :dimensions_item, content_id: content_id }
 
-  it 'returns an error for metrics not on the whitelist' do
-    get "/api/v1/metrics/number_of_puns/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+  describe "an API response" do
+    it "should be cacheable until the end of the day" do
+      Timecop.freeze(Time.zone.local(2020, 1, 1, 0, 0, 0)) do
+        get "/api/v1/metrics/"
 
-    expect(response.status).to eq(400)
+        expect(response.headers['ETag']).to be_present
+        expect(response.headers['Cache-Control']).to eq "max-age=3600, public"
+      end
+    end
 
-    json = JSON.parse(response.body)
+    it "expires at 1am" do
+      Timecop.freeze(Time.zone.local(2020, 1, 1, 1, 0, 0)) do
+        get "/api/v1/metrics/"
 
-    expected_error_response = {
-      "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
-      "title" => "One or more parameters is invalid",
-      "invalid_params" => { "metric" => ["is not included in the list"] }
-    }
+        expect(response.headers['ETag']).to be_present
+        expect(response.headers['Cache-Control']).to eq "max-age=0, public"
+      end
+    end
 
-    expect(json).to eq(expected_error_response)
+    it "can be cached for up to a day" do
+      Timecop.freeze(Time.zone.local(2020, 1, 1, 1, 0, 1)) do
+        get "/api/v1/metrics/"
+
+        expect(response.headers['ETag']).to be_present
+        expect(response.headers['Cache-Control']).to eq "max-age=86399, public"
+      end
+    end
   end
 
-  it 'returns an error for badly formatted dates' do
-    get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: 'today', to: '2018-01-15' }
+  describe "invalid requests" do
+    it 'returns an error for metrics not on the whitelist' do
+      get "/api/v1/metrics/number_of_puns/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
-    expect(response.status).to eq(400)
+      expect(response.status).to eq(400)
 
-    json = JSON.parse(response.body)
+      json = JSON.parse(response.body)
 
-    expected_error_response = {
-      "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
-      "title" => "One or more parameters is invalid",
-      "invalid_params" => { "from" => ["Dates should use the format YYYY-MM-DD"] }
-    }
+      expected_error_response = {
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        "title" => "One or more parameters is invalid",
+        "invalid_params" => { "metric" => ["is not included in the list"] }
+      }
 
-    expect(json).to eq(expected_error_response)
-  end
+      expect(json).to eq(expected_error_response)
+    end
 
-  it 'returns an error for bad date ranges' do
-    get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-16', to: '2018-01-15' }
+    it 'returns an error for badly formatted dates' do
+      get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: 'today', to: '2018-01-15' }
 
-    expect(response.status).to eq(400)
+      expect(response.status).to eq(400)
 
-    json = JSON.parse(response.body)
+      json = JSON.parse(response.body)
 
-    expected_error_response = {
-      "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
-      "title" => "One or more parameters is invalid",
-      "invalid_params" => { "from,to" => ["`from` parameter can't be after the `to` parameter"] }
-    }
+      expected_error_response = {
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        "title" => "One or more parameters is invalid",
+        "invalid_params" => { "from" => ["Dates should use the format YYYY-MM-DD"] }
+      }
 
-    expect(json).to eq(expected_error_response)
-  end
+      expect(json).to eq(expected_error_response)
+    end
 
-  it 'returns an error for unknown parameters' do
-    get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla" }
+    it 'returns an error for bad date ranges' do
+      get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-16', to: '2018-01-15' }
 
-    expect(response.status).to eq(400)
+      expect(response.status).to eq(400)
 
-    json = JSON.parse(response.body)
+      json = JSON.parse(response.body)
 
-    expected_error_response = {
-      "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#unknown-parameter",
-      "title" => "One or more parameter names are invalid",
-      "invalid_params" => ["extra"]
-    }
+      expected_error_response = {
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        "title" => "One or more parameters is invalid",
+        "invalid_params" => { "from,to" => ["`from` parameter can't be after the `to` parameter"] }
+      }
 
-    expect(json).to eq(expected_error_response)
+      expect(json).to eq(expected_error_response)
+    end
+
+    it 'returns an error for unknown parameters' do
+      get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla" }
+
+      expect(response.status).to eq(400)
+
+      json = JSON.parse(response.body)
+
+      expected_error_response = {
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#unknown-parameter",
+        "title" => "One or more parameter names are invalid",
+        "invalid_params" => ["extra"]
+      }
+
+      expect(json).to eq(expected_error_response)
+    end
   end
 
   describe 'Daily metrics' do
