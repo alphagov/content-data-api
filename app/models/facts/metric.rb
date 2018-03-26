@@ -37,7 +37,7 @@ class Facts::Metric < ApplicationRecord
       'SUM(feedex_comments)',
       'AVG(number_of_pdfs)',
       'AVG(number_of_word_files)',
-      'SUM(spell_count)',
+      'AVG(spell_count)',
       'AVG(readability_score)'
     ).first
     {
