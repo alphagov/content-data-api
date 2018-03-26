@@ -3,9 +3,9 @@ RSpec.describe Importers::ContentDetails do
   let(:content_id) { 'content_id' }
 
 
-  subject { Importers::ContentDetails.new(content_id, base_path, locale) }
 
   context 'Import contents' do
+    subject { Importers::ContentDetails.new(latest_dimension_item.id) }
     let(:locale) { 'en' }
     let!(:existing_content_hash) { 'ContentHashContentHash' }
     let!(:parsed_content_hash) { 'NewContentHash' }
@@ -102,6 +102,7 @@ RSpec.describe Importers::ContentDetails do
   end
 
   context 'when GdsApi::HTTPGone is raised' do
+    subject { Importers::ContentDetails.new(existing_content_item.id) }
     let(:locale) { 'en' }
     let!(:existing_content_item) { create :dimensions_item, content_id: content_id, status: 'something', locale: locale }
 
@@ -117,6 +118,7 @@ RSpec.describe Importers::ContentDetails do
   end
 
   context 'when GdsApi::HTTPNotFound is raised' do
+    subject { Importers::ContentDetails.new(existing_content_item.id) }
     let(:locale) { 'en' }
     let!(:existing_content_item) do
       create :dimensions_item, content_id: content_id, status: 'something', raw_json: { existing: 'content' }

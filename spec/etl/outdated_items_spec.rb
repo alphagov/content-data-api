@@ -43,7 +43,9 @@ RSpec.describe ETL::OutdatedItems do
   end
 
   it 'fires a Sidekiq job for the new item' do
-    expect(ImportContentDetailsJob).to have_received(:perform_async).with(content_id, base_path, locale)
+    latest_id = Dimensions::Item.find_by(content_id: content_id, latest: true).id
+
+    expect(ImportContentDetailsJob).to have_received(:perform_async).with(latest_id)
   end
 
   it 'does not touch content from later than the given date' do
