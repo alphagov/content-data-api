@@ -1,5 +1,5 @@
 class Api::MetricsController < Api::BaseController
-  before_action :validate_params!
+  before_action :validate_params!, except: :index
 
   def time_series
     @metrics = query_series
@@ -9,6 +9,11 @@ class Api::MetricsController < Api::BaseController
   def summary
     @metrics = query_series
     @metric_params = metric_params
+  end
+
+  def index
+    items = Rails.configuration.metrics.map { |k, v| v.merge(metric_id: k) }.sort_by { |item| item[:name] }
+    render json: items
   end
 
 private

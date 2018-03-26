@@ -160,4 +160,18 @@ RSpec.describe '/api/v1/metrics/:content_id', type: :request do
       }
     end
   end
+
+  describe "metrics index" do
+    it "describes the available metrics" do
+      get "/api/v1/metrics"
+
+      json = JSON.parse(response.body)
+
+      expect(json.count).to eq(Rails.configuration.metrics.count)
+
+      expect(json).to include("metric_id" => "pageviews",
+        "description" => "Number of pageviews",
+        "source" => "Google Analytics")
+    end
+  end
 end
