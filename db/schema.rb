@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20180323170720) do
     t.string "primary_organisation_content_id"
     t.boolean "primary_organisation_withdrawn"
     t.string "content_hash"
-    t.string "locale"
+    t.string "locale", default: "en", null: false
     t.datetime "outdated_at"
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
