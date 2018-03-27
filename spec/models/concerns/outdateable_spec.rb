@@ -29,8 +29,8 @@ RSpec.describe Concerns::Outdateable, type: :model do
     let(:date) { Date.new(2018, 2, 2) }
     let(:before_date) { Time.utc(2018, 2, 1, 23, 59, 59) }
 
-    let!(:outdated_item_1) { create(:dimensions_item, outdated: true, outdated_at: before_date) }
-    let!(:outdated_item_2) { create(:dimensions_item, outdated: true, outdated_at: date) }
+    let!(:outdated_item_1) { create(:outdated_item, outdated_at: before_date) }
+    let!(:outdated_item_2) { create(:outdated_item, outdated_at: date) }
 
     it 'only returns outdated items in their latest version' do
       outdated_item_1.update latest: false
@@ -59,7 +59,7 @@ RSpec.describe Concerns::Outdateable, type: :model do
 
     it 'sets the oudated_at time' do
       Timecop.freeze(Time.new(2018, 3, 3)) { item.outdate! }
-      
+
       expect(item.reload.outdated_at).to eq(Time.new(2018, 3, 3))
     end
   end

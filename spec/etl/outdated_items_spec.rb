@@ -11,18 +11,16 @@ RSpec.describe ETL::OutdatedItems do
   before :each do
     allow(ImportContentDetailsJob).to receive(:perform_async)
     create(
-      :dimensions_item,
+      :outdated_item,
       latest: true,
-      outdated: true,
       content_id: content_id,
       base_path: base_path,
       locale: locale,
       outdated_at: date
     )
     create(
-      :dimensions_item,
+      :outdated_item,
       latest: true,
-      outdated: true,
       content_id: later_content_id,
       base_path: base_path,
       outdated_at: date + 1.day,

@@ -22,13 +22,13 @@ RSpec.describe 'Master process spec' do
 
   let!(:an_item) { create :dimensions_item, content_id: 'a-content-id', locale: locale }
   let!(:outdated_item) do
-    create :dimensions_item, content_id: content_id,
+    create :outdated_item, content_id: content_id,
       base_path: '/old/base/path', locale: locale, latest: false
   end
   let!(:item) do
-    create :dimensions_item,
+    create :outdated_item,
       content_id: content_id, base_path: base_path,
-      locale: locale, outdated: true, outdated_at: 2.days.ago
+      locale: locale, outdated_at: 2.days.ago
   end
 
   it 'orchestrates all ETL processes' do

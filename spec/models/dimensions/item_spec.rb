@@ -18,8 +18,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '#new_version' do
     it 'duplicates the old item with latest: true, outdated: false but does not save' do
-      old_item = build(:dimensions_item,
-        outdated: true,
+      old_item = build(:outdated_item,
         latest: true,
         raw_json: { 'the' => 'content' },
         content_id: 'c-id',
