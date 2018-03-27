@@ -12,6 +12,13 @@ RSpec.describe 'new content from the publishing feed' do
     end
   end
 
+  before do
+    stub_google_analytics_response
+    stub_feedex_response
+    stub_quality_metrics_response
+    stub_content_store_response(title: 'title1', base_path: base_path)
+  end
+
   let(:content_id) { 'id1' }
   let(:base_path) { '/the-base-path' }
   let(:locale) { 'en' }
@@ -23,10 +30,6 @@ RSpec.describe 'new content from the publishing feed' do
     Timecop.freeze(today - 1.day) do
       PublishingApiConsumer.new.process(message)
     end
-    stub_google_analytics_response
-    stub_feedex_response
-    stub_quality_metrics_response
-    stub_content_store_response(title: 'title1', content: item_content, base_path: base_path)
 
     ETL::Master.process date: today
   end
@@ -50,10 +53,6 @@ RSpec.describe 'new content from the publishing feed' do
 
     before do
       PublishingApiConsumer.new.process(new_message)
-      stub_google_analytics_response
-      stub_feedex_response
-      stub_quality_metrics_response
-      stub_content_store_response(title: 'updated title', content: updated_content, base_path: new_base_path)
     end
 
     it 'creates a new item with the updated data' do
