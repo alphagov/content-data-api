@@ -8,8 +8,8 @@ RSpec.describe PublishingApiConsumer do
   it_behaves_like 'a message queue processor'
 
   context 'when the Dimensions::Item already exists - all events but unpublish' do
-    let!(:latest_item_en) { create(:dimensions_item, latest: true, outdated: false, locale: 'en') }
-    let!(:latest_item_de) { create(:dimensions_item, latest: true, outdated: false, locale: 'de') }
+    let!(:latest_item_en) { create(:dimensions_item, locale: 'en') }
+    let!(:latest_item_de) { create(:dimensions_item, locale: 'de') }
 
     let!(:older_item) do
       create(:dimensions_item,
@@ -18,7 +18,7 @@ RSpec.describe PublishingApiConsumer do
         latest: false,
         outdated: false)
     end
-    let!(:different_item) { create(:dimensions_item, latest: true, outdated: false) }
+    let!(:different_item) { create(:dimensions_item) }
     let!(:updated_base_path) { '/updated/base/path' }
     let!(:payload) do
       {
@@ -59,8 +59,8 @@ RSpec.describe PublishingApiConsumer do
   end
 
   context 'on an unpublish event' do
-    let!(:latest_item_en) { create(:dimensions_item, latest: true, outdated: false, locale: 'en') }
-    let!(:latest_item_fr) { create(:dimensions_item, latest: true, outdated: false, locale: 'fr') }
+    let!(:latest_item_en) { create(:dimensions_item, locale: 'en') }
+    let!(:latest_item_fr) { create(:dimensions_item, locale: 'fr') }
     let!(:payload) do
       {
         'base_path' => latest_item_en.base_path,

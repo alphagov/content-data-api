@@ -12,12 +12,12 @@ RSpec.describe Importers::ContentDetails do
     let!(:latest_dimension_item_fr) do
       create(:dimensions_item,
         content_id: content_id, base_path: base_path, locale: 'fr',
-        latest: true, raw_json: nil, content_hash: existing_content_hash)
+        raw_json: nil, content_hash: existing_content_hash)
     end
     let!(:latest_dimension_item) do
       create(:dimensions_item,
         content_id: content_id, base_path: base_path, locale: 'en',
-        latest: true, raw_json: nil, content_hash: existing_content_hash)
+        raw_json: nil, content_hash: existing_content_hash)
     end
     let!(:older_dimension_item) { create(:dimensions_item, content_id: content_id, base_path: base_path, latest: false, raw_json: nil) }
     let(:raw_json) { { 'details' => 'the-json' } }
