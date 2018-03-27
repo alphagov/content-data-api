@@ -13,7 +13,62 @@ info:
 servers:
   - url: https://content-performance-manager.publishing.service.gov.uk/api/
 
+components:
+  securitySchemes:
+    bearerAuth:  # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+
+  schemas:
+    MetricInfo:
+      description: |
+        Information about a metric returned by the API.
+      type: object
+      required:
+        - metric_id
+        - description
+      properties:
+        metric_id:
+          type: string
+          description: "ID to refer to the metric within the API"
+        description:
+          type: string
+          description: "Description of the metric"
+        source:
+          type: string
+          description: "Where this metric comes from"
+
+
+# Apply the security globally to all operations
+security:
+  - bearerAuth: []
+
 paths:
+  /metrics/:
+    get:
+      summary: List all available metrics.
+      description: |
+        Returns a list of metric metadata.
+      tags:
+        - Metadata
+
+      responses:
+        200:
+          description: |
+            A list of metric metadata.
+          content:
+            application/json:
+              schema:
+                description: "List of metrics returned by the API"
+                type: array
+                items:
+                  description: "Metric information"
+                  $ref: '#/components/schemas/MetricInfo'
+      x-code-samples:
+        "/metrics/":
+          lang: shell
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/'
+
   /metrics/{metric}/{content_id}:
     get:
       summary: Get summarised metrics for a content item.
