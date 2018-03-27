@@ -5,7 +5,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
   it { is_expected.to validate_presence_of(:content_id) }
 
-  describe '##by_natural_key' do
+  describe '#by_natural_key' do
     it 'returns the latest item of the correct locale' do
       content_id = 'the-one-we-want'
       expected_item = create(:dimensions_item, content_id: content_id, latest: true, locale: 'en')
@@ -36,6 +36,24 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
+  describe '#quality_metrics_required?' do
+    let(:item) { build(:dimensions_item, content_hash: 'existing-hash') }
+    it 'returns true if content has changed and locale is en' do
+      attributes = { content_hash: 'a different one', locale: 'en' }
+      expect(item.quality_metrics_required?(attributes)).to eq(true)
+    end
+
+    it 'returns false if content has not changed' do
+      attributes = { content_hash: 'existing-hash', locale: 'en' }
+      expect(item.quality_metrics_required?(attributes)).to eq(false)
+    end
+
+    it 'returns false if content has changed and locale not en' do
+      attributes = { content_hash: 'existing-hash', locale: 'de' }
+      expect(item.quality_metrics_required?(attributes)).to eq(false)
+    end
+  end
+
   describe '#gone!' do
     it 'sets the status  to "gone"' do
       item = create(:dimensions_item, outdated: false)
@@ -51,7 +69,7 @@ RSpec.describe Dimensions::Item, type: :model do
     expect(item.raw_json).to eq('a' => 'b')
   end
 
-  describe '##create_empty' do
+  describe '#create_empty' do
     let(:content_id) { 'new-item' }
     let(:base_path) { '/path/to/new-item' }
     it 'creates a new item with the correct attributes' do

@@ -24,6 +24,10 @@ class Dimensions::Item < ApplicationRecord
     update_attributes(status: 'gone')
   end
 
+  def quality_metrics_required?(attributes)
+    attributes[:locale] == 'en' && attributes[:content_hash] != content_hash
+  end
+
   def self.create_empty(content_id:, base_path:, locale:)
     create(
       content_id: content_id,

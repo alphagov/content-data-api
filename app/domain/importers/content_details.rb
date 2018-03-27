@@ -20,10 +20,10 @@ class Importers::ContentDetails
         item = Dimensions::Item.find(id)
         item_raw_json = items_service.fetch_raw_json(item.base_path)
         attributes = Metadata::Parser.parse(item_raw_json)
-        content_changed = item.content_hash != attributes[:content_hash]
+        needs_quality_metrics = item.quality_metrics_required?(attributes)
         item.update_attributes(attributes)
 
-        import_quality_metrics_for_en(item) if content_changed
+        ImportQualityMetricsJob.perform_async(item.id) if needs_quality_metrics
       end
     rescue GdsApi::HTTPGone
       item.gone!
@@ -34,10 +34,6 @@ class Importers::ContentDetails
   end
 
 private
-
-  def import_quality_metrics_for_en(item)
-    ImportQualityMetricsJob.perform_async(item.id) if item.locale == 'en'
-  end
 
   def handle_not_found(base_path:)
     log process: :content_details, message: "NotFound when retrieving '#{base_path}' from content store"

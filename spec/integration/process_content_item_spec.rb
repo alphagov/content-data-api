@@ -73,6 +73,7 @@ RSpec.describe 'Process content item' do
     response.merge!(
       'content_id' => content_id,
       'base_path' => base_path,
+      'locale' => 'en',
       'schema_name' => 'news_article',
       'title' => 'title1',
       'document_type' => 'document_type1',
