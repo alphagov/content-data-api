@@ -13,6 +13,16 @@ info:
 servers:
   - url: https://content-performance-manager.publishing.service.gov.uk/api/
 
+components:
+  securitySchemes:
+    bearerAuth:  # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+
+# Apply the security globally to all operations
+security:
+  - bearerAuth: []
+
 paths:
   /metrics/{metric}/{content_id}:
     get:
