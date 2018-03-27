@@ -40,36 +40,29 @@ RSpec.describe 'new content from the publishing feed' do
     end
   end
 
-  describe 'update item event' do
-    before do
-      Timecop.freeze(Date.yesterday) do
-        PublishingApiConsumer.new.process(message)
-      end
+  context 'with an update event' do
+    let(:new_base_path) { '/updated/base/path' }
+    let(:updated_content) { 'updated content' }
+    let(:message) { build_publishing_api_message(new_base_path, content_id, locale) }
 
-      ETL::Master.process date: today
+    let!(:latest) { create :dimensions_item, content_id: content_id, locale: locale, base_path: base_path, latest: true }
+
+    before do
+      stub_content_store_response(title: 'updated title', base_path: new_base_path)
     end
 
-    context 'once updated by another publishing event' do
-      let(:new_base_path) { '/updated/base/path' }
-      let(:updated_content) { 'updated content' }
-      let(:new_message) { build_publishing_api_message(new_base_path, content_id, locale) }
+    it 'the master process grows the dimension with the updated attributes' do
+      Timecop.freeze(Date.yesterday) { PublishingApiConsumer.new.process(message) }
 
-      before do
-        PublishingApiConsumer.new.process(new_message)
-        stub_content_store_response(title: 'updated title', base_path: new_base_path)
-      end
+      ETL::Master.process date: today
 
-      it 'creates a new item with the updated data' do
-        ETL::Master.process date: today + 1.day
+      expect(latest_version).to have_attributes(
+        content_id: content_id,
+        base_path: new_base_path,
+        locale: locale
+      )
 
-        expect(latest_version).to have_attributes(
-          content_id: content_id,
-          base_path: new_base_path,
-          locale: locale
-        )
-
-        validate_outdated_items!(total: 3, base_path: new_base_path)
-      end
+      validate_outdated_items!(total: 2, base_path: new_base_path)
     end
   end
 
