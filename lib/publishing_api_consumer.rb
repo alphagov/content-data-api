@@ -18,7 +18,8 @@ private
 
 
   def handle_existing(item, base_path, routing_key)
-    item.outdate! base_path: base_path
+    item.update! base_path: base_path
+    item.outdate!
     item.gone! if routing_key.include? 'unpublished'
   end
 end
