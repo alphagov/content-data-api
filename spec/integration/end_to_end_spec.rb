@@ -1,7 +1,7 @@
 require 'sidekiq/testing'
 require 'gds_api/test_helpers/content_store'
 
-RSpec.describe 'new content from the publishing feed' do
+RSpec.describe 'PublishingAPI events' do
   include GdsApi::TestHelpers::ContentStore
 
   around do |example|
