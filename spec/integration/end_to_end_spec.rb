@@ -17,22 +17,9 @@ RSpec.describe 'new content from the publishing feed' do
   let(:locale) { 'en' }
   let(:today) { Date.new(2018, 2, 21) }
   let(:item_content) { 'the content' }
-
-  let!(:payload) do
-    {
-      'base_path' => base_path,
-      'content_id' => content_id,
-      'locale' => locale
-    }
-  end
-  let!(:message) do
-    double('message',
-      payload: payload,
-      delivery_info: double('del_info', routing_key: 'news_story.major'))
-  end
+  let(:message) { build_publishing_api_message(base_path, content_id, locale) }
 
   before do
-    allow(message).to receive(:ack)
     Timecop.freeze(today - 1.day) do
       PublishingApiConsumer.new.process(message)
     end
@@ -65,11 +52,8 @@ RSpec.describe 'new content from the publishing feed' do
   context 'once updated by another publishing event' do
     let(:new_base_path) { '/updated/base/path' }
     let(:updated_content) { 'updated content' }
-    let(:new_message) do
-      double('new_message',
-        payload: payload.merge('base_path' => new_base_path),
-        delivery_info: message.delivery_info)
-    end
+    let(:new_message) { build_publishing_api_message(new_base_path, content_id, locale) }
+
     before do
       allow(new_message).to receive(:ack)
       PublishingApiConsumer.new.process(new_message)
@@ -98,6 +82,19 @@ RSpec.describe 'new content from the publishing feed' do
       validate_outdated_items!(total: 3, base_path: new_base_path)
       validate_metadata!(title: 'updated title')
     end
+  end
+
+  def build_publishing_api_message(base_path, content_id, locale)
+    message = double('message',
+      payload: {
+        'base_path' => base_path,
+        'content_id' => content_id,
+        'locale' => locale
+      },
+      delivery_info: double('del_info', routing_key: 'news_story.major'))
+    allow(message).to receive(:ack)
+
+    message
   end
 
   def latest_version
