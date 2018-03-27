@@ -24,6 +24,23 @@ security:
   - bearerAuth: []
 
 paths:
+  /metrics/:
+    get:
+      summary: List all available metrics.
+      description: |
+        Returns a list of metric metadata.
+      tags:
+        - Metadata
+
+      responses:
+        200:
+          description: |
+            A list of metadata for each metric.
+      x-code-samples:
+        "/metrics/":
+          lang: shell
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/'
+
   /metrics/{metric}/{content_id}:
     get:
       summary: Get summarised metrics for a content item.
