@@ -23,15 +23,9 @@ RSpec.describe 'new content from the publishing feed' do
     Timecop.freeze(today - 1.day) do
       PublishingApiConsumer.new.process(message)
     end
-    stub_google_analytics_response(
-      base_path: base_path,
-      date: '2018-02-21',
-      request_date: today,
-      pageviews: 11,
-      unique_pageviews: 5
-    )
-    stub_feedex_response(base_path: base_path, date: '2018-02-20', request_date: "2018-02-21", comments: 21)
-    stub_quality_metrics_response(content: item_content, passive_count: 6, repeated_count: 8)
+    stub_google_analytics_response
+    stub_feedex_response
+    stub_quality_metrics_response
     stub_content_store_response(title: 'title1', content: item_content, base_path: base_path)
 
     ETL::Master.process date: today
@@ -55,17 +49,10 @@ RSpec.describe 'new content from the publishing feed' do
     let(:new_message) { build_publishing_api_message(new_base_path, content_id, locale) }
 
     before do
-      allow(new_message).to receive(:ack)
       PublishingApiConsumer.new.process(new_message)
-      stub_google_analytics_response(
-        base_path: new_base_path,
-        date: '2018-02-22',
-        request_date: today + 1.day,
-        pageviews: 25,
-        unique_pageviews: 12
-      )
-      stub_feedex_response(base_path: new_base_path, date: '2018-02-21', request_date: "2018-02-22", comments: 18)
-      stub_quality_metrics_response(content: updated_content, passive_count: 10, repeated_count: 5)
+      stub_google_analytics_response
+      stub_feedex_response
+      stub_quality_metrics_response
       stub_content_store_response(title: 'updated title', content: updated_content, base_path: new_base_path)
     end
 
@@ -101,13 +88,6 @@ RSpec.describe 'new content from the publishing feed' do
     Dimensions::Item.by_natural_key(content_id: content_id, locale: locale)
   end
 
-  def latest_metric
-    Facts::Metric
-      .joins(:dimensions_item)
-      .where(dimensions_items: { latest: true, content_id: content_id })
-      .first
-  end
-
   def validate_outdated_items!(total:, base_path:)
     expect(Dimensions::Item.count).to eq(total)
     expect(Dimensions::Item.where(latest: true, content_id: content_id, base_path: base_path).count).to eq(1)
@@ -135,64 +115,20 @@ RSpec.describe 'new content from the publishing feed' do
     content_store_has_item(base_path, response, {})
   end
 
-  def stub_quality_metrics_response(content:, passive_count:, repeated_count:)
-    quality_metrics_response = {
-      passive: { 'count' => passive_count },
-      repeated_words: { 'count' => repeated_count },
-    }
-    stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics').
-      with(
-        body: { content: content }.to_json,
-        headers: { 'Content-Type' => 'application/json' }
-      )
-      .to_return(
-        status: 200,
-        body: quality_metrics_response.to_json,
-        headers: { 'Content-Type' => 'application/json' }
-      )
+  def stub_quality_metrics_response
+    stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics')
+      .to_return(status: 200, body: {}.to_json, headers: { 'Content-Type' => 'application/json' })
   end
 
-  def stub_google_analytics_response(base_path:, date:, request_date:, pageviews:, unique_pageviews:)
-    allow_any_instance_of(GoogleAnalyticsService).to receive(:find_in_batches).with(date: request_date).and_yield(
-      [
-        {
-          'page_path' => base_path,
-          'pageviews' => pageviews,
-          'unique_pageviews' => unique_pageviews,
-          'date' => date,
-        },
-        {
-          'page_path' => '/path2',
-          'pageviews' => 2,
-          'unique_pageviews' => 2,
-          'date' => date,
-        },
-      ]
-    )
+  def stub_google_analytics_response
+    allow_any_instance_of(GoogleAnalyticsService).to receive(:find_in_batches).and_yield([])
   end
 
-  def stub_feedex_response(base_path:, date:, comments:, request_date:)
-    response = {
-      'results': [{
-        'date': date,
-        'path': base_path,
-        'count': comments
-      }, {
-        'date': date,
-        'path': '/path2',
-        'count': 1
-      }, {
-        'date': date,
-        'path': '/path3',
-        'count': 1
-      }],
-      'total_count': 3,
-      'current_page': 1,
-      'pages': 1,
-      'page_size': 3
-    }.to_json
-
-    stub_request(:get, "http://support-api.dev.gov.uk/feedback-by-day/#{request_date}?page=1&per_page=10000").
+  def stub_feedex_response
+    response = { 'results': [], 'total_count': 0, 'current_page': 1, 'pages': 1, 'page_size': 1 }.to_json
+    stub_request(:get, "http://support-api.dev.gov.uk/feedback-by-day/2018-02-21?page=1&per_page=10000").
+      to_return(status: 200, body: response, headers: {})
+    stub_request(:get, "http://support-api.dev.gov.uk/feedback-by-day/2018-02-22?page=1&per_page=10000").
       to_return(status: 200, body: response, headers: {})
   end
 end
