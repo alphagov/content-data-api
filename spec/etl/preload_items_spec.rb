@@ -11,13 +11,15 @@ RSpec.describe ETL::PreloadItems do
         content_id: 'abc123',
         base_path: '/abc',
         description: 'Description of content with the title of abc.',
-        title: 'abc'
+        title: 'abc',
+        locale: 'en',
       },
       {
         content_id: 'xyz789',
         base_path: '/xyz',
         description: 'Description of content with the title of xyz.',
-        title: 'xyz'
+        title: 'xyz',
+        locale: 'en',
       }
     ]
   end
