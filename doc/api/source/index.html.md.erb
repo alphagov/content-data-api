@@ -8,64 +8,134 @@ title: About
   <p>
     <strong class="phase-banner"><%= config[:tech_docs][:phase] %></strong>
     <span>
-      This is a trial service. <a href="#alpha-software">Find out what
+      This is a trial service. <a href="#version">Find out what
       this means</a>.
     </span>
   </p>
 </div>
 
-
-This guide introduces the Content Performance API.
-
-All examples use [curl](https://curl.haxx.se/) for interfacing with the API on
-the command line. You may prefer the structured output of using [HTTPie](https://httpie.org/)
-or piping the curl responses through [jq](https://stedolan.github.io/jq/).
-
-GOV.UK Content API is accessed via [HTTP][] and returns data in a [JSON][]
-format. The [reference documentation](reference.html) provides a thorough
-overview of the endpoints and the response format.
-
-## What you can do with this API
+## What does this API do?
 
 This API provides access to metrics about the performance of GOV.UK content.
 Each metric is a time series, so you can see how the content performance has
 changed over time.
-
-## What you can't do with this API
 
 This API does not expose the content itself. For that you should use the [GOV.UK Content API][].
 
 Not all content is available. For example, content that is generated
 dynamically (such as through a search) is not available.
 
-## Getting Started
+## Before you start
 
-To query the API you need to know the content ID for the piece of content you
-are interested in.
+### Register an API key
+Usage of GOV.UK Content Performance API currently requires [authentication](#authentication-amp-authorisation) using an OAuth2 bearer token. Please [contact the team](#support) first if you are interested in using the API.
+
+### Find out Content IDs
+To query the API you need to know the content ID for the piece of content you are interested in.
 
 You can find out the content ID for most GOV.UK pages using the [GOV.UK Content API][].
 
-For example
+For example, for https://www.gov.uk/vat-rates, you can query the Content API like this:
 
 ```shell
-curl https://www.gov.uk/api/content/vat-rates
+curl https://www.gov.uk/api/content/vat-rates | python -m json.tool # Pretty print JSON
 ```
 
-Then you can use the `/metrics/[content-id]` endpoint to query the number of page views:
+```json
+{
+  "analytics_identifier": null,
+  "base_path": "/vat-rates",
+  "content_id": "f838c22a-b2aa-49be-bd95-153f593293a3",
+  "content_purpose_document_supertype": "guidance",
+  "content_purpose_supergroup": "guidance_and_regulation",
+  "content_purpose_subgroup": "guidance",
+  "document_type": "answer",
+  "email_document_supertype": "other",
+  "first_published_at": "2011-09-12T15:43:03.000+00:00",
+  "government_document_supertype": "other",
+  "locale": "en",
+  "navigation_document_supertype": "guidance",
+  "need_ids": [],
+  "phase": "live",
+  "public_updated_at": "2014-12-12T14:55:23.000+00:00",
+  "publishing_app": "publisher",
+  "publishing_scheduled_at": null,
+  "rendering_app": "government-frontend",
+  "scheduled_publishing_delay_seconds": null,
+  "schema_name": "answer",
+  "search_user_need_document_supertype": "core",
+  "title": "VAT rates",
+  "updated_at": "2018-03-26T16:21:14.213Z",
+  "user_journey_document_supertype": "thing",
+  "withdrawn_notice": {},
+  "publishing_request_id": "3592-1504179295.816-10.3.3.1-410",
+  "links": {...},
+  "description": "Current VAT rates - standard 20% and rates for reduced rate and zero-rated items",
+  "details": {...}
+}
+```
+
+The value of `content_id` is the value you need to pass to this API.
+
+## Getting Started
+
+### Get a full list of available metrics
+The exact metrics provided by the API may change over time. To retrieve the full list:
+
+```
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics | python -m json.tool
+```
+
+```
+[
+{
+  "description": "Number of pageviews",
+  "source": "Google Analytics",
+  "metric_id": "pageviews"
+},
+{
+  "description": "Number of unique pageviews",
+  "source": "Google Analytics",
+  "metric_id": "unique_pageviews"
+},
+{
+  "description": "Number of reported content issues",
+  "source": "Feedback explorer",
+  "metric_id": "feedex_comments"
+},
+{
+  "description": "Number of .pdf attachments",
+  "source": "Publishing API",
+  "metric_id": "number_of_pdfs"
+},
+...
+]
+```
+
+### Get metric data for a single piece of content
+You can use the `/metrics/[metric-id]/[content-id]/` endpoint to get the value of any metric; for example, the number of page views.
+
+To summarise the recorded data over a requested time frame:
 
 ```shell
-http://content-performance-manager.dev.gov.uk/api/v1/metrics/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-28&to=2018-02-28&metric=pageviews
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-28&to=2018-02-28&metric=pageviews
 ```
 
 The `from` and `to` query parameters specify the date range to query.
 
-## Alpha software
+To get data points for each day in the requested time frame:
+
+```shell
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/time-series/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-28&to=2018-02-28&metric=pageviews
+```
+
+## Version
 
 GOV.UK Content Performance API is currently alpha software and is likely to
 change significantly between versions.
 
 This means that you may use the API and build applications that use
-it, but live services should not rely on it.
+it, but live services should not rely on this API or the data provided by it.
 
 As we learn from feedback we may make changes to the software.
 We will communicate those via our [mailing list](#keep-informed).
@@ -75,15 +145,17 @@ We will communicate those via our [mailing list](#keep-informed).
 We intend to use a mailing list to communicate any breaking changes or updates to
 the support status of this API. This will be linked from this documentation.
 
-## Authentication
-
-Usage of GOV.UK Content Performance API currently requires authentication using an OAuth2 bearer token. Please [contact the team](#support) first if you are interested in using the API.
+## Authentication & Authorisation
 
 To authenticate, include an Authorization header like the following:
 
 ```
 Authorization: Bearer your-token-here
 ```
+
+## Testing
+
+There is no sandbox environment provided for testing. 
 
 ## Security and compliance
 
@@ -103,11 +175,11 @@ Security (TLS) protocol, is used by the platform to provide secure connections.
 ## Rate limiting
 
 There is a maximum limit of 10 requests per second per client. If you exceed
-this your request won't be processed until the limit is no longer exceeded
-and you may see timeout errors.
+this your request won't be processed and you will receive a response with HTTP status code 429 (too many requests).
 
-We think this should be sufficient for all users of GOV.UK Content Performance API but
-if you believe you need the limit increasing you can [contact support](#support).
+Your application should handle this exception by retrying the request at a later time.
+
+[Contact support](#support) if you want to increase this limit.
 
 ## Support
 
