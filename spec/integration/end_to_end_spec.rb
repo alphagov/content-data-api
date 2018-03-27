@@ -23,50 +23,53 @@ RSpec.describe 'new content from the publishing feed' do
   let(:base_path) { '/the-base-path' }
   let(:locale) { 'en' }
   let(:today) { Date.new(2018, 2, 21) }
-  let(:item_content) { 'the content' }
   let(:message) { build_publishing_api_message(base_path, content_id, locale) }
 
-  before do
-    Timecop.freeze(today - 1.day) do
-      PublishingApiConsumer.new.process(message)
-    end
+  context 'with a new item event' do
+    it 'the master process creates a new item' do
+      Timecop.freeze(Date.yesterday) { PublishingApiConsumer.new.process(message) }
 
-    ETL::Master.process date: today
-  end
+      ETL::Master.process date: today
 
-  context 'after the initial load' do
-    it 'creates the latest item with the correct attributes' do
       expect(latest_version).to have_attributes(
         content_id: content_id,
         base_path: base_path,
         locale: locale
       )
       validate_outdated_items!(total: 2, base_path: base_path)
-      validate_metadata!(title: 'title1')
     end
   end
 
-  context 'once updated by another publishing event' do
-    let(:new_base_path) { '/updated/base/path' }
-    let(:updated_content) { 'updated content' }
-    let(:new_message) { build_publishing_api_message(new_base_path, content_id, locale) }
-
+  describe 'update item event' do
     before do
-      PublishingApiConsumer.new.process(new_message)
+      Timecop.freeze(Date.yesterday) do
+        PublishingApiConsumer.new.process(message)
+      end
+
+      ETL::Master.process date: today
     end
 
-    it 'creates a new item with the updated data' do
-      original_version_id = latest_version.id
-      ETL::Master.process date: today + 1.day
+    context 'once updated by another publishing event' do
+      let(:new_base_path) { '/updated/base/path' }
+      let(:updated_content) { 'updated content' }
+      let(:new_message) { build_publishing_api_message(new_base_path, content_id, locale) }
 
-      expect(latest_version).to have_attributes(
-        content_id: content_id,
-        base_path: new_base_path,
-        locale: locale
-      )
+      before do
+        PublishingApiConsumer.new.process(new_message)
+        stub_content_store_response(title: 'updated title', base_path: new_base_path)
+      end
 
-      validate_outdated_items!(total: 3, base_path: new_base_path)
-      validate_metadata!(title: 'updated title')
+      it 'creates a new item with the updated data' do
+        ETL::Master.process date: today + 1.day
+
+        expect(latest_version).to have_attributes(
+          content_id: content_id,
+          base_path: new_base_path,
+          locale: locale
+        )
+
+        validate_outdated_items!(total: 3, base_path: new_base_path)
+      end
     end
   end
 
@@ -92,24 +95,14 @@ RSpec.describe 'new content from the publishing feed' do
     expect(Dimensions::Item.where(latest: true, content_id: content_id, base_path: base_path).count).to eq(1)
   end
 
-  def validate_metadata!(title:)
-    expect(latest_version).to have_attributes(
-      title: title,
-      document_type: 'document_type1',
-    )
-  end
-
-  def stub_content_store_response(title:, content:, base_path:)
+  def stub_content_store_response(title:, base_path:)
     response = content_item_for_base_path(base_path)
     response.merge!(
       'content_id' => content_id,
-      'base_path' => base_path,
       'schema_name' => 'news_article',
+      'base_path' => base_path,
       'title' => title,
-      'document_type' => 'document_type1',
-      'details' => {
-        'body' => content,
-      }
+      'details' => { 'body' => 'content' }
     )
     content_store_has_item(base_path, response, {})
   end
