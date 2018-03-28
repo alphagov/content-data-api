@@ -17,6 +17,8 @@ module Content
         parse_html parser.parse(json)
       else
         GovukError.notify(InvalidSchemaError.new("Schema does not exist: #{schema}"))
+
+        nil
       end
     end
 
