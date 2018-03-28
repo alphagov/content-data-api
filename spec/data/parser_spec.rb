@@ -295,14 +295,16 @@ RSpec.describe Content::Parser do
     end
 
     context 'when invalid schema' do
-      it 'raise InvalidSchemaError if json schema_name is not known' do
-        no_schema_json = { schema_name: 'blah' }
-        expect { subject.extract_content(no_schema_json) }.to raise_error(InvalidSchemaError)
+      it 'Logs an error InvalidSchemaError if json schema_name is not known' do
+        expect(GovukError).to receive(:notify).with(an_instance_of(InvalidSchemaError))
+
+        subject.extract_content schema_name: 'blah'
       end
 
       it 'raises InvalidSchemaError if non-empty json does not have a schema_name' do
-        invalid_schema = { document_type: 'answer' }
-        expect { subject.extract_content(invalid_schema) }.to raise_error(InvalidSchemaError)
+        expect(GovukError).to receive(:notify).with(instance_of(InvalidSchemaError))
+
+        subject.extract_content document_type: 'answer'
       end
     end
   end
