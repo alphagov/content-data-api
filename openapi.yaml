@@ -75,6 +75,14 @@ components:
       items:
         $ref: "#/components/schemas/Value"
 
+    MetricsResponse:
+      description: "A list of metrics that the API can return"
+      type: array
+      items:
+        $ref: '#/components/schemas/Metric'
+      example:
+        $ref: '#/components/examples/MetricsExample'
+
     TimeSeriesResponse:
         description: "An object where each key is a metric ID and each value is a time series."
         type: object
@@ -86,6 +94,37 @@ components:
         type: object
         additionalProperties:
           $ref: '#/components/schemas/Summary'
+
+    ErrorResponse:
+      description: "An error response."
+      type: object
+      required:
+        - title
+        - type
+      properties:
+        title:
+          type: string
+          description: A human readable summary of the error.
+        invalid_params:
+          type: object
+          description: An array of error messages for each invalid parameter.
+        type:
+          type: string
+          description: A URI identifying the error.
+      example:
+        $ref: "#/components/examples/ErrorExample"
+
+  examples:
+    ErrorExample:
+      title: "One or more parameters is invalid"
+      invalid_params: {"from":["can't be blank","Dates should use the format YYYY-MM-DD"],"to":["can't be blank","Dates should use the format YYYY-MM-DD"],"content_id":["Content ID must be a UUID."]}
+      type: https://content-performance-api.publishing.service.gov.uk/errors/#validation-error
+
+    MetricsExample:
+      - {"description":"Number of pageviews","source":"Google Analytics","metric_id":"pageviews"}
+      - {"description":"Number of unique pageviews","source":"Google Analytics","metric_id":"unique_pageviews"}
+      - {"description":"Number of reported content issues","source":"Feedback explorer","metric_id":"feedex_comments"}
+      - {"description":"Number of .pdf attachments","source":"Publishing API","metric_id":"number_of_pdfs"}
 
 # Apply the security globally to all operations
 security:
@@ -107,10 +146,9 @@ paths:
           content:
             application/json:
               schema:
-                description: "A list of metrics that the API can return"
-                type: array
-                items:
-                  $ref: '#/components/schemas/Metric'
+                $ref: "#/components/schemas/MetricsResponse"
+              example:
+                $ref: "#/components/examples/MetricsExample"
       x-code-samples:
         "/metrics/":
           lang: shell
@@ -166,6 +204,11 @@ paths:
                 $ref: "#/components/schemas/SummaryResponse"
         400:
           description: The API request is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
       x-code-samples:
         "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
           lang: shell
@@ -222,6 +265,13 @@ paths:
                 $ref: "#/components/schemas/TimeSeriesResponse"
         400:
           description: The API request is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                $ref: "#/components/examples/ErrorExample"
+
       x-code-samples:
         "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
           lang: shell
