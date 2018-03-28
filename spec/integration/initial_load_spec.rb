@@ -48,6 +48,7 @@ RSpec.describe 'Initial load from publishing api' do
         'details' => {
           'body' => 'some content',
         }
-      ) }, {})
+      )
+    }, {})
   end
 end

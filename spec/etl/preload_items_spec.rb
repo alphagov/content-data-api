@@ -44,7 +44,11 @@ RSpec.describe ETL::PreloadItems do
   end
 
   it 'creates a ImportItemJob for each item' do
-    expect(ImportContentDetailsJob).to have_received(:perform_async).with('abc123', '/abc')
-    expect(ImportContentDetailsJob).to have_received(:perform_async).with('xyz789', '/xyz')
+    item = Dimensions::Item.find_by(content_id: 'xyz789')
+    expect(ImportContentDetailsJob).to have_received(:perform_async).with(item.id)
+
+
+    item2 = Dimensions::Item.find_by(content_id: 'abc123')
+    expect(ImportContentDetailsJob).to have_received(:perform_async).with(item2.id)
   end
 end

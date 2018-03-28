@@ -37,9 +37,9 @@ private
     create_import_detail_job(result.ids)
   end
 
-  def create_import_detail_job(item_ids)
-    item_ids.each do |id|
-      ImportContentDetailsJob.perform_async(id)
+  def create_import_detail_job(_item_ids)
+    Dimensions::Item.find_each do |item|
+      ImportContentDetailsJob.perform_async(item.id)
     end
   end
 end
