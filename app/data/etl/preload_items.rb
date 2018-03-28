@@ -33,13 +33,13 @@ private
   end
 
   def load(items)
-    Dimensions::Item.import(items, batch_size: 5000)
-    create_import_detail_job(items)
+    result = Dimensions::Item.import(items, batch_size: 5000)
+    create_import_detail_job(result.ids)
   end
 
-  def create_import_detail_job(items)
-    items.each do |item|
-      ImportContentDetailsJob.perform_async(item[:content_id], item[:base_path])
+  def create_import_detail_job(item_ids)
+    item_ids.each do |id|
+      ImportContentDetailsJob.perform_async(id)
     end
   end
 end
