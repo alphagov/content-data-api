@@ -6,7 +6,7 @@ class Api::HealthcheckController < Api::BaseController
 
     healthcheck = {
       checks: {
-        database: database
+        database: { status: database }
       },
       status: :ok
     }
