@@ -42,16 +42,16 @@ Using GOV.UK Content Performance API currently requires [authentication][] using
 
 #### GOV.UK users:
 
-1. Go to [GOV.UK Signon][]
-2. Click `API Users`
-3. Click `Create API user button`
-4. Create the API user
-5. Click `Add application token` and select `Content Performance Manager` from the list
-6. Copy the bearer token
+1. Go to [GOV.UK Signon][].
+2. Click `API Users`.
+3. Click `Create API user button`.
+4. Create the API user.
+5. Click `Add application token` and select `Content Performance Manager` from the list.
+6. Copy the bearer token.
 
 #### GDS users:
 
-Should contact us through #govuk-developers on [GOV.UK Slack][].
+Contact us through #govuk-developers on [GOV.UK Slack][].
 
 #### Government users:
 
@@ -59,11 +59,11 @@ Contact the GOV.UK Content Performance API team through [Zendesk][].
 
 ### Find out Content IDs
 
-To query the API you need to know the content ID for the piece of content you are interested in.
+To query the API, you need to know the content ID for the piece of content you are interested in.
 
 You can find out the content ID for GOV.UK pages using the [GOV.UK Content API][].
 
-For example, for https://www.gov.uk/vat-rates, you can query the Content API like this:
+For example, for https://www.gov.uk/vat-rates, you can query the Content API using the following code:
 
 ```shell
 curl https://www.gov.uk/api/content/vat-rates | python -m json.tool # Pretty print JSON
