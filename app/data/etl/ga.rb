@@ -12,6 +12,7 @@ class ETL::GA
   def process
     time(process: :ga) do
       extract_events
+      transform_events
       load_metrics
     end
   end
@@ -25,6 +26,10 @@ private
       Events::GA.import(events, batch_size: 10_000)
       batch += 1
     end
+  end
+
+  def transform_events
+    fix_invalid_prefix_in_page_paths
   end
 
   def load_metrics
@@ -64,6 +69,15 @@ private
            AND facts_metrics.dimensions_date_id = '#{date_to_s}'
         )
     SQL
+  end
+
+  def fix_invalid_prefix_in_page_paths
+    events_with_prefix = Events::GA.where("page_path ~ '^\/https:\/\/www.gov.uk'")
+    log(process: :ga, message: "Transforming #{events_with_prefix.count} events with page_path starting https://gov.uk")
+    events_with_prefix.find_each do |event|
+      page_path_without_prefix = event.page_path.remove '/https://www.gov.uk'
+      event.update_attributes(page_path: page_path_without_prefix)
+    end
   end
 
   attr_reader :date
