@@ -40,6 +40,7 @@ module Content
         Parsers::Transaction,
         Parsers::TravelAdviceIndex,
         Parsers::Unpublished,
+        Parsers::NoContent
       ].each(&method(:register_parser))
     end
 

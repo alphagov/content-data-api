@@ -35,6 +35,18 @@ RSpec.describe Content::Parser do
         end
       end
 
+      it "handles schemas that don't have content" do
+        no_content_schemas = %w[
+          redirect
+          placeholder_person
+          placeholder
+        ]
+        no_content_schemas.each do |schema|
+          json = build_raw_json(schema_name: schema, body: "<p>Body for #{schema}</p>")
+          expect(subject.extract_content(json.deep_stringify_keys)).to be_nil, "schema: '#{schema}' should return nil"
+        end
+      end
+
       it 'returns nil if details.body does NOT exist' do
         valid_schema_json = { schema_name: 'answer', details: {} }
         expect(subject.extract_content(valid_schema_json.deep_stringify_keys)).to eq(nil)
@@ -252,9 +264,9 @@ RSpec.describe Content::Parser do
       it "returns content json if schema_name is 'travel_advice_index'" do
         json = { schema_name: "travel_advice_index",
           links: { children: [
-              { country: { name: "Portugal" } },
-              { country: { name: "Brazil" } }
-            ] } }
+            { country: { name: "Portugal" } },
+            { country: { name: "Brazil" } }
+          ] } }
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("Portugal Brazil")
       end
 
