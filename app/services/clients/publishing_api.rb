@@ -2,7 +2,7 @@ require 'gds_api/publishing_api_v2'
 
 module Clients
   class PublishingAPI
-    PER_PAGE = 350
+    PER_PAGE = 50
 
     attr_accessor :publishing_api, :per_page
 
@@ -12,7 +12,7 @@ module Clients
         disable_cache: true,
         bearer_token: ENV['PUBLISHING_API_BEARER_TOKEN'] || 'example',
       )
-      @per_page = 350
+      @per_page = 50
     end
 
     def fetch_all(fields)

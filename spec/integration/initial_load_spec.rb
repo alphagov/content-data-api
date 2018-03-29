@@ -22,7 +22,7 @@ RSpec.describe 'Initial load from publishing api' do
   end
 
   before :each do
-    publishing_api_get_editions(editions, fields: %i[base_path content_id locale], per_page: 350, states: ['published'])
+    publishing_api_get_editions(editions, fields: %i[base_path content_id locale], per_page: 50, states: ['published'])
   end
 
   it 'something' do

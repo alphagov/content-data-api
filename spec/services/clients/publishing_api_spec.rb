@@ -5,7 +5,7 @@ RSpec.describe Clients::PublishingAPI do
 
   describe "#all_content_items" do
     describe "multiple pages of 'en' content items" do
-      let(:page_size) { 350 }
+      let(:page_size) { 50 }
 
       let(:content_ids) { (page_size + 1).times.map { |i| "id-#{i}" } }
 
