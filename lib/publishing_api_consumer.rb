@@ -2,7 +2,7 @@ class PublishingApiConsumer
   def process(message)
     content_id = message.payload['content_id']
     base_path = message.payload['base_path']
-    locale = message.payload['locale']
+    locale = message.payload['locale'] || 'en'
 
     item = Dimensions::Item.by_natural_key(content_id: content_id, locale: locale)
     if item

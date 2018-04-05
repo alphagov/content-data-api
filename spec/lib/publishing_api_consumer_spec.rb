@@ -123,4 +123,28 @@ RSpec.describe PublishingApiConsumer do
       expect(message).to have_received(:ack)
     end
   end
+
+  context 'when locale is not present' do
+    let!(:message) do
+      double('message',
+        payload: {
+          'base_path' => '/path/to/new/content',
+          'content_id' => 'the_content_id'
+        })
+    end
+
+    it "creates a new item with the 'en' locale" do
+      allow(message).to receive(:ack)
+      subject.process(message)
+
+      item = Dimensions::Item.find_by(content_id: 'the_content_id')
+      expect(item).to have_attributes(locale: 'en')
+    end
+
+    it "ack's the message" do
+      expect(message).to receive(:ack)
+
+      subject.process(message)
+    end
+  end
 end
