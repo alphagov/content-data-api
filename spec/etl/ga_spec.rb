@@ -53,8 +53,8 @@ RSpec.describe ETL::GA do
 
     context 'when there are events from other days' do
       before do
-        Events::GA.create(date: date - 1, page_path: '/path1', pageviews: 10, unique_pageviews: 20)
-        Events::GA.create(date: date - 2, page_path: '/path1', pageviews: 10, unique_pageviews: 20)
+        create(:ga, date: date - 1, page_path: '/path1')
+        create(:ga, date: date - 2, page_path: '/path1')
       end
 
       it 'only updates metrics for the current day' do

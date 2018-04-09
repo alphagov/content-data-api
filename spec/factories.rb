@@ -38,4 +38,17 @@ FactoryBot.define do
     pageviews 10
     unique_pageviews 5
   end
+
+  factory :ga, class: Events::GA do
+    sequence(:page_path) { |i| "/path/#{i}" }
+    sequence(:date) { |i| i.days.ago.to_date }
+    pageviews 10
+    unique_pageviews 5
+  end
+
+  factory :feedex, class: Events::Feedex do
+    sequence(:page_path) { |i| "/path/#{i}" }
+    sequence(:date) { |i| i.days.ago.to_date }
+    feedex_comments 1
+  end
 end
