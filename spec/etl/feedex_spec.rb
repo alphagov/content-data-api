@@ -52,8 +52,8 @@ RSpec.describe ETL::Feedex do
 
   context 'when there are events from other days' do
     before do
-      Events::Feedex.create(date: date - 1, page_path: '/path1', feedex_comments: 1)
-      Events::Feedex.create(date: date - 2, page_path: '/path1', feedex_comments: 2)
+      create(:feedex, date: date - 1, page_path: '/path1')
+      create(:feedex, date: date - 2, page_path: '/path1')
     end
 
     it 'only updates metrics for the current day' do
