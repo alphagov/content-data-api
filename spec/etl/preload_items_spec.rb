@@ -4,26 +4,28 @@ require 'gds-api-adapters'
 RSpec.describe ETL::PreloadItems do
   include GdsApi::TestHelpers::PublishingApiV2
   subject { described_class }
-  let(:fields) { %i[base_path content_id description title] }
+  let(:fields) { %i[base_path content_id locale] }
   let(:content_items) do
     [
       {
         content_id: 'abc123',
         base_path: '/abc',
         description: 'Description of content with the title of abc.',
-        title: 'abc'
+        title: 'abc',
+        locale: 'en',
       },
       {
         content_id: 'xyz789',
         base_path: '/xyz',
         description: 'Description of content with the title of xyz.',
-        title: 'xyz'
+        title: 'xyz',
+        locale: 'en',
       }
     ]
   end
 
   before :each do
-    publishing_api_get_editions(content_items, fields: fields, per_page: 350, states: ['published'])
+    publishing_api_get_editions(content_items, fields: fields, per_page: 50, states: ['published'])
     allow(ImportContentDetailsJob).to receive(:perform_async)
     subject.process
   end
@@ -42,7 +44,11 @@ RSpec.describe ETL::PreloadItems do
   end
 
   it 'creates a ImportItemJob for each item' do
-    expect(ImportContentDetailsJob).to have_received(:perform_async).with('abc123', '/abc')
-    expect(ImportContentDetailsJob).to have_received(:perform_async).with('xyz789', '/xyz')
+    item = Dimensions::Item.find_by(content_id: 'xyz789')
+    expect(ImportContentDetailsJob).to have_received(:perform_async).with(item.id)
+
+
+    item2 = Dimensions::Item.find_by(content_id: 'abc123')
+    expect(ImportContentDetailsJob).to have_received(:perform_async).with(item2.id)
   end
 end

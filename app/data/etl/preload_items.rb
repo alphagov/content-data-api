@@ -18,8 +18,7 @@ class ETL::PreloadItems
 private
 
   def extract
-    fields = %w[content_id base_path title description]
-    ItemsService.new.fetch_all_with_default_locale_only(fields)
+    ItemsService.new.fetch_all
   end
 
   def transform(raw_data)
@@ -27,19 +26,20 @@ private
       {
         content_id: item[:content_id],
         base_path: item[:base_path],
+        locale: item[:locale],
         latest: true,
       }
     end
   end
 
   def load(items)
-    Dimensions::Item.import(items, batch_size: 5000)
-    create_import_detail_job(items)
+    result = Dimensions::Item.import(items, batch_size: 5000)
+    create_import_detail_job(result.ids)
   end
 
-  def create_import_detail_job(items)
-    items.each do |item|
-      ImportContentDetailsJob.perform_async(item[:content_id], item[:base_path])
+  def create_import_detail_job(_item_ids)
+    Dimensions::Item.find_each do |item|
+      ImportContentDetailsJob.perform_async(item.id)
     end
   end
 end

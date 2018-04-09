@@ -39,7 +39,7 @@ private
   def import_content_details(items)
     log process: :import_content_details, message: "creating #{items.length} ImportContentDetailsJobs"
     items.each do |item|
-      ImportContentDetailsJob.perform_async(item.content_id, item.base_path)
+      ImportContentDetailsJob.perform_async(item.id)
     end
   end
 end

@@ -4,8 +4,8 @@ require 'gds-api-adapters'
 RSpec.describe ETL::Feedex do
   subject { described_class }
 
-  let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
-  let!(:item2) { create :dimensions_item, base_path: '/path2', latest: true }
+  let!(:item1) { create :dimensions_item, base_path: '/path1' }
+  let!(:item2) { create :dimensions_item, base_path: '/path2' }
 
   let(:date) { Date.new(2018, 2, 20) }
   let(:dimensions_date) { Dimensions::Date.for(date) }

@@ -13,8 +13,13 @@ module Content
     def extract_content(json)
       schema = json.dig("schema_name")
       parser = for_schema(schema)
-      raise InvalidSchemaError, "Schema does not exist: #{schema}" unless parser
-      parse_html parser.parse(json)
+      if parser.present?
+        parse_html parser.parse(json)
+      else
+        GovukError.notify(InvalidSchemaError.new("Schema does not exist: #{schema}"))
+
+        nil
+      end
     end
 
   private
@@ -40,6 +45,7 @@ module Content
         Parsers::Transaction,
         Parsers::TravelAdviceIndex,
         Parsers::Unpublished,
+        Parsers::NoContent
       ].each(&method(:register_parser))
     end
 
