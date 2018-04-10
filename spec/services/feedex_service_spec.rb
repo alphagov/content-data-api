@@ -86,7 +86,6 @@ RSpec.describe FeedexService do
             feedex_comments: 7
           }
         ]
-
       )
 
       expect(support_api).to have_received(:feedback_by_day).with(expected_date, 1, 20)
