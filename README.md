@@ -98,7 +98,7 @@ $ docker-compose exec app rake
 
 * [GOVUK-LINT-RUBY](doc/govuk-lint.md)
 * [Set up Google Analytics credentials in development](doc/google_analytics_setup.md)
-
+* [Generate API documentation](doc/api/README.md)
 
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/overview/

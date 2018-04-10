@@ -40,14 +40,7 @@ Read [the changelog for the gem][gem-changelog] for the latest changes.
 
 ## Running documentation locally
 
-### Installing dependencies
-
-Setting up the documentation requires Ruby and Node. Run the following to
-install the necessary dependencies:
-
-```
-make requirements
-```
+All commands should be run from `doc/api`.
 
 ### Preview changes
 
