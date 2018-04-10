@@ -12,7 +12,7 @@ RSpec.describe Content::Parser do
           detailed_guide
           document_collection
           fatality_notice
-          help
+          help_page
           hmrc_manual_section
           html_publication
           manual
@@ -146,8 +146,8 @@ RSpec.describe Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs Design thinking Performance analysis")
       end
 
-      it "returns content json if schema_name is 'unpublished'" do
-        json = { schema_name: "unpublished",
+      it "returns content json if schema_name is 'unpublishing'" do
+        json = { schema_name: "unpublishing",
           details: { explanation: "This content has been removed" } }
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("This content has been removed")
       end

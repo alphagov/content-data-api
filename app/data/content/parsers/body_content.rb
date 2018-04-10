@@ -12,7 +12,7 @@ class Content::Parsers::BodyContent
     detailed_guide
     document_collection
     fatality_notice
-    help
+    help_page
     hmrc_manual_section
     html_publication
     manual
