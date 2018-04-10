@@ -16,26 +16,54 @@ title: About
 
 ## What does this API do?
 
-This API provides access to metrics about the performance of GOV.UK content.
-Each metric is a time series, so you can see how the content performance has
-changed over time.
+This API provides access to time series metrics data about the performance of GOV.UK content. Examples of metrics include unique page views and number of PDF attachments. Refer to the [getting started section][] for a complete list of metrics.
 
-This API does not expose the content itself. For that you should use the [GOV.UK Content API][].
+This API does not expose the content itself. Use the [GOV.UK Content API][] to access the content.
 
-Not all content is available. For example, content that is generated
-dynamically (such as through a search) is not available.
+## Rate limiting
+
+There is a limit of 10 requests per second per client. All requests over this limit will not be processed, and you will receive a response with `HTTP status code 429 (too many requests)`.
+
+Your application should handle this exception by retrying the request at a later time.
+
+[Contact support][] if you want to increase this limit.
+
+## Version
+
+GOV.UK Content Performance API is currently in alpha and is likely to change between versions.
+
+You may use the API and build applications that use it, but live services should not currently rely on the API or the data it provides.
 
 ## Before you start
 
 ### Register an API key
-Usage of GOV.UK Content Performance API currently requires [authentication](#authentication-amp-authorisation) using an OAuth2 bearer token. Please [contact the team](#support) first if you are interested in using the API.
+
+Using GOV.UK Content Performance API currently requires [authentication][] using an OAuth2 bearer token.
+
+#### GOV.UK users:
+
+1. Go to [GOV.UK Signon][].
+2. Click `API Users`.
+3. Click `Create API user button`.
+4. Create the API user.
+5. Click `Add application token` and select `Content Performance Manager` from the list.
+6. Copy the bearer token.
+
+#### GDS users:
+
+Contact us through #govuk-developers on [GOV.UK Slack][].
+
+#### Government users:
+
+Contact the GOV.UK Content Performance API team through [Zendesk][].
 
 ### Find out Content IDs
-To query the API you need to know the content ID for the piece of content you are interested in.
 
-You can find out the content ID for most GOV.UK pages using the [GOV.UK Content API][].
+To query the API, you need to know the content ID for the piece of content you are interested in.
 
-For example, for https://www.gov.uk/vat-rates, you can query the Content API like this:
+You can find out the content ID for GOV.UK pages using the [GOV.UK Content API][].
+
+For example, for https://www.gov.uk/vat-rates, you can query the Content API using the following code:
 
 ```shell
 curl https://www.gov.uk/api/content/vat-rates | python -m json.tool # Pretty print JSON
@@ -75,11 +103,12 @@ curl https://www.gov.uk/api/content/vat-rates | python -m json.tool # Pretty pri
 }
 ```
 
-The value of `content_id` is the value you need to pass to this API.
+Pass the content_id value to the content performance API.
 
-## Getting Started
+## Getting started
 
 ### Get a full list of available metrics
+
 The exact metrics provided by the API may change over time. To retrieve the full list:
 
 ```
@@ -112,7 +141,8 @@ curl -H 'Authorization: Bearer your-token-here' https://content-performance-mana
 ]
 ```
 
-### Get metric data for a single piece of content
+### Get metrics data for a single piece of content
+
 You can use the `/metrics/[metric-id]/[content-id]/` endpoint to get the value of any metric; for example, the number of page views.
 
 To summarise the recorded data over a requested time frame:
@@ -129,23 +159,13 @@ To get data points for each day in the requested time frame:
 curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/time-series/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-28&to=2018-02-28&metric=pageviews
 ```
 
-## Version
+## API reference
 
-GOV.UK Content Performance API is currently alpha software and is likely to
-change significantly between versions.
+The GOV.UK Content API is accessed using HTTP and returns data in a JSON format. The [reference documentation][] details the endpoints, methods and responses.
 
-This means that you may use the API and build applications that use
-it, but live services should not rely on this API or the data provided by it.
+All examples are written in curl.
 
-As we learn from feedback we may make changes to the software.
-We will communicate those via our [mailing list](#keep-informed).
-
-## Keep informed
-
-We intend to use a mailing list to communicate any breaking changes or updates to
-the support status of this API. This will be linked from this documentation.
-
-## Authentication & Authorisation
+## Authentication and authorisation
 
 To authenticate, include an Authorization header like the following:
 
@@ -155,31 +175,19 @@ Authorization: Bearer your-token-here
 
 ## Testing
 
-There is no sandbox environment provided for testing. 
+You can test your integration in the live environment. There is no sandbox environment provided for testing.
 
 ## Security and compliance
 
 ### Reporting vulnerabilities
 
-If you believe there is a security issue with GOV.UK Content Performance API, please
-[contact us immediately](#support).
+If you believe there is a security issue with GOV.UK Content Performance API, please [contact us immediately](#support).
 
 Please don’t disclose the suspected breach publicly until it has been fixed.
 
-### HTTPS
+## Security guidelines
 
-GOV.UK Content Performance API follows government HTTPS security guidelines. The
-Hypertext Transfer Protocol Secure (HTTPS), which involves the Transport Layer
-Security (TLS) protocol, is used by the platform to provide secure connections.
-
-## Rate limiting
-
-There is a maximum limit of 10 requests per second per client. If you exceed
-this your request won't be processed and you will receive a response with HTTP status code 429 (too many requests).
-
-Your application should handle this exception by retrying the request at a later time.
-
-[Contact support](#support) if you want to increase this limit.
+[GOV.UK Content Performance API][] follows [government HTTPS security guidelines][] for external facing services and uses HTTPS to provide secure connections.
 
 ## Support
 
@@ -189,8 +197,17 @@ please:
 - **If you are a government department:** Raise a ticket with [GOV.UK Support][]
 - **Otherwise:** [Contact GOV.UK][] with your query
 
-[HTTP]: https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
-[JSON]: https://en.wikipedia.org/wiki/JSON
-[GOV.UK Support]: https://support.publishing.service.gov.uk
-[Contact GOV.UK]: https://www.gov.uk/contact/govuk
+
+[getting started section]: /#getting-started
+[Contact support]: http://dev.gov.uk:4567/#support
+[authentication]: /#authentication-amp-authorisation
+[GOV.UK Signon]: https://signon.publishing.service.gov.uk/
+[GOV.UK Slack]: https://govuk.slack.com
 [GOV.UK Content API]: https://content-api.publishing.service.gov.uk
+[government HTTPS security guidelines]: https://www.ncsc.gov.uk/guidance/tls-external-facing-services
+[Contact GOV.UK]: https://www.gov.uk/contact/govuk
+[contact the team]: http://dev.gov.uk:4567/#Support
+[GOV.UK Support]: http://dev.gov.uk:4567/#Support
+[Zendesk]: https://www.zendesk.co.uk/
+[GOV.UK Content Performance API]: https://content-performance-api.publishing.service.gov.uk/#gov-uk-content-performance-api
+[reference documentation]: https://content-performance-api.publishing.service.gov.uk/reference.html#gov-uk-content-performance-api-v1-0-0
