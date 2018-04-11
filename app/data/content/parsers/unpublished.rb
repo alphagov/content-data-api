@@ -4,6 +4,6 @@ class Content::Parsers::Unpublished
   end
 
   def schemas
-    %w[unpublished gone]
+    %w[unpublishing gone]
   end
 end
