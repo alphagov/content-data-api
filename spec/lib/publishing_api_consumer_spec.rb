@@ -147,4 +147,31 @@ RSpec.describe PublishingApiConsumer do
       subject.process(message)
     end
   end
+
+  context "when an error happens" do
+    let!(:message) do
+      double('message',
+        payload: {
+          'base_path' => '/path/to/new/content',
+          'content_id' => 'the_content_id'
+        })
+    end
+
+    before do
+      allow(message).to receive(:discard)
+      expect(Dimensions::Item).to receive(:by_natural_key).and_raise(StandardError.new("An error"))
+    end
+
+    it "we log the error" do
+      expect(GovukError).to receive(:notify).with(instance_of(StandardError))
+
+      expect { subject.process(message) }.to_not raise_error
+    end
+
+    it "we discard the message" do
+      expect(message).to receive(:discard)
+
+      subject.process(message)
+    end
+  end
 end
