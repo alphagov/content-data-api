@@ -1,20 +1,28 @@
 # Content Performance Manager
 
-`Provide content designers across all of government with the data and tooling they need to measure and improve ‘their’ GOV.UK content.`
+A data warehouse that stores content and content metrics, to help content owners measure and improve content on GOV.UK.
 
-This is an app that aggregates metrics from multiple sources to give easy view of content performance measurements.
+This repository contains:
+- Extract, transform, load (ETL) processes for populating the data warehouse
+- An internal tool for exploring the data (AKA the sandbox)
+- Content performance API ([docs](content-performance-api.publishing.service.gov.uk/#gov-uk-content-performance-api))
 
-### Setting up the application
+Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback), and [readability indicators](https://github.com/alphagov/govuk-content-quality-metrics).
 
-The application contains a [setup script](./bin/setup) that will perform the
-steps required to bootstrap the application.
+## Nomenclature
 
-```bash
-$ ./bin/setup
-```
+- **Data warehouse**: the database where we store all the metrics.
+- **ETL**: [extract, transform, load](https://en.wikipedia.org/wiki/Extract,_transform,_load) - how we get data into the data warehouse.
+- **Fact**: a record containing measurements/metrics
+- **Dimension**: a characteristic that provides context for a fact (such as the time it was extracted, or the content item it belongs to)
+- **Star schema**: The way we structure data in the data warehouse using fact and dimension tables
 
-### Running the application
-#### Using the GDS development VM
+## Dependencies
+- [GOV.UK Publishing API](https://github.com/alphagov/publishing-api)
+
+## Setting up the application
+
+### Using the GDS development VM
 
 See the [getting started guide](https://docs.publishing.service.gov.uk/getting-started.html) for instructions about setting up and running your development VM.
 
@@ -34,6 +42,7 @@ The application can be accessed from:
 
 http://content-performance-manager.dev.gov.uk
 
+## Running the test suite
 To run the test suite:
  ```bash
  $ bundle exec rake
@@ -45,60 +54,27 @@ To run the test suite:
  $ bundle exec guard
  ```
 
-### Using Docker
+## Populating data
+If you are a GOV.UK developer using the development VM, you can [run the replication script to populate the database](https://docs.publishing.service.gov.uk/manual/get-started.html#7-import-production-data).
 
-[Docker] configuration files are included should you wish to develop the
-application in a container. A [compose][docker compose] configuration is
-included that defines all the services needed to run the application.
+To run the ETL process locally, you need to  [set up Google Analytics credentials in development](doc/google_analytics_setup.md).
 
-Use the [GOV.UK replication scripts] to download a copy of the application data:
+## Updating the API
+### All changes
+Anytime you change what the API accepts as input or returns as output, you need to [update the OpenAPI spec and documentation](doc/api/README.md).
 
-```commandline
-$ cd /path/to/govuk-puppet/development-vm/replication/
-$ ./sync-postgresql.sh -n postgresql-primary-1.backend.integration
-```
+### Backwards incompatable changes
+Currently the API is in alpha, so users should expect backwards incompatable changes without warning.
 
-Set an environmental variable pointing to the PostgreSQL backup. This is then
-mounted as a volume on the PostgreSQL container so that the application
-database is restored when the container is created. See the
-[official PostgreSQL Docker image](https://hub.docker.com/_/postgres/) for more
-information.
+When the API is live, we will follow the [GDS API technical and data standards](https://www.gov.uk/guidance/gds-api-technical-and-data-standards#iterate-your-api)
+- make backwards compatible changes where possible
+- use a version number as part of the URL when making backwards incompatible changes
+- make a new endpoint available for significant changes
+- provide notices for deprecated endpoints
 
-```commandline
-$ echo "DATABASE_BACKUP=/path/to/govuk-puppet/development-vm/replication/backups/postgresql/postgresql-primary-1.backend.integration/latest/content_performance_manager_production_XXXX-XX-XX_XXhXXm.Day.sql.gz" > .env
-```
+## Licence
 
-Create and start the containers:
-
-```commandline
-$ docker-compose up -d
-```
-
-Apply any database migrations created after the database import was taken:
-
-```commandline
-$ docker-compose exec app rails db:migrate
-```
-
-Launch the application:
-
-```commandline
-$ open http://localhost:3000/
-```
-
-To run the test suite:
-
-```commandline
-$ docker-compose exec app rails db:setup RAILS_ENV=test
-$ docker-compose exec app rake
-```
-
-
-### App development
-
-* [GOVUK-LINT-RUBY](doc/govuk-lint.md)
-* [Set up Google Analytics credentials in development](doc/google_analytics_setup.md)
-* [Generate API documentation](doc/api/README.md)
+[MIT License](LICENCE)
 
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/overview/
