@@ -3,11 +3,22 @@
 A data warehouse that stores content and content metrics, to help content owners measure and improve content on GOV.UK.
 
 This repository contains:
-- [Extract, transform, load (ETL)](https://en.wikipedia.org/wiki/Extract,_transform,_load) processes for populating the data warehouse
+- Extract, transform, load (ETL) processes for populating the data warehouse
 - An internal tool for exploring the data (AKA the sandbox)
 - Content performance API ([docs](content-performance-api.publishing.service.gov.uk/#gov-uk-content-performance-api))
 
 Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback), and [readability indicators](https://github.com/alphagov/govuk-content-quality-metrics).
+
+## Nomenclature
+
+- **Data warehouse**: the database where we store all the metrics.
+- **ETL**: [extract, transform, load](https://en.wikipedia.org/wiki/Extract,_transform,_load) - how we get data into the data warehouse.
+- **Fact**: a record containing measurements/metrics
+- **Dimension**: a characteristic that provides context for a fact (such as the time it was extracted, or the content item it belongs to)
+- **Star schema**: The way we structure data in the data warehouse using fact and dimension tables
+
+## Dependencies
+- [GOV.UK Publishing API](https://github.com/alphagov/publishing-api)
 
 ## Setting up the application
 
@@ -31,6 +42,7 @@ The application can be accessed from:
 
 http://content-performance-manager.dev.gov.uk
 
+## Running the test suite
 To run the test suite:
  ```bash
  $ bundle exec rake
@@ -60,8 +72,9 @@ When the API is live, we will follow the [GDS API technical and data standards](
 - make a new endpoint available for significant changes
 - provide notices for deprecated endpoints
 
+## Licence
 
-
+[MIT License](LICENCE)
 
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/overview/
