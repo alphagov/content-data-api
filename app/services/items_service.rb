@@ -1,7 +1,7 @@
 require 'gds_api/content_store'
 class ItemsService
   def initialize
-    @publishing_api_client = Clients::PublishingAPI.new
+    @publishing_api_client = PublishingAPIService.new
     @content_store_client = GdsApi::ContentStore.new(Plek.new.find('content-store'))
   end
 

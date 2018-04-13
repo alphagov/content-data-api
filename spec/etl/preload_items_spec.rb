@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'gds-api-adapters'
 
-RSpec.describe ETL::PreloadItems do
+RSpec.describe PreloadItems do
   include GdsApi::TestHelpers::PublishingApiV2
   subject { described_class }
   let(:fields) { %i[base_path content_id locale] }
@@ -26,7 +26,7 @@ RSpec.describe ETL::PreloadItems do
 
   before :each do
     publishing_api_get_editions(content_items, fields: fields, per_page: 50, states: ['published'])
-    allow(ImportContentDetailsJob).to receive(:perform_async)
+    allow(Content::Jobs::ImportContentDetailsJob).to receive(:perform_async)
     subject.process
   end
 
@@ -45,10 +45,10 @@ RSpec.describe ETL::PreloadItems do
 
   it 'creates a ImportItemJob for each item' do
     item = Dimensions::Item.find_by(content_id: 'xyz789')
-    expect(ImportContentDetailsJob).to have_received(:perform_async).with(item.id)
+    expect(Content::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item.id)
 
 
     item2 = Dimensions::Item.find_by(content_id: 'abc123')
-    expect(ImportContentDetailsJob).to have_received(:perform_async).with(item2.id)
+    expect(Content::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item2.id)
   end
 end

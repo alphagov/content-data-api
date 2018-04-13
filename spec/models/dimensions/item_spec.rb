@@ -95,7 +95,7 @@ RSpec.describe Dimensions::Item, type: :model do
     it 'returns the content when json is valid' do
       json = { 'schema_name' => 'valid' }
       item = create(:dimensions_item, raw_json: json)
-      expect(Content::Parser).to receive(:extract_content).with(json).and_return('the content')
+      expect(Content::Parsers::ContentParser).to receive(:extract_content).with(json).and_return('the content')
       expect(item.get_content).to eq('the content')
     end
   end

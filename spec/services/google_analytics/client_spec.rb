@@ -1,4 +1,4 @@
-RSpec.describe GoogleAnalytics::Client do
+RSpec.describe Clients::GoogleAnalytics do
   describe 'Connecting to the Google Analytics API' do
     let(:json_key) { { client_email: "test@test.com", private_key: "key" } }
 
@@ -20,7 +20,7 @@ RSpec.describe GoogleAnalytics::Client do
     end
 
     context "api client" do
-      subject { GoogleAnalytics::Client.new.build }
+      subject { Clients::GoogleAnalytics.new.build }
 
       it "is an instance of AnalyticsReportingService" do
         expect(subject).to be_kind_of(Google::Apis::AnalyticsreportingV4::AnalyticsReportingService)
@@ -28,7 +28,7 @@ RSpec.describe GoogleAnalytics::Client do
     end
 
     context "when setting up authorization" do
-      subject { GoogleAnalytics::Client.new.build }
+      subject { Clients::GoogleAnalytics.new.build }
 
       it "uses the given client email from the json key" do
         expect(subject.authorization.issuer).to eq("test@test.com")
@@ -40,7 +40,7 @@ RSpec.describe GoogleAnalytics::Client do
 
       it "uses the given scope" do
         options = { scope: "https://scope.com/analytics" }
-        auth = GoogleAnalytics::Client.new.build(options)
+        auth = Clients::GoogleAnalytics.new.build(options)
 
         expect(auth.authorization.scope).to include("https://scope.com/analytics")
       end
