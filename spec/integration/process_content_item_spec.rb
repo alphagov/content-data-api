@@ -27,7 +27,7 @@ RSpec.describe 'Process content item' do
     stub_item_metadata_in_content_store
     stub_quality_metrics_in_heroku
 
-    Importers::ContentDetails.run(item.id)
+    Content::Jobs::Importers::ContentDetails.run(item.id)
 
     expect(item.reload).to have_attributes(
       content_id: content_id,

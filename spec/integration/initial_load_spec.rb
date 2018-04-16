@@ -31,7 +31,7 @@ RSpec.describe 'Initial load from publishing api' do
     stub_content_item_for_path('/two', 'cont-3', 'new title 2')
 
 
-    ETL::PreloadItems.process
+    PreloadItems.process
 
     expect(Dimensions::Item.where(content_id: 'cont-1').count).to eq(2)
     expect(Dimensions::Item.where(locale: 'en').count).to eq(2)
