@@ -32,7 +32,7 @@ See "Option Three" in [Rails Environment Variables](http://railsapps.github.io/r
 To populate GA metrics for a given day, open a Rails console and run:
 
 ```
-> ETL::GA.process(Date.today) 
+> GA.process(Date.today) 
 ```
 
 It is recommended you disable logging to speed up the process:

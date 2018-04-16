@@ -29,7 +29,7 @@ RSpec.describe 'PublishingAPI events' do
     it 'the master process creates a new item' do
       Timecop.freeze(Date.yesterday) { PublishingApiConsumer.new.process(message) }
 
-      ETL::Master.process date: today
+      Master::Master.process date: today
 
       expect(latest_version).to have_attributes(
         content_id: content_id,
@@ -54,7 +54,7 @@ RSpec.describe 'PublishingAPI events' do
     it 'the master process grows the dimension with the updated attributes' do
       Timecop.freeze(Date.yesterday) { PublishingApiConsumer.new.process(message) }
 
-      ETL::Master.process date: today
+      Master::Master.process date: today
 
       expect(latest_version).to have_attributes(
         content_id: content_id,
