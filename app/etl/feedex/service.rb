@@ -1,6 +1,6 @@
 require 'gds_api/support_api'
 
-class Feedex::FeedexService
+class Feedex::Service
   attr_reader :date, :batch_size, :support_api
 
   def initialize(date, batch_size, support_api = GdsApi::SupportApi.new(Plek.new.find('support-api')))
