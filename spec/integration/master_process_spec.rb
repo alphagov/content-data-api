@@ -127,7 +127,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def stub_google_analytics_response
-    allow_any_instance_of(GoogleAnalyticsService).to receive(:find_in_batches).and_yield(
+    allow_any_instance_of(GA::GoogleAnalyticsService).to receive(:find_in_batches).and_yield(
       [
         {
           'page_path' => base_path,

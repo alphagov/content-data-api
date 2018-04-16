@@ -1,7 +1,7 @@
 require 'google/apis/analyticsreporting_v4'
 
-RSpec.describe GoogleAnalyticsService do
-  subject { GoogleAnalyticsService.new }
+RSpec.describe GA::GoogleAnalyticsService do
+  subject { GA::GoogleAnalyticsService.new }
 
   let(:google_client) { double('client') }
   before { allow(subject).to receive(:client).and_return(google_client) }

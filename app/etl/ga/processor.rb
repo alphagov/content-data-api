@@ -83,6 +83,6 @@ private
   attr_reader :date
 
   def ga_service
-    @ga_service ||= GoogleAnalyticsService.new
+    @ga_service ||= GA::GoogleAnalyticsService.new
   end
 end

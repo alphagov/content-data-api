@@ -9,7 +9,7 @@ class Items::Importers::QualityMetrics
 
   def initialize(item_id, _ = {})
     @item_id = item_id
-    @content_quality_service = ContentQualityService.new
+    @content_quality_service = Item::ContentQualityService.new
   end
 
   def run

@@ -1,4 +1,4 @@
-class GoogleAnalyticsService
+class GA::GoogleAnalyticsService
   def client
     @client ||= GoogleAnalytics::Client.new.build
   end

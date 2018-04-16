@@ -70,6 +70,6 @@ private
   attr_reader :date
 
   def feedex_service
-    @feedex_service ||= FeedexService.new(date, BATCH_SIZE)
+    @feedex_service ||= Feedex::FeedexService.new(date, BATCH_SIZE)
   end
 end

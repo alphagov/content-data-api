@@ -1,6 +1,6 @@
 require 'odyssey'
 
-class ContentQualityService
+class Item::ContentQualityService
   def run(content)
     parsed_response = fetch(content)
     convert_results(parsed_response, content)

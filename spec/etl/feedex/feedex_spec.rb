@@ -10,7 +10,7 @@ RSpec.describe Feedex::Processor do
   let(:date) { Date.new(2018, 2, 20) }
   let(:dimensions_date) { Dimensions::Date.for(date) }
 
-  before { allow_any_instance_of(FeedexService).to receive(:find_in_batches).and_yield(feedex_response) }
+  before { allow_any_instance_of(Feedex::FeedexService).to receive(:find_in_batches).and_yield(feedex_response) }
 
   context 'When the base_path matches the feedex path' do
     it 'update the facts with the feedex metrics' do
