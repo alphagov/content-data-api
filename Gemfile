@@ -54,6 +54,7 @@ group :development, :test do
   gem 'guard-rspec', require: false
   gem 'listen'
   gem 'phantomjs'
+  gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
