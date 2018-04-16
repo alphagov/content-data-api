@@ -69,6 +69,13 @@ RSpec.describe Items::Importers::ContentDetails do
       )
     end
 
+    it 'resets the outdated flag on the item' do
+      subject.run
+
+      expect(latest_dimension_item.reload.outdated).to be false
+    end
+
+
     context "when the locale is 'en'" do
       let(:locale) { 'en' }
 

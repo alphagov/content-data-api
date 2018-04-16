@@ -16,6 +16,7 @@ RSpec.describe 'Master process spec' do
 
   let(:content_id) { 'id1' }
   let(:base_path) { '/the-base-path' }
+  let(:old_base_path) { '/old/base/path' }
   let(:locale) { 'en' }
   let(:item_content) { 'This is the content.' }
 
@@ -23,7 +24,7 @@ RSpec.describe 'Master process spec' do
   let!(:an_item) { create :dimensions_item, content_id: 'a-content-id', locale: locale }
   let!(:outdated_item) do
     create :outdated_item, content_id: content_id,
-      base_path: '/old/base/path', locale: locale, latest: false
+      base_path: old_base_path, locale: locale, latest: false
   end
   let!(:item) do
     create :outdated_item,
@@ -64,7 +65,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def validate_outdated_items!
-    expect(Dimensions::Item.count).to eq(4)
+    expect(Dimensions::Item.count).to eq(3)
 
     expect(Dimensions::Item.where(latest: true, content_id: 'id1', base_path: base_path).count).to eq(1)
   end
@@ -107,6 +108,7 @@ RSpec.describe 'Master process spec' do
       }
     )
     content_store_has_item(base_path, response, {})
+    content_store_has_item(old_base_path, response, {})
   end
 
   def stub_quality_metrics_response

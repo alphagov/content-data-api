@@ -29,15 +29,6 @@ RSpec.describe Items::OutdatedItemsProcessor do
     subject.process
   end
 
-  it 'resets the outdated flag on the item' do
-    expect(Dimensions::Item.where(content_id: content_id, outdated: true, locale: locale).count).to eq(0)
-  end
-
-  it 'resets the latest flag on the old item' do
-    expect(Dimensions::Item.where(content_id: content_id, latest: true, locale: locale).count).to eq(1)
-    expect(Dimensions::Item.where(content_id: content_id, latest: false, locale: locale).count).to eq(1)
-  end
-
   it 'fires a Sidekiq job for the new item' do
     latest_id = Dimensions::Item.find_by(content_id: content_id, latest: true).id
 

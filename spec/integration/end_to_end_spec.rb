@@ -25,44 +25,32 @@ RSpec.describe 'PublishingAPI events' do
   let(:today) { Date.new(2018, 2, 21) }
   let(:message) { build_publishing_api_message(base_path, content_id, locale) }
 
-  context 'with a new item event' do
-    it 'the master process creates a new item' do
+  context 'having received a new version yesterday' do
+    before do
       Timecop.freeze(Date.yesterday) { PublishingApiConsumer.new.process(message) }
+    end
 
+    it 'the master process will still try to populate it today' do
       Master::MasterProcessor.process date: today
 
-      expect(latest_version).to have_attributes(
-        content_id: content_id,
-        base_path: base_path,
-        locale: locale
-      )
-      validate_outdated_items!(total: 2, base_path: base_path)
+      validate_number_of_items!(total: 1, base_path: base_path)
+      expect(Dimensions::Item.where(outdated: true).count).to eq(0)
     end
   end
 
-  context 'with an update event' do
-    let(:new_base_path) { '/updated/base/path' }
-    let(:updated_content) { 'updated content' }
-    let(:message) { build_publishing_api_message(new_base_path, content_id, locale) }
-
-    let!(:latest) { create :dimensions_item, content_id: content_id, locale: locale, base_path: base_path, latest: true }
-
+  context 'having processed two versions yesterday' do
     before do
-      stub_content_store_response(title: 'updated title', base_path: new_base_path)
+      Timecop.freeze(Date.yesterday) do
+        PublishingApiConsumer.new.process(message)
+        PublishingApiConsumer.new.process(message)
+      end
     end
 
-    it 'the master process grows the dimension with the updated attributes' do
-      Timecop.freeze(Date.yesterday) { PublishingApiConsumer.new.process(message) }
-
+    it 'the master process will populate content details for both of them' do
       Master::MasterProcessor.process date: today
 
-      expect(latest_version).to have_attributes(
-        content_id: content_id,
-        base_path: new_base_path,
-        locale: locale
-      )
-
-      validate_outdated_items!(total: 2, base_path: new_base_path)
+      validate_number_of_items!(total: 2, base_path: base_path)
+      expect(Dimensions::Item.where(outdated: true).count).to eq(0)
     end
   end
 
@@ -83,7 +71,7 @@ RSpec.describe 'PublishingAPI events' do
     Dimensions::Item.by_natural_key(content_id: content_id, locale: locale)
   end
 
-  def validate_outdated_items!(total:, base_path:)
+  def validate_number_of_items!(total:, base_path:)
     expect(Dimensions::Item.count).to eq(total)
     expect(Dimensions::Item.where(latest: true, content_id: content_id, base_path: base_path).count).to eq(1)
   end
