@@ -16,22 +16,31 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#new_version' do
-    it 'duplicates the old item with latest: true, outdated: false but does not save' do
-      old_item = build(:outdated_item,
+  describe '#copy_to_new_outdated_version!' do
+    it 'creates a new item with latest: true, and clears this flag on the old one' do
+      old_version = build(:outdated_item,
         latest: true,
         raw_json: { 'the' => 'content' },
         content_id: 'c-id',
         base_path: '/the/path')
-      new_version = old_item.new_version
+
+      new_version = old_version.copy_to_new_outdated_version!('/the/new/path')
+
       expect(new_version).to have_attributes(
-        outdated: false,
+        outdated: true,
         latest: true,
+        raw_json: nil,
+        content_id: 'c-id',
+        base_path: '/the/new/path'
+      )
+
+      expect(old_version).to have_attributes(
+        outdated: true,
+        latest: false,
         raw_json: { 'the' => 'content' },
         content_id: 'c-id',
         base_path: '/the/path'
       )
-      expect(new_version.new_record?).to eq(true)
     end
   end
 

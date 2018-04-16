@@ -24,11 +24,16 @@ private
   end
 
   def handle_existing(item, base_path, routing_key)
-    # If we have an event to update the basepath, in order to get the latest
-    # version from from the content store we need to have the latest path
-    item.update! base_path: base_path
-
-    item.outdate!
-    item.gone! if routing_key.include? 'unpublished'
+    case routing_key
+    when /major|minor/
+      item.copy_to_new_outdated_version!(base_path)
+    when /unpublished/
+      new_item = item.copy_to_new_outdated_version!(base_path)
+      new_item.gone!
+    else
+      # If we get a links update, or an item is republished for technical reasons,
+      # don't store a new version, but update the outdated time on the previous one.
+      item.outdate!
+    end
   end
 end
