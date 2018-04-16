@@ -1,4 +1,4 @@
-class Master::PreloadItems
+class Master::PreloadItemsProcessor
   include Concerns::Traceable
 
   def self.process(*args)

@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'gds-api-adapters'
 
-RSpec.describe Feedex::Feedex do
+RSpec.describe Feedex::Processor do
   subject { described_class }
 
   let!(:item1) { create :dimensions_item, base_path: '/path1' }

@@ -1,4 +1,4 @@
-class Master::Metrics
+class Master::MetricsProcessor
   include Concerns::Traceable
 
   def self.process(*args)

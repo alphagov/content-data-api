@@ -1,4 +1,4 @@
-class Feedex::Feedex
+class GA::Processor
   include Concerns::Traceable
 
   def self.process(*args)
@@ -10,23 +10,26 @@ class Feedex::Feedex
   end
 
   def process
-    time(process: :feedex) do
+    time(process: :ga) do
       extract_events
+      transform_events
       load_metrics
     end
   end
 
 private
 
-  BATCH_SIZE = 10_000
-
   def extract_events
     batch = 1
-    feedex_service.find_in_batches do |events|
-      log process: :feedex, message: "Processing #{events.length} events in batch #{batch}"
-      Events::Feedex.import(events, batch_size: BATCH_SIZE)
+    ga_service.find_in_batches(date: date) do |events|
+      log process: :ga, message: "Processing #{events.length} events in batch #{batch}"
+      Events::GA.import(events, batch_size: 10_000)
       batch += 1
     end
+  end
+
+  def transform_events
+    fix_invalid_prefix_in_page_paths
   end
 
   def load_metrics
@@ -40,14 +43,15 @@ private
   def load_metrics_query(date_to_s)
     <<~SQL
       UPDATE facts_metrics
-      SET feedex_comments = s.feedex_comments
+      SET unique_pageviews = s.unique_pageviews,
+          pageviews = s.pageviews
       FROM (
-        SELECT base_path,
-               feedex_comments,
+        SELECT pageviews,
+               unique_pageviews,
                dimensions_items.id
-        FROM events_feedexes, dimensions_items
+        FROM events_gas, dimensions_items
         WHERE page_path = base_path
-          AND events_feedexes.date = '#{date_to_s}'
+              AND events_gas.date = '#{date_to_s}'
       ) AS s
       WHERE dimensions_item_id = s.id AND dimensions_date_id = '#{date_to_s}'
     SQL
@@ -56,7 +60,7 @@ private
   def clean_up_query
     date_to_s = date.strftime("%F")
     <<~SQL
-      DELETE FROM events_feedexes
+      DELETE FROM events_gas
       WHERE date = '#{date_to_s}' AND
         page_path in (
            SELECT base_path
@@ -67,9 +71,18 @@ private
     SQL
   end
 
+  def fix_invalid_prefix_in_page_paths
+    events_with_prefix = Events::GA.where("page_path ~ '^\/https:\/\/www.gov.uk'")
+    log(process: :ga, message: "Transforming #{events_with_prefix.count} events with page_path starting https://gov.uk")
+    events_with_prefix.find_each do |event|
+      page_path_without_prefix = event.page_path.remove '/https://www.gov.uk'
+      event.update_attributes(page_path: page_path_without_prefix)
+    end
+  end
+
   attr_reader :date
 
-  def feedex_service
-    @feedex_service ||= FeedexService.new(date, BATCH_SIZE)
+  def ga_service
+    @ga_service ||= GoogleAnalyticsService.new
   end
 end

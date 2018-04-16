@@ -37,7 +37,7 @@ RSpec.describe 'Master process spec' do
     stub_content_store_response
     stub_quality_metrics_response
 
-    Master::Master.process
+    Master::MasterProcessor.process
 
     validate_facts_metrics!
     validate_outdated_items!

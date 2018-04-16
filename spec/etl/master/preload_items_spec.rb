@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'gds-api-adapters'
 
-RSpec.describe Master::PreloadItems do
+RSpec.describe Master::PreloadItemsProcessor do
   include GdsApi::TestHelpers::PublishingApiV2
   subject { described_class }
   let(:fields) { %i[base_path content_id locale] }

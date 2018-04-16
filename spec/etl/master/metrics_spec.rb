@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Master::Metrics do
+RSpec.describe Master::MetricsProcessor do
   let(:date) { Date.new(2018, 3, 15) }
 
   subject { described_class.new(date: date) }

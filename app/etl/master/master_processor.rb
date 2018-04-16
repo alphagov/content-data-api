@@ -1,4 +1,4 @@
-class Master::Master
+class Master::MasterProcessor
   include Concerns::Traceable
 
   def self.process(*args)
@@ -12,10 +12,10 @@ class Master::Master
   def process
     raise DuplicateDateError if Dimensions::Date.exists?(date)
     time(process: :master) do
-      Master::OutdatedItems.process(date: dimensions_date.date)
-      Master::Metrics.process(date: dimensions_date.date)
-      GA::GA.process(date: dimensions_date.date)
-      Feedex::Feedex.process(date: dimensions_date.date)
+      Master::OutdatedItemsProcessor.process(date: dimensions_date.date)
+      Master::MetricsProcessor.process(date: dimensions_date.date)
+      GA::Processor.process(date: dimensions_date.date)
+      Feedex::Processor.process(date: dimensions_date.date)
     end
   end
 
