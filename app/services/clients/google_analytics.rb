@@ -1,8 +1,8 @@
 require 'google/apis/analyticsreporting_v4'
 require 'googleauth'
 
-module GoogleAnalytics
-  class Client
+module Clients
+  class GoogleAnalytics
     include Google::Apis::AnalyticsreportingV4
     include Google::Auth
 
