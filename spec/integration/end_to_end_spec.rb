@@ -46,11 +46,26 @@ RSpec.describe 'PublishingAPI events' do
       end
     end
 
-    it 'the master process will populate content details for both of them' do
+    it 'populates content details for both versions' do
       Master::MasterProcessor.process date: today
 
       validate_number_of_items!(total: 2, base_path: base_path)
       expect(Dimensions::Item.where(outdated: true).count).to eq(0)
+    end
+
+    it 'populates daily metrics for the latest content item only' do
+      Master::MasterProcessor.process date: today
+
+      latest_item_facts = Facts::Metric.joins(:dimensions_item).where(
+        dimensions_items: { latest: true, content_id: content_id, base_path: base_path }
+      ).count
+
+      not_latest_item_facts = Facts::Metric.joins(:dimensions_item).where(
+        dimensions_items: { latest: false, content_id: content_id, base_path: base_path }
+      ).count
+
+      expect(latest_item_facts).to eq(1)
+      expect(not_latest_item_facts).to eq(0)
     end
   end
 
