@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180323170720) do
+ActiveRecord::Schema.define(version: 20180417102741) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,8 +70,9 @@ ActiveRecord::Schema.define(version: 20180323170720) do
     t.string "primary_organisation_content_id"
     t.boolean "primary_organisation_withdrawn"
     t.string "content_hash"
-    t.string "locale", default: "en", null: false
     t.datetime "outdated_at"
+    t.string "locale", default: "en", null: false
+    t.bigint "publishing_api_payload_version"
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
@@ -92,6 +93,35 @@ ActiveRecord::Schema.define(version: 20180323170720) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
+  end
+
+  create_table "facts_editions", force: :cascade do |t|
+    t.date "dimensions_date_id"
+    t.bigint "dimensions_item_id"
+    t.integer "number_of_pdfs"
+    t.integer "number_of_word_files"
+    t.integer "readability_score"
+    t.integer "contractions_count"
+    t.integer "equality_count"
+    t.integer "indefinite_article_count"
+    t.integer "passive_count"
+    t.integer "profanities_count"
+    t.integer "redundant_acronyms_count"
+    t.integer "repeated_words_count"
+    t.integer "simplify_count"
+    t.integer "spell_count"
+    t.integer "string_length", default: 0
+    t.integer "sentence_count", default: 0
+    t.integer "word_count", default: 0
+    t.json "raw_json"
+    t.string "status", default: "live"
+    t.string "description"
+    t.datetime "first_published_at"
+    t.datetime "public_updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dimensions_date_id"], name: "index_facts_editions_on_dimensions_date_id"
+    t.index ["dimensions_item_id"], name: "index_facts_editions_on_dimensions_item_id"
   end
 
   create_table "facts_metrics", force: :cascade do |t|
@@ -120,6 +150,8 @@ ActiveRecord::Schema.define(version: 20180323170720) do
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
+  add_foreign_key "facts_editions", "dimensions_dates", primary_key: "date"
+  add_foreign_key "facts_editions", "dimensions_items"
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
   add_foreign_key "facts_metrics", "dimensions_items"
 end

@@ -14,7 +14,7 @@ class Dimensions::Item < ApplicationRecord
     Item::Content::Parser.extract_content(raw_json)
   end
 
-  def copy_to_new_outdated_version!(current_base_path)
+  def copy_to_new_outdated_version!(base_path:, payload_version:)
     # Create a new version of this content item, assuming that a document's
     # content_id and locale are fixed, but the base_path may change.
     #
@@ -30,8 +30,9 @@ class Dimensions::Item < ApplicationRecord
 
     new_version = Dimensions::Item.create_empty(
       content_id: content_id,
-      base_path: current_base_path,
-      locale: locale
+      base_path: base_path,
+      locale: locale,
+      payload_version: payload_version
     )
 
     update_attributes(latest: false)
@@ -47,14 +48,15 @@ class Dimensions::Item < ApplicationRecord
     attributes[:locale] == 'en' && attributes[:content_hash] != content_hash
   end
 
-  def self.create_empty(content_id:, base_path:, locale:)
+  def self.create_empty(content_id:, base_path:, locale:, payload_version:)
     create(
       content_id: content_id,
       base_path: base_path,
       locale: locale,
       latest: true,
       outdated: true,
-      outdated_at: Time.zone.now
+      outdated_at: Time.zone.now,
+      publishing_api_payload_version: payload_version
     )
   end
 end

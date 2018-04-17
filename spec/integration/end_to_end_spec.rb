@@ -23,7 +23,8 @@ RSpec.describe 'PublishingAPI events' do
   let(:base_path) { '/the-base-path' }
   let(:locale) { 'en' }
   let(:today) { Date.new(2018, 2, 21) }
-  let(:message) { build_publishing_api_message(base_path, content_id, locale) }
+  let(:message) { build_publishing_api_message(base_path, content_id, locale, payload_version: 1) }
+  let(:another_message) { build_publishing_api_message(base_path, content_id, locale, payload_version: 2) }
 
   context 'having received a new version yesterday' do
     before do
@@ -42,7 +43,7 @@ RSpec.describe 'PublishingAPI events' do
     before do
       Timecop.freeze(Date.yesterday) do
         PublishingApiConsumer.new.process(message)
-        PublishingApiConsumer.new.process(message)
+        PublishingApiConsumer.new.process(another_message)
       end
     end
 
@@ -69,12 +70,43 @@ RSpec.describe 'PublishingAPI events' do
     end
   end
 
-  def build_publishing_api_message(base_path, content_id, locale)
+  context 'processing the same message twice' do
+    it 'ignores the message the second time around' do
+      Timecop.freeze(Date.yesterday) do
+        PublishingApiConsumer.new.process(message)
+        PublishingApiConsumer.new.process(message)
+      end
+
+      Master::MasterProcessor.process date: today
+
+      validate_number_of_items!(total: 1, base_path: base_path)
+      expect(Dimensions::Item.where(outdated: true).count).to eq(0)
+      expect(latest_version.publishing_api_payload_version).to eq(1)
+    end
+  end
+
+  context 'receiving versions out of order' do
+    it 'ignores the earlier message' do
+      Timecop.freeze(Date.yesterday) do
+        PublishingApiConsumer.new.process(another_message)
+        PublishingApiConsumer.new.process(message)
+      end
+
+      Master::MasterProcessor.process date: today
+
+      validate_number_of_items!(total: 1, base_path: base_path)
+      expect(Dimensions::Item.where(outdated: true).count).to eq(0)
+      expect(latest_version.publishing_api_payload_version).to eq(2)
+    end
+  end
+
+  def build_publishing_api_message(base_path, content_id, locale, payload_version: 1)
     message = double('message',
       payload: {
         'base_path' => base_path,
         'content_id' => content_id,
-        'locale' => locale
+        'locale' => locale,
+        'payload_version' => payload_version
       },
       delivery_info: double('del_info', routing_key: 'news_story.major'))
     allow(message).to receive(:ack)

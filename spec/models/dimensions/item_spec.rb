@@ -24,7 +24,7 @@ RSpec.describe Dimensions::Item, type: :model do
         content_id: 'c-id',
         base_path: '/the/path')
 
-      new_version = old_version.copy_to_new_outdated_version!('/the/new/path')
+      new_version = old_version.copy_to_new_outdated_version!(base_path: '/the/new/path', payload_version: 2)
 
       expect(new_version).to have_attributes(
         outdated: true,
@@ -82,7 +82,7 @@ RSpec.describe Dimensions::Item, type: :model do
     let(:base_path) { '/path/to/new-item' }
     it 'creates a new item with the correct attributes' do
       item = Timecop.freeze(now) do
-        Dimensions::Item.create_empty content_id: content_id, base_path: base_path, locale: 'fr'
+        Dimensions::Item.create_empty content_id: content_id, base_path: base_path, locale: 'fr', payload_version: 1
       end
       expect(item.reload).to have_attributes(
         content_id: content_id,

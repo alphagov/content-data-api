@@ -24,7 +24,8 @@ RSpec.describe PublishingApiConsumer do
       {
         'base_path' => updated_base_path,
         'content_id' => latest_item_de.content_id,
-        'locale' => 'de'
+        'locale' => 'de',
+        'payload_version' => 1
       }
     end
     let!(:message) do
@@ -69,7 +70,8 @@ RSpec.describe PublishingApiConsumer do
       {
         'base_path' => latest_item_en.base_path,
         'content_id' => latest_item_en.content_id,
-        'locale' => 'en'
+        'locale' => 'en',
+        'payload_version' => 1
       }
     end
     let!(:message) do
@@ -106,6 +108,7 @@ RSpec.describe PublishingApiConsumer do
         'base_path' => '/path/to/new/content',
         'content_id' => 'does-not-exist-yet',
         'locale' => 'en',
+        'payload_version' => 1
       }
     end
     let!(:message) { double('message', payload: payload) }
@@ -135,7 +138,8 @@ RSpec.describe PublishingApiConsumer do
       double('message',
         payload: {
           'base_path' => '/path/to/new/content',
-          'content_id' => 'the_content_id'
+          'content_id' => 'the_content_id',
+          'payload_version' => 1
         })
     end
 
@@ -159,7 +163,8 @@ RSpec.describe PublishingApiConsumer do
       double('message',
         payload: {
           'base_path' => '/path/to/new/content',
-          'content_id' => 'the_content_id'
+          'content_id' => 'the_content_id',
+          'payload_version' => 1
         })
     end
 
