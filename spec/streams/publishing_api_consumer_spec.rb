@@ -86,7 +86,7 @@ RSpec.describe PublishingApiConsumer do
     let!(:message) do
       double('message',
         payload: payload,
-        delivery_info: double('del_info', routing_key: 'gone.unpublished'))
+        delivery_info: double('del_info', routing_key: 'gone.unpublish'))
     end
 
     before :each do
