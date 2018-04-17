@@ -13,7 +13,7 @@ RSpec.describe Master::MasterProcessor do
   before do
     allow(GA::Processor).to receive(:process)
     allow(Feedex::Processor).to receive(:process)
-    allow(Master::OutdatedItemsProcessor).to receive(:process)
+    allow(Items::OutdatedItemsProcessor).to receive(:process)
     allow(Master::MetricsProcessor).to receive(:process)
   end
 
@@ -31,7 +31,7 @@ RSpec.describe Master::MasterProcessor do
   it 'updates the outdated items' do
     subject.process
 
-    expect(Master::OutdatedItemsProcessor).to have_received(:process).with(date: Date.new(2018, 2, 19))
+    expect(Items::OutdatedItemsProcessor).to have_received(:process).with(date: Date.new(2018, 2, 19))
   end
 
   it 'update GA metrics in the Facts table' do
@@ -50,7 +50,7 @@ RSpec.describe Master::MasterProcessor do
     another_date = Date.new(2017, 12, 30)
     subject.process(date: another_date)
     expect(Master::MetricsProcessor).to have_received(:process).with(date: another_date)
-    expect(Master::OutdatedItemsProcessor).to have_received(:process).with(date: another_date)
+    expect(Items::OutdatedItemsProcessor).to have_received(:process).with(date: another_date)
     expect(GA::Processor).to have_received(:process).with(date: another_date)
     expect(Feedex::Processor).to have_received(:process).with(date: another_date)
   end

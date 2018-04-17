@@ -1,4 +1,4 @@
-class Master::OutdatedItemsProcessor
+class Items::OutdatedItemsProcessor
   include Concerns::Traceable
 
   def self.process(*args)

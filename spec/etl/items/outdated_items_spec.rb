@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Master::OutdatedItemsProcessor do
+RSpec.describe Items::OutdatedItemsProcessor do
   let(:content_id) { 'outdated1' }
   let(:later_content_id) { 'outdated_next_day' }
   let(:base_path) { '/the/base/path' }

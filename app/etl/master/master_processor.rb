@@ -12,7 +12,7 @@ class Master::MasterProcessor
   def process
     raise DuplicateDateError if Dimensions::Date.exists?(date)
     time(process: :master) do
-      Master::OutdatedItemsProcessor.process(date: dimensions_date.date)
+      Items::OutdatedItemsProcessor.process(date: dimensions_date.date)
       Master::MetricsProcessor.process(date: dimensions_date.date)
       GA::Processor.process(date: dimensions_date.date)
       Feedex::Processor.process(date: dimensions_date.date)
