@@ -8,15 +8,20 @@ RSpec.describe PublishingApiConsumer do
   it_behaves_like 'a message queue processor'
 
   context 'when the Dimensions::Item already exists - all events but unpublish' do
-    let!(:latest_item_en) { create(:dimensions_item, locale: 'en', outdated: true) }
-    let!(:latest_item_de) { create(:dimensions_item, locale: 'de', outdated: false) }
+    let!(:latest_item_en) do
+      create(:dimensions_item, locale: 'en', outdated: true, publishing_api_payload_version: 1)
+    end
+    let!(:latest_item_de) do
+      create(:dimensions_item, locale: 'de', outdated: false, publishing_api_payload_version: 1)
+    end
 
     let!(:older_item) do
       create(:dimensions_item,
         content_id: latest_item_en.content_id,
         base_path: latest_item_en.base_path,
         latest: false,
-        outdated: false)
+        outdated: false,
+        publishing_api_payload_version: 1)
     end
     let!(:different_item) { create(:dimensions_item, outdated: false) }
     let!(:updated_base_path) { '/updated/base/path' }
@@ -25,7 +30,7 @@ RSpec.describe PublishingApiConsumer do
         'base_path' => updated_base_path,
         'content_id' => latest_item_de.content_id,
         'locale' => 'de',
-        'payload_version' => 1
+        'payload_version' => 2
       }
     end
     let!(:message) do
@@ -64,14 +69,18 @@ RSpec.describe PublishingApiConsumer do
   end
 
   context 'on an unpublish event' do
-    let!(:latest_item_en) { create(:dimensions_item, locale: 'en') }
-    let!(:latest_item_fr) { create(:dimensions_item, locale: 'fr') }
+    let!(:latest_item_en) do
+      create(:dimensions_item, locale: 'en', publishing_api_payload_version: 1)
+    end
+    let!(:latest_item_fr) do
+      create(:dimensions_item, locale: 'fr', publishing_api_payload_version: 1)
+    end
     let!(:payload) do
       {
         'base_path' => latest_item_en.base_path,
         'content_id' => latest_item_en.content_id,
         'locale' => 'en',
-        'payload_version' => 1
+        'payload_version' => 2
       }
     end
     let!(:message) do

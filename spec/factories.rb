@@ -26,6 +26,7 @@ FactoryBot.define do
     sequence(:base_path) { |i| "link - #{i}" }
     sequence(:description) { |i| "description - #{i}" }
     sequence(:raw_json) { |i| "json - #{i}" }
+    sequence(:publishing_api_payload_version)
     number_of_pdfs 0
 
     factory :outdated_item do

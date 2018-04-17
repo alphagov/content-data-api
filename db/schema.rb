@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20180417102741) do
     t.string "content_hash"
     t.datetime "outdated_at"
     t.string "locale", default: "en", null: false
-    t.bigint "publishing_api_payload_version"
+    t.bigint "publishing_api_payload_version", null: false
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"

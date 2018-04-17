@@ -19,7 +19,7 @@ private
     item = Dimensions::Item.by_natural_key(content_id: content_id, locale: locale)
 
     if item
-      existing_payload_version = item.publishing_api_payload_version || 0
+      existing_payload_version = item.publishing_api_payload_version
 
       if payload_version > existing_payload_version
         handle_existing(
