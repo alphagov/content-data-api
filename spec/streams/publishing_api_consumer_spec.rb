@@ -120,7 +120,11 @@ RSpec.describe PublishingApiConsumer do
         'payload_version' => 1
       }
     end
-    let!(:message) { double('message', payload: payload) }
+    let!(:message) do
+      double('message',
+        payload: payload,
+        delivery_info: double('del_info', routing_key: 'news_story.major'))
+    end
 
     before :each do
       allow(message).to receive(:ack)
@@ -149,7 +153,8 @@ RSpec.describe PublishingApiConsumer do
           'base_path' => '/path/to/new/content',
           'content_id' => 'the_content_id',
           'payload_version' => 1
-        })
+        },
+        delivery_info: double('del_info', routing_key: 'news_story.major'))
     end
 
     it "creates a new item with the 'en' locale" do
@@ -174,7 +179,8 @@ RSpec.describe PublishingApiConsumer do
           'base_path' => '/path/to/new/content',
           'content_id' => 'the_content_id',
           'payload_version' => 1
-        })
+        },
+        delivery_info: double('del_info', routing_key: 'news_story.major'))
     end
 
     before do
