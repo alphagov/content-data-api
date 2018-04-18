@@ -34,30 +34,4 @@ RSpec.describe Clients::PublishingAPI do
       end
     end
   end
-
-  describe "#fetch" do
-    let(:content_item) { { content_id: "id-123", title: "title" } }
-
-    before do
-      publishing_api_has_item(content_item)
-    end
-
-    it "fetches a content item by content id" do
-      result = subject.fetch("id-123", locale: "en")
-      expect(result).to eq(content_item)
-    end
-  end
-
-  describe "#links" do
-    let(:links) { { organisation: ["org-123"] } }
-
-    before do
-      publishing_api_has_links(content_id: "id-123", links: links)
-    end
-
-    it "gets the links for a content item" do
-      result = subject.links("id-123")
-      expect(result).to eq(links)
-    end
-  end
 end

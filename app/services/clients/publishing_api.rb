@@ -26,14 +26,6 @@ module Clients
         .flatten
     end
 
-    def fetch(content_id, options = {})
-      normalise(publishing_api.get_content(content_id, options))
-    end
-
-    def links(content_id)
-      normalise(publishing_api.get_links(content_id)).fetch(:links)
-    end
-
   private
 
     def build_base_query(fields, options)
