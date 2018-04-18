@@ -1,7 +1,7 @@
-RSpec.describe Clients::PublishingAPI do
+RSpec.describe Items::Clients::PublishingAPI do
   include GdsApi::TestHelpers::PublishingApiV2
 
-  subject { Clients::PublishingAPI.new }
+  subject { Items::Clients::PublishingAPI.new }
 
   describe "#all_content_items" do
     describe "multiple pages of 'en' content items" do
