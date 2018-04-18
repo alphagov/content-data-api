@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180323170720) do
+ActiveRecord::Schema.define(version: 20180418135632) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,8 @@ ActiveRecord::Schema.define(version: 20180323170720) do
     t.integer "unique_pageviews"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "is_this_useful_yes"
+    t.integer "is_this_useful_no"
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
   end
 
@@ -102,6 +104,8 @@ ActiveRecord::Schema.define(version: 20180323170720) do
     t.integer "pageviews", default: 0
     t.integer "unique_pageviews", default: 0
     t.integer "feedex_comments", default: 0
+    t.integer "is_this_useful_yes"
+    t.integer "is_this_useful_no"
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_date_item_id"
     t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
   end
