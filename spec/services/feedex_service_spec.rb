@@ -1,6 +1,6 @@
 require 'gds_api/support_api'
 
-RSpec.describe FeedexService do
+RSpec.describe Feedex::Service do
   let(:support_api) { double('support_api') }
   let(:subject) { described_class.new(date, 20, support_api) }
 

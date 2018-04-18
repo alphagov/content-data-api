@@ -37,7 +37,7 @@ RSpec.describe 'Master process spec' do
     stub_content_store_response
     stub_quality_metrics_response
 
-    ETL::Master.process
+    Master::MasterProcessor.process
 
     validate_facts_metrics!
     validate_outdated_items!
@@ -127,7 +127,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def stub_google_analytics_response
-    allow_any_instance_of(GoogleAnalyticsService).to receive(:find_in_batches).and_yield(
+    allow_any_instance_of(GA::Service).to receive(:find_in_batches).and_yield(
       [
         {
           'page_path' => base_path,
