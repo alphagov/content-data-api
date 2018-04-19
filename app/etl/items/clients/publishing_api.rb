@@ -11,7 +11,6 @@ class Items::Clients::PublishingAPI
       disable_cache: true,
       bearer_token: ENV['PUBLISHING_API_BEARER_TOKEN'] || 'example',
     )
-    @per_page = 50
   end
 
   def fetch_all(fields)
@@ -19,7 +18,7 @@ class Items::Clients::PublishingAPI
       .get_paged_editions(
         fields: fields,
         states: %w[published],
-        per_page: @per_page,
+        per_page: PER_PAGE,
       )
       .map { |response| normalise(response).fetch(:results) }
       .flatten
