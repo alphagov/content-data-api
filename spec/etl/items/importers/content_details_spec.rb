@@ -23,7 +23,7 @@ RSpec.describe Items::Importers::ContentDetails do
     let(:raw_json) { { 'details' => 'the-json' } }
 
     before do
-      allow(subject.items_service).to receive(:fetch_raw_json).and_return(raw_json)
+      allow(subject.content_store_client).to receive(:fetch_raw_json).and_return(raw_json)
       allow(Items::Jobs::ImportQualityMetricsJob).to receive(:perform_async)
       allow(Item::Metadata::Parser).to receive(:parse).and_return(
         raw_json: raw_json,
@@ -107,7 +107,7 @@ RSpec.describe Items::Importers::ContentDetails do
     let!(:existing_content_item) { create :dimensions_item, content_id: content_id, status: 'something', locale: locale }
 
     before :each do
-      expect(subject.items_service).to receive(:fetch_raw_json).and_raise(GdsApi::HTTPGone.new(410))
+      expect(subject.content_store_client).to receive(:fetch_raw_json).and_raise(GdsApi::HTTPGone.new(410))
 
       subject.run
     end
@@ -125,7 +125,7 @@ RSpec.describe Items::Importers::ContentDetails do
     end
 
     before :each do
-      expect(subject.items_service).to receive(:fetch_raw_json).and_raise(GdsApi::HTTPNotFound.new(404))
+      expect(subject.content_store_client).to receive(:fetch_raw_json).and_raise(GdsApi::HTTPNotFound.new(404))
 
       subject.run
     end

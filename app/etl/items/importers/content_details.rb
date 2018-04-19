@@ -3,7 +3,7 @@ require 'odyssey'
 class Items::Importers::ContentDetails
   include Concerns::Traceable
 
-  attr_reader :items_service, :id
+  attr_reader :content_store_client, :id
 
   def self.run(*args)
     new(*args).run
@@ -11,14 +11,14 @@ class Items::Importers::ContentDetails
 
   def initialize(id, _ = {})
     @id = id
-    @items_service = ItemsService.new
+    @content_store_client = Item::Clients::ContentStore.new
   end
 
   def run
     item = nil
     begin
       item = Dimensions::Item.find(id)
-      item_raw_json = items_service.fetch_raw_json(item.base_path)
+      item_raw_json = content_store_client.fetch_raw_json(item.base_path)
       attributes = Item::Metadata::Parser.parse(item_raw_json)
       needs_quality_metrics = item.quality_metrics_required?(attributes)
       item.update_attributes(attributes)
