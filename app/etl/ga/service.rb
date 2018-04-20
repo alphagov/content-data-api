@@ -1,6 +1,6 @@
 class GA::Service
   def client
-    @client ||= GoogleAnalytics::Client.new.build
+    @client ||= GA::Client.new.build
   end
 
   def find_in_batches(date:, batch_size: 10_000)

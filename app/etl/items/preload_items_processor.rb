@@ -5,8 +5,6 @@ class Items::PreloadItemsProcessor
     new(*args).process
   end
 
-  attr_reader :content_items_service
-
   def process
     time(process: :items) do
       raw_data = extract
@@ -18,7 +16,7 @@ class Items::PreloadItemsProcessor
 private
 
   def extract
-    ItemsService.new.fetch_all
+    Items::Clients::PublishingAPI.new.fetch_all(%w[content_id base_path locale])
   end
 
   def transform(raw_data)

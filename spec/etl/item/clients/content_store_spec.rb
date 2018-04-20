@@ -1,6 +1,6 @@
 require 'gds_api/test_helpers/content_store'
 
-RSpec.describe ItemsService do
+RSpec.describe Item::Clients::ContentStore do
   include GdsApi::TestHelpers::ContentStore
 
   describe "#fetch_raw_json" do
