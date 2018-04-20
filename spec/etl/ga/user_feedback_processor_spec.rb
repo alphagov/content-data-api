@@ -77,7 +77,7 @@ RSpec.describe GA::UserFeedbackProcessor do
 
   context 'when page_path starts "/https://www.gov.uk"' do
     it 'removes the "/https://www.gov.uk" from the GA::Event page_path' do
-      allow_any_instance_of(GA::Service).to receive(:find_in_batches).and_yield(ga_response_with_govuk_prefix)
+      allow_any_instance_of(GA::Service).to receive(:find_user_feedback_in_batches).and_yield(ga_response_with_govuk_prefix)
 
       described_class.process(date: date)
       expect(Events::GA.where(page_path: '/https://gov.uk/path1').count).to eq 0
@@ -108,14 +108,14 @@ private
     [
       {
         'page_path' => '/https://www.gov.uk/path1',
-        'pageviews' => 1,
-        'unique_pageviews' => 1,
+        'is_this_useful_no' => 1,
+        'is_this_useful_yes' => 1,
         'date' => '2018-02-20',
       },
       {
         'page_path' => '/path2',
-        'pageviews' => 2,
-        'unique_pageviews' => 2,
+        'is_this_useful_no' => 5,
+        'is_this_useful_yes' => 10,
         'date' => '2018-02-20',
       },
     ]

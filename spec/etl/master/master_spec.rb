@@ -12,6 +12,7 @@ RSpec.describe Master::MasterProcessor do
 
   before do
     allow(GA::Processor).to receive(:process)
+    allow(GA::UserFeedbackProcessor).to receive(:process)
     allow(Feedex::Processor).to receive(:process)
     allow(Items::OutdatedItemsProcessor).to receive(:process)
     allow(Master::MetricsProcessor).to receive(:process)
