@@ -33,6 +33,7 @@ RSpec.describe 'Master process spec' do
 
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response
+    stub_google_analytics_user_feedback_response
     stub_feedex_response
     stub_content_store_response
     stub_quality_metrics_response
@@ -139,6 +140,25 @@ RSpec.describe 'Master process spec' do
           'page_path' => '/path2',
           'pageviews' => 2,
           'unique_pageviews' => 2,
+          'date' => '2018-02-20',
+        },
+      ]
+    )
+  end
+
+  def stub_google_analytics_user_feedback_response
+    allow_any_instance_of(GA::Service).to receive(:find_user_feedback_in_batches).and_yield(
+      [
+        {
+          'page_path' => base_path,
+          'is_this_useful_no' => 1,
+          'is_this_useful_yes' => 12,
+          'date' => '2018-02-20',
+        },
+        {
+          'page_path' => base_path,
+          'is_this_useful_no' => 122,
+          'is_this_useful_yes' => 1,
           'date' => '2018-02-20',
         },
       ]
