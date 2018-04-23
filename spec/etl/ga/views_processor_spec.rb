@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'gds-api-adapters'
 
-RSpec.describe GA::Processor do
+RSpec.describe GA::ViewsProcessor do
   subject { described_class }
 
   let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }

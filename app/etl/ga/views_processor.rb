@@ -1,4 +1,4 @@
-class GA::Processor
+class GA::ViewsProcessor
   include Concerns::Traceable
 
   def self.process(*args)
