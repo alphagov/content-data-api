@@ -3,7 +3,7 @@ class Api::HealthcheckController < Api::BaseController
   skip_before_action :set_cache_headers
 
   def index
-    database = ActiveRecord::Base.connected? ? :ok : :critical
+    database = ActiveRecord::Base.establish_connection ? :ok : :critical
 
     healthcheck = {
       checks: {
