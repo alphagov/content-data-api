@@ -25,6 +25,7 @@ private
         content_id: item[:content_id],
         base_path: item[:base_path],
         locale: item[:locale],
+        publishing_api_payload_version: 0,
         latest: true,
       }
     end

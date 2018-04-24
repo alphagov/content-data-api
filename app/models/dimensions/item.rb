@@ -14,9 +14,29 @@ class Dimensions::Item < ApplicationRecord
     Item::Content::Parser.extract_content(raw_json)
   end
 
-  def new_version
-    new_version = self.dup
-    new_version.assign_attributes(latest: true, outdated: false)
+  def copy_to_new_outdated_version!(base_path:, payload_version:)
+    # Create a new version of this content item, assuming that a document's
+    # content_id and locale are fixed, but the base_path may change.
+    #
+    # Outdated means that quality metrics and content details we store on the dimension
+    # are missing and need to be updated.
+    #
+    # At the moment we populate these from a snapshot of the content item overnight.
+    # The concept of "outdated" will go away when we populate content item data directly
+    # from the publishing api consumer.
+    #
+    # This method is only expected to be called on the latest version of an item per day.
+    raise "Tried to create a new outdated version but this version is not the latest" unless latest
+
+    new_version = Dimensions::Item.create_empty(
+      content_id: content_id,
+      base_path: base_path,
+      locale: locale,
+      payload_version: payload_version
+    )
+
+    update_attributes(latest: false)
+
     new_version
   end
 
@@ -28,14 +48,15 @@ class Dimensions::Item < ApplicationRecord
     attributes[:locale] == 'en' && attributes[:content_hash] != content_hash
   end
 
-  def self.create_empty(content_id:, base_path:, locale:)
+  def self.create_empty(content_id:, base_path:, locale:, payload_version:)
     create(
       content_id: content_id,
       base_path: base_path,
       locale: locale,
       latest: true,
       outdated: true,
-      outdated_at: Time.zone.now
+      outdated_at: Time.zone.now,
+      publishing_api_payload_version: payload_version
     )
   end
 end

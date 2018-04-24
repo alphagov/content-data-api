@@ -8,23 +8,29 @@ RSpec.describe PublishingApiConsumer do
   it_behaves_like 'a message queue processor'
 
   context 'when the Dimensions::Item already exists - all events but unpublish' do
-    let!(:latest_item_en) { create(:dimensions_item, locale: 'en') }
-    let!(:latest_item_de) { create(:dimensions_item, locale: 'de') }
+    let!(:latest_item_en) do
+      create(:dimensions_item, locale: 'en', outdated: true, publishing_api_payload_version: 1)
+    end
+    let!(:latest_item_de) do
+      create(:dimensions_item, locale: 'de', outdated: false, publishing_api_payload_version: 1)
+    end
 
     let!(:older_item) do
       create(:dimensions_item,
         content_id: latest_item_en.content_id,
         base_path: latest_item_en.base_path,
         latest: false,
-        outdated: false)
+        outdated: false,
+        publishing_api_payload_version: 1)
     end
-    let!(:different_item) { create(:dimensions_item) }
+    let!(:different_item) { create(:dimensions_item, outdated: false) }
     let!(:updated_base_path) { '/updated/base/path' }
     let!(:payload) do
       {
         'base_path' => updated_base_path,
         'content_id' => latest_item_de.content_id,
-        'locale' => 'de'
+        'locale' => 'de',
+        'payload_version' => 2
       }
     end
     let!(:message) do
@@ -38,19 +44,23 @@ RSpec.describe PublishingApiConsumer do
       subject.process(message)
     end
 
-    it 'updates the latest content of the correct locale with an outdated flag' do
-      expect(latest_item_de.reload.outdated?).to be true
-      expect(latest_item_en.reload.outdated?).to be false
+    it 'leaves the outdated flag intact' do
+      expect(latest_item_de.reload.outdated?).to be false
+      expect(latest_item_en.reload.outdated?).to be true
       expect(older_item.reload.outdated?).to be false
       expect(different_item.reload.outdated?).to be false
     end
 
-    it 'sets the new base path on the outdated item' do
-      expect(latest_item_de.reload.base_path).to eq(updated_base_path)
+    it 'marks the existing item as not-latest' do
+      expect(latest_item_de.reload.latest).to be false
+      expect(latest_item_en.reload.latest).to be true
     end
 
-    it 'leaves the status as "live"' do
-      expect(latest_item_en.reload.status).to eq('live')
+    it 'creates a new latest item with the same locale and content_id but updated base path' do
+      new_item = Dimensions::Item.find_by(content_id: latest_item_de.content_id, locale: 'de', latest: true)
+
+      expect(new_item).not_to be_nil
+      expect(new_item.base_path).to eq(updated_base_path)
     end
 
     it "ack's the message" do
@@ -59,13 +69,18 @@ RSpec.describe PublishingApiConsumer do
   end
 
   context 'on an unpublish event' do
-    let!(:latest_item_en) { create(:dimensions_item, locale: 'en') }
-    let!(:latest_item_fr) { create(:dimensions_item, locale: 'fr') }
+    let!(:latest_item_en) do
+      create(:dimensions_item, locale: 'en', publishing_api_payload_version: 1)
+    end
+    let!(:latest_item_fr) do
+      create(:dimensions_item, locale: 'fr', publishing_api_payload_version: 1)
+    end
     let!(:payload) do
       {
         'base_path' => latest_item_en.base_path,
         'content_id' => latest_item_en.content_id,
-        'locale' => 'en'
+        'locale' => 'en',
+        'payload_version' => 2
       }
     end
     let!(:message) do
@@ -79,14 +94,16 @@ RSpec.describe PublishingApiConsumer do
       subject.process(message)
     end
 
-    it 'updates the latest content item with a outdated flag' do
-      expect(latest_item_en.reload.outdated?).to be true
-      expect(latest_item_fr.reload.outdated?).to be false
+    it 'creates a new gone item with the same locale and content_id' do
+      new_item = Dimensions::Item.find_by(content_id: latest_item_en.content_id, locale: 'en', latest: true)
+
+      expect(new_item).not_to be_nil
+      expect(new_item.reload.status).to eq('gone')
     end
 
-    it 'sets the status to "gone"' do
-      expect(latest_item_en.reload.status).to eq('gone')
-      expect(latest_item_fr.reload.status).to eq('live')
+    it 'updates the latest flag for the previous item' do
+      expect(latest_item_en.reload.latest).to be false
+      expect(latest_item_fr.reload.latest).to be true
     end
 
     it "ack's the message" do
@@ -100,9 +117,14 @@ RSpec.describe PublishingApiConsumer do
         'base_path' => '/path/to/new/content',
         'content_id' => 'does-not-exist-yet',
         'locale' => 'en',
+        'payload_version' => 1
       }
     end
-    let!(:message) { double('message', payload: payload) }
+    let!(:message) do
+      double('message',
+        payload: payload,
+        delivery_info: double('del_info', routing_key: 'news_story.major'))
+    end
 
     before :each do
       allow(message).to receive(:ack)
@@ -129,8 +151,10 @@ RSpec.describe PublishingApiConsumer do
       double('message',
         payload: {
           'base_path' => '/path/to/new/content',
-          'content_id' => 'the_content_id'
-        })
+          'content_id' => 'the_content_id',
+          'payload_version' => 1
+        },
+        delivery_info: double('del_info', routing_key: 'news_story.major'))
     end
 
     it "creates a new item with the 'en' locale" do
@@ -153,8 +177,10 @@ RSpec.describe PublishingApiConsumer do
       double('message',
         payload: {
           'base_path' => '/path/to/new/content',
-          'content_id' => 'the_content_id'
-        })
+          'content_id' => 'the_content_id',
+          'payload_version' => 1
+        },
+        delivery_info: double('del_info', routing_key: 'news_story.major'))
     end
 
     before do
