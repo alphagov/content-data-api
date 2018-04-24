@@ -46,7 +46,7 @@ private
     case routing_key
     when /major|minor/
       item.copy_to_new_outdated_version!(base_path: base_path, payload_version: payload_version)
-    when /unpublished/
+    when /unpublish/
       new_item = item.copy_to_new_outdated_version!(base_path: base_path, payload_version: payload_version)
       new_item.gone!
     else
