@@ -42,13 +42,22 @@ RSpec.describe GA::UserFeedbackProcessor do
       expect(fact.reload).to have_attributes(is_this_useful_no: 99, is_this_useful_yes: 90)
     end
 
-    it 'deletes the events that matches the base_path of an item' do
+    it 'deletes the events that matches the base_path of an item if it has user feedback data' do
       item2.destroy
       create :metric, dimensions_item: item1, dimensions_date: dimensions_date
 
       described_class.process(date: date)
 
       expect(Events::GA.count).to eq(1)
+    end
+
+    it 'does not delete the events that match the base_path of an item if it does not have user feedback data' do
+      allow_any_instance_of(GA::UserFeedbackService).to receive(:find_user_feedback_in_batches)
+                                                    .and_yield(ga_response_without_user_feedback_data)
+      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+      described_class.process(date: date)
+
+      expect(Events::GA.count).to eq(2)
     end
 
     context 'when there are events from other days' do
@@ -65,9 +74,16 @@ RSpec.describe GA::UserFeedbackProcessor do
         expect(fact1.reload).to have_attributes(is_this_useful_no: 1, is_this_useful_yes: 1)
       end
 
-      it 'only deletes the events for the current day that matches' do
+      it 'deletes events for the current day if it has user feedback' do
         create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+        create :metric, dimensions_item: item2, dimensions_date: dimensions_date
+        described_class.process(date: date)
 
+        expect(Events::GA.count).to eq(2)
+      end
+
+      it 'does not delete events that are not from the current day' do
+        create :metric, dimensions_item: item1, dimensions_date: dimensions_date
         described_class.process(date: date)
 
         expect(Events::GA.count).to eq(3)
@@ -77,7 +93,8 @@ RSpec.describe GA::UserFeedbackProcessor do
 
   context 'when page_path starts "/https://www.gov.uk"' do
     it 'removes the "/https://www.gov.uk" from the GA::Event page_path' do
-      allow_any_instance_of(GA::UserFeedbackService).to receive(:find_user_feedback_in_batches).and_yield(ga_response_with_govuk_prefix)
+      allow_any_instance_of(GA::UserFeedbackService).to receive(:find_user_feedback_in_batches)
+                                                    .and_yield(ga_response_with_govuk_prefix)
 
       described_class.process(date: date)
       expect(Events::GA.where(page_path: '/https://gov.uk/path1').count).to eq 0
@@ -99,6 +116,19 @@ private
         'page_path' => '/path2',
         'is_this_useful_no' => 5,
         'is_this_useful_yes' => 10,
+        'date' => '2018-02-20',
+      },
+    ]
+  end
+
+  def ga_response_without_user_feedback_data
+    [
+      {
+        'page_path' => '/path1',
+        'date' => '2018-02-20',
+      },
+      {
+        'page_path' => '/path2',
         'date' => '2018-02-20',
       },
     ]

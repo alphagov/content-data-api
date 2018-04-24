@@ -82,7 +82,7 @@ private
       "page_path" => key,
       "is_this_useful_yes" => yes,
       "is_this_useful_no" => no,
-      "date" => value.first['date']
+      "date" => value.first['date'],
     }
   end
 end
