@@ -82,6 +82,6 @@ private
   attr_reader :date
 
   def ga_service
-    @ga_service ||= GA::Service.new
+    @ga_service ||= GA::UserFeedbackService.new
   end
 end
