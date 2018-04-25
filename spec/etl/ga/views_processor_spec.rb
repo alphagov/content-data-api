@@ -76,13 +76,11 @@ RSpec.describe GA::ViewsProcessor do
   end
 
   context 'when page_path starts "/https://www.gov.uk"' do
-    it 'removes the "/https://www.gov.uk" from the GA::Event page_path' do
-      allow_any_instance_of(GA::ViewsService).to receive(:find_in_batches).and_yield(ga_response_with_govuk_prefix)
-
-      described_class.process(date: date)
-      expect(Events::GA.where(page_path: '/https://gov.uk/path1').count).to eq 0
-      expect(Events::GA.where(page_path: '/path1').count).to eq 1
+    before do
+      allow_any_instance_of(GA::ViewsService).to receive(:find_in_batches)
+      .and_yield(ga_response_with_govuk_prefix)
     end
+    include_examples "transform path examples"
   end
 
 private
