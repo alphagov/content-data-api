@@ -1,5 +1,6 @@
-class GA::Processor
+class GA::UserFeedbackProcessor
   include Concerns::Traceable
+  include GA::Concerns::TransformPath
 
   def self.process(*args)
     new(*args).process
@@ -21,7 +22,7 @@ private
 
   def extract_events
     batch = 1
-    ga_service.find_in_batches(date: date) do |events|
+    GA::UserFeedbackService.find_in_batches(date: date) do |events|
       log process: :ga, message: "Processing #{events.length} events in batch #{batch}"
       Events::GA.import(events, batch_size: 10_000)
       batch += 1
@@ -29,13 +30,12 @@ private
   end
 
   def transform_events
-    fix_invalid_prefix_in_page_paths
+    remove_invalid_prefix
   end
 
   def load_metrics
     conn = ActiveRecord::Base.connection
     date_to_s = date.strftime("%F")
-
     conn.execute(load_metrics_query(date_to_s))
     conn.execute(clean_up_query)
   end
@@ -43,11 +43,11 @@ private
   def load_metrics_query(date_to_s)
     <<~SQL
       UPDATE facts_metrics
-      SET unique_pageviews = s.unique_pageviews,
-          pageviews = s.pageviews
+      SET is_this_useful_no = s.is_this_useful_no,
+          is_this_useful_yes = s.is_this_useful_yes
       FROM (
-        SELECT pageviews,
-               unique_pageviews,
+        SELECT is_this_useful_no,
+               is_this_useful_yes,
                dimensions_items.id
         FROM events_gas, dimensions_items
         WHERE page_path = base_path
@@ -62,6 +62,7 @@ private
     <<~SQL
       DELETE FROM events_gas
       WHERE date = '#{date_to_s}' AND
+            process_name = #{Events::GA.process_names['user_feedback']} AND
         page_path in (
            SELECT base_path
            FROM dimensions_items, facts_metrics
@@ -71,18 +72,5 @@ private
     SQL
   end
 
-  def fix_invalid_prefix_in_page_paths
-    events_with_prefix = Events::GA.where("page_path ~ '^\/https:\/\/www.gov.uk'")
-    log(process: :ga, message: "Transforming #{events_with_prefix.count} events with page_path starting https://gov.uk")
-    events_with_prefix.find_each do |event|
-      page_path_without_prefix = event.page_path.remove '/https://www.gov.uk'
-      event.update_attributes(page_path: page_path_without_prefix)
-    end
-  end
-
   attr_reader :date
-
-  def ga_service
-    @ga_service ||= GA::Service.new
-  end
 end

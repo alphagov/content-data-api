@@ -1,28 +1,32 @@
-class GA::Service
-  def client
-    @client ||= GA::Client.new.build
+class GA::UserFeedbackService
+  def self.find_in_batches(*args, &block)
+    new.find_in_batches(*args, &block)
   end
 
   def find_in_batches(date:, batch_size: 10_000)
-    paged_report_data(date: date)
+    fetch_data(date: date)
       .lazy
       .map(&:to_h)
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
-      .map(&method(:append_data_labels))
+      .map(&method(:append_labels))
       .map { |h| h['date'] = date.strftime('%F'); h }
+      .group_by { |h| h['page_path'] }
+      .map { |h| format_data(h) }
       .each_slice(batch_size) { |slice| yield slice }
+  end
+
+  def client
+    @client ||= GA::Client.new.build
   end
 
 private
 
-  def append_data_labels(values)
-    page_path, pageviews, unique_pageviews = *values
-
+  def append_labels(values)
+    page_path, event_action, value = *values
     {
       'page_path' => page_path,
-      'pageviews' => pageviews,
-      'unique_pageviews' => unique_pageviews,
+      event_action.to_s => value,
     }
   end
 
@@ -39,12 +43,12 @@ private
     report.fetch(:rows)
   end
 
-  def paged_report_data(date:)
+  def fetch_data(date:)
     @data ||= client.fetch_all(items: :data) do |page_token, service|
       service
         .batch_get_reports(
           Google::Apis::AnalyticsreportingV4::GetReportsRequest.new(
-            report_requests: [report_request(date: date).merge(page_token: page_token)]
+            report_requests: [build_request(date: date).merge(page_token: page_token)]
           )
         )
         .reports
@@ -52,22 +56,38 @@ private
     end
   end
 
-  def report_request(date:)
+  def build_request(date:)
     {
       date_ranges: [
         { start_date: date.to_s("%Y-%m-%d"), end_date: date.to_s("%Y-%m-%d") },
       ],
       dimensions: [
         { name: 'ga:pagePath' },
+        { name: 'ga:eventAction' }
       ],
       hide_totals: true,
       hide_value_ranges: true,
       metrics: [
-        { expression: 'ga:pageviews' },
-        { expression: 'ga:uniquePageviews' },
+        { expression: 'ga:uniqueDimensionCombinations' },
       ],
+      filters_expression: 'ga:eventAction==ffNoClick,ga:eventAction==ffYesClick',
       page_size: 10_000,
       view_id: ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"],
+    }
+  end
+
+  def format_data(hash)
+    key, value = *hash
+    no_action = value.find { |v| v['ffNoClick'] }
+    yes_action = value.find { |v| v['ffYesClick'] }
+    yes = yes_action['ffYesClick'] if yes_action
+    no = no_action['ffNoClick'] if no_action
+    {
+      "page_path" => key,
+      "is_this_useful_yes" => yes,
+      "is_this_useful_no" => no,
+      "date" => value.first['date'],
+      'process_name' => 'user_feedback'
     }
   end
 end

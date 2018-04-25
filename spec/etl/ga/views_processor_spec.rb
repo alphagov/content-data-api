@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'gds-api-adapters'
 
-RSpec.describe GA::Processor do
+RSpec.describe GA::ViewsProcessor do
   subject { described_class }
 
   let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
@@ -12,7 +12,7 @@ RSpec.describe GA::Processor do
 
 
   context 'When the base_path matches the GA path' do
-    before { allow_any_instance_of(GA::Service).to receive(:find_in_batches).and_yield(ga_response) }
+    before { allow(GA::ViewsService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it 'update the facts with the GA metrics' do
       fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
@@ -51,10 +51,19 @@ RSpec.describe GA::Processor do
       expect(Events::GA.count).to eq(1)
     end
 
+    it 'does not delete the events it does not have user views data' do
+      create :ga_event, :with_user_feedback, date: date, page_path: item1.base_path
+      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+
+      described_class.process(date: date)
+
+      expect(Events::GA.count).to eq(2)
+    end
+
     context 'when there are events from other days' do
       before do
-        create(:ga, date: date - 1, page_path: '/path1')
-        create(:ga, date: date - 2, page_path: '/path1')
+        create(:ga_event, :with_views, date: date - 1, page_path: '/path1')
+        create(:ga_event, :with_views, date: date - 2, page_path: '/path1')
       end
 
       it 'only updates metrics for the current day' do
@@ -65,7 +74,7 @@ RSpec.describe GA::Processor do
         expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1)
       end
 
-      it 'only deletes the events for the current day that matches' do
+      it 'only deletes the events for the current day that matches the basepath of the item' do
         create :metric, dimensions_item: item1, dimensions_date: dimensions_date
 
         described_class.process(date: date)
@@ -76,16 +85,14 @@ RSpec.describe GA::Processor do
   end
 
   context 'when page_path starts "/https://www.gov.uk"' do
-    it 'removes the "/https://www.gov.uk" from the GA::Event page_path' do
-      allow_any_instance_of(GA::Service).to receive(:find_in_batches).and_yield(ga_response_with_govuk_prefix)
-
-      described_class.process(date: date)
-      expect(Events::GA.where(page_path: '/https://gov.uk/path1').count).to eq 0
-      expect(Events::GA.where(page_path: '/path1').count).to eq 1
+    before do
+      allow(GA::ViewsService).to receive(:find_in_batches).and_yield(ga_response_with_govuk_prefix)
     end
+
+    include_examples "transform path examples"
   end
 
-private
+  private
 
   def ga_response
     [
@@ -94,12 +101,14 @@ private
         'pageviews' => 1,
         'unique_pageviews' => 1,
         'date' => '2018-02-20',
+        'process_name' => 'views',
       },
       {
         'page_path' => '/path2',
         'pageviews' => 2,
         'unique_pageviews' => 2,
         'date' => '2018-02-20',
+        'process_name' => 'views',
       },
     ]
   end
@@ -111,12 +120,14 @@ private
         'pageviews' => 1,
         'unique_pageviews' => 1,
         'date' => '2018-02-20',
+        'process_name' => 'views',
       },
       {
         'page_path' => '/path2',
         'pageviews' => 2,
         'unique_pageviews' => 2,
         'date' => '2018-02-20',
+        'process_name' => 'views',
       },
     ]
   end
