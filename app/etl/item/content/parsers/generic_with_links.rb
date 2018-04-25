@@ -2,10 +2,12 @@ class Item::Content::Parsers::GenericWithLinks
   def parse(json)
     html = []
     links = json.dig("details", "external_related_links")
-    links.each do |link|
-      html << link["title"]
+    unless links.nil?
+      links.each do |link|
+        html << link["title"]
+      end
+      html.join(" ")
     end
-    html.join(" ")
   end
 
   def schemas
