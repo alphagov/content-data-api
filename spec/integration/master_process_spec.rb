@@ -130,7 +130,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def stub_google_analytics_response
-    allow_any_instance_of(GA::ViewsService).to receive(:find_in_batches).and_yield(
+    allow(GA::ViewsService).to receive(:find_in_batches).and_yield(
       [
         {
           'page_path' => base_path,
@@ -151,7 +151,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def stub_google_analytics_user_feedback_response
-    allow_any_instance_of(GA::UserFeedbackService).to receive(:find_in_batches).and_yield(
+    allow(GA::UserFeedbackService).to receive(:find_in_batches).and_yield(
       [
         {
           'page_path' => base_path,

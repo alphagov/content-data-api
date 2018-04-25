@@ -146,7 +146,7 @@ RSpec.describe 'PublishingAPI events' do
   end
 
   def stub_google_analytics_user_feedback_response
-    allow_any_instance_of(GA::UserFeedbackService).to receive(:find_in_batches).and_yield([])
+    allow(GA::UserFeedbackService).to receive(:find_in_batches).and_yield([])
   end
 
   def stub_feedex_response
