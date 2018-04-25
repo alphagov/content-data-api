@@ -74,28 +74,42 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('Introduction Enter your postcode')
       end
 
-      it "returns content json if schema_name is 'guide'" do
-        json = { schema_name: 'guide',
-          details: { parts:
-            [
-              { title: 'Schools',
-                body: 'Local council' },
-              { title: 'Appeal',
-                body: 'No placement' }
-            ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq('Schools Local council Appeal No placement')
-      end
+      describe "Parts" do
+        it "returns nil if 'guide' schema does not have 'parts' key" do
+          json = { schema_name: 'guide',
+            details: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
+        end
 
-      it "returns content json if schema_name is 'travel_advice'" do
-        json = { schema_name: 'travel_advice',
-          details: { parts:
-            [
-              { title: 'Some',
-                body: 'Advise' },
-              { title: 'For',
-                body: 'Some Travel' }
-            ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq('Some Advise For Some Travel')
+        it "returns content json if schema_name is 'guide'" do
+          json = { schema_name: 'guide',
+            details: { parts:
+              [
+                { title: 'Schools',
+                  body: 'Local council' },
+                { title: 'Appeal',
+                  body: 'No placement' }
+              ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq('Schools Local council Appeal No placement')
+        end
+
+        it "returns nil if 'travel_advice' schema does not have 'parts' key" do
+          json = { schema_name: 'travel_advice',
+            details: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
+        end
+
+        it "returns content json if schema_name is 'travel_advice'" do
+          json = { schema_name: 'travel_advice',
+            details: { parts:
+              [
+                { title: 'Some',
+                  body: 'Advise' },
+                { title: 'For',
+                  body: 'Some Travel' }
+              ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq('Some Advise For Some Travel')
+        end
       end
 
       it "returns content json if schema_name is 'transaction'" do
