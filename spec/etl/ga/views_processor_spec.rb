@@ -53,8 +53,8 @@ RSpec.describe GA::ViewsProcessor do
 
     context 'when there are events from other days' do
       before do
-        create(:ga, date: date - 1, page_path: '/path1')
-        create(:ga, date: date - 2, page_path: '/path1')
+        create(:ga_event, :with_views, date: date - 1, page_path: '/path1')
+        create(:ga_event, :with_views, date: date - 2, page_path: '/path1')
       end
 
       it 'only updates metrics for the current day' do
