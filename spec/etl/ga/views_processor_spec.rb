@@ -51,6 +51,15 @@ RSpec.describe GA::ViewsProcessor do
       expect(Events::GA.count).to eq(1)
     end
 
+    it 'does not delete the events it does not have user views data' do
+      create :ga_event, :with_user_feedback, date: date, page_path: item1.base_path
+      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+
+      described_class.process(date: date)
+
+      expect(Events::GA.count).to eq(2)
+    end
+
     context 'when there are events from other days' do
       before do
         create(:ga_event, :with_views, date: date - 1, page_path: '/path1')
@@ -65,7 +74,7 @@ RSpec.describe GA::ViewsProcessor do
         expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1)
       end
 
-      it 'only deletes the events for the current day that matches' do
+      it 'only deletes the events for the current day that matches the basepath of the item' do
         create :metric, dimensions_item: item1, dimensions_date: dimensions_date
 
         described_class.process(date: date)
@@ -83,7 +92,7 @@ RSpec.describe GA::ViewsProcessor do
     include_examples "transform path examples"
   end
 
-private
+  private
 
   def ga_response
     [
@@ -92,12 +101,14 @@ private
         'pageviews' => 1,
         'unique_pageviews' => 1,
         'date' => '2018-02-20',
+        'process_name' => 'views',
       },
       {
         'page_path' => '/path2',
         'pageviews' => 2,
         'unique_pageviews' => 2,
         'date' => '2018-02-20',
+        'process_name' => 'views',
       },
     ]
   end
@@ -109,12 +120,14 @@ private
         'pageviews' => 1,
         'unique_pageviews' => 1,
         'date' => '2018-02-20',
+        'process_name' => 'views',
       },
       {
         'page_path' => '/path2',
         'pageviews' => 2,
         'unique_pageviews' => 2,
         'date' => '2018-02-20',
+        'process_name' => 'views',
       },
     ]
   end

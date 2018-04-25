@@ -27,6 +27,7 @@ private
       'page_path' => page_path,
       'pageviews' => pageviews,
       'unique_pageviews' => unique_pageviews,
+      'process_name' => 'views'
     }
   end
 

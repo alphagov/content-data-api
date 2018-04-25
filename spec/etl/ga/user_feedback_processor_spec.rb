@@ -62,8 +62,8 @@ RSpec.describe GA::UserFeedbackProcessor do
 
     context 'when there are events from other days' do
       before do
-        create(:ga_event, date: date - 1, page_path: '/path1')
-        create(:ga_event, date: date - 2, page_path: '/path1')
+        create(:ga_event, :with_user_feedback, date: date - 1, page_path: '/path1')
+        create(:ga_event, :with_user_feedback, date: date - 2, page_path: '/path1')
       end
 
       it 'only updates metrics for the current day' do
@@ -108,12 +108,14 @@ private
         'is_this_useful_no' => 1,
         'is_this_useful_yes' => 1,
         'date' => '2018-02-20',
+        'process_name' => 'user_feedback',
       },
       {
         'page_path' => '/path2',
         'is_this_useful_no' => 5,
         'is_this_useful_yes' => 10,
         'date' => '2018-02-20',
+        'process_name' => 'user_feedback',
       },
     ]
   end
@@ -123,10 +125,12 @@ private
       {
         'page_path' => '/path1',
         'date' => '2018-02-20',
+        'process_name' => 'user_feedback',
       },
       {
         'page_path' => '/path2',
         'date' => '2018-02-20',
+        'process_name' => 'user_feedback',
       },
     ]
   end
@@ -138,12 +142,14 @@ private
         'is_this_useful_no' => 1,
         'is_this_useful_yes' => 1,
         'date' => '2018-02-20',
+        'process_name' => 'user_feedback',
       },
       {
         'page_path' => '/path2',
         'is_this_useful_no' => 5,
         'is_this_useful_yes' => 10,
         'date' => '2018-02-20',
+        'process_name' => 'user_feedback',
       },
     ]
   end

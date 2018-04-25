@@ -137,12 +137,14 @@ RSpec.describe 'Master process spec' do
           'pageviews' => 11,
           'unique_pageviews' => 12,
           'date' => '2018-02-20',
+          'process_name' => 'views',
         },
         {
           'page_path' => '/path2',
           'pageviews' => 2,
           'unique_pageviews' => 2,
           'date' => '2018-02-20',
+          'process_name' => 'views',
         },
       ]
     )
@@ -156,12 +158,14 @@ RSpec.describe 'Master process spec' do
           'is_this_useful_no' => 1,
           'is_this_useful_yes' => 12,
           'date' => '2018-02-20',
+          'process_name' => 'user_feedback',
         },
         {
           'page_path' => base_path,
           'is_this_useful_no' => 122,
           'is_this_useful_yes' => 1,
           'date' => '2018-02-20',
+          'process_name' => 'user_feedback',
         },
       ]
     )

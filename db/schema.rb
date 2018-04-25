@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180418135632) do
+ActiveRecord::Schema.define(version: 20180425132405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20180418135632) do
     t.datetime "updated_at", null: false
     t.integer "is_this_useful_yes", default: 0
     t.integer "is_this_useful_no", default: 0
+    t.integer "process_name", null: false
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
   end
 

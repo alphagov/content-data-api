@@ -63,6 +63,7 @@ private
     <<~SQL
       DELETE FROM events_gas
       WHERE date = '#{date_to_s}' AND
+            process_name = #{Events::GA.process_names['views']} AND
         page_path in (
            SELECT base_path
            FROM dimensions_items, facts_metrics
