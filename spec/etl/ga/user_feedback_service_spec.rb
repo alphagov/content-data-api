@@ -30,22 +30,6 @@ RSpec.describe GA::UserFeedbackService do
 
     context 'when #find_user_feedback_in_batches is called with a block' do
       it 'yield successive report data if all actions are present' do
-        allow(subject.client).to receive(:fetch_all) do
-          [
-            build_report_data(
-              build_report_row(dimensions: %w(/foo ffNoClick), metrics: %w(10))
-            ),
-            build_report_data(
-              build_report_row(dimensions: %w(/foo ffYesClick), metrics: %w(7))
-            ),
-            build_report_data(
-              build_report_row(dimensions: %w(/bar ffYesClick), metrics: %w(3))
-            ),
-            build_report_data(
-              build_report_row(dimensions: %w(/bar ffNoClick), metrics: %w(13))
-            ),
-          ]
-        end
         arg1 = [
           a_hash_including(
             'page_path' => '/foo',
