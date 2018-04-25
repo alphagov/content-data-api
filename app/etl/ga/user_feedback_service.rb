@@ -87,6 +87,7 @@ private
       "is_this_useful_yes" => yes,
       "is_this_useful_no" => no,
       "date" => value.first['date'],
+      'process_name' => 'user_feedback'
     }
   end
 end
