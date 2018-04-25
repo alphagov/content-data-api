@@ -3,9 +3,12 @@ class Item::Content::Parsers::ServiceManualStandard
     html = []
     html << json.dig('title')
     html << json.dig('details', 'body')
-    json.dig('links', 'children').each do |child|
-      html << child['title']
-      html << child['description']
+    children = json.dig('links', 'children')
+    unless children.nil?
+      children.each do |child|
+        html << child['title']
+        html << child['description']
+      end
     end
     html.join(" ")
   end
