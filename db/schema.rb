@@ -46,7 +46,6 @@ ActiveRecord::Schema.define(version: 20180425132405) do
     t.boolean "latest"
     t.json "raw_json"
     t.integer "number_of_pdfs"
-    t.boolean "outdated", default: false
     t.string "document_type"
     t.string "content_purpose_document_supertype"
     t.datetime "first_published_at"
@@ -70,7 +69,6 @@ ActiveRecord::Schema.define(version: 20180425132405) do
     t.string "primary_organisation_content_id"
     t.boolean "primary_organisation_withdrawn"
     t.string "content_hash"
-    t.datetime "outdated_at"
     t.string "locale", default: "en", null: false
     t.bigint "publishing_api_payload_version", null: false
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"

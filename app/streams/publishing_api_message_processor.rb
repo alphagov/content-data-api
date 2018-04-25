@@ -45,14 +45,15 @@ private
   def handle_existing(item)
     case routing_key
     when /major|minor/
-      item.copy_to_new_outdated_version!(base_path: base_path, payload_version: payload_version)
+      new_item = item.copy_to_new_version!(base_path: base_path, payload_version: payload_version)
+      Items::Jobs::ImportContentDetailsJob.perform_async(new_item.id)
     when /unpublish/
-      new_item = item.copy_to_new_outdated_version!(base_path: base_path, payload_version: payload_version)
+      new_item = item.copy_to_new_version!(base_path: base_path, payload_version: payload_version)
       new_item.gone!
     else
       # If we get a links update, or an item is republished for technical reasons,
-      # don't store a new version, but update the outdated time on the previous one.
-      item.outdate!
+      # don't store a new version, but update the previous one.
+      Items::Jobs::ImportContentDetailsJob.perform_async(item.id)
     end
   end
 end

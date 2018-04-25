@@ -22,9 +22,6 @@ class Items::Importers::ContentDetails
       attributes = Item::Metadata::Parser.parse(item_raw_json)
       needs_quality_metrics = item.quality_metrics_required?(attributes)
 
-      # Reset the outdated flag to show that the content details are there
-      attributes[:outdated] = false
-
       item.update_attributes(attributes)
 
       Items::Jobs::ImportQualityMetricsJob.perform_async(item.id) if needs_quality_metrics

@@ -35,8 +35,9 @@ RSpec.describe 'PublishingAPI events' do
     it 'the master process will still try to populate it today' do
       Master::MasterProcessor.process date: today
 
-      validate_number_of_items!(total: 1, base_path: base_path)
-      expect(Dimensions::Item.where(outdated: true).count).to eq(0)
+      facts = Facts::Metric.joins(:dimensions_item).where(dimensions_items: { content_id: content_id })
+
+      expect(facts.count).to eq(1)
     end
   end
 
@@ -46,13 +47,6 @@ RSpec.describe 'PublishingAPI events' do
         PublishingApiConsumer.new.process(message)
         PublishingApiConsumer.new.process(another_message)
       end
-    end
-
-    it 'populates content details for both versions' do
-      Master::MasterProcessor.process date: today
-
-      validate_number_of_items!(total: 2, base_path: base_path)
-      expect(Dimensions::Item.where(outdated: true).count).to eq(0)
     end
 
     it 'populates daily metrics for the latest content item only' do
@@ -71,36 +65,6 @@ RSpec.describe 'PublishingAPI events' do
     end
   end
 
-  context 'processing the same message twice' do
-    it 'ignores the message the second time around' do
-      Timecop.freeze(Date.yesterday) do
-        PublishingApiConsumer.new.process(message)
-        PublishingApiConsumer.new.process(message)
-      end
-
-      Master::MasterProcessor.process date: today
-
-      validate_number_of_items!(total: 1, base_path: base_path)
-      expect(Dimensions::Item.where(outdated: true).count).to eq(0)
-      expect(latest_version.publishing_api_payload_version).to eq(1)
-    end
-  end
-
-  context 'receiving versions out of order' do
-    it 'ignores the earlier message' do
-      Timecop.freeze(Date.yesterday) do
-        PublishingApiConsumer.new.process(another_message)
-        PublishingApiConsumer.new.process(message)
-      end
-
-      Master::MasterProcessor.process date: today
-
-      validate_number_of_items!(total: 1, base_path: base_path)
-      expect(Dimensions::Item.where(outdated: true).count).to eq(0)
-      expect(latest_version.publishing_api_payload_version).to eq(2)
-    end
-  end
-
   def build_publishing_api_message(base_path, content_id, locale, payload_version: 1)
     message = double('message',
       payload: {
@@ -113,15 +77,6 @@ RSpec.describe 'PublishingAPI events' do
     allow(message).to receive(:ack)
 
     message
-  end
-
-  def latest_version
-    Dimensions::Item.by_natural_key(content_id: content_id, locale: locale)
-  end
-
-  def validate_number_of_items!(total:, base_path:)
-    expect(Dimensions::Item.count).to eq(total)
-    expect(Dimensions::Item.where(latest: true, content_id: content_id, base_path: base_path).count).to eq(1)
   end
 
   def stub_content_store_response(title:, base_path:)

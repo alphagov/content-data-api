@@ -1,8 +1,6 @@
 require 'json'
 
 class Dimensions::Item < ApplicationRecord
-  include Concerns::Outdateable
-
   validates :content_id, presence: true
 
   def self.by_natural_key(content_id:, locale:)
@@ -14,19 +12,10 @@ class Dimensions::Item < ApplicationRecord
     Item::Content::Parser.extract_content(raw_json)
   end
 
-  def copy_to_new_outdated_version!(base_path:, payload_version:)
+  def copy_to_new_version!(base_path:, payload_version:)
     # Create a new version of this content item, assuming that a document's
     # content_id and locale are fixed, but the base_path may change.
-    #
-    # Outdated means that quality metrics and content details we store on the dimension
-    # are missing and need to be updated.
-    #
-    # At the moment we populate these from a snapshot of the content item overnight.
-    # The concept of "outdated" will go away when we populate content item data directly
-    # from the publishing api consumer.
-    #
-    # This method is only expected to be called on the latest version of an item per day.
-    raise "Tried to create a new outdated version but this version is not the latest" unless latest
+    raise "Tried to create a new version but this version is not the latest" unless latest
 
     new_version = Dimensions::Item.create_empty(
       content_id: content_id,
@@ -54,8 +43,6 @@ class Dimensions::Item < ApplicationRecord
       base_path: base_path,
       locale: locale,
       latest: true,
-      outdated: true,
-      outdated_at: Time.zone.now,
       publishing_api_payload_version: payload_version
     )
   end

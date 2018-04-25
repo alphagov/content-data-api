@@ -16,18 +16,17 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#copy_to_new_outdated_version!' do
+  describe '#copy_to_new_version!' do
     it 'creates a new item with latest: true, and clears this flag on the old one' do
-      old_version = build(:outdated_item,
+      old_version = build(:dimensions_item,
         latest: true,
         raw_json: { 'the' => 'content' },
         content_id: 'c-id',
         base_path: '/the/path')
 
-      new_version = old_version.copy_to_new_outdated_version!(base_path: '/the/new/path', payload_version: 2)
+      new_version = old_version.copy_to_new_version!(base_path: '/the/new/path', payload_version: 2)
 
       expect(new_version).to have_attributes(
-        outdated: true,
         latest: true,
         raw_json: nil,
         content_id: 'c-id',
@@ -35,7 +34,6 @@ RSpec.describe Dimensions::Item, type: :model do
       )
 
       expect(old_version).to have_attributes(
-        outdated: true,
         latest: false,
         raw_json: { 'the' => 'content' },
         content_id: 'c-id',
@@ -64,7 +62,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '#gone!' do
     it 'sets the status  to "gone"' do
-      item = create(:dimensions_item, outdated: false)
+      item = create(:dimensions_item)
       item.gone!
       expect(item.reload.status).to eq 'gone'
     end
@@ -88,9 +86,7 @@ RSpec.describe Dimensions::Item, type: :model do
         content_id: content_id,
         base_path: base_path,
         locale: 'fr',
-        outdated: true,
-        latest: true,
-        outdated_at: now,
+        latest: true
       )
     end
   end

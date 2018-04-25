@@ -1,18 +1,28 @@
 require 'rails_helper'
+require 'sidekiq/testing'
 require 'publishing_api_consumer'
 require 'govuk_message_queue_consumer/test_helpers'
+require 'gds_api/test_helpers/content_store'
 
 RSpec.describe PublishingApiConsumer do
+  include GdsApi::TestHelpers::ContentStore
+
+  around do |example|
+    Sidekiq::Testing.inline! do
+      example.run
+    end
+  end
+
   let(:subject) { described_class.new }
 
   it_behaves_like 'a message queue processor'
 
   context 'when the Dimensions::Item already exists - all events but unpublish' do
     let!(:latest_item_en) do
-      create(:dimensions_item, locale: 'en', outdated: true, publishing_api_payload_version: 1)
+      create(:dimensions_item, locale: 'en', publishing_api_payload_version: 1)
     end
     let!(:latest_item_de) do
-      create(:dimensions_item, locale: 'de', outdated: false, publishing_api_payload_version: 1)
+      create(:dimensions_item, locale: 'de', publishing_api_payload_version: 1)
     end
 
     let!(:older_item) do
@@ -20,17 +30,20 @@ RSpec.describe PublishingApiConsumer do
         content_id: latest_item_en.content_id,
         base_path: latest_item_en.base_path,
         latest: false,
-        outdated: false,
         publishing_api_payload_version: 1)
     end
-    let!(:different_item) { create(:dimensions_item, outdated: false) }
+    let!(:different_item) { create(:dimensions_item) }
     let!(:updated_base_path) { '/updated/base/path' }
+    let!(:updated_title) { 'new title' }
+    let!(:updated_document_type) { 'guide' }
     let!(:payload) do
       {
         'base_path' => updated_base_path,
         'content_id' => latest_item_de.content_id,
         'locale' => 'de',
-        'payload_version' => 2
+        'payload_version' => 2,
+        'title' => updated_title,
+        'document_type' => updated_document_type
       }
     end
     let!(:message) do
@@ -41,14 +54,18 @@ RSpec.describe PublishingApiConsumer do
 
     before :each do
       allow(message).to receive(:ack)
-      subject.process(message)
-    end
 
-    it 'leaves the outdated flag intact' do
-      expect(latest_item_de.reload.outdated?).to be false
-      expect(latest_item_en.reload.outdated?).to be true
-      expect(older_item.reload.outdated?).to be false
-      expect(different_item.reload.outdated?).to be false
+      stub_content_store_response(
+        content_id: latest_item_de.content_id,
+        base_path: updated_base_path,
+        body: "News about things",
+        document_type: updated_document_type,
+        title: updated_title
+      )
+
+      stub_quality_metrics_response("News about things")
+
+      subject.process(message)
     end
 
     it 'marks the existing item as not-latest' do
@@ -65,6 +82,15 @@ RSpec.describe PublishingApiConsumer do
 
     it "ack's the message" do
       expect(message).to have_received(:ack)
+    end
+
+    it "populates metadata for the new item" do
+      new_item = Dimensions::Item.find_by(content_id: latest_item_de.content_id, locale: 'de', latest: true)
+
+      expect(new_item).to have_attributes(
+        title: updated_title,
+        document_type: updated_document_type,
+      )
     end
   end
 
@@ -137,7 +163,6 @@ RSpec.describe PublishingApiConsumer do
       expect(item).to have_attributes(
         base_path: payload['base_path'],
         latest: true,
-        outdated: true,
       )
     end
 
@@ -199,5 +224,75 @@ RSpec.describe PublishingApiConsumer do
 
       subject.process(message)
     end
+  end
+
+  context 'receiving messages out of order' do
+    let(:content_id) { SecureRandom.uuid }
+    let(:base_path) { "/foo" }
+    let(:locale) { "en" }
+    let(:message) { build_publishing_api_message(base_path, content_id, locale, payload_version: 1) }
+    let(:another_message) { build_publishing_api_message(base_path, content_id, locale, payload_version: 2) }
+
+    it 'ignores repeated messages' do
+      subject.process(message)
+      subject.process(message)
+
+      expect(Dimensions::Item.count).to eq(1)
+      expect(Dimensions::Item.first.publishing_api_payload_version).to eq(1)
+    end
+
+    it 'ignores messages with old payload versions' do
+      subject.process(another_message)
+      subject.process(message)
+
+      expect(Dimensions::Item.count).to eq(1)
+      expect(Dimensions::Item.first.publishing_api_payload_version).to eq(2)
+    end
+  end
+
+  def stub_content_store_response(content_id:, base_path:, title:, body:, document_type:, schema_name: 'news_article')
+    response = content_item_for_base_path(base_path)
+    response.merge!(
+      'content_id' => content_id,
+      'base_path' => base_path,
+      'schema_name' => schema_name,
+      'title' => title,
+      'document_type' => document_type,
+      'details' => {
+        'body' => body,
+      }
+    )
+    content_store_has_item(base_path, response, {})
+  end
+
+  def stub_quality_metrics_response(item_content)
+    quality_metrics_response = {
+      passive: { 'count' => 5 },
+      repeated_words: { 'count' => 8 },
+    }
+    stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics').
+      with(
+        body: { content: item_content }.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+      .to_return(
+        status: 200,
+        body: quality_metrics_response.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+  end
+
+  def build_publishing_api_message(base_path, content_id, locale, payload_version: 1)
+    message = double('message',
+      payload: {
+        'base_path' => base_path,
+        'content_id' => content_id,
+        'locale' => locale,
+        'payload_version' => payload_version
+      },
+      delivery_info: double('del_info', routing_key: 'news_story.major'))
+    allow(message).to receive(:ack)
+
+    message
   end
 end
