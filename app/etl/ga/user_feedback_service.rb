@@ -1,6 +1,6 @@
 class GA::UserFeedbackService
-  def client
-    @client ||= GA::Client.new.build
+  def self.find_in_batches(*args, &block)
+    new.find_in_batches(*args, &block)
   end
 
   def find_in_batches(date:, batch_size: 10_000)
@@ -14,6 +14,10 @@ class GA::UserFeedbackService
       .group_by { |h| h['page_path'] }
       .map { |h| format_data(h) }
       .each_slice(batch_size) { |slice| yield slice }
+  end
+
+  def client
+    @client ||= GA::Client.new.build
   end
 
 private
