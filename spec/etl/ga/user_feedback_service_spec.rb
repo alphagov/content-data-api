@@ -6,7 +6,7 @@ RSpec.describe GA::UserFeedbackService do
   let(:google_client) { double('client') }
   before { allow(subject).to receive(:client).and_return(google_client) }
 
-  describe "#find_user_feedback_in_batches" do
+  describe "#find_in_batches" do
     let(:date) { Date.new(2018, 2, 20) }
 
     before do
@@ -28,7 +28,7 @@ RSpec.describe GA::UserFeedbackService do
       end
     end
 
-    context 'when #find_user_feedback_in_batches is called with a block' do
+    context 'when #find_in_batches is called with a block' do
       it 'yield successive report data if all actions are present' do
         arg1 = [
           a_hash_including(
@@ -46,7 +46,7 @@ RSpec.describe GA::UserFeedbackService do
             'date' => '2018-02-20',
           )
         ]
-        expect { |probe| subject.find_user_feedback_in_batches(date: date, batch_size: 1, &probe) }
+        expect { |probe| subject.find_in_batches(date: date, batch_size: 1, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
 
@@ -77,7 +77,7 @@ RSpec.describe GA::UserFeedbackService do
             'date' => '2018-02-20',
           )
         ]
-        expect { |probe| subject.find_user_feedback_in_batches(date: date, batch_size: 1, &probe) }
+        expect { |probe| subject.find_in_batches(date: date, batch_size: 1, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
     end

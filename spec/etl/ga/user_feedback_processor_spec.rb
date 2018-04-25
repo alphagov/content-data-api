@@ -12,7 +12,7 @@ RSpec.describe GA::UserFeedbackProcessor do
 
 
   context 'When the base_path matches the GA path' do
-    before { allow_any_instance_of(GA::UserFeedbackService).to receive(:find_user_feedback_in_batches).and_yield(ga_response) }
+    before { allow_any_instance_of(GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it 'update the facts with the GA metrics' do
       fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
@@ -52,7 +52,7 @@ RSpec.describe GA::UserFeedbackProcessor do
     end
 
     it 'does not delete the events that match the base_path of an item if it does not have user feedback data' do
-      allow_any_instance_of(GA::UserFeedbackService).to receive(:find_user_feedback_in_batches)
+      allow_any_instance_of(GA::UserFeedbackService).to receive(:find_in_batches)
                                                     .and_yield(ga_response_without_user_feedback_data)
       create :metric, dimensions_item: item1, dimensions_date: dimensions_date
       described_class.process(date: date)
@@ -93,7 +93,7 @@ RSpec.describe GA::UserFeedbackProcessor do
 
   context 'when page_path starts "/https://www.gov.uk"' do
     before do
-      allow_any_instance_of(GA::UserFeedbackService).to receive(:find_user_feedback_in_batches)
+      allow_any_instance_of(GA::UserFeedbackService).to receive(:find_in_batches)
       .and_yield(ga_response_with_govuk_prefix)
     end
     include_examples "transform path examples"

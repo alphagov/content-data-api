@@ -3,22 +3,22 @@ class GA::UserFeedbackService
     @client ||= GA::Client.new.build
   end
 
-  def find_user_feedback_in_batches(date:, batch_size: 10_000)
-    user_feedback_data(date: date)
+  def find_in_batches(date:, batch_size: 10_000)
+    fetch_data(date: date)
       .lazy
       .map(&:to_h)
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
-      .map(&method(:append_user_feedback_labels))
+      .map(&method(:append_labels))
       .map { |h| h['date'] = date.strftime('%F'); h }
       .group_by { |h| h['page_path'] }
-      .map { |h| format_user_feedback_data(h) }
+      .map { |h| format_data(h) }
       .each_slice(batch_size) { |slice| yield slice }
   end
 
 private
 
-  def append_user_feedback_labels(values)
+  def append_labels(values)
     page_path, event_action, value = *values
     {
       'page_path' => page_path,
@@ -39,12 +39,12 @@ private
     report.fetch(:rows)
   end
 
-  def user_feedback_data(date:)
+  def fetch_data(date:)
     @data ||= client.fetch_all(items: :data) do |page_token, service|
       service
         .batch_get_reports(
           Google::Apis::AnalyticsreportingV4::GetReportsRequest.new(
-            report_requests: [user_feedback_request(date: date).merge(page_token: page_token)]
+            report_requests: [build_request(date: date).merge(page_token: page_token)]
           )
         )
         .reports
@@ -52,7 +52,7 @@ private
     end
   end
 
-  def user_feedback_request(date:)
+  def build_request(date:)
     {
       date_ranges: [
         { start_date: date.to_s("%Y-%m-%d"), end_date: date.to_s("%Y-%m-%d") },
@@ -72,7 +72,7 @@ private
     }
   end
 
-  def format_user_feedback_data(hash)
+  def format_data(hash)
     key, value = *hash
     no_action = value.find { |v| v['ffNoClick'] }
     yes_action = value.find { |v| v['ffYesClick'] }
