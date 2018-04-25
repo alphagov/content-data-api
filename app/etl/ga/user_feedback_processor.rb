@@ -62,7 +62,7 @@ private
     <<~SQL
       DELETE FROM events_gas
       WHERE date = '#{date_to_s}' AND
-      (is_this_useful_no != 0  OR is_this_useful_yes != 0) AND
+            process_name = #{Events::GA.process_names['user_feedback']} AND
         page_path in (
            SELECT base_path
            FROM dimensions_items, facts_metrics

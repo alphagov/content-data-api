@@ -52,9 +52,9 @@ RSpec.describe GA::UserFeedbackProcessor do
     end
 
     it 'does not delete the events that match the base_path of an item if it does not have user feedback data' do
-      allow_any_instance_of(GA::UserFeedbackService).to receive(:find_in_batches)
-                                                    .and_yield(ga_response_without_user_feedback_data)
+      create :ga_event, :with_views, date: date, page_path: item1.base_path
       create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+
       described_class.process(date: date)
 
       expect(Events::GA.count).to eq(2)
