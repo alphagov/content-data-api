@@ -1,6 +1,6 @@
 class GA::ViewsService
-  def client
-    @client ||= GA::Client.new.build
+  def self.find_in_batches(*args, &block)
+    new.find_in_batches(*args, &block)
   end
 
   def find_in_batches(date:, batch_size: 10_000)
@@ -12,6 +12,10 @@ class GA::ViewsService
       .map(&method(:append_data_labels))
       .map { |h| h['date'] = date.strftime('%F'); h }
       .each_slice(batch_size) { |slice| yield slice }
+  end
+
+  def client
+    @client ||= GA::Client.new.build
   end
 
 private
