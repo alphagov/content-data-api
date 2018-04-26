@@ -65,6 +65,14 @@ default: &default
   word_count:
     description: "Total number of words detected in the text"
 
+  is_this_useful_no:
+    description: "Total number of people who did not find the page helpful"
+    source: Google Analytics
+
+  is_this_useful_yes:
+    description: "Total number of people who found the page helpful"
+    source: Google Analytics
+
 development:
   <<: *default
 
