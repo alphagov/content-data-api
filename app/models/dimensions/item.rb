@@ -1,6 +1,7 @@
 require 'json'
 
 class Dimensions::Item < ApplicationRecord
+  has_one :facts_edition, class_name: "Facts::Edition", foreign_key: :dimensions_item_id
   validates :content_id, presence: true
 
   def self.by_natural_key(content_id:, locale:)

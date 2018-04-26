@@ -7,6 +7,7 @@ RSpec.describe Items::Importers::ContentDetails do
   context 'Import contents' do
     subject { Items::Importers::ContentDetails.new(latest_dimension_item.id) }
     let(:locale) { 'en' }
+
     let!(:existing_content_hash) { 'ContentHashContentHash' }
     let!(:parsed_content_hash) { 'NewContentHash' }
     let!(:latest_dimension_item_fr) do
@@ -52,6 +53,8 @@ RSpec.describe Items::Importers::ContentDetails do
     end
 
     it 'updates the latest item attributes' do
+      expect(Items::Jobs::ImportQualityMetricsJob).to receive(:perform_async)
+
       subject.run
 
       expect(latest_dimension_item.reload).to have_attributes(
@@ -69,6 +72,16 @@ RSpec.describe Items::Importers::ContentDetails do
         primary_organisation_withdrawn: false,
         content_hash: parsed_content_hash,
       )
+    end
+
+    context 'without fetching quality metrics' do
+      subject { Items::Importers::ContentDetails.new(latest_dimension_item.id, quality_metrics: false) }
+
+      it "doesn't update facts for events we don't care about" do
+        expect(Items::Jobs::ImportQualityMetricsJob).not_to receive(:perform_async)
+
+        subject.run
+      end
     end
 
     context "when the locale is 'en'" do

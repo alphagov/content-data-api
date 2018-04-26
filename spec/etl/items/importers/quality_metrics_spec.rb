@@ -51,5 +51,26 @@ RSpec.describe Items::Importers::QualityMetrics do
         simplify_count: nil
       )
     end
+
+    it 'creates a fact record' do
+      subject.run
+
+      fact = dimensions_item.reload.facts_edition
+
+      expect(fact).not_to be_nil
+
+      expect(fact).to have_attributes(
+        spell_count: 10,
+        readability_score: 1,
+        contractions_count: 2,
+        equality_count: 3,
+        passive_count: 5,
+        indefinite_article_count: 4,
+        profanities_count: 6,
+        redundant_acronyms_count: 7,
+        repeated_words_count: 8,
+        simplify_count: 9
+      )
+    end
   end
 end
