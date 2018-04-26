@@ -74,28 +74,42 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('Introduction Enter your postcode')
       end
 
-      it "returns content json if schema_name is 'guide'" do
-        json = { schema_name: 'guide',
-          details: { parts:
-            [
-              { title: 'Schools',
-                body: 'Local council' },
-              { title: 'Appeal',
-                body: 'No placement' }
-            ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq('Schools Local council Appeal No placement')
-      end
+      describe "Parts" do
+        it "returns nil if 'guide' schema does not have 'parts' key" do
+          json = { schema_name: 'guide',
+            details: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
+        end
 
-      it "returns content json if schema_name is 'travel_advice'" do
-        json = { schema_name: 'travel_advice',
-          details: { parts:
-            [
-              { title: 'Some',
-                body: 'Advise' },
-              { title: 'For',
-                body: 'Some Travel' }
-            ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq('Some Advise For Some Travel')
+        it "returns content json if schema_name is 'guide'" do
+          json = { schema_name: 'guide',
+            details: { parts:
+              [
+                { title: 'Schools',
+                  body: 'Local council' },
+                { title: 'Appeal',
+                  body: 'No placement' }
+              ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq('Schools Local council Appeal No placement')
+        end
+
+        it "returns nil if 'travel_advice' schema does not have 'parts' key" do
+          json = { schema_name: 'travel_advice',
+            details: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
+        end
+
+        it "returns content json if schema_name is 'travel_advice'" do
+          json = { schema_name: 'travel_advice',
+            details: { parts:
+              [
+                { title: 'Some',
+                  body: 'Advise' },
+                { title: 'For',
+                  body: 'Some Travel' }
+              ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq('Some Advise For Some Travel')
+        end
       end
 
       it "returns content json if schema_name is 'transaction'" do
@@ -108,22 +122,39 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
       end
 
-      it "returns content json if schema_name is 'email_alert_signup'" do
-        json = { schema_name: "email_alert_signup",
-          details: { breadcrumbs: [{ title: "The title" }],
-            summary: "Summary" } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("The title Summary")
+      describe "EmailAlertSignup" do
+        it "returns summary if json does not have 'breadcrumbs' key" do
+          json = { schema_name: "email_alert_signup",
+            details: { summary: "Summary" } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Summary")
+        end
+
+        it "returns content json if schema_name is 'email_alert_signup'" do
+          json = { schema_name: "email_alert_signup",
+            details: { breadcrumbs: [{ title: "The title" }],
+              summary: "Summary" } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("The title Summary")
+        end
       end
 
-      it "returns content json if schema_name is 'finder_email_signup'" do
-        json = { schema_name: "finder_email_signup",
-          description: "Use buttons",
-          details: { email_signup_choice:
-            [
-              { radio_button_name: "Yes" },
-              { radio_button_name: "No" }
-            ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Yes No Use buttons")
+      describe "FinderEmailSignup" do
+        it "returns description if json does not have 'email_signup_choice' key" do
+          json = { schema_name: "finder_email_signup",
+            description: "Use buttons",
+            details: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Use buttons")
+        end
+
+        it "returns content json" do
+          json = { schema_name: "finder_email_signup",
+            description: "Use buttons",
+            details: { email_signup_choice:
+              [
+                { radio_button_name: "Yes" },
+                { radio_button_name: "No" }
+              ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Yes No Use buttons")
+        end
       end
 
       it "returns content json if schema_name is 'location_transaction'" do
@@ -133,17 +164,26 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("Greetings A Name An Address")
       end
 
-      it "returns content json if schema_name is 'service_manual_topic'" do
-        json = { schema_name: "service_manual_topic",
-          description: "Blogs",
-          details: { groups:
-            [
-              { name: "Design",
-                description: "thinking" },
-              { name: "Performance",
-                description: "analysis" }
-            ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs Design thinking Performance analysis")
+      describe "ServiceManualTopic" do
+        it "returns description if json does not have 'groups' key" do
+          json = { schema_name: "service_manual_topic",
+            description: "Blogs",
+            details: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs")
+        end
+
+        it "returns content json" do
+          json = { schema_name: "service_manual_topic",
+            description: "Blogs",
+            details: { groups:
+              [
+                { name: "Design",
+                  description: "thinking" },
+                { name: "Performance",
+                  description: "analysis" }
+              ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs Design thinking Performance analysis")
+        end
       end
 
       it "returns content json if schema_name is 'unpublishing'" do
@@ -159,80 +199,195 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("Announcement 25 December 2017 closed")
       end
 
-      it "returns content json if schema_name is 'taxon'" do
-        json = { schema_name: "taxon",
-          description: "Blogs",
-          links: { child_taxons: [
-            { title: "One", description: "first" },
-            { title: "Two", description: "second" }
-          ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs One first Two second")
+      describe "Taxon" do
+        it "returns description if json does not have any child_taxons" do
+          json = { schema_name: "taxon",
+            description: "Blogs",
+            links: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs")
+        end
+
+        it "returns content json if schema_name is 'taxon'" do
+          json = { schema_name: "taxon",
+            description: "Blogs",
+            links: { child_taxons: [
+              { title: "One", description: "first" },
+              { title: "Two", description: "second" }
+            ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs One first Two second")
+        end
       end
 
-      it "returns content if schema_name is 'service_manual_service_standard'" do
-        json = {
-          schema_name: 'service_manual_service_standard',
-          title: 'sm title',
-          details: { body: 'the main body' },
-          links: {
-            children: [
-              { title: 'ch1 title', description: 'ch1 desc' },
-              { title: 'ch2 title', description: 'ch2 desc' }
-            ]
+      describe "ServiceManualStandard" do
+        it "returns title and body if json does not have 'children' key" do
+          json = {
+            schema_name: 'service_manual_service_standard',
+            title: 'sm title',
+            details: { body: 'the main body' },
+            links: {}
           }
-        }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq('sm title the main body ch1 title ch1 desc ch2 title ch2 desc')
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq('sm title the main body')
+        end
+
+        it "returns content if schema_name is 'service_manual_service_standard'" do
+          json = {
+            schema_name: 'service_manual_service_standard',
+            title: 'sm title',
+            details: { body: 'the main body' },
+            links: {
+              children: [
+                { title: 'ch1 title', description: 'ch1 desc' },
+                { title: 'ch2 title', description: 'ch2 desc' }
+              ]
+            }
+          }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq('sm title the main body ch1 title ch1 desc ch2 title ch2 desc')
+        end
       end
 
-      it "returns content if schema name is 'service_manual_service_toolkit'" do
-        json = {
-          schema_name: 'service_manual_service_toolkit',
-          details: {
-            collections: [
-              {
-                title: 'main title 1',
-                description: 'main desc 1',
-                links: [
-                  { title: 'title link 1', description: 'desc link 1' },
-                  { title: 'title link 2', description: 'desc link 2' }
-                ]
-              }
-            ]
+      describe "ServiceManualServiceToolkit" do
+        it "returns nil if json does not have 'collection' key" do
+          json = {
+            schema_name: 'service_manual_service_toolkit',
+            details: {}
           }
-        }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq('main title 1 main desc 1 title link 1 desc link 1 title link 2 desc link 2')
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
+        end
+
+        it "returns 'title' and 'description' if json does not have 'links' key" do
+          json = {
+            schema_name: 'service_manual_service_toolkit',
+            details: {
+              collections: [
+                {
+                  title: 'main title 1',
+                  description: 'main desc 1'
+                }
+              ]
+            }
+          }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq('main title 1 main desc 1')
+        end
+
+        it "returns json content" do
+          json = {
+            schema_name: 'service_manual_service_toolkit',
+            details: {
+              collections: [
+                {
+                  title: 'main title 1',
+                  description: 'main desc 1',
+                  links: [
+                    { title: 'title link 1', description: 'desc link 1' },
+                    { title: 'title link 2', description: 'desc link 2' }
+                  ]
+                }
+              ]
+            }
+          }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq('main title 1 main desc 1 title link 1 desc link 1 title link 2 desc link 2')
+        end
       end
 
-      it "returns content if schema name is 'contact'" do
-        json = {
-          schema_name: 'contact',
-          details: {
-            description: 'main desc',
-            email_addresses: [
-              { title: 'title 1', description: '<p>desc 1</p>' },
-              { title: 'title 2', description: '<p>desc 2</p>' }
-            ],
-            more_info_email_address: '<p>more info</p>',
-            post_addresses: [
-              { title: 'post1 title', description: '<p>post1 desc</p>' },
-              { title: 'post2 title', description: '<p>post2 desc</p>' }
-            ],
-            more_info_post_address: '<p>more info post</p>',
-            phone_numbers: [
-              { title: 'phone1 title', description: '<p>phone1 desc</p>' },
-              { title: 'phone2 title', description: '<p>phone2 desc</p>' }
-            ],
-            more_info_phone_number: '<p>more info phone</p>'
+      describe "Contact" do
+        it "does not return phone numbers if there is no 'phone_numbers' key" do
+          json = {
+            schema_name: 'contact',
+            details: {
+              description: 'main desc',
+              email_addresses: [
+                { title: 'title 1', description: '<p>desc 1</p>' },
+                { title: 'title 2', description: '<p>desc 2</p>' }
+              ],
+              more_info_email_address: '<p>more info</p>',
+              post_addresses: [
+                { title: 'post1 title', description: '<p>post1 desc</p>' },
+                { title: 'post2 title', description: '<p>post2 desc</p>' }
+              ],
+              more_info_post_address: '<p>more info post</p>'
+            }
           }
-        }
-        expected = [
-          'main desc title 1 desc 1 title 2 desc 2',
-          'more info',
-          'post1 title post1 desc post2 title post2 desc',
-          'more info post',
-          'phone1 title phone1 desc phone2 title phone2 desc more info phone'
-        ].join(' ')
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
+          expected = [
+            'main desc title 1 desc 1 title 2 desc 2',
+            'more info',
+            'post1 title post1 desc post2 title post2 desc',
+            'more info post'
+          ].join(' ')
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
+        end
+
+        it "does not return post_addresses if there is no 'post_addresses' key" do
+          json = {
+            schema_name: 'contact',
+            details: {
+              description: 'main desc',
+              email_addresses: [
+                { title: 'title 1', description: '<p>desc 1</p>' },
+                { title: 'title 2', description: '<p>desc 2</p>' }
+              ],
+              more_info_email_address: '<p>more info</p>',
+              more_info_post_address: '<p>more info post</p>'
+            }
+          }
+          expected = [
+            'main desc title 1 desc 1 title 2 desc 2',
+            'more info',
+            'more info post'
+          ].join(' ')
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
+        end
+
+        it "does not return email_addresses if there is no 'email_addresses' key" do
+          json = {
+            schema_name: 'contact',
+            details: {
+              description: 'main desc',
+              post_addresses: [
+                { title: 'post1 title', description: '<p>post1 desc</p>' },
+                { title: 'post2 title', description: '<p>post2 desc</p>' }
+              ],
+              more_info_post_address: '<p>more info post</p>'
+            }
+          }
+          expected = [
+            'main desc',
+            'post1 title post1 desc post2 title post2 desc',
+            'more info post'
+          ].join(' ')
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
+        end
+
+        it "returns content if schema name is 'contact'" do
+          json = {
+            schema_name: 'contact',
+            details: {
+              description: 'main desc',
+              email_addresses: [
+                { title: 'title 1', description: '<p>desc 1</p>' },
+                { title: 'title 2', description: '<p>desc 2</p>' }
+              ],
+              more_info_email_address: '<p>more info</p>',
+              post_addresses: [
+                { title: 'post1 title', description: '<p>post1 desc</p>' },
+                { title: 'post2 title', description: '<p>post2 desc</p>' }
+              ],
+              more_info_post_address: '<p>more info post</p>',
+              phone_numbers: [
+                { title: 'phone1 title', description: '<p>phone1 desc</p>' },
+                { title: 'phone2 title', description: '<p>phone2 desc</p>' }
+              ],
+              more_info_phone_number: '<p>more info phone</p>'
+            }
+          }
+          expected = [
+            'main desc title 1 desc 1 title 2 desc 2',
+            'more info',
+            'post1 title post1 desc post2 title post2 desc',
+            'more info post',
+            'phone1 title phone1 desc phone2 title phone2 desc more info phone'
+          ].join(' ')
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
+        end
       end
 
       it "returns content if schema name is 'need'" do
@@ -253,21 +408,37 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("No page here")
       end
 
-      it "returns content json if schema_name is 'generic_with_external_related_links'" do
-        json = { schema_name: "generic_with_external_related_links",
-          details: { external_related_links: [
-            { title: "Check your Council Tax band" }
-          ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Check your Council Tax band")
+      describe "GenericWithLinks" do
+        it "returns nil if json does not have 'external_related_links' key" do
+          json = { schema_name: "generic_with_external_related_links",
+            details: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
+        end
+
+        it "returns content json if schema_name is 'generic_with_external_related_links'" do
+          json = { schema_name: "generic_with_external_related_links",
+            details: { external_related_links: [
+              { title: "Check your Council Tax band" }
+            ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Check your Council Tax band")
+        end
       end
 
-      it "returns content json if schema_name is 'travel_advice_index'" do
-        json = { schema_name: "travel_advice_index",
-          links: { children: [
-            { country: { name: "Portugal" } },
-            { country: { name: "Brazil" } }
-          ] } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Portugal Brazil")
+      describe "TravelAdviceIndex" do
+        it "returns nil if json does not have children array" do
+          json = { schema_name: "travel_advice_index",
+            links: {} }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
+        end
+
+        it "returns content json" do
+          json = { schema_name: "travel_advice_index",
+            links: { children: [
+              { country: { name: "Portugal" } },
+              { country: { name: "Brazil" } }
+            ] } }
+          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Portugal Brazil")
+        end
       end
 
       it "returns content json if schema_name is 'service_sign_in'" do

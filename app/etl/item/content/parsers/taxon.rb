@@ -2,11 +2,12 @@ class Item::Content::Parsers::Taxon
   def parse(json)
     html = []
     html << json.dig("description")
-    return unless json.dig("links").include?("child_taxons")
     children = json.dig("links", "child_taxons")
-    children.each do |child|
-      html << child["title"]
-      html << child["description"]
+    unless children.nil?
+      children.each do |child|
+        html << child["title"]
+        html << child["description"]
+      end
     end
     html.join(" ")
   end

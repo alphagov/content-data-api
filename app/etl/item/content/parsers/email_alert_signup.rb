@@ -1,8 +1,11 @@
 class Item::Content::Parsers::EmailAlertSignup
   def parse(json)
     html = []
-    json.dig("details", "breadcrumbs").each do |crumb|
-      html << crumb["title"]
+    breadcrumbs = json.dig("details", "breadcrumbs")
+    unless breadcrumbs.nil?
+      breadcrumbs.each do |crumb|
+        html << crumb["title"]
+      end
     end
     html << json.dig("details", "summary")
     html.join(" ")

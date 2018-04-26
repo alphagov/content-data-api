@@ -1,8 +1,11 @@
 class Item::Content::Parsers::FinderEmailSignup
   def parse(json)
     html = []
-    json.dig("details", "email_signup_choice").each do |choice|
-      html << choice["radio_button_name"]
+    choices = json.dig("details", "email_signup_choice")
+    unless choices.nil?
+      choices.each do |choice|
+        html << choice["radio_button_name"]
+      end
     end
     html << json.dig("description")
     html.join(" ")

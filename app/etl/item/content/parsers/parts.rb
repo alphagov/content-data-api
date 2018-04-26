@@ -1,7 +1,9 @@
 class Item::Content::Parsers::Parts
   def parse(json)
     html = []
-    json.dig("details", "parts").each do |part|
+    parts = json.dig("details", "parts")
+    return if parts.nil?
+    parts.each do |part|
       html << part["title"]
       html << part["body"]
     end
