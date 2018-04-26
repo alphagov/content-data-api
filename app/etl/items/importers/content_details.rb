@@ -5,7 +5,7 @@ class Items::Importers::ContentDetails
 
   attr_reader :content_store_client, :id, :fetch_quality_metrics
 
-  def self.run(id, *args, quality_metrics: true, **options)
+  def self.run(id, *_args, quality_metrics: true, **_options)
     new(id, quality_metrics: quality_metrics).run
   end
 

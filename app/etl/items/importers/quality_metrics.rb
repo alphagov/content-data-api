@@ -25,7 +25,6 @@ class Items::Importers::QualityMetrics
       dimensions_date: Dimensions::Date.for(item.created_at.to_date),
       **quality_metrics
     )
-
   rescue InvalidSchemaError
     do_nothing
   end
