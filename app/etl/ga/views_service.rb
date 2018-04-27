@@ -4,7 +4,7 @@ class GA::ViewsService
   end
 
   def find_in_batches(date:, batch_size: 10_000)
-    paged_report_data(date: date)
+    fetch_data(date: date)
       .lazy
       .map(&:to_h)
       .flat_map(&method(:extract_rows))
@@ -44,12 +44,12 @@ private
     report.fetch(:rows)
   end
 
-  def paged_report_data(date:)
+  def fetch_data(date:)
     @data ||= client.fetch_all(items: :data) do |page_token, service|
       service
         .batch_get_reports(
           Google::Apis::AnalyticsreportingV4::GetReportsRequest.new(
-            report_requests: [report_request(date: date).merge(page_token: page_token)]
+            report_requests: [build_request(date: date).merge(page_token: page_token)]
           )
         )
         .reports
@@ -57,7 +57,7 @@ private
     end
   end
 
-  def report_request(date:)
+  def build_request(date:)
     {
       date_ranges: [
         { start_date: date.to_s("%Y-%m-%d"), end_date: date.to_s("%Y-%m-%d") },
