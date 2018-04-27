@@ -63,7 +63,7 @@ private
     new_item.gone!
   end
 
-  def handle_existing_version(_item)
-    Items::Jobs::ImportContentDetailsJob.perform_async(new_item.id, quality_metrics: false)
+  def handle_existing_version(item)
+    Items::Jobs::ImportContentDetailsJob.perform_async(item.id, quality_metrics: false)
   end
 end

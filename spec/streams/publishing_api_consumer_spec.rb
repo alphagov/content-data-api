@@ -94,6 +94,72 @@ RSpec.describe PublishingApiConsumer do
     end
   end
 
+  context 'when the Dimensions::Item already exists - links update' do
+    let!(:latest_item_en) do
+      create(:dimensions_item, locale: 'en', publishing_api_payload_version: 1, base_path: "/foo")
+    end
+
+    let(:links) do
+      {
+        "primary_publishing_organisation" => [
+          { "content_id": "abc", "title": "ministry of silly walks", "withdrawn": false }
+        ]
+      }
+    end
+
+    let(:payload) do
+      {
+        'base_path' => latest_item_en.base_path,
+        'content_id' => latest_item_en.content_id,
+        'locale' => 'en',
+        'payload_version' => 2,
+        'title' => latest_item_en.title,
+        'document_type' => latest_item_en.document_type,
+        'expanded_links' => links
+      }
+    end
+
+    let(:message) do
+      double('message',
+        payload: payload,
+        delivery_info: double('del_info', routing_key: 'news_story.links'))
+    end
+
+    before :each do
+      allow(message).to receive(:ack)
+
+      stub_content_store_response(
+        content_id: latest_item_en.content_id,
+        base_path: latest_item_en.base_path,
+        body: "News about things",
+        document_type: latest_item_en.document_type,
+        title: latest_item_en.title,
+        links: links
+      )
+
+      stub_quality_metrics_response("News about things")
+
+      subject.process(message)
+    end
+
+    it 'keeps the latest item as the latest item' do
+      expect(latest_item_en.reload.latest).to be true
+    end
+
+    it "ack's the message" do
+      expect(message).to have_received(:ack)
+    end
+
+    it "updates the latest item" do
+      expect(latest_item_en.reload).to have_attributes(
+        primary_organisation_content_id: "abc",
+        primary_organisation_title: "ministry of silly walks",
+        primary_organisation_withdrawn: false
+      )
+    end
+  end
+
+
   context 'on an unpublish event' do
     let!(:latest_item_en) do
       create(:dimensions_item, locale: 'en', publishing_api_payload_version: 1)
@@ -250,7 +316,7 @@ RSpec.describe PublishingApiConsumer do
     end
   end
 
-  def stub_content_store_response(content_id:, base_path:, title:, body:, document_type:, schema_name: 'news_article')
+  def stub_content_store_response(content_id:, base_path:, title:, body:, document_type:, schema_name: 'news_article', links: nil)
     response = content_item_for_base_path(base_path)
     response.merge!(
       'content_id' => content_id,
@@ -262,6 +328,11 @@ RSpec.describe PublishingApiConsumer do
         'body' => body,
       }
     )
+
+    if links
+      response["links"] = links
+    end
+
     content_store_has_item(base_path, response, {})
   end
 
