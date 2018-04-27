@@ -42,6 +42,6 @@ private
     params.permit(:from, :to, :base_path, :utf8,
       :total_items, :pageviews, :unique_pageviews, :feedex_issues,
       :number_of_pdfs, :number_of_word_files, :filter, :organisation, :spell_count,
-      :readability_score)
+      :readability_score, :is_this_useful_yes, :is_this_useful_no)
   end
 end
