@@ -48,6 +48,12 @@ FactoryBot.define do
       is_this_useful_no 6
       process_name 'user_feedback'
     end
+
+    trait :with_number_of_internal_searches do
+      number_of_internal_searches 100
+      process_name 'number_of_internal_searches'
+    end
+
     sequence(:page_path) { |i| "/path/#{i}" }
     sequence(:date) { |i| i.days.ago.to_date }
   end

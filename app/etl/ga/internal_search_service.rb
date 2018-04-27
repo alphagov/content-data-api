@@ -21,10 +21,10 @@ class GA::InternalSearchService
 private
 
   def append_labels(values)
-    page_path, internal_search = *values
+    page_path, number_of_internal_searches = *values
     {
       'page_path' => page_path,
-      'internal_search' => internal_search
+      'number_of_internal_searches' => number_of_internal_searches
     }
   end
 

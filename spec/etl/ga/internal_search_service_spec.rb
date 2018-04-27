@@ -32,12 +32,12 @@ RSpec.describe GA::InternalSearchService do
         arg1 = [
           a_hash_including(
             'page_path' => '/foo',
-            'internal_search' => 1,
+            'number_of_internal_searches' => 1,
             'date' => '2018-02-20',
           ),
           a_hash_including(
             'page_path' => '/bar',
-            'internal_search' => 2,
+            'number_of_internal_searches' => 2,
             'date' => '2018-02-20',
           )
         ]
@@ -45,7 +45,7 @@ RSpec.describe GA::InternalSearchService do
         arg2 = [
           a_hash_including(
             'page_path' => '/cool',
-            'internal_search' => 3,
+            'number_of_internal_searches' => 3,
             'date' => '2018-02-20',
           )
         ]
