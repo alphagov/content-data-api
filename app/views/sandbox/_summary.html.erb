@@ -37,4 +37,14 @@
       <span class="summary-item-label">Readability score (avg)</span>
     </div>
   </div>
+  <div class="row">
+    <div class="summary-item col-xs-3 is_this_useful_yes">
+      <span class="summary-item-value"><%= number_with_precision((@summary[:is_this_useful_yes] || 0), precision: 2)  %></span>
+      <span class="summary-item-label">Useful (avg)</span>
+    </div>
+    <div class="summary-item col-xs-3 is_this_useful_no">
+      <span class="summary-item-value"><%= number_with_precision((@summary[:is_this_useful_no] || 0), precision: 2) %></span>
+      <span class="summary-item-label">Not Useful (avg)</span>
+    </div>
+  </div>
 </div>
