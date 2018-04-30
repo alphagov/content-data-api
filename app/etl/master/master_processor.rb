@@ -15,6 +15,7 @@ class Master::MasterProcessor
       Master::MetricsProcessor.process(date: dimensions_date.date)
       GA::ViewsProcessor.process(date: dimensions_date.date)
       GA::UserFeedbackProcessor.process(date: dimensions_date.date)
+      GA::InternalSearchProcessor.process(date: dimensions_date.date)
       Feedex::Processor.process(date: dimensions_date.date)
     end
   end

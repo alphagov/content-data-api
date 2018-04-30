@@ -1,4 +1,4 @@
-class GA::ViewsService
+class GA::InternalSearchService
   def self.find_in_batches(*args, &block)
     new.find_in_batches(*args, &block)
   end
@@ -9,7 +9,7 @@ class GA::ViewsService
       .map(&:to_h)
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
-      .map(&method(:append_data_labels))
+      .map(&method(:append_labels))
       .map { |h| h['date'] = date.strftime('%F'); h }
       .each_slice(batch_size) { |slice| yield slice }
   end
@@ -20,14 +20,11 @@ class GA::ViewsService
 
 private
 
-  def append_data_labels(values)
-    page_path, pageviews, unique_pageviews = *values
-
+  def append_labels(values)
+    page_path, number_of_internal_searches = *values
     {
       'page_path' => page_path,
-      'pageviews' => pageviews,
-      'unique_pageviews' => unique_pageviews,
-      'process_name' => 'views'
+      'number_of_internal_searches' => number_of_internal_searches
     }
   end
 
@@ -63,13 +60,12 @@ private
         { start_date: date.to_s("%Y-%m-%d"), end_date: date.to_s("%Y-%m-%d") },
       ],
       dimensions: [
-        { name: 'ga:pagePath' },
+        { name: 'ga:searchStartPage' },
       ],
       hide_totals: true,
       hide_value_ranges: true,
       metrics: [
-        { expression: 'ga:pageviews' },
-        { expression: 'ga:uniquePageviews' },
+        { expression: 'ga:searchUniques' }
       ],
       page_size: 10_000,
       view_id: ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"],

@@ -15,6 +15,7 @@ RSpec.describe 'PublishingAPI events' do
   before do
     stub_google_analytics_response
     stub_google_analytics_user_feedback_response
+    stub_google_analytics_internal_search_response
     stub_feedex_response
     stub_quality_metrics_response
     stub_content_store_response(title: 'title1', base_path: base_path)
@@ -102,6 +103,10 @@ RSpec.describe 'PublishingAPI events' do
 
   def stub_google_analytics_user_feedback_response
     allow(GA::UserFeedbackService).to receive(:find_in_batches).and_yield([])
+  end
+
+  def stub_google_analytics_internal_search_response
+    allow(GA::InternalSearchService).to receive(:find_in_batches).and_yield([])
   end
 
   def stub_feedex_response
