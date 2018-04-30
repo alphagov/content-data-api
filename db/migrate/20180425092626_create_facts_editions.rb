@@ -30,6 +30,6 @@ class CreateFactsEditions < ActiveRecord::Migration[5.1]
 
     add_foreign_key :facts_editions, :dimensions_dates, foreign_key: :dimensions_date_id, primary_key: :date
     add_foreign_key :facts_editions, :dimensions_items, foreign_key: :dimensions_item_id, primary_key: :id
-    add_index :facts_editions, dimensions_item_id, unique: true, name: 'index_facts_editions_on_dimension_ids'
+    add_index :facts_editions, :dimensions_item_id, unique: true, name: 'index_facts_editions_on_dimension_ids'
   end
 end

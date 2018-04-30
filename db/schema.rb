@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 20180425132405) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dimensions_date_id"], name: "index_facts_editions_on_dimensions_date_id"
-    t.index ["dimensions_item_id", "dimensions_date_id"], name: "index_facts_editions_on_dimension_ids", unique: true
+    t.index ["dimensions_item_id"], name: "index_facts_editions_on_dimension_ids", unique: true
   end
 
   create_table "facts_metrics", force: :cascade do |t|
