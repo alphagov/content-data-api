@@ -73,6 +73,10 @@ default: &default
     description: "Total number of people who found the page helpful"
     source: Google Analytics
 
+  number_of_internal_searches:
+    description: "Number of times a user searches for something else on GOV.UK from the page"
+    source: Google Analytics
+
 development:
   <<: *default
 
