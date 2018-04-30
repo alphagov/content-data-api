@@ -46,5 +46,9 @@
       <span class="summary-item-value"><%= number_with_precision((@summary[:is_this_useful_no] || 0), precision: 2) %></span>
       <span class="summary-item-label">Not Useful (avg)</span>
     </div>
+    <div class="summary-item col-xs-3 number_of_internal_searches">
+      <span class="summary-item-value"><%= number_with_precision((@summary[:number_of_internal_searches] || 0), precision: 2) %></span>
+      <span class="summary-item-label">Number of Internal Searches (avg)</span>
+    </div>
   </div>
 </div>
