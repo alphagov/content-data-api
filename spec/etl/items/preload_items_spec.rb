@@ -50,4 +50,25 @@ RSpec.describe Items::PreloadItemsProcessor do
       expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item2.id)
     end
   end
+
+  context 'with duplicated responses' do
+    let(:content_items) do
+      [
+        {
+          content_id: 'abc123',
+          base_path: '/abc',
+          locale: 'en',
+        },
+        {
+          content_id: 'abc123',
+          base_path: '/abc',
+          locale: 'en',
+        }
+      ]
+    end
+
+    it 'ignores duplicated items' do
+      expect(Dimensions::Item.count).to eq(1)
+    end
+  end
 end
