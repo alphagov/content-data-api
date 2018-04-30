@@ -28,6 +28,7 @@ RSpec.describe 'Master process spec' do
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response
     stub_google_analytics_user_feedback_response
+    stub_google_analytics_internal_search_response
     stub_feedex_response
 
     Master::MasterProcessor.process
@@ -109,6 +110,25 @@ RSpec.describe 'Master process spec' do
           'is_this_useful_yes' => 1,
           'date' => '2018-02-20',
           'process_name' => 'user_feedback',
+        },
+      ]
+    )
+  end
+
+  def stub_google_analytics_internal_search_response
+    allow(GA::InternalSearchService).to receive(:find_in_batches).and_yield(
+      [
+        {
+          'page_path' => '/path1',
+          'number_of_internal_searches' => 1,
+          'date' => '2018-02-20',
+          'process_name' => 'number_of_internal_searches'
+        },
+        {
+          'page_path' => '/path2',
+          'number_of_internal_searches' => 2,
+          'date' => '2018-02-20',
+          'process_name' => 'number_of_internal_searches'
         },
       ]
     )

@@ -13,6 +13,7 @@ RSpec.describe Master::MasterProcessor do
   before do
     allow(GA::ViewsProcessor).to receive(:process)
     allow(GA::UserFeedbackProcessor).to receive(:process)
+    allow(GA::InternalSearchProcessor).to receive(:process)
     allow(Feedex::Processor).to receive(:process)
     allow(Master::MetricsProcessor).to receive(:process)
   end
