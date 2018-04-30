@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180430100349) do
+ActiveRecord::Schema.define(version: 20180430110607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,8 +72,8 @@ ActiveRecord::Schema.define(version: 20180430100349) do
     t.string "locale", default: "en", null: false
     t.datetime "outdated_at"
     t.bigint "publishing_api_payload_version", null: false
+    t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path", unique: true
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
-    t.index ["latest"], name: "index_dimensions_items_on_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
   end
 
