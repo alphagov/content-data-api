@@ -5,20 +5,6 @@ RSpec.describe Items::PreloadItemsProcessor do
   include GdsApi::TestHelpers::PublishingApiV2
   subject { described_class }
   let(:fields) { %i[base_path content_id locale] }
-  let(:content_items) do
-    [
-      {
-        content_id: 'abc123',
-        base_path: '/abc',
-        locale: 'en',
-      },
-      {
-        content_id: 'xyz789',
-        base_path: '/xyz',
-        locale: 'en',
-      }
-    ]
-  end
 
   before :each do
     publishing_api_get_editions(content_items, fields: fields, per_page: 50, states: ['published'])
@@ -26,25 +12,42 @@ RSpec.describe Items::PreloadItemsProcessor do
     subject.process
   end
 
-  it 'saves an item per entry in Search API' do
-    expect(Dimensions::Item.count).to eq(2)
-  end
+  context 'with non duplicated' do
+    let(:content_items) do
+      [
+        {
+          content_id: 'abc123',
+          base_path: '/abc',
+          locale: 'en',
+        },
+        {
+          content_id: 'xyz789',
+          base_path: '/xyz',
+          locale: 'en',
+        }
+      ]
+    end
 
-  it 'transform an entry in PublishingAPI into a Dimensions::Item' do
-    item = Dimensions::Item.find_by(content_id: 'xyz789')
-    expect(item).to have_attributes(
-      content_id: 'xyz789',
-      base_path: '/xyz',
-      latest: true
-    )
-  end
+    it 'saves an item per entry in Search API' do
+      expect(Dimensions::Item.count).to eq(2)
+    end
 
-  it 'creates a ImportItemJob for each item' do
-    item = Dimensions::Item.find_by(content_id: 'xyz789')
-    expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item.id)
+    it 'transform an entry in PublishingAPI into a Dimensions::Item' do
+      item = Dimensions::Item.find_by(content_id: 'xyz789')
+      expect(item).to have_attributes(
+        content_id: 'xyz789',
+        base_path: '/xyz',
+        latest: true
+      )
+    end
+
+    it 'creates a ImportItemJob for each item' do
+      item = Dimensions::Item.find_by(content_id: 'xyz789')
+      expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item.id)
 
 
-    item2 = Dimensions::Item.find_by(content_id: 'abc123')
-    expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item2.id)
+      item2 = Dimensions::Item.find_by(content_id: 'abc123')
+      expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item2.id)
+    end
   end
 end
