@@ -43,7 +43,9 @@ class Facts::Metric < ApplicationRecord
       'AVG(number_of_pdfs)',
       'AVG(number_of_word_files)',
       'AVG(spell_count)',
-      'AVG(readability_score)'
+      'AVG(readability_score)',
+      'AVG(is_this_useful_yes)',
+      'AVG(is_this_useful_no)',
     ).first
     {
       total_items: array[0],
@@ -54,6 +56,8 @@ class Facts::Metric < ApplicationRecord
       number_of_word_files: array[5],
       spell_count: array[6],
       readability_score: array[7],
+      is_this_useful_yes: array[8],
+      is_this_useful_no: array[9]
     }
   end
 
@@ -79,6 +83,8 @@ class Facts::Metric < ApplicationRecord
       number_of_word_files
       readability_score
       spell_count
+      is_this_useful_yes
+      is_this_useful_no
     ]
   end
 end

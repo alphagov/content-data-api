@@ -82,9 +82,9 @@ RSpec.describe Facts::Metric, type: :model do
       item1 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 3, readability_score: 4)
       item2 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 3, readability_score: 4)
 
-      create(:metric, dimensions_item: item1, dimensions_date: day0, pageviews: 3, unique_pageviews: 2, feedex_comments: 4)
-      create(:metric, dimensions_item: item2, dimensions_date: day0, pageviews: 5, unique_pageviews: 2, feedex_comments: 3)
-      create(:metric, dimensions_item: item2, dimensions_date: day1, pageviews: 2, unique_pageviews: 2, feedex_comments: 2)
+      create(:metric, dimensions_item: item1, dimensions_date: day0, pageviews: 3, unique_pageviews: 2, feedex_comments: 4, is_this_useful_yes: 1, is_this_useful_no: 1)
+      create(:metric, dimensions_item: item2, dimensions_date: day0, pageviews: 5, unique_pageviews: 2, feedex_comments: 3, is_this_useful_yes: 2, is_this_useful_no: 2)
+      create(:metric, dimensions_item: item2, dimensions_date: day1, pageviews: 2, unique_pageviews: 2, feedex_comments: 2, is_this_useful_yes: 3, is_this_useful_no: 3)
 
       results = subject.between(day0, day1).by_base_path(base_path).metric_summary
 
@@ -97,6 +97,8 @@ RSpec.describe Facts::Metric, type: :model do
         number_of_word_files: 1,
         spell_count: 3,
         readability_score: 4,
+        is_this_useful_yes: 2,
+        is_this_useful_no: 2
       )
     end
   end
