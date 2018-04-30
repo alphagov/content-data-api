@@ -120,21 +120,6 @@ private
     ]
   end
 
-  def ga_response_without_user_feedback_data
-    [
-      {
-        'page_path' => '/path1',
-        'date' => '2018-02-20',
-        'process_name' => 'user_feedback',
-      },
-      {
-        'page_path' => '/path2',
-        'date' => '2018-02-20',
-        'process_name' => 'user_feedback',
-      },
-    ]
-  end
-
   def ga_response_with_govuk_prefix
     [
       {
