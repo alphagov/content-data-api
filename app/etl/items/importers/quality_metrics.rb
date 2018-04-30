@@ -17,6 +17,14 @@ class Items::Importers::QualityMetrics
 
     quality_metrics = content_quality_service.run(item.get_content)
     item.update_attributes(quality_metrics)
+
+    # FIXME: we link edition facts to the date we created the item, but it should
+    # come from the publishing API event date.
+    Facts::Edition.create(
+      dimensions_item: item,
+      dimensions_date: Dimensions::Date.for(item.created_at.to_date),
+      **quality_metrics
+    )
   rescue InvalidSchemaError
     do_nothing
   end

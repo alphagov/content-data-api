@@ -19,7 +19,6 @@ FactoryBot.define do
 
   factory :dimensions_item, class: Dimensions::Item do
     latest true
-    outdated false
     locale 'en'
     sequence(:content_id) { |i| "content_id - #{i}" }
     sequence(:title) { |i| "title - #{i}" }
@@ -28,11 +27,6 @@ FactoryBot.define do
     sequence(:raw_json) { |i| "json - #{i}" }
     sequence(:publishing_api_payload_version)
     number_of_pdfs 0
-
-    factory :outdated_item do
-      outdated true
-      outdated_at { 2.days.ago }
-    end
   end
 
   factory :metric, class: Facts::Metric do

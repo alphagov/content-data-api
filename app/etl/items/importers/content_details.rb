@@ -3,15 +3,16 @@ require 'odyssey'
 class Items::Importers::ContentDetails
   include Concerns::Traceable
 
-  attr_reader :content_store_client, :id
+  attr_reader :content_store_client, :id, :fetch_quality_metrics
 
-  def self.run(*args)
-    new(*args).run
+  def self.run(id, *_args, quality_metrics: true, **_options)
+    new(id, quality_metrics: quality_metrics).run
   end
 
-  def initialize(id, _ = {})
+  def initialize(id, quality_metrics: true)
     @id = id
     @content_store_client = Item::Clients::ContentStore.new
+    @fetch_quality_metrics = quality_metrics
   end
 
   def run
@@ -20,10 +21,8 @@ class Items::Importers::ContentDetails
       item = Dimensions::Item.find(id)
       item_raw_json = content_store_client.fetch_raw_json(item.base_path)
       attributes = Item::Metadata::Parser.parse(item_raw_json)
-      needs_quality_metrics = item.quality_metrics_required?(attributes)
 
-      # Reset the outdated flag to show that the content details are there
-      attributes[:outdated] = false
+      needs_quality_metrics = fetch_quality_metrics && item.quality_metrics_required?(attributes)
 
       item.update_attributes(attributes)
 

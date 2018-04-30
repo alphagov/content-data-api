@@ -46,7 +46,6 @@ ActiveRecord::Schema.define(version: 20180425132405) do
     t.boolean "latest"
     t.json "raw_json"
     t.integer "number_of_pdfs"
-    t.boolean "outdated", default: false
     t.string "document_type"
     t.string "content_purpose_document_supertype"
     t.datetime "first_published_at"
@@ -70,7 +69,6 @@ ActiveRecord::Schema.define(version: 20180425132405) do
     t.string "primary_organisation_content_id"
     t.boolean "primary_organisation_withdrawn"
     t.string "content_hash"
-    t.datetime "outdated_at"
     t.string "locale", default: "en", null: false
     t.bigint "publishing_api_payload_version", null: false
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
@@ -124,7 +122,7 @@ ActiveRecord::Schema.define(version: 20180425132405) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dimensions_date_id"], name: "index_facts_editions_on_dimensions_date_id"
-    t.index ["dimensions_item_id"], name: "index_facts_editions_on_dimensions_item_id"
+    t.index ["dimensions_item_id", "dimensions_date_id"], name: "index_facts_editions_on_dimension_ids", unique: true
   end
 
   create_table "facts_metrics", force: :cascade do |t|
