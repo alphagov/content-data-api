@@ -79,7 +79,7 @@ RSpec.describe Facts::Metric, type: :model do
     let(:base_path) { '/the/base/path' }
 
     it 'returns the correct numbers' do
-      item1 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 3, readability_score: 4)
+      item1 = create(:dimensions_item, latest: false, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 3, readability_score: 4)
       item2 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 3, readability_score: 4)
 
       create(:metric, dimensions_item: item1, dimensions_date: day0, pageviews: 3, unique_pageviews: 2, feedex_comments: 4, is_this_useful_yes: 1, is_this_useful_no: 1)

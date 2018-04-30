@@ -1,28 +1,26 @@
 RSpec.describe Items::Importers::ContentDetails do
-  let(:base_path) { '/base_path' }
   let(:content_id) { 'content_id' }
-
-
 
   context 'Import contents' do
     subject { Items::Importers::ContentDetails.new(latest_dimension_item.id) }
+
     let(:locale) { 'en' }
 
     let!(:existing_content_hash) { 'ContentHashContentHash' }
     let!(:parsed_content_hash) { 'NewContentHash' }
     let!(:latest_dimension_item_fr) do
       create(:dimensions_item,
-        content_id: content_id, base_path: base_path, locale: 'fr',
+        content_id: content_id, base_path: 'fr/base_path', locale: 'fr',
         raw_json: nil, content_hash: existing_content_hash,
         publishing_api_payload_version: 1)
     end
     let!(:latest_dimension_item) do
       create(:dimensions_item,
-        content_id: content_id, base_path: base_path, locale: 'en',
+        content_id: content_id, base_path: 'en/base_path', locale: 'en',
         raw_json: nil, content_hash: existing_content_hash,
         publishing_api_payload_version: 1)
     end
-    let!(:older_dimension_item) { create(:dimensions_item, content_id: content_id, base_path: base_path, latest: false, raw_json: nil) }
+    let!(:older_dimension_item) { create(:dimensions_item, content_id: content_id, base_path: 'en/base_path', latest: false, raw_json: nil) }
     let(:raw_json) { { 'details' => 'the-json' } }
 
     before do
