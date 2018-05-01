@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20180430110607) do
     t.string "locale", default: "en", null: false
     t.datetime "outdated_at"
     t.bigint "publishing_api_payload_version", null: false
-    t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path", unique: true
+    t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
   end
