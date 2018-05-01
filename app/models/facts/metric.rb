@@ -35,18 +35,17 @@ class Facts::Metric < ApplicationRecord
   end
 
   scope :metric_summary, -> do
-    array = pluck(
-      'COUNT(DISTINCT dimensions_items.content_id)',
-      'SUM(pageviews)',
-      'AVG(unique_pageviews)',
-      'SUM(feedex_comments)',
-      'AVG(number_of_pdfs)',
-      'AVG(number_of_word_files)',
-      'AVG(spell_count)',
-      'AVG(readability_score)',
-      'AVG(is_this_useful_yes)',
-      'AVG(is_this_useful_no)',
-    ).first
+    array = pluck('COUNT(DISTINCT dimensions_items.content_id)',
+                  'SUM(pageviews)',
+                  'AVG(unique_pageviews)',
+                  'SUM(feedex_comments)',
+                  'AVG(number_of_pdfs)',
+                  'AVG(number_of_word_files)',
+                  'AVG(spell_count)',
+                  'AVG(readability_score)',
+                  'AVG(is_this_useful_yes)',
+                  'AVG(is_this_useful_no)',
+                  'AVG(number_of_internal_searches)').first
     {
       total_items: array[0],
       pageviews: array[1],
@@ -57,7 +56,8 @@ class Facts::Metric < ApplicationRecord
       spell_count: array[6],
       readability_score: array[7],
       is_this_useful_yes: array[8],
-      is_this_useful_no: array[9]
+      is_this_useful_no: array[9],
+      number_of_internal_searches: array[10]
     }
   end
 
@@ -85,6 +85,7 @@ class Facts::Metric < ApplicationRecord
       spell_count
       is_this_useful_yes
       is_this_useful_no
+      number_of_internal_searches
     ]
   end
 end

@@ -23,12 +23,12 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
   let(:metric5) { create :metric, dimensions_item: item2, dimensions_date: day2 }
 
   scenario 'Show aggregated metrics' do
-    metric1.update pageviews: 10, unique_pageviews: 10, feedex_comments: 2, is_this_useful_no: 1, is_this_useful_yes: 2
-    metric2.update pageviews: 10, unique_pageviews: 10, feedex_comments: 4, is_this_useful_no: 3, is_this_useful_yes: 4
-    metric3.update pageviews: 20, unique_pageviews: 20, feedex_comments: 6, is_this_useful_no: 5, is_this_useful_yes: 6
-    metric4.update pageviews: 20, unique_pageviews: 20, feedex_comments: 8, is_this_useful_no: 7, is_this_useful_yes: 8
-    metric5.update pageviews: 30, unique_pageviews: 30, feedex_comments: 10, is_this_useful_no: 9, is_this_useful_yes: 10
-    metric2_fr.update pageviews: 5, unique_pageviews: 5, feedex_comments: 25, is_this_useful_no: 11, is_this_useful_yes: 12
+    metric1.update pageviews: 10, unique_pageviews: 10, feedex_comments: 2, is_this_useful_no: 1, is_this_useful_yes: 2, number_of_internal_searches: 12
+    metric2.update pageviews: 10, unique_pageviews: 10, feedex_comments: 4, is_this_useful_no: 3, is_this_useful_yes: 4, number_of_internal_searches: 22
+    metric3.update pageviews: 20, unique_pageviews: 20, feedex_comments: 6, is_this_useful_no: 5, is_this_useful_yes: 6, number_of_internal_searches: 32
+    metric4.update pageviews: 20, unique_pageviews: 20, feedex_comments: 8, is_this_useful_no: 7, is_this_useful_yes: 8, number_of_internal_searches: 42
+    metric5.update pageviews: 30, unique_pageviews: 30, feedex_comments: 10, is_this_useful_no: 9, is_this_useful_yes: 10, number_of_internal_searches: 52
+    metric2_fr.update pageviews: 5, unique_pageviews: 5, feedex_comments: 25, is_this_useful_no: 11, is_this_useful_yes: 12, number_of_internal_searches: 62
 
     item1.update number_of_pdfs: 2, number_of_word_files: 1, spell_count: 2, readability_score: 1
     item2.update number_of_pdfs: 4, number_of_word_files: 2, spell_count: 6, readability_score: 5
@@ -49,6 +49,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.readability_score', text: '3.00 Readability score (avg)')
     expect(page).to have_selector('.is_this_useful_yes', text: '7.00 Useful (avg)')
     expect(page).to have_selector('.is_this_useful_no', text: '6.00 Not Useful (avg)')
+    expect(page).to have_selector('.number_of_internal_searches', text: '37.00 Number of Internal Searches (avg)')
   end
 
   scenario 'Summary panel when no data' do
@@ -68,6 +69,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page).to have_selector('.number_of_word_files', text: '0 Word (avg)')
     expect(page).to have_selector('.is_this_useful_yes', text: '0 Useful (avg)')
     expect(page).to have_selector('.is_this_useful_no', text: '0 Not Useful (avg)')
+    expect(page).to have_selector('.number_of_internal_searches', text: '0 Number of Internal Searches (avg)')
   end
 
   scenario 'Download metrics as csv' do
@@ -78,7 +80,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       base_path: '/really-interesting'
     )
     metric1.update pageviews: 10
-    metric2.update pageviews: 10, is_this_useful_yes: 22, is_this_useful_no: 23
+    metric2.update pageviews: 10, is_this_useful_yes: 22, is_this_useful_no: 23, number_of_internal_searches: 99
     metric3.update pageviews: 5
     metric2_fr.update pageviews: 5, unique_pageviews: 5, feedex_comments: 25
 
@@ -95,7 +97,9 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page.body).to include('2018-01-13,cont-id,/really-interesting,en,Really interesting,desc,')
     expect(page.body).to include('is_this_useful_yes')
     expect(page.body).to include('is_this_useful_no')
+    expect(page.body).to include('number_of_internal_searches')
     expect(page.body).to include('22,23')
+    expect(page.body).to include('99')
     expect(page.body).not_to include('2018-01-14')
     expect(page.body).not_to include('fr')
   end
