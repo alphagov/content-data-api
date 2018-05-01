@@ -77,7 +77,12 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       title: 'Really interesting',
       description: 'desc',
       content_id: 'cont-id',
-      base_path: '/really-interesting'
+      base_path: '/really-interesting',
+      word_count: 30,
+      passive_count: 31,
+      simplify_count: 32,
+      string_length: 33,
+      sentence_count: 34
     )
     metric1.update pageviews: 10
     metric2.update pageviews: 10, is_this_useful_yes: 22, is_this_useful_no: 23, number_of_internal_searches: 99
@@ -98,8 +103,10 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page.body).to include('is_this_useful_yes')
     expect(page.body).to include('is_this_useful_no')
     expect(page.body).to include('number_of_internal_searches')
+    expect(page.body).to include('word_count,passive_count,simplify_count,string_length,sentence_count')
     expect(page.body).to include('22,23')
     expect(page.body).to include('99')
+    expect(page.body).to include('30,31,32,33,34')
     expect(page.body).not_to include('2018-01-14')
     expect(page.body).not_to include('fr')
   end
