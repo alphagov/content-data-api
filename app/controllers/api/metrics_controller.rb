@@ -23,14 +23,16 @@ private
       .between(from, to)
       .by_content_id(content_id)
       .by_locale('en')
-      .joins("LEFT JOIN facts_editions ON dimensions_items.id = facts_editions.dimensions_item_id")
-      .order('dimensions_dates.date asc')
-      .group('dimensions_dates.date')
 
     if facts_metrics.include?(metric)
-      series.sum("facts_editions.#{metric}")
+      series
+        .with_edition_metrics
+        .order('dimensions_dates.date asc')
+        .pluck(:date, "facts_editions.#{metric}").to_h
     else
-      series.sum(metric)
+      series
+        .order('dimensions_dates.date asc')
+        .pluck(:date, metric).to_h
     end
   end
 

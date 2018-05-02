@@ -2,6 +2,8 @@ class Facts::Metric < ApplicationRecord
   belongs_to :dimensions_date, class_name: 'Dimensions::Date'
   belongs_to :dimensions_item, class_name: 'Dimensions::Item'
 
+  has_one :facts_edition, through: :dimensions_item
+
   validates :dimensions_date, presence: true
   validates :dimensions_item, presence: true
 
@@ -32,6 +34,10 @@ class Facts::Metric < ApplicationRecord
   scope :by_locale, ->(locale) do
     joins(:dimensions_item)
       .where(dimensions_items: { locale: locale })
+  end
+
+  scope :with_edition_metrics, -> do
+    joins(:facts_edition)
   end
 
   scope :metric_summary, -> do
