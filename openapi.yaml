@@ -212,7 +212,7 @@ paths:
       x-code-samples:
         "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
           lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/pageviews/f838c22a-b2aa-49be-bd95-153f593293a3/summary?from=2018-02-27&to=2018-02-27'
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/pageviews/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-27&to=2018-02-27'
 
   /metrics/{metric}/{content_id}/time-series:
     get:
