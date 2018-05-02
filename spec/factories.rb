@@ -29,6 +29,9 @@ FactoryBot.define do
     number_of_pdfs 0
   end
 
+  factory :facts_edition, class: Facts::Edition do
+  end
+
   factory :metric, class: Facts::Metric do
     dimensions_date
     dimensions_item
