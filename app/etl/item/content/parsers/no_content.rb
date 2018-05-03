@@ -5,9 +5,20 @@ class Item::Content::Parsers::NoContent
 
   def schemas
     %w[
-    redirect
-    placeholder_person
-    placeholder
+      coming_soon
+      completed_transaction
+      external_content
+      generic
+      homepage
+      person
+      placeholder_corporate_information_page
+      placehold_worldwide_organisation
+      placeholder_person
+      placeholder
+      policy
+      special_route
+      redirect
+      vanish
     ]
   end
 end
