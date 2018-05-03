@@ -6,6 +6,7 @@ RSpec.describe Item::Content::Parser do
       it 'returns content json from :body for all valid formats' do
         valid_types = %w[
           answer
+          calendar
           case_study
           consultation
           corporate_information_page
@@ -168,8 +169,8 @@ RSpec.describe Item::Content::Parser do
         end
       end
 
-      it "returns content json if schema_name is 'location_transaction'" do
-        json = { schema_name: "location_transaction",
+      it "returns content json if schema_name is 'local_transaction'" do
+        json = { schema_name: "local_transaction",
           details: { introduction: "Greetings", need_to_know: "A Name",
             more_information: "An Address" } }
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("Greetings A Name An Address")
@@ -464,6 +465,36 @@ RSpec.describe Item::Content::Parser do
           } }
         expected = "Proof Use Gateway You have a user ID Use Verify You have an account Create Click here"
         expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
+      end
+
+      it "returns content json if schema_name is 'hmrc_manual'" do
+        json = { schema_name: "hmrc_manual",
+          title: "HMRC Manual",
+          description: "Manual of items",
+          details: {
+            child_section_groups: [{
+              child_sections: [
+                { section_id: "ARG6757", title: "Section 1" },
+                { section_id: "THP8972", title: "Section 2" }
+              ]
+            }, {
+              child_sections: [
+                { section_id: "UP4591", title: "Section 15" }
+                ], title: "Update"
+              }]
+            } }
+        expected = "HMRC Manual Manual of items ARG6757 Section 1 THP8972 Section 2 Update UP4591 Section 15"
+        expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)
+      end
+
+      it "returns content json if schema_name is 'finder'" do
+        json = { schema_name: "finder", title: "Contact HMRC",
+          links: { children: [
+            { title: "Personal Tax", description: "Email, write or phone us" },
+            { title: "Child Benefit", description: "Tweet us" }
+          ] } }
+        expected = "Contact HMRC Personal Tax Email, write or phone us Child Benefit Tweet us"
+        expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)
       end
 
       def build_raw_json(body:, schema_name:)

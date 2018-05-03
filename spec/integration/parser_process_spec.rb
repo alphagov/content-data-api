@@ -1,19 +1,8 @@
 RSpec.describe 'Process parser', type: :integration do
   let(:invalid_schema_list) {
     %w[
-      calendar
-      coming_soon
-      completed_transaction
-      external_content
-      finder
-      generic
-      hmrc_manual
-      homepage
-      local_transaction
       mainstream_browse_page
-      policy
       service_manual_homepage
-      special_route
       step_by_step_nav
       topic
       world_location
