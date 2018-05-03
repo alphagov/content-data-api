@@ -19,13 +19,21 @@ class Api::MetricsController < Api::BaseController
 private
 
   def query_series
-    Facts::Metric
+    series = Facts::Metric
       .between(from, to)
       .by_content_id(content_id)
       .by_locale('en')
-      .order('dimensions_dates.date asc')
-      .group('dimensions_dates.date')
-      .sum(metric)
+
+    if facts_metrics.include?(metric)
+      series
+        .with_edition_metrics
+        .order('dimensions_dates.date asc')
+        .pluck(:date, "facts_editions.#{metric}").to_h
+    else
+      series
+        .order('dimensions_dates.date asc')
+        .pluck(:date, metric).to_h
+    end
   end
 
   delegate :from, :to, :metric, :content_id, to: :metric_params
@@ -42,5 +50,25 @@ private
         invalid_params: metric_params.errors.to_hash
       )
     end
+  end
+
+  def facts_metrics
+    %w(
+      number_of_pdfs
+      number_of_word_files
+      readability_score
+      contractions_count
+      equality_count
+      indefinite_article_count
+      passive_count
+      profanities_count
+      redundant_acronyms_count
+      repeated_words_count
+      simplify_count
+      spell_count
+      string_length
+      sentence_count
+      word_count
+    )
   end
 end
