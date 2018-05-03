@@ -6,6 +6,7 @@ RSpec.describe Item::Content::Parser do
       it 'returns content json from :body for all valid formats' do
         valid_types = %w[
           answer
+          calendar
           case_study
           consultation
           corporate_information_page

@@ -6,6 +6,7 @@ class Item::Content::Parsers::BodyContent
   def schemas
     %w[
     answer
+    calendar
     case_study
     consultation
     corporate_information_page
