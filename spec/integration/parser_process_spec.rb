@@ -7,7 +7,6 @@ RSpec.describe 'Process parser', type: :integration do
       external_content
       finder
       generic
-      hmrc_manual
       homepage
       local_transaction
       mainstream_browse_page

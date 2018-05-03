@@ -31,6 +31,7 @@ private
       Item::Content::Parsers::EmailAlertSignup,
       Item::Content::Parsers::FinderEmailSignup,
       Item::Content::Parsers::GenericWithLinks,
+      Item::Content::Parsers::HmrcManual,
       Item::Content::Parsers::Licence,
       Item::Content::Parsers::LocalTransaction,
       Item::Content::Parsers::Need,
