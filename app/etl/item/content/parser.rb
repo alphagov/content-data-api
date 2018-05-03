@@ -29,6 +29,7 @@ private
       Item::Content::Parsers::BodyContent,
       Item::Content::Parsers::Contact,
       Item::Content::Parsers::EmailAlertSignup,
+      Item::Content::Parsers::Finder,
       Item::Content::Parsers::FinderEmailSignup,
       Item::Content::Parsers::GenericWithLinks,
       Item::Content::Parsers::HmrcManual,
