@@ -32,7 +32,7 @@ private
       Item::Content::Parsers::FinderEmailSignup,
       Item::Content::Parsers::GenericWithLinks,
       Item::Content::Parsers::Licence,
-      Item::Content::Parsers::LocationTransaction,
+      Item::Content::Parsers::LocalTransaction,
       Item::Content::Parsers::Need,
       Item::Content::Parsers::Parts,
       Item::Content::Parsers::Place,

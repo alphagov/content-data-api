@@ -1,4 +1,4 @@
-class Item::Content::Parsers::LocationTransaction
+class Item::Content::Parsers::LocalTransaction
   def parse(json)
     html = []
     html << json.dig("details", "introduction")
@@ -8,6 +8,6 @@ class Item::Content::Parsers::LocationTransaction
   end
 
   def schemas
-    ['location_transaction']
+    ['local_transaction']
   end
 end
