@@ -45,6 +45,7 @@ private
       Item::Content::Parsers::ServiceManualTopic,
       Item::Content::Parsers::ServiceSignIn,
       Item::Content::Parsers::StatisticsAnnouncement,
+      Item::Content::Parsers::StepByStep,
       Item::Content::Parsers::Taxon,
       Item::Content::Parsers::Transaction,
       Item::Content::Parsers::TravelAdviceIndex,
