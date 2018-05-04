@@ -1,68 +1,187 @@
 <div class="trends">
-  <% if params[:total_items].present? %>
-    <div class="total_items">
-      <h3>Number of Content Items</h3>
-      <%= line_chart(@metrics.group('facts_metrics.dimensions_date_id').count, height: '150px') %>
-    </div>
-  <% end %>
+  <div class="total-items">
+    <h3>Number of Content Items</h3>
+      <div class="total">Total = <%= number_with_delimiter (@metrics.count('distinct dimensions_items.content_id') || 0) %></div>
+    <%= line_chart(@metrics.group('facts_metrics.dimensions_date_id').count, height: '150px') %>
+  </div>
   <% if params[:pageviews].present? %>
       <div class="pageviews">
-        <h3>Number of Pageviews</h3>
+      <h3>Number of Pageviews</h3>
+        <%= render 'total', metric: :pageviews %>
+        <%= render 'average', metric: :pageviews %>
         <%= line_chart(@metrics.group(:dimensions_date_id).sum(:pageviews), height: '150px') %>
       </div>
   <% end %>
   <% if params[:unique_pageviews].present? %>
       <div class="unique_pageviews">
         <h3>Number of Unique Pageviews</h3>
+        <%= render 'total', metric: :unique_pageviews %>
+        <%= render 'average', metric: :unique_pageviews %>
         <%= line_chart(@metrics.group(:dimensions_date_id).sum(:unique_pageviews), height: '150px') %>
       </div>
   <% end %>
-  <% if params[:feedex_issues].present? %>
-      <div class="feedex">
+  <% if params[:feedex_comments].present? %>
+      <div class="feedex_comments">
         <h3>Number of Feedex issues</h3>
+        <%= render 'total', metric: :feedex_comments %>
+        <%= render 'average', metric: :feedex_comments %>
         <%= line_chart(@metrics.group(:dimensions_date_id).sum(:feedex_comments), height: '150px') %>
-      </div>
-  <% end %>
-  <% if params[:number_of_pdfs].present? %>
-      <div class="number_of_pdfs">
-        <h3>Number of PDFs</h3>
-        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:number_of_pdfs), height: '150px') %>
-      </div>
-  <% end %>
-  <% if params[:number_of_word_files].present? %>
-      <div class="number_of_word_files">
-        <h3>Number of Word files</h3>
-        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:number_of_word_files), height: '150px') %>
-      </div>
-  <% end %>
-  <% if params[:spell_count].present? %>
-      <div class="number_of_word_files">
-        <h3>Spelling errors</h3>
-        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:spell_count), height: '150px') %>
-      </div>
-  <% end %>
-  <% if params[:readability_score].present? %>
-      <div class="readability_score">
-        <h3>Reading score</h3>
-        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:readability_score), height: '150px') %>
       </div>
   <% end %>
   <% if params[:is_this_useful_yes].present? %>
       <div class="is_this_useful_yes">
         <h3>Useful</h3>
+        <%= render 'total', metric: :is_this_useful_yes %>
+        <%= render 'average', metric: :is_this_useful_yes %>
         <%= line_chart(@metrics.group(:dimensions_date_id).sum(:is_this_useful_yes), height: '150px') %>
       </div>
   <% end %>
   <% if params[:is_this_useful_no].present? %>
       <div class="is_this_useful_no">
         <h3>Not Useful</h3>
+        <%= render 'total', metric: :is_this_useful_no %>
+        <%= render 'average', metric: :is_this_useful_no %>
         <%= line_chart(@metrics.group(:dimensions_date_id).sum(:is_this_useful_no), height: '150px') %>
       </div>
   <% end %>
   <% if params[:number_of_internal_searches].present? %>
       <div class="number_of_internal_searches">
         <h3>Internal Searches</h3>
+        <%= render 'total', metric: :number_of_internal_searches %>
+        <%= render 'average', metric: :number_of_internal_searches %>
         <%= line_chart(@metrics.group(:dimensions_date_id).sum(:number_of_internal_searches), height: '150px') %>
       </div>
   <% end %>
+  <% if params[:number_of_pdfs].present? %>
+      <div class="number_of_pdfs">
+        <h3>Number of PDFs</h3>
+        <%= render 'total', metric: :number_of_pdfs %>
+        <%= render 'average', metric: :number_of_pdfs %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:number_of_pdfs), height: '150px') %>
+      </div>
+  <% end %>
+  <% if params[:readability_score].present? %>
+      <div class="readability_score">
+        <h3>Reading score</h3>
+        <%= render 'total', metric: :readability_score %>
+        <%= render 'average', metric: :readability_score %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:readability_score), height: '150px') %>
+      </div>
+  <% end %>
+  <% if params[:number_of_word_files].present? %>
+      <div class="number_of_word_files">
+        <h3>Number of Word files</h3>
+        <%= render 'total', metric: :number_of_word_files %>
+        <%= render 'average', metric: :number_of_word_files %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:number_of_word_files), height: '150px') %>
+      </div>
+  <% end %>
+  <% if params[:spell_count].present? %>
+      <div class="spell_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :spell_count %>
+        <%= render 'average', metric: :spell_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:spell_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:contractions_count].present? %>
+      <div class="contractions_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :contractions_count %>
+        <%= render 'average', metric: :contractions_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:contractions_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:equality_count].present? %>
+      <div class="equality_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :equality_count %>
+        <%= render 'average', metric: :equality_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:equality_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:indefinite_article_count].present? %>
+      <div class="indefinite_article_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :indefinite_article_count %>
+        <%= render 'average', metric: :indefinite_article_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:indefinite_article_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:passive_count].present? %>
+      <div class="passive_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :passive_count %>
+        <%= render 'average', metric: :passive_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:passive_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:profanities_count].present? %>
+      <div class="profanities_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :profanities_count %>
+        <%= render 'average', metric: :profanities_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:profanities_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:redundant_acronyms_count].present? %>
+      <div class="redundant_acronyms_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :redundant_acronyms_count %>
+        <%= render 'average', metric: :redundant_acronyms_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:redundant_acronyms_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:repeated_words_count].present? %>
+      <div class="repeated_words_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :repeated_words_count %>
+        <%= render 'average', metric: :repeated_words_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:repeated_words_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:simplify_count].present? %>
+      <div class="simplify_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :simplify_count %>
+        <%= render 'average', metric: :simplify_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:simplify_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:string_length].present? %>
+      <div class="string_length">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :string_length %>
+        <%= render 'average', metric: :string_length %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:string_length), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:sentence_count].present? %>
+      <div class="sentence_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :sentence_count %>
+        <%= render 'average', metric: :sentence_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:sentence_count), height: '150px') %>
+      </div>
+  <% end %>
+
+  <% if params[:word_count].present? %>
+      <div class="word_count">
+        <h3>Spelling errors</h3>
+        <%= render 'total', metric: :word_count %>
+        <%= render 'average', metric: :word_count %>
+        <%= line_chart(@metrics.group(:dimensions_date_id).sum(:word_count), height: '150px') %>
+      </div>
+  <% end %>
+
 </div>
