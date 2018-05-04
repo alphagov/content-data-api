@@ -39,6 +39,7 @@ private
       Item::Content::Parsers::Need,
       Item::Content::Parsers::Parts,
       Item::Content::Parsers::Place,
+      Item::Content::Parsers::ServiceManualHomepage,
       Item::Content::Parsers::ServiceManualStandard,
       Item::Content::Parsers::ServiceManualServiceToolkit,
       Item::Content::Parsers::ServiceManualTopic,
