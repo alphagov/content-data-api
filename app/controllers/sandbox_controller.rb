@@ -11,7 +11,6 @@ class SandboxController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @summary = @metrics.metric_summary
         @query_params = query_params
       end
       format.csv do
@@ -40,8 +39,12 @@ private
 
   def query_params
     params.permit(:from, :to, :base_path, :utf8,
-      :total_items, :pageviews, :unique_pageviews, :feedex_issues,
-      :number_of_pdfs, :number_of_word_files, :filter, :organisation, :spell_count,
-      :readability_score, :is_this_useful_yes, :is_this_useful_no, :number_of_internal_searches)
+      :total_items, :pageviews, :unique_pageviews, :feedex_comments,
+      :number_of_pdfs, :number_of_word_files, :filter, :organisation,
+      :is_this_useful_yes, :is_this_useful_no, :number_of_internal_searches,
+      :contractions_count, :equality_count, :indefinite_article_count, :number_of_pdfs,
+      :number_of_word_files, :passive_count, :profanities_count, :readability_score,
+      :redundant_acronyms_count, :repeated_words_count, :sentence_count, :simplify_count,
+      :spell_count, :string_length, :word_count)
   end
 end

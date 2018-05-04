@@ -16,74 +16,39 @@
         <%= label_tag 'to', 'To:', class: '' %>
         <%= date_field_tag 'to', params[:to], class: 'form-control' %>
       </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'total_items', params[:total_items], params[:total_items].present? %>
-            Total content items
-        <% end %>
+
+      <div class="input-group">
+        <h4>Performance Metrics</h4>
+        <%= render 'metric_option', metric: :total_items %>
+        <%= render 'metric_option', metric: :pageviews %>
+        <%= render 'metric_option', metric: :unique_pageviews %>
+        <%= render 'metric_option', metric: :feedex_comments %>
+        <%= render 'metric_option', metric: :is_this_useful_yes %>
+        <%= render 'metric_option', metric: :is_this_useful_no %>
+        <%= render 'metric_option', metric: :number_of_internal_searches %>
       </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'pageviews', params[:pageviews], params[:pageviews].present? %>
-            Pageviews
-        <% end %>
+
+      <div class="input-group">
+        <h4>Content metrics</h4>
+        <%= render 'metric_option', metric: :number_of_pdfs %>
+        <%= render 'metric_option', metric: :number_of_word_files %>
+        <%= render 'metric_option', metric: :readability_score %>
+        <%= render 'metric_option', metric: :contractions_count %>
+        <%= render 'metric_option', metric: :equality_count %>
+        <%= render 'metric_option', metric: :indefinite_article_count %>
+        <%= render 'metric_option', metric: :passive_count %>
+        <%= render 'metric_option', metric: :profanities_count %>
+        <%= render 'metric_option', metric: :redundant_acronyms_count %>
+        <%= render 'metric_option', metric: :repeated_words_count %>
+        <%= render 'metric_option', metric: :simplify_count %>
+        <%= render 'metric_option', metric: :spell_count %>
+        <%= render 'metric_option', metric: :string_length %>
+        <%= render 'metric_option', metric: :sentence_count %>
+        <%= render 'metric_option', metric: :word_count %>
       </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'unique_pageviews', params[:unique_pageviews], params[:unique_pageviews].present? %>
-            Unique pageviews
-        <% end %>
-      </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'feedex_issues', params[:feedex_issues], params[:feedex_issues].present? %>
-            Feedex issues
-        <% end %>
-      </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'number_of_pdfs', params[:number_of_pdfs], params[:number_of_pdfs].present? %>
-            Number of PDFs
-        <% end %>
-      </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'number_of_word_files', params[:number_of_word_files], params[:number_of_word_files].present? %>
-            Number of Word files
-        <% end %>
-      </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'spell_count', params[:spell_count], params[:spell_count].present? %>
-            Spell count
-        <% end %>
-      </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'readability_score', params[:readability_score], params[:readability_score].present? %>
-            Readability score
-        <% end %>
-      </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'is_this_useful_yes', params[:is_this_useful_yes], params[:is_this_useful_yes].present? %>
-            Useful
-        <% end %>
-      </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'is_this_useful_no', params[:is_this_useful_no], params[:is_this_useful_no].present? %>
-            Not Useful
-        <% end %>
-      </div>
-      <div class="form-group">
-        <%= label_tag do %>
-            <%= check_box_tag 'number_of_internal_searches', params[:number_of_internal_searches], params[:number_of_internal_searches].present? %>
-            Number of Internal Searches
-        <% end %>
-      </div>
+
       <div class="form-group">
         <%= submit_tag 'Filter', name: 'filter', class: "btn btn-default btn-block" %>
       </div>
   <% end %>
-  </div>
+</div>

@@ -72,38 +72,4 @@ RSpec.describe Facts::Metric, type: :model do
       expect(results).to match_array(metric1)
     end
   end
-
-  describe '.metric_summary' do
-    subject { described_class }
-
-    let(:base_path) { '/the/base/path' }
-
-    it 'returns the correct numbers' do
-      item1 = create(:dimensions_item, latest: false, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 3, readability_score: 4)
-      item2 = create(:dimensions_item, base_path: base_path, number_of_pdfs: 3, number_of_word_files: 1, spell_count: 3, readability_score: 4)
-
-      create(:metric, dimensions_item: item1, dimensions_date: day0, pageviews: 3, unique_pageviews: 2,
-                      feedex_comments: 4, is_this_useful_yes: 1, is_this_useful_no: 1, number_of_internal_searches: 9)
-      create(:metric, dimensions_item: item2, dimensions_date: day0, pageviews: 5, unique_pageviews: 2,
-                      feedex_comments: 3, is_this_useful_yes: 2, is_this_useful_no: 2, number_of_internal_searches: 9)
-      create(:metric, dimensions_item: item2, dimensions_date: day1, pageviews: 2, unique_pageviews: 2,
-                      feedex_comments: 2, is_this_useful_yes: 3, is_this_useful_no: 3, number_of_internal_searches: 9)
-
-      results = subject.between(day0, day1).by_base_path(base_path).metric_summary
-
-      expect(results).to eq(
-        total_items: 2,
-        pageviews: 10,
-        unique_pageviews: 2,
-        feedex_comments: 9,
-        number_of_pdfs: 3,
-        number_of_word_files: 1,
-        spell_count: 3,
-        readability_score: 4,
-        is_this_useful_yes: 2,
-        is_this_useful_no: 2,
-        number_of_internal_searches: 9
-      )
-    end
-  end
 end

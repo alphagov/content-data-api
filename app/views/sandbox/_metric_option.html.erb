@@ -1,0 +1,6 @@
+<div class="form-group">
+  <%= label_tag do %>
+      <%= check_box_tag metric.to_s, params[metric], params[metric].present? %>
+      <%= metric.to_s.titleize %>
+  <% end %>
+</div>
