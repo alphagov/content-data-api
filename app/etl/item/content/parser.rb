@@ -35,6 +35,7 @@ private
       Item::Content::Parsers::HmrcManual,
       Item::Content::Parsers::Licence,
       Item::Content::Parsers::LocalTransaction,
+      Item::Content::Parsers::Mainstream,
       Item::Content::Parsers::Need,
       Item::Content::Parsers::Parts,
       Item::Content::Parsers::Place,

@@ -1,7 +1,6 @@
 RSpec.describe 'Process parser', type: :integration do
   let(:invalid_schema_list) {
     %w[
-      mainstream_browse_page
       service_manual_homepage
       step_by_step_nav
       topic
