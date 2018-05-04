@@ -4,184 +4,26 @@
       <div class="total">Total = <%= number_with_delimiter (@metrics.count('distinct dimensions_items.content_id') || 0) %></div>
     <%= line_chart(@metrics.group('facts_metrics.dimensions_date_id').count, height: '150px') %>
   </div>
-  <% if params[:pageviews].present? %>
-      <div class="pageviews">
-      <h3>Number of Pageviews</h3>
-        <%= render 'total', metric: :pageviews %>
-        <%= render 'average', metric: :pageviews %>
-        <%= render 'chart', metric: :pageviews %>
-      </div>
-  <% end %>
-  <% if params[:unique_pageviews].present? %>
-      <div class="unique_pageviews">
-        <h3>Number of Unique Pageviews</h3>
-        <%= render 'total', metric: :unique_pageviews %>
-        <%= render 'average', metric: :unique_pageviews %>
-        <%= render 'chart', metric: :unique_pageviews %>
-      </div>
-  <% end %>
-  <% if params[:feedex_comments].present? %>
-      <div class="feedex_comments">
-        <h3>Number of Feedex issues</h3>
-        <%= render 'total', metric: :feedex_comments %>
-        <%= render 'average', metric: :feedex_comments %>
-        <%= render 'chart', metric: :feedex_comments %>
-      </div>
-  <% end %>
-  <% if params[:is_this_useful_yes].present? %>
-      <div class="is_this_useful_yes">
-        <h3>Useful</h3>
-        <%= render 'total', metric: :is_this_useful_yes %>
-        <%= render 'average', metric: :is_this_useful_yes %>
-        <%= render 'chart', metric: :is_this_useful_yes %>
-      </div>
-  <% end %>
-  <% if params[:is_this_useful_no].present? %>
-      <div class="is_this_useful_no">
-        <h3>Not Useful</h3>
-        <%= render 'total', metric: :is_this_useful_no %>
-        <%= render 'average', metric: :is_this_useful_no %>
-        <%= render 'chart', metric: :is_this_useful_no %>
-      </div>
-  <% end %>
-  <% if params[:number_of_internal_searches].present? %>
-      <div class="number_of_internal_searches">
-        <h3>Internal Searches</h3>
-        <%= render 'total', metric: :number_of_internal_searches %>
-        <%= render 'average', metric: :number_of_internal_searches %>
-        <%= render 'chart', metric: :number_of_internal_searches %>
-      </div>
-  <% end %>
-  <% if params[:number_of_pdfs].present? %>
-      <div class="number_of_pdfs">
-        <h3>Number of PDFs</h3>
-        <%= render 'total', metric: :number_of_pdfs %>
-        <%= render 'average', metric: :number_of_pdfs %>
-        <%= render 'chart', metric: :number_of_pdfs %>
-      </div>
-  <% end %>
-  <% if params[:readability_score].present? %>
-      <div class="readability_score">
-        <h3>Reading score</h3>
-        <%= render 'total', metric: :readability_score %>
-        <%= render 'average', metric: :readability_score %>
-        <%= render 'chart', metric: :readability_score %>
-      </div>
-  <% end %>
-  <% if params[:number_of_word_files].present? %>
-      <div class="number_of_word_files">
-        <h3>Number of Word files</h3>
-        <%= render 'total', metric: :number_of_word_files %>
-        <%= render 'average', metric: :number_of_word_files %>
-        <%= render 'chart', metric: :number_of_word_files %>
-      </div>
-  <% end %>
-  <% if params[:spell_count].present? %>
-      <div class="spell_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :spell_count %>
-        <%= render 'average', metric: :spell_count %>
-        <%= render 'chart', metric: :spell_count %>
-      </div>
-  <% end %>
 
-  <% if params[:contractions_count].present? %>
-      <div class="contractions_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :contractions_count %>
-        <%= render 'average', metric: :contractions_count %>
-        <%= render 'chart', metric: :contractions_count %>
-      </div>
-  <% end %>
-
-  <% if params[:equality_count].present? %>
-      <div class="equality_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :equality_count %>
-        <%= render 'average', metric: :equality_count %>
-        <%= render 'chart', metric: :equality_count %>
-      </div>
-  <% end %>
-
-  <% if params[:indefinite_article_count].present? %>
-      <div class="indefinite_article_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :indefinite_article_count %>
-        <%= render 'average', metric: :indefinite_article_count %>
-        <%= render 'chart', metric: :indefinite_article_count %>
-      </div>
-  <% end %>
-
-  <% if params[:passive_count].present? %>
-      <div class="passive_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :passive_count %>
-        <%= render 'average', metric: :passive_count %>
-        <%= render 'chart', metric: :passive_count %>
-      </div>
-  <% end %>
-
-  <% if params[:profanities_count].present? %>
-      <div class="profanities_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :profanities_count %>
-        <%= render 'average', metric: :profanities_count %>
-        <%= render 'chart', metric: :profanities_count %>
-      </div>
-  <% end %>
-
-  <% if params[:redundant_acronyms_count].present? %>
-      <div class="redundant_acronyms_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :redundant_acronyms_count %>
-        <%= render 'average', metric: :redundant_acronyms_count %>
-        <%= render 'chart', metric: :redundant_acronyms_count %>
-      </div>
-  <% end %>
-
-  <% if params[:repeated_words_count].present? %>
-      <div class="repeated_words_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :repeated_words_count %>
-        <%= render 'average', metric: :repeated_words_count %>
-        <%= render 'chart', metric: :repeated_words_count %>
-      </div>
-  <% end %>
-
-  <% if params[:simplify_count].present? %>
-      <div class="simplify_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :simplify_count %>
-        <%= render 'average', metric: :simplify_count %>
-        <%= render 'chart', metric: :simplify_count %>
-      </div>
-  <% end %>
-
-  <% if params[:string_length].present? %>
-      <div class="string_length">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :string_length %>
-        <%= render 'average', metric: :string_length %>
-        <%= render 'chart', metric: :string_length %>
-      </div>
-  <% end %>
-
-  <% if params[:sentence_count].present? %>
-      <div class="sentence_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :sentence_count %>
-        <%= render 'average', metric: :sentence_count %>
-        <%= render 'chart', metric: :sentence_count %>
-      </div>
-  <% end %>
-
-  <% if params[:word_count].present? %>
-      <div class="word_count">
-        <h3>Spelling errors</h3>
-        <%= render 'total', metric: :word_count %>
-        <%= render 'average', metric: :word_count %>
-        <%= render 'chart', metric: :word_count %>
-      </div>
-  <% end %>
-
+  <%= render 'section', metric: :pageviews %>
+  <%= render 'section', metric: :unique_pageviews %>
+  <%= render 'section', metric: :feedex_comments %>
+  <%= render 'section', metric: :is_this_useful_yes %>
+  <%= render 'section', metric: :is_this_useful_no %>
+  <%= render 'section', metric: :number_of_internal_searches %>
+  <%= render 'section', metric: :number_of_pdfs %>
+  <%= render 'section', metric: :readability_score %>
+  <%= render 'section', metric: :number_of_word_files %>
+  <%= render 'section', metric: :spell_count %>
+  <%= render 'section', metric: :contractions_count %>
+  <%= render 'section', metric: :equality_count %>
+  <%= render 'section', metric: :indefinite_article_count %>
+  <%= render 'section', metric: :passive_count %>
+  <%= render 'section', metric: :profanities_count %>
+  <%= render 'section', metric: :redundant_acronyms_count %>
+  <%= render 'section', metric: :repeated_words_count %>
+  <%= render 'section', metric: :simplify_count %>
+  <%= render 'section', metric: :string_length %>
+  <%= render 'section', metric: :sentence_count %>
+  <%= render 'section', metric: :word_count %>
 </div>
