@@ -19,6 +19,7 @@ RSpec.describe Item::Content::Parser do
           manual
           manual_section
           news_article
+          organisation
           publication
           service_manual_guide
           simple_smart_answer
