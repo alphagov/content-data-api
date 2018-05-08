@@ -68,6 +68,31 @@ RSpec.describe 'Process content item' do
     )
   end
 
+  context 'quality metrics in facts edition' do
+    it 'stores quality metrics in the facts edition' do
+      stub_item_metadata_in_content_store
+      stub_quality_metrics_in_heroku
+      Items::Importers::ContentDetails.run(item.id)
+      facts_edition = Facts::Edition.find_by(dimensions_item: item)
+
+      expect(facts_edition).to have_attributes(
+        readability_score: 97,
+        string_length: 20,
+        sentence_count: 1,
+        word_count: 4,
+        contractions_count: 2,
+        equality_count: 3,
+        indefinite_article_count: 4,
+        passive_count: 5,
+        profanities_count: 6,
+        redundant_acronyms_count: 7,
+        repeated_words_count: 8,
+        simplify_count: 9,
+        spell_count: 10,
+      )
+    end
+  end
+
   def stub_item_metadata_in_content_store
     response = content_item_for_base_path(base_path)
     response.merge!(
