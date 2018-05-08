@@ -19,6 +19,7 @@ RSpec.describe Item::Content::Parser do
           manual
           manual_section
           news_article
+          organisation
           publication
           service_manual_guide
           simple_smart_answer
@@ -494,6 +495,46 @@ RSpec.describe Item::Content::Parser do
             { title: "Child Benefit", description: "Tweet us" }
           ] } }
         expected = "Contact HMRC Personal Tax Email, write or phone us Child Benefit Tweet us"
+        expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)
+      end
+
+      it "returns content json if schema_name is 'mainstream_browse_page'" do
+        json = { schema_name: "mainstream_browse_page", title: "Travel Abroad",
+          description: "Go abroad",
+          links: { children: [
+            { title: "Driving Abroad" },
+            { title: "Forced Marriage" }
+            ],
+            related_topics: [
+              { title: "Pets" },
+              { title: "Help" }
+              ] } }
+        expected = "Travel Abroad Go abroad Driving Abroad Forced Marriage Pets Help"
+        expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)
+      end
+
+      it "returns content json if schema_name is 'service_manual_homepage'" do
+        json = { schema_name: "service_manual_homepage", title: "Service Manual",
+          description: "Digital Service Standard",
+          links: { children: [
+            { title: "Design", description: "Naming your service" },
+            { title: "Technology", description: "Security and Maintenance" }
+            ] } }
+
+        expected = "Service Manual Digital Service Standard Design Naming your service Technology Security and Maintenance"
+        expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)
+      end
+
+      it "returns content json if schema_name is 'step_by_step_nav'" do
+        json = { schema_name: "step_by_step_nav", details: { step_by_step_nav: {
+          title: "Learn to drive a car: step by step", introduction: "It's easy",
+          steps: [{ title: "Step 1",
+            contents: [{ text: "Enter vehicle" }, contents: [{ text: "A" }, { text: "B" }, { text: "C" }]] },
+                  { title: "Step 2",
+              contents: [{ text: "Adjust seat" }, contents: [{ text: "Z" }, { text: "Y" }, { text: "X" }]] }]
+          } } }
+
+        expected = "Learn to drive a car: step by step It's easy Step 1 Enter vehicle A B C Step 2 Adjust seat Z Y X"
         expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)
       end
 
