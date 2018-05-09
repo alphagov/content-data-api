@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180430110607) do
+ActiveRecord::Schema.define(version: 20180509100804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,7 +70,6 @@ ActiveRecord::Schema.define(version: 20180430110607) do
     t.boolean "primary_organisation_withdrawn"
     t.string "content_hash"
     t.string "locale", default: "en", null: false
-    t.datetime "outdated_at"
     t.bigint "publishing_api_payload_version", null: false
     t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
@@ -116,11 +115,6 @@ ActiveRecord::Schema.define(version: 20180430110607) do
     t.integer "string_length", default: 0
     t.integer "sentence_count", default: 0
     t.integer "word_count", default: 0
-    t.json "raw_json"
-    t.string "status", default: "live"
-    t.string "description"
-    t.datetime "first_published_at"
-    t.datetime "public_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dimensions_date_id"], name: "index_facts_editions_on_dimensions_date_id"
@@ -156,6 +150,8 @@ ActiveRecord::Schema.define(version: 20180430110607) do
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
+  add_foreign_key "facts_editions", "dimensions_dates", primary_key: "date"
+  add_foreign_key "facts_editions", "dimensions_items"
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
   add_foreign_key "facts_metrics", "dimensions_items"
 end
