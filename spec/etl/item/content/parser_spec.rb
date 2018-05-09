@@ -74,13 +74,6 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('Lorem ipsum dolor sit amet.')
       end
 
-      it "returns content json if schema is 'place'" do
-        json = { schema_name: 'place',
-          details: { introduction: 'Introduction',
-            more_information: 'Enter your postcode' } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq('Introduction Enter your postcode')
-      end
-
       it "returns content json if schema_name is 'transaction'" do
         json = { schema_name: "transaction",
           details: { introductory_paragraph: "Report changes",
