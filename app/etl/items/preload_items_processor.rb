@@ -40,7 +40,11 @@ private
 
   def create_import_detail_job(_item_ids)
     Dimensions::Item.find_each do |item|
-      Items::Jobs::ImportContentDetailsJob.perform_async(item.id)
+      Items::Jobs::ImportContentDetailsJob.perform_async(item.id, current_date.day, current_date.month, current_date.year)
     end
+  end
+
+  def current_date
+    Time.zone.now.to_date
   end
 end

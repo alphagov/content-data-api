@@ -3,16 +3,16 @@ require 'odyssey'
 class Items::Importers::ContentDetails
   include Concerns::Traceable
 
-  attr_reader :content_store_client, :id, :fetch_quality_metrics
+  attr_reader :content_store_client, :id, :date
 
-  def self.run(id, *_args, quality_metrics: true, **_options)
-    new(id, quality_metrics: quality_metrics).run
+  def self.run(id, day, month, year, *_args, **_options)
+    new(id, date: Date.new(year, month, day)).run
   end
 
-  def initialize(id, quality_metrics: true)
+  def initialize(id, date:)
     @id = id
     @content_store_client = Item::Clients::ContentStore.new
-    @fetch_quality_metrics = quality_metrics
+    @date = date
   end
 
   def run
@@ -22,9 +22,14 @@ class Items::Importers::ContentDetails
       item_raw_json = content_store_client.fetch_raw_json(item.base_path)
       attributes = Item::Metadata::Parser.parse(item_raw_json)
 
-      needs_quality_metrics = fetch_quality_metrics && item.quality_metrics_required?(attributes)
+      edition_attributes = attributes.extract!(:number_of_pdfs, :number_of_word_files)
+
+      needs_quality_metrics = item.quality_metrics_required?(attributes)
 
       item.update_attributes(attributes)
+
+      edition_attributes[:dimensions_date] = Dimensions::Date.for(date)
+      item.create_facts_edition!(edition_attributes)
 
       Items::Jobs::ImportQualityMetricsJob.perform_async(item.id) if needs_quality_metrics
     rescue GdsApi::HTTPGone

@@ -31,11 +31,14 @@ RSpec.feature 'Quality metrics', type: :feature do
 
     metrics.each do |metric_name|
       scenario "Show Stats for #{metric_name}" do
-        item1 = create :dimensions_item, metric_name => 10
-        item2 = create :dimensions_item, metric_name => 10
+        item1 = create :dimensions_item
+        item2 = create :dimensions_item
 
         create :metric, dimensions_item: item1, dimensions_date: day0
         create :metric, dimensions_item: item2, dimensions_date: day1
+
+        create :facts_edition, dimensions_item: item1, dimensions_date: day0, metric_name => 10
+        create :facts_edition, dimensions_item: item2, dimensions_date: day1, metric_name => 10
 
         visit '/sandbox'
 

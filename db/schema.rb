@@ -45,26 +45,11 @@ ActiveRecord::Schema.define(version: 20180518133900) do
     t.datetime "updated_at", null: false
     t.boolean "latest"
     t.json "raw_json"
-    t.integer "number_of_pdfs"
     t.string "document_type"
     t.string "content_purpose_document_supertype"
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
-    t.integer "number_of_word_files"
     t.string "status", default: "live"
-    t.integer "readability_score"
-    t.integer "contractions_count"
-    t.integer "equality_count"
-    t.integer "indefinite_article_count"
-    t.integer "passive_count"
-    t.integer "profanities_count"
-    t.integer "redundant_acronyms_count"
-    t.integer "repeated_words_count"
-    t.integer "simplify_count"
-    t.integer "spell_count"
-    t.integer "string_length", default: 0
-    t.integer "sentence_count", default: 0
-    t.integer "word_count", default: 0
     t.string "primary_organisation_title"
     t.string "primary_organisation_content_id"
     t.boolean "primary_organisation_withdrawn"

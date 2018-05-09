@@ -2,6 +2,10 @@ RSpec.describe Items::Importers::QualityMetrics do
   let(:dimensions_item) { create :dimensions_item }
   subject { Items::Importers::QualityMetrics.new(dimensions_item.id) }
 
+  before do
+    dimensions_item.create_facts_edition!(dimensions_date: Dimensions::Date.for(Date.today))
+  end
+
   context 'import quality metrics' do
     before do
       allow_any_instance_of(Dimensions::Item).to receive(:get_content).and_return('the-entire-body')
@@ -19,9 +23,9 @@ RSpec.describe Items::Importers::QualityMetrics do
       )
     end
 
-    it 'updates the metadata fields for dimensions item' do
+    it 'updates the quality metrics fields for dimensions item' do
       subject.run
-      expect(dimensions_item.reload).to have_attributes(
+      expect(dimensions_item.facts_edition.reload).to have_attributes(
         spell_count: 10,
         readability_score: 1,
         contractions_count: 2,
@@ -38,7 +42,7 @@ RSpec.describe Items::Importers::QualityMetrics do
     it 'does not update fields if InvalidSchemaError is raised' do
       allow_any_instance_of(Dimensions::Item).to receive(:get_content).and_raise(InvalidSchemaError)
       subject.run
-      expect(dimensions_item.reload).to have_attributes(
+      expect(dimensions_item.facts_edition.reload).to have_attributes(
         spell_count: nil,
         readability_score: nil,
         contractions_count: nil,

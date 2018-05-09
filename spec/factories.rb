@@ -26,10 +26,11 @@ FactoryBot.define do
     sequence(:description) { |i| "description - #{i}" }
     sequence(:raw_json) { |i| "json - #{i}" }
     sequence(:publishing_api_payload_version)
-    number_of_pdfs 0
   end
 
   factory :facts_edition, class: Facts::Edition do
+    dimensions_date
+    number_of_pdfs 0
   end
 
   factory :metric, class: Facts::Metric do

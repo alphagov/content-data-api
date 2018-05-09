@@ -27,16 +27,19 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     item.status = 'live'
     item.primary_organisation_title = 'HMRC'
     item.primary_organisation_content_id = 'the-organisation-id'
-    item.readability_score = 9
-    item.spell_count = 10
-    item.word_count = 14
-    item.passive_count = 15
-    item.simplify_count = 16
-    item.string_length = 17
-    item.sentence_count = 18
-    item.number_of_pdfs = 22
-    item.number_of_word_files = 23
     item.save!
+
+    edition = create :facts_edition, dimensions_item: item, dimensions_date: day0
+    edition.readability_score = 9
+    edition.spell_count = 10
+    edition.word_count = 14
+    edition.passive_count = 15
+    edition.simplify_count = 16
+    edition.string_length = 17
+    edition.sentence_count = 18
+    edition.number_of_pdfs = 22
+    edition.number_of_word_files = 23
+    edition.save!
 
     metric.is_this_useful_yes = 11
     metric.is_this_useful_no = 12

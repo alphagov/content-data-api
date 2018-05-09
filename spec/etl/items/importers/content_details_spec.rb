@@ -2,7 +2,7 @@ RSpec.describe Items::Importers::ContentDetails do
   let(:content_id) { 'content_id' }
 
   context 'Import contents' do
-    subject { Items::Importers::ContentDetails.new(latest_dimension_item.id) }
+    subject { Items::Importers::ContentDetails.new(latest_dimension_item.id, date: Date.new(2018, 5, 9)) }
 
     let(:locale) { 'en' }
 
@@ -59,8 +59,6 @@ RSpec.describe Items::Importers::ContentDetails do
 
       expect(latest_dimension_item.reload).to have_attributes(
         raw_json: raw_json,
-        number_of_pdfs: 99,
-        number_of_word_files: 94,
         content_id: '09hjasdfoj234',
         title: 'A guide to coding',
         document_type: 'answer',
@@ -74,16 +72,10 @@ RSpec.describe Items::Importers::ContentDetails do
         primary_organisation_withdrawn: false,
         content_hash: parsed_content_hash,
       )
-    end
-
-    context 'without fetching quality metrics' do
-      subject { Items::Importers::ContentDetails.new(latest_dimension_item.id, quality_metrics: false) }
-
-      it "doesn't update facts for events we don't care about" do
-        expect(Items::Jobs::ImportQualityMetricsJob).not_to receive(:perform_async)
-
-        subject.run
-      end
+      expect(latest_dimension_item.facts_edition.reload).to have_attributes(
+        number_of_pdfs: 99,
+        number_of_word_files: 94,
+      )
     end
 
     context "when the locale is 'en'" do
@@ -119,7 +111,7 @@ RSpec.describe Items::Importers::ContentDetails do
   end
 
   context 'when GdsApi::HTTPGone is raised' do
-    subject { Items::Importers::ContentDetails.new(existing_content_item.id) }
+    subject { Items::Importers::ContentDetails.new(existing_content_item.id, date: Date.new(2018, 5, 9)) }
     let(:locale) { 'en' }
     let!(:existing_content_item) { create :dimensions_item, content_id: content_id, status: 'something', locale: locale }
 
@@ -135,7 +127,7 @@ RSpec.describe Items::Importers::ContentDetails do
   end
 
   context 'when GdsApi::HTTPNotFound is raised' do
-    subject { Items::Importers::ContentDetails.new(existing_content_item.id) }
+    subject { Items::Importers::ContentDetails.new(existing_content_item.id, date: Date.new(2018, 5, 9)) }
     let(:locale) { 'en' }
     let!(:existing_content_item) do
       create :dimensions_item, content_id: content_id, status: 'something', raw_json: { existing: 'content' }
