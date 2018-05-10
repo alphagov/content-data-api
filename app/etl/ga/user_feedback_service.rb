@@ -48,7 +48,8 @@ private
       service
         .batch_get_reports(
           Google::Apis::AnalyticsreportingV4::GetReportsRequest.new(
-            report_requests: [build_request(date: date).merge(page_token: page_token)]
+            report_requests: [build_request(date: date).merge(page_token: page_token)],
+            use_resource_quotas: true
           )
         )
         .reports
