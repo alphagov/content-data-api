@@ -42,22 +42,12 @@ RSpec.describe GA::ViewsProcessor do
       expect(fact.reload).to have_attributes(pageviews: 99, unique_pageviews: 90)
     end
 
-    it 'deletes the events that matches the base_path of an item' do
-      item2.destroy
-      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+    it "deletes events after updating facts metrics" do
+      create(:ga_event, :with_user_feedback, date: date - 1, page_path: '/path1')
 
       described_class.process(date: date)
 
-      expect(Events::GA.count).to eq(1)
-    end
-
-    it 'does not delete the events it does not have user views data' do
-      create :ga_event, :with_user_feedback, date: date, page_path: item1.base_path
-      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
-
-      described_class.process(date: date)
-
-      expect(Events::GA.count).to eq(2)
+      expect(Events::GA.count).to eq(0)
     end
 
     context 'when there are events from other days' do
@@ -73,23 +63,7 @@ RSpec.describe GA::ViewsProcessor do
 
         expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1)
       end
-
-      it 'only deletes the events for the current day that matches the basepath of the item' do
-        create :metric, dimensions_item: item1, dimensions_date: dimensions_date
-
-        described_class.process(date: date)
-
-        expect(Events::GA.count).to eq(3)
-      end
     end
-  end
-
-  context 'when page_path starts "/https://www.gov.uk"' do
-    before do
-      allow(GA::ViewsService).to receive(:find_in_batches).and_yield(ga_response_with_govuk_prefix)
-    end
-
-    include_examples "transform path examples"
   end
 
   private
