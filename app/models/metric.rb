@@ -1,10 +1,5 @@
 class Metric
-  def self.all_metrics
-    items = Rails.configuration.metrics
-  end
-
-  def self.is_content_metric?(metric)
-    %w(
+  CONTENT_METRICS = %w(
       number_of_pdfs
       number_of_word_files
       readability_score
@@ -20,6 +15,17 @@ class Metric
       string_length
       sentence_count
       word_count
-    ).include?(metric)
+    ).freeze
+
+  def self.all_metrics
+    Rails.configuration.metrics
+  end
+
+  def self.is_content_metric?(metric)
+    CONTENT_METRICS.include?(metric)
+  end
+
+  def self.content_metrics
+    CONTENT_METRICS
   end
 end

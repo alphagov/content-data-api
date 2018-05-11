@@ -71,24 +71,6 @@ private
   end
 
   def is_content_metric?
-    content_metrics = %w(
-      number_of_pdfs
-      number_of_word_files
-      readability_score
-      contractions_count
-      equality_count
-      indefinite_article_count
-      passive_count
-      profanities_count
-      redundant_acronyms_count
-      repeated_words_count
-      simplify_count
-      spell_count
-      string_length
-      sentence_count
-      word_count
-    )
-
-    content_metrics.any? { |metric| params[metric] == 'on' }
+    Metric.content_metrics.any? { |metric| params[metric] == 'on' }
   end
 end
