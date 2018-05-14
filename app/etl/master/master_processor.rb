@@ -14,7 +14,7 @@ class Master::MasterProcessor
 
     time(process: :master) do
       Master::MetricsProcessor.process(date: date)
-      GA::ViewsProcessor.process(date: date)
+      GA::ViewsAndNavigationProcessor.process(date: date)
       GA::UserFeedbackProcessor.process(date: date)
       GA::InternalSearchProcessor.process(date: date)
       Feedex::Processor.process(date: date)

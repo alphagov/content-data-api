@@ -1,4 +1,4 @@
-class GA::ViewsProcessor
+class GA::ViewsAndNavigationProcessor
   include Concerns::Traceable
   include GA::Concerns::TransformPath
 
@@ -22,7 +22,7 @@ private
 
   def extract_events
     batch = 1
-    GA::ViewsService.find_in_batches(date: date) do |events|
+    GA::ViewsAndNavigationService.find_in_batches(date: date) do |events|
       log process: :ga, message: "Processing #{events.length} events in batch #{batch}"
       Events::GA.import(events, batch_size: 10_000)
       batch += 1

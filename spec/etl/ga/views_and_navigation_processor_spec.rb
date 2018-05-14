@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'gds-api-adapters'
 
-RSpec.describe GA::ViewsProcessor do
+RSpec.describe GA::ViewsAndNavigationProcessor do
   subject { described_class }
 
   let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
@@ -12,7 +12,7 @@ RSpec.describe GA::ViewsProcessor do
 
 
   context 'When the base_path matches the GA path' do
-    before { allow(GA::ViewsService).to receive(:find_in_batches).and_yield(ga_response) }
+    before { allow(GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it 'update the facts with the GA metrics' do
       fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date

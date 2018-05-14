@@ -1,4 +1,4 @@
-class GA::ViewsService
+class GA::ViewsAndNavigationService
   def self.find_in_batches(*args, &block)
     new.find_in_batches(*args, &block)
   end

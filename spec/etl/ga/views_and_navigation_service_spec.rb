@@ -1,12 +1,12 @@
 require 'google/apis/analyticsreporting_v4'
 
-RSpec.describe GA::ViewsService do
+RSpec.describe GA::ViewsAndNavigationService do
   include GoogleAnalyticsRequests
 
-  subject { GA::ViewsService }
+  subject { GA::ViewsAndNavigationService }
 
   let(:google_client) { double('client') }
-  before { allow_any_instance_of(GA::ViewsService).to receive(:client).and_return(google_client) }
+  before { allow_any_instance_of(GA::ViewsAndNavigationService).to receive(:client).and_return(google_client) }
 
   describe "#find_in_batches" do
     let(:date) { Date.new(2018, 2, 20) }
