@@ -129,23 +129,6 @@ RSpec.describe Item::Content::Parser do
         end
       end
 
-      describe "TravelAdviceIndex" do
-        it "returns nil if json does not have children array" do
-          json = { schema_name: "travel_advice_index",
-            links: {} }
-          expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
-        end
-
-        it "returns content json" do
-          json = { schema_name: "travel_advice_index",
-            links: { children: [
-              { country: { name: "Portugal" } },
-              { country: { name: "Brazil" } }
-            ] } }
-          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Portugal Brazil")
-        end
-      end
-
       it "returns content json if schema_name is 'service_sign_in'" do
         json = { schema_name: "service_sign_in",
           details: {
