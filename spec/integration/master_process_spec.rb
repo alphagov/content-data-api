@@ -105,7 +105,7 @@ RSpec.describe 'Master process spec' do
           'process_name' => 'user_feedback',
         },
         {
-          'page_path' => base_path,
+          'page_path' => '/path2',
           'is_this_useful_no' => 122,
           'is_this_useful_yes' => 1,
           'date' => '2018-02-20',
