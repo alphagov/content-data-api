@@ -30,7 +30,7 @@ private
   end
 
   def transform_events
-    remove_invalid_prefix
+    format_events_with_invalid_prefix
   end
 
   def load_metrics
