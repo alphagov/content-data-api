@@ -16,18 +16,6 @@ RSpec.describe Item::Content::Parser do
         expected = "Proof Use Gateway You have a user ID Use Verify You have an account Create Click here"
         expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)
       end
-
-      it "returns content json if schema_name is 'service_manual_homepage'" do
-        json = { schema_name: "service_manual_homepage", title: "Service Manual",
-          description: "Digital Service Standard",
-          links: { children: [
-            { title: "Design", description: "Naming your service" },
-            { title: "Technology", description: "Security and Maintenance" }
-            ] } }
-
-        expected = "Service Manual Digital Service Standard Design Naming your service Technology Security and Maintenance"
-        expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)
-      end
     end
 
     context "when invalid schema" do
