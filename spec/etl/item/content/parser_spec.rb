@@ -32,13 +32,6 @@ RSpec.describe Item::Content::Parser do
         end
       end
 
-      it "returns content json if schema_name is 'statistics_announcement'" do
-        json = { schema_name: "statistics_announcement",
-          description: "Announcement",
-          details: { display_date: "25 December 2017", state: "closed" } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Announcement 25 December 2017 closed")
-      end
-
       describe "ServiceManualServiceToolkit" do
         it "returns nil if json does not have 'collection' key" do
           json = {
