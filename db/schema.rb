@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180514085910) do
+ActiveRecord::Schema.define(version: 20180514143907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 20180514085910) do
     t.integer "bounce_rate", default: 0
     t.integer "avg_time_on_page", default: 0
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
+    t.index ["process_name", "page_path"], name: "index_events_gas_on_process_name_and_page_path", unique: true
   end
 
   create_table "facts_editions", force: :cascade do |t|
