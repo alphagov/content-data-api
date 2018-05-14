@@ -11,7 +11,7 @@ RSpec.describe Master::MasterProcessor do
   end
 
   before do
-    allow(GA::ViewsProcessor).to receive(:process)
+    allow(GA::ViewsAndNavigationProcessor).to receive(:process)
     allow(GA::UserFeedbackProcessor).to receive(:process)
     allow(GA::InternalSearchProcessor).to receive(:process)
     allow(Feedex::Processor).to receive(:process)
@@ -39,7 +39,7 @@ RSpec.describe Master::MasterProcessor do
   end
 
   it 'update GA metrics in the Facts table' do
-    expect(GA::ViewsProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
+    expect(GA::ViewsAndNavigationProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
 
     subject.process
   end
@@ -54,7 +54,7 @@ RSpec.describe Master::MasterProcessor do
     another_date = Date.new(2017, 12, 30)
     subject.process(date: another_date)
     expect(Master::MetricsProcessor).to have_received(:process).with(date: another_date)
-    expect(GA::ViewsProcessor).to have_received(:process).with(date: another_date)
+    expect(GA::ViewsAndNavigationProcessor).to have_received(:process).with(date: another_date)
     expect(Feedex::Processor).to have_received(:process).with(date: another_date)
   end
 end
