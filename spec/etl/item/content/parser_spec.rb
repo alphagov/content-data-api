@@ -32,12 +32,6 @@ RSpec.describe Item::Content::Parser do
         end
       end
 
-      it "returns content json if schema_name is 'unpublishing'" do
-        json = { schema_name: "unpublishing",
-          details: { explanation: "This content has been removed" } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("This content has been removed")
-      end
-
       it "returns content json if schema_name is 'statistics_announcement'" do
         json = { schema_name: "statistics_announcement",
           description: "Announcement",
@@ -248,11 +242,7 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq('the role the goal the benefit')
       end
 
-      it "returns content json if schema_name is 'gone'" do
-        json = { schema_name: "gone",
-          details: { explanation: "No page here" } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("No page here")
-      end
+
 
       describe "GenericWithLinks" do
         it "returns nil if json does not have 'external_related_links' key" do
