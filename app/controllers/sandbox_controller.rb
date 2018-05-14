@@ -4,18 +4,18 @@ class SandboxController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @metrics = Facts::Metric
-          .by_locale('en')
-          .between(from, to)
+        @metrics = Reports::Series.new
+          .for_en
+          .between(from: from, to: to)
           .by_base_path(base_path)
           .by_organisation_id(organisation)
                      .by_document_type(document_type)
 
         @metrics =
           if is_content_metric?
-            @metrics.with_edition_metrics
+            @metrics.with_edition_metrics.run
           else
-            @metrics.joins(:dimensions_item)
+            @metrics.run
           end
 
         @query_params = query_params
