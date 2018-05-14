@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180509100804) do
+ActiveRecord::Schema.define(version: 20180514085910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,10 @@ ActiveRecord::Schema.define(version: 20180509100804) do
     t.integer "is_this_useful_no", default: 0
     t.integer "process_name", null: false
     t.integer "number_of_internal_searches", default: 0
+    t.integer "exits", default: 0
+    t.integer "entrances", default: 0
+    t.integer "bounce_rate", default: 0
+    t.integer "avg_time_on_page", default: 0
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
   end
 
@@ -132,6 +136,10 @@ ActiveRecord::Schema.define(version: 20180509100804) do
     t.integer "is_this_useful_yes", default: 0
     t.integer "is_this_useful_no", default: 0
     t.integer "number_of_internal_searches", default: 0
+    t.integer "exits", default: 0
+    t.integer "entrances", default: 0
+    t.integer "bounce_rate", default: 0
+    t.integer "avg_time_on_page", default: 0
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_date_item_id"
     t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
   end
