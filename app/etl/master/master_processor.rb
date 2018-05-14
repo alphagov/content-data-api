@@ -10,21 +10,22 @@ class Master::MasterProcessor
   end
 
   def process
-    raise DuplicateDateError if Dimensions::Date.exists?(date)
+    raise DuplicateDateError if already_run?
+
     time(process: :master) do
-      Master::MetricsProcessor.process(date: dimensions_date.date)
-      GA::ViewsProcessor.process(date: dimensions_date.date)
-      GA::UserFeedbackProcessor.process(date: dimensions_date.date)
-      GA::InternalSearchProcessor.process(date: dimensions_date.date)
-      Feedex::Processor.process(date: dimensions_date.date)
+      Master::MetricsProcessor.process(date: date)
+      GA::ViewsProcessor.process(date: date)
+      GA::UserFeedbackProcessor.process(date: date)
+      GA::InternalSearchProcessor.process(date: date)
+      Feedex::Processor.process(date: date)
     end
   end
 
-private
-
-  def dimensions_date
-    @dimensions_date ||= Dimensions::Date.for(date)
+  def already_run?
+    Facts::Metric.where(dimensions_date_id: date).any?
   end
+
+private
 
   attr_reader :date
 

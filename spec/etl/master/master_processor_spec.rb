@@ -18,10 +18,19 @@ RSpec.describe Master::MasterProcessor do
     allow(Master::MetricsProcessor).to receive(:process)
   end
 
-  it 'does not process if already processed for date' do
-    create(:dimensions_date, date: Date.yesterday)
+  describe 'runs only once per day' do
+    it 'raises `DuplicateDateError` if there are already metrics for the day' do
+      date = create(:dimensions_date, date: Date.yesterday)
+      create(:metric, dimensions_date: date)
 
-    expect { subject.process }.to raise_error(Master::MasterProcessor::DuplicateDateError)
+      expect { subject.process }.to raise_error(Master::MasterProcessor::DuplicateDateError)
+    end
+
+    it 'does not raise `DuplicateDateError` otherwise' do
+      create(:dimensions_date, date: Date.yesterday)
+
+      expect { subject.process }.to_not raise_error
+    end
   end
 
   it 'creates a Metrics fact per content item' do
