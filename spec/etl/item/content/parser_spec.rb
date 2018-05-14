@@ -3,13 +3,6 @@ RSpec.describe Item::Content::Parser do
 
   describe "#extract_content" do
     context "when valid schema" do
-      it "returns content json if schema_name is 'local_transaction'" do
-        json = { schema_name: "local_transaction",
-          details: { introduction: "Greetings", need_to_know: "A Name",
-            more_information: "An Address" } }
-        expect(subject.extract_content(json.deep_stringify_keys)).to eq("Greetings A Name An Address")
-      end
-
       describe "ServiceManualTopic" do
         it "returns description if json does not have 'groups' key" do
           json = { schema_name: "service_manual_topic",
