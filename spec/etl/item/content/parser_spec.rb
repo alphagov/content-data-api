@@ -39,25 +39,6 @@ RSpec.describe Item::Content::Parser do
         expect(subject.extract_content(json.deep_stringify_keys)).to eq("Announcement 25 December 2017 closed")
       end
 
-      describe "Taxon" do
-        it "returns description if json does not have any child_taxons" do
-          json = { schema_name: "taxon",
-            description: "Blogs",
-            links: {} }
-          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs")
-        end
-
-        it "returns content json if schema_name is 'taxon'" do
-          json = { schema_name: "taxon",
-            description: "Blogs",
-            links: { child_taxons: [
-              { title: "One", description: "first" },
-              { title: "Two", description: "second" }
-            ] } }
-          expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs One first Two second")
-        end
-      end
-
       describe "ServiceManualStandard" do
         it "returns title and body if json does not have 'children' key" do
           json = {
