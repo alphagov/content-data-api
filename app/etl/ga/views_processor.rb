@@ -45,10 +45,18 @@ private
     <<~SQL
       UPDATE facts_metrics
       SET unique_pageviews = s.unique_pageviews,
-          pageviews = s.pageviews
+          pageviews = s.pageviews,
+          entrances = s.entrances,
+          exits = s.exits,
+          bounce_rate = s.bounce_rate,
+          avg_time_on_page = s.avg_time_on_page
       FROM (
         SELECT pageviews,
                unique_pageviews,
+               entrances,
+               exits,
+               bounce_rate,
+               avg_time_on_page,
                dimensions_items.id
         FROM events_gas, dimensions_items
         WHERE page_path = base_path

@@ -21,13 +21,17 @@ class GA::ViewsService
 private
 
   def append_data_labels(values)
-    page_path, pageviews, unique_pageviews = *values
+    page_path, pageviews, unique_pageviews, entrances, exits, bounce_rate, avg_time_on_page = *values
 
     {
       'page_path' => page_path,
       'pageviews' => pageviews,
       'unique_pageviews' => unique_pageviews,
-      'process_name' => 'views'
+      'process_name' => 'views',
+      'entrances' => entrances,
+      'exits' => exits,
+      'bounce_rate' => bounce_rate,
+      'avg_time_on_page' => avg_time_on_page
     }
   end
 
@@ -70,6 +74,10 @@ private
       metrics: [
         { expression: 'ga:pageviews' },
         { expression: 'ga:uniquePageviews' },
+        { expression: 'ga:entrances' },
+        { expression: 'ga:exits' },
+        { expression: 'ga:bounceRate' },
+        { expression: 'ga:avgTimeOnPage' },
       ],
       page_size: 10_000,
       view_id: ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"],

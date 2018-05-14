@@ -20,8 +20,8 @@ RSpec.describe GA::ViewsProcessor do
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1)
-      expect(fact2.reload).to have_attributes(pageviews: 2, unique_pageviews: 2)
+      expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1, entrances: 10, exits: 5, bounce_rate: 50, avg_time_on_page: 60)
+      expect(fact2.reload).to have_attributes(pageviews: 2, unique_pageviews: 2, entrances: 20, exits: 10, bounce_rate: 100, avg_time_on_page: 30)
     end
 
     it 'does not update metrics for other days' do
@@ -76,6 +76,10 @@ RSpec.describe GA::ViewsProcessor do
         'unique_pageviews' => 1,
         'date' => '2018-02-20',
         'process_name' => 'views',
+        'entrances' => 10,
+        'exits' => 5,
+        'bounce_rate' => 50,
+        'avg_time_on_page' => 60,
       },
       {
         'page_path' => '/path2',
@@ -83,6 +87,10 @@ RSpec.describe GA::ViewsProcessor do
         'unique_pageviews' => 2,
         'date' => '2018-02-20',
         'process_name' => 'views',
+        'entrances' => 20,
+        'exits' => 10,
+        'bounce_rate' => 100,
+        'avg_time_on_page' => 30,
       },
     ]
   end
@@ -95,6 +103,10 @@ RSpec.describe GA::ViewsProcessor do
         'unique_pageviews' => 1,
         'date' => '2018-02-20',
         'process_name' => 'views',
+        'entrances' => 10,
+        'exits' => 5,
+        'bounce_rate' => 50,
+        'avg_time_on_page' => 60,
       },
       {
         'page_path' => '/path2',
@@ -102,6 +114,10 @@ RSpec.describe GA::ViewsProcessor do
         'unique_pageviews' => 2,
         'date' => '2018-02-20',
         'process_name' => 'views',
+        'entrances' => 20,
+        'exits' => 10,
+        'bounce_rate' => 100,
+        'avg_time_on_page' => 30,
       },
     ]
   end
