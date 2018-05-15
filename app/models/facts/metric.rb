@@ -44,7 +44,7 @@ class Facts::Metric < ApplicationRecord
   end
 
   scope :with_edition_metrics, -> do
-    joins(:facts_edition)
+    joins(dimensions_item: :facts_edition)
   end
 
   def self.csv_fields
