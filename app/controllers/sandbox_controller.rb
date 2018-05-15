@@ -22,11 +22,14 @@ class SandboxController < ApplicationController
       end
 
       format.csv do
-        @metrics = Facts::Metric.joins(dimensions_item: :facts_edition)
-                     .by_locale('en')
-                     .between(from, to)
-                     .by_base_path(base_path)
-                     .by_organisation_id(organisation)
+        @metrics = Reports::Series.new
+          .for_en
+          .between(from: from, to: to)
+          .by_base_path(base_path)
+          .by_organisation_id(organisation)
+          .with_edition_metrics
+          .run
+
         export_to_csv enum: CSVExport.run(@metrics, Facts::Metric.csv_fields)
       end
     end
