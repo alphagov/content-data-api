@@ -35,6 +35,8 @@ RSpec.describe 'Process content item' do
       title: 'title1',
       document_type: 'document_type1',
       content_purpose_document_supertype: 'content_purpose_document_supertype1',
+      content_purpose_supergroup: 'content_purpose_supergroup1',
+      content_purpose_subgroup: 'content_purpose_subgroup1',
       first_published_at: Time.new(2018, 2, 19),
       public_updated_at: Time.new(2018, 2, 19),
       number_of_pdfs: 2,
@@ -103,6 +105,8 @@ RSpec.describe 'Process content item' do
       'title' => 'title1',
       'document_type' => 'document_type1',
       'content_purpose_document_supertype' => 'content_purpose_document_supertype1',
+      'content_purpose_supergroup' => 'content_purpose_supergroup1',
+      'content_purpose_subgroup' => 'content_purpose_subgroup1',
       'first_published_at' => Time.new(2018, 2, 19).to_s,
       'public_updated_at' => Time.new(2018, 2, 19).to_s,
       'details' => {
