@@ -7,6 +7,8 @@ class Item::Metadata::Parsers::Metadata
       'title',
       'document_type',
       'content_purpose_document_supertype',
+      'content_purpose_supergroup',
+      'content_purpose_subgroup',
       'first_published_at',
       'public_updated_at',
     ).symbolize_keys
