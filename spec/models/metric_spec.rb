@@ -5,6 +5,7 @@ RSpec.describe Metric do
   it "returns a list of all metrics" do
     metrics = Metric.all_metrics
 
+    expect(metrics.length).to eq(25)
     expect(metrics).to include(content_metric)
     expect(metrics).to include(performance_metric)
   end
