@@ -71,5 +71,19 @@ RSpec.describe Facts::Metric, type: :model do
       results = subject.by_locale('fr')
       expect(results).to match_array(metric1)
     end
+
+    it '.by_document_type' do
+      item1 = create(:dimensions_item, base_path: '/path1', document_type: 'guide')
+      item2 = create(:dimensions_item, base_path: '/path2', document_type: 'local_transaction')
+
+      metric1 = create(:metric, dimensions_item: item1, dimensions_date: day0)
+      metric2 = create(:metric, dimensions_item: item1, dimensions_date: day1)
+      create(:metric, dimensions_item: item2, dimensions_date: day0)
+      create(:metric, dimensions_item: item2, dimensions_date: day1)
+      create(:metric, dimensions_item: item2, dimensions_date: day2)
+
+      results = subject.by_document_type('guide')
+      expect(results).to match_array([metric1, metric2])
+    end
   end
 end

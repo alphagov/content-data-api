@@ -31,6 +31,13 @@ class Facts::Metric < ApplicationRecord
     end
   end
 
+  scope :by_document_type, ->(document_type) do
+    if document_type.present?
+      joins(:dimensions_item)
+        .where('dimensions_items.document_type like (?)', document_type)
+    end
+  end
+
   scope :by_locale, ->(locale) do
     joins(:dimensions_item)
       .where(dimensions_items: { locale: locale })

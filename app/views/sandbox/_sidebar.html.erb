@@ -9,6 +9,10 @@
         <%= text_field_tag 'base_path', params[:base_path], placeholder: 'Enter base path...', class: 'form-control' %>
       </div>
       <div class="form-group">
+        <%= label_tag 'document_type', 'Document Type:', class: '' %>
+        <%= text_field_tag 'document_type', params[:document_type], placeholder: 'Enter document type...', class: 'form-control' %>
+      </div>
+      <div class="form-group">
         <%= label_tag 'from', 'From:', class: '' %>
         <%= date_field_tag 'from', params[:from], class: 'form-control' %>
       </div>
