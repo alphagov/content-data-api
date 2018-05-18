@@ -22,9 +22,5 @@ module ContentPerformanceManager
 
     config.autoload_paths += additional_paths
     config.eager_load_paths += additional_paths
-
-    # Metadata about the metrics we collect
-    config.metrics = config_for(:metrics)
-    config.valid_metric_names = config.metrics.keys.map(&:to_s)
   end
 end

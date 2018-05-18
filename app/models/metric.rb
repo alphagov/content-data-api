@@ -18,7 +18,11 @@ class Metric
     ).freeze
 
   def self.all_metrics
-    Rails.configuration.metrics.map { |k, v| v.merge('metric_id' => k) }.sort_by { |item| item[:name] }
+    @all_metrics ||= YAML.load_file(Rails.root.join('config', 'metrics.yml')).sort_by { |metric| metric[:name] }
+  end
+
+  def self.valid_metric_names
+    self.all_metrics.map { |metric| metric['name'] }
   end
 
   def self.is_content_metric?(metric)
