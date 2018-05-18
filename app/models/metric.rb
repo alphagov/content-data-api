@@ -1,9 +1,10 @@
 class Metric
   include ActiveModel::Model
+  include Comparable
   attr_accessor :description, :name, :source
 
   def self.all_metrics
-    @all_metrics ||= (daily_metrics + edition_metrics).sort_by(&:name)
+    @all_metrics ||= (daily_metrics + edition_metrics).sort
   end
 
   def self.metric_names
@@ -28,5 +29,9 @@ class Metric
 
   def self.source
     @source ||= YAML.load_file(Rails.root.join('config', 'metrics.yml'))
+  end
+
+  def <=>(other)
+    name <=> other.name
   end
 end
