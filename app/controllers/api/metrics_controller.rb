@@ -24,7 +24,7 @@ private
       .by_base_path(format_base_path_param)
       .by_locale('en')
 
-    if Metric.is_content_metric?(metric)
+    if Metric.is_edition_metric?(metric)
       series
         .with_edition_metrics
         .order('dimensions_dates.date asc')

@@ -12,7 +12,7 @@ class SandboxController < ApplicationController
                      .by_document_type(document_type)
 
         @metrics =
-          if is_content_metric?
+          if is_edition_metric?
             @metrics.with_edition_metrics.run
           else
             @metrics.run
@@ -73,7 +73,7 @@ private
       :avg_time_on_page, :document_type, :metric)
   end
 
-  def is_content_metric?
+  def is_edition_metric?
     Metric.content_metrics.any? { |metric| params[metric] == 'on' }
   end
 end

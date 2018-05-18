@@ -1,5 +1,5 @@
 class Metric
-  CONTENT_METRICS = %w(
+  EDITION_METRICS = %w(
       number_of_pdfs
       number_of_word_files
       readability_score
@@ -25,11 +25,11 @@ class Metric
     self.all_metrics.map { |metric| metric['name'] }
   end
 
-  def self.is_content_metric?(metric)
-    CONTENT_METRICS.include?(metric)
+  def self.is_edition_metric?(metric)
+    EDITION_METRICS.include?(metric)
   end
 
   def self.content_metrics
-    CONTENT_METRICS
+    EDITION_METRICS
   end
 end

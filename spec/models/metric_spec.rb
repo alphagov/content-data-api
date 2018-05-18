@@ -11,7 +11,7 @@ RSpec.describe Metric do
     expect(a_metric).to include('description', 'name', 'source')
   end
 
-  describe '.is_content_metric' do
+  describe '.is_edition_metric?' do
     %w(
     number_of_pdfs
     number_of_word_files
@@ -30,7 +30,7 @@ RSpec.describe Metric do
     word_count
     ).each do |metric|
       it "returns true for #{metric}" do
-        expect(Metric.is_content_metric?(metric)).to be_truthy
+        expect(Metric.is_edition_metric?(metric)).to be_truthy
       end
     end
 
@@ -47,7 +47,7 @@ RSpec.describe Metric do
     avg_time_on_page
     ).each do |metric|
       it "returns false for #{metric}" do
-        expect(Metric.is_content_metric?(metric)).to be_falsey
+        expect(Metric.is_edition_metric?(metric)).to be_falsey
       end
     end
   end
