@@ -7,7 +7,7 @@ class Api::Metric
 
   attr_reader :metric, :from, :to, :content_id, :base_path
 
-  validates :metric, presence: true, inclusion: { in: ::Metric.metric_names }
+  validates :metric, presence: true, inclusion: { in: ::Metric.find_all.map(&:name) }
   validates :from, presence: true, format: { with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD" }
   validates :to, presence: true, format: { with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD" }
   validates :base_path, presence: true

@@ -56,13 +56,6 @@ RSpec.describe Metric do
     end
   end
 
-  describe '.edition_metrics_names' do
-    it 'return the edition metrics names' do
-      names = Metric.edition_metrics.map(&:name)
-      expect(names).to match_array(EDITION_METRICS)
-    end
-  end
-
   describe '.edition_metrics' do
     it 'return the edition metrics' do
       metrics = Metric.edition_metrics
