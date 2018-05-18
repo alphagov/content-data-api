@@ -8,6 +8,7 @@ class SandboxController < ApplicationController
       .between(from, to)
       .by_base_path(base_path)
       .by_organisation_id(organisation)
+      .by_document_type(document_type)
 
     respond_to do |format|
       format.html do
@@ -37,6 +38,10 @@ private
     params[:organisation]
   end
 
+  def document_type
+    params[:document_type]
+  end
+
   def query_params
     params.permit(:from, :to, :base_path, :utf8,
       :total_items, :pageviews, :unique_pageviews, :feedex_comments,
@@ -45,6 +50,7 @@ private
       :contractions_count, :equality_count, :indefinite_article_count, :number_of_pdfs,
       :number_of_word_files, :passive_count, :profanities_count, :readability_score,
       :redundant_acronyms_count, :repeated_words_count, :sentence_count, :simplify_count,
-      :spell_count, :string_length, :word_count, :entrances, :exits, :bounce_rate, :avg_time_on_page)
+      :spell_count, :string_length, :word_count, :entrances, :exits, :bounce_rate,
+      :avg_time_on_page, :document_type)
   end
 end
