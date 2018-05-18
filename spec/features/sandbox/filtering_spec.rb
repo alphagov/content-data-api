@@ -56,5 +56,19 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
 
       expect(page).to have_selector('.pageviews .total', text: 'Total = 10')
     end
+
+    scenario 'by document_type' do
+      item1.update document_type: 'guide'
+      create :metric, dimensions_item: item1, dimensions_date: day1, pageviews: 10
+      create :metric, dimensions_item: item2, dimensions_date: day1, pageviews: 30
+
+      visit '/sandbox'
+      check 'pageviews'
+
+      fill_in 'Document Type:', with: 'guide'
+      click_button 'Filter'
+
+      expect(page).to have_selector('.pageviews .total', text: 'Total = 10')
+    end
   end
 end
