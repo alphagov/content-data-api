@@ -86,9 +86,12 @@
 
 - name: 'string_length'
   description: "Total number of characters used in the text"
+  source: 'custom'
 
 - name: 'sentence_count'
   description: "Total number of sentences detected in the text"
+  source: 'custom'
 
 - name: 'word_count'
   description: "Total number of words detected in the text"
+  source: 'custom'
