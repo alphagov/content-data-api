@@ -3,7 +3,7 @@ class Metric
     @all_metrics ||= (daily_metrics + edition_metrics).sort_by { |metric| metric[:name] }
   end
 
-  def self.valid_metric_names
+  def self.metric_names
     self.all_metrics.map { |metric| metric['name'] }
   end
 
