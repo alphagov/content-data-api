@@ -11,23 +11,46 @@ RSpec.describe Metric do
     expect(a_metric).to include('description', 'name', 'source')
   end
 
+  describe '.edition_metrics' do
+    it 'return the edition metrics' do
+      metrics = Metric.edition_metrics
+      expect(metrics.map { |metric| metric['name'] }).to match_array(%w(
+        number_of_pdfs
+        number_of_word_files
+        readability_score
+        contractions_count
+        equality_count
+        indefinite_article_count
+        passive_count
+        profanities_count
+        redundant_acronyms_count
+        repeated_words_count
+        simplify_count
+        spell_count
+        string_length
+        sentence_count
+        word_count
+      ))
+    end
+  end
+
   describe '.is_edition_metric?' do
     %w(
-    number_of_pdfs
-    number_of_word_files
-    readability_score
-    contractions_count
-    equality_count
-    indefinite_article_count
-    passive_count
-    profanities_count
-    redundant_acronyms_count
-    repeated_words_count
-    simplify_count
-    spell_count
-    string_length
-    sentence_count
-    word_count
+      number_of_pdfs
+      number_of_word_files
+      readability_score
+      contractions_count
+      equality_count
+      indefinite_article_count
+      passive_count
+      profanities_count
+      redundant_acronyms_count
+      repeated_words_count
+      simplify_count
+      spell_count
+      string_length
+      sentence_count
+      word_count
     ).each do |metric|
       it "returns true for #{metric}" do
         expect(Metric.is_edition_metric?(metric)).to be_truthy
@@ -53,7 +76,7 @@ RSpec.describe Metric do
   end
 
   it "returns a list of content metrics" do
-    metrics = Metric.content_metrics
+    metrics = Metric.edition_metrics_names
 
     expect(metrics).to include(content_metric)
     expect(metrics).to_not include(performance_metric)

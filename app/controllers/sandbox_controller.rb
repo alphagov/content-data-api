@@ -74,6 +74,6 @@ private
   end
 
   def is_edition_metric?
-    Metric.content_metrics.any? { |metric| params[metric] == 'on' }
+    Metric.edition_metrics_names.any? { |metric| params[metric] == 'on' }
   end
 end
