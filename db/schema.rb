@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180515105428) do
+ActiveRecord::Schema.define(version: 20180518133900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,8 +88,8 @@ ActiveRecord::Schema.define(version: 20180515105428) do
   create_table "events_gas", force: :cascade do |t|
     t.date "date"
     t.string "page_path"
-    t.integer "pageviews"
-    t.integer "unique_pageviews"
+    t.integer "pageviews", default: 0
+    t.integer "unique_pageviews", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "is_this_useful_yes", default: 0
