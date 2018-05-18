@@ -3,12 +3,12 @@ class Metric
   include Comparable
   attr_accessor :description, :name, :source
 
-  def self.all_metrics
+  def self.find_all
     @all_metrics ||= (daily_metrics + edition_metrics).sort
   end
 
   def self.metric_names
-    self.all_metrics.map(&:name)
+    self.find_all.map(&:name)
   end
 
   def self.is_edition_metric?(metric_name)

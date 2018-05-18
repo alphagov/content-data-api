@@ -165,7 +165,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
       json = JSON.parse(response.body)
 
-      expect(json.count).to eq(::Metric.all_metrics.length)
+      expect(json.count).to eq(::Metric.find_all.length)
 
       expect(json).to include("name" => "pageviews",
         "description" => "Number of pageviews",

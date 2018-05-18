@@ -12,7 +12,7 @@ class Api::MetricsController < Api::BaseController
   end
 
   def index
-    items = ::Metric.all_metrics
+    items = ::Metric.find_all
     render json: items
   end
 

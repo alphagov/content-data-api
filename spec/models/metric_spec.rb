@@ -32,9 +32,9 @@ RSpec.describe Metric do
       unique_pageviews
     ).freeze
 
-  describe '.all_metrics' do
+  describe '.find_all' do
     it "returns a list of all metrics" do
-      metrics = Metric.all_metrics
+      metrics = Metric.find_all
 
       expect(metrics.length).to eq(25)
       a_metric = metrics.first
