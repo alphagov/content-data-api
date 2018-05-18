@@ -7,14 +7,13 @@ RSpec.describe Metric do
 
     expect(metrics.length).to eq(25)
     a_metric = metrics.first
-    expect(a_metric).to be_an_instance_of(Hash)
-    expect(a_metric).to include('description', 'name', 'source')
+    expect(a_metric).to be_an_instance_of(Metric)
   end
 
   describe '.edition_metrics' do
     it 'return the edition metrics' do
       metrics = Metric.edition_metrics
-      expect(metrics.map { |metric| metric['name'] }).to match_array(%w(
+      expect(metrics.map(&:name)).to match_array(%w(
         number_of_pdfs
         number_of_word_files
         readability_score
