@@ -45,6 +45,6 @@ private
       :contractions_count, :equality_count, :indefinite_article_count, :number_of_pdfs,
       :number_of_word_files, :passive_count, :profanities_count, :readability_score,
       :redundant_acronyms_count, :repeated_words_count, :sentence_count, :simplify_count,
-      :spell_count, :string_length, :word_count)
+      :spell_count, :string_length, :word_count, :entrances, :exits, :bounce_rate, :avg_time_on_page)
   end
 end

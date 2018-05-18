@@ -38,6 +38,10 @@ RSpec.feature 'Performance metrics', type: :feature do
        is_this_useful_yes
        is_this_useful_no
        number_of_internal_searches
+       entrances
+       exits
+       bounce_rate
+       avg_time_on_page
       )
 
     metrics.each do |metric_name|

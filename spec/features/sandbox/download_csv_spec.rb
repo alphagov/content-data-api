@@ -44,6 +44,10 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     metric.pageviews = 19
     metric.unique_pageviews = 20
     metric.feedex_comments = 21
+    metric.entrances = 30
+    metric.exits = 31
+    metric.bounce_rate = 32
+    metric.avg_time_on_page = 33
     metric.save!
 
     visit '/sandbox'
@@ -56,10 +60,10 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
     expect(page.response_headers['Content-Type']).to eq "text/csv"
     expect(page.response_headers['Content-disposition']).to eq 'attachment; filename="download.csv"'
 
-    header = 'date,content_id,base_path,locale,title,description,document_type,content_purpose_document_supertype,content_purpose_supergroup,content_purpose_subgroup,first_published_at,public_updated_at,status,pageviews,primary_organisation_title,primary_organisation_content_id,unique_pageviews,feedex_comments,number_of_pdfs,number_of_word_files,readability_score,spell_count,is_this_useful_yes,is_this_useful_no,number_of_internal_searches,word_count,passive_count,simplify_count,string_length,sentence_count'
+    header = 'date,content_id,base_path,locale,title,description,document_type,content_purpose_document_supertype,content_purpose_supergroup,content_purpose_subgroup,first_published_at,public_updated_at,status,pageviews,primary_organisation_title,primary_organisation_content_id,unique_pageviews,feedex_comments,number_of_pdfs,number_of_word_files,readability_score,spell_count,is_this_useful_yes,is_this_useful_no,number_of_internal_searches,word_count,passive_count,simplify_count,string_length,sentence_count,entrances,exits,bounce_rate,avg_time_on_page'
     expect(page.body).to include(header)
 
-    row = "2018-01-12,content-id,/base-path,en,This is the title,This is the description,Guide,Super Guide,Guide,guidance,2018-02-03 00:00:00 UTC,2018-03-03 00:00:00 UTC,live,19,HMRC,the-organisation-id,20,21,22,23,9,10,11,12,13,14,15,16,17,18"
+    row = "2018-01-12,content-id,/base-path,en,This is the title,This is the description,Guide,Super Guide,Guide,guidance,2018-02-03 00:00:00 UTC,2018-03-03 00:00:00 UTC,live,19,HMRC,the-organisation-id,20,21,22,23,9,10,11,12,13,14,15,16,17,18,30,31,32,33"
     expect(page.body).to include(row)
   end
 end

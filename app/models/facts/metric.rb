@@ -72,6 +72,10 @@ class Facts::Metric < ApplicationRecord
       simplify_count
       string_length
       sentence_count
+      entrances
+      exits
+      bounce_rate
+      avg_time_on_page
     ]
   end
 end
