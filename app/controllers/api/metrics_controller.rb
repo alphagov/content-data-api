@@ -12,7 +12,7 @@ class Api::MetricsController < Api::BaseController
   end
 
   def index
-    items = Metric.all_metrics.map { |k, v| v.merge(metric_id: k) }.sort_by { |item| item[:name] }
+    items = Metric.all_metrics
     render json: items
   end
 

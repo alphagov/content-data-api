@@ -6,8 +6,9 @@ RSpec.describe Metric do
     metrics = Metric.all_metrics
 
     expect(metrics.length).to eq(25)
-    expect(metrics).to include(content_metric)
-    expect(metrics).to include(performance_metric)
+    a_metric = metrics.first
+    expect(a_metric).to be_an_instance_of(Hash)
+    expect(a_metric).to include('source', 'description', 'metric_id')
   end
 
   describe '.is_content_metric' do

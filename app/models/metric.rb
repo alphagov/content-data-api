@@ -18,7 +18,7 @@ class Metric
     ).freeze
 
   def self.all_metrics
-    Rails.configuration.metrics
+    Rails.configuration.metrics.map { |k, v| v.merge('metric_id' => k) }.sort_by { |item| item[:name] }
   end
 
   def self.is_content_metric?(metric)
