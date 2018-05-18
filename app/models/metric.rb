@@ -15,10 +15,6 @@ class Metric
     edition_metrics.map(&:name).include?(metric_name)
   end
 
-  def self.edition_metrics_names
-    edition_metrics.map(&:name)
-  end
-
   def self.edition_metrics
     source['edition'].map { |attributes| Metric.new(attributes) }
   end

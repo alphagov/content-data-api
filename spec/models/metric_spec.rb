@@ -42,14 +42,6 @@ RSpec.describe Metric do
     end
   end
 
-  describe '.metric_names' do
-    it 'return all metric names' do
-      names = Metric.metric_names
-
-      expect(names).to match_array(EDITION_METRICS + DAILY_METRICS)
-    end
-  end
-
   describe '.is_edition_metric?' do
     EDITION_METRICS.each do |metric|
       it "returns true for #{metric}" do
