@@ -10,8 +10,45 @@ RSpec.describe Metric do
     expect(metrics).to include(performance_metric)
   end
 
-  it "checks if a metric is a content metric" do
-    expect(Metric.is_content_metric?(content_metric)).to be true
+  describe '.is_content_metric' do
+    %w(
+    number_of_pdfs
+    number_of_word_files
+    readability_score
+    contractions_count
+    equality_count
+    indefinite_article_count
+    passive_count
+    profanities_count
+    redundant_acronyms_count
+    repeated_words_count
+    simplify_count
+    spell_count
+    string_length
+    sentence_count
+    word_count
+    ).each do |metric|
+      it "returns true for #{metric}" do
+        expect(Metric.is_content_metric?(metric)).to be_truthy
+      end
+    end
+
+    %w(
+    pageviews
+    unique_pageviews
+    feedex_comments
+    is_this_useful_no
+    is_this_useful_yes
+    number_of_internal_searches
+    entrances
+    exits
+    bounce_rate
+    avg_time_on_page
+    ).each do |metric|
+      it "returns false for #{metric}" do
+        expect(Metric.is_content_metric?(metric)).to be_falsey
+      end
+    end
   end
 
   it "returns a list of content metrics" do
