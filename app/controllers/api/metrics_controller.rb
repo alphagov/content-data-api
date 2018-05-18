@@ -3,16 +3,16 @@ class Api::MetricsController < Api::BaseController
 
   def time_series
     @metrics = query_series
-    @metric_params = metric_params
+    @api_request = api_request
   end
 
   def summary
     @metrics = query_series
-    @metric_params = metric_params
+    @api_request = api_request
   end
 
   def index
-    items = ::Metric.find_all
+    items = Metric.find_all
     render json: items
   end
 
@@ -41,18 +41,18 @@ private
     "/#{base_path}"
   end
 
-  delegate :from, :to, :metric, :base_path, to: :metric_params
+  delegate :from, :to, :metric, :base_path, to: :api_request
 
-  def metric_params
-    @metric_params ||= Api::Metric.new(params.permit(:from, :to, :metric, :base_path, :format))
+  def api_request
+    @api_request ||= Api::Request.new(params.permit(:from, :to, :metric, :base_path, :format))
   end
 
   def validate_params!
-    unless metric_params.valid?
+    unless api_request.valid?
       error_response(
         "validation-error",
         title: "One or more parameters is invalid",
-        invalid_params: metric_params.errors.to_hash
+        invalid_params: api_request.errors.to_hash
       )
     end
   end

@@ -22,6 +22,12 @@ class Reports::Series
     self
   end
 
+  def by_document_type(document_type)
+    @document_type = document_type
+
+    self
+  end
+
   def by_base_path(base_path)
     @base_path = base_path
 
@@ -45,6 +51,10 @@ class Reports::Series
 
     if @base_path
       metrics = metrics.by_base_path(@base_path)
+    end
+    
+    if @document_type
+      metrics = metrics.by_document_type(@document_type)
     end
 
     metrics.joins(:dimensions_item)
