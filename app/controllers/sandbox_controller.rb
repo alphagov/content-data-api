@@ -37,10 +37,6 @@ class SandboxController < ApplicationController
 
 private
 
-  def metric
-    params[:metric]
-  end
-
   def from
     params[:from] ||= 5.days.ago.to_date
   end
