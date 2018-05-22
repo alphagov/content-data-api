@@ -52,7 +52,7 @@ class Reports::Series
     if @base_path
       metrics = metrics.by_base_path(@base_path)
     end
-    
+
     if @document_type
       metrics = metrics.by_document_type(@document_type)
     end

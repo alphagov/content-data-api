@@ -2,12 +2,12 @@ class Api::MetricsController < Api::BaseController
   before_action :validate_params!, except: :index
 
   def time_series
-    @metrics = query_series
+    @series = query_series
     @api_request = api_request
   end
 
   def summary
-    @metrics = query_series
+    @series = query_series
     @api_request = api_request
   end
 
