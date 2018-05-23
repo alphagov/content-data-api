@@ -25,7 +25,7 @@ RSpec.describe 'Initial load from publishing api' do
     publishing_api_get_editions(editions, fields: %i[base_path content_id locale], per_page: 50, states: ['published'])
   end
 
-  it 'something' do
+  it 'stores all published items including all locales' do
     stub_content_item_for_path('/one', 'cont-1', 'new title')
     stub_content_item_for_path('/one.de', 'cont-1', 'new title.de')
     stub_content_item_for_path('/two', 'cont-3', 'new title 2')
