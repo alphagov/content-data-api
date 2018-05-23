@@ -59,7 +59,8 @@ Contact the GOV.UK Content Performance API team through [Zendesk][].
 
 ### Query the API
 
-To query the API, you need to pass the base_path to the content performance API for the piece of content you are interested in.
+To query the API, you need to pass the base path (the part after 'www.gov.uk')
+to the content performance API for the piece of content you are interested in.
 
 For example, for https://www.gov.uk/vat-rates, the base_path will be "/vat-rates"
 
@@ -106,7 +107,7 @@ You can use the `/metrics/[metric-id]/[base_path]/` endpoint to get the value of
 To summarise the recorded data over a requested time frame:
 
 ```shell
-curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics//vat-rates?from=2018-02-28&to=2018-02-28&metric=pageviews
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-28&to=2018-02-28&metric=pageviews
 ```
 
 The `from` and `to` query parameters specify the date range to query.
@@ -114,7 +115,7 @@ The `from` and `to` query parameters specify the date range to query.
 To get data points for each day in the requested time frame:
 
 ```shell
-curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/time-series//vat-rates?from=2018-02-28&to=2018-02-28&metric=pageviews
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/time-series/vat-rates?from=2018-02-28&to=2018-02-28&metric=pageviews
 ```
 
 ## API reference

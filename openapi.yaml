@@ -212,7 +212,7 @@ paths:
       x-code-samples:
         "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
           lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/pageviews//vat-rates?from=2018-02-27&to=2018-02-27'
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/pageviews/vat-rates?from=2018-02-27&to=2018-02-27'
 
   /metrics/{metric}/{base_path}/time-series:
     get:
@@ -273,6 +273,6 @@ paths:
                 $ref: "#/components/examples/ErrorExample"
 
       x-code-samples:
-        "/metrics//vat-rates":
+        "/metrics/vat-rates":
           lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics//vat-rates/time-series?from=2018-02-27&to=2018-02-27&metric=pageviews'
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates/time-series?from=2018-02-27&to=2018-02-27&metric=pageviews'
