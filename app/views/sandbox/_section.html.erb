@@ -1,4 +1,4 @@
-<% if params[metric].present? %>
+<% if @selected_metrics.include?(metric.to_s) %>
     <div class="<%= metric %>">
       <h3>Number of <%= metric.to_s.titleize %></h3>
       <div class="chart-stats">

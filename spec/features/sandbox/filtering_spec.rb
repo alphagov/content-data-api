@@ -20,7 +20,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       create :metric, dimensions_item: item2, dimensions_date: day2, pageviews: 30
 
       visit '/sandbox'
-      check 'pageviews'
+      select 'pageviews', from: 'metric1'
 
       fill_in 'Base path:', with: '/path'
       click_button 'Filter'
@@ -35,7 +35,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       create :metric, dimensions_item: item2, dimensions_date: day1, pageviews: 30
 
       visit '/sandbox'
-      check 'pageviews'
+      select 'pageviews', from: 'metric1'
 
       fill_in 'Organisation ID:', with: 'org-1'
       click_button 'Filter'
@@ -48,7 +48,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       create :metric, dimensions_item: item1, dimensions_date: day2, pageviews: 20
 
       visit '/sandbox'
-      check 'pageviews'
+      select 'pageviews', from: 'metric1'
 
       fill_in 'From:', with: '2018-01-12'
       fill_in 'To:', with: '2018-01-12'
@@ -63,7 +63,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
       create :metric, dimensions_item: item2, dimensions_date: day1, pageviews: 30
 
       visit '/sandbox'
-      check 'pageviews'
+      select 'pageviews', from: 'metric1'
 
       fill_in 'Document Type:', with: 'guide'
       click_button 'Filter'

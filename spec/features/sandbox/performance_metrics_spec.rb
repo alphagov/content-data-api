@@ -53,7 +53,7 @@ RSpec.feature 'Performance metrics', type: :feature do
 
         fill_in 'From:', with: '2018-01-1'
         fill_in 'To:', with: '2018-01-30'
-        check metric_name
+        select metric_name, from: 'metric1'
         click_button 'Filter'
 
         expect(page).to have_selector(".#{metric_name} .total", text: 'Total = 20')

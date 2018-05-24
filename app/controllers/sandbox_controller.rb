@@ -2,6 +2,14 @@ class SandboxController < ApplicationController
   include Concerns::ExportableToCSV
 
   def index
+    @all_metrics = Metric.find_all.map(&:name)
+
+    @selected_metrics = [
+      params[:metric1],
+      params[:metric2],
+      params[:metric3]
+    ]
+
     respond_to do |format|
       format.html do
         @metrics = Reports::Series.new
@@ -58,18 +66,11 @@ private
   end
 
   def query_params
-    params.permit(:from, :to, :base_path, :utf8,
-      :total_items, :pageviews, :unique_pageviews, :feedex_comments,
-      :number_of_pdfs, :number_of_word_files, :filter, :organisation,
-      :is_this_useful_yes, :is_this_useful_no, :number_of_internal_searches,
-      :contractions_count, :equality_count, :indefinite_article_count, :number_of_pdfs,
-      :number_of_word_files, :passive_count, :profanities_count, :readability_score,
-      :redundant_acronyms_count, :repeated_words_count, :sentence_count, :simplify_count,
-      :spell_count, :string_length, :word_count, :entrances, :exits, :bounce_rate,
-      :avg_time_on_page, :document_type, :metric)
+    params.permit(:from, :to, :base_path, :utf8, :organisation, :filter,
+      :metric1, :metric2, :metric3, :metric, :document_type)
   end
 
   def is_edition_metric?
-    Metric.edition_metrics.any? { |metric| params[metric.name] == 'on' }
+    @selected_metrics.any? { |metric| Metric.is_edition_metric?(metric) }
   end
 end
