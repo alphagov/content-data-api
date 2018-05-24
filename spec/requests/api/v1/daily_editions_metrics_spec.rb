@@ -9,12 +9,13 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   let!(:day3) { create :dimensions_date, date: Date.new(2018, 1, 15) }
   let!(:day4) { create :dimensions_date, date: Date.new(2018, 1, 16) }
   let!(:content_id) { SecureRandom.uuid }
+  let!(:base_path) { '/base_path' }
 
-  let!(:item_non_english) { create :dimensions_item, content_id: content_id, locale: 'de' }
+  let!(:item_non_english) { create :dimensions_item, base_path: base_path, locale: 'de', latest: false }
 
   before do
-    item_day1 = create :dimensions_item, content_id: content_id, locale: 'en', latest: true
-    item_day2 = create :dimensions_item, content_id: content_id, locale: 'en', latest: true
+    item_day1 = create :dimensions_item, base_path: base_path, locale: 'en', latest: false
+    item_day2 = create :dimensions_item, base_path: base_path, locale: 'en', latest: true
 
     create :facts_edition, dimensions_item: item_day1, dimensions_date: day1, number_of_pdfs: 30, number_of_word_files: 30, readability_score: 123
     create :facts_edition, dimensions_item: item_day2, dimensions_date: day2, number_of_pdfs: 20, number_of_word_files: 20, readability_score: 5
@@ -31,21 +32,21 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   end
 
   it 'returns the `number of pdfs` between two dates' do
-    get "/api/v1/metrics/number_of_pdfs/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+    get "/api/v1/metrics/number_of_pdfs/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
     json = JSON.parse(response.body)
     expect(json.deep_symbolize_keys).to eq(api_reponse('number_of_pdfs'))
   end
 
   it 'returns the `number of word documents` between two dates' do
-    get "/api/v1/metrics/number_of_word_files/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+    get "/api/v1/metrics/number_of_word_files/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
     json = JSON.parse(response.body)
     expect(json.deep_symbolize_keys).to eq(api_reponse('number_of_word_files'))
   end
 
   it 'returns the `readability score` between two dates' do
-    get "/api/v1/metrics/readability_score/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+    get "/api/v1/metrics/readability_score/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
     json = JSON.parse(response.body)
     expect(json.deep_symbolize_keys).to eq(

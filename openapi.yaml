@@ -117,7 +117,7 @@ components:
   examples:
     ErrorExample:
       title: "One or more parameters is invalid"
-      invalid_params: {"from":["can't be blank","Dates should use the format YYYY-MM-DD"],"to":["can't be blank","Dates should use the format YYYY-MM-DD"],"content_id":["Content ID must be a UUID."]}
+      invalid_params: {"from":["can't be blank","Dates should use the format YYYY-MM-DD"],"to":["can't be blank","Dates should use the format YYYY-MM-DD"]}
       type: https://content-performance-api.publishing.service.gov.uk/errors/#validation-error
 
     MetricsExample:
@@ -154,7 +154,7 @@ paths:
           lang: shell
           source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/'
 
-  /metrics/{metric}/{content_id}:
+  /metrics/{metric}/{base_path}:
     get:
       summary: Get summarised metrics for a content item.
       description: |
@@ -162,14 +162,14 @@ paths:
       tags:
         - Aggregations
       parameters:
-        - name: 'content_id'
+        - name: 'base path'
           in: path
           required: true
           description: |
-            A GOV.UK content ID. This is a UUID value as used in the Content API.
+            A GOV.UK base path. A reserved URL on www.gov.uk that is associated with a content item.
           schema:
             type: string
-            example: 'f838c22a-b2aa-49be-bd95-153f593293a3'
+            example: '/vat-rates'
         - name: 'metric'
           in: path
           required: true
@@ -212,9 +212,9 @@ paths:
       x-code-samples:
         "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
           lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/pageviews/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-27&to=2018-02-27'
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/pageviews/vat-rates?from=2018-02-27&to=2018-02-27'
 
-  /metrics/{metric}/{content_id}/time-series:
+  /metrics/{metric}/{base_path}/time-series:
     get:
       summary: Get metric values for a single content item over a date range.
       description: |
@@ -223,14 +223,14 @@ paths:
       tags:
         - Time series
       parameters:
-        - name: 'content_id'
+        - name: 'base path'
           in: path
           required: true
           description: |
-            A GOV.UK content ID. This is a UUID value as used in the Content API.
+            A GOV.UK base path. A reserved URL on www.gov.uk that is associated with a content item.
           schema:
             type: string
-            example: 'f838c22a-b2aa-49be-bd95-153f593293a3'
+            example: '/vat-rates'
         - name: 'metric'
           in: path
           required: true
@@ -273,6 +273,6 @@ paths:
                 $ref: "#/components/examples/ErrorExample"
 
       x-code-samples:
-        "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
+        "/metrics/vat-rates":
           lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/f838c22a-b2aa-49be-bd95-153f593293a3/time-series?from=2018-02-27&to=2018-02-27&metric=pageviews'
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates/time-series?from=2018-02-27&to=2018-02-27&metric=pageviews'

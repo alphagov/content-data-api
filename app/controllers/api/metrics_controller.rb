@@ -21,7 +21,7 @@ private
   def query_series
     series = Facts::Metric
       .between(from, to)
-      .by_content_id(content_id)
+      .by_base_path(format_base_path_param)
       .by_locale('en')
 
     if facts_metrics.include?(metric)
@@ -36,10 +36,15 @@ private
     end
   end
 
-  delegate :from, :to, :metric, :content_id, to: :metric_params
+  def format_base_path_param
+    #  add '/' as param is received without leading forward slash which is needed to query by base_path.
+    "/#{base_path}"
+  end
+
+  delegate :from, :to, :metric, :base_path, to: :metric_params
 
   def metric_params
-    @metric_params ||= Api::Metric.new(params.permit(:from, :to, :metric, :content_id, :format))
+    @metric_params ||= Api::Metric.new(params.permit(:from, :to, :metric, :base_path, :format))
   end
 
   def validate_params!

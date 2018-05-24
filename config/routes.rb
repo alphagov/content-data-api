@@ -7,8 +7,8 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     get '/v1/metrics/', to: "metrics#index"
-    get '/v1/metrics/:metric/:content_id/', to: "metrics#summary"
-    get '/v1/metrics/:metric/:content_id/time-series', to: "metrics#time_series"
+    get '/v1/metrics/:metric/:base_path/', to: "metrics#summary"
+    get '/v1/metrics/:metric/:base_path/time-series', to: "metrics#time_series"
     get '/v1/healthcheck', to: "healthcheck#index"
   end
 

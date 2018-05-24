@@ -9,8 +9,9 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   let!(:day3) { create :dimensions_date, date: Date.new(2018, 1, 15) }
   let!(:day4) { create :dimensions_date, date: Date.new(2018, 1, 16) }
   let!(:content_id) { SecureRandom.uuid }
+  let!(:base_path) { '/base_path' }
 
-  let!(:item) { create :dimensions_item, content_id: content_id, locale: 'en' }
+  let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path, locale: 'en' }
   let!(:item_fr) { create :dimensions_item, content_id: content_id, locale: 'de' }
 
   describe "an API response" do
@@ -44,7 +45,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
   describe "invalid requests" do
     it 'returns an error for metrics not on the whitelist' do
-      get "/api/v1/metrics/number_of_puns/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+      get "/api/v1/metrics/number_of_puns/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
       expect(response.status).to eq(400)
 
@@ -60,7 +61,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for badly formatted dates' do
-      get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: 'today', to: '2018-01-15' }
+      get "/api/v1/metrics/pageviews/#{base_path}/time-series", params: { from: 'today', to: '2018-01-15' }
 
       expect(response.status).to eq(400)
 
@@ -76,7 +77,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for bad date ranges' do
-      get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-16', to: '2018-01-15' }
+      get "/api/v1/metrics/pageviews/#{base_path}/time-series", params: { from: '2018-01-16', to: '2018-01-15' }
 
       expect(response.status).to eq(400)
 
@@ -92,7 +93,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for unknown parameters' do
-      get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla" }
+      get "/api/v1/metrics/pageviews/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla" }
 
       expect(response.status).to eq(400)
 
@@ -118,14 +119,14 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns `pageviews` values between two dates' do
-      get "/api/v1/metrics/pageviews/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+      get "/api/v1/metrics/pageviews/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json).to eq(build_time_series_response('pageviews'))
     end
 
     it 'returns `feedex issues` between two dates' do
-      get "/api/v1/metrics/feedex_comments/#{content_id}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+      get "/api/v1/metrics/feedex_comments/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
 
       json = JSON.parse(response.body)
       expect(json.deep_symbolize_keys).to eq(build_time_series_response('feedex_comments'))
@@ -133,7 +134,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
     describe "Summary information" do
       it 'returns sums and latest values' do
-        get "//api/v1/metrics/feedex_comments/#{content_id}", params: { from: '2018-01-13', to: '2018-01-15' }
+        get "//api/v1/metrics/feedex_comments/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15' }
 
         json = JSON.parse(response.body)
 

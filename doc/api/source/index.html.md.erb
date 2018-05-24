@@ -57,53 +57,12 @@ Contact us through #govuk-developers on [GOV.UK Slack][].
 
 Contact the GOV.UK Content Performance API team through [Zendesk][].
 
-### Find out Content IDs
+### Query the API
 
-To query the API, you need to know the content ID for the piece of content you are interested in.
+To query the API, you need to pass the base path (the part after 'www.gov.uk')
+to the content performance API for the piece of content you are interested in.
 
-You can find out the content ID for GOV.UK pages using the [GOV.UK Content API][].
-
-For example, for https://www.gov.uk/vat-rates, you can query the Content API using the following code:
-
-```shell
-curl https://www.gov.uk/api/content/vat-rates | python -m json.tool # Pretty print JSON
-```
-
-```json
-{
-  "analytics_identifier": null,
-  "base_path": "/vat-rates",
-  "content_id": "f838c22a-b2aa-49be-bd95-153f593293a3",
-  "content_purpose_document_supertype": "guidance",
-  "content_purpose_supergroup": "guidance_and_regulation",
-  "content_purpose_subgroup": "guidance",
-  "document_type": "answer",
-  "email_document_supertype": "other",
-  "first_published_at": "2011-09-12T15:43:03.000+00:00",
-  "government_document_supertype": "other",
-  "locale": "en",
-  "navigation_document_supertype": "guidance",
-  "need_ids": [],
-  "phase": "live",
-  "public_updated_at": "2014-12-12T14:55:23.000+00:00",
-  "publishing_app": "publisher",
-  "publishing_scheduled_at": null,
-  "rendering_app": "government-frontend",
-  "scheduled_publishing_delay_seconds": null,
-  "schema_name": "answer",
-  "search_user_need_document_supertype": "core",
-  "title": "VAT rates",
-  "updated_at": "2018-03-26T16:21:14.213Z",
-  "user_journey_document_supertype": "thing",
-  "withdrawn_notice": {},
-  "publishing_request_id": "3592-1504179295.816-10.3.3.1-410",
-  "links": {...},
-  "description": "Current VAT rates - standard 20% and rates for reduced rate and zero-rated items",
-  "details": {...}
-}
-```
-
-Pass the content_id value to the content performance API.
+For example, for https://www.gov.uk/vat-rates, the base_path will be "/vat-rates"
 
 ## Getting started
 
@@ -143,12 +102,12 @@ curl -H 'Authorization: Bearer your-token-here' https://content-performance-mana
 
 ### Get metrics data for a single piece of content
 
-You can use the `/metrics/[metric-id]/[content-id]/` endpoint to get the value of any metric; for example, the number of page views.
+You can use the `/metrics/[metric-id]/[base_path]/` endpoint to get the value of any metric; for example, the number of page views.
 
 To summarise the recorded data over a requested time frame:
 
 ```shell
-curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-28&to=2018-02-28&metric=pageviews
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-28&to=2018-02-28&metric=pageviews
 ```
 
 The `from` and `to` query parameters specify the date range to query.
@@ -156,7 +115,7 @@ The `from` and `to` query parameters specify the date range to query.
 To get data points for each day in the requested time frame:
 
 ```shell
-curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/time-series/f838c22a-b2aa-49be-bd95-153f593293a3?from=2018-02-28&to=2018-02-28&metric=pageviews
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/time-series/vat-rates?from=2018-02-28&to=2018-02-28&metric=pageviews
 ```
 
 ## API reference
