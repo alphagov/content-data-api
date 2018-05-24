@@ -162,7 +162,7 @@ paths:
       tags:
         - Aggregations
       parameters:
-        - name: 'base path'
+        - name: 'base_path'
           in: path
           required: true
           description: |
@@ -223,7 +223,7 @@ paths:
       tags:
         - Time series
       parameters:
-        - name: 'base path'
+        - name: 'base_path'
           in: path
           required: true
           description: |
