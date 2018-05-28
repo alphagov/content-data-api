@@ -55,7 +55,8 @@ private
 
   def handle_new_version(item)
     new_item = item.copy_to_new_version!(base_path: base_path, payload_version: payload_version)
-    Items::Jobs::ImportContentDetailsJob.perform_async(new_item.id, quality_metrics: true)
+
+    Items::Jobs::ImportContentDetailsJob.perform_async(new_item.id, current_date.day, current_date.month, current_date.year)
   end
 
   def handle_unpublish(item)
@@ -64,6 +65,10 @@ private
   end
 
   def handle_existing_version(item)
-    Items::Jobs::ImportContentDetailsJob.perform_async(item.id, quality_metrics: false)
+    Items::Jobs::ImportContentDetailsJob.perform_async(item.id, current_date.day, current_date.month, current_date.year)
+  end
+
+  def current_date
+    Time.zone.now.to_date
   end
 end

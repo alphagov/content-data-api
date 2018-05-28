@@ -5,8 +5,10 @@ RSpec.describe Items::PreloadItemsProcessor do
   include GdsApi::TestHelpers::PublishingApiV2
   subject { described_class }
   let(:fields) { %i[base_path content_id locale] }
+  let(:today) { Date.today }
 
   before :each do
+    Timecop.freeze(Date.today)
     publishing_api_get_editions(content_items, fields: fields, per_page: 50, states: ['published'])
     allow(Items::Jobs::ImportContentDetailsJob).to receive(:perform_async)
     subject.process
@@ -43,11 +45,11 @@ RSpec.describe Items::PreloadItemsProcessor do
 
     it 'creates a ImportItemJob for each item' do
       item = Dimensions::Item.find_by(content_id: 'xyz789')
-      expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item.id)
+      expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item.id, today.day, today.month, today.year)
 
 
       item2 = Dimensions::Item.find_by(content_id: 'abc123')
-      expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item2.id)
+      expect(Items::Jobs::ImportContentDetailsJob).to have_received(:perform_async).with(item2.id, today.day, today.month, today.year)
     end
   end
 

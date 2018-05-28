@@ -2,19 +2,34 @@ class SandboxController < ApplicationController
   include Concerns::ExportableToCSV
 
   def index
-    @metrics = Facts::Metric
-      .joins(:dimensions_item)
-      .by_locale('en')
-      .between(from, to)
-      .by_base_path(base_path)
-      .by_organisation_id(organisation)
-      .by_document_type(document_type)
-
     respond_to do |format|
       format.html do
+        @metrics = Reports::Series.new
+          .for_en
+          .between(from: from, to: to)
+          .by_base_path(base_path)
+          .by_organisation_id(organisation)
+                     .by_document_type(document_type)
+
+        @metrics =
+          if is_edition_metric?
+            @metrics.with_edition_metrics.run
+          else
+            @metrics.run
+          end
+
         @query_params = query_params
       end
+
       format.csv do
+        @metrics = Reports::Series.new
+          .for_en
+          .between(from: from, to: to)
+          .by_base_path(base_path)
+          .by_organisation_id(organisation)
+          .with_edition_metrics
+          .run
+
         export_to_csv enum: CSVExport.run(@metrics, Facts::Metric.csv_fields)
       end
     end
@@ -51,6 +66,10 @@ private
       :number_of_word_files, :passive_count, :profanities_count, :readability_score,
       :redundant_acronyms_count, :repeated_words_count, :sentence_count, :simplify_count,
       :spell_count, :string_length, :word_count, :entrances, :exits, :bounce_rate,
-      :avg_time_on_page, :document_type)
+      :avg_time_on_page, :document_type, :metric)
+  end
+
+  def is_edition_metric?
+    Metric.edition_metrics.any? { |metric| params[metric.name] == 'on' }
   end
 end

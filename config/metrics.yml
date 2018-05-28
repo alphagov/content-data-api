@@ -1,103 +1,100 @@
-default: &default
-  pageviews:
+daily:
+  - name: 'pageviews'
     description: "Number of pageviews"
-    source: Google Analytics
+    source: 'Google Analytics'
 
-  unique_pageviews:
+  - name: 'unique_pageviews'
     description: "Number of unique pageviews"
-    source: Google Analytics
+    source: 'Google Analytics'
 
-  feedex_comments:
+  - name: 'feedex_comments'
     description: "Number of reported content issues"
-    source: Feedback explorer
+    source: 'Feedback explorer'
 
-  number_of_pdfs:
+  - name: 'is_this_useful_no'
+    description: "Total number of people who did not find the page helpful"
+    source: 'Google Analytics'
+
+  - name: 'is_this_useful_yes'
+    description: "Total number of people who found the page helpful"
+    source: 'Google Analytics'
+
+  - name: 'number_of_internal_searches'
+    description: "Number of times a user searches for something else on GOV.UK from the page"
+    source: 'Google Analytics'
+
+  - name: 'entrances'
+    description: "Number of session that began with this page"
+    source: 'Google Analytics'
+
+  - name: 'exits'
+    description: "Number of session that ended with this page"
+    source: 'Google Analytics'
+
+  - name: 'bounce_rate'
+    description: "Number of sessions that started on this page and exited without viewing any others"
+    source: 'Google Analytics'
+
+  - name: 'avg_time_on_page'
+    description: "Amount of time users spend on this page on average"
+    source: 'Google Analytics'
+
+edition:
+  - name: 'number_of_pdfs'
     description: "Number of .pdf attachments"
-    source: Publishing API
+    source: 'Publishing API'
 
-  number_of_word_files:
+  - name: 'number_of_word_files'
     description: "Number of .doc attachments"
-    source: Publishing API
+    source: 'Publishing API'
 
-  readability_score:
+  - name: 'readability_score'
     description: "Flesch-Kincaid Reading Ease score"
 
-  contractions_count:
+  - name: 'contractions_count'
     description: "Count of improper apostrophe use in contractions."
-    source: retext
+    source: 'retext'
 
-  equality_count:
+  - name: 'equality_count'
     description: "Number of times potentially insensitive language is used"
-    source: retext
+    source: 'retext'
 
-  indefinite_article_count:
+  - name: 'indefinite_article_count'
     description: "Number of times the indefinite articles (a, an) are used incorrectly"
-    source: retext
+    source: 'retext'
 
-  passive_count:
+  - name: 'passive_count'
     description: "Number of times the passive voice is used"
-    source: retext
+    source: 'retext'
 
-  profanities_count:
+  - name: 'profanities_count'
     description: "Number of times profanities are used"
-    source: retext
+    source: 'retext'
 
-  redundant_acronyms_count:
+  - name: 'redundant_acronyms_count'
     description: "Number of times redundant acronyms are used (like ATM machine instead of ATM)"
-    source: retext
+    source: 'retext'
 
-  repeated_words_count:
+  - name: 'repeated_words_count'
     description: 'Number of times a word is repeated (like "for for")'
-    source: retext
+    source: 'retext'
 
-  simplify_count:
+  - name: 'simplify_count'
     description: "Count of complicated words that have a simpler alternative"
+    source: 'retext'
 
-  spell_count:
+  - name: 'spell_count'
     description: "Number of spelling errors"
+    source: 'retext'
 
-  string_length:
+  - name: 'string_length'
     description: "Total number of characters used in the text"
+    source: 'custom'
 
-  sentence_count:
+  - name: 'sentence_count'
     description: "Total number of sentences detected in the text"
+    source: 'custom'
 
-  word_count:
+  - name: 'word_count'
     description: "Total number of words detected in the text"
-
-  is_this_useful_no:
-    description: "Total number of people who did not find the page helpful"
-    source: Google Analytics
-
-  is_this_useful_yes:
-    description: "Total number of people who found the page helpful"
-    source: Google Analytics
-
-  number_of_internal_searches:
-    description: "Number of times a user searches for something else on GOV.UK from the page"
-    source: Google Analytics
-
-  entrances:
-    description: "Number of session that began with this page"
-    source: Google Analytics
-
-  exits:
-    description: "Number of session that ended with this page"
-    source: Google Analytics
-
-  bounce_rate:
-    description: "Number of sessions that started on this page and exited without viewing any others"
-    source: Google Analytics
-
-  avg_time_on_page:
-    description: "Amount of time users spend on this page on average"
-    source: Google Analytics
-
-development:
-  <<: *default
-
-test:
-  <<: *default
-
-production:
-  <<: *default
+    source: 'custom'

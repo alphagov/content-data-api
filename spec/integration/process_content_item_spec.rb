@@ -15,6 +15,7 @@ RSpec.describe 'Process content item' do
   let(:item_content) { 'This is the content.' }
   let(:content_hash) { 'bfce49ef213b4f9f82a6a46caae2d81a4bcda1f2' }
   let(:locale) { 'en' }
+  let(:today) { Timecop.freeze(Date.new(2018, 5, 10)) }
 
   let!(:item) {
     create :dimensions_item,
@@ -23,11 +24,11 @@ RSpec.describe 'Process content item' do
       content_hash: 'OldContentHash'
   }
 
-  it 'stores metadata in quality metrics for a content item' do
+  it 'stores metadata for a content item' do
     stub_item_metadata_in_content_store
     stub_quality_metrics_in_heroku
 
-    Items::Importers::ContentDetails.run(item.id)
+    Items::Importers::ContentDetails.run(item.id, today.day, today.month, today.year)
 
     expect(item.reload).to have_attributes(
       content_id: content_id,
@@ -39,45 +40,23 @@ RSpec.describe 'Process content item' do
       content_purpose_subgroup: 'content_purpose_subgroup1',
       first_published_at: Time.new(2018, 2, 19),
       public_updated_at: Time.new(2018, 2, 19),
-      number_of_pdfs: 2,
-      number_of_word_files: 2,
-    )
-
-    expect(item).to have_attributes(
-      readability_score: 97,
-      string_length: 20,
-      sentence_count: 1,
-      word_count: 4,
-      contractions_count: 2,
-      equality_count: 3,
-      indefinite_article_count: 4,
-      passive_count: 5,
-      profanities_count: 6,
-      redundant_acronyms_count: 7,
-      repeated_words_count: 8,
-      simplify_count: 9,
-      spell_count: 10,
-    )
-
-    expect(item).to have_attributes(
       primary_organisation_title: 'Home Office',
       primary_organisation_content_id: 'cont-id-1',
-      primary_organisation_withdrawn: false
-    )
-
-    expect(item).to have_attributes(
-      content_hash: content_hash
+      primary_organisation_withdrawn: false,
+      content_hash: content_hash,
     )
   end
 
-  context 'quality metrics in facts edition' do
+  context 'content metrics in facts edition' do
     it 'stores quality metrics in the facts edition' do
       stub_item_metadata_in_content_store
       stub_quality_metrics_in_heroku
-      Items::Importers::ContentDetails.run(item.id)
+      Items::Importers::ContentDetails.run(item.id, today.day, today.month, today.year)
       facts_edition = Facts::Edition.find_by(dimensions_item: item)
 
       expect(facts_edition).to have_attributes(
+        number_of_pdfs: 2,
+        number_of_word_files: 2,
         readability_score: 97,
         string_length: 20,
         sentence_count: 1,
