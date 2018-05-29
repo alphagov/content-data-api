@@ -9,6 +9,10 @@ This repository contains:
 
 Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback), and [readability indicators](https://github.com/alphagov/govuk-content-quality-metrics).
 
+![Diagram of fact and dimension tables](doc/schema.png)
+
+Regenerate this diagram using `bundle exec erd --filetype=png --connected --title 'Schema' --filename doc/schema`.
+
 ## Nomenclature
 
 - **Data warehouse**: the database where we store all the metrics.
