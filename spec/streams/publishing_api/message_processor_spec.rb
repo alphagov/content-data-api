@@ -1,15 +1,8 @@
-require 'sidekiq/testing'
 require 'govuk_message_queue_consumer/test_helpers'
 require 'gds_api/test_helpers/content_store'
 
 RSpec.describe PublishingAPI::MessageProcessor do
   include GdsApi::TestHelpers::ContentStore
-
-  around do |example|
-    Sidekiq::Testing.inline! do
-      example.run
-    end
-  end
 
   let(:subject) { described_class }
 
