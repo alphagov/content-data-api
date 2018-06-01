@@ -1,4 +1,4 @@
-class PublishingAPI::PublishingApiMessageProcessor
+class PublishingAPI::MessageProcessor
   def initialize(message)
     @content_id = message.payload.fetch('content_id')
     @base_path = message.payload.fetch('base_path')

@@ -30,7 +30,7 @@ RSpec.describe 'PublishingAPI events' do
 
   context 'having received a new version yesterday' do
     before do
-      Timecop.freeze(Date.yesterday) { PublishingAPI::PublishingApiConsumer.new.process(message) }
+      Timecop.freeze(Date.yesterday) { PublishingAPI::Consumer.new.process(message) }
     end
 
     it 'the master process will still try to populate it today' do
@@ -45,8 +45,8 @@ RSpec.describe 'PublishingAPI events' do
   context 'having processed two versions yesterday' do
     before do
       Timecop.freeze(Date.yesterday) do
-        PublishingAPI::PublishingApiConsumer.new.process(message)
-        PublishingAPI::PublishingApiConsumer.new.process(another_message)
+        PublishingAPI::Consumer.new.process(message)
+        PublishingAPI::Consumer.new.process(another_message)
       end
     end
 
