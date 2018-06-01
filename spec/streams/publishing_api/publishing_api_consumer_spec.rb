@@ -1,10 +1,10 @@
 require 'rails_helper'
 require 'sidekiq/testing'
-require 'publishing_api_consumer'
+require 'publishing_api/publishing_api_consumer'
 require 'govuk_message_queue_consumer/test_helpers'
 require 'gds_api/test_helpers/content_store'
 
-RSpec.describe PublishingApiConsumer do
+RSpec.describe PublishingAPI::PublishingApiConsumer do
   include GdsApi::TestHelpers::ContentStore
 
   around do |example|

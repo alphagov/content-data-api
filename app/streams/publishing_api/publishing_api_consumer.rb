@@ -1,6 +1,6 @@
-class PublishingApiConsumer
+class PublishingAPI::PublishingApiConsumer
   def process(message)
-    PublishingApiMessageProcessor.new(message).process
+    PublishingAPI::PublishingApiMessageProcessor.new(message).process
     message.ack
   rescue StandardError => e
     GovukError.notify(e)
