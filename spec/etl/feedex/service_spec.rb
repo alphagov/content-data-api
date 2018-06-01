@@ -1,4 +1,3 @@
-require 'gds_api/support_api'
 
 RSpec.describe Feedex::Service do
   let(:support_api) { double('support_api') }

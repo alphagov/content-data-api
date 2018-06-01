@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 RSpec.describe 'rake publishing_api:*', type: task do
   let(:consumer) { double('message_consumer', run: nil) }

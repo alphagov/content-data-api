@@ -1,4 +1,3 @@
-require "rails_helper"
 require "gds-api-adapters"
 
 RSpec.describe GA::InternalSearchProcessor do

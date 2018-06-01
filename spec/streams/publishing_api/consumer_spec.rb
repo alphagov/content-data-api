@@ -1,6 +1,4 @@
-require 'rails_helper'
 require 'sidekiq/testing'
-require 'publishing_api/consumer'
 require 'govuk_message_queue_consumer/test_helpers'
 require 'gds_api/test_helpers/content_store'
 

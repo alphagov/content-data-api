@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 RSpec.describe 'rake etl:master', type: task do
   it "calls Master::MasterProcessor.process" do

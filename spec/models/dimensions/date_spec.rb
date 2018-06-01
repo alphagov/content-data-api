@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 RSpec.describe Dimensions::Date, type: :model do
   let(:date) { ::Date.new(2017, 12, 21) }

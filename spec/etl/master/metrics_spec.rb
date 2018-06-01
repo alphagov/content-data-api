@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 RSpec.describe Master::MetricsProcessor do
   let(:date) { Date.new(2018, 3, 15) }
