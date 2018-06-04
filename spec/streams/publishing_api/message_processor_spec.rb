@@ -32,7 +32,9 @@ RSpec.describe PublishingAPI::MessageProcessor do
         'locale' => 'de',
         'payload_version' => 2,
         'title' => updated_title,
-        'document_type' => updated_document_type
+        'document_type' => updated_document_type,
+        "expanded_links" => {},
+        "details" => {}
       }
     end
     let!(:message) do
@@ -99,7 +101,8 @@ RSpec.describe PublishingAPI::MessageProcessor do
         'payload_version' => 2,
         'title' => latest_item_en.title,
         'document_type' => latest_item_en.document_type,
-        'expanded_links' => links
+        'expanded_links' => links,
+        'details' => {}
       }
     end
 
@@ -149,7 +152,9 @@ RSpec.describe PublishingAPI::MessageProcessor do
         'base_path' => latest_item_en.base_path,
         'content_id' => latest_item_en.content_id,
         'locale' => 'en',
-        'payload_version' => 2
+        'payload_version' => 2,
+        'details' => {},
+        'expanded_links' => {}
       }
     end
     let!(:message) do
@@ -181,7 +186,9 @@ RSpec.describe PublishingAPI::MessageProcessor do
         'base_path' => '/path/to/new/content',
         'content_id' => 'does-not-exist-yet',
         'locale' => 'en',
-        'payload_version' => 1
+        'payload_version' => 1,
+        'details' => {},
+        'expanded_links' => {}
       }
     end
     let!(:message) do
@@ -210,7 +217,9 @@ RSpec.describe PublishingAPI::MessageProcessor do
         payload: {
           'base_path' => '/path/to/new/content',
           'content_id' => 'the_content_id',
-          'payload_version' => 1
+          'payload_version' => 1,
+          'details' => {},
+          'expanded_links' => {}
         },
         delivery_info: double('del_info', routing_key: 'news_story.major'))
     end
@@ -290,7 +299,9 @@ RSpec.describe PublishingAPI::MessageProcessor do
         'base_path' => base_path,
         'content_id' => content_id,
         'locale' => locale,
-        'payload_version' => payload_version
+        'payload_version' => payload_version,
+        'details' => {},
+        'expanded_links' => {}
       },
       delivery_info: double('del_info', routing_key: 'news_story.major'))
   end

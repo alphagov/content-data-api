@@ -13,7 +13,9 @@ RSpec.describe PublishingAPI::Consumer do
         payload: {
           'base_path' => '/path/to/new/content',
           'content_id' => 'the_content_id',
-          'payload_version' => 1
+          'payload_version' => 1,
+          'expanded_links' => {},
+          'details' => {}
         },
         delivery_info: double('del_info', routing_key: 'news_story.major'))
     end
