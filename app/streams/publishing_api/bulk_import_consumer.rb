@@ -1,4 +1,4 @@
-class PublishingApiBulkImportConsumer
+class PublishingAPI::BulkImportConsumer
   def process(message)
     # TODO: this is just a stubbed consumer to stop Icinga alerts
     # PublishingApiMessageProcessor.new(message).process

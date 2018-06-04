@@ -1,4 +1,4 @@
-class PublishingApiMessageProcessor
+class PublishingAPI::MessageProcessor
   def initialize(message)
     @content_id = message.payload.fetch('content_id')
     @base_path = message.payload.fetch('base_path')
@@ -56,7 +56,7 @@ private
   def handle_new_version(item)
     new_item = item.copy_to_new_version!(base_path: base_path, payload_version: payload_version)
 
-    Items::Jobs::ImportContentDetailsJob.perform_async(new_item.id, current_date.day, current_date.month, current_date.year)
+    Items::Importers::ContentDetails.run(new_item.id, current_date.day, current_date.month, current_date.year)
   end
 
   def handle_unpublish(item)
@@ -65,7 +65,7 @@ private
   end
 
   def handle_existing_version(item)
-    Items::Jobs::ImportContentDetailsJob.perform_async(item.id, current_date.day, current_date.month, current_date.year)
+    Items::Importers::ContentDetails.run(item.id, current_date.day, current_date.month, current_date.year)
   end
 
   def current_date

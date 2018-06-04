@@ -1,4 +1,3 @@
-require 'rails_helper'
 require 'securerandom'
 
 RSpec.describe '/api/v1/metrics/', type: :request do

@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 RSpec.describe '/api/v1/healthcheck/', type: :request do
   it "is not cacheable" do

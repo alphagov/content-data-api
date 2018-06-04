@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 RSpec.describe Reports::Series do
   context "all" do

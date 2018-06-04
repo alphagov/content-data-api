@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 RSpec.describe Dimensions::Item, type: :model do
   let(:now) { Time.new(2018, 2, 21, 12, 31, 2) }

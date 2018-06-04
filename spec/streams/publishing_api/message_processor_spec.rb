@@ -1,21 +1,10 @@
-require 'rails_helper'
-require 'sidekiq/testing'
-require 'publishing_api_consumer'
 require 'govuk_message_queue_consumer/test_helpers'
 require 'gds_api/test_helpers/content_store'
 
-RSpec.describe PublishingApiConsumer do
+RSpec.describe PublishingAPI::MessageProcessor do
   include GdsApi::TestHelpers::ContentStore
 
-  around do |example|
-    Sidekiq::Testing.inline! do
-      example.run
-    end
-  end
-
-  let(:subject) { described_class.new }
-
-  it_behaves_like 'a message queue processor'
+  let(:subject) { described_class }
 
   context 'when the Dimensions::Item already exists - all events but unpublish' do
     let!(:latest_item_en) do
@@ -53,8 +42,6 @@ RSpec.describe PublishingApiConsumer do
     end
 
     before :each do
-      allow(message).to receive(:ack)
-
       stub_content_store_response(
         content_id: latest_item_de.content_id,
         base_path: updated_base_path,
@@ -65,7 +52,7 @@ RSpec.describe PublishingApiConsumer do
 
       stub_quality_metrics_response("News about things")
 
-      subject.process(message)
+      subject.new(message).process
     end
 
     it 'marks the existing item as not-latest' do
@@ -80,9 +67,6 @@ RSpec.describe PublishingApiConsumer do
       expect(new_item.base_path).to eq(updated_base_path)
     end
 
-    it "ack's the message" do
-      expect(message).to have_received(:ack)
-    end
 
     it "populates metadata for the new item" do
       new_item = Dimensions::Item.find_by(content_id: latest_item_de.content_id, locale: 'de', latest: true)
@@ -126,8 +110,6 @@ RSpec.describe PublishingApiConsumer do
     end
 
     before :each do
-      allow(message).to receive(:ack)
-
       stub_content_store_response(
         content_id: latest_item_en.content_id,
         base_path: latest_item_en.base_path,
@@ -139,15 +121,11 @@ RSpec.describe PublishingApiConsumer do
 
       stub_quality_metrics_response("News about things")
 
-      subject.process(message)
+      subject.new(message).process
     end
 
     it 'keeps the latest item as the latest item' do
       expect(latest_item_en.reload.latest).to be true
-    end
-
-    it "ack's the message" do
-      expect(message).to have_received(:ack)
     end
 
     it "updates the latest item" do
@@ -158,7 +136,6 @@ RSpec.describe PublishingApiConsumer do
       )
     end
   end
-
 
   context 'on an unpublish event' do
     let!(:latest_item_en) do
@@ -182,8 +159,7 @@ RSpec.describe PublishingApiConsumer do
     end
 
     before :each do
-      allow(message).to receive(:ack)
-      subject.process(message)
+      subject.new(message).process
     end
 
     it 'creates a new gone item with the same locale and content_id' do
@@ -196,10 +172,6 @@ RSpec.describe PublishingApiConsumer do
     it 'updates the latest flag for the previous item' do
       expect(latest_item_en.reload.latest).to be false
       expect(latest_item_fr.reload.latest).to be true
-    end
-
-    it "ack's the message" do
-      expect(message).to have_received(:ack)
     end
   end
 
@@ -219,8 +191,7 @@ RSpec.describe PublishingApiConsumer do
     end
 
     before :each do
-      allow(message).to receive(:ack)
-      subject.process(message)
+      subject.new(message).process
     end
 
     it 'creates a new item with the correct base path' do
@@ -230,10 +201,6 @@ RSpec.describe PublishingApiConsumer do
         base_path: payload['base_path'],
         latest: true,
       )
-    end
-
-    it "ack's the message" do
-      expect(message).to have_received(:ack)
     end
   end
 
@@ -249,46 +216,10 @@ RSpec.describe PublishingApiConsumer do
     end
 
     it "creates a new item with the 'en' locale" do
-      allow(message).to receive(:ack)
-      subject.process(message)
+      subject.new(message).process
 
       item = Dimensions::Item.find_by(content_id: 'the_content_id')
       expect(item).to have_attributes(locale: 'en')
-    end
-
-    it "ack's the message" do
-      expect(message).to receive(:ack)
-
-      subject.process(message)
-    end
-  end
-
-  context "when an error happens" do
-    let!(:message) do
-      double('message',
-        payload: {
-          'base_path' => '/path/to/new/content',
-          'content_id' => 'the_content_id',
-          'payload_version' => 1
-        },
-        delivery_info: double('del_info', routing_key: 'news_story.major'))
-    end
-
-    before do
-      allow(message).to receive(:discard)
-      expect(Dimensions::Item).to receive(:by_natural_key).and_raise(StandardError.new("An error"))
-    end
-
-    it "we log the error" do
-      expect(GovukError).to receive(:notify).with(instance_of(StandardError))
-
-      expect { subject.process(message) }.to_not raise_error
-    end
-
-    it "we discard the message" do
-      expect(message).to receive(:discard)
-
-      subject.process(message)
     end
   end
 
@@ -300,16 +231,16 @@ RSpec.describe PublishingApiConsumer do
     let(:another_message) { build_publishing_api_message(base_path, content_id, locale, payload_version: 2) }
 
     it 'ignores repeated messages' do
-      subject.process(message)
-      subject.process(message)
+      subject.new(message).process
+      subject.new(message).process
 
       expect(Dimensions::Item.count).to eq(1)
       expect(Dimensions::Item.first.publishing_api_payload_version).to eq(1)
     end
 
     it 'ignores messages with old payload versions' do
-      subject.process(another_message)
-      subject.process(message)
+      subject.new(another_message).process
+      subject.new(message).process
 
       expect(Dimensions::Item.count).to eq(1)
       expect(Dimensions::Item.first.publishing_api_payload_version).to eq(2)
@@ -354,7 +285,7 @@ RSpec.describe PublishingApiConsumer do
   end
 
   def build_publishing_api_message(base_path, content_id, locale, payload_version: 1)
-    message = double('message',
+    double('message',
       payload: {
         'base_path' => base_path,
         'content_id' => content_id,
@@ -362,8 +293,5 @@ RSpec.describe PublishingApiConsumer do
         'payload_version' => payload_version
       },
       delivery_info: double('del_info', routing_key: 'news_story.major'))
-    allow(message).to receive(:ack)
-
-    message
   end
 end

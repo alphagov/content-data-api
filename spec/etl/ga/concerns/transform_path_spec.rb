@@ -1,5 +1,3 @@
-require "rails_helper"
-
 RSpec.describe GA::Concerns::TransformPath do
   class Dummy
     include GA::Concerns::TransformPath

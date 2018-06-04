@@ -1,4 +1,5 @@
 require 'gds_api/test_helpers/content_store'
+
 module Performance
   RSpec.describe Item::Metadata::Parsers::NumberOfPdfs do
     include GdsApi::TestHelpers::ContentStore
