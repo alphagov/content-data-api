@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 20180522103512) do
     t.string "content_purpose_supergroup"
     t.string "content_purpose_subgroup"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
+    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
