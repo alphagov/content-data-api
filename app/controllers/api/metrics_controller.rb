@@ -19,11 +19,11 @@ class Api::MetricsController < Api::BaseController
 private
 
   def query_series
-    series = Facts::Metric
-      .between(from, to)
-      .by_base_path(format_base_path_param)
-      .by_locale('en')
-
+    series = Reports::Series.new
+               .for_en
+               .between(from: from, to: to)
+               .by_base_path(format_base_path_param)
+               .run
     if Metric.is_edition_metric?(metric)
       series
         .with_edition_metrics
