@@ -1,4 +1,3 @@
-
 RSpec.describe Reports::Series do
   context "all" do
     it "returns a series of all metrics" do
@@ -110,6 +109,24 @@ RSpec.describe Reports::Series do
       metric = create :metric
 
       expect(described_class.new.by_base_path('').run).to match_array([metric])
+    end
+  end
+
+  describe '#content_items' do
+    it 'return the content items included in the report' do
+      day0 = create(:dimensions_date, date: Date.new(2018, 1, 12))
+      day1 = create(:dimensions_date, date: Date.new(2018, 1, 13))
+      day2 = create(:dimensions_date, date: Date.new(2018, 1, 14))
+      item1 = create(:dimensions_item, base_path: '/path1')
+      item2 = create(:dimensions_item, base_path: '/path2')
+
+      create(:metric, dimensions_item: item1, dimensions_date: day0)
+      create(:metric, dimensions_item: item1, dimensions_date: day1)
+      create(:metric, dimensions_item: item1, dimensions_date: day2)
+      create(:metric, dimensions_item: item2, dimensions_date: day1)
+      create(:metric, dimensions_item: item2, dimensions_date: day2)
+
+      expect(described_class.new.content_items).to match_array([item1, item2])
     end
   end
 end
