@@ -72,7 +72,9 @@ RSpec.describe 'PublishingAPI events' do
         'base_path' => base_path,
         'content_id' => content_id,
         'locale' => locale,
-        'payload_version' => payload_version
+        'payload_version' => payload_version,
+        'expanded_links' => {},
+        'details' => {}
       },
       delivery_info: double('del_info', routing_key: 'news_story.major'))
     allow(message).to receive(:ack)
