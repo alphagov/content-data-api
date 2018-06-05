@@ -8,7 +8,7 @@
     <%= line_chart(@metrics.group('facts_metrics.dimensions_date_id').count, height: '150px') %>
   </div>
 
-  <%= render 'section', metric: params[:metric1] if params[:metric1]%>
-  <%= render 'section', metric: params[:metric2] if params[:metric2] %>
-  <%= render 'section', metric: params[:metric3] if params[:metric3] %>
+  <%= render 'section', metric: params[:metric1] unless params[:metric1].blank? %>
+  <%= render 'section', metric: params[:metric2] unless params[:metric2].blank? %>
+  <%= render 'section', metric: params[:metric3] unless params[:metric3].blank? %>
 </div>
