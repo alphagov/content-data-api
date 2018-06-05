@@ -2,33 +2,19 @@ class SandboxController < ApplicationController
   include Concerns::ExportableToCSV
 
   def index
+    report = build_series_report
+
     respond_to do |format|
       format.html do
-        @metrics = Reports::Series.new
-          .for_en
-          .between(from: from, to: to)
-          .by_base_path(base_path)
-          .by_organisation_id(organisation)
-          .by_document_type(document_type)
+        report = report.with_edition_metrics if is_edition_metric?
 
-        @metrics =
-          if is_edition_metric?
-            @metrics.with_edition_metrics.run
-          else
-            @metrics.run
-          end
-
+        @metrics = report.run
+        @content_items = report.content_items
         @query_params = query_params
       end
 
       format.csv do
-        @metrics = Reports::Series.new
-          .for_en
-          .between(from: from, to: to)
-          .by_base_path(base_path)
-          .by_organisation_id(organisation)
-          .with_edition_metrics
-          .run
+        @metrics = report.with_edition_metrics.run
 
         export_to_csv enum: CSVExport.run(@metrics, Facts::Metric.csv_fields)
       end
@@ -36,6 +22,15 @@ class SandboxController < ApplicationController
   end
 
 private
+
+  def build_series_report
+    Reports::Series.new
+      .for_en
+      .between(from: from, to: to)
+      .by_base_path(base_path)
+      .by_organisation_id(organisation)
+      .by_document_type(document_type)
+  end
 
   def from
     params[:from] ||= 5.days.ago.to_date

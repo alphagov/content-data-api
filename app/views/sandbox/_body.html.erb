@@ -3,7 +3,7 @@
     <h3>Number of Content Items</h3>
     <div class="chart-stats">
       <div class="total">Total
-        = <%= number_with_delimiter (@metrics.count('distinct dimensions_items.content_id') || 0) %></div>
+        = <%= number_with_delimiter (@content_items.count('distinct content_id') || 0) %></div>
     </div>
     <%= line_chart(@metrics.group('facts_metrics.dimensions_date_id').count, height: '150px') %>
   </div>
