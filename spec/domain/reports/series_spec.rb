@@ -79,6 +79,12 @@ RSpec.describe Reports::Series do
 
       expect(series).to match_array([metric1, metric2])
     end
+
+    it 'ignores parameters when blank' do
+      metric = create :metric
+
+      expect(described_class.new.by_organisation_id('').run).to match_array([metric])
+    end
   end
 
   context "by_base_path" do
@@ -98,6 +104,12 @@ RSpec.describe Reports::Series do
       results = described_class.new.by_base_path('/path1').run
 
       expect(results).to match_array([metric1, metric2, metric3])
+    end
+
+    it 'ignores parameters when blank' do
+      metric = create :metric
+
+      expect(described_class.new.by_base_path('').run).to match_array([metric])
     end
   end
 end

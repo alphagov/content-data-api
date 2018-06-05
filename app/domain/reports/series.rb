@@ -35,28 +35,20 @@ class Reports::Series
   end
 
   def run
-    metrics = Facts::Metric.by_locale('en')
+    items = Dimensions::Item.all
+    metrics = Facts::Metric.all
+    dates = Dimensions::Date.all
 
-    if @from && @to
-      metrics = metrics.between(@from, @to)
-    end
+    dates = dates.between(@from, @to) if @from && @to
+    metrics = metrics.with_edition_metrics if @with_edition_metrics
 
-    if @org_id
-      metrics = metrics.by_organisation_id(@org_id)
-    end
+    items = items.by_locale('en')
+    items = items.by_organisation_id(@org_id) unless @org_id.blank?
+    items = items.by_base_path(@base_path) unless @base_path.blank?
+    items = items.by_document_type(@document_type) unless @document_type.blank?
 
-    if @with_edition_metrics
-      metrics = metrics.with_edition_metrics
-    end
-
-    if @base_path
-      metrics = metrics.by_base_path(@base_path)
-    end
-
-    if @document_type
-      metrics = metrics.by_document_type(@document_type)
-    end
-
-    metrics.joins(:dimensions_item)
+    metrics
+      .joins(:dimensions_item).merge(items)
+      .joins(:dimensions_date).merge(dates)
   end
 end
