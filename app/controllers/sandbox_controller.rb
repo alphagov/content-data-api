@@ -17,7 +17,7 @@ class SandboxController < ApplicationController
           .between(from: from, to: to)
           .by_base_path(base_path)
           .by_organisation_id(organisation)
-                     .by_document_type(document_type)
+          .by_document_type(document_type)
 
         @metrics =
           if is_edition_metric?
