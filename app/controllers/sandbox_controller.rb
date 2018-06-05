@@ -2,8 +2,6 @@ class SandboxController < ApplicationController
   include Concerns::ExportableToCSV
 
   def index
-    @all_metrics = Metric.find_all.map(&:name)
-
     @selected_metrics = [
       params[:metric1],
       params[:metric2],

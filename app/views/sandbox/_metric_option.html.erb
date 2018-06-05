@@ -1,5 +1,5 @@
 <div class="form-group">
   <%= label_tag metric.to_s do %>
-      <%= select_tag metric.to_s, options_for_select(@all_metrics, :include_blank => 'name of your blank prompt') %>
+      <%= select_tag metric.to_s, options_for_select(Metric.find_all.map(&:name), :include_blank => 'name of your blank prompt') %>
   <% end %>
 </div>
