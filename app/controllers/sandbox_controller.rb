@@ -2,12 +2,6 @@ class SandboxController < ApplicationController
   include Concerns::ExportableToCSV
 
   def index
-    @selected_metrics = [
-      params[:metric1],
-      params[:metric2],
-      params[:metric3]
-    ]
-
     respond_to do |format|
       format.html do
         @metrics = Reports::Series.new
@@ -69,6 +63,7 @@ private
   end
 
   def is_edition_metric?
-    @selected_metrics.any? { |metric| Metric.is_edition_metric?(metric) }
+    selected_metrics = [params[:metric1], params[:metric2], params[:metric3]]
+    selected_metrics.any? { |metric| Metric.is_edition_metric?(metric) }
   end
 end
