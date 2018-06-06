@@ -25,11 +25,11 @@ class PublishingAPI::ContentItem
       content_purpose_supergroup: payload['content_purpose_supergroup'],
       details: payload.fetch('details'),
       document_type: payload['document_type'],
-      first_published_at: payload['first_published_at'],
+      first_published_at: Time.parse(payload['first_published_at']),
       links: payload.fetch('expanded_links'),
       locale: payload['locale'] || 'en',
       payload_version: payload.fetch('payload_version'),
-      public_updated_at: payload['public_updated_at'],
+      public_updated_at: Time.parse(payload['public_updated_at']),
       title: payload['title']
     )
   end
