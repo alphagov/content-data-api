@@ -14,9 +14,10 @@ class Items::Importers::QualityMetrics
 
   def run
     item = Dimensions::Item.find(@item_id)
-
-    quality_metrics = content_quality_service.run(item.get_content)
-    item.facts_edition.update(**quality_metrics)
+    if item.get_content
+      quality_metrics = content_quality_service.run(item.get_content)
+      item.facts_edition.update(**quality_metrics)
+    end
   rescue InvalidSchemaError
     do_nothing
   end
