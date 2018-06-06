@@ -1,6 +1,5 @@
 <div class="form-group">
   <%= label_tag do %>
-      <%= check_box_tag metric.to_s, params[metric], params[metric].present? %>
-      <%= metric.to_s.titleize %>
+      <%= select_tag option_name.to_s, options_for_select(Metric.find_all.map(&:name), params[option_name]), :include_blank => 'Select metric', class: 'form-control' %>
   <% end %>
 </div>

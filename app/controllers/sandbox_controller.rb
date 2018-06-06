@@ -2,33 +2,19 @@ class SandboxController < ApplicationController
   include Concerns::ExportableToCSV
 
   def index
+    report = build_series_report
+
     respond_to do |format|
       format.html do
-        @metrics = Reports::Series.new
-          .for_en
-          .between(from: from, to: to)
-          .by_base_path(base_path)
-          .by_organisation_id(organisation)
-                     .by_document_type(document_type)
+        report = report.with_edition_metrics if is_edition_metric?
 
-        @metrics =
-          if is_edition_metric?
-            @metrics.with_edition_metrics.run
-          else
-            @metrics.run
-          end
-
+        @metrics = report.run
+        @content_items = report.content_items
         @query_params = query_params
       end
 
       format.csv do
-        @metrics = Reports::Series.new
-          .for_en
-          .between(from: from, to: to)
-          .by_base_path(base_path)
-          .by_organisation_id(organisation)
-          .with_edition_metrics
-          .run
+        @metrics = report.with_edition_metrics.run
 
         export_to_csv enum: CSVExport.run(@metrics, Facts::Metric.csv_fields)
       end
@@ -36,6 +22,15 @@ class SandboxController < ApplicationController
   end
 
 private
+
+  def build_series_report
+    Reports::Series.new
+      .for_en
+      .between(from: from, to: to)
+      .by_base_path(base_path)
+      .by_organisation_id(organisation)
+      .by_document_type(document_type)
+  end
 
   def from
     params[:from] ||= 5.days.ago.to_date
@@ -58,18 +53,12 @@ private
   end
 
   def query_params
-    params.permit(:from, :to, :base_path, :utf8,
-      :total_items, :pageviews, :unique_pageviews, :feedex_comments,
-      :number_of_pdfs, :number_of_word_files, :filter, :organisation,
-      :is_this_useful_yes, :is_this_useful_no, :number_of_internal_searches,
-      :contractions_count, :equality_count, :indefinite_article_count, :number_of_pdfs,
-      :number_of_word_files, :passive_count, :profanities_count, :readability_score,
-      :redundant_acronyms_count, :repeated_words_count, :sentence_count, :simplify_count,
-      :spell_count, :string_length, :word_count, :entrances, :exits, :bounce_rate,
-      :avg_time_on_page, :document_type, :metric)
+    params.permit(:from, :to, :base_path, :utf8, :organisation, :filter,
+      :metric1, :metric2, :metric3, :metric, :document_type)
   end
 
   def is_edition_metric?
-    Metric.edition_metrics.any? { |metric| params[metric.name] == 'on' }
+    selected_metrics = [params[:metric1], params[:metric2], params[:metric3]]
+    selected_metrics.any? { |metric| Metric.is_edition_metric?(metric) }
   end
 end

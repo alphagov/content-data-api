@@ -7,42 +7,6 @@ class Facts::Metric < ApplicationRecord
   validates :dimensions_date, presence: true
   validates :dimensions_item, presence: true
 
-  scope :between, ->(from, to) do
-    joins(:dimensions_date)
-      .where('dimensions_dates.date BETWEEN ? AND ?', from, to)
-  end
-
-  scope :by_base_path, ->(base_path) do
-    if base_path.present?
-      joins(:dimensions_item)
-        .where('dimensions_items.base_path like (?)', base_path)
-    end
-  end
-
-  scope :by_content_id, ->(content_id) do
-    joins(:dimensions_item)
-      .where(dimensions_items: { content_id: content_id })
-  end
-
-  scope :by_organisation_id, ->(organisation_id) do
-    if organisation_id.present?
-      joins(:dimensions_item)
-        .where(dimensions_items: { primary_organisation_content_id: organisation_id })
-    end
-  end
-
-  scope :by_document_type, ->(document_type) do
-    if document_type.present?
-      joins(:dimensions_item)
-        .where('dimensions_items.document_type like (?)', document_type)
-    end
-  end
-
-  scope :by_locale, ->(locale) do
-    joins(:dimensions_item)
-      .where(dimensions_items: { locale: locale })
-  end
-
   scope :with_edition_metrics, -> do
     joins(dimensions_item: :facts_edition)
   end

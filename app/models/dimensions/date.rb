@@ -1,6 +1,8 @@
 class Dimensions::Date < ApplicationRecord
   self.primary_key = 'date'
 
+  scope :between, ->(from, to) { where('date BETWEEN ? AND ?', from, to) }
+
   def self.build(date)
     new(
       date: date,

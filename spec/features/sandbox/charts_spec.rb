@@ -9,7 +9,7 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
 
       fill_in 'From:', with: '2018-01-13'
       fill_in 'To:', with: '2018-01-15'
-      check 'pageviews'
+      select 'pageviews', from: 'metric1'
 
       click_button 'Filter'
 

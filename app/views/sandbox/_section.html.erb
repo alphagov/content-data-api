@@ -1,10 +1,8 @@
-<% if params[metric].present? %>
-    <div class="<%= metric %>">
-      <h3>Number of <%= metric.to_s.titleize %></h3>
-      <div class="chart-stats">
-        <%= render 'total', metric: metric %>
-        <%= render 'average', metric: metric %>
-      </div>
-      <%= render 'chart', metric: metric %>
-    </div>
-<% end %>
+<div class="<%= metric %>">
+  <h3>Number of <%= metric.to_s.titleize %></h3>
+  <div class="chart-stats">
+    <%= render 'total', metric: metric %>
+    <%= render 'average', metric: metric %>
+  </div>
+  <%= render 'chart', metric: metric %>
+</div>

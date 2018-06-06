@@ -23,36 +23,9 @@
 
       <div class="input-group">
         <h4>Performance Metrics</h4>
-        <%= render 'metric_option', metric: :total_items %>
-        <%= render 'metric_option', metric: :pageviews %>
-        <%= render 'metric_option', metric: :unique_pageviews %>
-        <%= render 'metric_option', metric: :feedex_comments %>
-        <%= render 'metric_option', metric: :is_this_useful_yes %>
-        <%= render 'metric_option', metric: :is_this_useful_no %>
-        <%= render 'metric_option', metric: :number_of_internal_searches %>
-        <%= render 'metric_option', metric: :entrances %>
-        <%= render 'metric_option', metric: :exits %>
-        <%= render 'metric_option', metric: :bounce_rate %>
-        <%= render 'metric_option', metric: :avg_time_on_page %>
-      </div>
-
-      <div class="input-group">
-        <h4>Content metrics</h4>
-        <%= render 'metric_option', metric: :number_of_pdfs %>
-        <%= render 'metric_option', metric: :number_of_word_files %>
-        <%= render 'metric_option', metric: :readability_score %>
-        <%= render 'metric_option', metric: :contractions_count %>
-        <%= render 'metric_option', metric: :equality_count %>
-        <%= render 'metric_option', metric: :indefinite_article_count %>
-        <%= render 'metric_option', metric: :passive_count %>
-        <%= render 'metric_option', metric: :profanities_count %>
-        <%= render 'metric_option', metric: :redundant_acronyms_count %>
-        <%= render 'metric_option', metric: :repeated_words_count %>
-        <%= render 'metric_option', metric: :simplify_count %>
-        <%= render 'metric_option', metric: :spell_count %>
-        <%= render 'metric_option', metric: :string_length %>
-        <%= render 'metric_option', metric: :sentence_count %>
-        <%= render 'metric_option', metric: :word_count %>
+        <%= render 'metric_option', option_name: :metric1 %>
+        <%= render 'metric_option', option_name: :metric2 %>
+        <%= render 'metric_option', option_name: :metric3 %>
       </div>
 
       <div class="form-group">

@@ -3,34 +3,12 @@
     <h3>Number of Content Items</h3>
     <div class="chart-stats">
       <div class="total">Total
-        = <%= number_with_delimiter (@metrics.count('distinct dimensions_items.content_id') || 0) %></div>
+        = <%= number_with_delimiter (@content_items.count('distinct content_id') || 0) %></div>
     </div>
     <%= line_chart(@metrics.group('facts_metrics.dimensions_date_id').count, height: '150px') %>
   </div>
 
-  <%= render 'section', metric: :pageviews %>
-  <%= render 'section', metric: :unique_pageviews %>
-  <%= render 'section', metric: :feedex_comments %>
-  <%= render 'section', metric: :is_this_useful_yes %>
-  <%= render 'section', metric: :is_this_useful_no %>
-  <%= render 'section', metric: :number_of_internal_searches %>
-  <%= render 'section', metric: :entrances %>
-  <%= render 'section', metric: :exits %>
-  <%= render 'section', metric: :bounce_rate %>
-  <%= render 'section', metric: :avg_time_on_page %>
-  <%= render 'section', metric: :number_of_pdfs %>
-  <%= render 'section', metric: :readability_score %>
-  <%= render 'section', metric: :number_of_word_files %>
-  <%= render 'section', metric: :spell_count %>
-  <%= render 'section', metric: :contractions_count %>
-  <%= render 'section', metric: :equality_count %>
-  <%= render 'section', metric: :indefinite_article_count %>
-  <%= render 'section', metric: :passive_count %>
-  <%= render 'section', metric: :profanities_count %>
-  <%= render 'section', metric: :redundant_acronyms_count %>
-  <%= render 'section', metric: :repeated_words_count %>
-  <%= render 'section', metric: :simplify_count %>
-  <%= render 'section', metric: :string_length %>
-  <%= render 'section', metric: :sentence_count %>
-  <%= render 'section', metric: :word_count %>
+  <%= render 'section', metric: params[:metric1] unless params[:metric1].blank? %>
+  <%= render 'section', metric: params[:metric2] unless params[:metric2].blank? %>
+  <%= render 'section', metric: params[:metric3] unless params[:metric3].blank? %>
 </div>

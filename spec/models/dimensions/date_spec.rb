@@ -139,4 +139,18 @@ RSpec.describe Dimensions::Date, type: :model do
       end
     end
   end
+
+  describe 'Filtering' do
+    subject { Dimensions::Date }
+
+    it '.between' do
+      date1 = create(:dimensions_date, date: Date.new(2018, 1, 12))
+      date2 = create(:dimensions_date, date: Date.new(2018, 1, 13))
+      date3 = create(:dimensions_date, date: Date.new(2018, 1, 14))
+      create(:dimensions_date, date: Date.new(2018, 1, 15))
+
+      results = subject.between(date1, date3)
+      expect(results).to match_array([date1, date2, date3])
+    end
+  end
 end

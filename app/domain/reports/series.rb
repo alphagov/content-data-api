@@ -34,29 +34,35 @@ class Reports::Series
     self
   end
 
+  def content_items
+    slice_content_items
+  end
+
   def run
-    metrics = Facts::Metric.by_locale('en')
+    dates = slice_dates
+    items = slice_content_items
 
-    if @from && @to
-      metrics = metrics.between(@from, @to)
-    end
+    metrics = Facts::Metric.all
+    metrics = metrics.with_edition_metrics if @with_edition_metrics
+    metrics
+      .joins(:dimensions_item).merge(items)
+      .joins(:dimensions_date).merge(dates)
+  end
 
-    if @org_id
-      metrics = metrics.by_organisation_id(@org_id)
-    end
+private
 
-    if @with_edition_metrics
-      metrics = metrics.with_edition_metrics
-    end
+  def slice_dates
+    dates = Dimensions::Date.all
+    dates = dates.between(@from, @to) if @from && @to
+    dates
+  end
 
-    if @base_path
-      metrics = metrics.by_base_path(@base_path)
-    end
-
-    if @document_type
-      metrics = metrics.by_document_type(@document_type)
-    end
-
-    metrics.joins(:dimensions_item)
+  def slice_content_items
+    items = Dimensions::Item.all
+    items = items.by_locale('en')
+    items = items.by_organisation_id(@org_id) unless @org_id.blank?
+    items = items.by_base_path(@base_path) unless @base_path.blank?
+    items = items.by_document_type(@document_type) unless @document_type.blank?
+    items
   end
 end
