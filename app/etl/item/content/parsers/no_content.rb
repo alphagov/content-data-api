@@ -17,9 +17,9 @@ class Item::Content::Parsers::NoContent
       placeholder_organisation
       placeholder_policy_area
       placeholder_topical_event
-      placeholer_working_group
+      placeholder_working_group
       placeholder_world_location
-      placehold_worldwide_organisation
+      placeholder_worldwide_organisation
       placeholder_person
       placeholder
       policy
