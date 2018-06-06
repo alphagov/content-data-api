@@ -1,7 +1,7 @@
 RSpec.describe PublishingAPI::ContentItem do
   it "parses a valid message queue message" do
     payload = GovukSchemas::RandomExample.for_schema(notification_schema: "detailed_guide")
-    content_item = PublishingAPI::ContentItem.parse_message(payload)
+    content_item = PublishingAPI::ContentItem.parse(payload: payload)
 
     expect(content_item.base_path).to eq(payload['base_path'])
     expect(content_item.content_id).to eq(payload['content_id'])
@@ -20,6 +20,6 @@ RSpec.describe PublishingAPI::ContentItem do
 
   it "rejects an invalid message queue message" do
     payload = { "content_id": "fake-content" }
-    expect { PublishingAPI::ContentItem.parse_message(payload) }.to raise_error(KeyError)
+    expect { PublishingAPI::ContentItem.parse(payload: payload) }.to raise_error(KeyError)
   end
 end

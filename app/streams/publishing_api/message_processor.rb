@@ -1,6 +1,6 @@
 class PublishingAPI::MessageProcessor
   def initialize(message)
-    @incoming_content_item = PublishingAPI::ContentItem.parse_message(message.payload)
+    @incoming_content_item = PublishingAPI::ContentItem.parse(payload: message.payload)
     @routing_key = message.delivery_info.routing_key
   end
 

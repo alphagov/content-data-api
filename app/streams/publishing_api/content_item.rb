@@ -16,21 +16,21 @@ class PublishingAPI::ContentItem
   attr_accessor :title
 
 
-  def self.parse_message(message_payload)
+  def self.parse(payload: )
     new(
-      base_path: message_payload.fetch('base_path'),
-      content_id: message_payload.fetch('content_id'),
-      content_purpose_document_supertype: message_payload['content_purpose_document_supertype'],
-      content_purpose_subgroup: message_payload['content_purpose_subgroup'],
-      content_purpose_supergroup: message_payload['content_purpose_supergroup'],
-      details: message_payload.fetch('details'),
-      document_type: message_payload['document_type'],
-      first_published_at: message_payload['first_published_at'],
-      links: message_payload.fetch('expanded_links'),
-      locale: message_payload['locale'] || 'en',
-      payload_version: message_payload.fetch('payload_version'),
-      public_updated_at: message_payload['public_updated_at'],
-      title: message_payload['title']
+      base_path: payload.fetch('base_path'),
+      content_id: payload.fetch('content_id'),
+      content_purpose_document_supertype: payload['content_purpose_document_supertype'],
+      content_purpose_subgroup: payload['content_purpose_subgroup'],
+      content_purpose_supergroup: payload['content_purpose_supergroup'],
+      details: payload.fetch('details'),
+      document_type: payload['document_type'],
+      first_published_at: payload['first_published_at'],
+      links: payload.fetch('expanded_links'),
+      locale: payload['locale'] || 'en',
+      payload_version: payload.fetch('payload_version'),
+      public_updated_at: payload['public_updated_at'],
+      title: payload['title']
     )
   end
 
