@@ -25,13 +25,13 @@ RSpec.describe PublishingAPI::Consumer do
       expect(Dimensions::Item).to receive(:by_natural_key).and_raise(StandardError.new("An error"))
     end
 
-    it "we log the error" do
+    it "logs the error" do
       expect(GovukError).to receive(:notify).with(instance_of(StandardError))
 
       expect { subject.process(message) }.to_not raise_error
     end
 
-    it "we discard the message" do
+    it "discards the message" do
       expect(message).to receive(:discard)
 
       subject.process(message)
