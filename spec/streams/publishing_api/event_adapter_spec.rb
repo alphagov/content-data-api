@@ -36,5 +36,18 @@ RSpec.describe PublishingAPI::EventAdapter do
       )
     end
 
+    describe 'all schemas' do
+      schemas = GovukSchemas::Schema.all(schema_type: "notification")
+      schemas.values.each do |schema|
+        payload = GovukSchemas::RandomExample.new(schema: schema).payload
+        schema_name = payload.dig('schema_name')
+
+        it "transfom schema: `#{schema_name}` with no errors" do
+          event = PublishingAPI::Event.new(payload: payload, routing_key: 'the-key')
+
+          expect { subject.to_dimension_item(event) }.to_not raise_error
+        end
+      end
+    end
   end
 end
