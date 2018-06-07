@@ -5,7 +5,6 @@ RSpec.describe Item::Metadata::Parser do
   before :each do
     allow(Item::Metadata::Parsers::NumberOfPdfs).to receive(:parse).with(raw_json).and_return(number_of_pdfs: 99)
     allow(Item::Metadata::Parsers::NumberOfWordFiles).to receive(:parse).with(raw_json).and_return(number_of_word_files: 94)
-    allow(Item::Metadata::Parsers::ContentHash).to receive(:parse).and_return(content_hash: content_hash)
   end
 
   it 'populates raw_json field of latest version of dimensions_items' do
@@ -26,12 +25,5 @@ RSpec.describe Item::Metadata::Parser do
       number_of_word_files: 94
     )
     expect(Item::Metadata::Parsers::NumberOfWordFiles).to have_received(:parse).with(raw_json)
-  end
-
-  it 'populates the content hash' do
-    expect(subject.parse(raw_json)).to include(
-      content_hash: content_hash
-    )
-    expect(Item::Metadata::Parsers::ContentHash).to have_received(:parse).with(raw_json)
   end
 end
