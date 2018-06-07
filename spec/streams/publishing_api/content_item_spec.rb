@@ -13,6 +13,7 @@ RSpec.describe PublishingAPI::ContentItem do
     expect(content_item.first_published_at).to eq(Time.parse(payload['first_published_at']))
     expect(content_item.links).to eq(payload['expanded_links'])
     expect(content_item.locale).to eq(payload['locale'])
+    expect(content_item.payload).to eq(payload)
     expect(content_item.payload_version).to eq(payload['payload_version'])
     expect(content_item.public_updated_at).to eq(Time.parse(payload['public_updated_at']))
     expect(content_item.title).to eq(payload['title'])

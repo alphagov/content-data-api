@@ -11,6 +11,7 @@ class PublishingAPI::ContentItem
   attr_accessor :first_published_at
   attr_accessor :links
   attr_accessor :locale
+  attr_accessor :payload
   attr_accessor :payload_version
   attr_accessor :public_updated_at
   attr_accessor :title
@@ -28,6 +29,7 @@ class PublishingAPI::ContentItem
       first_published_at: Time.parse(payload['first_published_at']),
       links: payload.fetch('expanded_links'),
       locale: payload['locale'] || 'en',
+      payload: payload,
       payload_version: payload.fetch('payload_version'),
       public_updated_at: Time.parse(payload['public_updated_at']),
       title: payload['title']
