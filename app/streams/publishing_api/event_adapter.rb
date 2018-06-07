@@ -20,10 +20,18 @@ module PublishingAPI
         content_purpose_supergroup: event.payload['content_purpose_supergroup'],
         content_purpose_subgroup: event.payload['content_purpose_subgroup'],
         first_published_at: parse_time('first_published_at'),
+        primary_organisation_content_id: primary_organisation['content_id'],
+        primary_organisation_title: primary_organisation['title'],
+        primary_organisation_withdrawn: primary_organisation['withdrawn'],
         public_updated_at: parse_time('public_updated_at'),
         latest: true,
         raw_json: event.payload.to_json,
       )
+    end
+
+    def primary_organisation
+      primary_org = event.payload.dig('expanded_links', 'primary_publishing_organisation') || []
+      primary_org.any? ? primary_org[0] : {}
     end
 
   private

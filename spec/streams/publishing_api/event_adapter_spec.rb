@@ -16,6 +16,7 @@ RSpec.describe PublishingAPI::EventAdapter do
           'public_updated_at' => '2018-04-20T12:00:40+01:00',
         )
       end
+
       event = PublishingAPI::Event.new(payload: payload, routing_key: 'the-key')
       dimension_item = subject.to_dimension_item(event)
 
@@ -33,6 +34,31 @@ RSpec.describe PublishingAPI::EventAdapter do
         public_updated_at: Time.zone.parse('2018-04-20T12:00:40+01:00'),
         latest: true,
         raw_json: payload.to_json
+      )
+    end
+
+    it 'converts the primary organisation' do
+      payload = GovukSchemas::RandomExample.for_schema(notification_schema: "detailed_guide") do |result|
+        result['expanded_links']['primary_publishing_organisation'] = [
+          {
+            'content_id' => 'ce91c056-8165-49fe-b318-b71113ab4a30',
+            'title' => 'the-title',
+            'withdrawn' => 'false',
+            'locale' => 'en',
+            'base_path' => '/the-bas-path'
+          }
+        ]
+
+        result
+      end
+
+      event = PublishingAPI::Event.new(payload: payload, routing_key: 'the-key')
+      dimension_item = subject.to_dimension_item(event)
+
+      expect(dimension_item).to have_attributes(
+        primary_organisation_content_id: 'ce91c056-8165-49fe-b318-b71113ab4a30',
+        primary_organisation_title: 'the-title',
+        primary_organisation_withdrawn: false,
       )
     end
 
