@@ -16,7 +16,7 @@ class PublishingAPI::ContentItem
   attr_accessor :title
 
 
-  def self.parse(payload: )
+  def self.parse(payload:)
     new(
       base_path: payload.fetch('base_path'),
       content_id: payload.fetch('content_id'),

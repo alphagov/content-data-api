@@ -24,7 +24,7 @@ RSpec.describe 'Process content item' do
       content_hash: 'OldContentHash'
   }
 
-  it 'stores metadata for a content item' do
+  xit 'stores metadata for a content item' do
     stub_item_metadata_in_content_store
     stub_quality_metrics_in_heroku
 
@@ -47,7 +47,7 @@ RSpec.describe 'Process content item' do
     )
   end
 
-  context 'content metrics in facts edition' do
+  xcontext 'content metrics in facts edition' do
     it 'stores quality metrics in the facts edition' do
       stub_item_metadata_in_content_store
       stub_quality_metrics_in_heroku

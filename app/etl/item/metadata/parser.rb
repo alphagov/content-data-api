@@ -4,7 +4,6 @@ class Item::Metadata::Parser
     @parsers = [
       Item::Metadata::Parsers::NumberOfPdfs,
       Item::Metadata::Parsers::NumberOfWordFiles,
-      Item::Metadata::Parsers::Metadata,
       Item::Metadata::Parsers::PrimaryOrganisation,
       Item::Metadata::Parsers::ContentHash,
     ]

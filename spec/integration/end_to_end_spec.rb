@@ -28,7 +28,7 @@ RSpec.describe 'PublishingAPI events' do
   let(:message) { build_publishing_api_message(base_path, content_id, locale, payload_version: 1) }
   let(:another_message) { build_publishing_api_message(base_path, content_id, locale, payload_version: 2) }
 
-  context 'having received a new version yesterday' do
+  xcontext 'having received a new version yesterday' do
     before do
       Timecop.freeze(Date.yesterday) { PublishingAPI::Consumer.new.process(message) }
     end
@@ -42,7 +42,7 @@ RSpec.describe 'PublishingAPI events' do
     end
   end
 
-  context 'having processed two versions yesterday' do
+  xcontext 'having processed two versions yesterday' do
     before do
       Timecop.freeze(Date.yesterday) do
         PublishingAPI::Consumer.new.process(message)

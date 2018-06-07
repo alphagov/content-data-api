@@ -5,16 +5,6 @@ RSpec.describe Item::Metadata::Parser do
   before :each do
     allow(Item::Metadata::Parsers::NumberOfPdfs).to receive(:parse).with(raw_json).and_return(number_of_pdfs: 99)
     allow(Item::Metadata::Parsers::NumberOfWordFiles).to receive(:parse).with(raw_json).and_return(number_of_word_files: 94)
-    allow(Item::Metadata::Parsers::Metadata).to receive(:parse).and_return(
-      'content_id' => '09hjasdfoj234',
-      'title' => 'A guide to coding',
-      'document_type' => 'answer',
-      'content_purpose_document_supertype' => 'guide',
-      'content_purpose_supergroup' => 'guide',
-      'content_purpose_subgroup' => 'guidance',
-      'first_published_at' => '2012-10-03T13:19:55.000+00:00',
-      'public_updated_at' => '2015-06-03T11:13:44.000+00:00',
-    )
     allow(Item::Metadata::Parsers::ContentHash).to receive(:parse).and_return(content_hash: content_hash)
   end
 
@@ -36,20 +26,6 @@ RSpec.describe Item::Metadata::Parser do
       number_of_word_files: 94
     )
     expect(Item::Metadata::Parsers::NumberOfWordFiles).to have_received(:parse).with(raw_json)
-  end
-
-  it 'populates the metadata' do
-    expect(subject.parse(raw_json)).to include(
-      'content_id' => '09hjasdfoj234',
-      'title' => 'A guide to coding',
-      'document_type' => 'answer',
-      'content_purpose_document_supertype' => 'guide',
-      'content_purpose_supergroup' => 'guide',
-      'content_purpose_subgroup' => 'guidance',
-      'first_published_at' => '2012-10-03T13:19:55.000+00:00',
-      'public_updated_at' => '2015-06-03T11:13:44.000+00:00'
-    )
-    expect(Item::Metadata::Parsers::Metadata).to have_received(:parse).with(raw_json)
   end
 
   it 'populates the content hash' do

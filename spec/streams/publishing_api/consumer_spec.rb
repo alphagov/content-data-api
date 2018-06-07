@@ -22,7 +22,7 @@ RSpec.describe PublishingAPI::Consumer do
 
     before do
       allow(message).to receive(:discard)
-      expect(Dimensions::Item).to receive(:by_natural_key).and_raise(StandardError.new("An error"))
+      expect(subject).to receive(:do_process).and_raise(StandardError.new("An error"))
     end
 
     it "logs the error" do
