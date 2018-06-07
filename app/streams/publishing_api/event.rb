@@ -1,4 +1,5 @@
-class PublishingAPI::ContentItem
+# https://github.com/alphagov/publishing-api/blob/master/doc/rabbitmq.md#event_type
+class PublishingAPI::Event
   include ActiveModel::Model
 
   attr_accessor :base_path
@@ -13,11 +14,15 @@ class PublishingAPI::ContentItem
   attr_accessor :locale
   attr_accessor :payload
   attr_accessor :payload_version
+  attr_accessor :routing_key
   attr_accessor :public_updated_at
   attr_accessor :title
 
 
-  def self.parse(payload:)
+  def self.parse(message)
+    payload = message.payload
+    routing_key = message.delivery_info.routing_key
+
     new(
       base_path: payload.fetch('base_path'),
       content_id: payload.fetch('content_id'),
@@ -31,14 +36,11 @@ class PublishingAPI::ContentItem
       locale: payload['locale'] || 'en',
       payload: payload,
       payload_version: payload.fetch('payload_version'),
+      routing_key: routing_key,
       public_updated_at: Time.parse(payload['public_updated_at']),
       title: payload['title']
     )
   end
-
-private
-
-  def current_date
-    Time.zone.now.to_date
-  end
 end
+
+

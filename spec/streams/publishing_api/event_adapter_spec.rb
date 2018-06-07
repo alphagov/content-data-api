@@ -1,8 +1,8 @@
-RSpec.describe PublishingAPI::ContentItemAdapter do
+RSpec.describe PublishingAPI::EventAdapter do
   subject { described_class }
 
   it "transform a Publising::API into a Dimensions::Item" do
-    content_item = PublishingAPI::ContentItem.new(
+    event = PublishingAPI::Event.new(
       base_path: 'the-base_path',
       content_id: 'the-content_id',
       content_purpose_document_supertype: 'the-content_purpose_document_supertype',
@@ -13,15 +13,15 @@ RSpec.describe PublishingAPI::ContentItemAdapter do
       first_published_at: Time.new('2018-01-01'),
       links: 'the-links',
       locale: 'the-locale',
+      payload: { 'foo' => 'bar' },
       payload_version: 10,
       public_updated_at: Time.new('2018-01-02'),
       title: 'the-title'
     )
 
-    payload = { 'foo' => 'bar' }
-    item = subject.to_dimension_item(content_item: content_item, payload: payload)
+    dimension_item = subject.to_dimension_item(event)
 
-    expect(item).to have_attributes(
+    expect(dimension_item).to have_attributes(
       base_path: 'the-base_path',
       content_id: 'the-content_id',
       content_purpose_document_supertype: 'the-content_purpose_document_supertype',
