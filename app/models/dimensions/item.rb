@@ -18,10 +18,6 @@ class Dimensions::Item < ApplicationRecord
     return if raw_json.blank?
     Item::Content::Parser.extract_content(raw_json)
   end
-
-  def gone!
-    update_attributes(status: 'gone')
-  end
 end
 
 class InvalidSchemaError < StandardError;

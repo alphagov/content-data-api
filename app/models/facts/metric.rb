@@ -25,7 +25,6 @@ class Facts::Metric < ApplicationRecord
       content_purpose_subgroup
       first_published_at
       public_updated_at
-      status
       pageviews
       primary_organisation_title
       primary_organisation_content_id
