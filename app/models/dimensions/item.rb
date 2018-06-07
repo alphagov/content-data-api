@@ -22,16 +22,6 @@ class Dimensions::Item < ApplicationRecord
   def gone!
     update_attributes(status: 'gone')
   end
-
-  def self.create_empty(content_id:, base_path:, locale:, payload_version:)
-    create(
-      content_id: content_id,
-      base_path: base_path,
-      locale: locale,
-      latest: true,
-      publishing_api_payload_version: payload_version
-    )
-  end
 end
 
 class InvalidSchemaError < StandardError;

@@ -74,22 +74,6 @@ RSpec.describe Dimensions::Item, type: :model do
     expect(item.raw_json).to eq('a' => 'b')
   end
 
-  describe '#create_empty' do
-    let(:content_id) { 'new-item' }
-    let(:base_path) { '/path/to/new-item' }
-    it 'creates a new item with the correct attributes' do
-      item = Timecop.freeze(now) do
-        Dimensions::Item.create_empty content_id: content_id, base_path: base_path, locale: 'fr', payload_version: 1
-      end
-      expect(item.reload).to have_attributes(
-        content_id: content_id,
-        base_path: base_path,
-        locale: 'fr',
-        latest: true
-      )
-    end
-  end
-
   describe "#get_content" do
     it "returns nil if json is empty" do
       item = create(:dimensions_item, raw_json: {})
