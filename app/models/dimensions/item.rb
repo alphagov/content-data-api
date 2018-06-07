@@ -19,23 +19,6 @@ class Dimensions::Item < ApplicationRecord
     Item::Content::Parser.extract_content(raw_json)
   end
 
-  def copy_to_new_version!(base_path:, payload_version:)
-    # Create a new version of this content item, assuming that a document's
-    # content_id and locale are fixed, but the base_path may change.
-    raise "Tried to create a new version but this version is not the latest" unless latest
-
-    update_attributes(latest: false)
-
-    new_version = Dimensions::Item.create_empty(
-      content_id: content_id,
-      base_path: base_path,
-      locale: locale,
-      payload_version: payload_version
-    )
-
-    new_version
-  end
-
   def gone!
     update_attributes(status: 'gone')
   end
