@@ -20,6 +20,7 @@ class Facts::Metric < ApplicationRecord
       title
       description
       document_type
+      schema_name
       content_purpose_document_supertype
       content_purpose_supergroup
       content_purpose_subgroup

@@ -24,6 +24,7 @@ module PublishingAPI
         primary_organisation_title: primary_organisation['title'],
         primary_organisation_withdrawn: primary_organisation['withdrawn'],
         public_updated_at: parse_time('public_updated_at'),
+        schema_name: event.payload.fetch('schema_name'),
         latest: true,
         raw_json: event.payload.to_json,
       )
