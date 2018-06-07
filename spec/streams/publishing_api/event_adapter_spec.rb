@@ -1,40 +1,40 @@
 RSpec.describe PublishingAPI::EventAdapter do
   subject { described_class }
 
-  it "transform a Publising::API into a Dimensions::Item" do
-    event = PublishingAPI::Event.new(
-      base_path: 'the-base_path',
-      content_id: 'the-content_id',
-      content_purpose_document_supertype: 'the-content_purpose_document_supertype',
-      content_purpose_subgroup: 'the-content_purpose_subgroup',
-      content_purpose_supergroup: 'the-content_purpose_supergroup',
-      details: 'the-details',
-      document_type: 'the-document_type',
-      first_published_at: Time.new('2018-01-01'),
-      links: 'the-links',
-      locale: 'the-locale',
-      payload: { 'foo' => 'bar' },
-      payload_version: 10,
-      public_updated_at: Time.new('2018-01-02'),
-      title: 'the-title'
-    )
+  describe '.to_dimension_item' do
+    it 'convert an Event into a Dimensions::Item' do
+      payload = GovukSchemas::RandomExample.for_schema(notification_schema: "detailed_guide") do |result|
+        result.merge(
+          'payload_version' => 7,
+          'locale' => 'fr',
+          'title' => 'the-title',
+          'document_type' => 'detailed_guide',
+          'content_purpose_document_supertype' => 'the-supertype',
+          'content_purpose_supergroup' => 'the-supergroup',
+          'content_purpose_subgroup' => 'the-subgroup',
+          'first_published_at' => '2018-04-19T12:00:40+01:00',
+          'public_updated_at' => '2018-04-20T12:00:40+01:00',
+        )
+      end
+      event = PublishingAPI::Event.new(payload: payload, routing_key: 'the-key')
+      dimension_item = subject.to_dimension_item(event)
 
-    dimension_item = subject.to_dimension_item(event)
+      expect(dimension_item).to have_attributes(
+        content_id: payload.fetch('content_id'),
+        base_path: payload.fetch('base_path'),
+        publishing_api_payload_version: 7,
+        locale: 'fr',
+        title: 'the-title',
+        document_type: 'detailed_guide',
+        content_purpose_document_supertype: 'the-supertype',
+        content_purpose_supergroup: 'the-supergroup',
+        content_purpose_subgroup: 'the-subgroup',
+        first_published_at: Time.zone.parse('2018-04-19T12:00:40+01:00'),
+        public_updated_at: Time.zone.parse('2018-04-20T12:00:40+01:00'),
+        latest: true,
+        raw_json: payload.to_json
+      )
+    end
 
-    expect(dimension_item).to have_attributes(
-      base_path: 'the-base_path',
-      content_id: 'the-content_id',
-      content_purpose_document_supertype: 'the-content_purpose_document_supertype',
-      content_purpose_subgroup: 'the-content_purpose_subgroup',
-      content_purpose_supergroup: 'the-content_purpose_supergroup',
-      document_type: 'the-document_type',
-      first_published_at: Time.new('2018-01-01'),
-      locale: 'the-locale',
-      publishing_api_payload_version: 10,
-      public_updated_at: Time.new('2018-01-02'),
-      title: 'the-title',
-      latest: true,
-      raw_json: { 'foo' => 'bar' }.to_json,
-    )
   end
 end
