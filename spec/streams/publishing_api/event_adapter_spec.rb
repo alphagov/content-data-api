@@ -38,7 +38,7 @@ RSpec.describe PublishingAPI::EventAdapter do
 
     describe 'all schemas' do
       schemas = GovukSchemas::Schema.all(schema_type: "notification")
-      schemas.values.each do |schema|
+      schemas.each_value do |schema|
         payload = GovukSchemas::RandomExample.new(schema: schema).payload
         schema_name = payload.dig('schema_name')
 
