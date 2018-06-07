@@ -1,14 +1,14 @@
 class Item::Metadata::Parsers::PrimaryOrganisation
   def self.parse(raw_json)
-    return {} unless raw_json
-    links = raw_json['links']
-    return {} unless links && links['primary_publishing_organisation']
-    org = links['primary_publishing_organisation'].first
-    return {} unless org
-    {
-      primary_organisation_content_id: org['content_id'],
-      primary_organisation_title: org['title'],
-      primary_organisation_withdrawn: org['withdrawn']
-    }
+    primary_org = raw_json.dig('links', 'primary_publishing_organisation') || []
+    if primary_org.any?
+      {
+        primary_organisation_content_id: primary_org[0].fetch('content_id'),
+        primary_organisation_title: primary_org[0].fetch('title'),
+        primary_organisation_withdrawn: primary_org[0].fetch('withdrawn')
+      }
+    else
+      {}
+    end
   end
 end
