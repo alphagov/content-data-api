@@ -1,4 +1,4 @@
-RSpec.describe PublishingAPI::EventAdapter do
+RSpec.describe PublishingAPI::MessageAdapter do
   subject { described_class }
 
   describe '.to_dimension_item' do

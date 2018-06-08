@@ -8,22 +8,9 @@ RSpec.describe PublishingAPI::Consumer do
   it_behaves_like 'a message queue processor'
 
   context 'when an error happens' do
-    let!(:message) do
-      double('message',
-        payload: {
-          'base_path' => '/path/to/new/content',
-          'content_id' => 'the_content_id',
-          'payload_version' => 1,
-          'expanded_links' => {},
-          'details' => {}
-        },
-        delivery_info: double('del_info', routing_key: 'news_story.major'))
-    end
+    let!(:message) { build :message}
 
-    before do
-      allow(message).to receive(:discard)
-      expect(PublishingAPI::MessageHandler).to receive(:process).and_raise(StandardError.new("An error"))
-    end
+    before { expect(PublishingAPI::MessageHandler).to receive(:process).and_raise(StandardError.new("An error")) }
 
     it "logs the error" do
       expect(GovukError).to receive(:notify).with(instance_of(StandardError))

@@ -74,8 +74,11 @@ FactoryBot.define do
     transient do
       schema_name 'detailed_guide'
       base_path '/base-path'
+      routing_key 'news_story.major'
       attributes { {} }
     end
+
+    delivery_info { { routing_key: routing_key }}
 
     payload do
       GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
