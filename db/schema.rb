@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180607205553) do
+ActiveRecord::Schema.define(version: 20180608124756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,9 +105,9 @@ ActiveRecord::Schema.define(version: 20180607205553) do
     t.integer "repeated_words_count"
     t.integer "simplify_count"
     t.integer "spell_count"
-    t.integer "string_length", default: 0
-    t.integer "sentence_count", default: 0
-    t.integer "word_count", default: 0
+    t.integer "string_length"
+    t.integer "sentence_count"
+    t.integer "word_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dimensions_date_id"], name: "index_facts_editions_on_dimensions_date_id"
