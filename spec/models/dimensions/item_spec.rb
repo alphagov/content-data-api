@@ -59,7 +59,7 @@ RSpec.describe Dimensions::Item, type: :model do
   end
 
   describe '#older_than?' do
-    let (:dimension_item) { build :dimensions_item, publishing_api_payload_version: 10 }
+    let(:dimension_item) { build :dimensions_item, publishing_api_payload_version: 10 }
 
     it 'returns true when compared with `nil`' do
       other = nil
@@ -87,8 +87,8 @@ RSpec.describe Dimensions::Item, type: :model do
     expect(item.raw_json).to eq('a' => 'b')
   end
 
-  describe "#get_content" do
-    it "returns nil if json is empty" do
+  describe '#get_content' do
+    it 'returns nil if json is empty' do
       item = create(:dimensions_item, raw_json: {})
       expect(item.get_content).to eq(nil)
     end
@@ -98,6 +98,23 @@ RSpec.describe Dimensions::Item, type: :model do
       item = create(:dimensions_item, raw_json: json)
       expect(Item::Content::Parser).to receive(:extract_content).with(json).and_return('the content')
       expect(item.get_content).to eq('the content')
+    end
+  end
+
+  describe '#promote!' do
+    let(:item) { build :dimensions_item, latest: false }
+
+    it 'set the latest attribute to true' do
+      item.promote!(build :dimensions_item)
+
+      expect(item.latest).to be true
+    end
+
+    it 'set the latest attribute to false for the old version' do
+      old_item = build :dimensions_item
+      item.promote!(old_item)
+
+      expect(old_item.latest).to be false
     end
   end
 end

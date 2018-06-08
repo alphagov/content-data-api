@@ -24,6 +24,17 @@ class Dimensions::Item < ApplicationRecord
 
     self.publishing_api_payload_version > other.publishing_api_payload_version
   end
+
+  def promote!(old_item)
+    old_item.deprecate! if old_item
+    update(latest: true)
+  end
+
+  protected
+
+  def deprecate!
+    update!(latest: false)
+  end
 end
 
 class InvalidSchemaError < StandardError;
