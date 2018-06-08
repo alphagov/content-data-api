@@ -1,4 +1,4 @@
-module Item::Metadata::Parsers::NumberOfFiles
+module Item::Metadata::NumberOfFiles
   def self.number_of_files(body, extensions_regex)
     documents = extract_documents(body)
     all_links = all_links(documents)

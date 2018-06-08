@@ -1,6 +1,6 @@
 require 'odyssey'
 
-RSpec.describe Item::ContentQualityService do
+RSpec.describe Item::Quality::Service do
   let(:content) { 'Some content the has the oddd spelling mistkae' }
 
   it 'makes request and outputs the results' do

@@ -8,6 +8,7 @@ class PublishingAPI::MessageHandler
 
     if new_item.older_than?(old_item)
       new_item.promote!(old_item)
+      Item::Processor.run(new_item, Date.today)
     end
   end
 end
