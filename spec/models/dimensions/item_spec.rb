@@ -1,4 +1,3 @@
-
 RSpec.describe Dimensions::Item, type: :model do
   let(:now) { Time.new(2018, 2, 21, 12, 31, 2) }
 
@@ -59,11 +58,25 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#gone!' do
-    it 'sets the status  to "gone"' do
-      item = create(:dimensions_item)
-      item.gone!
-      expect(item.reload.status).to eq 'gone'
+  describe '#older_than?' do
+    let (:dimension_item) { build :dimensions_item, publishing_api_payload_version: 10 }
+
+    it 'returns true when compared with `nil`' do
+      other = nil
+
+      expect(dimension_item.older_than?(other)).to be true
+    end
+
+    it 'returns true if the payload version is bigger' do
+      other = build :dimensions_item, publishing_api_payload_version: 9
+
+      expect(dimension_item.older_than?(other)).to be true
+    end
+
+    it 'returns false if the payload version is smaller' do
+      other = build :dimensions_item, publishing_api_payload_version: 11
+
+      expect(dimension_item.older_than?(other)).to be false
     end
   end
 

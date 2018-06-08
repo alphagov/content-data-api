@@ -18,6 +18,12 @@ class Dimensions::Item < ApplicationRecord
     return if raw_json.blank?
     Item::Content::Parser.extract_content(raw_json)
   end
+
+  def older_than?(other)
+    return true unless other
+
+    self.publishing_api_payload_version > other.publishing_api_payload_version
+  end
 end
 
 class InvalidSchemaError < StandardError;
