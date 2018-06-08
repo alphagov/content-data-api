@@ -1,3 +1,5 @@
+require 'govuk_message_queue_consumer/test_helpers/mock_message'
+
 FactoryBot.define do
   factory :user do
     transient do
@@ -67,4 +69,20 @@ FactoryBot.define do
     sequence(:date) { |i| i.days.ago.to_date }
     feedex_comments 1
   end
+
+  factory :message, class: GovukMessageQueueConsumer::MockMessage do
+    transient do
+      schema_name 'detailed_guide'
+      base_path '/base-path'
+      attributes { {} }
+    end
+
+    payload do
+      GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
+        result.merge!('base_path' => base_path)
+        result.merge! attributes
+      end
+    end
+  end
+
 end

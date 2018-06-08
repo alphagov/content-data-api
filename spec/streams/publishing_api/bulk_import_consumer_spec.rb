@@ -23,7 +23,7 @@ RSpec.describe PublishingAPI::BulkImportConsumer do
 
     before do
       allow(message).to receive(:discard)
-      expect(subject).to receive(:do_process).and_raise(StandardError.new("An error"))
+      expect(PublishingAPI::MessageHandler).to receive(:process).and_raise(StandardError.new("An error"))
     end
 
     it "logs the error" do
