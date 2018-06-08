@@ -20,7 +20,6 @@ private
 
   def query_series
     series = Reports::Series.new
-               .for_en
                .between(from: from, to: to)
                .by_base_path(format_base_path_param)
                .run
