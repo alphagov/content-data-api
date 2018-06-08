@@ -26,7 +26,7 @@ module PublishingAPI
         public_updated_at: parse_time('public_updated_at'),
         schema_name: message.payload.fetch('schema_name'),
         latest: true,
-        raw_json: message.payload.to_json,
+        raw_json: message.payload,
       )
     end
 

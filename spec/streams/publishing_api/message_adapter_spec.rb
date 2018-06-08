@@ -34,7 +34,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
         public_updated_at: Time.zone.parse('2018-04-20T12:00:40+01:00'),
         schema_name: 'detailed_guide',
         latest: true,
-        raw_json: payload.to_json
+        raw_json: payload
       )
     end
 
