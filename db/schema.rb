@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 20180610081625) do
     t.integer "word_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
+    t.index ["dimensions_item_id", "dimensions_date_id"], name: "editions_item_id_date_id", unique: true
   end
 
   create_table "facts_metrics", force: :cascade do |t|
@@ -128,6 +128,7 @@ ActiveRecord::Schema.define(version: 20180610081625) do
     t.integer "entrances", default: 0
     t.integer "bounce_rate", default: 0
     t.integer "avg_time_on_page", default: 0
+    t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
