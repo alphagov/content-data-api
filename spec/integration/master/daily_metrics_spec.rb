@@ -1,29 +1,14 @@
 RSpec.describe 'Master process spec' do
   let(:today) { Date.new(2018, 2, 21) }
-
   around do |example|
     Timecop.freeze(today) do
       example.run
     end
   end
 
-  let(:content_id) { 'id1' }
-  let(:base_path) { '/the-base-path' }
-  let(:old_base_path) { '/old/base/path' }
-  let(:locale) { 'en' }
-  let(:item_content) { 'This is the content.' }
-
-
-  let!(:an_item) { create :dimensions_item, content_id: 'a-content-id', locale: locale }
-  let!(:outdated_item) do
-    create :dimensions_item, content_id: content_id,
-      base_path: old_base_path, locale: locale, latest: false
-  end
-  let!(:item) do
-    create :dimensions_item,
-      content_id: content_id, base_path: base_path,
-      locale: locale
-  end
+  let!(:an_item) { create :dimensions_item }
+  let!(:outdated_item) { create :dimensions_item, content_id: 'id1', base_path: '/path-1', latest: false }
+  let!(:item) { create :dimensions_item, content_id: 'id1', base_path: '/path-1', latest: true }
 
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response
@@ -66,18 +51,11 @@ RSpec.describe 'Master process spec' do
     expect(latest_metric).to have_attributes(feedex_comments: 21)
   end
 
-  def validate_quality_metrics
-    expect(latest_metric).to have_attributes(
-      repeated_words_count: 8,
-      passive_count: 6,
-    )
-  end
-
   def stub_google_analytics_response
     allow(GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(
       [
         {
-          'page_path' => base_path,
+          'page_path' => '/path-1',
           'pageviews' => 11,
           'unique_pageviews' => 12,
           'date' => '2018-02-20',
@@ -98,7 +76,7 @@ RSpec.describe 'Master process spec' do
     allow(GA::UserFeedbackService).to receive(:find_in_batches).and_yield(
       [
         {
-          'page_path' => base_path,
+          'page_path' => '/path-1',
           'is_this_useful_no' => 1,
           'is_this_useful_yes' => 12,
           'date' => '2018-02-20',
@@ -138,7 +116,7 @@ RSpec.describe 'Master process spec' do
     response = {
       'results': [{
         'date': '2018-02-20',
-        'path': base_path,
+        'path': '/path-1',
         'count': 21
       }, {
         'date': '2018-02-20',
