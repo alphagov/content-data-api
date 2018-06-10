@@ -1,5 +1,4 @@
 RSpec.describe 'Import edition metrics' do
-
   subject { PublishingAPI::MessageHandler }
 
   it 'stores content item metrics' do

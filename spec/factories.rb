@@ -28,6 +28,8 @@ FactoryBot.define do
     sequence(:description) { |i| "description - #{i}" }
     sequence(:raw_json) { |i| "json - #{i}" }
     sequence(:publishing_api_payload_version)
+    schema_name 'detailed_guide'
+    document_type 'detailed_guide'
   end
 
   factory :facts_edition, class: Facts::Edition do
@@ -73,19 +75,19 @@ FactoryBot.define do
   factory :message, class: GovukMessageQueueConsumer::MockMessage do
     transient do
       schema_name 'detailed_guide'
+      document_type 'detailed_guide'
       base_path '/base-path'
       routing_key 'news_story.major'
       attributes { {} }
     end
 
-    delivery_info { { routing_key: routing_key }}
+    delivery_info { { routing_key: routing_key } }
 
     payload do
       GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
-        result.merge!('base_path' => base_path)
+        result['base_path'] = base_path
         result.merge! attributes
       end
     end
   end
-
 end

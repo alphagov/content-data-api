@@ -3,7 +3,7 @@ RSpec.describe 'Grow the Items dimension' do
 
   it 'grows the dimension with update events' do
     expect {
-      subject.process(build :message)
+      subject.process(build(:message))
     }.to change(Dimensions::Item, :count).by(1)
   end
 

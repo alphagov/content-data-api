@@ -16,7 +16,8 @@ class Dimensions::Item < ApplicationRecord
 
   def get_content
     return if raw_json.blank?
-    Item::Content::Parser.extract_content(raw_json)
+
+    ::Item::Content::Parser.extract_content(raw_json)
   end
 
   def older_than?(other)
@@ -30,7 +31,7 @@ class Dimensions::Item < ApplicationRecord
     update(latest: true)
   end
 
-  protected
+protected
 
   def deprecate!
     update!(latest: false)

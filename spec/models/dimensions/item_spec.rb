@@ -105,7 +105,7 @@ RSpec.describe Dimensions::Item, type: :model do
     let(:item) { build :dimensions_item, latest: false }
 
     it 'set the latest attribute to true' do
-      item.promote!(build :dimensions_item)
+      item.promote!(build(:dimensions_item))
 
       expect(item.latest).to be true
     end

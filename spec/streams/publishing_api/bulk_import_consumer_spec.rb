@@ -9,7 +9,7 @@ RSpec.describe PublishingAPI::BulkImportConsumer do
   it_behaves_like 'a message queue processor'
 
   context 'when an error happens' do
-    let!(:message) { build :message}
+    let!(:message) { build :message }
 
     before { expect(PublishingAPI::MessageHandler).to receive(:process).and_raise(StandardError.new("An error")) }
 

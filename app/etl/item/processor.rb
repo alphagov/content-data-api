@@ -11,14 +11,15 @@ class Item::Processor
   end
 
   def run
-    attributes = Item::Quality::Service.new.run(item.get_content)
-    attributes.merge!(
+    edition = Facts::Edition.create!(
       number_of_pdfs: Item::Metadata::NumberOfPdfs.parse(item.raw_json),
       number_of_word_files: Item::Metadata::NumberOfWordFiles.parse(item.raw_json),
       dimensions_date: Dimensions::Date.for(date),
       dimensions_item: item,
     )
 
-    Facts::Edition.create!(attributes)
+    unless item.get_content.blank?
+      edition.update(Item::Quality::Service.new.run(item.get_content))
+    end
   end
 end

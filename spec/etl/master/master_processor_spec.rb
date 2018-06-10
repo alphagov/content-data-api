@@ -34,6 +34,7 @@ RSpec.describe Master::MasterProcessor do
 
   it 'creates a Metrics fact per content item' do
     subject.process
+
     expect(Master::MetricsProcessor).to have_received(:process).with(date: Date.new(2018, 2, 19))
   end
 
@@ -52,6 +53,7 @@ RSpec.describe Master::MasterProcessor do
   it 'can run the process for other days' do
     another_date = Date.new(2017, 12, 30)
     subject.process(date: another_date)
+
     expect(Master::MetricsProcessor).to have_received(:process).with(date: another_date)
     expect(GA::ViewsAndNavigationProcessor).to have_received(:process).with(date: another_date)
     expect(Feedex::Processor).to have_received(:process).with(date: another_date)
