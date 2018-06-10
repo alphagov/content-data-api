@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180610074451) do
+ActiveRecord::Schema.define(version: 20180610080335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,8 +110,7 @@ ActiveRecord::Schema.define(version: 20180610074451) do
     t.integer "word_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dimensions_date_id"], name: "index_facts_editions_on_dimensions_date_id"
-    t.index ["dimensions_item_id"], name: "index_facts_editions_on_dimension_ids", unique: true
+    t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
   end
 
   create_table "facts_metrics", force: :cascade do |t|
@@ -129,8 +128,6 @@ ActiveRecord::Schema.define(version: 20180610074451) do
     t.integer "entrances", default: 0
     t.integer "bounce_rate", default: 0
     t.integer "avg_time_on_page", default: 0
-    t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_date_item_id"
-    t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
