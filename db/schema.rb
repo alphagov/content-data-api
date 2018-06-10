@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180608125059) do
+ActiveRecord::Schema.define(version: 20180610074451) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,8 +91,8 @@ ActiveRecord::Schema.define(version: 20180608125059) do
   end
 
   create_table "facts_editions", force: :cascade do |t|
-    t.date "dimensions_date_id"
-    t.bigint "dimensions_item_id"
+    t.date "dimensions_date_id", null: false
+    t.bigint "dimensions_item_id", null: false
     t.integer "number_of_pdfs"
     t.integer "number_of_word_files"
     t.integer "readability_score"
@@ -115,8 +115,8 @@ ActiveRecord::Schema.define(version: 20180608125059) do
   end
 
   create_table "facts_metrics", force: :cascade do |t|
-    t.date "dimensions_date_id"
-    t.bigint "dimensions_item_id"
+    t.date "dimensions_date_id", null: false
+    t.bigint "dimensions_item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "pageviews", default: 0
