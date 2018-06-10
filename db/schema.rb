@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180610080335) do
+ActiveRecord::Schema.define(version: 20180610081321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,15 +37,15 @@ ActiveRecord::Schema.define(version: 20180610080335) do
   end
 
   create_table "dimensions_items", force: :cascade do |t|
-    t.string "content_id"
+    t.string "content_id", null: false
     t.string "title"
-    t.string "base_path"
+    t.string "base_path", null: false
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "latest"
     t.json "raw_json"
-    t.string "document_type"
+    t.string "document_type", null: false
     t.string "content_purpose_document_supertype"
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 20180610080335) do
     t.string "content_purpose_subgroup"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
     t.index ["content_id", "latest"], name: "idx_latest_content_id"
-    t.string "schema_name"
+    t.string "schema_name", null: false
     t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
