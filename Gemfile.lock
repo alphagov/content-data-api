@@ -90,7 +90,7 @@ GEM
     declarative-option (0.1.0)
     diff-lcs (1.3)
     docile (1.3.0)
-    domain_name (0.5.20170404)
+    domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     draper (3.0.1)
       actionpack (~> 5.0)
@@ -109,7 +109,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.23)
     formatador (0.2.5)
-    gds-api-adapters (52.5.1)
+    gds-api-adapters (52.6.0)
       addressable
       link_header
       lrucache (~> 0.1.1)
@@ -293,7 +293,7 @@ GEM
     public_suffix (3.0.2)
     puma (3.11.4)
     rack (2.0.5)
-    rack-cache (1.7.1)
+    rack-cache (1.8.0)
       rack (>= 0.4)
     rack-protection (2.0.1)
       rack
@@ -489,7 +489,7 @@ DEPENDENCIES
   database_cleaner
   draper
   factory_bot_rails
-  gds-api-adapters (~> 52.5.1)
+  gds-api-adapters (~> 52.6.0)
   gds-sso
   google-api-client (~> 0.23)
   govuk-lint (= 3.8.0)
