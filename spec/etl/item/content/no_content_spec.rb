@@ -22,6 +22,7 @@ RSpec.describe Item::Content::Parser do
       placeholder
       policy
       redirect
+      role
       special_route
       topic
       world_location

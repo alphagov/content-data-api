@@ -24,6 +24,7 @@ class Item::Content::Parsers::NoContent
       placeholder
       policy
       redirect
+      role
       special_route
       topic
       world_location
