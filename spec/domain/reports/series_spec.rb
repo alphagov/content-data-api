@@ -3,9 +3,9 @@ RSpec.describe Reports::Series do
     it "returns a series of all metrics" do
       item = create(:dimensions_item)
       create(:metric, dimensions_item: item)
-      described_class.new.for_en
+      described_class.new
 
-      expect(described_class.new.for_en.run.one?).to eq(true)
+      expect(described_class.new.run.one?).to eq(true)
     end
   end
 

@@ -1,8 +1,4 @@
 class Reports::Series
-  def for_en
-    self
-  end
-
   def between(from:, to:)
     @from = from
     @to = to
