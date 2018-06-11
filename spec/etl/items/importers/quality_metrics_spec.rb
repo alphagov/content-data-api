@@ -56,6 +56,13 @@ RSpec.describe Items::Importers::QualityMetrics do
       )
     end
 
+    it 'returns without running content_quality_service if item has no content' do
+      item = create(:dimensions_item, raw_json: nil)
+      subject { Items::Importers::QualityMetrics.new(item.id) }
+      subject.run
+      expect(subject.content_quality_service).not_to receive(:run)
+    end
+
     it 'creates a fact record' do
       subject.run
 
