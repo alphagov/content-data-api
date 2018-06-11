@@ -1,4 +1,6 @@
 RSpec.describe 'Import edition metrics' do
+  include QualityMetricsHelpers
+
   subject { PublishingAPI::MessageHandler }
 
   it 'stores content item metrics' do
@@ -9,7 +11,7 @@ RSpec.describe 'Import edition metrics' do
       '<div class=\"attachment-details\">\n<a href=\"link.docx\">1</a>\n\n\n\n</div>',
     ]
 
-    stub_quality_metrics
+    stub_quality_metrics_request
     subject.process(message)
 
     item = Dimensions::Item.first
@@ -33,8 +35,8 @@ RSpec.describe 'Import edition metrics' do
     )
   end
 
-  def stub_quality_metrics
-    response = {
+  def stub_quality_metrics_request
+    stub_quality_metrics(
       readability: { 'count' => 1 },
       contractions: { 'count' => 2 },
       equality: { 'count' => 3 },
@@ -45,8 +47,6 @@ RSpec.describe 'Import edition metrics' do
       repeated_words: { 'count' => 8 },
       simplify: { 'count' => 9 },
       spell: { 'count' => 10 }
-    }
-    stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics').
-      to_return(status: 200, body: response.to_json, headers: { 'Content-Type' => 'application/json' })
+    )
   end
 end

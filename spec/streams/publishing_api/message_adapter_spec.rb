@@ -46,7 +46,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
             'title' => 'the-title',
             'withdrawn' => 'false',
             'locale' => 'en',
-            'base_path' => '/the-bas-path'
+            'base_path' => '/the-base-path'
           }
         ]
 
