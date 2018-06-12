@@ -16,6 +16,7 @@ private
       body: { content: content }.to_json,
       headers: { 'Content-Type' => 'application/json' }
     )
+    raise QualityMetricsError("response body: #{response.body}") unless response.code == 200
     response.parsed_response
   end
 
@@ -42,4 +43,6 @@ private
   def count_metric(response, metric_name)
     response.dig(metric_name, 'count') || 0
   end
+
+  class QualityMetricsError < StandardError; end
 end
