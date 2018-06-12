@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20180610081625) do
     t.datetime "updated_at", null: false
     t.boolean "latest"
     t.json "raw_json"
-    t.string "document_type", null: false
+    t.string "document_type"
     t.string "content_purpose_document_supertype"
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
@@ -56,10 +56,10 @@ ActiveRecord::Schema.define(version: 20180610081625) do
     t.bigint "publishing_api_payload_version", null: false
     t.string "content_purpose_supergroup"
     t.string "content_purpose_subgroup"
-    t.index ["base_path"], name: "index_dimensions_items_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.string "schema_name", null: false
     t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest", unique: true, where: "(latest = true)"
+    t.index ["base_path"], name: "index_dimensions_items_on_base_path"
+    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
   end
