@@ -16,42 +16,25 @@ class Dimensions::Item < ApplicationRecord
 
   def get_content
     return if raw_json.blank?
-    Item::Content::Parser.extract_content(raw_json)
+
+    ::Item::Content::Parser.extract_content(raw_json)
   end
 
-  def copy_to_new_version!(base_path:, payload_version:)
-    # Create a new version of this content item, assuming that a document's
-    # content_id and locale are fixed, but the base_path may change.
-    raise "Tried to create a new version but this version is not the latest" unless latest
+  def older_than?(other)
+    return true unless other
 
-    update_attributes(latest: false)
-
-    new_version = Dimensions::Item.create_empty(
-      content_id: content_id,
-      base_path: base_path,
-      locale: locale,
-      payload_version: payload_version
-    )
-
-    new_version
+    self.publishing_api_payload_version > other.publishing_api_payload_version
   end
 
-  def gone!
-    update_attributes(status: 'gone')
+  def promote!(old_item)
+    old_item.deprecate! if old_item
+    update(latest: true)
   end
 
-  def quality_metrics_required?(attributes)
-    attributes[:locale] == 'en' && attributes[:content_hash] != content_hash
-  end
+protected
 
-  def self.create_empty(content_id:, base_path:, locale:, payload_version:)
-    create(
-      content_id: content_id,
-      base_path: base_path,
-      locale: locale,
-      latest: true,
-      publishing_api_payload_version: payload_version
-    )
+  def deprecate!
+    update!(latest: false)
   end
 end
 

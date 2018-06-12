@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180522103512) do
+ActiveRecord::Schema.define(version: 20180610081625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,31 +37,30 @@ ActiveRecord::Schema.define(version: 20180522103512) do
   end
 
   create_table "dimensions_items", force: :cascade do |t|
-    t.string "content_id"
+    t.string "content_id", null: false
     t.string "title"
-    t.string "base_path"
+    t.string "base_path", null: false
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "latest"
     t.json "raw_json"
-    t.string "document_type"
+    t.string "document_type", null: false
     t.string "content_purpose_document_supertype"
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
-    t.string "status", default: "live"
     t.string "primary_organisation_title"
     t.string "primary_organisation_content_id"
     t.boolean "primary_organisation_withdrawn"
-    t.string "content_hash"
-    t.string "locale", default: "en", null: false
+    t.string "locale"
     t.bigint "publishing_api_payload_version", null: false
     t.string "content_purpose_supergroup"
     t.string "content_purpose_subgroup"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
     t.index ["content_id", "latest"], name: "idx_latest_content_id"
-    t.index ["latest", "base_path"], name: "index_dimensions_items_on_latest_and_base_path", unique: true, where: "(latest = true)"
-    t.index ["latest", "content_id"], name: "index_dimensions_items_on_latest_and_content_id"
+    t.string "schema_name", null: false
+    t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest", unique: true, where: "(latest = true)"
+    t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
   end
 
@@ -92,8 +91,8 @@ ActiveRecord::Schema.define(version: 20180522103512) do
   end
 
   create_table "facts_editions", force: :cascade do |t|
-    t.date "dimensions_date_id"
-    t.bigint "dimensions_item_id"
+    t.date "dimensions_date_id", null: false
+    t.bigint "dimensions_item_id", null: false
     t.integer "number_of_pdfs"
     t.integer "number_of_word_files"
     t.integer "readability_score"
@@ -106,18 +105,17 @@ ActiveRecord::Schema.define(version: 20180522103512) do
     t.integer "repeated_words_count"
     t.integer "simplify_count"
     t.integer "spell_count"
-    t.integer "string_length", default: 0
-    t.integer "sentence_count", default: 0
-    t.integer "word_count", default: 0
+    t.integer "string_length"
+    t.integer "sentence_count"
+    t.integer "word_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dimensions_date_id"], name: "index_facts_editions_on_dimensions_date_id"
-    t.index ["dimensions_item_id"], name: "index_facts_editions_on_dimension_ids", unique: true
+    t.index ["dimensions_item_id", "dimensions_date_id"], name: "editions_item_id_date_id", unique: true
   end
 
   create_table "facts_metrics", force: :cascade do |t|
-    t.date "dimensions_date_id"
-    t.bigint "dimensions_item_id"
+    t.date "dimensions_date_id", null: false
+    t.bigint "dimensions_item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "pageviews", default: 0
@@ -130,8 +128,7 @@ ActiveRecord::Schema.define(version: 20180522103512) do
     t.integer "entrances", default: 0
     t.integer "bounce_rate", default: 0
     t.integer "avg_time_on_page", default: 0
-    t.index ["dimensions_date_id", "dimensions_item_id"], name: "index_facts_metrics_date_item_id"
-    t.index ["dimensions_item_id"], name: "index_facts_metrics_on_dimensions_item_id"
+    t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
   end
 
   create_table "users", id: :serial, force: :cascade do |t|

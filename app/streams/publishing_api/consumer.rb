@@ -1,7 +1,8 @@
 module PublishingAPI
   class Consumer
     def process(message)
-      MessageProcessor.new(message).process
+      PublishingAPI::MessageHandler.process(message)
+
       message.ack
     rescue StandardError => e
       GovukError.notify(e)
