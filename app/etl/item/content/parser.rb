@@ -14,7 +14,11 @@ class Item::Content::Parser
     base_path = json.dig("base_path")
     parser = for_schema(schema)
     if parser.present?
-      parse_html parser.parse(json)
+      begin
+        parse_html parser.parse(json)
+      rescue StandardError => e
+        GovukError.notify(e, extra: { schema: schema, base_path: base_path, json: json })
+      end
     else
       GovukError.notify(InvalidSchemaError.new("Schema does not exist: #{schema}"), extra: { base_path: base_path.to_s })
 

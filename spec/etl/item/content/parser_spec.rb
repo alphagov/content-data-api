@@ -2,6 +2,21 @@ RSpec.describe Item::Content::Parser do
   subject { described_class.instance }
 
   describe "#extract_content" do
+    context "when valid schema" do
+      describe "extraction fails with a StandardError" do
+        it "logs the error with Sentry" do
+          json = { schema_name: 'place',
+            details: { introduction: 'Introduction',
+              more_information: 'Enter your postcode' } }.deep_stringify_keys
+
+          allow(Nokogiri::HTML).to receive(:parse).and_raise(StandardError)
+
+          expect(GovukError).to receive(:notify)
+          subject.extract_content(json)
+        end
+      end
+    end
+
     context "when invalid schema" do
       describe "has no schema_name and no base_path" do
         it "raises an InvalidSchemaError and returns nil" do
