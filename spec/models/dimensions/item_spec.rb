@@ -2,6 +2,9 @@ RSpec.describe Dimensions::Item, type: :model do
   let(:now) { Time.new(2018, 2, 21, 12, 31, 2) }
 
   it { is_expected.to validate_presence_of(:content_id) }
+  it { is_expected.to validate_presence_of(:base_path) }
+  it { is_expected.to validate_presence_of(:publishing_api_payload_version) }
+  it { is_expected.to validate_presence_of(:schema_name) }
 
   describe '#by_natural_key' do
     it 'returns the latest item of the correct locale' do

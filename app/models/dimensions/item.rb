@@ -3,6 +3,9 @@ require 'json'
 class Dimensions::Item < ApplicationRecord
   has_one :facts_edition, class_name: "Facts::Edition", foreign_key: :dimensions_item_id
   validates :content_id, presence: true
+  validates :base_path, presence: true
+  validates :schema_name, presence: true
+  validates :publishing_api_payload_version, presence: true
 
   scope :by_base_path, ->(base_path) { where('base_path like (?)', base_path) }
   scope :by_content_id, ->(content_id) { where(content_id: content_id) }
