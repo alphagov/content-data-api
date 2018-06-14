@@ -78,4 +78,7 @@ private
   def parsers
     @parsers ||= {}
   end
+
+  class InvalidSchemaError < StandardError;
+  end
 end

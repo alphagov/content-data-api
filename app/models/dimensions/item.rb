@@ -37,6 +37,3 @@ protected
     update!(latest: false)
   end
 end
-
-class InvalidSchemaError < StandardError;
-end
