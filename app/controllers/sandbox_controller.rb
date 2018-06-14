@@ -3,19 +3,15 @@ class SandboxController < ApplicationController
 
   def index
     report = build_series_report
+    @metrics = report.run
 
     respond_to do |format|
       format.html do
-        report = report.with_edition_metrics if is_edition_metric?
-
-        @metrics = report.run
         @content_items = report.content_items
         @query_params = query_params
       end
 
       format.csv do
-        @metrics = report.with_edition_metrics.run
-
         export_to_csv enum: CSVExport.run(@metrics, Facts::Metric.csv_fields)
       end
     end
@@ -54,10 +50,5 @@ private
   def query_params
     params.permit(:from, :to, :base_path, :utf8, :organisation, :filter,
       :metric1, :metric2, :metric3, :metric, :document_type)
-  end
-
-  def is_edition_metric?
-    selected_metrics = [params[:metric1], params[:metric2], params[:metric3]]
-    selected_metrics.any? { |metric| Metric.is_edition_metric?(metric) }
   end
 end

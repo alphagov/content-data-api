@@ -48,6 +48,8 @@ RSpec.feature 'Performance metrics', type: :feature do
       scenario "Show Stats for #{metric_name}" do
         create :metric, dimensions_item: item1, dimensions_date: day0, metric_name => 10
         create :metric, dimensions_item: item2, dimensions_date: day1, metric_name => 10
+        create :facts_edition, dimensions_item: item1, dimensions_date: day0
+        create :facts_edition, dimensions_item: item2, dimensions_date: day0
 
         visit '/sandbox'
 
