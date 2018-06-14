@@ -6,17 +6,6 @@ RSpec.describe Dimensions::Item, type: :model do
   it { is_expected.to validate_presence_of(:publishing_api_payload_version) }
   it { is_expected.to validate_presence_of(:schema_name) }
 
-  describe '#by_natural_key' do
-    it 'returns the latest item of the correct locale' do
-      content_id = 'the-one-we-want'
-      expected_item = create(:dimensions_item, content_id: content_id, latest: true, locale: 'en')
-      create(:dimensions_item, content_id: content_id, latest: false, locale: 'en')
-      create(:dimensions_item, content_id: content_id, latest: true, locale: 'de')
-      create(:dimensions_item, content_id: content_id, latest: true, locale: 'fr')
-      expect(Dimensions::Item.by_natural_key(content_id: content_id, locale: 'en')).to eq(expected_item)
-    end
-  end
-
   describe 'Filtering' do
     subject { Dimensions::Item }
 

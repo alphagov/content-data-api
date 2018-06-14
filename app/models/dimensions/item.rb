@@ -13,10 +13,6 @@ class Dimensions::Item < ApplicationRecord
   scope :by_document_type, ->(document_type) { where('document_type like (?)', document_type) }
   scope :by_locale, ->(locale) { where(locale: locale) }
 
-  def self.by_natural_key(content_id:, locale:)
-    find_by(content_id: content_id, locale: locale, latest: true)
-  end
-
   def get_content
     return if raw_json.blank?
 
