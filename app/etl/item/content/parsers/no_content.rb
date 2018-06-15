@@ -10,6 +10,7 @@ class Item::Content::Parsers::NoContent
       external_content
       generic
       homepage
+      knowledge_alpha
       organisations_homepage
       person
       placeholder_corporate_information_page
