@@ -1,8 +1,8 @@
 RSpec.describe Item::Content::Parser do
   subject { described_class.instance }
 
-  it 'returns content json from :body for all valid formats' do
-    valid_types = %w[
+  let(:valid_types) do
+    %w[
       answer
       calendar
       case_study
@@ -29,6 +29,9 @@ RSpec.describe Item::Content::Parser do
       working_group
       world_location_news_article
     ].freeze
+  end
+
+  it 'returns content json from :body for all valid formats' do
     valid_types.each do |schema|
       json = build_raw_json(schema_name: schema, body: "<p>Body for #{schema}</p>")
       expect(subject.extract_content(json.deep_stringify_keys)).to eq("Body for #{schema}"), "Incorrect body for schema: '#{schema}'"
@@ -38,6 +41,28 @@ RSpec.describe Item::Content::Parser do
   it 'returns nil if details.body does NOT exist' do
     valid_schema_json = { schema_name: 'answer', details: {} }
     expect(subject.extract_content(valid_schema_json.deep_stringify_keys)).to eq(nil)
+  end
+
+  it 'returns body for content provided as array for each content type' do
+    valid_types.each do |schema|
+      body_multi_html_content = {
+        schema_name: 'answer',
+        details: {
+          body: [
+            {
+              "content_type": "text/govspeak",
+              "content": "## Wrong body for #{schema}"
+            },
+            {
+              "content_type": "text/html",
+              "content": "<h2>Body for #{schema}</h2>"
+            },
+          ]
+        }
+      }
+
+      expect(subject.extract_content(body_multi_html_content.deep_stringify_keys)).to eq("Body for #{schema}")
+    end
   end
 
   it 'does not fail with unicode characters' do
