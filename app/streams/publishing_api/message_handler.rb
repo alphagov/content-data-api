@@ -13,7 +13,7 @@ class PublishingAPI::MessageHandler
   end
 
   def process
-    return unless new_item.older_than?(old_item)
+    return unless new_item.newer_than?(old_item)
 
     if is_links_update?
       grow_dimension! if links_have_changed?
