@@ -2,7 +2,7 @@
 
 library("govuk")
 
-node {
+node("postgresql-9.6") {
   govuk.buildProject(
     postgres96Lint: false,
     beforeTest: {
