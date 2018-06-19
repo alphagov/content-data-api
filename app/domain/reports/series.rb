@@ -6,12 +6,6 @@ class Reports::Series
     self
   end
 
-  def with_edition_metrics
-    @with_edition_metrics = true
-
-    self
-  end
-
   def by_organisation_id(org_id)
     @org_id = org_id
 
@@ -38,8 +32,7 @@ class Reports::Series
     dates = slice_dates
     items = slice_content_items
 
-    metrics = Facts::Metric.all
-    metrics = metrics.with_edition_metrics if @with_edition_metrics
+    metrics = Facts::Metric.all.with_edition_metrics
     metrics
       .joins(:dimensions_item).merge(items)
       .joins(:dimensions_date).merge(dates)

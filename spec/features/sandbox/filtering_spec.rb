@@ -10,7 +10,14 @@ RSpec.feature 'Show aggregated metrics', type: :feature do
   let(:day1) { create :dimensions_date, date: Date.new(2018, 1, 12) }
   let(:day2) { create :dimensions_date, date: Date.new(2018, 1, 13) }
 
+
   describe 'Filtering' do
+    before(:each) do
+      create :facts_edition, dimensions_item: item1,
+                             dimensions_date: day1
+      create :facts_edition, dimensions_item: item2,
+                             dimensions_date: day1
+    end
     let(:item1) { create :dimensions_item, base_path: '/path' }
     let(:item2) { create :dimensions_item, base_path: '/path2' }
 

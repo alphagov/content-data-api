@@ -115,6 +115,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, feedex_comments: 20
       create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, feedex_comments: 30
       create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, feedex_comments: 40
+      create :facts_edition, dimensions_item: item, dimensions_date: day1
     end
 
     it 'returns `pageviews` values between two dates' do
