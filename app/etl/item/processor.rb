@@ -17,7 +17,6 @@ class Item::Processor
       dimensions_date: Dimensions::Date.for(date),
       dimensions_item: item,
     )
-
     unless item.get_content.blank?
       edition.update(Item::Quality::Service.new.run(item.get_content))
     end

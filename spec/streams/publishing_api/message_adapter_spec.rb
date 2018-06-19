@@ -18,7 +18,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
       end
 
       event = build(:message, payload: payload, routing_key: 'the-key')
-      dimension_item = subject.to_dimension_item(event)
+      dimension_item = subject.to_dimension_items(event)[0]
 
       expect(dimension_item).to have_attributes(
         content_id: payload.fetch('content_id'),
@@ -54,7 +54,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
       end
 
       event = build(:message, payload: payload, routing_key: 'the-key')
-      dimension_item = subject.to_dimension_item(event)
+      dimension_item = subject.to_dimension_items(event)[0]
 
       expect(dimension_item).to have_attributes(
         primary_organisation_content_id: 'ce91c056-8165-49fe-b318-b71113ab4a30',
@@ -72,7 +72,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
         it "transfom schema: `#{schema_name}` with no errors" do
           event = build(:message, payload: payload, routing_key: 'the-key')
 
-          expect { subject.to_dimension_item(event) }.to_not raise_error
+          expect { subject.to_dimension_items(event) }.to_not raise_error
         end
       end
     end
