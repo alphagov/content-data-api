@@ -1,13 +1,14 @@
 class Item::Processor
   attr_reader :item, :date
 
-  def self.run(item, date)
-    new(item: item, date: date).run
+  def self.run(item, date, subpage:)
+    new(item: item, date: date, subpage: subpage).run
   end
 
-  def initialize(item:, date:)
+  def initialize(item:, date:, subpage:)
     @item = item
     @date = date
+    @subpage = subpage
   end
 
   def run

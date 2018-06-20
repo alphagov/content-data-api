@@ -7,19 +7,14 @@ class PublishingAPI::MessageHandler
 
   def initialize(message)
     @message = message
-
-    @new_items = PublishingAPI::MessageAdapter.to_dimension_items(message)
   end
 
   def process
-    @new_items.each do |new_item|
-      old_item = Dimensions::Item.find_by(base_path: new_item.base_path, latest: true)
-
-      next unless new_item.newer_than?(old_item)
+    items.each do |item|
       if is_links_update?
-        grow_dimension!(new_item, old_item) if links_have_changed?(new_item, old_item)
+        item.process_links!
       else
-        grow_dimension!(new_item, old_item)
+        item.process!
       end
     end
   end
@@ -28,21 +23,40 @@ private
 
   attr_reader :message
 
+  def get_old_items(new_base_paths)
+    content_id = message.payload["content_id"]
+
+    # Get everything with the same content id, so we can deprecate parts
+    # that no longer exist, and get everything with the same base path
+    # to maintain the constraint of only one latest item at each base path
+    Dimensions::Item.where(content_id: content_id, latest: true).or(
+      Dimensions::Item.where(base_path: new_base_paths, latest: true)
+    )
+  end
+
+  def items
+    adapter = PublishingAPI::MessageAdapter.new(message)
+    new_items = adapter.to_dimension_items
+    new_items_by_base_path = new_items.map { |item| [item.base_path, item] }.to_h
+    new_base_paths = new_items_by_base_path.keys
+
+    old_items = get_old_items(new_base_paths)
+    old_items_by_base_path = old_items.map { |item| [item.base_path, item] }.to_h
+    old_base_paths = old_items_by_base_path.keys
+
+    all_base_paths = new_base_paths.to_set + old_base_paths.to_set
+
+    all_base_paths.map do |base_path|
+      PublishingAPI::ItemHandler.new(
+        old_item: old_items_by_base_path[base_path],
+        new_item: new_items_by_base_path[base_path],
+        subpage: adapter.has_multiple_parts?
+      )
+    end
+  end
+
   def is_links_update?
     routing_key = message.delivery_info.routing_key
     routing_key.ends_with?('.links')
-  end
-
-  def links_have_changed?(new_item, old_item)
-    return true if old_item.nil?
-    HashDiff::Comparison.new(
-      old_item.expanded_links.deep_sort,
-      new_item.expanded_links.deep_sort
-    ).diff.present?
-  end
-
-  def grow_dimension!(new_item, old_item)
-    new_item.promote!(old_item)
-    Item::Processor.run(new_item, Date.today)
   end
 end

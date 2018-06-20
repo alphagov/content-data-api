@@ -34,7 +34,7 @@ module PublishingAPI
     end
 
     def to_dimension_items
-      if parts.present?
+      if has_multiple_parts?
         parts.each do |part|
           @items << Dimensions::Item.new(
             base_path: message.payload.fetch('base_path') + '/' + part.fetch('slug'),
@@ -63,8 +63,8 @@ module PublishingAPI
       items
     end
 
-    def parts
-      message.payload.dig('details', 'parts')
+    def has_multiple_parts?
+      parts.present?
     end
 
     def primary_organisation
@@ -78,6 +78,10 @@ module PublishingAPI
 
     def parse_time(attribute_name)
       message.payload.fetch(attribute_name, nil)
+    end
+
+    def parts
+      message.payload.dig('details', 'parts')
     end
   end
 end

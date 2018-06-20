@@ -38,8 +38,6 @@ class Dimensions::Item < ApplicationRecord
     end
   end
 
-protected
-
   def deprecate!
     update!(latest: false)
   end
