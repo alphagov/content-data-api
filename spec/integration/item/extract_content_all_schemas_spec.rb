@@ -23,7 +23,7 @@ RSpec.describe 'Process parser', type: :integration do
   end
 
   def get_schema_collection
-    schemas = GovukSchemas::Schema.all(schema_type: "frontend")
+    schemas = GovukSchemas::Schema.all(schema_type: "notification")
     schemas.values
   end
 
