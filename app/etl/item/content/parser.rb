@@ -83,6 +83,6 @@ private
     @parsers ||= {}
   end
 
-  class InvalidSchemaError < StandardError;
+  class InvalidSchemaError < StandardError
   end
 end

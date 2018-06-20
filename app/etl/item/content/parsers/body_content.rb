@@ -1,6 +1,11 @@
 class Item::Content::Parsers::BodyContent
   def parse(json)
-    json.dig("details", "body")
+    parsed = json.dig("details", "body")
+    if parsed.present? && parsed.is_a?(Array)
+      parsed = Hash[*parsed.map(&:values).flatten].fetch("text/html", nil)
+    end
+
+    parsed
   end
 
   def schemas
