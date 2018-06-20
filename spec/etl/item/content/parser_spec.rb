@@ -17,6 +17,11 @@ RSpec.describe Item::Content::Parser do
       end
     end
 
+    it 'returns nil if json is empty' do
+      content = subject.extract_content({})
+      expect(content).to be_nil
+    end
+
     context "when invalid schema" do
       describe "has no schema_name and no base_path" do
         it "raises an InvalidSchemaError and returns nil" do

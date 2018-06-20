@@ -36,6 +36,7 @@ private
 
   def items
     adapter = PublishingAPI::MessageAdapter.new(message)
+    subpages = adapter.subpages_by_base_path
     new_items = adapter.to_dimension_items
     new_items_by_base_path = new_items.map { |item| [item.base_path, item] }.to_h
     new_base_paths = new_items_by_base_path.keys
@@ -47,10 +48,14 @@ private
     all_base_paths = new_base_paths.to_set + old_base_paths.to_set
 
     all_base_paths.map do |base_path|
+      old_item = old_items_by_base_path[base_path]
+      new_item = new_items_by_base_path[base_path]
+      subpage = new_item ? subpages[new_item.base_path] : nil
+
       PublishingAPI::ItemHandler.new(
-        old_item: old_items_by_base_path[base_path],
-        new_item: new_items_by_base_path[base_path],
-        subpage: adapter.has_multiple_parts?
+        old_item: old_item,
+        new_item: new_item,
+        subpage: subpage
       )
     end
   end

@@ -79,20 +79,6 @@ RSpec.describe Dimensions::Item, type: :model do
     expect(item.raw_json).to eq('a' => 'b')
   end
 
-  describe '#get_content' do
-    it 'returns nil if json is empty' do
-      item = create(:dimensions_item, raw_json: {})
-      expect(item.get_content).to eq(nil)
-    end
-
-    it 'returns the content when json is valid' do
-      json = { 'schema_name' => 'valid' }
-      item = create(:dimensions_item, raw_json: json)
-      expect(Item::Content::Parser).to receive(:extract_content).with(json).and_return('the content')
-      expect(item.get_content).to eq('the content')
-    end
-  end
-
   describe '#promote!' do
     let(:item) { build :dimensions_item, latest: false }
 

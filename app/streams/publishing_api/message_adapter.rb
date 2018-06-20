@@ -37,12 +37,12 @@ module PublishingAPI
       if has_multiple_parts?
         parts.each do |part|
           @items << Dimensions::Item.new(
-            base_path: message.payload.fetch('base_path') + '/' + part.fetch('slug'),
+            base_path: base_path_for_part(part),
             content_id: message.payload.fetch('content_id'),
             publishing_api_payload_version: message.payload.fetch('payload_version'),
             document_type: message.payload.fetch('document_type'),
             locale: message.payload['locale'],
-            title: message.payload['title'],
+            title: title_for_part(part),
             content_purpose_document_supertype: message.payload['content_purpose_document_supertype'],
             content_purpose_supergroup: message.payload['content_purpose_supergroup'],
             content_purpose_subgroup: message.payload['content_purpose_subgroup'],
@@ -63,6 +63,12 @@ module PublishingAPI
       items
     end
 
+    def subpages_by_base_path
+      return {} unless has_multiple_parts?
+
+      parts.map { |part| [base_path_for_part(part), part.fetch('slug')] }.to_h
+    end
+
     def has_multiple_parts?
       parts.present?
     end
@@ -75,6 +81,19 @@ module PublishingAPI
   private
 
     attr_reader :message
+
+    def base_path
+      message.payload.fetch('base_path')
+    end
+
+    def base_path_for_part(part)
+      slug = part.fetch('slug')
+      base_path + '/' + slug
+    end
+
+    def title_for_part(part)
+      part.fetch('title')
+    end
 
     def parse_time(attribute_name)
       message.payload.fetch(attribute_name, nil)

@@ -1,13 +1,19 @@
 class Item::Content::Parsers::Parts
-  def parse(json)
-    html = []
+  def parse_subpage(json, subpage)
     parts = json.dig("details", "parts")
     return if parts.nil?
-    parts.each do |part|
-      html << part["title"]
-      html << part["body"]
+
+    current_part = parts.find { |part| part["slug"] == subpage }
+    return if current_part.nil?
+
+    body = current_part["body"]
+
+    if body.is_a?(Array)
+      body_by_content_type = body.map(&:values).to_h
+      body = body_by_content_type.fetch('text/html', nil)
     end
-    html.join(" ")
+
+    body
   end
 
   def schemas

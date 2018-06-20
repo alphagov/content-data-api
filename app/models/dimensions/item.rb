@@ -13,12 +13,6 @@ class Dimensions::Item < ApplicationRecord
   scope :by_document_type, ->(document_type) { where('document_type like (?)', document_type) }
   scope :by_locale, ->(locale) { where(locale: locale) }
 
-  def get_content
-    return if raw_json.blank?
-
-    ::Item::Content::Parser.extract_content(raw_json)
-  end
-
   def newer_than?(other)
     return true unless other
 
