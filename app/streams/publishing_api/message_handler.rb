@@ -1,4 +1,6 @@
 class PublishingAPI::MessageHandler
+  require "deepsort"
+
   def self.process(*args)
     new(*args).process
   end
@@ -30,10 +32,10 @@ private
   end
 
   def links_have_changed?
-    current_links = old_item.raw_json['expanded_links']
-    new_links = new_item.raw_json['expanded_links']
+    current_links = old_item.raw_json['expanded_links'].deep_sort
+    new_links = new_item.raw_json['expanded_links'].deep_sort
 
-    current_links != new_links
+    HashDiff::Comparison.new(current_links, new_links).diff.present?
   end
 
   def grow_dimension!
