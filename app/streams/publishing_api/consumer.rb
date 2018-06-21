@@ -2,7 +2,7 @@ module PublishingAPI
   class Consumer
     def process(message)
       if is_invalid_message?(message)
-        GovukError.notify(StandardError.new, extra: { payload: message })
+        GovukError.notify(StandardError.new, extra: { payload: message.payload })
         message.discard
         return
       end
