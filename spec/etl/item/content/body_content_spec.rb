@@ -43,6 +43,16 @@ RSpec.describe Item::Content::Parser do
     expect(subject.extract_content(valid_schema_json.deep_stringify_keys)).to eq(nil)
   end
 
+  it 'returns nil if details.body is an empty string' do
+    valid_schema_json = { schema_name: 'answer', details: { body: '' } }
+    expect(subject.extract_content(valid_schema_json.deep_stringify_keys)).to eq(nil)
+  end
+
+  it 'returns nil if details.body is an empty array' do
+    valid_schema_json = { schema_name: 'answer', details: { body: [] } }
+    expect(subject.extract_content(valid_schema_json.deep_stringify_keys)).to eq(nil)
+  end
+
   it 'returns body for content provided as array for each content type' do
     valid_types.each do |schema|
       body_multi_html_content = {
