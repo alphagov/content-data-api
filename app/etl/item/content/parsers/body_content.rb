@@ -5,6 +5,7 @@ class Item::Content::Parsers::BodyContent
       parsed = Hash[*parsed.map(&:values).flatten].fetch("text/html", nil)
     end
 
+    return nil unless parsed.present?
     parsed
   end
 
