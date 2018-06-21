@@ -33,13 +33,6 @@ RSpec.describe PublishingAPI::Consumer do
     }
 
     context "missing field is base_path" do
-      it "logs the error" do
-        message.payload.delete('base_path')
-
-        expect(GovukError).to receive(:notify).with(StandardError.new, extra: { payload: message.payload })
-        expect { subject.process(message) }.to_not raise_error
-      end
-
       it "discards the message" do
         expect(message).to receive(:discard)
 
@@ -48,13 +41,6 @@ RSpec.describe PublishingAPI::Consumer do
     end
 
     context "missing field is schema_name" do
-      it "logs the error" do
-        message.payload.delete('schema_name')
-
-        expect(GovukError).to receive(:notify).with(StandardError.new, extra: { payload: message.payload })
-        expect { subject.process(message) }.to_not raise_error
-      end
-
       it "discards the message" do
         expect(message).to receive(:discard)
 
