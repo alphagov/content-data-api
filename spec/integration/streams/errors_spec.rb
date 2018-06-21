@@ -27,22 +27,39 @@ RSpec.describe PublishingAPI::Consumer do
     end
   end
 
-  context "when message has missing mandatory field 'base_path'" do
+  context "when message has missing mandatory fields" do
     before {
       allow(PublishingAPI::MessageHandler).to receive(:process).and_raise(StandardError)
     }
 
-    it "logs the error" do
-      message.payload.delete('base_path')
+    context "missing field is base_path" do
+      it "logs the error" do
+        message.payload.delete('base_path')
 
-      expect(GovukError).to receive(:notify).with(StandardError.new, extra: { payload: message })
-      expect { subject.process(message) }.to_not raise_error
+        expect(GovukError).to receive(:notify).with(StandardError.new, extra: { payload: message.payload })
+        expect { subject.process(message) }.to_not raise_error
+      end
+
+      it "discards the message" do
+        expect(message).to receive(:discard)
+
+        subject.process(message)
+      end
     end
 
-    it "discards the message" do
-      expect(message).to receive(:discard)
+    context "missing field is schema_name" do
+      it "logs the error" do
+        message.payload.delete('schema_name')
 
-      subject.process(message)
+        expect(GovukError).to receive(:notify).with(StandardError.new, extra: { payload: message.payload })
+        expect { subject.process(message) }.to_not raise_error
+      end
+
+      it "discards the message" do
+        expect(message).to receive(:discard)
+
+        subject.process(message)
+      end
     end
   end
 end

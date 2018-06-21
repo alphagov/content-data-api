@@ -2,7 +2,7 @@ module PublishingAPI
   class Consumer
     def process(message)
       if is_invalid_message?(message)
-        GovukError.notify(StandardError.new, extra: { payload: message })
+        GovukError.notify(StandardError.new, extra: { payload: message.payload })
         message.discard
         return
       end
@@ -18,7 +18,8 @@ module PublishingAPI
   private
 
     def is_invalid_message?(message)
-      !message.payload['base_path'].present?
+      mandatory_fields = message.payload.values_at('base_path', 'schema_name')
+      mandatory_fields.any?(&:nil?)
     end
   end
 end
