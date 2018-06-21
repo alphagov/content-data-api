@@ -54,4 +54,32 @@ RSpec.describe PublishingAPI::Consumer do
       subject.process(link_update)
     }.to change(Dimensions::Item, :count).by(1)
   end
+
+  it 'does not grow the dimension when same links in different order' do
+    expect(GovukError).to_not receive(:notify)
+    expanded_links = [
+     {
+       'content_id' => 'aaaaaaaa-8165-49fe-b318-b71113ab4a30',
+       'title' => 'the-title-a',
+       'base_path' => '/the-base-path-a'
+     },
+     {
+       'content_id' => 'bbbbbbbb-8165-49fe-b318-b71113ab4a30',
+       'title' => 'the-title-b',
+       'base_path' => '/the-base-path-b'
+     },
+    ]
+
+    message = build(:message)
+    message.payload['payload_version'] = 1
+    message.payload['expanded_links']['primary_publishing_organisation'] = expanded_links
+    subject.process(message)
+
+    link_update = build :message, :link_update, payload: message.payload
+    link_update.payload['payload_version'] = 2
+    link_update.payload['expanded_links']['primary_publishing_organisation'] = expanded_links.reverse
+    expect {
+      subject.process(link_update)
+    }.to change(Dimensions::Item, :count).by(0)
+  end
 end
