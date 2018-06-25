@@ -1,8 +1,7 @@
 class PublishingAPI::ItemHandler
-  def initialize(old_item:, new_item:, subpage:)
+  def initialize(old_item:, new_item:)
     @old_item = old_item
     @new_item = new_item
-    @subpage = subpage
   end
 
   def process!
@@ -25,7 +24,6 @@ private
 
   attr_reader :old_item
   attr_reader :new_item
-  attr_reader :subpage
 
   def new_version?
     new_item && new_item.newer_than?(old_item)
@@ -42,6 +40,6 @@ private
 
   def grow_dimension!
     new_item.promote!(old_item)
-    Item::Processor.run(new_item, Date.today, subpage: subpage)
+    Item::Processor.run(new_item, Date.today)
   end
 end

@@ -1,14 +1,13 @@
 class Item::Processor
-  attr_reader :item, :date, :subpage
+  attr_reader :item, :date
 
-  def self.run(item, date, subpage:)
-    new(item: item, date: date, subpage: subpage).run
+  def self.run(item, date)
+    new(item: item, date: date).run
   end
 
-  def initialize(item:, date:, subpage:)
+  def initialize(item:, date:)
     @item = item
     @date = date
-    @subpage = subpage
   end
 
   def run
@@ -19,9 +18,8 @@ class Item::Processor
       dimensions_item: item,
     )
 
-    content = ::Item::Content::Parser.extract_content(item.raw_json, subpage: subpage)
-    unless content.blank?
-      edition.update(Item::Quality::Service.new.run(content))
+    if item.content.present?
+      edition.update(Item::Quality::Service.new.run(item.content))
     end
   end
 end

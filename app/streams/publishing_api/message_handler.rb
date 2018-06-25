@@ -39,13 +39,11 @@ private
     new_items = adapter.to_dimension_items
 
     old_items = get_old_items(new_items.map(&:base_path))
-    subpages = adapter.subpages_by_base_path
     result = new_items.map do |new_item|
       old_item = Dimensions::Item.find_by(base_path: new_item.base_path, latest: true)
       PublishingAPI::ItemHandler.new(
         old_item: old_item,
         new_item: new_item,
-        subpage: new_item ? subpages[new_item.base_path] : nil
       )
     end
 
