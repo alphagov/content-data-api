@@ -9,7 +9,7 @@ class PublishingAPI::ItemHandler
     if new_item
       grow_dimension! if new_version?
     else
-      deprecate_only!
+      old_item.deprecate!
     end
   end
 
@@ -17,7 +17,7 @@ class PublishingAPI::ItemHandler
     if new_item
       grow_dimension! if new_version? && links_have_changed?
     else
-      deprecate_only!
+      old_item.deprecate!
     end
   end
 
@@ -43,9 +43,5 @@ private
   def grow_dimension!
     new_item.promote!(old_item)
     Item::Processor.run(new_item, Date.today, subpage: subpage)
-  end
-
-  def deprecate_only!
-    old_item.deprecate!
   end
 end
