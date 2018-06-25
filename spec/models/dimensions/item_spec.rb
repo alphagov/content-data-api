@@ -48,6 +48,69 @@ RSpec.describe Dimensions::Item, type: :model do
       results = subject.by_document_type('guide')
       expect(results).to match_array([item1])
     end
+
+    describe '.existing_latest_items' do
+      let(:content_id_1) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
+      let(:content_id_2) { 'aaaaaaaa-0c34-4942-9111-2331e12cb1c5' }
+      let(:base_path_1_1) { '/foo/part1' }
+      let(:base_path_1_2) { '/foo/part2' }
+      let(:base_path_2) { '/bar' }
+
+      let!(:item_1_1) do
+        create(
+          :dimensions_item,
+          document_type: 'guide',
+          base_path: base_path_1_1,
+          content_id: content_id_1
+        )
+      end
+
+      let!(:item_1_2) do
+        create(
+          :dimensions_item,
+          document_type: 'guide',
+          base_path: base_path_1_2,
+          content_id: content_id_1
+        )
+      end
+
+      let!(:item_2) do
+        create(
+          :dimensions_item,
+          document_type: 'guide',
+          base_path: '/bar',
+          content_id: 'aaaaaaaa-0c34-4942-9111-2331e12cb1c5'
+        )
+      end
+
+      it "includes items with the same content id as the new thing, even if the base path has changed" do
+        new_paths = ['/baz']
+        existing = Dimensions::Item.existing_latest_items(content_id_2, new_paths)
+        expect(existing).to eq([item_2])
+      end
+
+      it "includes items with a different content id that clash with a new base path" do
+        new_content_id = 'bbbbbbbb-0c34-4942-9111-2331e12cb1c5'
+        new_paths = ['/bar']
+        existing = Dimensions::Item.existing_latest_items(new_content_id, new_paths)
+
+        expect(existing).to eq([item_2])
+      end
+
+      context "when the new document has one part the same and one part different" do
+        let(:new_paths) { [base_path_1_1, '/foo/new-part'] }
+        let(:existing) { Dimensions::Item.existing_latest_items(content_id_1, new_paths) }
+
+        it 'includes all parts that currently map to the content id' do
+          expect(existing).to include(item_1_1)
+          expect(existing).to include(item_1_2)
+        end
+
+        it "doesn't include items with completely different content id and base path" do
+          expect(existing).not_to include(item_2)
+        end
+      end
+    end
   end
 
   describe '#newer_than?' do

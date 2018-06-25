@@ -23,22 +23,11 @@ private
 
   attr_reader :message
 
-  def get_old_items(new_base_paths)
-    content_id = message.payload["content_id"]
-
-    # Get everything with the same content id, so we can deprecate parts
-    # that no longer exist, and get everything with the same base path
-    # to maintain the constraint of only one latest item at each base path
-    Dimensions::Item.where(content_id: content_id, latest: true).or(
-      Dimensions::Item.where(base_path: new_base_paths, latest: true)
-    )
-  end
-
   def items
     adapter = PublishingAPI::MessageAdapter.new(message)
     new_items = adapter.to_dimension_items
+    old_items = adapter.existing_dimension_items
 
-    old_items = get_old_items(new_items.map(&:base_path))
     result = new_items.map do |new_item|
       old_item = Dimensions::Item.find_by(base_path: new_item.base_path, latest: true)
       PublishingAPI::ItemHandler.new(

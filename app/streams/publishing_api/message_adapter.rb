@@ -8,6 +8,13 @@ module PublishingAPI
       @message = message
     end
 
+    def existing_dimension_items
+      Dimensions::Item.existing_latest_items(
+        content_id,
+        to_dimension_items.map(&:base_path)
+      )
+    end
+
     def to_dimension_items
       items = []
       if has_multiple_parts?
@@ -74,6 +81,10 @@ module PublishingAPI
 
     def has_multiple_parts?
       parts.present?
+    end
+
+    def content_id
+      message.payload["content_id"]
     end
 
     def base_path
