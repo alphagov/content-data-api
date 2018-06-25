@@ -3,10 +3,6 @@ class PublishingAPI::ItemHandler
     @old_item = old_item
     @new_item = new_item
     @subpage = subpage
-
-    # old_item may be nil if the item belongs to a brand new document
-    # new_item may be nil if a base_path is reused for a different content id
-    raise ArgumentError if old_item.nil? && new_item.nil?
   end
 
   def process!
