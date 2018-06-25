@@ -30,6 +30,7 @@ module PublishingAPI
         schema_name: item_message.payload.fetch('schema_name'),
         latest: true,
         raw_json: item_message.payload,
+        content: Item::Content::Parser.extract_content(item_message.payload)
       )
     end
 
@@ -53,7 +54,8 @@ module PublishingAPI
             public_updated_at: parse_time('public_updated_at'),
             schema_name: message.payload.fetch('schema_name'),
             latest: true,
-            raw_json: message.payload
+            raw_json: message.payload,
+            content: Item::Content::Parser.extract_content(message.payload, subpage: part['slug'])
           )
         end
       else

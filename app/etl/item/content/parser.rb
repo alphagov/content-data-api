@@ -5,8 +5,8 @@ class Item::Content::Parser
     register_parsers
   end
 
-  def self.extract_content(*args)
-    instance.extract_content(*args)
+  def self.extract_content(*args, subpage: nil)
+    instance.extract_content(*args, subpage: subpage)
   end
 
   def extract_content(json, subpage: nil)

@@ -3,8 +3,8 @@ RSpec.describe PublishingAPI::MessageAdapter do
 
   describe '.to_dimension_item' do
     it 'convert an Event into a Dimensions::Item' do
-      payload = GovukSchemas::RandomExample.for_schema(notification_schema: "detailed_guide") do |result|
-        result.merge(
+      payload = GovukSchemas::RandomExample.for_schema(notification_schema: 'detailed_guide') do |result|
+        result.merge!(
           'payload_version' => 7,
           'locale' => 'fr',
           'title' => 'the-title',
@@ -15,6 +15,8 @@ RSpec.describe PublishingAPI::MessageAdapter do
           'first_published_at' => '2018-04-19T12:00:40+01:00',
           'public_updated_at' => '2018-04-20T12:00:40+01:00',
         )
+        result['details']['body'] = 'some content'
+        result
       end
 
       event = build(:message, payload: payload, routing_key: 'the-key')
@@ -34,12 +36,13 @@ RSpec.describe PublishingAPI::MessageAdapter do
         public_updated_at: Time.zone.parse('2018-04-20T12:00:40+01:00'),
         schema_name: 'detailed_guide',
         latest: true,
+        content: 'some content',
         raw_json: payload
       )
     end
 
     it 'converts the primary organisation' do
-      payload = GovukSchemas::RandomExample.for_schema(notification_schema: "detailed_guide") do |result|
+      payload = GovukSchemas::RandomExample.for_schema(notification_schema: 'detailed_guide') do |result|
         result['expanded_links']['primary_publishing_organisation'] = [
           {
             'content_id' => 'ce91c056-8165-49fe-b318-b71113ab4a30',
@@ -64,7 +67,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
     end
 
     describe 'all schemas' do
-      schemas = GovukSchemas::Schema.all(schema_type: "notification")
+      schemas = GovukSchemas::Schema.all(schema_type: 'notification')
       schemas.each_value do |schema|
         payload = GovukSchemas::RandomExample.new(schema: schema).payload
         schema_name = payload.dig('schema_name')
@@ -75,6 +78,50 @@ RSpec.describe PublishingAPI::MessageAdapter do
           expect { subject.to_dimension_items(event) }.to_not raise_error
         end
       end
+    end
+  end
+
+  describe '.to_dimension_items' do
+    let(:payload) do
+      GovukSchemas::RandomExample.for_schema(notification_schema: 'guide') do |result|
+        result.merge!(
+          'payload_version' => 7,
+          'locale' => 'fr',
+          'title' => 'the-title',
+          'base_path' => '/root',
+          'document_type' => 'guide',
+          'content_purpose_document_supertype' => 'the-supertype',
+          'content_purpose_supergroup' => 'the-supergroup',
+          'content_purpose_subgroup' => 'the-subgroup',
+          'first_published_at' => '2018-04-19T12:00:40+01:00',
+          'public_updated_at' => '2018-04-20T12:00:40+01:00',
+        )
+
+        result['details']['parts'] = [
+          { 'slug' => 'part1', 'body' => [{ 'content_type' => 'text/html', 'content' => 'part 1 content' }], 'title' => 'part 1' },
+          { 'slug' => 'part2', 'body' => [{ 'content_type' => 'text/html', 'content' => 'part 2 content' }], 'title' => 'part 2' }
+        ]
+        result
+      end
+    end
+
+    it 'convert an multipart event into a set of Dimensions::Items' do
+      event = build(:message, payload: payload, routing_key: 'the-key')
+      result = subject.to_dimension_items(event)
+
+      expect(result.length).to eq(2)
+    end
+
+    it 'extracts page attributes into the Item' do
+      event = build(:message, payload: payload, routing_key: 'the-key')
+      dimension_item = subject.to_dimension_items(event)[0]
+
+      expect(dimension_item).to have_attributes(
+        content_id: payload.fetch('content_id'),
+        base_path: '/root/part1',
+        title: 'part 1',
+        content: 'part 1 content',
+      )
     end
   end
 end
