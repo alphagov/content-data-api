@@ -32,10 +32,11 @@ private
   end
 
   def links_have_changed?
-    current_links = old_item.raw_json['expanded_links'].deep_sort
-    new_links = new_item.raw_json['expanded_links'].deep_sort
-
-    HashDiff::Comparison.new(current_links, new_links).diff.present?
+    return true if old_item.nil?
+    HashDiff::Comparison.new(
+      old_item.expanded_links.deep_sort,
+      new_item.expanded_links.deep_sort
+    ).diff.present?
   end
 
   def grow_dimension!

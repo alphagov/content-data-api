@@ -30,6 +30,14 @@ class Dimensions::Item < ApplicationRecord
     update(latest: true)
   end
 
+  def expanded_links
+    if raw_json && raw_json['expanded_links']
+      raw_json['expanded_links']
+    else
+      {}
+    end
+  end
+
 protected
 
   def deprecate!
