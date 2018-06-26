@@ -5,19 +5,11 @@ class PublishingAPI::ItemHandler
   end
 
   def process!
-    if new_item
-      grow_dimension! if new_version?
-    else
-      old_item.deprecate!
-    end
+    grow_dimension! if new_version?
   end
 
   def process_links!
-    if new_item
-      grow_dimension! if new_version? && links_have_changed?
-    else
-      old_item.deprecate!
-    end
+    grow_dimension! if new_version? && links_have_changed?
   end
 
 private
