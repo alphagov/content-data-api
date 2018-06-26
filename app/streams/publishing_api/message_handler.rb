@@ -1,6 +1,4 @@
 class PublishingAPI::MessageHandler
-  require "deepsort"
-
   def self.process(*args)
     new(*args).process
   end
