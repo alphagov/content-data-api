@@ -29,22 +29,6 @@ RSpec.describe "Process sub-pages for multipart content types" do
     ]
   end
 
-  it "can incrementally reprocess messages containing multiple parts, if some of them fail" do
-    message = build(:message, :with_parts)
-
-    # Let's pretend that an error occurred while processing part 4 and it didn't get stored...
-    part4 = message.payload["details"]["parts"].pop
-    subject.process(message)
-
-    expect(Dimensions::Item.count).to eq(3)
-
-    # Now reprocess the full message
-    message.payload["details"]["parts"].push(part4)
-    subject.process(message)
-
-    expect(Dimensions::Item.count).to eq(4)
-  end
-
   it "deprecates all existing parts even if only one item changed" do
     message = build(:message, :with_parts)
     subject.process(message)
