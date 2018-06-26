@@ -1,6 +1,8 @@
 module PublishingAPI
   class Consumer
     def process(message)
+      event = track_event(message)
+
       if is_invalid_message?(message)
         message.discard
       else
@@ -19,9 +21,16 @@ module PublishingAPI
       message.discard
     end
 
-    def is_invalid_message?(message)
-      mandatory_fields = message.payload.values_at('base_path', 'schema_name')
+    def is_invalid_message?(event)
+      mandatory_fields = event.payload.values_at('base_path', 'schema_name')
       mandatory_fields.any?(&:nil?)
+    end
+
+    def track_event(event)
+      PublishingApiEvent.create!(
+        payload: event.payload,
+        routing_key: event.delivery_info.routing_key,
+      )
     end
   end
 end

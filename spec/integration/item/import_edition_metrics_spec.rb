@@ -1,7 +1,7 @@
 RSpec.describe 'Import edition metrics' do
   include QualityMetricsHelpers
 
-  subject { PublishingAPI::MessageHandler }
+  subject { PublishingAPI::Consumer.new }
 
   it 'stores content item metrics' do
     message = build(:message, schema_name: 'publication', base_path: '/base-path')
