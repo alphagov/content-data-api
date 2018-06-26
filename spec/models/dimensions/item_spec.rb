@@ -79,27 +79,42 @@ RSpec.describe Dimensions::Item, type: :model do
           :dimensions_item,
           document_type: 'guide',
           base_path: '/bar',
-          content_id: 'aaaaaaaa-0c34-4942-9111-2331e12cb1c5'
+          content_id: content_id_2
         )
       end
 
       it "includes items with the same content id as the new thing, even if the base path has changed" do
         new_paths = ['/baz']
-        existing = Dimensions::Item.existing_latest_items(content_id_2, new_paths)
+        existing = Dimensions::Item.existing_latest_items(content_id_2, 'en', new_paths)
         expect(existing).to eq([item_2])
       end
 
       it "includes items with a different content id that clash with a new base path" do
         new_content_id = 'bbbbbbbb-0c34-4942-9111-2331e12cb1c5'
         new_paths = ['/bar']
-        existing = Dimensions::Item.existing_latest_items(new_content_id, new_paths)
+        existing = Dimensions::Item.existing_latest_items(new_content_id, 'en', new_paths)
 
         expect(existing).to eq([item_2])
       end
 
+      it "excludes items with a different locale" do
+        translation = create(
+          :dimensions_item,
+          document_type: 'guide',
+          base_path: '/bar.fr',
+          content_id: content_id_2,
+          locale: 'fr'
+        )
+
+        existing = Dimensions::Item.existing_latest_items(content_id_2, 'en', [base_path_2])
+
+        expect(existing).to include(item_2)
+        expect(existing).not_to include(translation)
+      end
+
       context "when the new document has one part the same and one part different" do
         let(:new_paths) { [base_path_1_1, '/foo/new-part'] }
-        let(:existing) { Dimensions::Item.existing_latest_items(content_id_1, new_paths) }
+        let(:existing) { Dimensions::Item.existing_latest_items(content_id_1, 'en', new_paths) }
 
         it 'includes all parts that currently map to the content id' do
           expect(existing).to include(item_1_1)

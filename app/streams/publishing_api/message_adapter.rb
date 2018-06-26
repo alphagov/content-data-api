@@ -8,6 +8,10 @@ module PublishingAPI
       message.payload["content_id"]
     end
 
+    def locale
+      message.payload['locale']
+    end
+
     def new_dimension_items
       if has_multiple_parts?
         parts.map do |part|
@@ -39,7 +43,7 @@ module PublishingAPI
         content_id: content_id,
         publishing_api_payload_version: message.payload.fetch('payload_version'),
         document_type: message.payload.fetch('document_type'),
-        locale: message.payload['locale'],
+        locale: locale,
         content_purpose_document_supertype: message.payload['content_purpose_document_supertype'],
         content_purpose_supergroup: message.payload['content_purpose_supergroup'],
         content_purpose_subgroup: message.payload['content_purpose_subgroup'],

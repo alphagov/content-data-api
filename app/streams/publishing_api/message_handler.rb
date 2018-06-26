@@ -25,6 +25,7 @@ private
 
     old_items = Dimensions::Item.existing_latest_items(
       adapter.content_id,
+      adapter.locale,
       new_items.map(&:base_path)
     )
 

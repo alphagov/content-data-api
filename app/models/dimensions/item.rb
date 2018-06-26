@@ -12,9 +12,9 @@ class Dimensions::Item < ApplicationRecord
   scope :by_organisation_id, ->(organisation_id) { where(primary_organisation_content_id: organisation_id) }
   scope :by_document_type, ->(document_type) { where('document_type like (?)', document_type) }
   scope :by_locale, ->(locale) { where(locale: locale) }
-  scope :latest_by_content_id, ->(content_id) { where(content_id: content_id, latest: true) }
+  scope :latest_by_content_id, ->(content_id, locale) { where(content_id: content_id, locale: locale, latest: true) }
   scope :latest_by_base_path, ->(base_paths) { where(base_path: base_paths, latest: true) }
-  scope :existing_latest_items, ->(content_id, base_paths) { latest_by_content_id(content_id).or(latest_by_base_path(base_paths)) }
+  scope :existing_latest_items, ->(content_id, locale, base_paths) { latest_by_content_id(content_id, locale).or(latest_by_base_path(base_paths)) }
 
   def newer_than?(other)
     return true unless other
