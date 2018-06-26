@@ -23,7 +23,7 @@ private
 
   def items
     adapter = PublishingAPI::MessageAdapter.new(message)
-    new_items = adapter.to_dimension_items
+    new_items = adapter.new_dimension_items
     old_items = adapter.existing_dimension_items
 
     result = new_items.map do |new_item|

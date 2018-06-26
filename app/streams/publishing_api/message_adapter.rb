@@ -1,9 +1,5 @@
 module PublishingAPI
   class MessageAdapter
-    def self.to_dimension_items(*args)
-      new(*args).to_dimension_items
-    end
-
     def initialize(message)
       @message = message
     end
@@ -11,11 +7,11 @@ module PublishingAPI
     def existing_dimension_items
       Dimensions::Item.existing_latest_items(
         content_id,
-        to_dimension_items.map(&:base_path)
+        new_dimension_items.map(&:base_path)
       )
     end
 
-    def to_dimension_items
+    def new_dimension_items
       if has_multiple_parts?
         parts.map do |part|
           Dimensions::Item.new(
