@@ -22,7 +22,11 @@ private
   def item_handlers
     adapter = PublishingAPI::MessageAdapter.new(message)
     new_items = adapter.new_dimension_items
-    old_items = adapter.existing_dimension_items
+
+    old_items = Dimensions::Item.existing_latest_items(
+      adapter.content_id,
+      new_items.map(&:base_path)
+    )
 
     result = new_items.map do |new_item|
       old_item = Dimensions::Item.find_by(base_path: new_item.base_path, latest: true)
