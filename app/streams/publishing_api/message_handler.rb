@@ -8,7 +8,7 @@ class PublishingAPI::MessageHandler
   end
 
   def process
-    if is_links_update?
+    if publishing_api_event.is_links_update?
       item_handlers.each(&:process_links!)
     else
       item_handlers.each(&:process!)
@@ -40,10 +40,5 @@ private
     old_items.each(&:deprecate!)
 
     result
-  end
-
-  def is_links_update?
-    routing_key = publishing_api_event.routing_key
-    routing_key.ends_with?('.links')
   end
 end

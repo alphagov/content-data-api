@@ -3,4 +3,8 @@ class PublishingApiEvent < ApplicationRecord
 
   validates :payload, presence: true
   validates :routing_key, presence: true
+
+  def is_links_update?
+    routing_key.ends_with?('.links')
+  end
 end

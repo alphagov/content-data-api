@@ -6,14 +6,14 @@ module PublishingAPI
       if is_invalid_message?(message)
         message.discard
       else
-        do_process(message)
+        do_process(event, message)
       end
     end
 
   private
 
-    def do_process(message)
-      PublishingAPI::MessageHandler.process(message)
+    def do_process(event, message)
+      PublishingAPI::MessageHandler.process(event)
 
       message.ack
     rescue StandardError => e
