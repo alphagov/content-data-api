@@ -8,12 +8,10 @@ class PublishingAPI::MessageHandler
   end
 
   def process
-    items.each do |item|
-      if is_links_update?
-        item.process_links!
-      else
-        item.process!
-      end
+    if is_links_update?
+      item_handlers.each(&:process_links!)
+    else
+      item_handlers.each(&:process!)
     end
   end
 
@@ -21,7 +19,7 @@ private
 
   attr_reader :message
 
-  def items
+  def item_handlers
     adapter = PublishingAPI::MessageAdapter.new(message)
     new_items = adapter.new_dimension_items
     old_items = adapter.existing_dimension_items
