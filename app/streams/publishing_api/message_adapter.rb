@@ -1,21 +1,49 @@
 module PublishingAPI
   class MessageAdapter
-    def self.to_dimension_item(*args)
-      new(*args).to_dimension_item
-    end
-
     def initialize(message)
       @message = message
     end
 
-    def to_dimension_item
-      Dimensions::Item.new(
-        content_id: message.payload.fetch('content_id'),
-        base_path: message.payload.fetch('base_path'),
+    def content_id
+      message.payload["content_id"]
+    end
+
+    def locale
+      message.payload['locale']
+    end
+
+    def new_dimension_items
+      if has_multiple_parts?
+        parts.map do |part|
+          Dimensions::Item.new(
+            base_path: base_path_for_part(part),
+            title: title_for_part(part),
+            content: Item::Content::Parser.extract_content(message.payload, subpage: part['slug']),
+            **attributes
+          )
+        end
+      else
+        [
+          Dimensions::Item.new(
+            base_path: base_path,
+            title: title,
+            content: Item::Content::Parser.extract_content(message.payload),
+            **attributes
+          )
+        ]
+      end
+    end
+
+  private
+
+    attr_reader :message
+
+    def attributes
+      {
+        content_id: content_id,
         publishing_api_payload_version: message.payload.fetch('payload_version'),
         document_type: message.payload.fetch('document_type'),
-        locale: message.payload['locale'],
-        title: message.payload['title'],
+        locale: locale,
         content_purpose_document_supertype: message.payload['content_purpose_document_supertype'],
         content_purpose_supergroup: message.payload['content_purpose_supergroup'],
         content_purpose_subgroup: message.payload['content_purpose_subgroup'],
@@ -25,9 +53,9 @@ module PublishingAPI
         primary_organisation_withdrawn: primary_organisation['withdrawn'],
         public_updated_at: parse_time('public_updated_at'),
         schema_name: message.payload.fetch('schema_name'),
-        latest: true,
         raw_json: message.payload,
-      )
+        latest: true
+      }
     end
 
     def primary_organisation
@@ -35,12 +63,33 @@ module PublishingAPI
       primary_org.any? ? primary_org[0] : {}
     end
 
-  private
+    def has_multiple_parts?
+      parts.present?
+    end
 
-    attr_reader :message
+    def base_path
+      message.payload.fetch('base_path')
+    end
+
+    def title
+      message.payload['title']
+    end
+
+    def base_path_for_part(part)
+      slug = part.fetch('slug')
+      base_path + '/' + slug
+    end
+
+    def title_for_part(part)
+      part.fetch('title')
+    end
 
     def parse_time(attribute_name)
       message.payload.fetch(attribute_name, nil)
+    end
+
+    def parts
+      message.payload.dig('details', 'parts')
     end
   end
 end

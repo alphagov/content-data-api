@@ -48,27 +48,105 @@ RSpec.describe Dimensions::Item, type: :model do
       results = subject.by_document_type('guide')
       expect(results).to match_array([item1])
     end
+
+    describe '.existing_latest_items' do
+      let(:content_id_1) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
+      let(:content_id_2) { 'aaaaaaaa-0c34-4942-9111-2331e12cb1c5' }
+      let(:base_path_1_1) { '/foo/part1' }
+      let(:base_path_1_2) { '/foo/part2' }
+      let(:base_path_2) { '/bar' }
+
+      let!(:item_1_1) do
+        create(
+          :dimensions_item,
+          document_type: 'guide',
+          base_path: base_path_1_1,
+          content_id: content_id_1
+        )
+      end
+
+      let!(:item_1_2) do
+        create(
+          :dimensions_item,
+          document_type: 'guide',
+          base_path: base_path_1_2,
+          content_id: content_id_1
+        )
+      end
+
+      let!(:item_2) do
+        create(
+          :dimensions_item,
+          document_type: 'guide',
+          base_path: '/bar',
+          content_id: content_id_2
+        )
+      end
+
+      it "includes items with the same content id as the new thing, even if the base path has changed" do
+        new_paths = ['/baz']
+        existing = Dimensions::Item.existing_latest_items(content_id_2, 'en', new_paths)
+        expect(existing).to eq([item_2])
+      end
+
+      it "includes items with a different content id that clash with a new base path" do
+        new_content_id = 'bbbbbbbb-0c34-4942-9111-2331e12cb1c5'
+        new_paths = ['/bar']
+        existing = Dimensions::Item.existing_latest_items(new_content_id, 'en', new_paths)
+
+        expect(existing).to eq([item_2])
+      end
+
+      it "excludes items with a different locale" do
+        translation = create(
+          :dimensions_item,
+          document_type: 'guide',
+          base_path: '/bar.fr',
+          content_id: content_id_2,
+          locale: 'fr'
+        )
+
+        existing = Dimensions::Item.existing_latest_items(content_id_2, 'en', [base_path_2])
+
+        expect(existing).to include(item_2)
+        expect(existing).not_to include(translation)
+      end
+
+      context "when the new document has one part the same and one part different" do
+        let(:new_paths) { [base_path_1_1, '/foo/new-part'] }
+        let(:existing) { Dimensions::Item.existing_latest_items(content_id_1, 'en', new_paths) }
+
+        it 'includes all parts that currently map to the content id' do
+          expect(existing).to include(item_1_1)
+          expect(existing).to include(item_1_2)
+        end
+
+        it "doesn't include items with completely different content id and base path" do
+          expect(existing).not_to include(item_2)
+        end
+      end
+    end
   end
 
-  describe '#older_than?' do
+  describe '#newer_than?' do
     let(:dimension_item) { build :dimensions_item, publishing_api_payload_version: 10 }
 
     it 'returns true when compared with `nil`' do
       other = nil
 
-      expect(dimension_item.older_than?(other)).to be true
+      expect(dimension_item.newer_than?(other)).to be true
     end
 
     it 'returns true if the payload version is bigger' do
       other = build :dimensions_item, publishing_api_payload_version: 9
 
-      expect(dimension_item.older_than?(other)).to be true
+      expect(dimension_item.newer_than?(other)).to be true
     end
 
     it 'returns false if the payload version is smaller' do
       other = build :dimensions_item, publishing_api_payload_version: 11
 
-      expect(dimension_item.older_than?(other)).to be false
+      expect(dimension_item.newer_than?(other)).to be false
     end
   end
 
@@ -77,20 +155,6 @@ RSpec.describe Dimensions::Item, type: :model do
     item.reload
 
     expect(item.raw_json).to eq('a' => 'b')
-  end
-
-  describe '#get_content' do
-    it 'returns nil if json is empty' do
-      item = create(:dimensions_item, raw_json: {})
-      expect(item.get_content).to eq(nil)
-    end
-
-    it 'returns the content when json is valid' do
-      json = { 'schema_name' => 'valid' }
-      item = create(:dimensions_item, raw_json: json)
-      expect(Item::Content::Parser).to receive(:extract_content).with(json).and_return('the content')
-      expect(item.get_content).to eq('the content')
-    end
   end
 
   describe '#promote!' do

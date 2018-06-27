@@ -18,8 +18,8 @@ class Item::Processor
       dimensions_item: item,
     )
 
-    unless item.get_content.blank?
-      edition.update(Item::Quality::Service.new.run(item.get_content))
+    if item.content.present?
+      edition.update(Item::Quality::Service.new.run(item.content))
     end
   end
 end

@@ -5,25 +5,27 @@ class Item::Content::Parser
     register_parsers
   end
 
-  def self.extract_content(*args)
-    instance.extract_content(*args)
+  def self.extract_content(*args, subpage: nil)
+    instance.extract_content(*args, subpage: subpage)
   end
 
-  def extract_content(json)
+  def extract_content(json, subpage: nil)
+    return nil if json.blank?
+
     schema = json.dig("schema_name")
     base_path = json.dig("base_path")
     parser = for_schema(schema)
-    if parser.present?
-      begin
-        parse_html parser.parse(json)
-      rescue StandardError => e
-        GovukError.notify(e, extra: { schema: schema, base_path: base_path, json: json })
-      end
-    else
-      GovukError.notify(InvalidSchemaError.new("Schema does not exist: #{schema}"), extra: { base_path: base_path.to_s })
 
+    if parser.blank?
+      GovukError.notify(InvalidSchemaError.new("Schema does not exist: #{schema}"), extra: { base_path: base_path.to_s })
       nil
+    elsif parser.respond_to?(:parse_subpage)
+      parse_html parser.parse_subpage(json, subpage)
+    else
+      parse_html parser.parse(json)
     end
+  rescue StandardError => e
+    GovukError.notify(e, extra: { schema: schema, base_path: base_path, json: json })
   end
 
 private

@@ -1,46 +1,49 @@
 class PublishingAPI::MessageHandler
-  require "deepsort"
-
   def self.process(*args)
     new(*args).process
   end
 
   def initialize(message)
     @message = message
-
-    @new_item = PublishingAPI::MessageAdapter.to_dimension_item(message)
-    @old_item = Dimensions::Item.find_by(base_path: new_item.base_path, latest: true)
   end
 
   def process
-    return unless new_item.older_than?(old_item)
-
     if is_links_update?
-      grow_dimension! if links_have_changed?
+      item_handlers.each(&:process_links!)
     else
-      grow_dimension!
+      item_handlers.each(&:process!)
     end
   end
 
 private
 
-  attr_reader :message, :new_item, :old_item
+  attr_reader :message
+
+  def item_handlers
+    adapter = PublishingAPI::MessageAdapter.new(message)
+    new_items = adapter.new_dimension_items
+
+    old_items = Dimensions::Item.existing_latest_items(
+      adapter.content_id,
+      adapter.locale,
+      new_items.map(&:base_path)
+    )
+
+    result = new_items.map do |new_item|
+      old_item = Dimensions::Item.find_by(base_path: new_item.base_path, latest: true)
+      PublishingAPI::ItemHandler.new(
+        old_item: old_item,
+        new_item: new_item,
+      )
+    end
+
+    old_items.each(&:deprecate!)
+
+    result
+  end
 
   def is_links_update?
     routing_key = message.delivery_info.routing_key
     routing_key.ends_with?('.links')
-  end
-
-  def links_have_changed?
-    return true if old_item.nil?
-    HashDiff::Comparison.new(
-      old_item.expanded_links.deep_sort,
-      new_item.expanded_links.deep_sort
-    ).diff.present?
-  end
-
-  def grow_dimension!
-    new_item.promote!(old_item)
-    Item::Processor.run(new_item, Date.today)
   end
 end
