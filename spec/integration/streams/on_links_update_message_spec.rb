@@ -82,4 +82,31 @@ RSpec.describe PublishingAPI::Consumer do
       subject.process(link_update)
     }.to change(Dimensions::Item, :count).by(0)
   end
+
+  it 'does not raise error if `old_item` does not exist' do
+    expect(GovukError).to_not receive(:notify)
+
+    link_update = build :message, :link_update
+    link_update.payload['payload_version'] = 2
+    link_update.payload['expanded_links'] = nil
+    expect {
+      subject.process(link_update)
+    }.to_not raise_error
+  end
+
+  it 'does not raise error if `expanded_links` field is not present' do
+    expect(GovukError).to_not receive(:notify)
+
+    message = build(:message)
+    message.payload['payload_version'] = 1
+    message.payload['expanded_links'] = nil
+    subject.process(message)
+
+    link_update = build :message, :link_update, payload: message.payload
+    link_update.payload['payload_version'] = 2
+    link_update.payload['expanded_links'] = nil
+    expect {
+      subject.process(link_update)
+    }.to_not raise_error
+  end
 end
