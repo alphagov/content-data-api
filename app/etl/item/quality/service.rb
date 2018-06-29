@@ -4,8 +4,6 @@ class Item::Quality::Service
   def run(content)
     parsed_response = fetch(content)
     convert_results(parsed_response, content)
-  rescue StandardError => e
-    GovukError.notify(e, extra: { content: content, message: e.message })
   end
 
 private
@@ -18,7 +16,7 @@ private
       body: { content: content }.to_json,
       headers: { 'Content-Type' => 'application/json' }
     )
-    raise QualityMetricsError("response body: #{response.body}") unless response.code == 200
+    raise QualityMetricsError.new("response body: #{response.body}") unless response.code == 200
     response.parsed_response
   end
 
