@@ -114,11 +114,23 @@ RSpec.describe PublishingAPI::MessageAdapter do
 
     it 'extracts page attributes into the Item' do
       event = build(:message, payload: payload, routing_key: 'the-key')
+      dimension_item = subject.new(event).new_dimension_items[1]
+
+      expect(dimension_item).to have_attributes(
+        content_id: payload.fetch('content_id'),
+        base_path: '/root/part2',
+        title: 'part 2',
+        content: 'part 2 content',
+      )
+    end
+
+    it 'the first page of multipart pages do not have a slug in the url' do
+      event = build(:message, payload: payload, routing_key: 'the-key')
       dimension_item = subject.new(event).new_dimension_items[0]
 
       expect(dimension_item).to have_attributes(
         content_id: payload.fetch('content_id'),
-        base_path: '/root/part1',
+        base_path: '/root',
         title: 'part 1',
         content: 'part 1 content',
       )
