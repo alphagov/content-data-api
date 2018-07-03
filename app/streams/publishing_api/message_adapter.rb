@@ -1,7 +1,10 @@
 module PublishingAPI
   class MessageAdapter
+    attr_reader :doc_type
+
     def initialize(message)
       @message = message
+      @doc_type = message.payload.fetch('document_type')
     end
 
     def content_id
@@ -14,9 +17,10 @@ module PublishingAPI
 
     def new_dimension_items
       if has_multiple_parts?
-        parts.map do |part|
+        add_summary_part if doc_type == 'travel_advice'
+        parts.each_with_index.map do |part, index|
           Dimensions::Item.new(
-            base_path: base_path_for_part(part),
+            base_path: base_path_for_part(part, index),
             title: title_for_part(part),
             document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage: part['slug']),
             **attributes
@@ -75,9 +79,10 @@ module PublishingAPI
       message.payload['title']
     end
 
-    def base_path_for_part(part)
+    def base_path_for_part(part, index)
       slug = part.fetch('slug')
-      base_path + '/' + slug
+
+      index.zero? ? base_path : base_path + '/' + slug
     end
 
     def title_for_part(part)
@@ -90,6 +95,18 @@ module PublishingAPI
 
     def parts
       message.payload.dig('details', 'parts')
+    end
+
+    def add_summary_part
+      parts.prepend(
+        'slug' => '',
+        'title' => 'Summary',
+        'body' => [message.payload.dig('details', 'summary').find { |x| x['content_type'] == "text/html" }]
+      )
+    end
+
+    def schema_name
+      message.payload.dig('schema_name')
     end
   end
 end
