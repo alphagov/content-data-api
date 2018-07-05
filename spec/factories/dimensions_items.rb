@@ -10,5 +10,7 @@ FactoryBot.define do
     sequence(:publishing_api_payload_version)
     schema_name 'detailed_guide'
     document_type 'detailed_guide'
+
+    initialize_with { Dimensions::Item.find_or_create_by(base_path: base_path, latest: latest) }
   end
 end

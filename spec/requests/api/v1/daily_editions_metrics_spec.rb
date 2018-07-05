@@ -1,28 +1,24 @@
 require 'securerandom'
 
 RSpec.describe '/api/v1/metrics/', type: :request do
+  include MetricsHelpers
   before { create(:user) }
 
-  let!(:day1) { create :dimensions_date, date: Date.new(2018, 1, 13) }
-  let!(:day2) { create :dimensions_date, date: Date.new(2018, 1, 14) }
-  let!(:day3) { create :dimensions_date, date: Date.new(2018, 1, 15) }
-  let!(:day4) { create :dimensions_date, date: Date.new(2018, 1, 16) }
-  let!(:content_id) { SecureRandom.uuid }
   let!(:base_path) { '/base_path' }
 
   before do
-    item_day1 = create :dimensions_item, base_path: base_path, locale: 'en', latest: false
-    item_day2 = create :dimensions_item, base_path: base_path, locale: 'en', latest: true
-
-    create :facts_edition, dimensions_item: item_day1, dimensions_date: day1, number_of_pdfs: 30, number_of_word_files: 30, readability_score: 123
-    create :facts_edition, dimensions_item: item_day2, dimensions_date: day2, number_of_pdfs: 20, number_of_word_files: 20, readability_score: 5
-
-    create :dimensions_item, content_id: content_id, locale: 'en'
-
-    create :metric, dimensions_item: item_day1, dimensions_date: day1
-    create :metric, dimensions_item: item_day2, dimensions_date: day2
-    create :metric, dimensions_item: item_day2, dimensions_date: day3
-    create :metric, dimensions_item: item_day2, dimensions_date: day4
+    create_metric(base_path: base_path, date: '2018-01-13',
+      edition: {
+        number_of_pdfs: 30, number_of_word_files: 30, readability_score: 123
+      },
+      item: { latest: false })
+    create_metric(base_path: base_path, date: '2018-01-14',
+      edition: {
+        number_of_pdfs: 20, number_of_word_files: 20, readability_score: 5
+      },
+      item: { latest: true })
+    create_metric base_path: base_path, date: '2018-01-15'
+    create_metric base_path: base_path, date: '2018-01-16'
   end
 
   it 'returns the `number of pdfs` between two dates' do

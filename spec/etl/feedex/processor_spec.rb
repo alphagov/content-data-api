@@ -1,20 +1,16 @@
 require 'gds-api-adapters'
 
 RSpec.describe Feedex::Processor do
-  subject { described_class }
-
-  let!(:item1) { create :dimensions_item, base_path: '/path1' }
-  let!(:item2) { create :dimensions_item, base_path: '/path2' }
+  include MetricsHelpers
 
   let(:date) { Date.new(2018, 2, 20) }
-  let(:dimensions_date) { Dimensions::Date.for(date) }
 
   before { allow_any_instance_of(Feedex::Service).to receive(:find_in_batches).and_yield(feedex_response) }
 
   context 'When the base_path matches the feedex path' do
     it 'update the facts with the feedex metrics' do
-      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
-      fact2 = create :metric, dimensions_item: item2, dimensions_date: dimensions_date
+      fact1 = create_metric base_path: '/path1', date: '2018-02-20'
+      fact2 = create_metric base_path: '/path2', date: '2018-02-20'
 
       described_class.process(date: date)
 
@@ -23,7 +19,7 @@ RSpec.describe Feedex::Processor do
     end
 
     it 'does not update metrics for other days' do
-      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date, feedex_comments: 1
+      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { feedex_comments: 1 }
       day_before = date - 1
       described_class.process(date: day_before)
 
@@ -31,8 +27,7 @@ RSpec.describe Feedex::Processor do
     end
 
     it 'does not update metrics for other items' do
-      item = create :dimensions_item, base_path: '/non-matching-path', latest: true
-      fact = create :metric, dimensions_item: item, dimensions_date: dimensions_date, feedex_comments: 9
+      fact = create_metric base_path: '/non-matching-path', date: '2018-02-20', daily: { feedex_comments: 9 }
 
       described_class.process(date: date)
 
@@ -40,8 +35,7 @@ RSpec.describe Feedex::Processor do
     end
 
     it 'deletes the events that matches the base_path of an item' do
-      item2.destroy
-      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+      create_metric base_path: '/path1', date: '2018-02-20'
 
       described_class.process(date: date)
 
@@ -56,7 +50,7 @@ RSpec.describe Feedex::Processor do
     end
 
     it 'only updates metrics for the current day' do
-      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+      fact1 = create_metric base_path: '/path1', date: '2018-02-20'
 
       described_class.process(date: date)
 
@@ -64,7 +58,7 @@ RSpec.describe Feedex::Processor do
     end
 
     it 'only deletes the events for the current day that matches' do
-      create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+      create_metric base_path: '/path1', date: '2018-02-20'
 
       described_class.process(date: date)
 

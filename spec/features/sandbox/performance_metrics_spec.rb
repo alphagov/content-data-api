@@ -1,4 +1,5 @@
 RSpec.feature 'Performance metrics', type: :feature do
+  include MetricsHelpers
   before do
     create(:user)
   end
@@ -7,16 +8,10 @@ RSpec.feature 'Performance metrics', type: :feature do
     Timecop.freeze(Date.new(2018, 1, 15)) { example.run }
   end
 
-  let(:day0) { create :dimensions_date, date: Date.new(2018, 1, 12) }
-  let(:day1) { create :dimensions_date, date: Date.new(2018, 1, 13) }
-
   scenario 'Show total of content items' do
-    item1 = create :dimensions_item
-    item2 = create :dimensions_item
-
-    create :metric, dimensions_item: item1, dimensions_date: day0
-    create :metric, dimensions_item: item1, dimensions_date: day1
-    create :metric, dimensions_item: item2, dimensions_date: day1
+    create_metric base_path: '/path/1', date: '2018-01-12'
+    create_metric base_path: '/path/1', date: '2018-01-13'
+    create_metric base_path: '/path/2', date: '2018-01-13'
 
     visit '/sandbox'
 
@@ -28,9 +23,6 @@ RSpec.feature 'Performance metrics', type: :feature do
   end
 
   context 'Performance metrics' do
-    let(:item1) { create :dimensions_item }
-    let(:item2) { create :dimensions_item }
-
     metrics = %w(
        pageviews
        unique_pageviews
@@ -46,10 +38,8 @@ RSpec.feature 'Performance metrics', type: :feature do
 
     metrics.each do |metric_name|
       scenario "Show Stats for #{metric_name}" do
-        create :metric, dimensions_item: item1, dimensions_date: day0, metric_name => 10
-        create :metric, dimensions_item: item2, dimensions_date: day1, metric_name => 10
-        create :facts_edition, dimensions_item: item1, dimensions_date: day0
-        create :facts_edition, dimensions_item: item2, dimensions_date: day0
+        create_metric base_path: '/path/1', date: '2018-01-12', daily: { metric_name => 10 }
+        create_metric base_path: '/path/2', date: '2018-01-13', daily: { metric_name => 10 }
 
         visit '/sandbox'
 
