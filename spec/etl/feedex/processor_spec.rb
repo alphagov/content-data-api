@@ -39,7 +39,7 @@ RSpec.describe Feedex::Processor do
 
       described_class.process(date: date)
 
-      expect(Events::Feedex.count).to eq(1)
+      expect(Events::Feedex.where(page_path: '/path1').count).to eq(0)
     end
   end
 
