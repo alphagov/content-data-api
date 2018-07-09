@@ -1,7 +1,7 @@
 namespace :etl do
   desc 'Run ETL master process'
   task master: :environment do
-    Master::MasterProcessor.process
+    Etl::Master::MasterProcessor.process
   end
 
   desc 'Populate GA metrics for a date'

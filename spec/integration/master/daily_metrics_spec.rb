@@ -16,7 +16,7 @@ RSpec.describe 'Master process spec' do
     stub_google_analytics_internal_search_response
     stub_feedex_response
 
-    Master::MasterProcessor.process
+    Etl::Master::MasterProcessor.process
 
     validate_facts_metrics!
     validate_google_analytics!
@@ -52,7 +52,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def stub_google_analytics_response
-    allow(GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(
+    allow(Etl::GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(
       [
         {
           'page_path' => '/path-1',
@@ -73,7 +73,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def stub_google_analytics_user_feedback_response
-    allow(GA::UserFeedbackService).to receive(:find_in_batches).and_yield(
+    allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(
       [
         {
           'page_path' => '/path-1',
@@ -94,7 +94,7 @@ RSpec.describe 'Master process spec' do
   end
 
   def stub_google_analytics_internal_search_response
-    allow(GA::InternalSearchService).to receive(:find_in_batches).and_yield(
+    allow(Etl::GA::InternalSearchService).to receive(:find_in_batches).and_yield(
       [
         {
           'page_path' => '/path1',
