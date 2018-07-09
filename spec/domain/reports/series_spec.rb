@@ -1,11 +1,9 @@
 RSpec.describe Reports::Series do
+  include MetricsHelpers
   context "all" do
     it "returns a series of all metrics" do
-      item = create(:dimensions_item)
-      create(:metric, dimensions_item: item)
-      today = Dimensions::Date.for(Date.today)
-      create(:facts_edition, dimensions_item: item,
-                             dimensions_date: today)
+      today = Date.today
+      create_metric(base_path: '/path/1', date: today)
 
       expect(described_class.new.run.one?).to eq(true)
     end
@@ -13,15 +11,10 @@ RSpec.describe Reports::Series do
 
   context "between" do
     it "returns metrics for a given date range" do
-      date_from = Dimensions::Date.for(Date.new(2018, 5, 13))
-      date_to = Dimensions::Date.for(Date.new(2018, 5, 14))
-      item = create(:dimensions_item)
-      create(:facts_edition, dimensions_item: item,
-                             dimensions_date: date_to)
-      metric1 = create(:metric, dimensions_date: date_from, dimensions_item: item)
-      metric2 = create(:metric, dimensions_date: date_to, dimensions_item: item)
-      create(:metric, dimensions_date: Dimensions::Date.for(Date.new(2018, 5, 24)), dimensions_item: item)
-      series = described_class.new.between(from: date_from, to: date_to).run
+      metric1 = create_metric(base_path: '/the/path', date: '2018-5-13')
+      metric2 = create_metric(base_path: '/the/path', date: '2018-5-14')
+      create_metric(base_path: '/the/path', date: '2018-5-24')
+      series = described_class.new.between(from: '2018-5-13', to: '2018-5-14').run
 
       expect(series).to_not be_nil
       expect(series.size).to eq(2)
@@ -31,35 +24,12 @@ RSpec.describe Reports::Series do
 
   context "by_metric" do
     it "returns a series of metrics filtered by the passed in metric" do
-      item1 = create(:dimensions_item)
-      today = Dimensions::Date.for(Date.today)
-      create(
-        :facts_edition,
-        dimensions_item: item1,
-        dimensions_date: today,
-        word_count: 10_000
-      )
+      today = Date.today
+      tomorrow = today + 1
 
-      item2 = create(:dimensions_item)
-      tomorrow = Dimensions::Date.for(Date.today + 1)
-      create(
-        :facts_edition,
-        dimensions_item: item2,
-        dimensions_date: tomorrow,
-        word_count: 20_000
-      )
-
-      item3 = create(:dimensions_item)
-      tomorrow = Dimensions::Date.for(Date.today + 1)
-      create(
-        :facts_edition,
-        dimensions_item: item3,
-        dimensions_date: tomorrow
-      )
-
-      metric1 = create(:metric, dimensions_item: item1, dimensions_date: today)
-      metric2 = create(:metric, dimensions_item: item2, dimensions_date: tomorrow)
-      metric3 = create(:metric, dimensions_item: item3, dimensions_date: tomorrow)
+      metric1 = create_metric base_path: '/path/1', date: today, edition: { word_count: 10_000 }
+      metric2 = create_metric base_path: '/path/2', date: tomorrow, edition: { word_count: 20_000 }
+      metric3 = create_metric base_path: '/path/3', date: tomorrow
 
       series = described_class.new.run
 
@@ -91,7 +61,7 @@ RSpec.describe Reports::Series do
       metric = create(:metric, dimensions_item: item)
       today = Dimensions::Date.for(Date.today)
       create(:facts_edition, dimensions_item: item,
-                             dimensions_date: today)
+        dimensions_date: today)
 
       expect(described_class.new.by_organisation_id('').run).to match_array([metric])
     end
@@ -122,7 +92,7 @@ RSpec.describe Reports::Series do
       metric = create(:metric, dimensions_item: item)
       today = Dimensions::Date.for(Date.today)
       create(:facts_edition, dimensions_item: item,
-                             dimensions_date: today)
+        dimensions_date: today)
 
       expect(described_class.new.by_base_path('').run).to match_array([metric])
     end

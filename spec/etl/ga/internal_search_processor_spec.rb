@@ -1,20 +1,18 @@
 require "gds-api-adapters"
+require 'traceable'
 
 RSpec.describe GA::InternalSearchProcessor do
+  include MetricsHelpers
   subject { described_class }
 
-  let!(:item1) { create :dimensions_item, base_path: "/path1", latest: true }
-  let!(:item2) { create :dimensions_item, base_path: "/path2", latest: true }
-
   let(:date) { Date.new(2018, 2, 20) }
-  let(:dimensions_date) { Dimensions::Date.for(date) }
 
   context "When the base_path matches the GA path" do
     before { allow(GA::InternalSearchService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it "updates the facts with GA metrics" do
-      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
-      fact2 = create :metric, dimensions_item: item2, dimensions_date: dimensions_date
+      fact1 = create_metric base_path: "/path1", date: '2018-02-20'
+      fact2 = create_metric base_path: "/path2", date: '2018-02-20'
 
       described_class.process(date: date)
 
@@ -23,7 +21,7 @@ RSpec.describe GA::InternalSearchProcessor do
     end
 
     it "does not update metrics for other days" do
-      fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date, number_of_internal_searches: 20
+      fact1 = create_metric base_path: "/path1", date: '2018-02-20', daily: { number_of_internal_searches: 20 }
 
       day_before = date - 1
       described_class.process(date: day_before)
@@ -32,8 +30,7 @@ RSpec.describe GA::InternalSearchProcessor do
     end
 
     it "does not update metrics for other items" do
-      item = create :dimensions_item, base_path: "/non-matching-path", latest: true
-      fact = create :metric, dimensions_item: item, dimensions_date: dimensions_date, number_of_internal_searches: 99
+      fact = create_metric base_path: "/non-matching-path", date: '2018-02-20', daily: { number_of_internal_searches: 99 }
 
       described_class.process(date: date)
 
@@ -55,7 +52,7 @@ RSpec.describe GA::InternalSearchProcessor do
       end
 
       it "only updates metrics for the current day" do
-        fact1 = create :metric, dimensions_item: item1, dimensions_date: dimensions_date
+        fact1 = create_metric base_path: '/path1', date: '2018-02-20'
 
         described_class.process(date: date)
 
