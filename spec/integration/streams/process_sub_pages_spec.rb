@@ -22,7 +22,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     parts = Dimensions::Item.pluck(:base_path, :title).to_set
 
     expect(parts).to eq Set[
-      ["/base-path/part1", "Part 1"],
+      ["/base-path", "Part 1"],
       ["/base-path/part2", "Part 2"],
       ["/base-path/part3", "Part 3"],
       ["/base-path/part4", "Part 4"]

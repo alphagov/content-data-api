@@ -14,9 +14,9 @@ module PublishingAPI
 
     def new_dimension_items
       if has_multiple_parts?
-        parts.map do |part|
+        parts.each_with_index.map do |part, index|
           Dimensions::Item.new(
-            base_path: base_path_for_part(part),
+            base_path: base_path_for_part(part, index),
             title: title_for_part(part),
             content: Etl::Item::Content::Parser.extract_content(message.payload, subpage: part['slug']),
             **attributes
@@ -75,9 +75,9 @@ module PublishingAPI
       message.payload['title']
     end
 
-    def base_path_for_part(part)
+    def base_path_for_part(part, index)
       slug = part.fetch('slug')
-      base_path + '/' + slug
+      index.zero? ? base_path : base_path + '/' + slug
     end
 
     def title_for_part(part)
