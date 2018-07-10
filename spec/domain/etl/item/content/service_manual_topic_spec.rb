@@ -1,4 +1,4 @@
-RSpec.describe Item::Content::Parser do
+RSpec.describe Etl::Item::Content::Parser do
   subject { described_class.instance }
 
   it "returns description if json does not have 'groups' key" do

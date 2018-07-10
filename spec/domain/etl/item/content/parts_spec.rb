@@ -1,4 +1,4 @@
-RSpec.describe Item::Content::Parser do
+RSpec.describe Etl::Item::Content::Parser do
   subject { described_class.instance }
 
   describe "Parts" do

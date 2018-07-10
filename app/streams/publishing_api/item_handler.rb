@@ -32,6 +32,6 @@ private
 
   def grow_dimension!
     new_item.promote!(old_item)
-    Item::Processor.run(new_item, Date.today)
+    Etl::Item::Processor.run(new_item, Date.today)
   end
 end

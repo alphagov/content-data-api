@@ -1,7 +1,7 @@
 require 'gds_api/test_helpers/content_store'
 
 module Performance
-  RSpec.describe Item::Metadata::NumberOfWordFiles do
+  RSpec.describe Etl::Item::Metadata::NumberOfWordFiles do
     include GdsApi::TestHelpers::ContentStore
 
     subject { described_class }
