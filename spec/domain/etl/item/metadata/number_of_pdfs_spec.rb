@@ -1,7 +1,7 @@
 require 'gds_api/test_helpers/content_store'
 
 module Performance
-  RSpec.describe Item::Metadata::NumberOfPdfs do
+  RSpec.describe Etl::Item::Metadata::NumberOfPdfs do
     include GdsApi::TestHelpers::ContentStore
 
     subject { described_class }

@@ -1,4 +1,4 @@
-RSpec.describe Item::Content::Parser do
+RSpec.describe Etl::Item::Content::Parser do
   subject { described_class.instance }
 
   it "returns content json if schema_name is 'step_by_step_nav'" do

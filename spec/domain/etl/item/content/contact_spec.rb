@@ -1,4 +1,4 @@
-RSpec.describe Item::Content::Parser do
+RSpec.describe Etl::Item::Content::Parser do
   subject { described_class.instance }
 
   it "does not return phone numbers if there is no 'phone_numbers' key" do
