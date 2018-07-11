@@ -37,10 +37,14 @@ FactoryBot.define do
             [
               {
                 "title" => "Part 1",
-                "slug" => "part1",
+                "slug" => base_path,
                 "body" => [
                   {
                     "content_type" => "text/govspeak",
+                    "content" => "Here 1"
+                  },
+                  {
+                    "content_type" => "text/html",
                     "content" => "Here 1"
                   }
                 ]
@@ -52,6 +56,10 @@ FactoryBot.define do
                   {
                     "content_type" => "text/govspeak",
                     "content" => "be 2"
+                  },
+                  {
+                    "content_type" => "text/html",
+                    "content" => "be 2"
                   }
                 ]
               },
@@ -62,6 +70,10 @@ FactoryBot.define do
                   {
                     "content_type" => "text/govspeak",
                     "content" => "some 3"
+                  },
+                  {
+                    "content_type" => "text/html",
+                    "content" => "some 3"
                   }
                 ]
               },
@@ -71,6 +83,10 @@ FactoryBot.define do
                 "body" => [
                   {
                     "content_type" => "text/govspeak",
+                    "content" => "content 4.",
+                  },
+                  {
+                    "content_type" => "text/html",
                     "content" => "content 4."
                   }
                 ]
