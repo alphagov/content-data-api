@@ -38,7 +38,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
         latest: true,
         content: 'some content',
         raw_json: payload,
-        publishing_api_events_id: event.id,
+        publishing_api_event_id: event.id,
       )
     end
 

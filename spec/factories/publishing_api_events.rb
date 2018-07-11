@@ -7,5 +7,8 @@ FactoryBot.define do
     trait :major_update do
       routing_key 'guides.major'
     end
+
+    sequence(:payload) { |i| "payload - #{i}" }
+    sequence(:routing_key) { |i| "routing_key - #{i}" }
   end
 end

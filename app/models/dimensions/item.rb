@@ -2,7 +2,7 @@ require 'json'
 
 class Dimensions::Item < ApplicationRecord
   has_one :facts_edition, class_name: "Facts::Edition", foreign_key: :dimensions_item_id
-  has_one :publishing_api_event
+  belongs_to :publishing_api_event
 
   validates :content_id, presence: true
   validates :base_path, presence: true
