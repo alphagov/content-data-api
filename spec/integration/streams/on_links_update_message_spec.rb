@@ -33,6 +33,12 @@ RSpec.describe PublishingAPI::Consumer do
     }.to change(Dimensions::Item, :count).by(0)
   end
 
+  it 'tracks the message' do
+    expect {
+      subject.process(build(:message))
+    }.to change(PublishingApiEvent, :count).by(1)
+  end
+
   it 'grows the dimension with when links change' do
     expect(GovukError).to_not receive(:notify)
 
