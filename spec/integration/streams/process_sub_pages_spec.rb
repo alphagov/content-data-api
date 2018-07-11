@@ -107,4 +107,26 @@ RSpec.describe "Process sub-pages for multipart content types" do
       expect(Dimensions::Item.where(latest: true).count).to eq(4)
     end
   end
+
+  describe "multipart content types" do
+    context "when multi part content types have different first parts" do
+      multipart_types = Item::Content::Parsers::Parts.new.schemas
+
+      multipart_types.each do |type|
+        context type do
+          it "it creates an item with base path and no slug for first part" do
+            message = build(:message, type.to_sym)
+            message.payload["base_path"] = "/#{type}-url"
+            subject.process(message)
+
+            item = Dimensions::Item.where(base_path: "/#{type}-url", latest: true).first
+            part = Dimensions::Item.where(base_path: "/#{type}-url/part2", latest: true).first
+
+            expect(item.base_path).to eq("/#{type}-url")
+            expect(part.base_path).to eq("/#{type}-url/part2")
+          end
+        end
+      end
+    end
+  end
 end

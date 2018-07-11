@@ -97,6 +97,10 @@ FactoryBot.define do
       end
     end
 
+    trait :guide do
+      with_parts
+    end
+
     trait :travel_advice do
       schema_name 'travel_advice'
       document_type 'travel_advice'
