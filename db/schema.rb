@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180711100526) do
+ActiveRecord::Schema.define(version: 20180712115111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20180711100526) do
     t.string "content_purpose_supergroup"
     t.string "content_purpose_subgroup"
     t.string "schema_name", null: false
-    t.text "content"
+    t.text "document_text"
     t.bigint "publishing_api_event_id"
     t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest", unique: true, where: "(latest = true)"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"

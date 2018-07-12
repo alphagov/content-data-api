@@ -18,8 +18,8 @@ class Etl::Item::Processor
       dimensions_item: item,
     )
 
-    if item.content.present?
-      edition.update(Etl::Item::Quality::Service.new.run(item.content))
+    if item.document_text.present?
+      edition.update(Etl::Item::Quality::Service.new.run(item.document_text))
     end
   end
 end

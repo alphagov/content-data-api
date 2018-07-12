@@ -36,7 +36,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
         public_updated_at: Time.zone.parse('2018-04-20T12:00:40+01:00'),
         schema_name: 'detailed_guide',
         latest: true,
-        content: 'some content',
+        document_text: 'some content',
         raw_json: payload,
         publishing_api_event_id: event.id,
       )
@@ -121,7 +121,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
         content_id: payload.fetch('content_id'),
         base_path: '/root/part1',
         title: 'part 1',
-        content: 'part 1 content',
+        document_text: 'part 1 content',
       )
     end
   end
