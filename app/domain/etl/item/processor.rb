@@ -1,25 +1,46 @@
 class Etl::Item::Processor
-  attr_reader :item, :date
+  attr_reader :new_item, :old_item, :dimensions_date
 
-  def self.run(item, date)
-    new(item: item, date: date).run
+  def self.run(new_item, old_item, date)
+    new(new_item: new_item, old_item: old_item, date: date).run
   end
 
-  def initialize(item:, date:)
-    @item = item
-    @date = date
+  def initialize(new_item:, old_item:, date:)
+    @new_item = new_item
+    @old_item = old_item
+    @dimensions_date = Dimensions::Date.for(date)
   end
 
   def run
-    edition = Facts::Edition.create!(
-      number_of_pdfs: Etl::Item::Metadata::NumberOfPdfs.parse(item.raw_json),
-      number_of_word_files: Etl::Item::Metadata::NumberOfWordFiles.parse(item.raw_json),
-      dimensions_date: Dimensions::Date.for(date),
-      dimensions_item: item,
-    )
-
-    if item.document_text.present?
-      edition.update(Etl::Item::Quality::Service.new.run(item.document_text))
+    if content_changed?
+      create_new_edition
+    else
+      clone_existing_edition
     end
+  end
+
+  def content_changed?
+    return true unless old_item
+    old_item.try(:document_text) != new_item.try(:document_text)
+  end
+
+private
+
+  def clone_existing_edition
+    old_item.facts_edition.clone_for!(new_item, dimensions_date)
+  end
+
+  def create_new_edition
+    Facts::Edition.create!({
+      number_of_pdfs: Etl::Item::Metadata::NumberOfPdfs.parse(new_item.raw_json),
+      number_of_word_files: Etl::Item::Metadata::NumberOfWordFiles.parse(new_item.raw_json),
+      dimensions_date: dimensions_date,
+      dimensions_item: new_item
+}.merge(quality_metrics))
+  end
+
+  def quality_metrics
+    return {} if new_item.document_text.blank?
+    Etl::Item::Quality::Service.new.run(new_item.document_text)
   end
 end

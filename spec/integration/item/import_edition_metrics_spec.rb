@@ -4,7 +4,7 @@ RSpec.describe 'Import edition metrics' do
   subject { PublishingAPI::Consumer.new }
 
   it 'stores content item metrics' do
-    message = build(:message, schema_name: 'publication', base_path: '/base-path')
+    message = build(:message, schema_name: 'publication', base_path: '/new-path')
     message.payload['details']['body'] = 'This is good content.'
     message.payload['details']['documents'] = [
       '<div class=\"attachment-details\">\n<a href=\"link.pdf\">1</a>\n\n\n\n</div>',
@@ -35,6 +35,29 @@ RSpec.describe 'Import edition metrics' do
     )
   end
 
+  it 'clones the existing edition if the content has not changed' do
+    item = create(:dimensions_item,
+      base_path: '/same-content',
+      document_text: 'the same content',
+      publishing_api_payload_version: 1,
+      latest: true)
+
+    create(:facts_edition,
+      dimensions_item: item,
+      dimensions_date: Dimensions::Date.for(Date.today),
+      repeated_words_count: 1)
+    message = build(:message,
+      schema_name: 'publication',
+      base_path: '/same-content',
+      payload_version: 2)
+    message.payload['details']['body'] = '<p>the same content</p>'
+
+    stub_quality_metrics_request
+    subject.process(message)
+
+    expect(find_latest_edition('/same-content').repeated_words_count).to eq(1)
+  end
+
   def stub_quality_metrics_request
     stub_quality_metrics(
       readability: { 'count' => 1 },
@@ -48,5 +71,9 @@ RSpec.describe 'Import edition metrics' do
       simplify: { 'count' => 9 },
       spell: { 'count' => 10 }
     )
+  end
+
+  def find_latest_edition(base_path)
+    Dimensions::Item.latest_by_base_path([base_path]).first.facts_edition
   end
 end
