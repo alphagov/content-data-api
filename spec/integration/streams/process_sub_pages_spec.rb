@@ -128,5 +128,43 @@ RSpec.describe "Process sub-pages for multipart content types" do
         end
       end
     end
+
+    context "different schemas structure first part differently" do
+      it "extracts the content for travel advice" do
+        message = build(:message, :travel_advice)
+        message.payload["base_path"] = "/travel-advice"
+        message.payload["details"]["summary"] = [
+            "content_type" => "text/html",
+            "content" => 'Summary content'
+        ]
+        subject.process(message)
+
+        item = Dimensions::Item.where(base_path: "/travel-advice", latest: true).first
+
+        expect(item.content).to eq("Summary content")
+      end
+
+      it "extracts the content for guide" do
+        message = build(:message, :guide)
+        message.payload["base_path"] = "/guide"
+        message.payload["details"]["parts"] = [
+          {
+            "title" => "Guide 1",
+            "slug" => "/guide",
+            "body" => [
+              {
+                "content_type" => "text/html",
+                "content" => "<h1>Heading 1</h1>"
+              }
+            ]
+          }
+        ]
+        subject.process(message)
+
+        item = Dimensions::Item.where(base_path: "/guide", latest: true).first
+
+        expect(item.content).to eq("Heading 1")
+      end
+    end
   end
 end
