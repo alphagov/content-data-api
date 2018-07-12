@@ -22,7 +22,7 @@ module PublishingAPI
           Dimensions::Item.new(
             base_path: base_path_for_part(part, index),
             title: title_for_part(part),
-            document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage: part['slug']),
+            document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage_slug: part['slug']),
             **attributes
           )
         end

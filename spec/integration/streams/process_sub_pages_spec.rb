@@ -109,7 +109,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
   end
 
   context "when multi part content types have different first parts" do
-    multipart_types = Item::Content::Parsers::Parts.new.schemas
+    multipart_types = Etl::Item::Content::Parsers::Parts.new.schemas
 
     multipart_types.each do |type|
       context type do
@@ -140,7 +140,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
       item = Dimensions::Item.where(base_path: "/travel-advice", latest: true).first
 
-      expect(item.content).to eq("Summary content")
+      expect(item.document_text).to eq("Summary content")
     end
 
     it "extracts the content for guide" do
@@ -162,7 +162,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
       item = Dimensions::Item.where(base_path: "/guide", latest: true).first
 
-      expect(item.content).to eq("Heading 1")
+      expect(item.document_text).to eq("Heading 1")
     end
   end
 end
