@@ -15,7 +15,7 @@ class Etl::GA::InternalSearchService
   end
 
   def client
-    @client ||= GA::Client.new.build
+    @client ||= Etl::GA::Client.new.build
   end
 
 private
