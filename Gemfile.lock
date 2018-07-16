@@ -522,6 +522,7 @@ DEPENDENCIES
   rails (~> 5.1)
   rails-controller-testing
   rspec-rails
+  ruby-progressbar
   sass-rails
   shoulda-matchers
   simplecov
