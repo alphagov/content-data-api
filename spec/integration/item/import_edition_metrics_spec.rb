@@ -58,6 +58,29 @@ RSpec.describe 'Import edition metrics' do
     expect(find_latest_edition('/same-content').repeated_words_count).to eq(1)
   end
 
+  it 'clones the existing edition if the content is nil on old and new items' do
+    item = create(:dimensions_item,
+      base_path: '/same-content',
+      document_text: nil,
+      publishing_api_payload_version: 1,
+      latest: true)
+
+    create(:facts_edition,
+      dimensions_item: item,
+      dimensions_date: Dimensions::Date.for(Date.today),
+      repeated_words_count: 1)
+    message = build(:message,
+      schema_name: 'publication',
+      base_path: '/same-content',
+      payload_version: 2)
+    message.payload['details']['body'] = nil
+
+    stub_quality_metrics_request
+    subject.process(message)
+
+    expect(find_latest_edition('/same-content').repeated_words_count).to eq(1)
+  end
+
   def stub_quality_metrics_request
     stub_quality_metrics(
       readability: { 'count' => 1 },

@@ -2,6 +2,8 @@ require 'odyssey'
 
 class Etl::Item::Quality::Service
   def run(content)
+    return {} if content.blank?
+
     parsed_response = fetch(content)
     convert_results(parsed_response, content)
   end

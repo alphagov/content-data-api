@@ -1,4 +1,4 @@
-RSpec.describe Etl::Item::Content::ContentPopulator do
+RSpec.describe 'rake etl:populate_content' do
   let!(:item_without_content) do
     create :dimensions_item,
       base_path: '/without',
@@ -13,7 +13,7 @@ RSpec.describe Etl::Item::Content::ContentPopulator do
   end
 
   before do
-    Etl::Item::Content::ContentPopulator.process
+    Rake::Task['etl:populate_content'].invoke
   end
 
   it 'updates the content where it is missing' do

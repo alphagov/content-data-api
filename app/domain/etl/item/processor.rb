@@ -36,11 +36,10 @@ private
       number_of_word_files: Etl::Item::Metadata::NumberOfWordFiles.parse(new_item.raw_json),
       dimensions_date: dimensions_date,
       dimensions_item: new_item
-}.merge(quality_metrics))
+    }.merge(quality_metrics))
   end
 
   def quality_metrics
-    return {} if new_item.document_text.blank?
     Etl::Item::Quality::Service.new.run(new_item.document_text)
   end
 end
