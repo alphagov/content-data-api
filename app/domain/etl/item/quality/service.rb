@@ -44,7 +44,7 @@ private
   def count_metric(response, metric_name)
     response.dig(metric_name) || 0
   end
+end
 
-  class QualityMetricsError < StandardError;
-  end
+class QualityMetricsError < StandardError;
 end
