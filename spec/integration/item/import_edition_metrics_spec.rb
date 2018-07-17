@@ -37,16 +37,16 @@ RSpec.describe 'Import edition metrics' do
 
   def stub_quality_metrics_request
     stub_quality_metrics(
-      readability: { 'count' => 1 },
-      contractions: { 'count' => 2 },
-      equality: { 'count' => 3 },
-      indefinite_article: { 'count' => 4 },
-      passive: { 'count' => 5 },
-      profanities: { 'count' => 6 },
-      redundant_acronyms: { 'count' => 7 },
-      repeated_words: { 'count' => 8 },
-      simplify: { 'count' => 9 },
-      spell: { 'count' => 10 }
+      readability_count: 1,
+      contractions_count: 2,
+      equality_count: 3,
+      indefinite_article_count: 4,
+      passive_count: 5,
+      profanities_count: 6,
+      redundant_acronyms_count: 7,
+      repeated_words_count: 8,
+      simplify_count: 9,
+      spell_count: 10
     )
   end
 end

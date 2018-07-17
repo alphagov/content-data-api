@@ -21,28 +21,30 @@ private
   end
 
   def convert_results(response, content)
+    result_fields = %w[
+    contractions_count
+    equality_count
+    indefinite_article_count
+    passive_count
+    profanities_count
+    redundant_acronyms_count
+    repeated_words_count
+    simplify_count
+    spell_count
+]
     result = Odyssey.flesch_kincaid_re(content, true)
-    {
+    response.slice(*result_fields).symbolize_keys.merge(
       readability_score: result.fetch('score'),
       string_length: result.fetch('string_length'),
       sentence_count: result.fetch('sentence_count'),
       word_count: result.fetch('word_count'),
-    }.tap do |results|
-      results[:contractions_count] = count_metric(response, 'contractions')
-      results[:equality_count] = count_metric(response, 'equality')
-      results[:indefinite_article_count] = count_metric(response, 'indefinite_article')
-      results[:passive_count] = count_metric(response, 'passive')
-      results[:profanities_count] = count_metric(response, 'profanities')
-      results[:redundant_acronyms_count] = count_metric(response, 'redundant_acronyms')
-      results[:repeated_words_count] = count_metric(response, 'repeated_words')
-      results[:simplify_count] = count_metric(response, 'simplify')
-      results[:spell_count] = count_metric(response, 'spell')
-    end
+    )
   end
 
   def count_metric(response, metric_name)
-    response.dig(metric_name, 'count') || 0
+    response.dig(metric_name) || 0
   end
 
-  class QualityMetricsError < StandardError; end
+  class QualityMetricsError < StandardError;
+  end
 end
