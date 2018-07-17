@@ -1,5 +1,6 @@
 RSpec.describe 'Import edition metrics' do
   include QualityMetricsHelpers
+  include ItemSetupHelpers
 
   subject { PublishingAPI::Consumer.new }
 
@@ -35,17 +36,28 @@ RSpec.describe 'Import edition metrics' do
     )
   end
 
-  it 'clones the existing edition if the content has not changed' do
-    item = create(:dimensions_item,
-      base_path: '/same-content',
-      document_text: 'the same content',
-      publishing_api_payload_version: 1,
-      latest: true)
+  let(:existing_quality_metrics) do
+    {
+      repeated_words_count: 1,
+      word_count: 3,
+      equality_count: 2,
+      indefinite_article_count: 2,
+      passive_count: 6
+    }
+  end
 
-    create(:facts_edition,
-      dimensions_item: item,
-      dimensions_date: Dimensions::Date.for(Date.today),
-      repeated_words_count: 1)
+  it 'clones the existing edition if the content has not changed' do
+    create_edition(
+      base_path: '/same-content',
+      date: Date.today,
+      item: {
+        document_text: 'the same content',
+        publishing_api_payload_version: 1,
+        latest: true
+      },
+      edition: existing_quality_metrics
+    )
+
     message = build(:message,
       schema_name: 'publication',
       base_path: '/same-content',
@@ -55,30 +67,31 @@ RSpec.describe 'Import edition metrics' do
     stub_quality_metrics_request
     subject.process(message)
 
-    expect(find_latest_edition('/same-content').repeated_words_count).to eq(1)
+    expect(find_latest_edition('/same-content')).to have_attributes(existing_quality_metrics)
   end
 
   it 'clones the existing edition if the content is nil on old and new items' do
-    item = create(:dimensions_item,
-      base_path: '/same-content',
-      document_text: nil,
-      publishing_api_payload_version: 1,
-      latest: true)
+    create_edition(
+      base_path: '/empty-content',
+      date: Date.today,
+      item: {
+        document_text: nil,
+        publishing_api_payload_version: 1,
+        latest: true
+      },
+      edition: existing_quality_metrics
+    )
 
-    create(:facts_edition,
-      dimensions_item: item,
-      dimensions_date: Dimensions::Date.for(Date.today),
-      repeated_words_count: 1)
     message = build(:message,
       schema_name: 'publication',
-      base_path: '/same-content',
+      base_path: '/empty-content',
       payload_version: 2)
     message.payload['details']['body'] = nil
 
     stub_quality_metrics_request
     subject.process(message)
 
-    expect(find_latest_edition('/same-content').repeated_words_count).to eq(1)
+    expect(find_latest_edition('/empty-content')).to have_attributes(existing_quality_metrics)
   end
 
   def stub_quality_metrics_request

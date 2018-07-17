@@ -1,7 +1,7 @@
 require 'securerandom'
 
 RSpec.describe '/api/v1/metrics/', type: :request do
-  include MetricsHelpers
+  include ItemSetupHelpers
   before { create(:user) }
 
   let!(:base_path) { '/base_path' }

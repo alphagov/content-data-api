@@ -2,7 +2,7 @@ require 'gds-api-adapters'
 require 'traceable'
 
 RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
-  include MetricsHelpers
+  include ItemSetupHelpers
   subject { described_class }
 
   let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }

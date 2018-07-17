@@ -1,5 +1,5 @@
 RSpec.describe Reports::Series do
-  include MetricsHelpers
+  include ItemSetupHelpers
   context "all" do
     it "returns a series of all metrics" do
       today = Date.today
