@@ -3,12 +3,12 @@ class PublishingAPI::MessageHandler
     new(*args).process
   end
 
-  def initialize(publishing_api_event)
-    @publishing_api_event = publishing_api_event
+  def initialize(message)
+    @message = message
   end
 
   def process
-    if publishing_api_event.is_links_update?
+    if is_links_update?
       item_handlers.each(&:process_links!)
     else
       item_handlers.each(&:process!)
@@ -17,10 +17,10 @@ class PublishingAPI::MessageHandler
 
 private
 
-  attr_reader :publishing_api_event
+  attr_reader :message
 
   def item_handlers
-    adapter = PublishingAPI::MessageAdapter.new(publishing_api_event)
+    adapter = PublishingAPI::MessageAdapter.new(message)
     new_items = adapter.new_dimension_items
 
     old_items = Dimensions::Item.existing_latest_items(
@@ -40,5 +40,10 @@ private
     old_items.each(&:deprecate!)
 
     result
+  end
+
+  def is_links_update?
+    routing_key = message.delivery_info.routing_key
+    routing_key.ends_with?('.links')
   end
 end
