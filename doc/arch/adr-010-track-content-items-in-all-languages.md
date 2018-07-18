@@ -6,11 +6,11 @@
 
 In [adr-008][1] we agreed on focusing only on English pages.
 
-We have noticed during the last months that this restriction is causing more
+We have noticed during the last few months that this restriction is causing more
 issues than benefits, because:
 
-- We have Content Items with the same content_id and different locales.
-- We need to handle edge cases when retrieving the information from Publishing API.
+- We have Content Items with the same `content_id` and different `locale`s.
+- We needed to handle edge cases when retrieving the information from Publishing API in order to work around only retrieving English language content.
 
 ## Impact
 
