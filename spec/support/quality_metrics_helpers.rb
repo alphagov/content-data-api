@@ -16,4 +16,9 @@ module QualityMetricsHelpers
     stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics').
       to_return(status: 200, body: response.to_json, headers: { 'Content-Type' => 'application/json' })
   end
+
+  def stub_failing_quality_metrics(status:, body:)
+    stub_request(:post, 'https://govuk-content-quality-metrics.cloudapps.digital/metrics').
+      to_return(status: status, body: body, headers: { 'Content-Type' => 'application/json' })
+  end
 end
