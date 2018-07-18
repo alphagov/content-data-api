@@ -19,7 +19,6 @@ module PublishingAPI
             base_path: base_path_for_part(part),
             title: title_for_part(part),
             document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage: part['slug']),
-            publishing_api_event_id: message.id,
             **attributes
           )
         end
@@ -29,7 +28,6 @@ module PublishingAPI
             base_path: base_path,
             title: title,
             document_text: Etl::Item::Content::Parser.extract_content(message.payload),
-            publishing_api_event_id: message.id,
             **attributes
           )
         ]
@@ -56,7 +54,6 @@ module PublishingAPI
         public_updated_at: parse_time('public_updated_at'),
         schema_name: message.payload.fetch('schema_name'),
         raw_json: message.payload,
-        publishing_api_event_id: message.id,
         latest: true
       }
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180712115111) do
+ActiveRecord::Schema.define(version: 20180718161302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,12 +58,10 @@ ActiveRecord::Schema.define(version: 20180712115111) do
     t.string "content_purpose_subgroup"
     t.string "schema_name", null: false
     t.text "document_text"
-    t.bigint "publishing_api_event_id"
     t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest", unique: true, where: "(latest = true)"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
     t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
-    t.index ["publishing_api_event_id"], name: "index_dimensions_items_on_publishing_api_event_id"
   end
 
   create_table "events_feedexes", force: :cascade do |t|
@@ -133,13 +131,6 @@ ActiveRecord::Schema.define(version: 20180712115111) do
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
   end
 
-  create_table "publishing_api_events", force: :cascade do |t|
-    t.string "routing_key"
-    t.jsonb "payload"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -154,7 +145,6 @@ ActiveRecord::Schema.define(version: 20180712115111) do
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
-  add_foreign_key "dimensions_items", "publishing_api_events"
   add_foreign_key "facts_editions", "dimensions_dates", primary_key: "date"
   add_foreign_key "facts_editions", "dimensions_items"
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
