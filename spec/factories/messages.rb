@@ -15,7 +15,6 @@ FactoryBot.define do
       routing_key 'schema.links'
     end
 
-
     delivery_info { OpenStruct.new(routing_key: routing_key) }
 
     payload do

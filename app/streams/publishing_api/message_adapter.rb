@@ -16,13 +16,15 @@ module PublishingAPI
     end
 
     def new_dimension_items
-      if has_multiple_parts?
-        add_summary_part if doc_type == 'travel_advice'
+      parts_adapter = PartsAdapter.new(message)
+      parts = parts_adapter.parts
+
+      if parts.present?
         parts.each_with_index.map do |part, index|
           Dimensions::Item.new(
-            base_path: base_path_for_part(part, index),
-            title: title_for_part(part),
-            document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage_slug: part['slug']),
+            base_path: parts_adapter.base_path_for_part(part, index),
+            title: parts_adapter.title_for(part),
+            document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage_path: part['slug']),
             **attributes
           )
         end
@@ -62,47 +64,21 @@ module PublishingAPI
       }
     end
 
+    def base_path
+      message.payload.fetch('base_path')
+    end
+
     def primary_organisation
       primary_org = message.payload.dig('expanded_links', 'primary_publishing_organisation') || []
       primary_org.any? ? primary_org[0] : {}
-    end
-
-    def has_multiple_parts?
-      parts.present?
-    end
-
-    def base_path
-      message.payload.fetch('base_path')
     end
 
     def title
       message.payload['title']
     end
 
-    def base_path_for_part(part, index)
-      slug = part.fetch('slug')
-
-      index.zero? ? base_path : base_path + '/' + slug
-    end
-
-    def title_for_part(part)
-      part.fetch('title')
-    end
-
     def parse_time(attribute_name)
       message.payload.fetch(attribute_name, nil)
-    end
-
-    def parts
-      message.payload.dig('details', 'parts')
-    end
-
-    def add_summary_part
-      parts.prepend(
-        'slug' => '',
-        'title' => 'Summary',
-        'body' => [message.payload.dig('details', 'summary').find { |x| x['content_type'] == "text/html" }]
-      )
     end
 
     def schema_name

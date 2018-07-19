@@ -5,11 +5,11 @@ class Etl::Item::Content::Parser
     register_parsers
   end
 
-  def self.extract_content(*args, subpage_slug: nil)
-    instance.extract_content(*args, subpage_slug: subpage_slug)
+  def self.extract_content(*args, subpage_path: nil)
+    instance.extract_content(*args, subpage_path: subpage_path)
   end
 
-  def extract_content(json, subpage_slug: nil)
+  def extract_content(json, subpage_path: nil)
     return nil if json.blank?
 
     schema = json.dig("schema_name")
@@ -20,7 +20,7 @@ class Etl::Item::Content::Parser
       GovukError.notify(InvalidSchemaError.new("Schema does not exist: #{schema}"), extra: { base_path: base_path.to_s })
       nil
     elsif parser.respond_to?(:parse_subpage)
-      parse_html parser.parse_subpage(json, subpage_slug)
+      parse_html parser.parse_subpage(json, subpage_path)
     else
       parse_html parser.parse(json)
     end
