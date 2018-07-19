@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180725104938) do
+ActiveRecord::Schema.define(version: 20180719133916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,15 @@ ActiveRecord::Schema.define(version: 20180725104938) do
     t.string "content_purpose_subgroup"
     t.string "schema_name", null: false
     t.text "document_text"
+    t.string "publishing_app"
+    t.string "rendering_app"
+    t.string "analytics_identifier"
+    t.string "phase"
+    t.string "previous_version"
+    t.string "update_type"
+    t.datetime "last_edited_at"
+    t.json "links"
+    t.index ["base_path", "latest"], name: "index_dimensions_items_on_base_path_and_latest", unique: true, where: "(latest = true)"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
     t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
