@@ -1,10 +1,7 @@
 module PublishingAPI
   class MessageAdapter
-    attr_reader :doc_type
-
     def initialize(message)
       @message = message
-      @doc_type = message.payload.fetch('document_type')
     end
 
     def content_id
