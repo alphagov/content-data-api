@@ -3,12 +3,15 @@ require 'odyssey'
 class Etl::Item::Quality::Service
   def run(content)
     return {} if content.blank?
-
-    parsed_response = fetch(content)
+    parsed_response = fetch(space_between_sentences(content))
     convert_results(parsed_response, content)
   end
 
 private
+
+  def space_between_sentences(content)
+    content.gsub(/\./, '. ')
+  end
 
   URL = 'https://govuk-content-quality-metrics.cloudapps.digital/metrics'.freeze
 
