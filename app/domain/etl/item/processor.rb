@@ -31,15 +31,12 @@ private
   end
 
   def create_new_edition
-    Facts::Edition.create!({
+    Facts::Edition.create!(
       number_of_pdfs: Etl::Item::Metadata::NumberOfPdfs.parse(new_item.raw_json),
       number_of_word_files: Etl::Item::Metadata::NumberOfWordFiles.parse(new_item.raw_json),
       dimensions_date: dimensions_date,
       dimensions_item: new_item
-    }.merge(quality_metrics))
-  end
-
-  def quality_metrics
-    Etl::Item::Quality::Service.new.run(new_item.document_text)
+    )
+    Etl::Jobs::QualityMetricsJob.perform_async(new_item.id)
   end
 end

@@ -33,7 +33,7 @@ private
     repeated_words_count
     simplify_count
     spell_count
-]
+    ]
     result = Odyssey.flesch_kincaid_re(content, true)
     response.slice(*result_fields).symbolize_keys.merge(
       readability_score: result.fetch('score'),
