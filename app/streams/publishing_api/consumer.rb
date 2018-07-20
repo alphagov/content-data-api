@@ -4,8 +4,10 @@ module PublishingAPI
       if is_invalid_message?(message)
         message.discard
       else
-        ActiveRecord::Base.transaction do
-          do_process(message)
+        Retriable.retriable(on: ActiveRecord::RecordNotUnique) do
+          ActiveRecord::Base.transaction do
+            do_process(message)
+          end
         end
       end
     end
