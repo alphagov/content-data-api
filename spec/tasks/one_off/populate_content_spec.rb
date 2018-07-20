@@ -1,15 +1,9 @@
 RSpec.describe 'rake etl:populate_content' do
   let!(:item_without_content) do
-    create :dimensions_item,
-      base_path: '/without',
-      document_text: nil,
-      raw_json: build_json(body: '<p>new content</p>')
+    create :dimensions_item, base_path: '/without', document_text: nil, raw_json: build_json(body: '<p>new content</p>')
   end
   let!(:item_with_content) do
-    create :dimensions_item,
-      base_path: '/with',
-      document_text: 'existing content',
-      raw_json: build_json(body: '<p>new content</p>')
+    create :dimensions_item, base_path: '/with', document_text: 'existing content', raw_json: build_json(body: '<p>new content</p>')
   end
 
   before do
