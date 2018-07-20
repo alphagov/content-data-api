@@ -7,14 +7,18 @@ RSpec.describe 'rake etl:populate_content' do
   end
 
   before do
-    Rake::Task['etl:populate_content'].invoke
+    Rake::Task['etl:populate_content'].reenable
   end
 
   it 'updates the content where it is missing' do
+    Rake::Task['etl:populate_content'].invoke
+
     expect(item_without_content.reload.document_text).to eq('new content')
   end
 
   it 'ignores items with existing content' do
+    Rake::Task['etl:populate_content'].invoke
+
     expect(item_with_content.reload.document_text).to eq('existing content')
   end
 
