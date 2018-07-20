@@ -1,7 +1,7 @@
 RSpec.describe PublishingAPI::PartsAdapter do
   subject { described_class }
 
-  context ".parts" do
+  describe "#parts" do
     let(:parts) { subject.new(build(:message, :with_parts)).parts }
 
     it "returns parts for multipart content" do
@@ -13,7 +13,7 @@ RSpec.describe PublishingAPI::PartsAdapter do
     end
   end
 
-  context ".title_for" do
+  context "#title_for" do
     it "returns title for a part" do
       part = {
         "title" => "Title for part",
@@ -33,7 +33,7 @@ RSpec.describe PublishingAPI::PartsAdapter do
     end
   end
 
-  context ".base_path_for_part" do
+  context "#base_path_for_part" do
     it "returns base path without slug prepended for part at index 0" do
       part_0 = {
         "title" => "Title for part",
