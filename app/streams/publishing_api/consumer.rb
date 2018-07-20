@@ -4,7 +4,9 @@ module PublishingAPI
       if is_invalid_message?(message)
         message.discard
       else
-        do_process(message)
+        ActiveRecord::Base.transaction do
+          do_process(message)
+        end
       end
     end
 
