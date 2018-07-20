@@ -1,4 +1,4 @@
-module MetricsHelpers
+module ItemSetupHelpers
   def create_metric(base_path:, date:, edition: {}, daily: {}, item: {})
     dimensions_item = dimensions_item(item.merge(base_path: base_path))
     dimensions_date = dimensions_date(date)
@@ -7,6 +7,10 @@ module MetricsHelpers
       dimensions_date: dimensions_date,
       dimensions_item: dimensions_item
     )
+  end
+
+  def create_edition(base_path:, date:, edition:, item:)
+    ensure_edition_exists(dimensions_item(item.merge(base_path: base_path)), dimensions_date(date), edition)
   end
 
 private

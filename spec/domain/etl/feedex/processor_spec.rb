@@ -1,7 +1,7 @@
 require 'gds-api-adapters'
 
 RSpec.describe Etl::Feedex::Processor do
-  include MetricsHelpers
+  include ItemSetupHelpers
 
   let(:date) { Date.new(2018, 2, 20) }
 

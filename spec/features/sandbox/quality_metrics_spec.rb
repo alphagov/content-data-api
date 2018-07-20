@@ -1,5 +1,5 @@
 RSpec.feature 'Quality metrics', type: :feature do
-  include MetricsHelpers
+  include ItemSetupHelpers
   before do
     create(:user)
   end
