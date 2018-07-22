@@ -1,5 +1,5 @@
 class Etl::Item::Content::Parsers::Parts
-  def parse_subpage(json, subpage_slug)
+  def parse_subpage(json, subpage_path)
     parts = json.dig("details", "parts")
     return if parts.nil?
 

@@ -13,33 +13,39 @@ module PublishingAPI
     end
 
     def new_dimension_items
-      parts_adapter = PartsAdapter.new(message)
-      parts = parts_adapter.parts
-
-      if parts.present?
-        parts.each_with_index.map do |part, index|
-          Dimensions::Item.new(
-            base_path: parts_adapter.base_path_for_part(part, index),
-            title: parts_adapter.title_for(part),
-            document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage_path: part['slug']),
-            **attributes
-          )
-        end
+      if MultipartMessage.is_multipart?(message)
+        multipart_message_to_dimension_items
       else
-        [
-          Dimensions::Item.new(
-            base_path: base_path,
-            title: title,
-            document_text: Etl::Item::Content::Parser.extract_content(message.payload),
-            **attributes
-          )
-        ]
+        single_message_to_dimension_item
       end
     end
 
   private
 
     attr_reader :message
+
+    def single_message_to_dimension_item
+      [
+        Dimensions::Item.new(
+          base_path: base_path,
+          title: title,
+          document_text: Etl::Item::Content::Parser.extract_content(message.payload),
+          **attributes
+        )
+      ]
+    end
+
+    def multipart_message_to_dimension_items
+      multipart_message = MultipartMessage.new(message)
+      multipart_message.parts.map.with_index do |part, index|
+        Dimensions::Item.new(
+          base_path: multipart_message.base_path_for_part(part, index),
+          title: multipart_message.title_for(part),
+          document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage_path: part['slug']),
+          **attributes
+        )
+      end
+    end
 
     def attributes
       {

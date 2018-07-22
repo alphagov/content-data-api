@@ -1,5 +1,9 @@
 module PublishingAPI
-  class PartsAdapter
+  class MultipartMessage
+    def self.is_multipart?(message)
+      message.payload.dig('details', 'parts').present?
+    end
+
     def initialize(message)
       @message = message
     end
@@ -23,13 +27,13 @@ module PublishingAPI
     end
 
     def base_path_for_part(part, index)
-      return base_path if index == 0
       slug = part.fetch('slug')
+      return base_path if index.zero?
 
       "#{base_path}/#{slug}"
     end
 
-    private
+  private
 
     attr_reader :message, :message_parts
 
