@@ -37,6 +37,6 @@ private
       dimensions_date: dimensions_date,
       dimensions_item: new_item
     )
-    Etl::Jobs::QualityMetricsJob.perform_async(new_item.id)
+    Etl::Jobs::QualityMetricsJob.perform_later(new_item.id)
   end
 end
