@@ -2,6 +2,7 @@ require 'sidekiq/testing'
 RSpec.describe 'Import edition metrics' do
   include QualityMetricsHelpers
   include ItemSetupHelpers
+  include ActiveJob::TestHelper
 
   subject { PublishingAPI::MessageHandler }
 
@@ -11,7 +12,7 @@ RSpec.describe 'Import edition metrics' do
     end
   end
 
-  it 'stores content item metrics' do
+  it 'stores content item metrics', perform_enqueued: true do
     message = build(:message, schema_name: 'publication', base_path: '/new-path')
     message.payload['details']['body'] = 'This is good content.'
     message.payload['details']['documents'] = [
