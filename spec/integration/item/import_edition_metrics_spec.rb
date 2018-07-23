@@ -1,8 +1,15 @@
+require 'sidekiq/testing'
 RSpec.describe 'Import edition metrics' do
   include QualityMetricsHelpers
   include ItemSetupHelpers
 
   subject { PublishingAPI::MessageHandler }
+
+  around do |example|
+    Sidekiq::Testing.inline! do
+      example.run
+    end
+  end
 
   it 'stores content item metrics' do
     message = build(:message, schema_name: 'publication', base_path: '/new-path')

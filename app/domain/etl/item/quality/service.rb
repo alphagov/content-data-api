@@ -3,12 +3,15 @@ require 'odyssey'
 class Etl::Item::Quality::Service
   def run(content)
     return {} if content.blank?
-
-    parsed_response = fetch(content)
+    parsed_response = fetch(space_between_sentences(content))
     convert_results(parsed_response, content)
   end
 
 private
+
+  def space_between_sentences(content)
+    content.gsub(/\./, '. ')
+  end
 
   URL = 'https://govuk-content-quality-metrics.cloudapps.digital/metrics'.freeze
 
@@ -33,7 +36,7 @@ private
     repeated_words_count
     simplify_count
     spell_count
-]
+    ]
     result = Odyssey.flesch_kincaid_re(content, true)
     response.slice(*result_fields).symbolize_keys.merge(
       readability_score: result.fetch('score'),

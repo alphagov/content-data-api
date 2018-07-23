@@ -9,7 +9,7 @@ module ItemSetupHelpers
     )
   end
 
-  def create_edition(base_path:, date:, edition:, item:)
+  def create_edition(base_path:, date:, edition: {}, item: {})
     ensure_edition_exists(dimensions_item(item.merge(base_path: base_path)), dimensions_date(date), edition)
   end
 
