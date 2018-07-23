@@ -14,6 +14,15 @@ RSpec.describe PublishingAPI::MessageAdapter do
           'content_purpose_subgroup' => 'the-subgroup',
           'first_published_at' => '2018-04-19T12:00:40+01:00',
           'public_updated_at' => '2018-04-20T12:00:40+01:00',
+          'phase' => 'live',
+          'publishing_app' => 'calendars',
+          'rendering_app' => 'calendars',
+          'analytics_identifier' => 'analytics_identifier',
+          'update_type' => 'major',
+          'links' => { 'policy_areas' => ['f50bb933-d558-49e1-934d-ccd1e68405fb',
+                                          '132c48c6-e274-4c46-838a-36916f6dfa8f',
+                                          'dbe221f3-43c4-4dae-9958-b87cde95c966',
+                                          '1e3e32e2-d616-4cba-a449-22f5a0219468'] },
         )
         result['details']['body'] = 'some content'
         result
@@ -37,7 +46,16 @@ RSpec.describe PublishingAPI::MessageAdapter do
         schema_name: 'detailed_guide',
         latest: true,
         document_text: 'some content',
-        raw_json: payload
+        phase: 'live',
+        publishing_app: 'calendars',
+        rendering_app: 'calendars',
+        analytics_identifier: 'analytics_identifier',
+        update_type: 'major',
+        links: { "policy_areas" => ["f50bb933-d558-49e1-934d-ccd1e68405fb",
+                                    "132c48c6-e274-4c46-838a-36916f6dfa8f",
+                                    "dbe221f3-43c4-4dae-9958-b87cde95c966",
+                                    "1e3e32e2-d616-4cba-a449-22f5a0219468"] },
+        raw_json: payload,
       )
     end
 
