@@ -23,7 +23,7 @@ RSpec.describe PublishingAPI::MultipartMessage do
     end
   end
 
-  context ".title_for" do
+  context "#title_for" do
     it "returns title for a part" do
       part = {
         "title" => "Title for part",
@@ -43,7 +43,7 @@ RSpec.describe PublishingAPI::MultipartMessage do
     end
   end
 
-  context ".base_path_for_part" do
+  context "#base_path_for_part" do
     it "returns base path without slug appended for part at index 0" do
       part_zero = {
         "title" => "Title for part",
