@@ -4,23 +4,22 @@ module PublishingAPI
       if is_invalid_message?(message)
         message.discard
       else
-        Retriable.retriable(on: ActiveRecord::RecordNotUnique) do
-          ActiveRecord::Base.transaction do
-            do_process(message)
-          end
-        end
+        do_process(message)
       end
+    rescue StandardError => e
+      GovukError.notify(e)
+      message.discard
     end
 
   private
 
     def do_process(message)
-      PublishingAPI::MessageHandler.process(message)
-
-      message.ack
-    rescue StandardError => e
-      GovukError.notify(e)
-      message.discard
+      Retriable.retriable(on: ActiveRecord::RecordNotUnique) do
+        ActiveRecord::Base.transaction do
+          PublishingAPI::MessageHandler.process(message)
+          message.ack
+        end
+      end
     end
 
     def is_invalid_message?(message)
