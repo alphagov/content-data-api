@@ -82,46 +82,66 @@ RSpec.describe PublishingAPI::MessageAdapter do
   end
 
   describe '.new_dimension_items' do
-    let(:payload) do
-      GovukSchemas::RandomExample.for_schema(notification_schema: 'guide') do |result|
-        result.merge!(
-          'payload_version' => 7,
-          'locale' => 'fr',
-          'title' => 'the-title',
-          'base_path' => '/root',
-          'document_type' => 'guide',
-          'content_purpose_document_supertype' => 'the-supertype',
-          'content_purpose_supergroup' => 'the-supergroup',
-          'content_purpose_subgroup' => 'the-subgroup',
-          'first_published_at' => '2018-04-19T12:00:40+01:00',
-          'public_updated_at' => '2018-04-20T12:00:40+01:00',
-        )
-
-        result['details']['parts'] = [
-          { 'slug' => 'part1', 'body' => [{ 'content_type' => 'text/html', 'content' => 'part 1 content' }], 'title' => 'part 1' },
-          { 'slug' => 'part2', 'body' => [{ 'content_type' => 'text/html', 'content' => 'part 2 content' }], 'title' => 'part 2' }
-        ]
-        result
-      end
-    end
-
     it 'convert an multipart event into a set of Dimensions::Items' do
-      event = build(:message, payload: payload, routing_key: 'the-key')
+      event = build(:message, :with_parts)
       result = subject.new(event).new_dimension_items
 
-      expect(result.length).to eq(2)
+      expect(result.length).to eq(4)
     end
 
     it 'extracts page attributes into the Item' do
-      event = build(:message, payload: payload, routing_key: 'the-key')
+      event = build(:message, :with_parts)
+      dimension_item = subject.new(event).new_dimension_items[1]
+
+      expect(dimension_item).to have_attributes(
+        base_path: '/base-path/part2',
+        title: 'Part 2',
+        document_text: 'be 2'
+      )
+    end
+
+    it 'the first page of multipart pages do not have a slug in the url' do
+      event = build(:message, :with_parts)
       dimension_item = subject.new(event).new_dimension_items[0]
 
       expect(dimension_item).to have_attributes(
-        content_id: payload.fetch('content_id'),
-        base_path: '/root/part1',
-        title: 'part 1',
-        document_text: 'part 1 content',
+        base_path: '/base-path',
+        title: 'Part 1',
+        document_text: 'Here 1'
       )
+    end
+
+    it 'the first page of multipart pages do not have a slug in the url' do
+      event = build(:message, :with_parts)
+      dimension_item = subject.new(event).new_dimension_items[0]
+
+      expect(dimension_item).to have_attributes(
+        base_path: '/base-path'
+      )
+    end
+
+    context 'item is a travel guide' do
+      it 'uses summary as first part without base_path containing the slug' do
+        travel_advice_message = build(:message, :travel_advice)
+        dimension_item = subject.new(travel_advice_message).new_dimension_items[0]
+
+        expect(dimension_item).to have_attributes(
+          base_path: '/base-path',
+          title: 'Summary',
+          document_text: 'summary content',
+        )
+      end
+
+      it 'uses `parts` as the additional pages with base_path containing the slug' do
+        travel_advice_message = build(:message, :travel_advice)
+        dimension_item = subject.new(travel_advice_message).new_dimension_items[1]
+
+        expect(dimension_item).to have_attributes(
+          base_path: '/base-path/part1',
+          title: 'Part 1',
+          document_text: 'Here 1',
+        )
+      end
     end
   end
 end

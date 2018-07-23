@@ -15,7 +15,6 @@ FactoryBot.define do
       routing_key 'schema.links'
     end
 
-
     delivery_info { OpenStruct.new(routing_key: routing_key) }
 
     payload do
@@ -37,10 +36,14 @@ FactoryBot.define do
             [
               {
                 "title" => "Part 1",
-                "slug" => "part1",
+                "slug" => base_path,
                 "body" => [
                   {
                     "content_type" => "text/govspeak",
+                    "content" => "Here 1"
+                  },
+                  {
+                    "content_type" => "text/html",
                     "content" => "Here 1"
                   }
                 ]
@@ -52,6 +55,10 @@ FactoryBot.define do
                   {
                     "content_type" => "text/govspeak",
                     "content" => "be 2"
+                  },
+                  {
+                    "content_type" => "text/html",
+                    "content" => "be 2"
                   }
                 ]
               },
@@ -62,6 +69,10 @@ FactoryBot.define do
                   {
                     "content_type" => "text/govspeak",
                     "content" => "some 3"
+                  },
+                  {
+                    "content_type" => "text/html",
+                    "content" => "some 3"
                   }
                 ]
               },
@@ -71,7 +82,54 @@ FactoryBot.define do
                 "body" => [
                   {
                     "content_type" => "text/govspeak",
+                    "content" => "content 4.",
+                  },
+                  {
+                    "content_type" => "text/html",
                     "content" => "content 4."
+                  }
+                ]
+              }
+            ]
+          result.merge! attributes
+        end
+      end
+    end
+
+    trait :guide do
+      with_parts
+    end
+
+    trait :travel_advice do
+      schema_name 'travel_advice'
+      document_type 'travel_advice'
+      payload do
+        GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
+          result['base_path'] = base_path
+          result['payload_version'] = payload_version
+          result['details']['summary'] = [
+            "content_type" => "text/html",
+            "content" => 'summary content'
+          ]
+          result['details']['parts'] =
+            [
+              {
+                "title" => "Part 1",
+                "slug" => "part1",
+                "body" => [
+                  {
+                    "content_type" => "text/html",
+                    "content" => "Here 1"
+                  }
+                ]
+              },
+              {
+                "title" => "Part 2",
+                "slug" => "part2",
+                "body" => [
+                  {
+                    "content_type" => "text/html",
+                    "content" => "be 2"
                   }
                 ]
               }

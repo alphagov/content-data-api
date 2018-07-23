@@ -13,30 +13,39 @@ module PublishingAPI
     end
 
     def new_dimension_items
-      if has_multiple_parts?
-        parts.map do |part|
-          Dimensions::Item.new(
-            base_path: base_path_for_part(part),
-            title: title_for_part(part),
-            document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage: part['slug']),
-            **attributes
-          )
-        end
+      if MultipartMessage.is_multipart?(message)
+        multipart_message_to_dimension_items
       else
-        [
-          Dimensions::Item.new(
-            base_path: base_path,
-            title: title,
-            document_text: Etl::Item::Content::Parser.extract_content(message.payload),
-            **attributes
-          )
-        ]
+        single_message_to_dimension_item
       end
     end
 
   private
 
     attr_reader :message
+
+    def single_message_to_dimension_item
+      [
+        Dimensions::Item.new(
+          base_path: base_path,
+          title: title,
+          document_text: Etl::Item::Content::Parser.extract_content(message.payload),
+          **attributes
+        )
+      ]
+    end
+
+    def multipart_message_to_dimension_items
+      multipart_message = MultipartMessage.new(message)
+      multipart_message.parts.map.with_index do |part, index|
+        Dimensions::Item.new(
+          base_path: multipart_message.base_path_for_part(part, index),
+          title: multipart_message.title_for(part),
+          document_text: Etl::Item::Content::Parser.extract_content(message.payload, subpage_path: part['slug']),
+          **attributes
+        )
+      end
+    end
 
     def attributes
       {
@@ -58,38 +67,25 @@ module PublishingAPI
       }
     end
 
+    def base_path
+      message.payload.fetch('base_path')
+    end
+
     def primary_organisation
       primary_org = message.payload.dig('expanded_links', 'primary_publishing_organisation') || []
       primary_org.any? ? primary_org[0] : {}
-    end
-
-    def has_multiple_parts?
-      parts.present?
-    end
-
-    def base_path
-      message.payload.fetch('base_path')
     end
 
     def title
       message.payload['title']
     end
 
-    def base_path_for_part(part)
-      slug = part.fetch('slug')
-      base_path + '/' + slug
-    end
-
-    def title_for_part(part)
-      part.fetch('title')
-    end
-
     def parse_time(attribute_name)
       message.payload.fetch(attribute_name, nil)
     end
 
-    def parts
-      message.payload.dig('details', 'parts')
+    def schema_name
+      message.payload.dig('schema_name')
     end
   end
 end

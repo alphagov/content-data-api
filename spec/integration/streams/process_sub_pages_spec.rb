@@ -22,7 +22,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     parts = Dimensions::Item.pluck(:base_path, :title).to_set
 
     expect(parts).to eq Set[
-      ["/base-path/part1", "Part 1"],
+      ["/base-path", "Part 1"],
       ["/base-path/part2", "Part 2"],
       ["/base-path/part3", "Part 3"],
       ["/base-path/part4", "Part 4"]
@@ -105,6 +105,64 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
       expect(Dimensions::Item.count).to eq(8)
       expect(Dimensions::Item.where(latest: true).count).to eq(4)
+    end
+  end
+
+  context "when multi part content types have different first parts" do
+    multipart_types = Etl::Item::Content::Parsers::Parts.new.schemas
+
+    multipart_types.each do |type|
+      context type do
+        it "it creates an item with base path and no slug for first part" do
+          message = build(:message, type.to_sym)
+          message.payload["base_path"] = "/#{type}-url"
+          subject.process(message)
+
+          item = Dimensions::Item.where(base_path: "/#{type}-url", latest: true).first
+          part = Dimensions::Item.where(base_path: "/#{type}-url/part2", latest: true).first
+
+          expect(item.base_path).to eq("/#{type}-url")
+          expect(part.base_path).to eq("/#{type}-url/part2")
+        end
+      end
+    end
+  end
+
+  context "different schemas structure first part differently" do
+    it "extracts the content for travel advice" do
+      message = build(:message, :travel_advice)
+      message.payload["base_path"] = "/travel-advice"
+      message.payload["details"]["summary"] = [
+          "content_type" => "text/html",
+          "content" => 'Summary content'
+      ]
+      subject.process(message)
+
+      item = Dimensions::Item.where(base_path: "/travel-advice", latest: true).first
+
+      expect(item.document_text).to eq("Summary content")
+    end
+
+    it "extracts the content for guide" do
+      message = build(:message, :guide)
+      message.payload["base_path"] = "/guide"
+      message.payload["details"]["parts"] = [
+        {
+          "title" => "Guide 1",
+          "slug" => "/guide",
+          "body" => [
+            {
+              "content_type" => "text/html",
+              "content" => "<h1>Heading 1</h1>"
+            }
+          ]
+        }
+      ]
+      subject.process(message)
+
+      item = Dimensions::Item.where(base_path: "/guide", latest: true).first
+
+      expect(item.document_text).to eq("Heading 1")
     end
   end
 end
