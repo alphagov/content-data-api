@@ -521,6 +521,7 @@ DEPENDENCIES
   rack-proxy
   rails (~> 5.1)
   rails-controller-testing
+  retriable
   rspec-rails
   ruby-progressbar
   sass-rails
