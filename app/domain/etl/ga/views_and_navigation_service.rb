@@ -15,7 +15,7 @@ class Etl::GA::ViewsAndNavigationService
   end
 
   def client
-    @client ||= GA::Client.new.build
+    @client ||= ETL::GA::Client.new.build
   end
 
 private
