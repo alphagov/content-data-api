@@ -55,7 +55,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'govuk-lint', '3.8.0'
-  gem 'govuk_schemas', '3.1.0'
+  gem 'govuk_schemas', '3.2.0'
   gem 'guard-rspec', require: false
   gem 'listen'
   gem 'phantomjs'
