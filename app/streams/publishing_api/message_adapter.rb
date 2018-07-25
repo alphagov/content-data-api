@@ -63,6 +63,12 @@ module PublishingAPI
         public_updated_at: parse_time('public_updated_at'),
         schema_name: message.payload.fetch('schema_name'),
         raw_json: message.payload,
+        phase: message.payload.fetch('phase', nil),
+        publishing_app: message.payload.fetch('publishing_app', nil),
+        rendering_app: message.payload.fetch('rendering_app', nil),
+        analytics_identifier: message.payload.fetch('analytics_identifier', nil),
+        update_type: message.payload.fetch('update_type', nil),
+        expanded_links: message.payload.fetch('expanded_links', nil),
         latest: true
       }
     end

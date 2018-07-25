@@ -14,6 +14,12 @@ RSpec.describe PublishingAPI::MessageAdapter do
           'content_purpose_subgroup' => 'the-subgroup',
           'first_published_at' => '2018-04-19T12:00:40+01:00',
           'public_updated_at' => '2018-04-20T12:00:40+01:00',
+          'phase' => 'live',
+          'publishing_app' => 'calendars',
+          'rendering_app' => 'calendars',
+          'analytics_identifier' => 'analytics_identifier',
+          'update_type' => 'major',
+          'expanded_links' => { 'policy_areas' => [] },
         )
         result['details']['body'] = 'some content'
         result
@@ -37,7 +43,13 @@ RSpec.describe PublishingAPI::MessageAdapter do
         schema_name: 'detailed_guide',
         latest: true,
         document_text: 'some content',
-        raw_json: payload
+        phase: 'live',
+        publishing_app: 'calendars',
+        rendering_app: 'calendars',
+        analytics_identifier: 'analytics_identifier',
+        update_type: 'major',
+        expanded_links: { 'policy_areas' => [] },
+        raw_json: payload,
       )
     end
 
