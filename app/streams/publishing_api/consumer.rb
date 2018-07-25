@@ -4,7 +4,9 @@ module PublishingAPI
       if is_invalid_message?(message)
         message.discard
       else
-        do_process(message)
+        User.first.with_lock do
+          do_process(message)
+        end
       end
     rescue StandardError => e
       GovukError.notify(e)
