@@ -1,5 +1,4 @@
 ---
 :concurrency:  3
 :queues:
-  - publishing_api
   - quality_metrics
