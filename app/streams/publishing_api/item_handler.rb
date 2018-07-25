@@ -5,21 +5,17 @@ class PublishingAPI::ItemHandler
   end
 
   def process!
-    grow_dimension! if new_version?
+    grow_dimension!
   end
 
   def process_links!
-    grow_dimension! if new_version? && links_have_changed?
+    grow_dimension! if links_have_changed?
   end
 
 private
 
   attr_reader :old_item
   attr_reader :new_item
-
-  def new_version?
-    new_item && new_item.newer_than?(old_item)
-  end
 
   def links_have_changed?
     return true if old_item.nil?

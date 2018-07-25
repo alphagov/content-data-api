@@ -16,12 +16,6 @@ class Dimensions::Item < ApplicationRecord
   scope :latest_by_base_path, ->(base_paths) { where(base_path: base_paths, latest: true) }
   scope :existing_latest_items, ->(content_id, locale, base_paths) { latest_by_content_id(content_id, locale).or(latest_by_base_path(base_paths)) }
 
-  def newer_than?(other)
-    return true unless other
-
-    self.publishing_api_payload_version > other.publishing_api_payload_version
-  end
-
   def promote!(old_item)
     old_item.deprecate! if old_item
     update!(latest: true)
