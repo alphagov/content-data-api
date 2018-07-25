@@ -19,10 +19,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
           'rendering_app' => 'calendars',
           'analytics_identifier' => 'analytics_identifier',
           'update_type' => 'major',
-          'links' => { 'policy_areas' => ['f50bb933-d558-49e1-934d-ccd1e68405fb',
-                                          '132c48c6-e274-4c46-838a-36916f6dfa8f',
-                                          'dbe221f3-43c4-4dae-9958-b87cde95c966',
-                                          '1e3e32e2-d616-4cba-a449-22f5a0219468'] },
+          'expanded_links' => { 'policy_areas' => [] },
         )
         result['details']['body'] = 'some content'
         result
@@ -51,10 +48,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
         rendering_app: 'calendars',
         analytics_identifier: 'analytics_identifier',
         update_type: 'major',
-        links: { "policy_areas" => ["f50bb933-d558-49e1-934d-ccd1e68405fb",
-                                    "132c48c6-e274-4c46-838a-36916f6dfa8f",
-                                    "dbe221f3-43c4-4dae-9958-b87cde95c966",
-                                    "1e3e32e2-d616-4cba-a449-22f5a0219468"] },
+        expanded_links: { 'policy_areas' => [] },
         raw_json: payload,
       )
     end
