@@ -177,23 +177,6 @@ RSpec.describe Dimensions::Item, type: :model do
   describe '#expanded_links' do
     let(:item) { build :dimensions_item }
     context 'when item has raw_json' do
-      it 'returns `expanded links` if raw_json has the `expanded_links` field' do
-        raw_json = {
-          'expanded_links' => [
-            {
-              'name' => 'tax-rates',
-              'url' => '/tax_rates'
-            },
-            {
-              'name' => 'vat-rates',
-              'url' => '/vat_rates'
-            }
-          ]
-        }
-        item.update_attributes(raw_json: raw_json)
-        expect(item.expanded_links).to eq raw_json['expanded_links']
-      end
-
       it 'returns an empty hash if raw json does not have `expanded_links` field' do
         expect(item.expanded_links).to eq Hash.new
       end
