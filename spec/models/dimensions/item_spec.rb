@@ -128,28 +128,6 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#newer_than?' do
-    let(:dimension_item) { build :dimensions_item, publishing_api_payload_version: 10 }
-
-    it 'returns true when compared with `nil`' do
-      other = nil
-
-      expect(dimension_item.newer_than?(other)).to be true
-    end
-
-    it 'returns true if the payload version is bigger' do
-      other = build :dimensions_item, publishing_api_payload_version: 9
-
-      expect(dimension_item.newer_than?(other)).to be true
-    end
-
-    it 'returns false if the payload version is smaller' do
-      other = build :dimensions_item, publishing_api_payload_version: 11
-
-      expect(dimension_item.newer_than?(other)).to be false
-    end
-  end
-
   it 'stores/read a Hash with the item JSON' do
     item = create :dimensions_item, raw_json: { a: :b }
     item.reload
