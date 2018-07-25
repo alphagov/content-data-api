@@ -8,6 +8,8 @@ class PublishingAPI::MessageHandler
   end
 
   def process
+    return if PublishingAPI::MessageValidator.is_old_message?(message)
+
     if is_links_update?
       item_handlers.each(&:process_links!)
     else
