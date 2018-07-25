@@ -14,11 +14,9 @@ module PublishingAPI
   private
 
     def do_process(message)
-      Retriable.retriable(on: ActiveRecord::RecordNotUnique) do
-        ActiveRecord::Base.transaction do
-          PublishingAPI::MessageHandler.process(message)
-          message.ack
-        end
+      ActiveRecord::Base.transaction do
+        PublishingAPI::MessageHandler.process(message)
+        message.ack
       end
     end
 
