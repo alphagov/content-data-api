@@ -24,7 +24,7 @@ class Dimensions::Item < ApplicationRecord
 
   def promote!(old_item)
     old_item.deprecate! if old_item
-    update(latest: true)
+    update!(latest: true)
   end
 
   def expanded_links
