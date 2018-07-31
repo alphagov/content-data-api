@@ -12,7 +12,7 @@ RSpec.describe 'Import edition metrics' do
     end
   end
 
-  xit 'stores content item metrics', perform_enqueued: true do
+  it 'stores content item metrics', perform_enqueued: true do
     message = build(:message, schema_name: 'publication', base_path: '/new-path')
     message.payload['details']['body'] = 'This is good content.'
     message.payload['details']['documents'] = [

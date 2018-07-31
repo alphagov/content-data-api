@@ -18,7 +18,7 @@ RSpec.describe Etl::Item::Processor do
   subject { described_class.new(old_item: old_item, new_item: new_item, date: Date.today) }
 
   before do
-    # allow(Etl::Jobs::QualityMetricsJob).to receive(:perform_later)
+    allow(Etl::Jobs::QualityMetricsJob).to receive(:perform_later)
     allow(Etl::Item::Metadata::NumberOfWordFiles).to receive(:parse).and_return(1)
     allow(Etl::Item::Metadata::NumberOfPdfs).to receive(:parse).and_return(2)
     subject.run
@@ -33,7 +33,7 @@ RSpec.describe Etl::Item::Processor do
       expect(new_item.reload.facts_edition).to be_persisted
     end
 
-    xit 'fires a sidekiq job to populate quality metrics for the new edition' do
+    it 'fires a sidekiq job to populate quality metrics for the new edition' do
       expect(Etl::Jobs::QualityMetricsJob).to have_received(:perform_later).with(new_item.id)
     end
   end
@@ -53,7 +53,7 @@ RSpec.describe Etl::Item::Processor do
       )
     end
 
-    xit 'does not fire a sidekiq job to populate quality metrics' do
+    it 'does not fire a sidekiq job to populate quality metrics' do
       expect(Etl::Jobs::QualityMetricsJob).not_to have_received(:perform_later)
     end
   end
