@@ -37,6 +37,8 @@ private
       dimensions_date: dimensions_date,
       dimensions_item: new_item
     )
-    Etl::Jobs::QualityMetricsJob.perform_later(new_item.id)
+    # temporarily disable quality metrics job as queues are not properly configured currently
+    # and it is causing problems for 2nd line
+    # Etl::Jobs::QualityMetricsJob.perform_later(new_item.id)
   end
 end
