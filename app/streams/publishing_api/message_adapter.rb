@@ -68,7 +68,7 @@ module PublishingAPI
         rendering_app: message.payload.fetch('rendering_app', nil),
         analytics_identifier: message.payload.fetch('analytics_identifier', nil),
         update_type: message.payload.fetch('update_type', nil),
-        expanded_links: message.payload.fetch('expanded_links', nil),
+        expanded_links: message.payload.fetch('expanded_links', {}),
         latest: true
       }
     end
