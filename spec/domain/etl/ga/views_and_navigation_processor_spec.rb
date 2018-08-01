@@ -20,8 +20,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1, entrances: 10, exits: 5, bounce_rate: 50, avg_time_on_page: 60)
-      expect(fact2.reload).to have_attributes(pageviews: 2, unique_pageviews: 2, entrances: 20, exits: 10, bounce_rate: 100, avg_time_on_page: 30)
+      expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1, entrances: 10, exits: 5, bounce_rate: 50, avg_time_on_page: 60, bounces: 31, time_on_page: 20)
+      expect(fact2.reload).to have_attributes(pageviews: 2, unique_pageviews: 2, entrances: 20, exits: 10, bounce_rate: 100, avg_time_on_page: 30, bounces: 50, time_on_page: 23)
     end
 
     it 'does not update metrics for other days' do
@@ -79,6 +79,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
         'exits' => 5,
         'bounce_rate' => 50,
         'avg_time_on_page' => 60,
+        'bounces' => 31,
+        'time_on_page' => 20,
       },
       {
         'page_path' => '/path2',
@@ -90,6 +92,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
         'exits' => 10,
         'bounce_rate' => 100,
         'avg_time_on_page' => 30,
+        'bounces' => 50,
+        'time_on_page' => 23,
       },
     ]
   end
@@ -106,6 +110,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
         'exits' => 5,
         'bounce_rate' => 50,
         'avg_time_on_page' => 60,
+        'bounces' => 66,
+        'time_on_page' => 86,
       },
       {
         'page_path' => '/path2',
@@ -117,6 +123,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
         'exits' => 10,
         'bounce_rate' => 100,
         'avg_time_on_page' => 30,
+        'bounces' => 15,
+        'time_on_page' => 63,
       },
     ]
   end

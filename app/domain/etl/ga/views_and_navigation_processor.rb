@@ -49,7 +49,9 @@ private
           entrances = s.entrances,
           exits = s.exits,
           bounce_rate = s.bounce_rate,
-          avg_time_on_page = s.avg_time_on_page
+          avg_time_on_page = s.avg_time_on_page,
+          bounces = s.bounces,
+          time_on_page = s.time_on_page
       FROM (
         SELECT pageviews,
                unique_pageviews,
@@ -57,6 +59,8 @@ private
                exits,
                bounce_rate,
                avg_time_on_page,
+               bounces,
+               time_on_page,
                dimensions_items.id
         FROM events_gas, dimensions_items
         WHERE page_path = base_path

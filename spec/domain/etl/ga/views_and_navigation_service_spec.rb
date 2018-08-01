@@ -15,13 +15,13 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
       allow(google_client).to receive(:fetch_all) do
         [
           build_report_data(
-            build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1))
+            build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1 1 1))
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/bar), metrics: %w(2 2 2 2 2 2))
+            build_report_row(dimensions: %w(/bar), metrics: %w(2 2 2 2 2 2 2 2))
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/cool), metrics: %w(3 3 3 3 3 3))
+            build_report_row(dimensions: %w(/cool), metrics: %w(3 3 3 3 3 3 3 3))
           ),
         ]
       end
@@ -38,6 +38,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
             'exits' => 1,
             'bounce_rate' => 1,
             'avg_time_on_page' => 1,
+            'bounces' => 1,
+            'time_on_page' => 1,
             'date' => '2018-02-20',
           ),
           a_hash_including(
@@ -48,6 +50,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
             'exits' => 2,
             'bounce_rate' => 2,
             'avg_time_on_page' => 2,
+            'bounces' => 2,
+            'time_on_page' => 2,
             'date' => '2018-02-20',
           )
         ]
@@ -60,6 +64,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
             'exits' => 3,
             'bounce_rate' => 3,
             'avg_time_on_page' => 3,
+            'bounces' => 3,
+            'time_on_page' => 3,
             'date' => '2018-02-20',
           )
         ]
