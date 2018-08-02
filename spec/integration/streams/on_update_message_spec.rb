@@ -7,6 +7,14 @@ RSpec.describe PublishingAPI::Consumer do
 
   let(:subject) { described_class.new }
 
+  it 'does not notify error if message is missing `locale`' do
+    message = build(:message)
+    message.payload.except!('locale')
+
+    expect(GovukError).not_to receive(:notify)
+    subject.process(message)
+  end
+
   it 'grows the dimension with update events' do
     expect {
       subject.process(build(:message))
