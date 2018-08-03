@@ -46,11 +46,6 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
-  config.before :example, perform_enqueued: true do
-    ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
-    ActiveJob::Base.queue_adapter.perform_enqueued_at_jobs = true
-  end
 end
 
 Shoulda::Matchers.configure do |config|
