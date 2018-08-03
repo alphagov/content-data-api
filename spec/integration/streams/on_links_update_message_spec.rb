@@ -20,6 +20,17 @@ RSpec.describe PublishingAPI::Consumer do
       to_return(status: 200, body: response.to_json, headers: { 'Content-Type' => 'application/json' })
   end
 
+  it 'does not notify error if old item is missing `expanded_links`' do
+    item = create(:dimensions_item, expanded_links: nil)
+    message = build(:message, :link_update)
+    message.payload['content_id'] = item.content_id
+    message.payload['publishing_api_payload_version'] = item.publishing_api_payload_version + 1
+    message.payload['base_path'] = item.base_path
+
+    expect(GovukError).not_to receive(:notify)
+    subject.process(message)
+  end
+
   it 'discard the event if no real link changes' do
     expect(GovukError).to_not receive(:notify)
 
