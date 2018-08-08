@@ -1,0 +1,26 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Command Injection",
+      "warning_code": 14,
+      "fingerprint": "6bb72563651a196605533cf18c0ba1bcb6acc357b2a6c60650491d6de7a17c11",
+      "check_name": "Execute",
+      "message": "Possible command injection",
+      "file": "lib/guard/lint.rb",
+      "line": 13,
+      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
+      "code": "system(\"#{\"bundle exec govuk-lint-ruby\"} #{files.join(\" \")}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Guard::Lint",
+        "method": "run_on_modifications"
+      },
+      "user_input": "files.join(\" \")",
+      "confidence": "Medium",
+      "note": "This is used by 'guard', it's not part of the running app"
+    }
+  ],
+  "updated": "2018-08-08 09:18:42 +0000",
+  "brakeman_version": "4.3.1"
+}
