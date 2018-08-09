@@ -9,9 +9,7 @@ RSpec.describe Etl::Item::Processor do
         latest: false
       },
       edition: {
-        contractions_count: 2,
-        equality_count: 3,
-        indefinite_article_count: 4,
+        word_count: 2,
       }
 ).dimensions_item
   end
@@ -26,15 +24,15 @@ RSpec.describe Etl::Item::Processor do
 
   context 'when the content has changed' do
     let(:new_item) do
-      create(:dimensions_item, base_path: '/base-path', document_text: 'new content')
+      create(:dimensions_item, base_path: '/base-path', document_text: 'fresh new content')
     end
 
     it 'creates a new edition' do
       expect(new_item.reload.facts_edition).to be_persisted
     end
 
-    it 'fires a sidekiq job to populate quality metrics for the new edition' do
-      expect(Etl::Jobs::QualityMetricsJob).to have_received(:perform_async).with(new_item.id)
+    it 'populates word count for the new edition' do
+      expect(new_item.reload.facts_edition.word_count).to eq 3
     end
   end
 
@@ -47,14 +45,8 @@ RSpec.describe Etl::Item::Processor do
       updated_item = new_item.reload
       expect(updated_item.facts_edition).to be_persisted
       expect(updated_item.facts_edition).to have_attributes(
-        contractions_count: 2,
-        equality_count: 3,
-        indefinite_article_count: 4,
+        word_count: 2
       )
-    end
-
-    it 'does not fire a sidekiq job to populate quality metrics' do
-      expect(Etl::Jobs::QualityMetricsJob).not_to have_received(:perform_async)
     end
   end
 end
