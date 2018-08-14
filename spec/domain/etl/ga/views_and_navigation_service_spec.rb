@@ -6,7 +6,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
   subject { Etl::GA::ViewsAndNavigationService }
 
   let(:google_client) { double('client') }
-  before { allow_any_instance_of(Etl::GA::ViewsAndNavigationService).to receive(:client).and_return(google_client) }
+  before { expect(Etl::GA::Client).to receive(:build).and_return(google_client) }
 
   describe "#find_in_batches" do
     let(:date) { Date.new(2018, 2, 20) }
