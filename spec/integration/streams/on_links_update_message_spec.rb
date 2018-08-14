@@ -42,6 +42,7 @@ RSpec.describe PublishingAPI::Consumer do
     expect {
       subject.process(link_update)
     }.to change(Dimensions::Item, :count).by(0)
+    expect(Dimensions::Item.first).to have_attributes(latest: true)
   end
 
   it 'grows the dimension with when links change' do
