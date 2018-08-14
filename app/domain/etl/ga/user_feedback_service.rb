@@ -17,7 +17,7 @@ class Etl::GA::UserFeedbackService
   end
 
   def client
-    @client ||= GA::Client.new.build
+    @client ||= Etl::GA::Client.build
   end
 
 private

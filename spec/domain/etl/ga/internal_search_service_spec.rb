@@ -5,8 +5,8 @@ RSpec.describe Etl::GA::InternalSearchService do
 
   subject { Etl::GA::InternalSearchService }
 
-  let(:google_client) { double('client') }
-  before { allow_any_instance_of(Etl::GA::Client).to receive(:build).and_return(google_client) }
+  let(:google_client) { instance_double(Google::Apis::AnalyticsreportingV4::AnalyticsReportingService) }
+  before { expect(Etl::GA::Client).to receive(:build).and_return(google_client) }
 
   describe "#find_in_batches" do
     let(:date) { Date.new(2018, 2, 20) }
