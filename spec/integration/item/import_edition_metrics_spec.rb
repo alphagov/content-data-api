@@ -1,6 +1,5 @@
 require 'sidekiq/testing'
 RSpec.describe 'Import edition metrics' do
-  include QualityMetricsHelpers
   include ItemSetupHelpers
 
   subject { PublishingAPI::MessageHandler }
@@ -19,7 +18,6 @@ RSpec.describe 'Import edition metrics' do
       '<div class=\"attachment-details\">\n<a href=\"link.docx\">1</a>\n\n\n\n</div>',
     ]
 
-    stub_quality_metrics_request
     subject.process(message)
 
     item = Dimensions::Item.first
@@ -58,7 +56,6 @@ RSpec.describe 'Import edition metrics' do
       payload_version: 2)
     message.payload['details']['body'] = '<p>the same content</p>'
 
-    stub_quality_metrics_request
     subject.process(message)
 
     expect(find_latest_edition('/same-content')).to have_attributes(existing_quality_metrics)
@@ -82,25 +79,9 @@ RSpec.describe 'Import edition metrics' do
       payload_version: 2)
     message.payload['details']['body'] = nil
 
-    stub_quality_metrics_request
     subject.process(message)
 
     expect(find_latest_edition('/empty-content')).to have_attributes(existing_quality_metrics)
-  end
-
-  def stub_quality_metrics_request
-    stub_quality_metrics(
-      readability_count: 1,
-      contractions_count: 2,
-      equality_count: 3,
-      indefinite_article_count: 4,
-      passive_count: 5,
-      profanities_count: 6,
-      redundant_acronyms_count: 7,
-      repeated_words_count: 8,
-      simplify_count: 9,
-      spell_count: 10
-    )
   end
 
   def find_latest_edition(base_path)

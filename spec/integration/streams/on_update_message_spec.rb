@@ -1,10 +1,6 @@
 require 'govuk_message_queue_consumer/test_helpers'
 
 RSpec.describe PublishingAPI::Consumer do
-  include QualityMetricsHelpers
-
-  before { stub_quality_metrics }
-
   let(:subject) { described_class.new }
 
   it 'does not notify error if message is missing `locale`' do
