@@ -16,7 +16,6 @@ RSpec.describe Etl::Item::Processor do
   subject { described_class.new(old_item: old_item, new_item: new_item, date: Date.today) }
 
   before do
-    allow(Etl::Jobs::QualityMetricsJob).to receive(:perform_async)
     allow(Etl::Item::Metadata::NumberOfWordFiles).to receive(:parse).and_return(1)
     allow(Etl::Item::Metadata::NumberOfPdfs).to receive(:parse).and_return(2)
     subject.run
