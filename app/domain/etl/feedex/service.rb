@@ -3,10 +3,10 @@ require 'gds_api/support_api'
 class Etl::Feedex::Service
   attr_reader :date, :batch_size, :support_api
 
-  def initialize(date, batch_size, support_api = GdsApi::SupportApi.new(Plek.new.find('support-api')))
+  def initialize(date, batch_size, support_api = nil)
     @date = date
     @batch_size = batch_size
-    @support_api = support_api
+    @support_api = support_api || support_api_with_long_timeout
   end
 
   def find_in_batches
@@ -21,6 +21,12 @@ class Etl::Feedex::Service
   end
 
 private
+
+  def support_api_with_long_timeout
+    GdsApi::SupportApi.new(Plek.new.find('support-api')).tap do |client|
+      client.options[:timeout] = 15
+    end
+  end
 
   def convert_results(results)
     results.map do |result|
