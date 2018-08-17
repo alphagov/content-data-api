@@ -27,6 +27,11 @@ private
       Events::Feedex.import(events, batch_size: BATCH_SIZE)
       batch += 1
     end
+  rescue GdsApi::TimedOutException,
+         GdsApi::HTTPNotFound,
+         GdsApi::EndpointNotFound,
+         GdsApi::InvalidUrl => e
+    GovukError.notify(e)
   end
 
   def load_metrics
