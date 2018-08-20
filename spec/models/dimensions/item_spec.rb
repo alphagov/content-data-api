@@ -128,13 +128,6 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  it 'stores/read a Hash with the item JSON' do
-    item = create :dimensions_item, raw_json: { a: :b }
-    item.reload
-
-    expect(item.raw_json).to eq('a' => 'b')
-  end
-
   describe '#promote!' do
     let(:item) { build :dimensions_item, latest: false }
 

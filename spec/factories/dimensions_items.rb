@@ -6,7 +6,6 @@ FactoryBot.define do
     sequence(:title) { |i| "title - #{i}" }
     sequence(:base_path) { |i| "link - #{i}" }
     sequence(:description) { |i| "description - #{i}" }
-    sequence(:raw_json) { |i| "json - #{i}" }
     sequence(:publishing_api_payload_version)
     schema_name { 'detailed_guide' }
     document_type { 'detailed_guide' }

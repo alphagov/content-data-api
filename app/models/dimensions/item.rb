@@ -1,6 +1,8 @@
 require 'json'
 
 class Dimensions::Item < ApplicationRecord
+  attr_accessor :raw_json
+
   has_one :facts_edition, class_name: "Facts::Edition", foreign_key: :dimensions_item_id
   validates :content_id, presence: true
   validates :base_path, presence: true
