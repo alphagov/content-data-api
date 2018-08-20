@@ -4,15 +4,15 @@ FactoryBot.define do
   factory :message, class: GovukMessageQueueConsumer::MockMessage do
     transient do
       sequence(:payload_version) { |i| 10 + i }
-      schema_name 'detailed_guide'
-      document_type 'detailed_guide'
-      base_path '/base-path'
-      routing_key 'news_story.major'
+      schema_name { 'detailed_guide' }
+      document_type { 'detailed_guide' }
+      base_path { '/base-path' }
+      routing_key { 'news_story.major' }
       attributes { {} }
     end
 
     trait :link_update do
-      routing_key 'schema.links'
+      routing_key { 'schema.links' }
     end
 
     delivery_info { OpenStruct.new(routing_key: routing_key) }
@@ -26,8 +26,8 @@ FactoryBot.define do
     end
 
     trait :with_parts do
-      schema_name 'guide'
-      document_type 'guide'
+      schema_name { 'guide' }
+      document_type { 'guide' }
       payload do
         GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
           result['base_path'] = base_path
@@ -101,8 +101,8 @@ FactoryBot.define do
     end
 
     trait :travel_advice do
-      schema_name 'travel_advice'
-      document_type 'travel_advice'
+      schema_name { 'travel_advice' }
+      document_type { 'travel_advice' }
       payload do
         GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
           result['base_path'] = base_path
