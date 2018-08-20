@@ -34,6 +34,8 @@ module Etl
           end
           Facts::Metric.import(values, validate: false)
         end
+      rescue StandardError => e
+        GovukError.notify(e)
       end
     end
   end
