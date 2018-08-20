@@ -14,4 +14,7 @@ Rails.application.routes.draw do
 
   get '/content', to: 'content#show', defaults: { format: :json }
   get '/single_page/(*base_path)', to: 'single_item#show', defaults: { format: :json }
+  get '/healthcheck', to: GovukHealthcheck.rack_response(
+    GovukHealthcheck::ActiveRecord,
+  )
 end
