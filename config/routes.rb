@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get '/sandbox', to: 'sandbox#index'
 
   get '/healthcheck', to: GovukHealthcheck.rack_response(
+    Healthchecks::DailyMetricsCheck,
     GovukHealthcheck::ActiveRecord,
   )
 end
