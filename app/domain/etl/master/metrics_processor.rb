@@ -22,7 +22,9 @@ module Etl
       attr_reader :date
 
       def create_metrics
+        log process: :metrics, message: 'about to get the Dimensions::Date'
         dimensions_date = Dimensions::Date.for(date)
+        log process: :metrics, message: 'got the Dimensions::Date'
         Dimensions::Item.where(latest: true).find_in_batches(batch_size: 50000)
           .with_index do |batch, index|
           log process: :metrics, message: "processing #{batch.length} items in batch #{index}"
@@ -34,6 +36,8 @@ module Etl
           end
           Facts::Metric.import(values, validate: false)
         end
+      rescue StandardError => e
+        GovukError.notify(e)
       end
     end
   end
