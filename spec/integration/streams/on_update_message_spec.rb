@@ -28,13 +28,7 @@ RSpec.describe PublishingAPI::Consumer do
 
   it 'ignores old events' do
     message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
-    message2 = build :message,
-      base_path: '/base-path',
-      attributes: {
-        'payload_version' => 1,
-        'locale' => message.payload['locale'],
-        'content_id' => message.payload['content_id'],
-      }
+    message2 = build :message, payload: message.payload, attributes: { 'payload_version' => 1 }
 
     expect {
       subject.process(message)
@@ -47,11 +41,9 @@ RSpec.describe PublishingAPI::Consumer do
 
   it 'deprecates old items' do
     message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
-    message2 = build :message, base_path: '/base-path', attributes: {
-      'payload_version' => 4,
-      'locale' => message.payload['locale'],
-      'content_id' => message.payload['content_id'],
-    }
+    message2 = build :message, payload: message.payload.dup
+    message2.payload['payload_version'] = 4
+    message2.payload['title'] = 'updated-title'
 
     expect {
       subject.process(message)
