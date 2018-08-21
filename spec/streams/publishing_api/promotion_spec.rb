@@ -35,6 +35,15 @@ RSpec.describe PublishingAPI::Promotion do
     end
   end
 
+  it 'does not include the latest attribute' do
+    item1 = build :dimensions_item, latest: true
+    item2 = build :dimensions_item, item1.attributes.dup
+    item2.latest = false
+
+    promotion = PublishingAPI::Promotion.new(item1, item2)
+    expect(promotion.valid?).to be false
+  end
+
   it 'returns true if old_item is nil' do
     item1 = build :dimensions_item
     item2 = nil

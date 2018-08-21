@@ -5,7 +5,7 @@ class PublishingAPI::Promotion
   end
 
   def valid?
-    list = %i(id update_at created_at)
+    list = %w(id update_at created_at latest)
     attributes1 = new_item.attributes.except(*list)
     attributes2 = old_item.attributes.except(*list)
 
