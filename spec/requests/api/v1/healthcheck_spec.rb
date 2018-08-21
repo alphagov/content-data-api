@@ -1,4 +1,3 @@
-
 RSpec.describe '/api/v1/healthcheck/', type: :request do
   it "is not cacheable" do
     get "/api/v1/healthcheck/"
