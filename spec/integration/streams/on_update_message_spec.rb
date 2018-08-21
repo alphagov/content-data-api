@@ -53,4 +53,15 @@ RSpec.describe PublishingAPI::Consumer do
     expect(Dimensions::Item.find_by(publishing_api_payload_version: 2)).to have_attributes(latest: false)
     expect(Dimensions::Item.find_by(publishing_api_payload_version: 4)).to have_attributes(latest: true)
   end
+
+  it 'does not grow the dimension if the event carry no changes in an attribute' do
+    message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
+    message2 = build :message, payload: message.payload.dup
+    message2.payload['payload_version'] = 4
+
+    expect {
+      subject.process(message)
+      subject.process(message2)
+    }.to change(Dimensions::Item, :count).by(1)
+  end
 end

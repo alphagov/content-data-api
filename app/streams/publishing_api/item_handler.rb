@@ -5,7 +5,11 @@ class PublishingAPI::ItemHandler
   end
 
   def process!
-    grow_dimension!
+    promotion = PublishingAPI::Promotion.new(new_item, old_item)
+
+    if promotion.valid?
+      grow_dimension!
+    end
   end
 
 private
