@@ -32,7 +32,6 @@ gem 'rack-proxy'
 gem 'rails', '~> 5.1'
 gem 'ruby-progressbar'
 gem 'sass-rails'
-gem 'turbolinks'
 gem 'uglifier'
 gem 'unicorn'
 
