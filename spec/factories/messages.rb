@@ -11,10 +11,6 @@ FactoryBot.define do
       attributes { {} }
     end
 
-    trait :link_update do
-      routing_key { 'schema.links' }
-    end
-
     delivery_info { OpenStruct.new(routing_key: routing_key) }
 
     payload do
