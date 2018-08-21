@@ -10,11 +10,7 @@ class PublishingAPI::MessageHandler
   def process
     return if PublishingAPI::MessageValidator.is_old_message?(message)
 
-    if is_links_update?
-      item_handlers.each(&:process_links!)
-    else
-      item_handlers.each(&:process!)
-    end
+    item_handlers.each(&:process!)
   end
 
 private
@@ -44,10 +40,5 @@ private
     end
 
     result
-  end
-
-  def is_links_update?
-    routing_key = message.delivery_info.routing_key
-    routing_key.ends_with?('.links')
   end
 end

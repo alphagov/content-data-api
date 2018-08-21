@@ -8,27 +8,10 @@ class PublishingAPI::ItemHandler
     grow_dimension!
   end
 
-  def process_links!
-    grow_dimension! if links_have_changed?
-  end
-
 private
 
   attr_reader :old_item
   attr_reader :new_item
-
-  def links_have_changed?
-    return true if old_item.nil?
-    return false if new_item.nil?
-
-    old_links = old_item.expanded_links ? old_item.expanded_links : {}
-    new_links = new_item.expanded_links ? new_item.expanded_links : {}
-
-    HashDiff::Comparison.new(
-      old_links.deep_sort,
-      new_links.deep_sort
-    ).diff.present?
-  end
 
   def grow_dimension!
     new_item.promote!(old_item)

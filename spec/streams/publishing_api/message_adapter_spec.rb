@@ -48,7 +48,6 @@ RSpec.describe PublishingAPI::MessageAdapter do
         rendering_app: 'calendars',
         analytics_identifier: 'analytics_identifier',
         update_type: 'major',
-        expanded_links: { 'policy_areas' => [] },
         raw_json: payload,
       )
     end
