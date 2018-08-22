@@ -10,9 +10,9 @@ class PublishingAPI::MessageHandler
   def process
     return if PublishingAPI::MessageValidator.is_old_message?(message)
     if PublishingAPI::MultipartMessage.is_multipart?(message)
-      PublishingAPI::MultipartHandler.new(message).process
+      PublishingAPI::MultipartHandler.process(message)
     else
-      PublishingAPI::SingleItemHandler.new(message).process
+      PublishingAPI::SingleItemHandler.process(message)
     end
 
   end
