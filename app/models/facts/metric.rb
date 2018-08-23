@@ -60,7 +60,7 @@ class Facts::Metric < ApplicationRecord
     ]
   end
 
-  private
+private
 
   def calculate_satisfaction_score
     return nil if is_this_useful_yes.nil? && is_this_useful_no.nil?

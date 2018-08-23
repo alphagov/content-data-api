@@ -11,13 +11,13 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
     before { allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it 'update the facts with the GA metrics' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20'
-      fact2 = create_metric base_path: '/path2', date: '2018-02-20'
+      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { is_this_useful_no: 1, is_this_useful_yes: 1 }
+      fact2 = create_metric base_path: '/path2', date: '2018-02-20', daily: { is_this_useful_no: 5, is_this_useful_yes: 10 }
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(is_this_useful_no: 1, is_this_useful_yes: 1)
-      expect(fact2.reload).to have_attributes(is_this_useful_no: 5, is_this_useful_yes: 10)
+      expect(fact1.reload).to have_attributes(is_this_useful_no: 1, is_this_useful_yes: 1, satisfaction_score: 0.5)
+      expect(fact2.reload).to have_attributes(is_this_useful_no: 5, is_this_useful_yes: 10, satisfaction_score: 0.666666666666667)
     end
 
     it 'does not update metrics for other days' do
