@@ -26,6 +26,7 @@ class Etl::Item::Content::Parsers::NoContent
       policy
       redirect
       role
+      role_appointment
       special_route
       topic
       world_location

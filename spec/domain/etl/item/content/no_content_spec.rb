@@ -1,6 +1,10 @@
 RSpec.describe Etl::Item::Content::Parser do
   subject { described_class.instance }
 
+  before do
+    allow(GovukError).to receive(:notify)
+  end
+
   it "handles schemas that does not have useful content" do
     no_content_schemas = %w[
       coming_soon
@@ -24,6 +28,7 @@ RSpec.describe Etl::Item::Content::Parser do
       policy
       redirect
       role
+      role_appointment
       special_route
       topic
       world_location
@@ -33,6 +38,7 @@ RSpec.describe Etl::Item::Content::Parser do
       json = build_raw_json(schema_name: schema, body: "<p>Body for #{schema}</p>")
       expect(subject.extract_content(json.deep_stringify_keys)).to be_nil, "schema: '#{schema}' should return nil"
     end
+    expect(GovukError).not_to have_received(:notify)
   end
 
   def build_raw_json(body:, schema_name:)
