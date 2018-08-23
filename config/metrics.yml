@@ -19,6 +19,10 @@ daily:
     description: "Total number of people who found the page helpful"
     source: 'Google Analytics'
 
+  - name: 'satisfaction_score'
+    description: "Calculated percentage score based on `is_this_useful_yes` and `is_this_useful_no` values."
+    source: 'custom'
+
   - name: 'number_of_internal_searches'
     description: "Number of times a user searches for something else on GOV.UK from the page"
     source: 'Google Analytics'

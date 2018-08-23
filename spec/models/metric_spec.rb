@@ -36,7 +36,7 @@ RSpec.describe Metric do
     it "returns a list of all metrics" do
       metrics = Metric.find_all
 
-      expect(metrics.length).to eq(25)
+      expect(metrics.length).to eq(26)
       a_metric = metrics.first
       expect(a_metric).to be_an_instance_of(Metric)
     end
