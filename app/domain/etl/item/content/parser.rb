@@ -54,6 +54,7 @@ private
       Etl::Item::Content::Parsers::StepByStep,
       Etl::Item::Content::Parsers::Taxon,
       Etl::Item::Content::Parsers::Transaction,
+      Etl::Item::Content::Parsers::TravelAdvice,
       Etl::Item::Content::Parsers::TravelAdviceIndex,
       Etl::Item::Content::Parsers::Unpublished,
       Etl::Item::Content::Parsers::NoContent

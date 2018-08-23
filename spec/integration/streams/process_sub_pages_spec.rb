@@ -11,18 +11,34 @@ RSpec.describe "Process sub-pages for multipart content types" do
     }.to change(Dimensions::Item, :count).by(4)
   end
 
-  it "separates the parts of multipart content types" do
-    message = build(:message, :with_parts)
-    subject.process(message)
+  context 'for a guide' do
+    it "separates the parts of multipart content types" do
+      message = build(:message, :with_parts)
+      subject.process(message)
 
-    parts = Dimensions::Item.pluck(:base_path, :title).to_set
+      parts = Dimensions::Item.pluck(:base_path, :title).to_set
 
-    expect(parts).to eq Set[
-      ["/base-path", "Part 1"],
-      ["/base-path/part2", "Part 2"],
-      ["/base-path/part3", "Part 3"],
-      ["/base-path/part4", "Part 4"]
-    ]
+      expect(parts).to eq Set[
+        ["/base-path", "Part 1"],
+        ["/base-path/part2", "Part 2"],
+        ["/base-path/part3", "Part 3"],
+        ["/base-path/part4", "Part 4"]
+      ]
+    end
+  end
+
+  context 'for travel advice' do
+    it "separates the parts of multipart content types" do
+      message = build(:message, :travel_advice)
+      subject.process(message)
+      parts = Dimensions::Item.pluck(:base_path, :title).to_set
+
+      expect(parts).to eq Set[
+        ["/base-path", "Summary"],
+        ["/base-path/part1", "Part 1"],
+        ["/base-path/part2", "Part 2"],
+      ]
+    end
   end
 
   it "deprecates all existing parts even if only one item changed" do
@@ -129,8 +145,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
       message = build(:message, :travel_advice)
       message.payload["base_path"] = "/travel-advice"
       message.payload["details"]["summary"] = [
-          "content_type" => "text/html",
-          "content" => 'Summary content'
+        "content_type" => "text/html",
+        "content" => 'Summary content'
       ]
       subject.process(message)
 

@@ -17,6 +17,6 @@ class Etl::Item::Content::Parsers::Parts
   end
 
   def schemas
-    %w[guide travel_advice]
+    %w[guide]
   end
 end

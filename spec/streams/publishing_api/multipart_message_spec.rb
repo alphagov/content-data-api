@@ -81,15 +81,20 @@ RSpec.describe PublishingAPI::MultipartMessage do
     end
   end
 
-  context "Trave Advice" do
-    let(:parts) { subject.new(build(:message, :travel_advice)).parts }
+  context "Travel Advice" do
+    let(:instance) { subject.new(build(:message, :travel_advice)) }
 
     it "returns base_path for first part" do
-      expect(parts[0]["slug"]).to eq("/base-path")
+      expect(instance.parts[0]["slug"]).to eq("/base-path")
     end
 
     it "returns parts for travel advice with summary as first part" do
-      expect(parts[0]["body"][0]["content"]).to eq("summary content")
+      expect(instance.parts[0]["body"][0]["content"]).to eq("summary content")
+    end
+
+    it 'returns the same items with each call' do
+      expect(instance.parts.length).to eq(3)
+      expect(instance.parts.length).to eq(3)
     end
   end
 end

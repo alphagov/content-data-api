@@ -1,4 +1,7 @@
 RSpec.describe PublishingAPI::MessageAdapter do
+  skip  do
+    'work out where to put these'
+  end
   subject { described_class }
 
   describe '.new_dimension_items' do
@@ -93,43 +96,7 @@ RSpec.describe PublishingAPI::MessageAdapter do
   end
 
   describe '.new_dimension_items' do
-    it 'convert an multipart event into a set of Dimensions::Items' do
-      event = build(:message, :with_parts)
-      result = subject.new(event).new_dimension_items
 
-      expect(result.length).to eq(4)
-    end
-
-    it 'extracts page attributes into the Item' do
-      event = build(:message, :with_parts)
-      dimension_item = subject.new(event).new_dimension_items[1]
-
-      expect(dimension_item).to have_attributes(
-        base_path: '/base-path/part2',
-        title: 'Part 2',
-        document_text: 'be 2'
-      )
-    end
-
-    it 'the first page of multipart pages do not have a slug in the url' do
-      event = build(:message, :with_parts)
-      dimension_item = subject.new(event).new_dimension_items[0]
-
-      expect(dimension_item).to have_attributes(
-        base_path: '/base-path',
-        title: 'Part 1',
-        document_text: 'Here 1'
-      )
-    end
-
-    it 'the first page of multipart pages do not have a slug in the url' do
-      event = build(:message, :with_parts)
-      dimension_item = subject.new(event).new_dimension_items[0]
-
-      expect(dimension_item).to have_attributes(
-        base_path: '/base-path'
-      )
-    end
 
     context 'item is a travel guide' do
       it 'uses summary as first part without base_path containing the slug' do

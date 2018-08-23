@@ -9,8 +9,7 @@ module PublishingAPI
     end
 
     def parts
-      message_parts = message.payload.dig('details', 'parts')
-
+      message_parts = message.payload.dig('details', 'parts').dup
       if doc_type == 'travel_advice'
         message_parts.prepend(
           'slug' => base_path,
@@ -18,7 +17,6 @@ module PublishingAPI
           'body' => [message.payload.dig('details', 'summary').find { |x| x['content_type'] == "text/html" }]
         )
       end
-
       message_parts
     end
 
