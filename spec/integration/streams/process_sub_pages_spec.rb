@@ -1,6 +1,8 @@
 require 'govuk_message_queue_consumer/test_helpers/mock_message'
 
 RSpec.describe "Process sub-pages for multipart content types" do
+  include PublishingEventProcessingSpecHelper
+
   let(:subject) { PublishingAPI::Consumer.new }
 
   it "grows the dimension for each subpage" do
@@ -140,19 +142,67 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
   end
 
-  context "different schemas structure first part differently" do
-    it "extracts the content for travel advice" do
-      message = build(:message, :travel_advice)
-      message.payload["base_path"] = "/travel-advice"
-      message.payload["details"]["summary"] = [
-        "content_type" => "text/html",
-        "content" => 'Summary content'
-      ]
+  context "when the content is `travel_advice`" do
+    before do
+      create :dimensions_item,
+        base_path: '/travel-advice/part3',
+        content_id: '45423d8e-1a8b-42fd-ba93-c953ad20bc8a',
+        locale: 'fr'
+      message = build(:message,
+        :travel_advice,
+        attributes: message_attributes(
+          'base_path' => '/travel-advice',
+          'content_id' => '45423d8e-1a8b-42fd-ba93-c953ad20bc8a',
+          'document_type' => 'travel_advice'
+        ),
+        summary: 'Summary content'
+      )
       subject.process(message)
+    end
 
+    it "extracts the Summary" do
       item = Dimensions::Item.where(base_path: "/travel-advice", latest: true).first
 
-      expect(item.document_text).to eq("Summary content")
+      expect(item).to have_attributes(expected_attributes(
+        base_path: '/travel-advice',
+        content_id: '45423d8e-1a8b-42fd-ba93-c953ad20bc8a',
+        document_text: "Summary content",
+        document_type: "travel_advice",
+        schema_name: "travel_advice",
+        title: "Summary",
+      ))
+    end
+
+    it 'extracts /travel-advice/part1' do
+      item = Dimensions::Item.where(base_path: "/travel-advice/part1", latest: true).first
+
+      expect(item).to have_attributes(expected_attributes(
+        base_path: '/travel-advice/part1',
+        content_id: '45423d8e-1a8b-42fd-ba93-c953ad20bc8a',
+        document_text: "Here 1",
+        document_type: "travel_advice",
+        schema_name: "travel_advice",
+        title: "Part 1",
+      ))
+    end
+
+    it 'extracts /travel-advice/part2' do
+      item = Dimensions::Item.where(base_path: "/travel-advice/part2", latest: true).first
+
+      expect(item).to have_attributes(expected_attributes(
+        base_path: '/travel-advice/part2',
+        content_id: '45423d8e-1a8b-42fd-ba93-c953ad20bc8a',
+        document_text: "be 2",
+        document_type: "travel_advice",
+        schema_name: "travel_advice",
+        title: "Part 2",
+      ))
+    end
+
+    it 'deprecates any other items' do
+      query = Dimensions::Item.where(base_path: "/travel-advice/part3")
+      expect(query.count).to eq(1)
+      expect(query.first.latest).to eq(false)
     end
 
     it "extracts the content for guide" do
