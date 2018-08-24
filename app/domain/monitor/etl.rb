@@ -1,4 +1,8 @@
 class Monitor::Etl
+  def self.run(*args)
+    new(*args).run
+  end
+
   def run
     count_metrics!
     count_daily_metrics!
