@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180820115550) do
+ActiveRecord::Schema.define(version: 2018_08_22_144907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 20180820115550) do
     t.integer "avg_time_on_page", default: 0
     t.integer "bounces", default: 0
     t.integer "time_on_page", default: 0
+    t.float "satisfaction_score"
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
   end
 
