@@ -1,5 +1,5 @@
 module ItemSetupHelpers
-  def create_metric(base_path:, date:, edition: {}, daily: {}, item: {})
+  def create_metric(base_path: '/base-path', date:, edition: {}, daily: {}, item: {})
     dimensions_item = dimensions_item(item.merge(base_path: base_path))
     dimensions_date = dimensions_date(date)
     ensure_edition_exists(dimensions_item, dimensions_date, edition)

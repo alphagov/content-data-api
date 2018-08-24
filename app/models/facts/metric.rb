@@ -21,6 +21,8 @@ class Facts::Metric < ApplicationRecord
     self.satisfaction_score = calculate_satisfaction_score
   end
 
+  scope :for_yesterday, -> { where(dimensions_date: Dimensions::Date.for(Date.yesterday)) }
+
   def self.csv_fields
     %i[
       date
