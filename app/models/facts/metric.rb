@@ -11,6 +11,16 @@ class Facts::Metric < ApplicationRecord
     joins(dimensions_item: :facts_edition)
   end
 
+  def is_this_useful_yes=(value)
+    super(value)
+    self.satisfaction_score = calculate_satisfaction_score
+  end
+
+  def is_this_useful_no=(value)
+    super(value)
+    self.satisfaction_score = calculate_satisfaction_score
+  end
+
   def self.csv_fields
     %i[
       date
@@ -48,5 +58,15 @@ class Facts::Metric < ApplicationRecord
       bounce_rate
       avg_time_on_page
     ]
+  end
+
+  private
+
+  def calculate_satisfaction_score
+    return nil if is_this_useful_yes.nil? && is_this_useful_no.nil?
+    return 0 if is_this_useful_yes.nil? || is_this_useful_yes.zero?
+    return 1 if is_this_useful_no.nil? || is_this_useful_no.zero?
+
+    is_this_useful_yes.to_f / (is_this_useful_yes + is_this_useful_no).to_f
   end
 end
