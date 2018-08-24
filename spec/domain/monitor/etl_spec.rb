@@ -1,4 +1,4 @@
-RSpec.describe Monitor::ETL do
+RSpec.describe Monitor::Etl do
   include ItemSetupHelpers
 
   around do |example|
@@ -18,7 +18,7 @@ RSpec.describe Monitor::ETL do
 
   Metric.daily_metrics.map(&:name).each do |metric_name|
     it "sends StatsD counter for daily metric: `#{metric_name}` for previous day" do
-      expect(GovukStatsd).to receive(:count).with("monitor.etl.#{metric_name}", 10)
+      expect(GovukStatsd).to receive(:count).with("monitor.etl.daily.#{metric_name}", 10)
 
       create_metric date: yesterday, daily: { metric_name => 10 }
       subject.run
@@ -27,7 +27,7 @@ RSpec.describe Monitor::ETL do
 
   Metric.edition_metrics.map(&:name).each do |metric_name|
     it "sends StatsD counter for edition metric `#{metric_name}` for previous day" do
-      expect(GovukStatsd).to receive(:count).with("monitor.etl.#{metric_name}", 10)
+      expect(GovukStatsd).to receive(:count).with("monitor.etl.edition.#{metric_name}", 10)
 
       create_metric date: yesterday, edition: { metric_name => 10 }
       subject.run

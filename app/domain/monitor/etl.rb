@@ -1,4 +1,4 @@
-class Monitor::ETL
+class Monitor::Etl
   def run
     count_metrics!
     count_daily_metrics!
@@ -9,18 +9,32 @@ private
 
   def count_edition_metrics!
     Metric.edition_metrics.map(&:name).each do |edition_metric|
-      GovukStatsd.count("monitor.etl.#{edition_metric}", editions.sum("facts_editions.#{edition_metric}"))
+      path = path_for_edition_metric(edition_metric)
+
+      GovukStatsd.count(path, editions.sum("facts_editions.#{edition_metric}"))
     end
   end
 
   def count_daily_metrics!
     Metric.daily_metrics.map(&:name).each do |daily_metric|
-      GovukStatsd.count("monitor.etl.#{daily_metric}", metrics.sum(daily_metric))
+      path = path_for_daily_metric(daily_metric)
+
+      GovukStatsd.count(path, metrics.sum(daily_metric))
     end
   end
 
   def count_metrics!
-    GovukStatsd.count("monitor.etl.facts_metrics", metrics.count)
+    path = "monitor.etl.facts_metrics"
+
+    GovukStatsd.count(path, metrics.count)
+  end
+
+  def path_for_edition_metric(edition_metric)
+    "monitor.etl.edition.#{edition_metric}"
+  end
+
+  def path_for_daily_metric(daily_metric)
+    "monitor.etl.daily.#{daily_metric}"
   end
 
   def metrics
