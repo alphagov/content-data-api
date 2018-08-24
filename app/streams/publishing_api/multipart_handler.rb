@@ -31,11 +31,7 @@ private
         new_item: new_item,
       )
     end
-
-    if new_items.length < old_items.length
-      old_items.each(&:deprecate!)
-    end
-
+    old_items.each(&:deprecate!)
     result
   end
 

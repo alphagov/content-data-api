@@ -1,7 +1,7 @@
 class Etl::Item::Content::Parsers::TravelAdvice
   def parse_subpage(json, subpage_path)
     if summary_page?(json, subpage_path)
-      json.dig('details', 'summary').find { |x| x['content_type'] == "text/html" }.dig('content')
+      json.dig('details', 'summary').find { |x| x['content_type'] == "text/html" }.try(:dig, 'content')
     else
       Etl::Item::Content::Parsers::Parts.new.parse_subpage(json, subpage_path)
     end
