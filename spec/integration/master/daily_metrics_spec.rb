@@ -15,12 +15,14 @@ RSpec.describe 'Master process spec' do
     stub_google_analytics_user_feedback_response
     stub_google_analytics_internal_search_response
     stub_feedex_response
+    stub_monitoring
 
     Etl::Master::MasterProcessor.process
 
     validate_facts_metrics!
     validate_google_analytics!
     validate_feedex!
+    validate_monitoring!
   end
 
   def latest_version
@@ -49,6 +51,10 @@ RSpec.describe 'Master process spec' do
 
   def validate_feedex!
     expect(latest_metric).to have_attributes(feedex_comments: 21)
+  end
+
+  def validate_monitoring!
+    expect(GovukStatsd).to have_received(:count).at_least(1).times
   end
 
   def stub_google_analytics_response
@@ -110,6 +116,10 @@ RSpec.describe 'Master process spec' do
         },
       ]
     )
+  end
+
+  def stub_monitoring
+    allow(GovukStatsd).to receive(:count)
   end
 
   def stub_feedex_response
