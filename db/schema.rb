@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_22_144907) do
+ActiveRecord::Schema.define(version: 2018_08_24_105759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,15 +104,6 @@ ActiveRecord::Schema.define(version: 2018_08_22_144907) do
     t.integer "number_of_pdfs"
     t.integer "number_of_word_files"
     t.integer "readability_score"
-    t.integer "contractions_count"
-    t.integer "equality_count"
-    t.integer "indefinite_article_count"
-    t.integer "passive_count"
-    t.integer "profanities_count"
-    t.integer "redundant_acronyms_count"
-    t.integer "repeated_words_count"
-    t.integer "simplify_count"
-    t.integer "spell_count"
     t.integer "string_length"
     t.integer "sentence_count"
     t.integer "word_count"

@@ -44,13 +44,10 @@ class Facts::Metric < ApplicationRecord
       number_of_pdfs
       number_of_word_files
       readability_score
-      spell_count
       is_this_useful_yes
       is_this_useful_no
       number_of_internal_searches
       word_count
-      passive_count
-      simplify_count
       string_length
       sentence_count
       entrances
