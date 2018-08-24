@@ -1,19 +1,10 @@
 RSpec.describe Metric do
   EDITION_METRICS =
     %w(
-      contractions_count
-      equality_count
-      indefinite_article_count
       number_of_pdfs
       number_of_word_files
-      passive_count
-      profanities_count
       readability_score
-      redundant_acronyms_count
-      repeated_words_count
       sentence_count
-      simplify_count
-      spell_count
       string_length
       word_count
     ).freeze
@@ -36,7 +27,7 @@ RSpec.describe Metric do
     it "returns a list of all metrics" do
       metrics = Metric.find_all
 
-      expect(metrics.length).to eq(26)
+      expect(metrics.length).to eq(17)
       a_metric = metrics.first
       expect(a_metric).to be_an_instance_of(Metric)
     end

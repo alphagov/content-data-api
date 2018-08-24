@@ -15,6 +15,7 @@ RSpec.describe Etl::Master::MasterProcessor do
     allow(Etl::GA::InternalSearchProcessor).to receive(:process)
     allow(Etl::Feedex::Processor).to receive(:process)
     allow(Etl::Master::MetricsProcessor).to receive(:process)
+    allow(Monitor::Etl).to receive(:run)
   end
 
   describe 'runs only once per day' do
@@ -46,6 +47,12 @@ RSpec.describe Etl::Master::MasterProcessor do
 
   it 'update Feedex metrics in the Facts table' do
     expect(Etl::Feedex::Processor).to receive(:process).with(date: Date.new(2018, 2, 19))
+
+    subject.process
+  end
+
+  it 'monitors ETL processes' do
+    expect(Monitor::Etl).to receive(:run)
 
     subject.process
   end

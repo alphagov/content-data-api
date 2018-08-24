@@ -11,15 +11,6 @@ RSpec.describe Facts::Edition do
       string_length: 21,
       sentence_count: 1,
       word_count: 4,
-      contractions_count: 2,
-      equality_count: 3,
-      indefinite_article_count: 4,
-      passive_count: 5,
-      profanities_count: 6,
-      redundant_acronyms_count: 7,
-      repeated_words_count: 8,
-      simplify_count: 9,
-      spell_count: 10,
     }
   end
 

@@ -55,42 +55,6 @@ edition:
   - name: 'readability_score'
     description: "Flesch-Kincaid Reading Ease score"
 
-  - name: 'contractions_count'
-    description: "Count of improper apostrophe use in contractions."
-    source: 'retext'
-
-  - name: 'equality_count'
-    description: "Number of times potentially insensitive language is used"
-    source: 'retext'
-
-  - name: 'indefinite_article_count'
-    description: "Number of times the indefinite articles (a, an) are used incorrectly"
-    source: 'retext'
-
-  - name: 'passive_count'
-    description: "Number of times the passive voice is used"
-    source: 'retext'
-
-  - name: 'profanities_count'
-    description: "Number of times profanities are used"
-    source: 'retext'
-
-  - name: 'redundant_acronyms_count'
-    description: "Number of times redundant acronyms are used (like ATM machine instead of ATM)"
-    source: 'retext'
-
-  - name: 'repeated_words_count'
-    description: 'Number of times a word is repeated (like "for for")'
-    source: 'retext'
-
-  - name: 'simplify_count'
-    description: "Count of complicated words that have a simpler alternative"
-    source: 'retext'
-
-  - name: 'spell_count'
-    description: "Number of spelling errors"
-    source: 'retext'
-
   - name: 'string_length'
     description: "Total number of characters used in the text"
     source: 'custom'

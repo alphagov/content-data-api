@@ -19,6 +19,10 @@ class Etl::Master::MasterProcessor
       Etl::GA::InternalSearchProcessor.process(date: date)
       Etl::Feedex::Processor.process(date: date)
     end
+
+    time(process: :monitor) do
+      Monitor::Etl.run
+    end
   end
 
   def already_run?
