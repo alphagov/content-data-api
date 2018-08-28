@@ -43,16 +43,17 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
   end
 
-  it "deprecates all existing parts even if only one item changed" do
+  it "deprecates only the parts that have changed" do
     message = build(:message, :with_parts)
     subject.process(message)
+    expect(Dimensions::Item.count).to eq(4)
 
     message.payload["details"]["parts"][1]["body"] = "this is a change"
     message.payload["payload_version"] = message.payload["payload_version"] + 1
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(8)
+    expect(Dimensions::Item.count).to eq(5)
     expect(Dimensions::Item.where(latest: true).count).to eq(4)
   end
 
@@ -75,7 +76,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(9)
+    expect(Dimensions::Item.count).to eq(5)
     expect(Dimensions::Item.where(latest: true).count).to eq(5)
   end
 
@@ -88,7 +89,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(7)
+    expect(Dimensions::Item.count).to eq(4)
     expect(Dimensions::Item.where(latest: true).count).to eq(3)
   end
 
@@ -96,12 +97,12 @@ RSpec.describe "Process sub-pages for multipart content types" do
     message = build(:message, :with_parts)
     subject.process(message)
 
-    message.payload.dig("details", "parts").first["slug"] = "new-slug"
+    message.payload.dig("details", "parts")[1]["slug"] = "new-slug"
     message.payload["payload_version"] = message.payload["payload_version"] + 1
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(8)
+    expect(Dimensions::Item.count).to eq(5)
     expect(Dimensions::Item.where(latest: true).count).to eq(4)
   end
 
@@ -177,12 +178,12 @@ RSpec.describe "Process sub-pages for multipart content types" do
     it "extracts the Summary" do
       item = Dimensions::Item.where(base_path: "/travel-advice", latest: true).first
       expect(item).to have_attributes(expected_attributes(
-        base_path: '/travel-advice',
-        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-        document_text: "Summary content",
-        document_type: "travel_advice",
-        schema_name: "travel_advice",
-        title: "Summary",
+                                        base_path: '/travel-advice',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: "Summary content",
+                                        document_type: "travel_advice",
+                                        schema_name: "travel_advice",
+                                        title: "Summary",
       ))
     end
 
@@ -190,24 +191,24 @@ RSpec.describe "Process sub-pages for multipart content types" do
       item = Dimensions::Item.where(base_path: "/travel-advice/part1", latest: true).first
 
       expect(item).to have_attributes(expected_attributes(
-        base_path: '/travel-advice/part1',
-        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-        document_text: "Here 1",
-        document_type: "travel_advice",
-        schema_name: "travel_advice",
-        title: "Part 1",
+                                        base_path: '/travel-advice/part1',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: "Here 1",
+                                        document_type: "travel_advice",
+                                        schema_name: "travel_advice",
+                                        title: "Part 1",
       ))
     end
 
     it 'extracts /travel-advice/part2' do
       item = Dimensions::Item.where(base_path: "/travel-advice/part2", latest: true).first
       expect(item).to have_attributes(expected_attributes(
-        base_path: '/travel-advice/part2',
-        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-        document_text: "be 2",
-        document_type: "travel_advice",
-        schema_name: "travel_advice",
-        title: "Part 2",
+                                        base_path: '/travel-advice/part2',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: "be 2",
+                                        document_type: "travel_advice",
+                                        schema_name: "travel_advice",
+                                        title: "Part 2",
       ))
     end
 
@@ -220,7 +221,6 @@ RSpec.describe "Process sub-pages for multipart content types" do
     it 'does not log any errors' do
       expect(GovukError).not_to have_received(:notify)
     end
-
   end
 
   context 'when the content is a `guide`' do
@@ -232,8 +232,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
           'base_path' => '/guide',
           'content_id' => '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
           'document_type' => 'guide'
-        )
-      )
+        ))
     end
 
     before do
@@ -253,48 +252,48 @@ RSpec.describe "Process sub-pages for multipart content types" do
     it 'extracts part 1 on the base path' do
       item = Dimensions::Item.where(base_path: "/guide", latest: true).first
       expect(item).to have_attributes(expected_attributes(
-        base_path: '/guide',
-        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-        :document_text => 'Here 1',
-        document_type: 'guide',
-        schema_name: 'guide',
-        title: 'Part 1',
+                                        base_path: '/guide',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: 'Here 1',
+                                        document_type: 'guide',
+                                        schema_name: 'guide',
+                                        title: 'Part 1',
       ))
     end
 
     it 'extracts part 2 under the base path' do
       item = Dimensions::Item.where(base_path: '/guide/part2', latest: true).first
       expect(item).to have_attributes(expected_attributes(
-        base_path: '/guide/part2',
-        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-        :document_text => 'be 2',
-        document_type: 'guide',
-        schema_name: 'guide',
-        title: 'Part 2',
+                                        base_path: '/guide/part2',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: 'be 2',
+                                        document_type: 'guide',
+                                        schema_name: 'guide',
+                                        title: 'Part 2',
       ))
     end
 
     it 'extracts part 3 under the base path' do
       item = Dimensions::Item.where(base_path: '/guide/part3', latest: true).first
       expect(item).to have_attributes(expected_attributes(
-        base_path: '/guide/part3',
-        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-        :document_text => 'some 3',
-        document_type: 'guide',
-        schema_name: 'guide',
-        title: 'Part 3',
+                                        base_path: '/guide/part3',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: 'some 3',
+                                        document_type: 'guide',
+                                        schema_name: 'guide',
+                                        title: 'Part 3',
       ))
     end
 
     it 'extracts part 4 under the base path' do
       item = Dimensions::Item.where(base_path: '/guide/part4', latest: true).first
       expect(item).to have_attributes(expected_attributes(
-        base_path: '/guide/part4',
-        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-        :document_text => 'content 4.',
-        document_type: 'guide',
-        schema_name: 'guide',
-        title: 'Part 4',
+                                        base_path: '/guide/part4',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: 'content 4.',
+                                        document_type: 'guide',
+                                        schema_name: 'guide',
+                                        title: 'Part 4',
       ))
     end
 
@@ -321,7 +320,6 @@ RSpec.describe "Process sub-pages for multipart content types" do
       if %w{travel_advice guide}.include?(schema_name) && !schema_name.include?('placeholder')
 
         %w{major minor links republish unpublish}.each do |update_type|
-
           it "handles event for: `#{schema_name}` with no errors for a `#{update_type}` update" do
             message = build(:message, :with_parts, payload: payload, routing_key: "#{schema_name}.#{update_type}")
 

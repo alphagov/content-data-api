@@ -54,7 +54,7 @@ RSpec.describe PublishingAPI::Consumer do
     expect(Dimensions::Item.find_by(publishing_api_payload_version: 4)).to have_attributes(latest: true)
   end
 
-  it 'does not grow the dimension if the event carry no changes in an attribute' do
+  it 'does not grow the dimension if the event carries no changes in an attribute' do
     message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
     message2 = build :message, payload: message.payload.dup
     message2.payload['payload_version'] = 4
@@ -63,6 +63,17 @@ RSpec.describe PublishingAPI::Consumer do
       subject.process(message)
       subject.process(message2)
     }.to change(Dimensions::Item, :count).by(1)
+  end
+
+  it 'grows the dimension if the event carries a change in the body' do
+    message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
+    message2 = build :message, payload: message.payload.deep_dup
+    message2.payload['payload_version'] = 4
+    message2.payload['details']['body'] = '<p>different content</p>'
+    expect {
+      subject.process(message)
+      subject.process(message2)
+    }.to change(Dimensions::Item, :count).by(2)
   end
 
   it 'updates the attributes correctly' do
@@ -85,7 +96,6 @@ RSpec.describe PublishingAPI::Consumer do
       unless %w{travel_advice guide}.include?(schema_name) || schema_name.include?('placeholder')
 
         %w{major minor links republish unpublish}.each do |update_type|
-
           it "handles event for: `#{schema_name}` with no errors for a `#{update_type}` update" do
             message = build(:message, payload: payload, routing_key: "#{schema_name}.#{update_type}")
 

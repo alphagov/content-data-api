@@ -38,7 +38,7 @@ module PublishingEventProcessingSpecHelper
       phase: 'live',
       primary_organisation_content_id: org_content_id,
       primary_organisation_title: 'the-org',
-      primary_organisation_withdrawn: false,publishing_app: 'calendars',
+      primary_organisation_withdrawn: false, publishing_app: 'calendars',
       rendering_app: 'calendars',
       analytics_identifier: 'analytics_identifier',
       update_type: 'major',
@@ -47,11 +47,11 @@ module PublishingEventProcessingSpecHelper
 
 private
 
-    def org_content_id
-      'ce91c056-8165-49fe-b318-b71113ab4a30'
-    end
+  def org_content_id
+    'ce91c056-8165-49fe-b318-b71113ab4a30'
+  end
 
-    def primary_org
+  def primary_org
     [{
       'content_id' => org_content_id,
       'title' => 'the-org',

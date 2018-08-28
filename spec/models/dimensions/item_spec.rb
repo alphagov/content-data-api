@@ -44,7 +44,7 @@ RSpec.describe Dimensions::Item, type: :model do
     describe '.outdated_subpages' do
       let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:locale) { 'fr' }
-      let!(:outdated_item) {  create :dimensions_item, base_path: '/path-1/part-2', locale: locale, content_id: content_id}
+      let!(:outdated_item) { create :dimensions_item, base_path: '/path-1/part-2', locale: locale, content_id: content_id }
 
       it 'filters out the passed paths' do
         create :dimensions_item, base_path: '/path-1', locale: locale, content_id: content_id
@@ -161,18 +161,18 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '#updated_by?' do
     let(:attrs) { { base_path: '/base/path' } }
-    let(:item) { create :dimensions_item, base_path: '/base/path'}
+    let(:item) { create :dimensions_item, base_path: '/base/path' }
 
     it 'returns true if would be changed by the given attributes' do
-      expect(item.updated_by? attrs.merge(base_path: '/new/base/path')).to eq(true)
+      expect(item.updated_by?(attrs.merge(base_path: '/new/base/path'))).to eq(true)
     end
 
     it 'returns false if would not be changed by the given attributes' do
-      expect(item.updated_by? attrs).to eq(false)
+      expect(item.updated_by?(attrs)).to eq(false)
     end
 
     it 'ignores the raw_json attribute' do
-      expect(item.updated_by? attrs.merge(raw_json: '{}')).to eq(false)
+      expect(item.updated_by?(attrs.merge(raw_json: '{}'))).to eq(false)
     end
   end
 end

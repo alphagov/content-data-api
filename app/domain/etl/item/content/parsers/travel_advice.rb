@@ -12,6 +12,7 @@ class Etl::Item::Content::Parsers::TravelAdvice
   end
 
 private
+
   def summary_page?(json, subpage_path)
     json.dig("base_path") == subpage_path
   end

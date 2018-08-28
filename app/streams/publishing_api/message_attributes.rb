@@ -1,6 +1,7 @@
 require 'active_support/concern'
 module PublishingAPI::MessageAttributes
   extend ActiveSupport::Concern
+# rubocop:disable Metrics/BlockLength
   included do
     def attributes
       {
@@ -27,9 +28,9 @@ module PublishingAPI::MessageAttributes
       }
     end
 
-    def update_required?(old_item:, base_path:, title:)
+    def update_required?(old_item:, base_path:, title:, document_text:)
       return true unless old_item
-      old_item.updated_by?(comparable_attributes base_path, title)
+      old_item.updated_by?(comparable_attributes(base_path, title, document_text))
     end
 
     def base_path
@@ -57,10 +58,11 @@ module PublishingAPI::MessageAttributes
       message.payload.fetch(attribute_name, nil)
     end
 
-    def comparable_attributes(base_path, title)
+    def comparable_attributes(base_path, title, document_text)
       attributes.reject(&method(:excluded_from_comparison?)).merge(
         base_path: base_path,
-        title: title
+        title: title,
+        document_text: document_text
       )
     end
 
@@ -68,4 +70,5 @@ module PublishingAPI::MessageAttributes
       %i[publishing_api_payload_version public_updated_at id update_at created_at latest].include? key
     end
   end
+  # rubocop:enable Metrics/BlockLength
 end

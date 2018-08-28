@@ -14,7 +14,6 @@ class PublishingAPI::MessageHandler
     else
       PublishingAPI::SingleItemHandler.process(message)
     end
-
   end
 
 private
