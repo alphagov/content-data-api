@@ -41,6 +41,20 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(results).to match_array(item1)
     end
 
+    describe '.outdated_subpages' do
+      let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
+      let(:locale) { 'fr' }
+      let!(:outdated_item) {  create :dimensions_item, base_path: '/path-1/part-2', locale: locale, content_id: content_id}
+
+      it 'filters out the passed paths' do
+        create :dimensions_item, base_path: '/path-1', locale: locale, content_id: content_id
+        create :dimensions_item, base_path: '/path-1/part-1', locale: locale, content_id: content_id
+        create :dimensions_item, base_path: '/path-1/part-2.fr', locale: locale, content_id: content_id
+        create :dimensions_item, base_path: '/path-1/part-2', locale: 'en', content_id: content_id
+        expect(Dimensions::Item.outdated_subpages(content_id, locale, ['/path-1', '/path-1/part-1']).map(&:base_path)).to eq(['/path-1/part-2.fr'])
+      end
+    end
+
     it '.by_document_type' do
       item1 = create(:dimensions_item, document_type: 'guide')
       create(:dimensions_item, document_type: 'local_transaction')
@@ -142,6 +156,23 @@ RSpec.describe Dimensions::Item, type: :model do
       item.promote!(old_item)
 
       expect(old_item.latest).to be false
+    end
+  end
+
+  describe '#updated_by?' do
+    let(:attrs) { { base_path: '/base/path' } }
+    let(:item) { create :dimensions_item, base_path: '/base/path'}
+
+    it 'returns true if would be changed by the given attributes' do
+      expect(item.updated_by? attrs.merge(base_path: '/new/base/path')).to eq(true)
+    end
+
+    it 'returns false if would not be changed by the given attributes' do
+      expect(item.updated_by? attrs).to eq(false)
+    end
+
+    it 'ignores the raw_json attribute' do
+      expect(item.updated_by? attrs.merge(raw_json: '{}')).to eq(false)
     end
   end
 end

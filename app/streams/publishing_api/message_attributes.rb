@@ -17,14 +17,19 @@ module PublishingAPI::MessageAttributes
         primary_organisation_withdrawn: primary_organisation['withdrawn'],
         public_updated_at: parse_time('public_updated_at'),
         schema_name: message.payload.fetch('schema_name'),
-        raw_json: message.payload,
         phase: message.payload.fetch('phase', nil),
         publishing_app: message.payload.fetch('publishing_app', nil),
         rendering_app: message.payload.fetch('rendering_app', nil),
         analytics_identifier: message.payload.fetch('analytics_identifier', nil),
         update_type: message.payload.fetch('update_type', nil),
-        latest: true
+        latest: true,
+        raw_json: message.payload
       }
+    end
+
+    def update_required?(old_item:, base_path:, title:)
+      return true unless old_item
+      old_item.updated_by?(comparable_attributes base_path, title)
     end
 
     def base_path
@@ -50,6 +55,17 @@ module PublishingAPI::MessageAttributes
 
     def parse_time(attribute_name)
       message.payload.fetch(attribute_name, nil)
+    end
+
+    def comparable_attributes(base_path, title)
+      attributes.reject(&method(:excluded_from_comparison?)).merge(
+        base_path: base_path,
+        title: title
+      )
+    end
+
+    def excluded_from_comparison?(key, _)
+      %i[publishing_api_payload_version public_updated_at id update_at created_at latest].include? key
     end
   end
 end

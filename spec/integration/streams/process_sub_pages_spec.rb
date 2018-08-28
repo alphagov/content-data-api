@@ -241,7 +241,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
         base_path: '/guide/part5',
         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
         locale: 'fr',
-        publishing_api_payload_version: 0
+        publishing_api_payload_version: 0,
+        title: 'Part 5'
       allow(GovukError).to receive(:notify)
       subject.process(message)
     end

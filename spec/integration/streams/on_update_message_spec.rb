@@ -35,7 +35,6 @@ RSpec.describe PublishingAPI::Consumer do
       subject.process(message)
       subject.process(message2)
     }.to change(Dimensions::Item, :count).by(1)
-
     expect(Dimensions::Item.first).to have_attributes(publishing_api_payload_version: 2)
     expect(Dimensions::Item.first).to have_attributes(latest: true)
   end
