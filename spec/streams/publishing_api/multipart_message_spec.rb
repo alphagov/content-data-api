@@ -1,4 +1,4 @@
-RSpec.describe PublishingAPI::MultipartMessage do
+RSpec.describe PublishingAPI::Messages::MultipartMessage do
   subject { described_class }
 
   describe ".is_multipart?" do

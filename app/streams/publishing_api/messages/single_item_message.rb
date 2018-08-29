@@ -1,5 +1,5 @@
 module PublishingAPI
-  class SingleItemMessage < SimpleDelegator
+  class Messages::SingleItemMessage < SimpleDelegator
     def initialize(message)
       super
 

@@ -28,10 +28,10 @@ module PublishingAPI
 
     class MessageFactory
       def self.build(rabbitmq_message)
-        if PublishingAPI::MultipartMessage.is_multipart?(rabbitmq_message)
-          PublishingAPI::MultipartMessage.new(rabbitmq_message)
+        if PublishingAPI::Messages::MultipartMessage.is_multipart?(rabbitmq_message)
+          PublishingAPI::Messages::MultipartMessage.new(rabbitmq_message)
         else
-          PublishingAPI::SingleItemMessage.new(rabbitmq_message)
+          PublishingAPI::Messages::SingleItemMessage.new(rabbitmq_message)
         end
       end
     end

@@ -42,6 +42,6 @@ private
   end
 
   def multipart_message
-    @multipart_message ||= PublishingAPI::MultipartMessage.new(message)
+    @multipart_message ||= PublishingAPI::Messages::MultipartMessage.new(message)
   end
 end

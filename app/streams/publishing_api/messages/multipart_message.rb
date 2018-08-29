@@ -1,5 +1,5 @@
 module PublishingAPI
-  class MultipartMessage < SimpleDelegator
+  class Messages::MultipartMessage < SimpleDelegator
     def initialize(message)
       super
 
