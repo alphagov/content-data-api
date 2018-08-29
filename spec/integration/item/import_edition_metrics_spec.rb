@@ -2,7 +2,7 @@ require 'sidekiq/testing'
 RSpec.describe 'Import edition metrics' do
   include ItemSetupHelpers
 
-  subject { PublishingAPI::MessageHandler }
+  subject { PublishingAPI::Consumer.new }
 
   it 'stores content item metrics' do
     message = build(:message, schema_name: 'publication', base_path: '/new-path')

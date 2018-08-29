@@ -1,11 +1,22 @@
 module PublishingAPI
-  class MultipartMessage
+  class MultipartMessage < SimpleDelegator
+    def initialize(message)
+      super
+
+      @message = message
+    end
+
     def self.is_multipart?(message)
       message.payload.dig('details', 'parts').present?
     end
 
-    def initialize(message)
-      @message = message
+    def handler
+      PublishingAPI::MultipartHandler
+    end
+
+    def invalid?
+      mandatory_fields = @message.payload.values_at('base_path', 'schema_name')
+      mandatory_fields.any?(&:nil?)
     end
 
     def parts
