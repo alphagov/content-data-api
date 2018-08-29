@@ -1,4 +1,4 @@
-class PublishingAPI::MultipartHandler < PublishingAPI::BaseHandler
+class PublishingAPI::Handlers::MultipartHandler < PublishingAPI::Handlers::BaseHandler
   def self.process(*args)
     new(*args).process
   end

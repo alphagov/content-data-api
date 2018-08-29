@@ -1,4 +1,4 @@
-class PublishingAPI::BaseHandler
+class PublishingAPI::Handlers::BaseHandler
   def all_attributes
     {
       content_id: content_id,

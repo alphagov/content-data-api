@@ -11,7 +11,7 @@ module PublishingAPI
     end
 
     def handler
-      PublishingAPI::MultipartHandler
+      PublishingAPI::Handlers::MultipartHandler
     end
 
     def invalid?

@@ -7,7 +7,7 @@ module PublishingAPI
     end
 
     def handler
-      PublishingAPI::SingleItemHandler
+      PublishingAPI::Handlers::SingleItemHandler
     end
 
     def invalid?

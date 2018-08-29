@@ -1,4 +1,4 @@
-class PublishingAPI::SingleItemHandler < PublishingAPI::BaseHandler
+class PublishingAPI::Handlers::SingleItemHandler < PublishingAPI::Handlers::BaseHandler
   def self.process(*args)
     new(*args).process
   end
@@ -17,7 +17,7 @@ class PublishingAPI::SingleItemHandler < PublishingAPI::BaseHandler
   end
 
 private
-  
+
   def new_item(document_text)
     item = Dimensions::Item.new(
       base_path: base_path,
