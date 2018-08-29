@@ -1,6 +1,4 @@
-class PublishingAPI::SingleItemHandler
-  include MessageAttributes
-
+class PublishingAPI::SingleItemHandler < PublishingAPI::BaseHandler
   def self.process(*args)
     new(*args).process
   end
@@ -19,13 +17,13 @@ class PublishingAPI::SingleItemHandler
   end
 
 private
-
+  
   def new_item(document_text)
     item = Dimensions::Item.new(
       base_path: base_path,
       title: title,
       document_text: document_text,
-      **attributes
+      **all_attributes
     )
     item.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_item, item))
     item

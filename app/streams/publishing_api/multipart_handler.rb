@@ -1,6 +1,4 @@
-class PublishingAPI::MultipartHandler
-  include PublishingAPI::MessageAttributes
-
+class PublishingAPI::MultipartHandler < PublishingAPI::BaseHandler
   def self.process(*args)
     new(*args).process
   end
@@ -37,7 +35,7 @@ private
       base_path: base_path,
       title: title,
       document_text: document_text,
-      **attributes
+      **all_attributes
     )
     item.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_item, item))
     item.promote!(old_item)
