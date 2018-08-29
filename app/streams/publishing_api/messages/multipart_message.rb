@@ -1,5 +1,7 @@
 module PublishingAPI
   class Messages::MultipartMessage < SimpleDelegator
+    include Messages::Concerns::MessageValidation
+
     def initialize(message)
       super
 

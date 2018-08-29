@@ -1,5 +1,7 @@
 module PublishingAPI
   class Messages::SingleItemMessage < SimpleDelegator
+    include Messages::Concerns::MessageValidation
+
     def initialize(message)
       super
 

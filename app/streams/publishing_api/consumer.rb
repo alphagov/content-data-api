@@ -16,7 +16,7 @@ module PublishingAPI
   private
 
     def do_process(message)
-      return if PublishingAPI::MessageValidator.is_old_message?(message)
+      return if message.is_old_message?
 
       ActiveRecord::Base.transaction do
         handler = message.handler
