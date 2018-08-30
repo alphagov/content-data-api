@@ -23,15 +23,15 @@ private
                .between(from: from, to: to)
                .by_base_path(format_base_path_param)
                .run
-    if Metric.is_edition_metric?(metric)
+    if Metric.is_edition_metric?(metrics.first)
       series
         .with_edition_metrics
         .order('dimensions_dates.date asc')
-        .pluck(:date, "facts_editions.#{metric}").to_h
+        .pluck(:date, "facts_editions.#{metrics.first}").to_h
     else
       series
         .order('dimensions_dates.date asc')
-        .pluck(:date, metric).to_h
+        .pluck(:date, metrics.first).to_h
     end
   end
 
@@ -40,10 +40,10 @@ private
     "/#{base_path}"
   end
 
-  delegate :from, :to, :metric, :base_path, to: :api_request
+  delegate :from, :to, :metrics, :base_path, to: :api_request
 
   def api_request
-    @api_request ||= Api::Request.new(params.permit(:from, :to, :metric, :base_path, :format))
+    @api_request ||= Api::Request.new(params.permit(:from, :to, :base_path, :format, metrics: []))
   end
 
   def validate_params!
