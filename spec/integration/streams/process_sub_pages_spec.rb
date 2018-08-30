@@ -54,7 +54,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     subject.process(message)
 
     expect(Dimensions::Item.count).to eq(5)
-    expect(Dimensions::Item.where(latest: true).count).to eq(4)
+    expect(Dimensions::Item.latest.count).to eq(4)
   end
 
   it "increases the number of latest items when a subpage is added" do
@@ -77,7 +77,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     subject.process(message)
 
     expect(Dimensions::Item.count).to eq(5)
-    expect(Dimensions::Item.where(latest: true).count).to eq(5)
+    expect(Dimensions::Item.latest.count).to eq(5)
   end
 
   it "decreases the number of latest items when a subpage is removed" do
@@ -90,7 +90,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     subject.process(message)
 
     expect(Dimensions::Item.count).to eq(4)
-    expect(Dimensions::Item.where(latest: true).count).to eq(3)
+    expect(Dimensions::Item.latest.count).to eq(3)
   end
 
   it "still grows the dimension if parts are renamed" do
@@ -103,7 +103,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     subject.process(message)
 
     expect(Dimensions::Item.count).to eq(5)
-    expect(Dimensions::Item.where(latest: true).count).to eq(4)
+    expect(Dimensions::Item.latest.count).to eq(4)
   end
 
   context "when base paths in the message already belong to items with a different content id" do
@@ -119,7 +119,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
       subject.process(another_message)
 
       expect(Dimensions::Item.count).to eq(8)
-      expect(Dimensions::Item.where(latest: true).count).to eq(4)
+      expect(Dimensions::Item.latest.count).to eq(4)
     end
   end
 

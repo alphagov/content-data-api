@@ -25,7 +25,7 @@ module Etl
         log process: :metrics, message: 'about to get the Dimensions::Date'
         dimensions_date = Dimensions::Date.for(date)
         log process: :metrics, message: 'got the Dimensions::Date'
-        Dimensions::Item.where(latest: true).find_in_batches(batch_size: 50000)
+        Dimensions::Item.latest.find_in_batches(batch_size: 50000)
           .with_index do |batch, index|
           log process: :metrics, message: "processing #{batch.length} items in batch #{index}"
           values = batch.pluck(:id).map do |value|

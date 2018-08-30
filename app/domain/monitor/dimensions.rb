@@ -15,7 +15,7 @@ private
 
   def count_latest_base_paths!
     path = path_for('latest_base_path')
-    count = Dimensions::Item.where(latest: true).count
+    count = Dimensions::Item.latest.count
 
     GovukStatsd.count(path, count)
   end
@@ -29,7 +29,7 @@ private
 
   def count_latest_content_items!
     path = path_for('latest_content_items')
-    count = Dimensions::Item.where(latest: true).count('distinct content_id')
+    count = Dimensions::Item.latest.count('distinct content_id')
 
     GovukStatsd.count(path, count)
   end

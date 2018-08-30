@@ -43,6 +43,4 @@ RSpec.describe Monitor::Dimensions do
     create :dimensions_item, content_id: 'id1', base_path: '/other', latest: false
     subject.run
   end
-
-
 end
