@@ -9,7 +9,7 @@ RSpec.describe Monitor::Facts do
 
   before { allow(GovukStatsd).to receive(:count) }
 
-  it 'sends the total number of facts metrics' do
+  it 'sends StatsD counter for facts metrics' do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.all_metrics", 2)
 
     create_list :metric, 2
@@ -17,7 +17,7 @@ RSpec.describe Monitor::Facts do
     subject.run
   end
 
-  it 'sends the total number of `daily` metrics' do
+  it 'sends StatsD counter for `daily` metrics' do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_metrics", 1)
 
     create_metric date: Date.yesterday
@@ -26,7 +26,7 @@ RSpec.describe Monitor::Facts do
     subject.run
   end
 
-  it 'sends the total number of facts editions' do
+  it 'sends StatsD counter for facts editions' do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.all_editions", 2)
 
     create_metric date: Date.yesterday, base_path: '/foo'
@@ -35,7 +35,7 @@ RSpec.describe Monitor::Facts do
     subject.run
   end
 
-  it 'sends the total number of `daily` editions' do
+  it 'sends StatsD counter for `daily` editions' do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_editions", 1)
 
     create_metric date: Date.yesterday, base_path: '/foo'

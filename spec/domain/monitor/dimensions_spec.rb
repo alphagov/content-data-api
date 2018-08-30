@@ -9,7 +9,7 @@ RSpec.describe Monitor::Dimensions do
 
   before { allow(GovukStatsd).to receive(:count) }
 
-  it 'sends the total number of base_paths' do
+  it 'sends StatsD counter of base_paths' do
     expect(GovukStatsd).to receive(:count).with("monitor.dimensions.base_path", 2)
 
     create_list :dimensions_item, 2
@@ -17,7 +17,7 @@ RSpec.describe Monitor::Dimensions do
     subject.run
   end
 
-  it 'sends the total number of `latest` base_paths' do
+  it 'sends StatsD counter of `latest` base_paths' do
     expect(GovukStatsd).to receive(:count).with("monitor.dimensions.latest_base_path", 1)
 
     create :dimensions_item, base_path: '/foo', latest: true
@@ -26,7 +26,7 @@ RSpec.describe Monitor::Dimensions do
     subject.run
   end
 
-  it 'sends the total number of content_items' do
+  it 'sends StatsD counter of content_items' do
     expect(GovukStatsd).to receive(:count).with("monitor.dimensions.content_items", 1)
 
     create :dimensions_item, content_id: 'id1', base_path: '/foo'
@@ -35,7 +35,7 @@ RSpec.describe Monitor::Dimensions do
     subject.run
   end
 
-  it 'sends the total number of `latest` content_items' do
+  it 'sends StatsD counter of `latest` content_items' do
     expect(GovukStatsd).to receive(:count).with("monitor.dimensions.latest_content_items", 1)
 
     create :dimensions_item, content_id: 'id1', base_path: '/foo', latest: true
