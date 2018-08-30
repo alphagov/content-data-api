@@ -16,4 +16,13 @@ RSpec.describe Monitor::Dimensions do
 
     subject.run
   end
+
+  it 'sends the total number of `latest` base_paths' do
+    expect(GovukStatsd).to receive(:count).with("monitor.dimensions.latest_base_path", 1)
+
+    create :dimensions_item, base_path: '/foo', latest: true
+    create :dimensions_item, base_path: '/bar', latest: false
+
+    subject.run
+  end
 end
