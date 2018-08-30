@@ -4,9 +4,44 @@ class Monitor::Dimensions
   end
 
   def run
-    GovukStatsd.count('monitor.dimensions.base_path', Dimensions::Item.count)
-    GovukStatsd.count('monitor.dimensions.latest_base_path', Dimensions::Item.where(latest: true).count)
-    GovukStatsd.count('monitor.dimensions.content_items', Dimensions::Item.count('distinct content_id'))
-    GovukStatsd.count('monitor.dimensions.latest_content_items', Dimensions::Item.where(latest: true).count('distinct content_id'))
+    count_base_paths!
+    count_latest_base_paths!
+
+    count_content_items
+    count_latest_content_items!
+  end
+
+private
+
+  def count_latest_base_paths!
+    path = path_for('latest_base_path')
+    count = Dimensions::Item.where(latest: true).count
+
+    GovukStatsd.count(path, count)
+  end
+
+  def count_base_paths!
+    path = path_for('base_path')
+    count = Dimensions::Item.count
+
+    GovukStatsd.count(path, count)
+  end
+
+  def count_latest_content_items!
+    path = path_for('latest_content_items')
+    count = Dimensions::Item.where(latest: true).count('distinct content_id')
+
+    GovukStatsd.count(path, count)
+  end
+
+  def count_content_items
+    path = path_for('content_items')
+    count = Dimensions::Item.count('distinct content_id')
+
+    GovukStatsd.count(path, count)
+  end
+
+  def path_for(item)
+    "monitor.dimensions.#{item}"
   end
 end
