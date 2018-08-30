@@ -4,37 +4,37 @@ class Monitor::Facts
   end
 
   def run
-    count_facts_metrics!
-    count_facts_daily_metrics!
+    statsd_for_all_metrics!
+    statsd_for_yesterday_metrics!
 
-    count_facts_editions!
-    count_daily_facts_editions!
+    statsd_for_total_editions!
+    statsd_for_yesterday_editions!
   end
 
 private
 
-  def count_facts_metrics!
+  def statsd_for_all_metrics!
     path = path_for('all_metrics')
     count = Facts::Metric.count
 
     GovukStatsd.count(path, count)
   end
 
-  def count_facts_daily_metrics!
+  def statsd_for_yesterday_metrics!
     path = path_for('daily_metrics')
     count = Facts::Metric.for_yesterday.count
 
     GovukStatsd.count(path, count)
   end
 
-  def count_facts_editions!
+  def statsd_for_total_editions!
     path = path_for('all_editions')
     count = Facts::Edition.count
 
     GovukStatsd.count(path, count)
   end
 
-  def count_daily_facts_editions!
+  def statsd_for_yesterday_editions!
     path = path_for('daily_editions')
     count = Facts::Edition.where(dimensions_date: Dimensions::Date.for(Date.yesterday)).count
 

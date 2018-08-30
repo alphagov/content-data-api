@@ -4,13 +4,13 @@ class Monitor::Etl
   end
 
   def run
-    count_daily_metrics!
-    count_edition_metrics!
+    statsd_for_performance_metrics!
+    statsd_for_edition_metrics!
   end
 
 private
 
-  def count_edition_metrics!
+  def statsd_for_edition_metrics!
     Metric.edition_metrics.map(&:name).each do |edition_metric|
       path = path_for_edition_metric(edition_metric)
 
@@ -18,7 +18,7 @@ private
     end
   end
 
-  def count_daily_metrics!
+  def statsd_for_performance_metrics!
     Metric.daily_metrics.map(&:name).each do |daily_metric|
       path = path_for_daily_metric(daily_metric)
 
