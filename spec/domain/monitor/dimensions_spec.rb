@@ -34,4 +34,15 @@ RSpec.describe Monitor::Dimensions do
 
     subject.run
   end
+
+  it 'sends the total number of `latest` content_items' do
+    expect(GovukStatsd).to receive(:count).with("monitor.dimensions.latest_content_items", 1)
+
+    create :dimensions_item, content_id: 'id1', base_path: '/foo', latest: true
+    create :dimensions_item, content_id: 'id1', base_path: '/bar', latest: true
+    create :dimensions_item, content_id: 'id1', base_path: '/other', latest: false
+    subject.run
+  end
+
+
 end
