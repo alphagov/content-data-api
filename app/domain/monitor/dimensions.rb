@@ -14,14 +14,14 @@ class Monitor::Dimensions
 private
 
   def statsd_for_latest_base_paths!
-    path = path_for('latest_base_path')
+    path = path_for('latest_base_paths')
     count = Dimensions::Item.latest.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_all_base_paths!
-    path = path_for('base_path')
+    path = path_for('base_paths')
     count = Dimensions::Item.count
 
     GovukStatsd.count(path, count)
