@@ -64,6 +64,12 @@ RSpec.describe Etl::Master::MasterProcessor do
 
         subject.process
       end
+
+      it 'monitor Facts' do
+        expect(Monitor::Facts).to receive(:run)
+
+        subject.process
+      end
     end
 
     context 'not the day before' do
@@ -75,6 +81,12 @@ RSpec.describe Etl::Master::MasterProcessor do
 
       it 'does not add Dimension stats if not the day before' do
         expect(Monitor::Dimensions).to_not receive(:run)
+
+        subject.process(date: Date.today)
+      end
+
+      it 'does not add Facts stats if not the day before' do
+        expect(Monitor::Facts).to_not receive(:run)
 
         subject.process(date: Date.today)
       end

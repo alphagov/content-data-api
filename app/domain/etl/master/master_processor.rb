@@ -24,6 +24,7 @@ class Etl::Master::MasterProcessor
       unless historic_data?
         Monitor::Etl.run
         Monitor::Dimensions.run
+        Monitor::Facts.run
       end
     end
   end
