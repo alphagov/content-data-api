@@ -21,7 +21,7 @@ class Etl::Master::MasterProcessor
     end
 
     time(process: :monitor) do
-      Monitor::Etl.run
+      Monitor::Etl.run unless historic_data?
     end
   end
 
@@ -32,6 +32,10 @@ class Etl::Master::MasterProcessor
 private
 
   attr_reader :date
+
+  def historic_data?
+    date != Date.yesterday
+  end
 
   class DuplicateDateError < StandardError;
   end

@@ -51,10 +51,18 @@ RSpec.describe Etl::Master::MasterProcessor do
     subject.process
   end
 
-  it 'monitors ETL processes' do
-    expect(Monitor::Etl).to receive(:run)
+  describe 'Monitoring' do
+    it 'monitors ETL processes' do
+      expect(Monitor::Etl).to receive(:run)
 
-    subject.process
+      subject.process
+    end
+
+    it 'does not add ETL stats if not the day before' do
+      expect(Monitor::Etl).to_not receive(:run)
+
+      subject.process(date: Date.today)
+    end
   end
 
   it 'can run the process for other days' do
