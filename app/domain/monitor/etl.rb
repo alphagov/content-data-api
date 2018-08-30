@@ -4,7 +4,6 @@ class Monitor::Etl
   end
 
   def run
-    count_metrics!
     count_daily_metrics!
     count_edition_metrics!
   end
@@ -25,12 +24,6 @@ private
 
       GovukStatsd.count(path, metrics.sum(daily_metric))
     end
-  end
-
-  def count_metrics!
-    path = "monitor.etl.facts_metrics"
-
-    GovukStatsd.count(path, metrics.count)
   end
 
   def path_for_edition_metric(edition_metric)
