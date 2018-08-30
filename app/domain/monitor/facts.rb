@@ -7,6 +7,8 @@ class Monitor::Facts
   def run
     count_facts_metrics!
     count_facts_daily_metrics!
+
+    count_facts_editions!
   end
 
 private
@@ -21,6 +23,13 @@ private
   def count_facts_daily_metrics!
     path = path_for('daily_metrics')
     count = Facts::Metric.for_yesterday.count
+
+    GovukStatsd.count(path, count)
+  end
+
+  def count_facts_editions!
+    path = path_for('all_editions')
+    count = Facts::Edition.count
 
     GovukStatsd.count(path, count)
   end
