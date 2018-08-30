@@ -1,5 +1,4 @@
 class Monitor::Facts
- 
   def self.run(*args)
     new(*args).run
   end
@@ -9,6 +8,7 @@ class Monitor::Facts
     count_facts_daily_metrics!
 
     count_facts_editions!
+    count_daily_facts_editions!
   end
 
 private
@@ -34,6 +34,12 @@ private
     GovukStatsd.count(path, count)
   end
 
+  def count_daily_facts_editions!
+    path = path_for('daily_editions')
+    count = Facts::Edition.where(dimensions_date: Dimensions::Date.for(Date.yesterday)).count
+
+    GovukStatsd.count(path, count)
+  end
 
   def path_for(item)
     "monitor.facts.#{item}"

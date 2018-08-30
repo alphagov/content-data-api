@@ -34,4 +34,13 @@ RSpec.describe Monitor::Facts do
 
     subject.run
   end
+
+  it 'sends the total number of `daily` editions' do
+    expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_editions", 1)
+
+    create_metric date: Date.yesterday, base_path: '/foo'
+    create_metric date: Date.today, base_path: '/bar'
+
+    subject.run
+  end
 end
