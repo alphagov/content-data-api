@@ -93,7 +93,7 @@ RSpec.describe PublishingAPI::Consumer do
     schemas.each_value do |schema|
       payload = GovukSchemas::RandomExample.new(schema: schema).payload
       schema_name = payload.dig('schema_name')
-      unless %w{travel_advice guide placeholder}.include?(schema_name)
+      unless %w{travel_advice guide}.include?(schema_name) || schema_name.include?('placeholder')
 
         %w{major minor links republish unpublish}.each do |update_type|
           it "handles event for: `#{schema_name}` with no errors for a `#{update_type}` update" do
