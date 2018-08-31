@@ -19,7 +19,7 @@ class Api::MetricsController < Api::BaseController
 private
 
   def query_series
-    series = Reports::Series.new
+    series = Reports::FindSeries.new
                .between(from: from, to: to)
                .by_base_path(format_base_path_param)
                .run

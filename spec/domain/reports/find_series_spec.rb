@@ -1,4 +1,4 @@
-RSpec.describe Reports::Series do
+RSpec.describe Reports::FindSeries do
   include ItemSetupHelpers
   context "all" do
     it "returns a series of all metrics" do
