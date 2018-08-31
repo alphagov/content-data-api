@@ -1,4 +1,4 @@
-class Reports::Series
+class Reports::FindSeries
   def between(from:, to:)
     @from = from
     @to = to

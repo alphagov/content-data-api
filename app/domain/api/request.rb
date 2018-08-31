@@ -38,5 +38,4 @@ private
       errors.add("metric", "is not included in the list") unless Metric.find_all.map(&:name).include?(metric)
     end
   end
-
 end
