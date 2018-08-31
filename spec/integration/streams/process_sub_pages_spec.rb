@@ -1,6 +1,8 @@
 require 'govuk_message_queue_consumer/test_helpers/mock_message'
 
 RSpec.describe "Process sub-pages for multipart content types" do
+  include PublishingEventProcessingSpecHelper
+
   let(:subject) { PublishingAPI::Consumer.new }
 
   it "grows the dimension for each subpage" do
@@ -11,30 +13,47 @@ RSpec.describe "Process sub-pages for multipart content types" do
     }.to change(Dimensions::Item, :count).by(4)
   end
 
-  it "separates the parts of multipart content types" do
-    message = build(:message, :with_parts)
-    subject.process(message)
+  context 'for a guide' do
+    it "separates the parts of multipart content types" do
+      message = build(:message, :with_parts)
+      subject.process(message)
 
-    parts = Dimensions::Item.pluck(:base_path, :title).to_set
+      parts = Dimensions::Item.pluck(:base_path, :title).to_set
 
-    expect(parts).to eq Set[
-      ["/base-path", "Part 1"],
-      ["/base-path/part2", "Part 2"],
-      ["/base-path/part3", "Part 3"],
-      ["/base-path/part4", "Part 4"]
-    ]
+      expect(parts).to eq Set[
+        ["/base-path", "Part 1"],
+        ["/base-path/part2", "Part 2"],
+        ["/base-path/part3", "Part 3"],
+        ["/base-path/part4", "Part 4"]
+      ]
+    end
   end
 
-  it "deprecates all existing parts even if only one item changed" do
+  context 'for travel advice' do
+    it "separates the parts of multipart content types" do
+      message = build(:message, :travel_advice)
+      subject.process(message)
+      parts = Dimensions::Item.pluck(:base_path, :title).to_set
+
+      expect(parts).to eq Set[
+        ["/base-path", "Summary"],
+        ["/base-path/part1", "Part 1"],
+        ["/base-path/part2", "Part 2"],
+      ]
+    end
+  end
+
+  it "deprecates only the parts that have changed" do
     message = build(:message, :with_parts)
     subject.process(message)
+    expect(Dimensions::Item.count).to eq(4)
 
     message.payload["details"]["parts"][1]["body"] = "this is a change"
     message.payload["payload_version"] = message.payload["payload_version"] + 1
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(8)
+    expect(Dimensions::Item.count).to eq(5)
     expect(Dimensions::Item.where(latest: true).count).to eq(4)
   end
 
@@ -57,7 +76,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(9)
+    expect(Dimensions::Item.count).to eq(5)
     expect(Dimensions::Item.where(latest: true).count).to eq(5)
   end
 
@@ -70,7 +89,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(7)
+    expect(Dimensions::Item.count).to eq(4)
     expect(Dimensions::Item.where(latest: true).count).to eq(3)
   end
 
@@ -78,12 +97,12 @@ RSpec.describe "Process sub-pages for multipart content types" do
     message = build(:message, :with_parts)
     subject.process(message)
 
-    message.payload.dig("details", "parts").first["slug"] = "new-slug"
+    message.payload.dig("details", "parts")[1]["slug"] = "new-slug"
     message.payload["payload_version"] = message.payload["payload_version"] + 1
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(8)
+    expect(Dimensions::Item.count).to eq(5)
     expect(Dimensions::Item.where(latest: true).count).to eq(4)
   end
 
@@ -124,41 +143,192 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
   end
 
-  context "different schemas structure first part differently" do
-    it "extracts the content for travel advice" do
-      message = build(:message, :travel_advice)
-      message.payload["base_path"] = "/travel-advice"
-      message.payload["details"]["summary"] = [
-          "content_type" => "text/html",
-          "content" => 'Summary content'
-      ]
-      subject.process(message)
+  shared_examples 'when unchanged' do
+    it 'does not grow the dimension' do
+      message2 = build :message, payload: message.payload.dup
+      message2.payload['payload_version'] = message.payload['payload_version'] + 1
 
-      item = Dimensions::Item.where(base_path: "/travel-advice", latest: true).first
+      expect { subject.process(message2) }.not_to change(Dimensions::Item, :count)
+    end
+  end
 
-      expect(item.document_text).to eq("Summary content")
+  context "when the content is `travel_advice`" do
+    let(:message) do
+      build :message, :travel_advice,
+        attributes: message_attributes(
+          'base_path' => '/travel-advice',
+          'content_id' => '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+          'document_type' => 'travel_advice'
+        ),
+        summary: 'Summary content'
     end
 
-    it "extracts the content for guide" do
-      message = build(:message, :guide)
-      message.payload["base_path"] = "/guide"
-      message.payload["details"]["parts"] = [
-        {
-          "title" => "Guide 1",
-          "slug" => "/guide",
-          "body" => [
-            {
-              "content_type" => "text/html",
-              "content" => "<h1>Heading 1</h1>"
-            }
-          ]
-        }
-      ]
+    before do
+      create :dimensions_item,
+        base_path: '/travel-advice/part3',
+        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+        locale: 'fr',
+        publishing_api_payload_version: 0
+      allow(GovukError).to receive(:notify)
       subject.process(message)
+    end
 
+    it_behaves_like 'when unchanged'
+
+    it "extracts the Summary" do
+      item = Dimensions::Item.where(base_path: "/travel-advice", latest: true).first
+      expect(item).to have_attributes(expected_attributes(
+                                        base_path: '/travel-advice',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: "Summary content",
+                                        document_type: "travel_advice",
+                                        schema_name: "travel_advice",
+                                        title: "Summary",
+      ))
+    end
+
+    it 'extracts /travel-advice/part1' do
+      item = Dimensions::Item.where(base_path: "/travel-advice/part1", latest: true).first
+
+      expect(item).to have_attributes(expected_attributes(
+                                        base_path: '/travel-advice/part1',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: "Here 1",
+                                        document_type: "travel_advice",
+                                        schema_name: "travel_advice",
+                                        title: "Part 1",
+      ))
+    end
+
+    it 'extracts /travel-advice/part2' do
+      item = Dimensions::Item.where(base_path: "/travel-advice/part2", latest: true).first
+      expect(item).to have_attributes(expected_attributes(
+                                        base_path: '/travel-advice/part2',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: "be 2",
+                                        document_type: "travel_advice",
+                                        schema_name: "travel_advice",
+                                        title: "Part 2",
+      ))
+    end
+
+    it 'deprecates any other items' do
+      query = Dimensions::Item.where(base_path: "/travel-advice/part3")
+      expect(query.count).to eq(1)
+      expect(query.first.latest).to eq(false)
+    end
+
+    it 'does not log any errors' do
+      expect(GovukError).not_to have_received(:notify)
+    end
+  end
+
+  context 'when the content is a `guide`' do
+    let(:message) do
+      build(:message,
+        :with_parts,
+        base_path: '/guide',
+        attributes: message_attributes(
+          'base_path' => '/guide',
+          'content_id' => '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+          'document_type' => 'guide'
+        ))
+    end
+
+    before do
+      create :dimensions_item,
+        base_path: '/guide/part5',
+        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+        locale: 'fr',
+        publishing_api_payload_version: 0,
+        title: 'Part 5'
+      allow(GovukError).to receive(:notify)
+      subject.process(message)
+    end
+
+    it_behaves_like 'when unchanged'
+
+
+    it 'extracts part 1 on the base path' do
       item = Dimensions::Item.where(base_path: "/guide", latest: true).first
+      expect(item).to have_attributes(expected_attributes(
+                                        base_path: '/guide',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: 'Here 1',
+                                        document_type: 'guide',
+                                        schema_name: 'guide',
+                                        title: 'Part 1',
+      ))
+    end
 
-      expect(item.document_text).to eq("Heading 1")
+    it 'extracts part 2 under the base path' do
+      item = Dimensions::Item.where(base_path: '/guide/part2', latest: true).first
+      expect(item).to have_attributes(expected_attributes(
+                                        base_path: '/guide/part2',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: 'be 2',
+                                        document_type: 'guide',
+                                        schema_name: 'guide',
+                                        title: 'Part 2',
+      ))
+    end
+
+    it 'extracts part 3 under the base path' do
+      item = Dimensions::Item.where(base_path: '/guide/part3', latest: true).first
+      expect(item).to have_attributes(expected_attributes(
+                                        base_path: '/guide/part3',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: 'some 3',
+                                        document_type: 'guide',
+                                        schema_name: 'guide',
+                                        title: 'Part 3',
+      ))
+    end
+
+    it 'extracts part 4 under the base path' do
+      item = Dimensions::Item.where(base_path: '/guide/part4', latest: true).first
+      expect(item).to have_attributes(expected_attributes(
+                                        base_path: '/guide/part4',
+                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        document_text: 'content 4.',
+                                        document_type: 'guide',
+                                        schema_name: 'guide',
+                                        title: 'Part 4',
+      ))
+    end
+
+    it 'deprecates any other items' do
+      query = Dimensions::Item.where(base_path: "/guide/part5")
+      expect(query.count).to eq(1)
+      expect(query.first.latest).to eq(false)
+    end
+
+    it 'does not log any errors' do
+      expect(GovukError).not_to have_received(:notify)
+    end
+  end
+
+  describe 'all schemas' do
+    before do
+      allow(GovukError).to receive(:notify)
+    end
+
+    schemas = GovukSchemas::Schema.all(schema_type: 'notification')
+    schemas.each_value do |schema|
+      payload = GovukSchemas::RandomExample.new(schema: schema).payload
+      schema_name = payload.dig('schema_name')
+      if %w{travel_advice guide}.include?(schema_name) && !schema_name.include?('placeholder')
+
+        %w{major minor links republish unpublish}.each do |update_type|
+          it "handles event for: `#{schema_name}` with no errors for a `#{update_type}` update" do
+            message = build(:message, :with_parts, payload: payload, routing_key: "#{schema_name}.#{update_type}")
+
+            subject.process(message)
+
+            expect(GovukError).not_to have_received(:notify)
+          end
+        end
+      end
     end
   end
 end

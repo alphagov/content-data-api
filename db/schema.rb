@@ -64,7 +64,6 @@ ActiveRecord::Schema.define(version: 2018_08_31_101255) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
-    t.json "expanded_links", default: {}
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
     t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
     t.index ["latest"], name: "index_dimensions_items_on_latest"

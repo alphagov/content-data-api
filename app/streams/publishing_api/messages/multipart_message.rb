@@ -1,16 +1,28 @@
 module PublishingAPI
-  class MultipartMessage
+  class Messages::MultipartMessage < SimpleDelegator
+    include Messages::Concerns::MessageValidation
+
+    def initialize(message)
+      super
+
+      @message = message
+    end
+
     def self.is_multipart?(message)
       message.payload.dig('details', 'parts').present?
     end
 
-    def initialize(message)
-      @message = message
+    def handler
+      PublishingAPI::Handlers::MultipartHandler
+    end
+
+    def invalid?
+      mandatory_fields = @message.payload.values_at('base_path', 'schema_name')
+      mandatory_fields.any?(&:nil?)
     end
 
     def parts
-      message_parts = message.payload.dig('details', 'parts')
-
+      message_parts = message.payload.dig('details', 'parts').dup
       if doc_type == 'travel_advice'
         message_parts.prepend(
           'slug' => base_path,
@@ -18,7 +30,6 @@ module PublishingAPI
           'body' => [message.payload.dig('details', 'summary').find { |x| x['content_type'] == "text/html" }]
         )
       end
-
       message_parts
     end
 

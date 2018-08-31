@@ -41,6 +41,20 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(results).to match_array(item1)
     end
 
+    describe '.outdated_subpages' do
+      let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
+      let(:locale) { 'fr' }
+      let!(:outdated_item) { create :dimensions_item, base_path: '/path-1/part-2', locale: locale, content_id: content_id }
+
+      it 'filters out the passed paths' do
+        create :dimensions_item, base_path: '/path-1', locale: locale, content_id: content_id
+        create :dimensions_item, base_path: '/path-1/part-1', locale: locale, content_id: content_id
+        create :dimensions_item, base_path: '/path-1/part-2.fr', locale: locale, content_id: content_id
+        create :dimensions_item, base_path: '/path-1/part-2', locale: 'en', content_id: content_id
+        expect(Dimensions::Item.outdated_subpages(content_id, locale, ['/path-1', '/path-1/part-1']).map(&:base_path)).to eq(['/path-1/part-2.fr'])
+      end
+    end
+
     it '.by_document_type' do
       item1 = create(:dimensions_item, document_type: 'guide')
       create(:dimensions_item, document_type: 'local_transaction')
@@ -145,19 +159,20 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#expanded_links' do
-    let(:item) { build :dimensions_item }
-    context 'when item has raw_json' do
-      it 'returns an empty hash if raw json does not have `expanded_links` field' do
-        expect(item.expanded_links).to eq Hash.new
-      end
+  describe '#change_from?' do
+    let(:attrs) { { base_path: '/base/path' } }
+    let(:item) { create :dimensions_item, base_path: '/base/path' }
+
+    it 'returns true if would be changed by the given attributes' do
+      expect(item.change_from?(attrs.merge(base_path: '/new/base/path'))).to eq(true)
     end
 
-    context 'when item does not have raw_json' do
-      it 'returns empty hash' do
-        item.update_attributes(raw_json: nil)
-        expect(item.expanded_links).to eq Hash.new
-      end
+    it 'returns false if would not be changed by the given attributes' do
+      expect(item.change_from?(attrs)).to eq(false)
+    end
+
+    it 'ignores the raw_json attribute' do
+      expect(item.change_from?(attrs.merge(raw_json: '{}'))).to eq(false)
     end
   end
 end

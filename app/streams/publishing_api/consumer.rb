@@ -1,7 +1,9 @@
 module PublishingAPI
   class Consumer
-    def process(message)
-      if is_invalid_message?(message)
+    def process(rabbit_mq_message)
+      message = MessageFactory.build(rabbit_mq_message)
+
+      if message.invalid?
         message.discard
       else
         do_process(message)
@@ -14,15 +16,24 @@ module PublishingAPI
   private
 
     def do_process(message)
+      return if message.is_old_message?
+
       ActiveRecord::Base.transaction do
-        PublishingAPI::MessageHandler.process(message)
+        handler = message.handler
+
+        handler.process(message)
         message.ack
       end
     end
 
-    def is_invalid_message?(message)
-      mandatory_fields = message.payload.values_at('base_path', 'schema_name')
-      mandatory_fields.any?(&:nil?)
+    class MessageFactory
+      def self.build(rabbitmq_message)
+        if PublishingAPI::Messages::MultipartMessage.is_multipart?(rabbitmq_message)
+          PublishingAPI::Messages::MultipartMessage.new(rabbitmq_message)
+        else
+          PublishingAPI::Messages::SingleItemMessage.new(rabbitmq_message)
+        end
+      end
     end
   end
 end

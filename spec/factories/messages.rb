@@ -11,10 +11,6 @@ FactoryBot.define do
       attributes { {} }
     end
 
-    trait :link_update do
-      routing_key { 'schema.links' }
-    end
-
     delivery_info { OpenStruct.new(routing_key: routing_key) }
 
     payload do
@@ -103,13 +99,16 @@ FactoryBot.define do
     trait :travel_advice do
       schema_name { 'travel_advice' }
       document_type { 'travel_advice' }
+      transient do
+        summary { 'summary content' }
+      end
       payload do
         GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
           result['base_path'] = base_path
           result['payload_version'] = payload_version
           result['details']['summary'] = [
             "content_type" => "text/html",
-            "content" => 'summary content'
+            "content" => summary
           ]
           result['details']['parts'] =
             [

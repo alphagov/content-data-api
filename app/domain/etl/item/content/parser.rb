@@ -15,7 +15,6 @@ class Etl::Item::Content::Parser
     schema = json.dig("schema_name")
     base_path = json.dig("base_path")
     parser = for_schema(schema)
-
     if parser.blank?
       GovukError.notify(InvalidSchemaError.new("Schema does not exist: #{schema}"), extra: { base_path: base_path.to_s })
       nil
@@ -54,6 +53,7 @@ private
       Etl::Item::Content::Parsers::StepByStep,
       Etl::Item::Content::Parsers::Taxon,
       Etl::Item::Content::Parsers::Transaction,
+      Etl::Item::Content::Parsers::TravelAdvice,
       Etl::Item::Content::Parsers::TravelAdviceIndex,
       Etl::Item::Content::Parsers::Unpublished,
       Etl::Item::Content::Parsers::NoContent

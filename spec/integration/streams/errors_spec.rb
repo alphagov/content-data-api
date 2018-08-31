@@ -11,7 +11,7 @@ RSpec.describe PublishingAPI::Consumer do
 
   context 'when an error happens' do
     before {
-      expect(PublishingAPI::MessageHandler).to receive(:process).and_raise(StandardError.new)
+      expect_any_instance_of(PublishingAPI::Messages::SingleItemMessage).to receive(:invalid?).and_raise(StandardError.new)
     }
 
     it "logs the error" do
@@ -29,7 +29,7 @@ RSpec.describe PublishingAPI::Consumer do
 
   context "when message has missing mandatory fields" do
     before {
-      allow(PublishingAPI::MessageHandler).to receive(:process).and_raise(StandardError)
+      allow_any_instance_of(PublishingAPI::Messages::SingleItemMessage).to receive(:invalid?).and_raise(StandardError)
     }
 
     context "missing field is base_path" do

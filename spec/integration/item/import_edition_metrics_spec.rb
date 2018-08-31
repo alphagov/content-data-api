@@ -2,13 +2,7 @@ require 'sidekiq/testing'
 RSpec.describe 'Import edition metrics' do
   include ItemSetupHelpers
 
-  subject { PublishingAPI::MessageHandler }
-
-  around do |example|
-    Sidekiq::Testing.inline! do
-      example.run
-    end
-  end
+  subject { PublishingAPI::Consumer.new }
 
   it 'stores content item metrics' do
     message = build(:message, schema_name: 'publication', base_path: '/new-path')
@@ -21,7 +15,6 @@ RSpec.describe 'Import edition metrics' do
     subject.process(message)
 
     item = Dimensions::Item.first
-
     expect(item.facts_edition).to have_attributes(
       number_of_pdfs: 1,
       number_of_word_files: 1,
@@ -59,29 +52,6 @@ RSpec.describe 'Import edition metrics' do
     subject.process(message)
 
     expect(find_latest_edition('/same-content')).to have_attributes(existing_quality_metrics)
-  end
-
-  it 'clones the existing edition if the content is nil on old and new items' do
-    create_edition(
-      base_path: '/empty-content',
-      date: Date.today,
-      item: {
-        document_text: nil,
-        publishing_api_payload_version: 1,
-        latest: true
-      },
-      edition: existing_quality_metrics
-    )
-
-    message = build(:message,
-      schema_name: 'publication',
-      base_path: '/empty-content',
-      payload_version: 2)
-    message.payload['details']['body'] = nil
-
-    subject.process(message)
-
-    expect(find_latest_edition('/empty-content')).to have_attributes(existing_quality_metrics)
   end
 
   def find_latest_edition(base_path)

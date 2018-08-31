@@ -1,35 +1,21 @@
-require 'odyssey'
-class Etl::Item::Processor
-  attr_reader :new_item, :old_item, :dimensions_date
-
-  def self.run(new_item, old_item, date)
-    new(new_item: new_item, old_item: old_item, date: date).run
+class Etl::Edition::Processor
+  def self.process(*args)
+    new(*args).process
   end
 
-  def initialize(new_item:, old_item:, date:)
-    @new_item = new_item
-    @old_item = old_item
+  def initialize(old_item, new_item, date = Date.today)
     @dimensions_date = Dimensions::Date.for(date)
+    @old_item = old_item
+    @new_item = new_item
   end
 
-  def run
-    if content_changed?
-      create_new_edition
-    else
-      clone_existing_edition
-    end
-  end
-
-  def content_changed?
-    return true unless old_item
-    old_item.try(:document_text) != new_item.try(:document_text)
+  def process
+    create_new_edition
   end
 
 private
 
-  def clone_existing_edition
-    old_item.facts_edition.clone_for!(new_item, dimensions_date)
-  end
+  attr_reader :dimensions_date, :new_item
 
   def create_new_edition
     Facts::Edition.create!(
