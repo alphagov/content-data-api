@@ -30,7 +30,7 @@ class Dimensions::Item < ApplicationRecord
     update!(latest: false)
   end
 
-  def updated_by?(attributes)
+  def change_from?(attributes)
     assign_attributes(attributes.reject { |k, _| k == :raw_json })
     dirty = changed?
     reload

@@ -26,7 +26,7 @@ class PublishingAPI::Handlers::BaseHandler
 
   def update_required?(old_item:, base_path:, title:, document_text:)
     return true unless old_item
-    old_item.updated_by?(comparable_attributes(base_path, title, document_text))
+    old_item.change_from?(comparable_attributes(base_path, title, document_text))
   end
 
   def base_path

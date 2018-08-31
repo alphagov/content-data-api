@@ -159,20 +159,20 @@ RSpec.describe Dimensions::Item, type: :model do
     end
   end
 
-  describe '#updated_by?' do
+  describe '#change_from?' do
     let(:attrs) { { base_path: '/base/path' } }
     let(:item) { create :dimensions_item, base_path: '/base/path' }
 
     it 'returns true if would be changed by the given attributes' do
-      expect(item.updated_by?(attrs.merge(base_path: '/new/base/path'))).to eq(true)
+      expect(item.change_from?(attrs.merge(base_path: '/new/base/path'))).to eq(true)
     end
 
     it 'returns false if would not be changed by the given attributes' do
-      expect(item.updated_by?(attrs)).to eq(false)
+      expect(item.change_from?(attrs)).to eq(false)
     end
 
     it 'ignores the raw_json attribute' do
-      expect(item.updated_by?(attrs.merge(raw_json: '{}'))).to eq(false)
+      expect(item.change_from?(attrs.merge(raw_json: '{}'))).to eq(false)
     end
   end
 end
