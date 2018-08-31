@@ -24,6 +24,12 @@ class Reports::FindSeries
     self
   end
 
+  def by_metrics(metrics)
+    @metric_names = metrics
+
+    self
+  end
+
   def content_items
     slice_content_items
   end
@@ -32,10 +38,16 @@ class Reports::FindSeries
     dates = slice_dates
     items = slice_content_items
 
-    metrics = Facts::Metric.all.with_edition_metrics
-    metrics
-      .joins(:dimensions_item).merge(items)
+    metrics = Facts::Metric.all
+    metrics = metrics
+      .joins(dimensions_item: :facts_edition).merge(items)
       .joins(:dimensions_date).merge(dates)
+
+    if @metric_names
+      @metric_names.map { |metric_name| Reports::Series.new(metric_name, metrics) }
+    else
+      metrics
+    end
   end
 
 private

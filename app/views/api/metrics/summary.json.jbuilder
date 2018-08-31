@@ -1,4 +1,6 @@
-json.set! @api_request.metrics.first do
-  json.total @series.values.sum
-  json.latest @series.values.last
+@series.each do |series|
+  json.set! series.metric_name do
+    json.total series.total
+    json.latest series.latest
+  end
 end

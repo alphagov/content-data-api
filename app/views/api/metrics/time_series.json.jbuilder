@@ -1,6 +1,8 @@
-json.set! @api_request.metrics.first do
-  json.array! @series do |date, value|
-    json.date date
-    json.value value
+@series.each do |series|
+  json.set! series.metric_name do
+    json.array! series.values_by_date do |value|
+      json.date value.keys.first
+      json.value value.values.first
+    end
   end
 end
