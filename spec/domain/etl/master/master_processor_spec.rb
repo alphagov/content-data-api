@@ -52,16 +52,44 @@ RSpec.describe Etl::Master::MasterProcessor do
   end
 
   describe 'Monitoring' do
-    it 'monitors ETL processes' do
-      expect(Monitor::Etl).to receive(:run)
+    context 'the day before' do
+      it 'monitors ETL processes' do
+        expect(Monitor::Etl).to receive(:run)
 
-      subject.process
+        subject.process
+      end
+
+      it 'monitor Item Dimensions' do
+        expect(Monitor::Dimensions).to receive(:run)
+
+        subject.process
+      end
+
+      it 'monitor Facts' do
+        expect(Monitor::Facts).to receive(:run)
+
+        subject.process
+      end
     end
 
-    it 'does not add ETL stats if not the day before' do
-      expect(Monitor::Etl).to_not receive(:run)
+    context 'not the day before' do
+      it 'does not add ETL stats if not the day before' do
+        expect(Monitor::Etl).to_not receive(:run)
 
-      subject.process(date: Date.today)
+        subject.process(date: Date.today)
+      end
+
+      it 'does not add Dimension stats if not the day before' do
+        expect(Monitor::Dimensions).to_not receive(:run)
+
+        subject.process(date: Date.today)
+      end
+
+      it 'does not add Facts stats if not the day before' do
+        expect(Monitor::Facts).to_not receive(:run)
+
+        subject.process(date: Date.today)
+      end
     end
   end
 

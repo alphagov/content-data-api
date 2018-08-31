@@ -4,14 +4,13 @@ class Monitor::Etl
   end
 
   def run
-    count_metrics!
-    count_daily_metrics!
-    count_edition_metrics!
+    statsd_for_performance_metrics!
+    statsd_for_edition_metrics!
   end
 
 private
 
-  def count_edition_metrics!
+  def statsd_for_edition_metrics!
     Metric.edition_metrics.map(&:name).each do |edition_metric|
       path = path_for_edition_metric(edition_metric)
 
@@ -19,18 +18,12 @@ private
     end
   end
 
-  def count_daily_metrics!
+  def statsd_for_performance_metrics!
     Metric.daily_metrics.map(&:name).each do |daily_metric|
       path = path_for_daily_metric(daily_metric)
 
       GovukStatsd.count(path, metrics.sum(daily_metric))
     end
-  end
-
-  def count_metrics!
-    path = "monitor.etl.facts_metrics"
-
-    GovukStatsd.count(path, metrics.count)
   end
 
   def path_for_edition_metric(edition_metric)

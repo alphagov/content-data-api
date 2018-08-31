@@ -63,6 +63,13 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(results).to match_array([item1])
     end
 
+    it '.latest' do
+      item1 = create :dimensions_item, latest: true
+      _item2 = create :dimensions_item, latest: false
+
+      expect(subject.latest).to match_array([item1])
+    end
+
     describe '.existing_latest_items' do
       let(:content_id_1) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:content_id_2) { 'aaaaaaaa-0c34-4942-9111-2331e12cb1c5' }

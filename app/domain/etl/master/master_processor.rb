@@ -21,7 +21,11 @@ class Etl::Master::MasterProcessor
     end
 
     time(process: :monitor) do
-      Monitor::Etl.run unless historic_data?
+      unless historic_data?
+        Monitor::Etl.run
+        Monitor::Dimensions.run
+        Monitor::Facts.run
+      end
     end
   end
 
