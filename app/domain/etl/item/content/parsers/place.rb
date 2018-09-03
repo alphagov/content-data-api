@@ -7,6 +7,6 @@ class Etl::Item::Content::Parsers::Place
   end
 
   def schemas
-    ['place']
+    %w[place]
   end
 end

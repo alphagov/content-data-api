@@ -62,8 +62,7 @@ class PublishingAPI::Handlers::BaseHandler
     )
   end
 
-  def excluded_from_comparison?(key, _)
+  def excluded_from_comparison?(key, _value)
     %i[publishing_api_payload_version public_updated_at id update_at created_at latest].include? key
   end
-  # rubocop:enable Metrics/BlockLength
 end

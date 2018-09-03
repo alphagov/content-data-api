@@ -15,6 +15,6 @@ class Etl::Item::Content::Parsers::ServiceSignIn
   end
 
   def schemas
-    ['service_sign_in']
+    %w[service_sign_in]
   end
 end

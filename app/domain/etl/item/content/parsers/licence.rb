@@ -12,6 +12,6 @@ class Etl::Item::Content::Parsers::Licence
   end
 
   def schemas
-    ['licence']
+    %w[licence]
   end
 end

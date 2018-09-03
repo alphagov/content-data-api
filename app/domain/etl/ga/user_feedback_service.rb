@@ -44,7 +44,7 @@ private
   end
 
   def fetch_data(date:)
-    @data ||= client.fetch_all(items: :data) do |page_token, service|
+    @fetch_data ||= client.fetch_all(items: :data) do |page_token, service|
       service
         .batch_get_reports(
           Google::Apis::AnalyticsreportingV4::GetReportsRequest.new(

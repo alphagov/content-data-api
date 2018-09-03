@@ -16,6 +16,6 @@ class Etl::Item::Content::Parsers::ServiceManualHomepage
   end
 
   def schemas
-    ['service_manual_homepage']
+    %w[service_manual_homepage]
   end
 end

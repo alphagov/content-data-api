@@ -4,7 +4,7 @@ class Metric
   attr_accessor :description, :name, :source
 
   def self.find_all
-    @all_metrics ||= (daily_metrics + edition_metrics).sort
+    @find_all ||= (daily_metrics + edition_metrics).sort
   end
 
   def self.is_edition_metric?(metric_name)

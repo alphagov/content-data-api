@@ -13,6 +13,6 @@ class Etl::Item::Content::Parsers::Taxon
   end
 
   def schemas
-    ['taxon']
+    %w[taxon]
   end
 end

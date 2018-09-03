@@ -12,6 +12,6 @@ class Etl::Item::Content::Parsers::FinderEmailSignup
   end
 
   def schemas
-    ['finder_email_signup']
+    %w[finder_email_signup]
   end
 end

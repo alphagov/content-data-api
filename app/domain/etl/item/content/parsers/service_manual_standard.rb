@@ -14,6 +14,6 @@ class Etl::Item::Content::Parsers::ServiceManualStandard
   end
 
   def schemas
-    ['service_manual_service_standard']
+    %w[service_manual_service_standard]
   end
 end

@@ -1,4 +1,3 @@
-
 RSpec.describe Dimensions::Date, type: :model do
   let(:date) { ::Date.new(2017, 12, 21) }
   it { is_expected.to validate_presence_of(:date) }

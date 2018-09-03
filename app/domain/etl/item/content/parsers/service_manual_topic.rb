@@ -13,6 +13,6 @@ class Etl::Item::Content::Parsers::ServiceManualTopic
   end
 
   def schemas
-    ['service_manual_topic']
+    %w[service_manual_topic]
   end
 end

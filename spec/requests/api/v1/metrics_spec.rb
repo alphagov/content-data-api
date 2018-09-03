@@ -101,7 +101,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       expected_error_response = {
         "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#unknown-parameter",
         "title" => "One or more parameter names are invalid",
-        "invalid_params" => ["extra"]
+        "invalid_params" => %w[extra]
       }
 
       expect(json).to eq(expected_error_response)
