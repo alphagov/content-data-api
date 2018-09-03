@@ -4,8 +4,8 @@ module PublishingAPI
       super
     end
 
-    def self.is_multipart?(message)
-      message.payload.dig('details', 'parts').present?
+    def self.is_multipart?(payload)
+      payload.dig('details', 'parts').present?
     end
 
     def handler

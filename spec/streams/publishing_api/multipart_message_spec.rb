@@ -3,11 +3,11 @@ RSpec.describe PublishingAPI::Messages::MultipartMessage do
 
   describe ".is_multipart?" do
     it "returns true if message is for multipart item" do
-      expect(subject.is_multipart?(build(:message, :with_parts))).to be(true)
+      expect(subject.is_multipart?(build(:message, :with_parts).payload)).to be(true)
     end
 
     it "returns false if message is for single part item" do
-      expect(subject.is_multipart?(build(:message))).to be(false)
+      expect(subject.is_multipart?(build(:message).payload)).to be(false)
     end
   end
 
