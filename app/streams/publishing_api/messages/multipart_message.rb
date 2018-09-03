@@ -1,11 +1,7 @@
 module PublishingAPI
-  class Messages::MultipartMessage < SimpleDelegator
-    include Messages::Concerns::MessageValidation
-
-    def initialize(message)
+  class Messages::MultipartMessage < Messages::BaseMessage
+    def initialize(payload)
       super
-
-      @message = message
     end
 
     def self.is_multipart?(message)
@@ -17,17 +13,17 @@ module PublishingAPI
     end
 
     def invalid?
-      mandatory_fields = @message.payload.values_at('base_path', 'schema_name')
+      mandatory_fields = @payload.values_at('base_path', 'schema_name')
       mandatory_fields.any?(&:nil?)
     end
 
     def parts
-      message_parts = message.payload.dig('details', 'parts').dup
+      message_parts = @payload.dig('details', 'parts').dup
       if doc_type == 'travel_advice'
         message_parts.prepend(
           'slug' => base_path,
           'title' => 'Summary',
-          'body' => [message.payload.dig('details', 'summary').find { |x| x['content_type'] == "text/html" }]
+          'body' => [@payload.dig('details', 'summary').find { |x| x['content_type'] == "text/html" }]
         )
       end
       message_parts
@@ -44,16 +40,14 @@ module PublishingAPI
       "#{base_path}/#{slug}"
     end
 
-  private
-
-    attr_reader :message, :message_parts
+    attr_reader :payload, :message_parts
 
     def doc_type
-      message.payload.fetch('document_type')
+      @payload.fetch('document_type')
     end
 
     def base_path
-      message.payload.fetch('base_path')
+      @payload.fetch('base_path')
     end
   end
 end

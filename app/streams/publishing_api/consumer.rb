@@ -1,37 +1,36 @@
 module PublishingAPI
   class Consumer
-    def process(rabbit_mq_message)
-      message = MessageFactory.build(rabbit_mq_message)
+    def process(rabbitmq_message)
+      message = MessageFactory.build(rabbitmq_message)
 
-      if message.invalid?
-        message.discard
-      else
-        do_process(message)
-      end
+      do_process(message)
+
+      rabbitmq_message.ack
     rescue StandardError => e
       GovukError.notify(e)
-      message.discard
+      rabbitmq_message.discard
     end
 
   private
 
     def do_process(message)
-      return if message.is_old_message?
+      return if message.invalid? || message.is_old_message?
 
       ActiveRecord::Base.transaction do
         handler = message.handler
 
         handler.process(message)
-        message.ack
       end
     end
 
     class MessageFactory
       def self.build(rabbitmq_message)
+        payload = rabbitmq_message.payload
+
         if PublishingAPI::Messages::MultipartMessage.is_multipart?(rabbitmq_message)
-          PublishingAPI::Messages::MultipartMessage.new(rabbitmq_message)
+          PublishingAPI::Messages::MultipartMessage.new(payload)
         else
-          PublishingAPI::Messages::SingleItemMessage.new(rabbitmq_message)
+          PublishingAPI::Messages::SingleItemMessage.new(payload)
         end
       end
     end
