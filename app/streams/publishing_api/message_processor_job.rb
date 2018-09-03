@@ -1,6 +1,6 @@
 module PublishingAPI
-  class MessageProcessorJob
-    def self.perform_later(payload)
+  class MessageProcessorJob < ActiveJob::Base
+    def perform(payload)
       message = Messages::Factory.build(payload)
       return if message.invalid? || message.is_old_message?
 
