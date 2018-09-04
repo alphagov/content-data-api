@@ -3,16 +3,16 @@ RSpec.describe PublishingAPI::Messages::MultipartMessage do
 
   describe ".is_multipart?" do
     it "returns true if message is for multipart item" do
-      expect(subject.is_multipart?(build(:message, :with_parts))).to be(true)
+      expect(subject.is_multipart?(build(:message, :with_parts).payload)).to be(true)
     end
 
     it "returns false if message is for single part item" do
-      expect(subject.is_multipart?(build(:message))).to be(false)
+      expect(subject.is_multipart?(build(:message).payload)).to be(false)
     end
   end
 
   describe "#parts" do
-    let(:parts) { subject.new(build(:message, :with_parts)).parts }
+    let(:parts) { subject.new(build(:message, :with_parts).payload).parts }
 
     it "returns parts for multipart content" do
       expect(parts.size).to eq(4)
@@ -37,7 +37,7 @@ RSpec.describe PublishingAPI::Messages::MultipartMessage do
           ]
         }
 
-      title = subject.new(build(:message)).title_for(part)
+      title = subject.new(build(:message).payload).title_for(part)
 
       expect(title).to eq("Title for part")
     end
@@ -57,7 +57,7 @@ RSpec.describe PublishingAPI::Messages::MultipartMessage do
           ]
         }
 
-      base_path = subject.new(build(:message, :with_parts)).base_path_for_part(part_zero, 0)
+      base_path = subject.new(build(:message, :with_parts).payload).base_path_for_part(part_zero, 0)
 
       expect(base_path).to eq("/base-path")
     end
@@ -75,14 +75,14 @@ RSpec.describe PublishingAPI::Messages::MultipartMessage do
           ]
         }
 
-      base_path = subject.new(build(:message, :with_parts)).base_path_for_part(part_one, 1)
+      base_path = subject.new(build(:message, :with_parts).payload).base_path_for_part(part_one, 1)
 
       expect(base_path).to eq("/base-path/part-1")
     end
   end
 
   context "Travel Advice" do
-    let(:instance) { subject.new(build(:message, :travel_advice)) }
+    let(:instance) { subject.new(build(:message, :travel_advice).payload) }
 
     it "returns base_path for first part" do
       expect(instance.parts[0]["slug"]).to eq("/base-path")

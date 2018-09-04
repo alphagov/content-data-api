@@ -1,11 +1,7 @@
 module PublishingAPI
-  class Messages::SingleItemMessage < SimpleDelegator
-    include Messages::Concerns::MessageValidation
-
-    def initialize(message)
+  class Messages::SingleItemMessage < Messages::BaseMessage
+    def initialize(payload)
       super
-
-      @message = message
     end
 
     def handler
@@ -13,7 +9,7 @@ module PublishingAPI
     end
 
     def invalid?
-      mandatory_fields = @message.payload.values_at('base_path', 'schema_name')
+      mandatory_fields = @payload.values_at('base_path', 'schema_name')
       mandatory_fields.any?(&:nil?)
     end
   end

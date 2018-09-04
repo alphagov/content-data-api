@@ -1,13 +1,9 @@
 module PublishingAPI
   class Consumer
-    def process(rabbit_mq_message)
-      message = MessageFactory.build(rabbit_mq_message)
+    def process(message)
+      MessageProcessorJob.perform_later(message.payload) if valid_routing_key?(message)
 
-      if message.invalid?
-        message.discard
-      else
-        do_process(message)
-      end
+      message.ack
     rescue StandardError => e
       GovukError.notify(e)
       message.discard
@@ -15,25 +11,12 @@ module PublishingAPI
 
   private
 
-    def do_process(message)
-      return if message.is_old_message?
+    def valid_routing_key?(message)
+      routing_key = message.delivery_info.routing_key
 
-      ActiveRecord::Base.transaction do
-        handler = message.handler
-
-        handler.process(message)
-        message.ack
-      end
+      ROUTING_KEYS.any? { |suffix| routing_key.ends_with?(suffix) }
     end
 
-    class MessageFactory
-      def self.build(rabbitmq_message)
-        if PublishingAPI::Messages::MultipartMessage.is_multipart?(rabbitmq_message)
-          PublishingAPI::Messages::MultipartMessage.new(rabbitmq_message)
-        else
-          PublishingAPI::Messages::SingleItemMessage.new(rabbitmq_message)
-        end
-      end
-    end
+    ROUTING_KEYS = %w(links major minor unpublish bulk.data-warehouse).freeze
   end
 end
