@@ -156,16 +156,13 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     describe "Summary information" do
-      it 'returns sums and latest values' do
+      it 'returns sums for each metric' do
         get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['feedex_comments'] }
 
         json = JSON.parse(response.body)
 
         expected_response = {
-          feedex_comments: {
-            total: 60,
-            latest: 30
-          }
+          feedex_comments: 60
         }
         expect(json.deep_symbolize_keys).to eq(expected_response)
       end
