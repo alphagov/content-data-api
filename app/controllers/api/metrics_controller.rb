@@ -9,6 +9,7 @@ class Api::MetricsController < Api::BaseController
   def summary
     @series = query_series
     @api_request = api_request
+    @metadata = metadata
   end
 
   def index
@@ -29,6 +30,10 @@ private
   def format_base_path_param
     #  add '/' as param is received without leading forward slash which is needed to query by base_path.
     "/#{base_path}"
+  end
+
+  def metadata
+    Dimensions::Item.latest_by_base_path(format_base_path_param).first.metadata
   end
 
   delegate :from, :to, :base_path, :metrics, to: :api_request
