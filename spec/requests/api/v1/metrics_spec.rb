@@ -110,11 +110,11 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
   describe 'Daily metrics' do
     before do
-      create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, feedex_comments: 10, is_this_useful_yes: 10, is_this_useful_no: 20
-      create :metric, dimensions_item: item_fr, dimensions_date: day2, pageviews: 100, feedex_comments: 200, is_this_useful_yes: 10, is_this_useful_no: 20
-      create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, feedex_comments: 20, is_this_useful_yes: 10, is_this_useful_no: 20
-      create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, feedex_comments: 30, is_this_useful_yes: 10, is_this_useful_no: 20
-      create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, feedex_comments: 40, is_this_useful_yes: 10, is_this_useful_no: 20
+      create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, feedex_comments: 10, is_this_useful_yes: 10, is_this_useful_no: 30
+      create :metric, dimensions_item: item_fr, dimensions_date: day2, pageviews: 100, feedex_comments: 200, is_this_useful_yes: 10, is_this_useful_no: 30
+      create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, feedex_comments: 20, is_this_useful_yes: 10, is_this_useful_no: 30
+      create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, feedex_comments: 30, is_this_useful_yes: 10, is_this_useful_no: 30
+      create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, feedex_comments: 40, is_this_useful_yes: 10, is_this_useful_no: 30
       create :facts_edition, dimensions_item: item, dimensions_date: day1
     end
 
@@ -130,16 +130,16 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       satisfaction_score = {
         satisfaction_score: [
           {
-              date: "2018-01-13",
-              value: 0.333333333333333
+            date: "2018-01-13",
+            value: 0.25
           },
           {
-              date: "2018-01-14",
-              value: 0.333333333333333
+            date: "2018-01-14",
+            value: 0.25
           },
           {
-              date: "2018-01-15",
-              value: 0.333333333333333
+            date: "2018-01-15",
+            value: 0.25
           }
         ]
       }
