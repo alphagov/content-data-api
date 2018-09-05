@@ -162,10 +162,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
         json = JSON.parse(response.body)
 
         expected_response = {
-          feedex_comments: {
-            total: 60,
-            latest: 30
-          }
+          feedex_comments: 60
         }
         expect(json.deep_symbolize_keys).to eq(expected_response)
       end
