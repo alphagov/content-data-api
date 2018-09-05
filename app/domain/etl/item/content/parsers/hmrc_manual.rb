@@ -20,6 +20,6 @@ class Etl::Item::Content::Parsers::HmrcManual
   end
 
   def schemas
-    ['hmrc_manual']
+    %w[hmrc_manual]
   end
 end

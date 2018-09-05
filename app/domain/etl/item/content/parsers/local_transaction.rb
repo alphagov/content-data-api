@@ -8,6 +8,6 @@ class Etl::Item::Content::Parsers::LocalTransaction
   end
 
   def schemas
-    ['local_transaction']
+    %w[local_transaction]
   end
 end

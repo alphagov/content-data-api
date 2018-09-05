@@ -52,7 +52,7 @@ group :development, :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
-  gem 'govuk-lint', '3.8.0'
+  gem 'govuk-lint', '3.9.0'
   gem 'govuk_schemas', '3.2.0'
   gem 'guard-rspec', require: false
   gem 'listen'

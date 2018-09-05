@@ -13,6 +13,6 @@ class Etl::Item::Content::Parsers::Finder
   end
 
   def schemas
-    ['finder']
+    %w[finder]
   end
 end

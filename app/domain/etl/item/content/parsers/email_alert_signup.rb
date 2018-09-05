@@ -12,6 +12,6 @@ class Etl::Item::Content::Parsers::EmailAlertSignup
   end
 
   def schemas
-    ['email_alert_signup']
+    %w[email_alert_signup]
   end
 end

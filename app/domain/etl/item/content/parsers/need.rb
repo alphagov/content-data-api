@@ -8,6 +8,6 @@ class Etl::Item::Content::Parsers::Need
   end
 
   def schemas
-    ['need']
+    %w[need]
   end
 end

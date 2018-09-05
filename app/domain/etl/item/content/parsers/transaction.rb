@@ -9,6 +9,6 @@ class Etl::Item::Content::Parsers::Transaction
   end
 
   def schemas
-    ['transaction']
+    %w[transaction]
   end
 end

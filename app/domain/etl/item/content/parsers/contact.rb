@@ -9,7 +9,7 @@ class Etl::Item::Content::Parsers::Contact
   end
 
   def schemas
-    ['contact']
+    %w[contact]
   end
 
 private

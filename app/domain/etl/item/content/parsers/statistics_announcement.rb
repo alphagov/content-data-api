@@ -8,6 +8,6 @@ class Etl::Item::Content::Parsers::StatisticsAnnouncement
   end
 
   def schemas
-    ['statistics_announcement']
+    %w[statistics_announcement]
   end
 end

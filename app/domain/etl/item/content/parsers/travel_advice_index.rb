@@ -11,6 +11,6 @@ class Etl::Item::Content::Parsers::TravelAdviceIndex
   end
 
   def schemas
-    ['travel_advice_index']
+    %w[travel_advice_index]
   end
 end

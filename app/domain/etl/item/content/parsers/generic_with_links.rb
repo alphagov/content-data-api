@@ -11,6 +11,6 @@ class Etl::Item::Content::Parsers::GenericWithLinks
   end
 
   def schemas
-    ['generic_with_external_related_links']
+    %w[generic_with_external_related_links]
   end
 end
