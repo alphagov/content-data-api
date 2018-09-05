@@ -10,7 +10,17 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   let!(:content_id) { SecureRandom.uuid }
   let!(:base_path) { '/base_path' }
 
-  let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path, locale: 'en' }
+  let!(:item) do
+    create :dimensions_item,
+      content_id: content_id,
+      title: 'the title',
+      base_path: base_path,
+      document_type: 'guide',
+      locale: 'en',
+      publishing_app: 'whitehall',
+      first_published_at: '2018-02-01',
+      public_updated_at: '2018-04-25'
+  end
   let!(:item_fr) { create :dimensions_item, content_id: content_id, locale: 'de' }
 
   describe "an API response" do
@@ -156,15 +166,29 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     describe "Summary information" do
-      it 'returns sums for each metric' do
+      it 'returns the sum of feedex comments' do
         get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['feedex_comments'] }
 
         json = JSON.parse(response.body)
 
-        expected_response = {
+        expect(json.deep_symbolize_keys).to include(
           feedex_comments: 60
-        }
-        expect(json.deep_symbolize_keys).to eq(expected_response)
+        )
+      end
+
+      it 'returns the metadata from the latest item' do
+        get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['feedex_comments'] }
+
+        json = JSON.parse(response.body)
+
+        expect(json.deep_symbolize_keys).to include(
+          title: 'the title',
+          base_path: base_path,
+          document_type: 'guide',
+          publishing_app: 'whitehall',
+          first_published_at: '2018-02-01T00:00:00.000Z',
+          public_updated_at: '2018-04-25T00:00:00.000Z'
+        )
       end
     end
 
