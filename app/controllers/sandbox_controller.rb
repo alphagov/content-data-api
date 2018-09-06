@@ -20,7 +20,7 @@ class SandboxController < ApplicationController
 private
 
   def build_series_report
-    Reports::Series.new
+    Reports::FindSeries.new
       .between(from: from, to: to)
       .by_base_path(base_path)
       .by_organisation_id(organisation)

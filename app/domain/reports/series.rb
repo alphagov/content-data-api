@@ -1,57 +1,25 @@
 class Reports::Series
-  def between(from:, to:)
-    @from = from
-    @to = to
+  attr_reader :metric_name, :all_metrics, :values_by_date
 
-    self
+  def initialize(metric_name, all_metrics)
+    @metric_name = metric_name
+    @all_metrics = all_metrics
+    @values_by_date = set_values
   end
 
-  def by_organisation_id(org_id)
-    @org_id = org_id
-
-    self
+  def set_values
+    all_metrics.map do |metric|
+      key = metric.dimensions_date_id.to_s
+      value = Metric.is_edition_metric?(metric_name) ? metric.facts_edition.send(metric_name) : metric.send(metric_name)
+      { key => value }
+    end
   end
 
-  def by_document_type(document_type)
-    @document_type = document_type
-
-    self
+  def total
+    values_by_date.reduce(0) { |memo, value_by_date| memo + value_by_date.values.first }
   end
 
-  def by_base_path(base_path)
-    @base_path = base_path
-
-    self
-  end
-
-  def content_items
-    slice_content_items
-  end
-
-  def run
-    dates = slice_dates
-    items = slice_content_items
-
-    metrics = Facts::Metric.all.with_edition_metrics
-    metrics
-      .joins(:dimensions_item).merge(items)
-      .joins(:dimensions_date).merge(dates)
-  end
-
-private
-
-  def slice_dates
-    dates = Dimensions::Date.all
-    dates = dates.between(@from, @to) if @from && @to
-    dates
-  end
-
-  def slice_content_items
-    items = Dimensions::Item.all
-    items = items.by_locale('en')
-    items = items.by_organisation_id(@org_id) unless @org_id.blank?
-    items = items.by_base_path(@base_path) unless @base_path.blank?
-    items = items.by_document_type(@document_type) unless @document_type.blank?
-    items
+  def latest
+    values_by_date.last.values.first
   end
 end

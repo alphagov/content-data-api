@@ -22,21 +22,21 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   end
 
   it 'returns the `number of pdfs` between two dates' do
-    get "/api/v1/metrics/number_of_pdfs/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+    get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['number_of_pdfs'] }
 
     json = JSON.parse(response.body)
     expect(json.deep_symbolize_keys).to eq(api_reponse('number_of_pdfs'))
   end
 
   it 'returns the `number of word documents` between two dates' do
-    get "/api/v1/metrics/number_of_word_files/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+    get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['number_of_word_files'] }
 
     json = JSON.parse(response.body)
     expect(json.deep_symbolize_keys).to eq(api_reponse('number_of_word_files'))
   end
 
   it 'returns the `readability score` between two dates' do
-    get "/api/v1/metrics/readability_score/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15' }
+    get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['readability_score'] }
 
     json = JSON.parse(response.body)
     expect(json.deep_symbolize_keys).to eq(
