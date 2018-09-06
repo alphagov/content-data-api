@@ -9,6 +9,7 @@ class Api::MetricsController < Api::BaseController
   def summary
     @series = query_series
     @api_request = api_request
+    @metadata = metadata
   end
 
   def index
@@ -19,20 +20,11 @@ class Api::MetricsController < Api::BaseController
 private
 
   def query_series
-    series = Reports::Series.new
-               .between(from: from, to: to)
-               .by_base_path(format_base_path_param)
-               .run
-    if Metric.is_edition_metric?(metric)
-      series
-        .with_edition_metrics
-        .order('dimensions_dates.date asc')
-        .pluck(:date, "facts_editions.#{metric}").to_h
-    else
-      series
-        .order('dimensions_dates.date asc')
-        .pluck(:date, metric).to_h
-    end
+    Reports::FindSeries.new
+       .between(from: from, to: to)
+       .by_base_path(format_base_path_param)
+       .by_metrics(params[:metrics])
+       .run
   end
 
   def format_base_path_param
@@ -40,10 +32,14 @@ private
     "/#{base_path}"
   end
 
-  delegate :from, :to, :metric, :base_path, to: :api_request
+  def metadata
+    Dimensions::Item.latest_by_base_path(format_base_path_param).first.metadata
+  end
+
+  delegate :from, :to, :base_path, :metrics, to: :api_request
 
   def api_request
-    @api_request ||= Api::Request.new(params.permit(:from, :to, :metric, :base_path, :format))
+    @api_request ||= Api::Request.new(params.permit(:from, :to, :metric, :base_path, :format, metrics: []))
   end
 
   def validate_params!

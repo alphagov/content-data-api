@@ -37,4 +37,15 @@ class Dimensions::Item < ApplicationRecord
     reload
     dirty
   end
+
+  def metadata
+    {
+      title: title,
+      base_path: base_path,
+      first_published_at: first_published_at,
+      public_updated_at: public_updated_at,
+      publishing_app: publishing_app,
+      document_type: document_type
+    }
+  end
 end
