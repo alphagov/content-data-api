@@ -54,7 +54,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
   describe "invalid requests" do
     it 'returns an error for metrics not on the whitelist' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['number_of_puns'] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[number_of_puns] }
 
       expect(response.status).to eq(400)
 
@@ -70,7 +70,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for badly formatted dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: 'today', to: '2018-01-15', metrics: ['pageviews'] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: 'today', to: '2018-01-15', metrics: %w[pageviews] }
 
       expect(response.status).to eq(400)
 
@@ -86,7 +86,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for bad date ranges' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-16', to: '2018-01-15', metrics: ['pageviews'] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-16', to: '2018-01-15', metrics: %w[pageviews] }
 
       expect(response.status).to eq(400)
 
@@ -102,7 +102,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for unknown parameters' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla", metrics: ['pageviews'] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla", metrics: %w[pageviews] }
 
       expect(response.status).to eq(400)
 
@@ -129,14 +129,14 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns `pageviews` values between two dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['pageviews'] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[pageviews] }
 
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json).to eq(build_time_series_response('pageviews'))
     end
 
     it 'returns `satisfaction_score` values between two dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['satisfaction_score'] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[satisfaction_score] }
       satisfaction_score = {
         satisfaction_score: [
           {
@@ -159,7 +159,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns `feedex issues` between two dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['feedex_comments'] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
 
       json = JSON.parse(response.body)
       expect(json.deep_symbolize_keys).to eq(build_time_series_response('feedex_comments'))
@@ -167,7 +167,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
     describe "Summary information" do
       it 'returns the sum of feedex comments' do
-        get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['feedex_comments'] }
+        get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
 
         json = JSON.parse(response.body)
 
@@ -177,7 +177,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       end
 
       it 'returns the metadata from the latest item' do
-        get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: ['feedex_comments'] }
+        get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
 
         json = JSON.parse(response.body)
 
