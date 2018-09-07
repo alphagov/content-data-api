@@ -11,7 +11,8 @@ class Api::Request
   validates :to, presence: true, format: { with: DATE_REGEX, message: "Dates should use the format YYYY-MM-DD" }
   validates :base_path, presence: true
   validate :from_before_to, if: :have_a_date_range?
-  validate :verify_metrics
+  validates :metrics, presence: true
+  validate :verify_metrics, if: [Proc.new { metrics.present? }]
 
   def initialize(params)
     @metrics = params[:metrics]
@@ -34,6 +35,11 @@ private
   end
 
   def verify_metrics
+    if metrics.blank?
+      errors.add("metrics", "metrics are required")
+      return false
+    end
+
     metrics.each do |metric|
       errors.add("metric", "is not included in the list") unless Metric.find_all.map(&:name).include?(metric)
     end
