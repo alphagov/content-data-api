@@ -91,6 +91,22 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       expect(json).to eq(expected_error_response)
     end
 
+    it 'returns an error for missing metrics parameter' do
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15' }
+
+      expect(response.status).to eq(400)
+
+      json = JSON.parse(response.body)
+
+      expected_error_response = {
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        "title" => "One or more parameters is invalid",
+        "invalid_params" => { "metrics" => ["can't be blank"] }
+      }
+
+      expect(json).to eq(expected_error_response)
+    end
+
     it 'returns an error for unknown parameters' do
       get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla", metrics: %w[pageviews] }
 
