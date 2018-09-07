@@ -154,7 +154,7 @@ paths:
           lang: shell
           source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/'
 
-  /metrics/{metric}/{base_path}:
+  /metrics/{base_path}:
     get:
       summary: Get summarised metrics for a content item.
       description: |
@@ -170,11 +170,11 @@ paths:
           schema:
             type: string
             example: '/vat-rates'
-        - name: 'metric'
+        - name: 'metrics'
           in: path
           required: true
           description: |
-            The name of a metric.
+            The names of metrics.
           schema:
             type: string
             example: "pageviews"
@@ -212,9 +212,9 @@ paths:
       x-code-samples:
         "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
           lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/pageviews/vat-rates?from=2018-02-27&to=2018-02-27'
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-27&to=2018-02-27&metrics[]=unique_pageviews&metrics[]=pageviews'
 
-  /metrics/{metric}/{base_path}/time-series:
+  /metrics/{base_path}/time-series:
     get:
       summary: Get metric values for a single content item over a date range.
       description: |
@@ -231,11 +231,11 @@ paths:
           schema:
             type: string
             example: '/vat-rates'
-        - name: 'metric'
+        - name: 'metrics'
           in: path
           required: true
           description: |
-            The name of a metric.
+            The names of metrics.
           schema:
             type: string
             example: "pageviews"
@@ -275,4 +275,4 @@ paths:
       x-code-samples:
         "/metrics/vat-rates":
           lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates/time-series?from=2018-02-27&to=2018-02-27&metric=pageviews'
+          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates/time-series?from=2018-02-27&to=2018-02-27&metrics[]=unique_pageviews&metrics[]=pageviews'
