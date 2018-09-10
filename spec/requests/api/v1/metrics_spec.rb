@@ -136,88 +136,109 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   end
 
   describe 'Daily metrics' do
-    before do
-      create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, feedex_comments: 10, is_this_useful_yes: 10, is_this_useful_no: 30
-      create :metric, dimensions_item: item_fr, dimensions_date: day2, pageviews: 100, feedex_comments: 200, is_this_useful_yes: 10, is_this_useful_no: 30
-      create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, feedex_comments: 20, is_this_useful_yes: 10, is_this_useful_no: 30
-      create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, feedex_comments: 30, is_this_useful_yes: 10, is_this_useful_no: 30
-      create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, feedex_comments: 40, is_this_useful_yes: 10, is_this_useful_no: 30
-      create :facts_edition, dimensions_item: item, dimensions_date: day1
+    context 'succcessful response' do
+      before do
+        create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, feedex_comments: 10, is_this_useful_yes: 10, is_this_useful_no: 30
+        create :metric, dimensions_item: item_fr, dimensions_date: day2, pageviews: 100, feedex_comments: 200, is_this_useful_yes: 10, is_this_useful_no: 30
+        create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, feedex_comments: 20, is_this_useful_yes: 10, is_this_useful_no: 30
+        create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, feedex_comments: 30, is_this_useful_yes: 10, is_this_useful_no: 30
+        create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, feedex_comments: 40, is_this_useful_yes: 10, is_this_useful_no: 30
+        create :facts_edition, dimensions_item: item, dimensions_date: day1
+      end
+
+      it 'returns `pageviews` values between two dates' do
+        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[pageviews] }
+
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json).to eq(build_time_series_response('pageviews'))
+      end
+
+      it 'returns `satisfaction_score` values between two dates' do
+        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[satisfaction_score] }
+        satisfaction_score = {
+          satisfaction_score: [
+            {
+              date: "2018-01-13",
+              value: 0.25
+            },
+            {
+              date: "2018-01-14",
+              value: 0.25
+            },
+            {
+              date: "2018-01-15",
+              value: 0.25
+            }
+          ]
+        }
+
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json).to eq(satisfaction_score)
+      end
+
+      it 'returns `feedex issues` between two dates' do
+        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
+
+        json = JSON.parse(response.body)
+        expect(json.deep_symbolize_keys).to eq(build_time_series_response('feedex_comments'))
+      end
+
+      describe "Summary information" do
+        it 'returns the sum of feedex comments' do
+          get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
+
+
+          json = JSON.parse(response.body)
+
+          expect(json.deep_symbolize_keys).to include(
+            feedex_comments: 60
+          )
+        end
+      end
+
+      def build_time_series_response(metric_name)
+        {
+          metric_name.to_sym => [
+            { date: '2018-01-13', value: 10 },
+            { date: '2018-01-14', value: 20 },
+            { date: '2018-01-15', value: 30 },
+          ]
+        }
+      end
     end
 
-    it 'returns `pageviews` values between two dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[pageviews] }
-
-      json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json).to eq(build_time_series_response('pageviews'))
-    end
-
-    it 'returns `satisfaction_score` values between two dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[satisfaction_score] }
-      satisfaction_score = {
-        satisfaction_score: [
-          {
-            date: "2018-01-13",
-            value: 0.25
-          },
-          {
-            date: "2018-01-14",
-            value: 0.25
-          },
-          {
-            date: "2018-01-15",
-            value: 0.25
-          }
-        ]
-      }
-
-      json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json).to eq(satisfaction_score)
-    end
-
-    it 'returns `feedex issues` between two dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
+    it 'returns the metadata from the latest item' do
+      get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
 
       json = JSON.parse(response.body)
-      expect(json.deep_symbolize_keys).to eq(build_time_series_response('feedex_comments'))
+
+      expect(json.deep_symbolize_keys).to include(
+        title: 'the title',
+        base_path: base_path,
+        document_type: 'guide',
+        publishing_app: 'whitehall',
+        first_published_at: '2018-02-01T00:00:00.000Z',
+        public_updated_at: '2018-04-25T00:00:00.000Z',
+        primary_organisation_title: 'The ministry'
+      )
     end
 
-    describe "Summary information" do
-      it 'returns the sum of feedex comments' do
-        get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
+    context 'when the base path does not exist' do
+      it 'returns a 404 response' do
+        get '/api/v1/metrics/non/existant/base/path',
+        params: { from: '2018-01-01', to: '2018-06-01', metrics: %w[pageviews] }
+        expect(response.status).to eq(404)
 
         json = JSON.parse(response.body)
 
-        expect(json.deep_symbolize_keys).to include(
-          feedex_comments: 60
-        )
+        expected_error_response = {
+          "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#base-path-not-found",
+          "title" => "The base path you are looking for cannot be found",
+          "invalid_params" => %w[base_path]
+        }
+
+        expect(json).to eq(expected_error_response)
       end
-
-      it 'returns the metadata from the latest item' do
-        get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
-
-        json = JSON.parse(response.body)
-
-        expect(json.deep_symbolize_keys).to include(
-          title: 'the title',
-          base_path: base_path,
-          document_type: 'guide',
-          publishing_app: 'whitehall',
-          first_published_at: '2018-02-01T00:00:00.000Z',
-          public_updated_at: '2018-04-25T00:00:00.000Z',
-          primary_organisation_title: 'The ministry'
-        )
-      end
-    end
-
-    def build_time_series_response(metric_name)
-      {
-        metric_name.to_sym => [
-          { date: '2018-01-13', value: 10 },
-          { date: '2018-01-14', value: 20 },
-          { date: '2018-01-15', value: 30 },
-        ]
-      }
     end
   end
 
