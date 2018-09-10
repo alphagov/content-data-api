@@ -1,7 +1,11 @@
 module PublishingAPI
   class Consumer
     def process(message)
-      MessageProcessorJob.perform_later(message.payload) if valid_routing_key?(message)
+      if valid_routing_key?(message)
+        MessageProcessorJob.perform_later(message.payload)
+      else
+        Monitor::Messages.increment_discarded
+      end
 
       message.ack
     rescue StandardError => e
