@@ -199,8 +199,8 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(item.reload.metadata).to eq(
         base_path: '/the/base/path',
         title: 'The Title',
-        first_published_at: Time.new(2018, 1, 1),
-        public_updated_at: Time.new(2018, 5, 20),
+        first_published_at: Time.new(2018, 1, 1).strftime("%Y-%m-%d"),
+        public_updated_at: Time.new(2018, 5, 20).strftime("%Y-%m-%d"),
         publishing_app: 'publisher',
         document_type: 'guide',
         primary_organisation_title: 'The ministry'
