@@ -182,4 +182,29 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(item.change_from?(attrs.merge(raw_json: '{}'))).to eq(false)
     end
   end
+
+  describe '#metadata' do
+    let(:item) do
+      create :dimensions_item,
+        title: 'The Title',
+        base_path: '/the/base/path',
+        first_published_at: '2018-01-01',
+        public_updated_at: '2018-05-20',
+        publishing_app: 'publisher',
+        document_type: 'guide',
+        primary_organisation_title: 'The ministry'
+    end
+
+    it 'returns the correct attributes' do
+      expect(item.reload.metadata).to eq(
+        base_path: '/the/base/path',
+        title: 'The Title',
+        first_published_at: Time.new(2018, 1, 1),
+        public_updated_at: Time.new(2018, 5, 20),
+        publishing_app: 'publisher',
+        document_type: 'guide',
+        primary_organisation_title: 'The ministry'
+      )
+    end
+  end
 end
