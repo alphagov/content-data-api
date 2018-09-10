@@ -11,6 +11,4 @@ Rails.application.routes.draw do
     get '/v1/metrics/*base_path', to: "metrics#summary"
     get '/v1/healthcheck', to: "healthcheck#index"
   end
-
-  get '/sandbox', to: 'sandbox#index'
 end
