@@ -35,8 +35,6 @@ class Dimensions::Date < ApplicationRecord
       find_by(date: date) || create_with(date)
     rescue ActiveRecord::RecordNotUnique
       find_by(date: date)
-    rescue StandardError => e
-      GovukError.notify(e)
     end
   end
 
