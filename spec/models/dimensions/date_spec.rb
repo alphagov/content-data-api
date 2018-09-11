@@ -131,6 +131,17 @@ RSpec.describe Dimensions::Date, type: :model do
         expect(dimension_date.date).to eq(date)
       end
     end
+
+    context 'when a dimension created under losing race conditions' do
+      it 'should return the existing dimension' do
+        dimension_date = Dimensions::Date.build(date)
+        allow(Dimensions::Date).to receive(:create) {
+          dimension_date.save
+          raise ActiveRecord::RecordNotUnique
+        }
+        expect(Dimensions::Date.for(date)).to eq(dimension_date)
+      end
+    end
   end
 
   describe '.exists?' do
