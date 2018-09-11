@@ -41,10 +41,12 @@ private
   end
 
   def load_metrics_query(date_to_s)
+    # Using PostgreSQL round() to coax the integers into floats before calculating
     <<~SQL
       UPDATE facts_metrics
       SET is_this_useful_no = s.is_this_useful_no,
-          is_this_useful_yes = s.is_this_useful_yes
+          is_this_useful_yes = s.is_this_useful_yes,
+          satisfaction_score = s.is_this_useful_yes / round((s.is_this_useful_yes + s.is_this_useful_no), 10)
       FROM (
         SELECT is_this_useful_no,
                is_this_useful_yes,
