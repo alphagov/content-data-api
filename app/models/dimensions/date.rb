@@ -24,11 +24,17 @@ class Dimensions::Date < ApplicationRecord
       )
   end
 
+  def self.create_with(date)
+    date_dimension = build(date)
+    date_dimension.save
+    date_dimension
+  end
+
   def self.for(date)
-    where(date: date).first || begin
-      date_dimension = build(date)
-      date_dimension.save
-      date_dimension
+    begin
+      find_by(date: date) || create_with(date)
+    rescue StandardError => e
+      GovukError.notify(e)
     end
   end
 

@@ -103,6 +103,14 @@ RSpec.describe Dimensions::Date, type: :model do
     end
   end
 
+  describe '.create_with' do
+    it 'builds and saves a new date dimension' do
+      dimension_date = Dimensions::Date.create_with(date)
+      expect(Dimensions::Date.count).to eq(1)
+      expect(Dimensions::Date.first).to eq(dimension_date)
+    end
+  end
+
   describe '.for' do
     let(:date) { ::Date.new(2017, 12, 21) }
 
