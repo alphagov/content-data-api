@@ -70,6 +70,20 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
     end
   end
 
+  context 'the calculation for satisfaction_score in SQL is compared to the calculation in the model' do
+    it 'matches the calculation in the model' do
+      fact = create_metric base_path: '/path1', date: '2018-02-20'
+      allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 1, useful_no: 0))
+      described_class.process(date: date)
+
+      comparison_fact = build :metric
+      comparison_fact.is_this_useful_yes = 1
+      comparison_fact.is_this_useful_no = 0
+
+      expect(fact.reload.satisfaction_score).to eq(comparison_fact.satisfaction_score)
+    end
+  end
+
   context 'When is_this_useful values are received from GA' do
     let!(:fact) { create_metric base_path: '/path1', date: '2018-02-20' }
 
