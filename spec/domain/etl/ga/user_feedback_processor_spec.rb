@@ -90,23 +90,4 @@ private
       },
     ]
   end
-
-  def ga_response_with_govuk_prefix
-    [
-      {
-        'page_path' => '/https://www.gov.uk/path1',
-        'is_this_useful_no' => 1,
-        'is_this_useful_yes' => 1,
-        'date' => '2018-02-20',
-        'process_name' => 'user_feedback',
-      },
-      {
-        'page_path' => '/path2',
-        'is_this_useful_no' => 5,
-        'is_this_useful_yes' => 10,
-        'date' => '2018-02-20',
-        'process_name' => 'user_feedback',
-      },
-    ]
-  end
 end
