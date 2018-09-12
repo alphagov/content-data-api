@@ -1,5 +1,4 @@
-openapi: '3.0.0'
-
+openapi: 3.0.0
 info:
   title: GOV.UK Content Performance API
   description: |
@@ -7,18 +6,168 @@ info:
 
     This API accepts HTTP requests and responds with
     [JSON](https://en.wikipedia.org/wiki/JSON).
-
-  version: '1.0.0'
-
+  version: 1.0.0
 servers:
-  - url: https://content-performance-manager.publishing.service.gov.uk/api/
-
+  - url: 'https://content-performance-manager.publishing.service.gov.uk/api/'
+paths:
+  '/metrics/':
+    get:
+      summary: List all available metrics.
+      description: |
+        Returns a list of metrics that the API can return.
+      tags:
+        - Metadata
+      responses:
+        '200':
+          description: |
+            Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsResponse'
+              example:
+                $ref: '#/components/examples/MetricsExample'
+      x-code-samples:
+        /metrics/:
+          lang: shell
+          source: >-
+            curl
+            'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/'
+  '/metrics/{base_path}':
+    get:
+      summary: Get summarised metrics for a content item.
+      description: >
+        Returns a summary of a metric based on data collected over a time
+        period.
+      tags:
+        - Aggregations
+      parameters:
+        - name: base_path
+          in: path
+          required: true
+          description: >
+            A GOV.UK base path. A reserved URL on www.gov.uk that is associated
+            with a content item.
+          schema:
+            type: string
+            example: /vat-rates
+        - name: metrics
+          in: path
+          required: true
+          description: |
+            The names of metrics.
+          schema:
+            type: string
+            example: pageviews
+        - name: from
+          in: query
+          required: true
+          description: >
+            From date in the format 'YYYY-MM-DD'. Only data collected on or
+            after this date will be included.
+          schema:
+            type: string
+            example: '2018-01-01'
+        - name: to
+          in: query
+          required: true
+          description: >
+            To date in the format 'YYYY-MM-DD'. Only data collected on or before
+            this date will be included.
+          schema:
+            type: string
+            example: '2018-01-01'
+      responses:
+        '200':
+          description: |
+            Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SummaryResponse'
+        '400':
+          description: The API request is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-code-samples:
+        /metrics/f838c22a-b2aa-49be-bd95-153f593293a3:
+          lang: shell
+          source: >-
+            curl
+            'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-27&to=2018-02-27&metrics[]=unique_pageviews&metrics[]=pageviews'
+  '/metrics/{base_path}/time-series':
+    get:
+      summary: Get metric values for a single content item over a date range.
+      description: |
+        Returns an array of values for each metric. Each item represents a
+        metric value at a single point in time.
+      tags:
+        - Time series
+      parameters:
+        - name: base_path
+          in: path
+          required: true
+          description: >
+            A GOV.UK base path. A reserved URL on www.gov.uk that is associated
+            with a content item.
+          schema:
+            type: string
+            example: /vat-rates
+        - name: metrics
+          in: path
+          required: true
+          description: |
+            The names of metrics.
+          schema:
+            type: string
+            example: pageviews
+        - name: from
+          in: query
+          required: true
+          description: >
+            From date in the format 'YYYY-MM-DD'. Only data collected on or
+            after this date will be returned.
+          schema:
+            type: string
+            example: '2018-01-01'
+        - name: to
+          in: query
+          required: true
+          description: >
+            To date in the format 'YYYY-MM-DD'. Only data collected on or before
+            this date will be returned.
+          schema:
+            type: string
+            example: '2018-01-01'
+      responses:
+        '200':
+          description: |
+            Success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesResponse'
+        '400':
+          description: The API request is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                $ref: '#/components/examples/ErrorExample'
+      x-code-samples:
+        /metrics/vat-rates:
+          lang: shell
+          source: >-
+            curl
+            'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates/time-series?from=2018-02-27&to=2018-02-27&metrics[]=unique_pageviews&metrics[]=pageviews'
 components:
   securitySchemes:
-    bearerAuth:  # arbitrary name for the security scheme
+    bearerAuth:
       type: http
       scheme: bearer
-
   schemas:
     Metric:
       description: |
@@ -30,14 +179,13 @@ components:
       properties:
         metric_id:
           type: string
-          description: "ID to refer to the metric within the API"
+          description: ID to refer to the metric within the API
         description:
           type: string
-          description: "Description of the metric"
+          description: Description of the metric
         source:
           type: string
-          description: "Where this metric comes from"
-
+          description: Where this metric comes from
     Summary:
       description: |
         Summarised metric data for a defined time period
@@ -48,11 +196,10 @@ components:
       properties:
         total:
           type: integer
-          description: "Sum of all recorded metric values within the date range."
+          description: Sum of all recorded metric values within the date range.
         latest:
           type: integer
-          description: "The latest recorded metric value within the date range."
-
+          description: The latest recorded metric value within the date range.
     Value:
       description: |
         A single observation of a metric.
@@ -62,41 +209,36 @@ components:
         - value
       properties:
         date:
-          type: date
-          description: "Date of measurement, in the form YYYY-MM-DD."
+          type: string
+          description: Date of measurement, in the form YYYY-MM-DD.
         value:
           type: integer
-          description: "The value of the metric."
-
+          description: The value of the metric.
     TimeSeries:
       description: |
         A series of values for a metric.
       type: array
       items:
-        $ref: "#/components/schemas/Value"
-
+        $ref: '#/components/schemas/Value'
     MetricsResponse:
-      description: "A list of metrics that the API can return"
+      description: A list of metrics that the API can return
       type: array
       items:
         $ref: '#/components/schemas/Metric'
       example:
         $ref: '#/components/examples/MetricsExample'
-
     TimeSeriesResponse:
-        description: "An object where each key is a metric ID and each value is a time series."
-        type: object
-        additionalProperties:
-          $ref: '#/components/schemas/TimeSeries'
-
+      description: An object where each key is a metric ID and each value is a time series.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/TimeSeries'
     SummaryResponse:
-        description: "Summary information keyed by metric ID."
-        type: object
-        additionalProperties:
-          $ref: '#/components/schemas/Summary'
-
+      description: Summary information keyed by metric ID.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Summary'
     ErrorResponse:
-      description: "An error response."
+      description: An error response.
       type: object
       required:
         - title
@@ -112,167 +254,35 @@ components:
           type: string
           description: A URI identifying the error.
       example:
-        $ref: "#/components/examples/ErrorExample"
-
+        $ref: '#/components/examples/ErrorExample'
   examples:
     ErrorExample:
-      title: "One or more parameters is invalid"
-      invalid_params: {"from":["can't be blank","Dates should use the format YYYY-MM-DD"],"to":["can't be blank","Dates should use the format YYYY-MM-DD"]}
-      type: https://content-performance-api.publishing.service.gov.uk/errors/#validation-error
-
+      summary: An example of an error.
+      value:
+        title: One or more parameters is invalid
+        invalid_params:
+          from:
+            - can't be blank
+            - Dates should use the format YYYY-MM-DD
+          to:
+            - can't be blank
+            - Dates should use the format YYYY-MM-DD
+        type: >-
+          https://content-performance-api.publishing.service.gov.uk/errors/#validation-error
     MetricsExample:
-      - {"description":"Number of pageviews","source":"Google Analytics","metric_id":"pageviews"}
-      - {"description":"Number of unique pageviews","source":"Google Analytics","metric_id":"unique_pageviews"}
-      - {"description":"Number of reported content issues","source":"Feedback explorer","metric_id":"feedex_comments"}
-      - {"description":"Number of .pdf attachments","source":"Publishing API","metric_id":"number_of_pdfs"}
-
-# Apply the security globally to all operations
+      summary: An example of an error.
+      value:
+        - description: Number of pageviews
+          source: Google Analytics
+          metric_id: pageviews
+        - description: Number of unique pageviews
+          source: Google Analytics
+          metric_id: unique_pageviews
+        - description: Number of reported content issues
+          source: Feedback explorer
+          metric_id: feedex_comments
+        - description: Number of .pdf attachments
+          source: Publishing API
+          metric_id: number_of_pdfs
 security:
   - bearerAuth: []
-
-paths:
-  /metrics/:
-    get:
-      summary: List all available metrics.
-      description: |
-        Returns a list of metrics that the API can return.
-      tags:
-        - Metadata
-
-      responses:
-        200:
-          description: |
-            Success response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MetricsResponse"
-              example:
-                $ref: "#/components/examples/MetricsExample"
-      x-code-samples:
-        "/metrics/":
-          lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/'
-
-  /metrics/{base_path}:
-    get:
-      summary: Get summarised metrics for a content item.
-      description: |
-        Returns a summary of a metric based on data collected over a time period.
-      tags:
-        - Aggregations
-      parameters:
-        - name: 'base_path'
-          in: path
-          required: true
-          description: |
-            A GOV.UK base path. A reserved URL on www.gov.uk that is associated with a content item.
-          schema:
-            type: string
-            example: '/vat-rates'
-        - name: 'metrics'
-          in: path
-          required: true
-          description: |
-            The names of metrics.
-          schema:
-            type: string
-            example: "pageviews"
-        - name: 'from'
-          in: query
-          required: true
-          description: |
-            From date in the format 'YYYY-MM-DD'. Only data collected on or after this date will be included.
-          schema:
-            type: date
-            example: '2018-01-01'
-        - name: 'to'
-          in: query
-          required: true
-          description: |
-            To date in the format 'YYYY-MM-DD'. Only data collected on or before this date will be included.
-          schema:
-            type: date
-            example: '2018-01-01'
-      responses:
-        200:
-          description: |
-            Success response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SummaryResponse"
-        400:
-          description: The API request is invalid.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-
-      x-code-samples:
-        "/metrics/f838c22a-b2aa-49be-bd95-153f593293a3":
-          lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-27&to=2018-02-27&metrics[]=unique_pageviews&metrics[]=pageviews'
-
-  /metrics/{base_path}/time-series:
-    get:
-      summary: Get metric values for a single content item over a date range.
-      description: |
-        Returns an array of values for each metric. Each item represents a
-        metric value at a single point in time.
-      tags:
-        - Time series
-      parameters:
-        - name: 'base_path'
-          in: path
-          required: true
-          description: |
-            A GOV.UK base path. A reserved URL on www.gov.uk that is associated with a content item.
-          schema:
-            type: string
-            example: '/vat-rates'
-        - name: 'metrics'
-          in: path
-          required: true
-          description: |
-            The names of metrics.
-          schema:
-            type: string
-            example: "pageviews"
-        - name: 'from'
-          in: query
-          required: true
-          description: |
-            From date in the format 'YYYY-MM-DD'. Only data collected on or after this date will be returned.
-          schema:
-            type: date
-            example: '2018-01-01'
-        - name: 'to'
-          in: query
-          required: true
-          description: |
-            To date in the format 'YYYY-MM-DD'. Only data collected on or before this date will be returned.
-          schema:
-            type: date
-            example: '2018-01-01'
-      responses:
-        200:
-          description: |
-            Success response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/TimeSeriesResponse"
-        400:
-          description: The API request is invalid.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-              example:
-                $ref: "#/components/examples/ErrorExample"
-
-      x-code-samples:
-        "/metrics/vat-rates":
-          lang: shell
-          source: curl 'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates/time-series?from=2018-02-27&to=2018-02-27&metrics[]=unique_pageviews&metrics[]=pageviews'
