@@ -21,7 +21,7 @@ paths:
     get:
       summary: List all available metrics.
       description: |
-        Returns a list of metrics that the API can return.
+        Returns a list of available metrics for content items.
       tags:
         - Metadata
       responses:
@@ -31,7 +31,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MetricsResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Metric'
               example:
                 $ref: '#/components/examples/MetricsExample'
       x-code-samples:
@@ -227,13 +229,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Value'
-    MetricsResponse:
-      description: A list of metrics that the API can return
-      type: array
-      items:
-        $ref: '#/components/schemas/Metric'
-      example:
-        $ref: '#/components/examples/MetricsExample'
     TimeSeriesResponse:
       description: An object where each key is a metric ID and each value is a time series.
       type: object
@@ -277,7 +272,7 @@ components:
         type: >-
           https://content-performance-api.publishing.service.gov.uk/errors/#validation-error
     MetricsExample:
-      summary: An example of an error.
+      summary: An list of available metrics.
       value:
         - description: Number of pageviews
           source: Google Analytics
