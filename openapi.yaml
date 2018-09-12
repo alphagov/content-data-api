@@ -8,7 +8,14 @@ info:
     [JSON](https://en.wikipedia.org/wiki/JSON).
   version: 1.0.0
 servers:
-  - url: 'https://content-performance-manager.publishing.service.gov.uk/api/'
+  - url: 'https://content-performance-manager.publishing.service.gov.uk/api/v1'
+    description: Production
+  - url: 'https://content-performance-manager.staging.publishing.service.gov.uk/api/v1'
+    description: Staging
+  - url: 'https://content-performance-manager.integration.publishing.service.gov.uk/api/v1'
+    description: Integration
+  - url: 'http://content-performance-manager.dev.gov.uk/api/v1'
+    description: Development
 paths:
   '/metrics/':
     get:
