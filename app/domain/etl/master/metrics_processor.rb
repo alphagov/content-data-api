@@ -23,7 +23,7 @@ module Etl
 
       def create_metrics
         log process: :metrics, message: 'about to get the Dimensions::Date'
-        dimensions_date = Dimensions::Date.for(date)
+        dimensions_date = Dimensions::Date.find_or_create(date)
         log process: :metrics, message: 'got the Dimensions::Date'
         Dimensions::Item.latest.find_in_batches(batch_size: 50000)
           .with_index do |batch, index|

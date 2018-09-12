@@ -36,7 +36,7 @@ private
 
   def statsd_for_yesterday_editions!
     path = path_for('daily_editions')
-    count = Facts::Edition.where(dimensions_date: Dimensions::Date.for(Date.yesterday)).count
+    count = Facts::Edition.where(dimensions_date: Dimensions::Date.find_or_create(Date.yesterday)).count
 
     GovukStatsd.count(path, count)
   end
