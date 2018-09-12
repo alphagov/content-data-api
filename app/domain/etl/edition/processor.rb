@@ -4,7 +4,7 @@ class Etl::Edition::Processor
   end
 
   def initialize(old_item, new_item, date = Date.today)
-    @dimensions_date = Dimensions::Date.for(date)
+    @dimensions_date = Dimensions::Date.find_or_create(date)
     @old_item = old_item
     @new_item = new_item
   end

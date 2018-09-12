@@ -24,11 +24,17 @@ class Dimensions::Date < ApplicationRecord
       )
   end
 
-  def self.for(date)
-    where(date: date).first || begin
-      date_dimension = build(date)
-      date_dimension.save
-      date_dimension
+  def self.create_with(date)
+    date_dimension = build(date)
+    date_dimension.save
+    date_dimension
+  end
+
+  def self.find_or_create(date)
+    begin
+      find_by(date: date) || create_with(date)
+    rescue ActiveRecord::RecordNotUnique
+      find_by(date: date)
     end
   end
 

@@ -59,7 +59,7 @@ RSpec.describe Reports::FindSeries do
     it 'ignores parameters when blank' do
       item = create(:dimensions_item)
       metric = create(:metric, dimensions_item: item)
-      today = Dimensions::Date.for(Date.today)
+      today = Dimensions::Date.find_or_create(Date.today)
       create(:facts_edition, dimensions_item: item,
         dimensions_date: today)
 
@@ -90,7 +90,7 @@ RSpec.describe Reports::FindSeries do
     it 'ignores parameters when blank' do
       item = create(:dimensions_item)
       metric = create(:metric, dimensions_item: item)
-      today = Dimensions::Date.for(Date.today)
+      today = Dimensions::Date.find_or_create(Date.today)
       create(:facts_edition, dimensions_item: item,
         dimensions_date: today)
 
