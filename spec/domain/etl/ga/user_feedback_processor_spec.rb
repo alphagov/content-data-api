@@ -70,14 +70,60 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
     end
   end
 
+  context 'When is_this_useful values are received from GA' do
+    let!(:fact) { create_metric base_path: '/path1', date: '2018-02-20' }
+
+    it 'sets `satisfaction_score = 1.0` with `yes: 1` and `no: 0`' do
+      allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 1, useful_no: 0))
+      described_class.process(date: date)
+
+      expect(fact.reload.satisfaction_score).to be_within(0.1).of(1.0)
+    end
+
+    it 'sets `satisfaction_score = 0.0` with `useful_yes:0` and `no: 1`' do
+      allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 0, useful_no: 1))
+      described_class.process(date: date)
+
+      expect(fact.reload.satisfaction_score).to be_within(0.1).of(0.0)
+    end
+
+    it 'sets `satisfaction_score = 0.0` with `useful_yes: 0` and `no: 0`' do
+      allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 0, useful_no: 0))
+      described_class.process(date: date)
+
+      expect(fact.reload.satisfaction_score).to be_within(0.1).of(0.0)
+    end
+
+    it 'sets `satisfaction_score = 0.0` with `useful_yes: nil` and `no: 0`' do
+      allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: nil, useful_no: 0))
+      described_class.process(date: date)
+
+      expect(fact.reload.satisfaction_score).to be_within(0.1).of(0.0)
+    end
+
+    it 'sets `satisfaction_score = 1.0` with `useful_yes: 1` and `no: nil`' do
+      allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 1, useful_no: nil))
+      described_class.process(date: date)
+
+      expect(fact.reload.satisfaction_score).to be_within(0.1).of(1)
+    end
+
+    it 'sets `satisfaction_score = 0.0` with `useful_yes: nil` and `no: nil`' do
+      allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: nil, useful_no: nil))
+      described_class.process(date: date)
+
+      expect(fact.reload.satisfaction_score).to be_nil
+    end
+  end
+
 private
 
-  def ga_response
+  def ga_response(useful_yes: 1, useful_no: 1)
     [
       {
         'page_path' => '/path1',
-        'is_this_useful_no' => 1,
-        'is_this_useful_yes' => 1,
+        'is_this_useful_yes' => useful_yes,
+        'is_this_useful_no' => useful_no,
         'date' => '2018-02-20',
         'process_name' => 'user_feedback',
       },

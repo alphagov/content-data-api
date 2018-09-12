@@ -13,15 +13,16 @@ class Facts::Metric < ApplicationRecord
 
   def is_this_useful_yes=(value)
     super(value)
-    self.satisfaction_score = calculate_satisfaction_score
+    self.satisfaction_score = Facts::Calculations::SatisfactionScore.apply(self)
   end
 
   def is_this_useful_no=(value)
     super(value)
-    self.satisfaction_score = calculate_satisfaction_score
+    self.satisfaction_score = Facts::Calculations::SatisfactionScore.apply(self)
   end
 
   scope :for_yesterday, -> { where(dimensions_date: Dimensions::Date.find_or_create(Date.yesterday)) }
+  scope :from_day_before_to, ->(date) { where(dimensions_date: Dimensions::Date.between(date - 1, date)) }
 
   def self.csv_fields
     %i[
@@ -57,15 +58,5 @@ class Facts::Metric < ApplicationRecord
       bounce_rate
       avg_time_on_page
     ]
-  end
-
-private
-
-  def calculate_satisfaction_score
-    return nil if is_this_useful_yes.nil? && is_this_useful_no.nil?
-    return 0 if is_this_useful_yes.nil? || is_this_useful_yes.zero?
-    return 1 if is_this_useful_no.nil? || is_this_useful_no.zero?
-
-    is_this_useful_yes.to_f / (is_this_useful_yes + is_this_useful_no).to_f
   end
 end
