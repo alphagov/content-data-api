@@ -12,6 +12,7 @@ phase: Alpha
 header_links:
   About: /
   Reference: /reference.html
+  Errors: /errors.html
 
 # Tracking ID from Google Analytics (e.g. UA-XXXX-Y)
 #ga_tracking_id: UA-26179049-13
