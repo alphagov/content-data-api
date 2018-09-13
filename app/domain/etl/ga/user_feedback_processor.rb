@@ -37,6 +37,7 @@ private
     conn = ActiveRecord::Base.connection
     date_to_s = date.strftime("%F")
     conn.execute(load_metrics_query(date_to_s))
+    calculate_and_set_satisfaction_scores(date)
     clean_up_events!
   end
 
@@ -59,6 +60,13 @@ private
 
   def clean_up_events!
     Events::GA.delete_all
+  end
+
+  def calculate_and_set_satisfaction_scores(date)
+    Facts::Metric.from_day_before_to(date).find_each do |metric|
+      metric.satisfaction_score = Facts::Calculations::SatisfactionScore.apply(metric)
+      metric.save!
+    end
   end
 
   attr_reader :date
