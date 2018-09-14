@@ -62,7 +62,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
         "title" => "One or more parameters is invalid",
         "invalid_params" => { "metric" => ["is not included in the list"] }
       }
@@ -78,7 +78,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
         "title" => "One or more parameters is invalid",
         "invalid_params" => { "from" => ["Dates should use the format YYYY-MM-DD"] }
       }
@@ -94,7 +94,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
         "title" => "One or more parameters is invalid",
         "invalid_params" => { "from,to" => ["`from` parameter can't be after the `to` parameter"] }
       }
@@ -110,7 +110,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#validation-error",
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
         "title" => "One or more parameters is invalid",
         "invalid_params" => { "metrics" => ["can't be blank"] }
       }
@@ -126,7 +126,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#unknown-parameter",
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#unknown-parameter",
         "title" => "One or more parameter names are invalid",
         "invalid_params" => %w[extra]
       }
@@ -232,7 +232,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
         json = JSON.parse(response.body)
 
         expected_error_response = {
-          "type" => "https://content-performance-api.publishing.service.gov.uk/errors/#base-path-not-found",
+          "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#base-path-not-found",
           "title" => "The base path you are looking for cannot be found",
           "invalid_params" => %w[base_path]
         }
