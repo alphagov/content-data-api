@@ -14,7 +14,7 @@ private
     Metric.edition_metrics.map(&:name).each do |edition_metric|
       path = path_for_edition_metric(edition_metric)
 
-      GovukStatsd.count(path, editions.sum("facts_editions.#{edition_metric}"))
+      GovukStatsd.count(path, sum("facts_editions.#{edition_metric}"))
     end
   end
 
@@ -22,8 +22,12 @@ private
     Metric.daily_metrics.map(&:name).each do |daily_metric|
       path = path_for_daily_metric(daily_metric)
 
-      GovukStatsd.count(path, metrics.sum(daily_metric))
+      GovukStatsd.count(path, sum(daily_metric))
     end
+  end
+
+  def sum(selector)
+    editions.sum(Arel.sql(selector))
   end
 
   def path_for_edition_metric(edition_metric)
