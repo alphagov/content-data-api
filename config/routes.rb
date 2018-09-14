@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/audits', to: redirect(Plek.find('content-audit-tool', status: 302))
 
   namespace :api, defaults: { format: :json } do
+    get '/v1/content', to: "content#index"
     get '/v1/metrics/', to: "metrics#index"
     get '/v1/metrics/*base_path/time-series', to: "metrics#time_series"
     get '/v1/metrics/*base_path', to: "metrics#summary"
