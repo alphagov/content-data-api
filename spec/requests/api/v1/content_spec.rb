@@ -82,4 +82,38 @@ RSpec.describe '/api/v1/content' do
       )
     end
   end
+
+  context 'with invalid params' do
+    it 'returns an error for badly formatted dates' do
+      get "/api/v1/content", params: { from: 'today', to: '2018-01-15' }
+
+      expect(response.status).to eq(400)
+
+      json = JSON.parse(response.body)
+
+      expected_error_response = {
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
+        "title" => "One or more parameters is invalid",
+        "invalid_params" => { "from" => ["Dates should use the format YYYY-MM-DD"] }
+      }
+
+      expect(json).to eq(expected_error_response)
+    end
+
+    it 'returns an error for bad date ranges' do
+      get "/api/v1/content/", params: { from: '2018-01-16', to: '2018-01-15' }
+
+      expect(response.status).to eq(400)
+
+      json = JSON.parse(response.body)
+
+      expected_error_response = {
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
+        "title" => "One or more parameters is invalid",
+        "invalid_params" => { "from,to" => ["`from` parameter can't be after the `to` parameter"] }
+      }
+
+      expect(json).to eq(expected_error_response)
+    end
+  end
 end
