@@ -21,7 +21,8 @@ class Reports::Content
   end
 
 private
-    def aggregates
+
+  def aggregates
     [
       sum('unique_pageviews'),
       average_satisfaction_score,

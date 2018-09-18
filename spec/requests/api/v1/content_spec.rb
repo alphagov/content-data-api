@@ -77,15 +77,8 @@ RSpec.describe '/api/v1/content' do
           is_this_useful_yes: 0,
           is_this_useful_no: 0,
         },
-<<<<<<< HEAD
-
-        item: { title: 'the title', primary_organisation_content_id: primary_org_id },)
+        item: { title: 'the title', primary_organisation_content_id: primary_org_id })
       get "//api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation: primary_org_id }
-=======
-        item: { title: 'the title', primary_organisation_content_id: primary_org_id },)
-      get "//api/v1/content", params: {from: '2018-01-01', to: '2018-09-01', organisation: primary_org_id}
-
->>>>>>> b24efb0... Add filter for organisation
     end
 
     it 'returns the nil for the satisfaction_score' do
