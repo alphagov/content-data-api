@@ -1,12 +1,13 @@
 class Api::ContentController < Api::BaseController
   before_action :validate_params!
   def index
-    @content = Reports::Content.retrieve(from: params[:from], to: params[:to])
+    @content = Reports::Content.retrieve(from: params[:from], to: params[:to],
+    organisation: params[:organisation])
     render json: { results: @content }.to_json
   end
 
   def api_request
-    @api_request ||= Api::Request.new(params.permit(:from, :to, :metric, :base_path, :format, metrics: []),
+    @api_request ||= Api::Request.new(params.permit(:from, :to, :metric, :base_path, :organisation, :format, metrics: []),
       requires_metrics: false,
       requires_base_path: false)
   end

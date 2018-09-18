@@ -4,6 +4,9 @@ RSpec.describe '/api/v1/content' do
     create :user
   end
 
+  let(:primary_org_id) { '6667cce2-e809-4e21-ae09-cb0bdc1ddda3' }
+  let(:another_org_id) { '05e9c04d-534b-4ff0-ae8f-35c1bf9e510f' }
+
   context 'when successful' do
     before do
       create_metric(base_path: '/path/1', date: '2018-01-01',
@@ -13,7 +16,12 @@ RSpec.describe '/api/v1/content' do
           is_this_useful_no: 20,
           number_of_internal_searches: 20,
         },
-        item: { title: 'the title' },)
+        item: {
+          title: 'the title',
+          document_type: 'news_story',
+          primary_organisation_content_id: primary_org_id,
+        })
+
       create_metric(base_path: '/path/1', date: '2018-01-02',
         daily: {
           unique_pageviews: 133,
@@ -61,7 +69,7 @@ RSpec.describe '/api/v1/content' do
     end
   end
 
-  context 'when no is_this_useful.. reponses' do
+  context 'when no is_this_useful.. responses' do
     before do
       create_metric(base_path: '/path/1', date: '2018-01-01',
         daily: {
@@ -69,9 +77,15 @@ RSpec.describe '/api/v1/content' do
           is_this_useful_yes: 0,
           is_this_useful_no: 0,
         },
+<<<<<<< HEAD
 
         item: { title: 'the title', primary_organisation_content_id: primary_org_id },)
       get "//api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation: primary_org_id }
+=======
+        item: { title: 'the title', primary_organisation_content_id: primary_org_id },)
+      get "//api/v1/content", params: {from: '2018-01-01', to: '2018-09-01', organisation: primary_org_id}
+
+>>>>>>> b24efb0... Add filter for organisation
     end
 
     it 'returns the nil for the satisfaction_score' do

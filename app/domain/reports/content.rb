@@ -1,26 +1,27 @@
 class Reports::Content
-  def self.retrieve(from:, to:)
-    new(from, to).retrieve
+  def self.retrieve(from:, to:, organisation:)
+    new(from, to, organisation).retrieve
   end
 
-  def initialize(from, to)
+  def initialize(from, to, organisation)
     @from = from
     @to = to
+    @organsation = organisation
   end
 
   def retrieve
     Facts::Metric.all
-      .joins(dimensions_item: :facts_edition)
+      .joins(dimensions_item: :facts_edition).merge(slice_items)
       .joins(:dimensions_date).merge(slice_dates)
       .group(group_columns)
+      .order(order_by)
       .limit(100)
       .pluck(*group_columns, *aggregates)
       .map(&method(:array_to_hash))
   end
 
 private
-
-  def aggregates
+    def aggregates
     [
       sum('unique_pageviews'),
       average_satisfaction_score,
@@ -31,6 +32,10 @@ private
 
   def group_columns
     %w[base_path title document_type].map { |col| Arel.sql(col) }
+  end
+
+  def order_by
+    Arel.sql('SUM(unique_pageviews) DESC')
   end
 
   def sum(column)
@@ -65,6 +70,10 @@ private
       satisfaction_score_responses: array[5],
       number_of_internal_searches: array[6],
     }
+  end
+
+  def slice_items
+    Dimensions::Item.by_organisation_id(@organsation)
   end
 
   def slice_dates
