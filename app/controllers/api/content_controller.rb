@@ -7,7 +7,13 @@ class Api::ContentController < Api::BaseController
   end
 
   def api_request
-    @api_request ||= Api::ContentRequest.new(params.permit(:from, :to, :organisation_id, :format))
+    @api_request ||= Api::ContentRequest.new(permitted_params)
+  end
+
+private
+
+  def permitted_params
+    params.permit(:from, :to, :organisation_id, :format)
   end
 
   def validate_params!
