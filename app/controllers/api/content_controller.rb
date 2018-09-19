@@ -7,7 +7,7 @@ class Api::ContentController < Api::BaseController
   end
 
   def api_request
-    @api_request ||= Api::Request.new(params.permit(:from, :to, :metric, :base_path, :organisation, :format, metrics: []),
+    @api_request ||= Api::MetricsRequest.new(params.permit(:from, :to, :metric, :base_path, :organisation, :format, metrics: []),
       requires_metrics: false,
       requires_base_path: false)
   end

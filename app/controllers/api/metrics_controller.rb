@@ -41,7 +41,7 @@ private
   delegate :from, :to, :base_path, :metrics, to: :api_request
 
   def api_request
-    @api_request ||= Api::Request.new(params.permit(:from, :to, :metric, :base_path, :format, metrics: []))
+    @api_request ||= Api::MetricsRequest.new(params.permit(:from, :to, :metric, :base_path, :format, metrics: []))
   end
 
   def validate_params!
