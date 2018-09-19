@@ -46,7 +46,7 @@ RSpec.describe '/api/v1/content' do
           document_type: 'news_story',
           primary_organisation_content_id: another_org_id,
         })
-      get "//api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation: primary_org_id }
+      get "//api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
     end
 
     it 'is successful' do
@@ -78,7 +78,7 @@ RSpec.describe '/api/v1/content' do
           is_this_useful_no: 0,
         },
         item: { title: 'the title', primary_organisation_content_id: primary_org_id })
-      get "//api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation: primary_org_id }
+      get "//api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
     end
 
     it 'returns the nil for the satisfaction_score' do
@@ -92,7 +92,7 @@ RSpec.describe '/api/v1/content' do
 
   context 'with invalid params' do
     it 'returns an error for badly formatted dates' do
-      get "/api/v1/content", params: { from: 'today', to: '2018-01-15' }
+      get "/api/v1/content", params: { from: 'today', to: '2018-01-15', organisation_id: '386ea723-d8fc-4581-8e53-bb8ee9aa8c03' }
 
       expect(response.status).to eq(400)
 
@@ -108,7 +108,7 @@ RSpec.describe '/api/v1/content' do
     end
 
     it 'returns an error for bad date ranges' do
-      get "/api/v1/content/", params: { from: '2018-01-16', to: '2018-01-15' }
+      get "/api/v1/content/", params: { from: '2018-01-16', to: '2018-01-15', organisation_id: '1182a3ed-a9a3-482c-81e1-0a9ecfb847d0' }
 
       expect(response.status).to eq(400)
 
@@ -118,6 +118,22 @@ RSpec.describe '/api/v1/content' do
         "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
         "title" => "One or more parameters is invalid",
         "invalid_params" => { "from,to" => ["`from` parameter can't be after the `to` parameter"] }
+      }
+
+      expect(json).to eq(expected_error_response)
+    end
+
+    it 'returns an error for invalid organisation_id' do
+      get "/api/v1/content/", params: { from: '2018-01-16', to: '2018-01-17', organisation_id: 'blah' }
+
+      expect(response.status).to eq(400)
+
+      json = JSON.parse(response.body)
+
+      expected_error_response = {
+        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
+        "title" => "One or more parameters is invalid",
+        "invalid_params" => { "organisation_id" => ["this is not a valid organisation id"] }
       }
 
       expect(json).to eq(expected_error_response)

@@ -34,6 +34,7 @@ gem 'ruby-progressbar'
 gem 'sass-rails'
 gem 'uglifier'
 gem 'unicorn'
+gem 'uuid'
 
 group :development do
   gem 'better_errors'
