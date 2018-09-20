@@ -113,7 +113,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
     formatador (0.2.5)
-    gds-api-adapters (53.0.0)
+    gds-api-adapters (53.1.0)
       addressable
       link_header
       null_logger
@@ -491,7 +491,7 @@ DEPENDENCIES
   deepsort
   draper
   factory_bot_rails
-  gds-api-adapters (~> 53.0.0)
+  gds-api-adapters (~> 53.1.0)
   gds-sso
   google-api-client (~> 0.23)
   govuk-lint (= 3.9.0)
