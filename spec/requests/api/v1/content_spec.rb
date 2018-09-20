@@ -69,6 +69,37 @@ RSpec.describe '/api/v1/content' do
     end
   end
 
+  describe "an API response" do
+    it "should be cacheable until the end of the day" do
+      Timecop.freeze(Time.zone.local(2020, 1, 1, 0, 0, 0)) do
+        get "/api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+
+        expect(response.headers['ETag']).to be_present
+        expect(response.headers['Cache-Control']).to eq "max-age=3600, public"
+      end
+    end
+
+    it "expires at 1am" do
+      Timecop.freeze(Time.zone.local(2020, 1, 1, 1, 0, 0)) do
+        get "/api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+
+        expect(response.headers['ETag']).to be_present
+        expect(response.headers['Cache-Control']).to eq "max-age=0, public"
+      end
+    end
+
+    it "can be cached for up to a day" do
+      Timecop.freeze(Time.zone.local(2020, 1, 1, 1, 0, 1)) do
+        get "/api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+
+        expect(response.headers['ETag']).to be_present
+        expect(response.headers['Cache-Control']).to eq "max-age=86399, public"
+      end
+    end
+  end
+
+
+
   context 'with invalid params' do
     it 'returns an error for badly formatted dates' do
       get "/api/v1/content", params: { from: 'today', to: '2018-01-15', organisation_id: '386ea723-d8fc-4581-8e53-bb8ee9aa8c03' }
