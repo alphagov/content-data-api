@@ -1,12 +1,12 @@
 class Reports::Content
-  def self.retrieve(from:, to:, organisation:)
-    new(from, to, organisation).retrieve
+  def self.retrieve(from:, to:, organisation_id:)
+    new(from, to, organisation_id).retrieve
   end
 
-  def initialize(from, to, organisation)
+  def initialize(from, to, organisation_id)
     @from = from
     @to = to
-    @organsation = organisation
+    @organsation_id = organisation_id
   end
 
   def retrieve
@@ -74,7 +74,7 @@ private
   end
 
   def slice_items
-    Dimensions::Item.by_organisation_id(@organsation)
+    Dimensions::Item.by_organisation_id(@organsation_id)
   end
 
   def slice_dates

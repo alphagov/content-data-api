@@ -46,7 +46,7 @@ RSpec.describe '/api/v1/content' do
           document_type: 'news_story',
           primary_organisation_content_id: another_org_id,
         })
-      get "//api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+      get "/api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
     end
 
     it 'is successful' do
@@ -65,27 +65,6 @@ RSpec.describe '/api/v1/content' do
           satisfaction_score_responses: 250,
           number_of_internal_searches: 220
         ]
-      )
-    end
-  end
-
-  context 'when no is_this_useful.. responses' do
-    before do
-      create_metric(base_path: '/path/1', date: '2018-01-01',
-        daily: {
-          unique_pageviews: 100,
-          is_this_useful_yes: 0,
-          is_this_useful_no: 0,
-        },
-        item: { title: 'the title', primary_organisation_content_id: primary_org_id })
-      get "//api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
-    end
-
-    it 'returns the nil for the satisfaction_score' do
-      json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json[:results][0]).to include(
-        satisfaction_score: nil,
-        satisfaction_score_responses: 0
       )
     end
   end

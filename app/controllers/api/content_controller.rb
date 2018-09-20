@@ -1,8 +1,12 @@
 class Api::ContentController < Api::BaseController
   before_action :validate_params!
+
   def index
-    @content = Reports::Content.retrieve(from: params[:from], to: params[:to],
-    organisation: params[:organisation_id])
+    @content = Reports::Content.retrieve(
+      from: params[:from],
+      to: params[:to],
+      organisation_id: params[:organisation_id]
+    )
     render json: { results: @content }.to_json
   end
 
