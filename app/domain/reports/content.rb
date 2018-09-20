@@ -11,9 +11,10 @@ class Reports::Content
 
   def retrieve
     Facts::Metric.all
-      .joins(dimensions_item: :facts_edition).merge(slice_items)
       .joins(:dimensions_date).merge(slice_dates)
-      .group(group_columns)
+      .joins(dimensions_item: :facts_edition).merge(slice_items)
+      .joins(latest_join)
+      .group('latest.content_uuid', *group_columns)
       .order(order_by)
       .limit(100)
       .pluck(*group_columns, *aggregates)
@@ -32,7 +33,7 @@ private
   end
 
   def group_columns
-    %w[base_path title document_type].map { |col| Arel.sql(col) }
+    %w[latest.base_path latest.title latest.document_type].map { |col| Arel.sql(col) }
   end
 
   def order_by
@@ -49,6 +50,10 @@ private
 
   def satifaction_score_responses
     Arel.sql("SUM(is_this_useful_yes + is_this_useful_no)")
+  end
+
+  def latest_join
+    "INNER JOIN dimensions_items latest ON latest.content_uuid = dimensions_items.content_uuid AND latest.latest = true"
   end
 
   def average_satisfaction_score
