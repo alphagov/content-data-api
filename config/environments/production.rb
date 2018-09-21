@@ -1,8 +1,5 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  config.logstasher.enabled = true
-  config.logstasher.logger = Logger.new(Rails.root.join("log/production.json.log"))
-  config.logstasher.suppress_app_log = true
 
   # Code is not reloaded between requests.
   config.cache_classes = true
