@@ -513,7 +513,6 @@ DEPENDENCIES
   jquery-rails
   kaminari
   listen
-  logstasher
   nokogiri (~> 1.8)
   odyssey
   pg
