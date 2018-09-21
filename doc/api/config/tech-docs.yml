@@ -1,6 +1,7 @@
 # Host to use for canonical URL generation (without trailing slash)
 host: https://content-performance-api.publishing.service.gov.uk
 api_base_url: https://content-performance-manager.publishing.service.gov.uk
+api_path: ../../openapi.yaml
 
 # Header-related options
 show_govuk_logo: true
