@@ -1,4 +1,4 @@
-RSpec.describe '/api/v1/content' do
+RSpec.describe '/content' do
   include ItemSetupHelpers
   before do
     create :user
@@ -46,7 +46,7 @@ RSpec.describe '/api/v1/content' do
           document_type: 'news_story',
           primary_organisation_content_id: another_org_id,
         })
-      get "/api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+      get "/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
     end
 
     it 'is successful' do
@@ -72,7 +72,7 @@ RSpec.describe '/api/v1/content' do
   describe "an API response" do
     it "should be cacheable until the end of the day" do
       Timecop.freeze(Time.zone.local(2020, 1, 1, 0, 0, 0)) do
-        get "/api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+        get "/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
 
         expect(response.headers['ETag']).to be_present
         expect(response.headers['Cache-Control']).to eq "max-age=3600, public"
@@ -81,7 +81,7 @@ RSpec.describe '/api/v1/content' do
 
     it "expires at 1am" do
       Timecop.freeze(Time.zone.local(2020, 1, 1, 1, 0, 0)) do
-        get "/api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+        get "/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
 
         expect(response.headers['ETag']).to be_present
         expect(response.headers['Cache-Control']).to eq "max-age=0, public"
@@ -90,7 +90,7 @@ RSpec.describe '/api/v1/content' do
 
     it "can be cached for up to a day" do
       Timecop.freeze(Time.zone.local(2020, 1, 1, 1, 0, 1)) do
-        get "/api/v1/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+        get "/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
 
         expect(response.headers['ETag']).to be_present
         expect(response.headers['Cache-Control']).to eq "max-age=86399, public"
@@ -102,7 +102,7 @@ RSpec.describe '/api/v1/content' do
 
   context 'with invalid params' do
     it 'returns an error for badly formatted dates' do
-      get "/api/v1/content", params: { from: 'today', to: '2018-01-15', organisation_id: '386ea723-d8fc-4581-8e53-bb8ee9aa8c03' }
+      get "/content", params: { from: 'today', to: '2018-01-15', organisation_id: '386ea723-d8fc-4581-8e53-bb8ee9aa8c03' }
 
       expect(response.status).to eq(400)
 
@@ -118,7 +118,7 @@ RSpec.describe '/api/v1/content' do
     end
 
     it 'returns an error for bad date ranges' do
-      get "/api/v1/content/", params: { from: '2018-01-16', to: '2018-01-15', organisation_id: '1182a3ed-a9a3-482c-81e1-0a9ecfb847d0' }
+      get "/content/", params: { from: '2018-01-16', to: '2018-01-15', organisation_id: '1182a3ed-a9a3-482c-81e1-0a9ecfb847d0' }
 
       expect(response.status).to eq(400)
 
@@ -134,7 +134,7 @@ RSpec.describe '/api/v1/content' do
     end
 
     it 'returns an error for invalid organisation_id' do
-      get "/api/v1/content/", params: { from: '2018-01-16', to: '2018-01-17', organisation_id: 'blah' }
+      get "/content/", params: { from: '2018-01-16', to: '2018-01-17', organisation_id: 'blah' }
 
       expect(response.status).to eq(400)
 
