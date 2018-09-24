@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     get '/v1/content', to: "content#index"
     get '/v1/metrics/', to: "metrics#index"
     get '/v1/metrics/*base_path/time-series', to: "time_series#show"
-    get '/v1/metrics/*base_path', to: "metrics#summary"
+    get '/v1/metrics/*base_path', to: "aggregations#show"
     get '/v1/healthcheck', to: "healthcheck#index"
   end
 end
