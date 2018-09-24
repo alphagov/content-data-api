@@ -4,8 +4,10 @@ RSpec.describe '/api/v1/content' do
     create :user
   end
 
-  let(:primary_org_id) { '6667cce2-e809-4e21-ae09-cb0bdc1ddda3' }
-  let(:another_org_id) { '05e9c04d-534b-4ff0-ae8f-35c1bf9e510f' }
+  let(:primary_org_id) { SecureRandom.uuid }
+  let(:another_org_id) { SecureRandom.uuid }
+  let(:content_uuid) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
+  let(:another_content_uuid) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
 
   context 'when successful' do
     before do
@@ -17,12 +19,14 @@ RSpec.describe '/api/v1/content' do
           number_of_internal_searches: 20,
         },
         item: {
-          title: 'the title',
+          title: 'old title',
           document_type: 'news_story',
           primary_organisation_content_id: primary_org_id,
+          latest: false,
+          content_uuid: content_uuid,
         })
 
-      create_metric(base_path: '/path/1', date: '2018-01-02',
+      create_metric(base_path: '/new/base/path', date: '2018-01-02',
         daily: {
           unique_pageviews: 133,
           is_this_useful_yes: 150,
@@ -30,11 +34,26 @@ RSpec.describe '/api/v1/content' do
           number_of_internal_searches: 200
         },
         item: {
-          title: 'the title',
-          document_type: 'news_story',
+          title: 'latest title',
+          document_type: 'latest_doc_type',
           primary_organisation_content_id: primary_org_id,
+          latest: true,
+          content_uuid: content_uuid,
         })
-      create_metric(base_path: '/another/path', date: '2018-01-02',
+      create_metric(base_path: '/path/2', date: '2018-01-02',
+        daily: {
+          unique_pageviews: 100,
+          is_this_useful_yes: 10,
+          is_this_useful_no: 10,
+          number_of_internal_searches: 1
+        },
+        item: {
+          title: 'another title',
+          document_type: 'organisation',
+          primary_organisation_content_id: primary_org_id,
+          content_uuid: another_content_uuid,
+        })
+      create_metric(base_path: '/another/org/path', date: '2018-01-02',
         daily: {
           unique_pageviews: 34,
           is_this_useful_yes: 22,
@@ -53,17 +72,28 @@ RSpec.describe '/api/v1/content' do
       expect(response.status).to eq(200)
     end
 
-    it 'returns the correct data' do
+    it 'returns the data summarized with metadata from latest item' do
       json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json[:results]).to match_array(
+      expect(json[:results]).to eq(
         [
-          base_path: '/path/1',
-          title: 'the title',
-          unique_pageviews: 233,
-          document_type: 'news_story',
-          satisfaction_score: 0.8,
-          satisfaction_score_responses: 250,
-          number_of_internal_searches: 220
+          {
+            base_path: '/new/base/path',
+            title: 'latest title',
+            unique_pageviews: 233,
+            document_type: 'latest_doc_type',
+            satisfaction_score: 0.8,
+            satisfaction_score_responses: 250,
+            number_of_internal_searches: 220
+          },
+          {
+            base_path: '/path/2',
+            title: 'another title',
+            unique_pageviews: 100,
+            document_type: 'organisation',
+            satisfaction_score: 0.5,
+            satisfaction_score_responses: 20,
+            number_of_internal_searches: 1
+          }
         ]
       )
     end
@@ -97,7 +127,6 @@ RSpec.describe '/api/v1/content' do
       end
     end
   end
-
 
 
   context 'with invalid params' do
