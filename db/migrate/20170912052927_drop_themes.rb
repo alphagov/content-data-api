@@ -4,7 +4,7 @@ class DropThemes < ActiveRecord::Migration[5.1]
       t.string "name", null: false
       t.timestamps
 
-      t.index ["name"], name: "index_themes_on_name", unique: true
+      t.index %w[name], name: "index_themes_on_name", unique: true
     end
   end
 end

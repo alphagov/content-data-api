@@ -6,7 +6,7 @@ class DropOrganisations < ActiveRecord::Migration[5.1]
       t.datetime "updated_at", null: false
       t.string "title"
       t.string "content_id"
-      t.index ["slug"], name: "index_organisations_on_slug", unique: true
+      t.index %w[slug], name: "index_organisations_on_slug", unique: true
     end
   end
 end

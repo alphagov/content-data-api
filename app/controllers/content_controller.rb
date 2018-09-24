@@ -1,7 +1,7 @@
-class Api::ContentController < Api::BaseController
+class ContentController < Api::BaseController
   before_action :validate_params!
 
-  def index
+  def show
     @content = Reports::Content.retrieve(
       from: params[:from],
       to: params[:to],
