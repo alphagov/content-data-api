@@ -3,7 +3,6 @@ class Api::AggregationsController < Api::BaseController
 
   def show
     @series = query_series
-    @api_request = api_request
     @metadata = metadata
   end
 
@@ -24,7 +23,7 @@ private
 
   def metadata
     latest_item = Dimensions::Item.latest_by_base_path(format_base_path_param).first
-    raise Api::NotFoundError.new("#{@api_request.base_path} not found") if latest_item.nil?
+    raise Api::NotFoundError.new("#{api_request.base_path} not found") if latest_item.nil?
     latest_item.metadata
   end
 

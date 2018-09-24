@@ -3,7 +3,6 @@ class Api::TimeSeriesController < Api::BaseController
 
   def show
     @series = query_series
-    @api_request = api_request
   end
 
 private
