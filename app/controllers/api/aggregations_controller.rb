@@ -16,11 +16,6 @@ private
        .run
   end
 
-  def format_base_path_param
-    #  add '/' as param is received without leading forward slash which is needed to query by base_path.
-    "/#{base_path}"
-  end
-
   def metadata
     latest_item = Dimensions::Item.latest_by_base_path(format_base_path_param).first
     raise Api::NotFoundError.new("#{api_request.base_path} not found") if latest_item.nil?
@@ -35,15 +30,5 @@ private
 
   def permitted_params
     params.permit(:from, :to, :base_path, :format, metrics: [])
-  end
-
-  def validate_params!
-    unless api_request.valid?
-      error_response(
-        "validation-error",
-        title: "One or more parameters is invalid",
-        invalid_params: api_request.errors.to_hash
-      )
-    end
   end
 end

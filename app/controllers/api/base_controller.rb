@@ -16,6 +16,21 @@ class Api::BaseController < ApplicationController
     not_found_response
   end
 
+  def validate_params!
+    unless api_request.valid?
+      error_response(
+        "validation-error",
+          title: "One or more parameters is invalid",
+          invalid_params: api_request.errors.to_hash
+      )
+    end
+  end
+
+  def format_base_path_param
+    #  add '/' as param is received without leading forward slash which is needed to query by base_path.
+    "/#{base_path}"
+  end
+
 private
 
   def set_cache_headers

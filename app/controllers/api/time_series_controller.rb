@@ -15,11 +15,6 @@ private
        .run
   end
 
-  def format_base_path_param
-    #  add '/' as param is received without leading forward slash which is needed to query by base_path.
-    "/#{base_path}"
-  end
-
   delegate :from, :to, :base_path, :metrics, to: :api_request
 
   def api_request
@@ -28,15 +23,5 @@ private
 
   def permitted_params
     params.permit(:from, :to, :base_path, :format, metrics: [])
-  end
-
-  def validate_params!
-    unless api_request.valid?
-      error_response(
-        "validation-error",
-        title: "One or more parameters is invalid",
-        invalid_params: api_request.errors.to_hash
-      )
-    end
   end
 end
