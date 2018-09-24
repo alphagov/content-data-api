@@ -44,7 +44,6 @@ RSpec.describe Dimensions::Item, type: :model do
     describe '.outdated_subpages' do
       let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:locale) { 'fr' }
-      let!(:outdated_item) { create :dimensions_item, base_path: '/path-1/part-2', locale: locale, content_id: content_id }
 
       it 'filters out the passed paths' do
         create :dimensions_item, base_path: '/path-1', locale: locale, content_id: content_id

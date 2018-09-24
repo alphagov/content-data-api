@@ -5,25 +5,25 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   before { create(:user) }
 
   let!(:base_path) { '/base_path' }
+  let(:content_uuid) { '35058ac0-fb70-4220-81dc-c8b14bededdc' }
 
   before do
     create_metric(base_path: base_path, date: '2018-01-13',
       edition: {
         number_of_pdfs: 30, number_of_word_files: 30, readability_score: 123
       },
-      item: { latest: false })
+      item: { latest: false, content_uuid: content_uuid })
     create_metric(base_path: base_path, date: '2018-01-14',
       edition: {
         number_of_pdfs: 20, number_of_word_files: 20, readability_score: 5
       },
-      item: { latest: true })
-    create_metric base_path: base_path, date: '2018-01-15'
-    create_metric base_path: base_path, date: '2018-01-16'
+      item: { latest: true, content_uuid: content_uuid })
+    create_metric base_path: base_path, date: '2018-01-15', item: { content_uuid: content_uuid, latest: true }
+    create_metric base_path: base_path, date: '2018-01-16', item: { content_uuid: content_uuid, latest: true }
   end
 
   it 'returns the `number of pdfs` between two dates' do
     get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[number_of_pdfs] }
-
     json = JSON.parse(response.body)
     expect(json.deep_symbolize_keys).to eq(api_reponse('number_of_pdfs'))
   end

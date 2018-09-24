@@ -6,8 +6,8 @@ RSpec.describe '/content' do
 
   let(:primary_org_id) { SecureRandom.uuid }
   let(:another_org_id) { SecureRandom.uuid }
-  let(:content_uuid) { SecureRandom.uuid }
-  let(:another_content_uuid) { SecureRandom.uuid }
+  let(:content_uuid) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
+  let(:another_content_uuid) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
 
   context 'when successful' do
     before do
