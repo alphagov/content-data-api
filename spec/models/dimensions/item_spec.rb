@@ -150,18 +150,23 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '#promote!' do
     let(:item) { build :dimensions_item, latest: false }
+    let(:content_uuid) { 'content-uuid' }
+    let(:old_item) { build :dimensions_item, content_uuid: content_uuid }
+
+    before do
+      item.promote!(old_item)
+    end
 
     it 'set the latest attribute to true' do
-      item.promote!(build(:dimensions_item))
-
       expect(item.latest).to be true
     end
 
-    it 'set the latest attribute to false for the old version' do
-      old_item = build :dimensions_item
-      item.promote!(old_item)
-
+    it 'sets the latest attribute to false for the old version' do
       expect(old_item.latest).to be false
+    end
+
+    it 'copies the content_uuid from the old item' do
+      expect(item.reload.content_uuid).to eq(content_uuid)
     end
   end
 

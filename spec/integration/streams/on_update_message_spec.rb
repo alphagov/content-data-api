@@ -39,20 +39,6 @@ RSpec.describe PublishingAPI::Consumer do
     expect(Dimensions::Item.first).to have_attributes(latest: true)
   end
 
-  it 'deprecates old items' do
-    message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
-    message2 = build :message, payload: message.payload.dup
-    message2.payload['payload_version'] = 4
-    message2.payload['title'] = 'updated-title'
-
-    expect {
-      subject.process(message)
-      subject.process(message2)
-    }.to change(Dimensions::Item, :count).by(2)
-
-    expect(Dimensions::Item.find_by(publishing_api_payload_version: 2)).to have_attributes(latest: false)
-    expect(Dimensions::Item.find_by(publishing_api_payload_version: 4)).to have_attributes(latest: true)
-  end
 
   it 'does not grow the dimension if the event carries no changes in an attribute' do
     message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
@@ -65,23 +51,89 @@ RSpec.describe PublishingAPI::Consumer do
     }.to change(Dimensions::Item, :count).by(1)
   end
 
-  it 'grows the dimension if the event carries a change in the body' do
-    message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
-    message2 = build :message, payload: message.payload.deep_dup
-    message2.payload['payload_version'] = 4
-    message2.payload['details']['body'] = '<p>different content</p>'
-    expect {
+  context 'when the event carries a change' do
+    it 'deprecates old items' do
+      message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
+      message2 = build :message, payload: message.payload.dup
+      message2.payload['payload_version'] = 4
+      message2.payload['title'] = 'updated-title'
+
+      expect {
+        subject.process(message)
+        subject.process(message2)
+      }.to change(Dimensions::Item, :count).by(2)
+
+      expect(Dimensions::Item.find_by(publishing_api_payload_version: 2)).to have_attributes(latest: false)
+      expect(Dimensions::Item.find_by(publishing_api_payload_version: 4)).to have_attributes(latest: true)
+    end
+
+    it 'grows the dimension' do
+      message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
+      message2 = build :message, payload: message.payload.deep_dup
+      message2.payload['payload_version'] = 4
+      message2.payload['details']['body'] = '<p>different content</p>'
+      expect {
+        subject.process(message)
+        subject.process(message2)
+      }.to change(Dimensions::Item, :count).by(2)
+    end
+
+    it 'updates the attributes correctly' do
+      message = build :message, base_path: '/base-path', attributes: message_attributes
+      message.payload['details']['body'] = '<p>some content</p>'
+      subject.process(message)
+      latest_item = Dimensions::Item.where(base_path: '/base-path', latest: true).first
+      expect(latest_item).to have_attributes(expected_attributes(content_id: message.payload['content_id']))
+    end
+
+    it 'assigns the same content_uuid to the new item' do
+      content_id = SecureRandom.uuid
+      message = build :message,
+        base_path: '/base-path',
+        content_id: content_id,
+        attributes: { 'payload_version' => 2 }
+      message2 = build :message,
+        content_id: content_id,
+        payload: message.payload.deep_dup
+      message2.payload['payload_version'] = 4
+      message2.payload['details']['body'] = '<p>different content</p>'
       subject.process(message)
       subject.process(message2)
-    }.to change(Dimensions::Item, :count).by(2)
+      content_uuids = Dimensions::Item.where(base_path: '/base-path').pluck(:content_uuid)
+      expect(content_uuids.uniq).to eq(["#{content_id}:en"])
+    end
   end
 
-  it 'updates the attributes correctly' do
-    message = build :message, base_path: '/base-path', attributes: message_attributes
-    message.payload['details']['body'] = '<p>some content</p>'
-    subject.process(message)
-    latest_item = Dimensions::Item.where(base_path: '/base-path', latest: true).first
-    expect(latest_item).to have_attributes(expected_attributes(content_id: message.payload['content_id']))
+  context 'when the base path has changed' do
+    let(:content_id) { SecureRandom.uuid }
+    let(:locale) { 'en' }
+    let(:content_uuid) { "#{content_id}:#{locale}" }
+    let(:new_base_path) { '/new/base/path' }
+
+    it 'creates the new item with the content_uuid of the old item' do
+      create :dimensions_item,
+        base_path: '/old/base/path',
+        content_id: content_id,
+        locale: locale,
+        content_uuid: content_uuid,
+        latest: true,
+        publishing_api_payload_version: 2
+      message = build :message,
+        base_path: new_base_path,
+        content_id: content_id,
+        locale: locale,
+        payload_version: 3
+
+      subject.process(message)
+
+      new_item = Dimensions::Item.find_by(content_id: content_id,
+        locale: locale,
+        latest: true)
+      expect(new_item).to have_attributes(
+        content_uuid: content_uuid,
+        base_path: new_base_path
+      )
+    end
   end
 
   describe 'all schemas' do

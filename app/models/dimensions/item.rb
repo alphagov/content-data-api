@@ -20,8 +20,12 @@ class Dimensions::Item < ApplicationRecord
     latest_by_content_id(content_id, locale)
       .where.not(base_path: exclude_paths)
   end
+
   def promote!(old_item)
-    old_item.deprecate! if old_item
+    if old_item
+      old_item.deprecate!
+      assign_attributes content_uuid: old_item.content_uuid
+    end
     update!(latest: true)
   end
 
