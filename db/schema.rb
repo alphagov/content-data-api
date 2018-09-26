@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_24_093138) do
+ActiveRecord::Schema.define(version: 2018_09_26_105207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,8 +121,8 @@ ActiveRecord::Schema.define(version: 2018_09_24_093138) do
     t.integer "pageviews", default: 0
     t.integer "unique_pageviews", default: 0
     t.integer "feedex_comments", default: 0
-    t.integer "is_this_useful_yes", default: 0
-    t.integer "is_this_useful_no", default: 0
+    t.integer "is_this_useful_yes", default: 0, null: false
+    t.integer "is_this_useful_no", default: 0, null: false
     t.integer "number_of_internal_searches", default: 0
     t.integer "exits", default: 0
     t.integer "entrances", default: 0
@@ -130,7 +130,7 @@ ActiveRecord::Schema.define(version: 2018_09_24_093138) do
     t.integer "avg_time_on_page", default: 0
     t.integer "bounces", default: 0
     t.integer "time_on_page", default: 0
-    t.float "satisfaction_score"
+    t.float "satisfaction_score", default: 0.0, null: false
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
   end
 
