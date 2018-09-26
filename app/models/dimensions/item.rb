@@ -24,7 +24,7 @@ class Dimensions::Item < ApplicationRecord
   def promote!(old_item)
     if old_item
       old_item.deprecate!
-      assign_attributes content_uuid: old_item.content_uuid
+      assign_attributes warehouse_item_id: old_item.warehouse_item_id
     end
     update!(latest: true)
   end

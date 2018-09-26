@@ -86,7 +86,7 @@ RSpec.describe PublishingAPI::Consumer do
       expect(latest_item).to have_attributes(expected_attributes(content_id: message.payload['content_id']))
     end
 
-    it 'assigns the same content_uuid to the new item' do
+    it 'assigns the same warehouse_item_id to the new item' do
       content_id = SecureRandom.uuid
       message = build :message,
         base_path: '/base-path',
@@ -99,23 +99,23 @@ RSpec.describe PublishingAPI::Consumer do
       message2.payload['details']['body'] = '<p>different content</p>'
       subject.process(message)
       subject.process(message2)
-      content_uuids = Dimensions::Item.where(base_path: '/base-path').pluck(:content_uuid)
-      expect(content_uuids.uniq).to eq(["#{content_id}:en"])
+      warehouse_ids = Dimensions::Item.where(base_path: '/base-path').pluck(:warehouse_item_id)
+      expect(warehouse_ids.uniq).to eq(["#{content_id}:en"])
     end
   end
 
   context 'when the base path has changed' do
     let(:content_id) { SecureRandom.uuid }
     let(:locale) { 'en' }
-    let(:content_uuid) { "#{content_id}:#{locale}" }
+    let(:warehouse_item_id) { "#{content_id}:#{locale}" }
     let(:new_base_path) { '/new/base/path' }
 
-    it 'creates the new item with the content_uuid of the old item' do
+    it 'creates the new item with the warehouse_item_id of the old item' do
       create :dimensions_item,
         base_path: '/old/base/path',
         content_id: content_id,
         locale: locale,
-        content_uuid: content_uuid,
+        warehouse_item_id: warehouse_item_id,
         latest: true,
         publishing_api_payload_version: 2
       message = build :message,
@@ -130,7 +130,7 @@ RSpec.describe PublishingAPI::Consumer do
         locale: locale,
         latest: true)
       expect(new_item).to have_attributes(
-        content_uuid: content_uuid,
+        warehouse_item_id: warehouse_item_id,
         base_path: new_base_path
       )
     end

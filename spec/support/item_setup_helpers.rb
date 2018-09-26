@@ -15,7 +15,7 @@ module ItemSetupHelpers
 private
 
   def dimensions_item(attrs, edition, dimensions_date)
-    existing_item = Dimensions::Item.find_by(content_uuid: attrs[:content_uuid], latest: attrs[:latest])
+    existing_item = Dimensions::Item.find_by(warehouse_item_id: attrs[:warehouse_item_id], latest: attrs[:latest])
     return existing_item if existing_item
     new_item = create(:dimensions_item, attrs)
     create(:facts_edition, edition.merge(dimensions_item: new_item, dimensions_date: dimensions_date))

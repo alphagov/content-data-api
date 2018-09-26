@@ -6,8 +6,8 @@ RSpec.describe '/content' do
 
   let(:primary_org_id) { SecureRandom.uuid }
   let(:another_org_id) { SecureRandom.uuid }
-  let(:content_uuid) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
-  let(:another_content_uuid) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
+  let(:warehouse_item_id) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
+  let(:another_warehouse_item_id) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
 
   context 'when successful' do
     before do
@@ -23,7 +23,7 @@ RSpec.describe '/content' do
           document_type: 'news_story',
           primary_organisation_content_id: primary_org_id,
           latest: false,
-          content_uuid: content_uuid,
+          warehouse_item_id: warehouse_item_id,
         })
 
       create_metric(base_path: '/new/base/path', date: '2018-01-02',
@@ -38,7 +38,7 @@ RSpec.describe '/content' do
           document_type: 'latest_doc_type',
           primary_organisation_content_id: primary_org_id,
           latest: true,
-          content_uuid: content_uuid,
+          warehouse_item_id: warehouse_item_id,
         })
       create_metric(base_path: '/path/2', date: '2018-01-02',
         daily: {
@@ -51,7 +51,7 @@ RSpec.describe '/content' do
           title: 'another title',
           document_type: 'organisation',
           primary_organisation_content_id: primary_org_id,
-          content_uuid: another_content_uuid,
+          warehouse_item_id: another_warehouse_item_id,
         })
       create_metric(base_path: '/another/org/path', date: '2018-01-02',
         daily: {

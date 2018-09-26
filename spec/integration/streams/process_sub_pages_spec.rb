@@ -22,7 +22,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
         locale: 'en')
       subject.process(message)
 
-      parts = Dimensions::Item.pluck(:base_path, :title, :content_uuid).to_set
+      parts = Dimensions::Item.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
         ["/base-path", "Part 1", "#{content_id}:en:/base-path"],
@@ -42,7 +42,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
         content_id: content_id,
         locale: 'fr')
       subject.process(message)
-      parts = Dimensions::Item.pluck(:base_path, :title, :content_uuid).to_set
+      parts = Dimensions::Item.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
         %W(/travel/advice Summary #{content_id}:fr:/travel/advice),

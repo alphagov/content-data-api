@@ -2,8 +2,8 @@ RSpec.describe Reports::Content do
   include ItemSetupHelpers
 
   let(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
-  let(:content_uuid) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
-  let(:another_content_uuid) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
+  let(:warehouse_item_id) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
+  let(:another_warehouse_item_id) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
 
   before do
     create :user
@@ -23,7 +23,7 @@ RSpec.describe Reports::Content do
           document_type: 'news_story',
           primary_organisation_content_id: primary_org_id,
           latest: false,
-          content_uuid: content_uuid,
+          warehouse_item_id: warehouse_item_id,
         })
 
       create_metric(base_path: '/path/1', date: '2018-01-02',
@@ -38,7 +38,7 @@ RSpec.describe Reports::Content do
           document_type: 'news_story',
           primary_organisation_content_id: primary_org_id,
           latest: true,
-          content_uuid: content_uuid,
+          warehouse_item_id: warehouse_item_id,
         })
 
       create_metric(base_path: '/path/2', date: '2018-01-02',
@@ -53,7 +53,7 @@ RSpec.describe Reports::Content do
           document_type: 'press_release',
           primary_organisation_content_id: primary_org_id,
           latest: true,
-          content_uuid: another_content_uuid,
+          warehouse_item_id: another_warehouse_item_id,
         })
     end
 
@@ -99,7 +99,7 @@ RSpec.describe Reports::Content do
           document_type: 'news_story',
           primary_organisation_content_id: primary_org_id,
           latest: false,
-          content_uuid: content_uuid,
+          warehouse_item_id: warehouse_item_id,
         })
       create_metric(base_path: '/new/base/path', date: '2018-01-01',
         daily: {
@@ -113,7 +113,7 @@ RSpec.describe Reports::Content do
           document_type: 'press_release',
           primary_organisation_content_id: primary_org_id,
           latest: true,
-          content_uuid: content_uuid,
+          warehouse_item_id: warehouse_item_id,
         })
     end
 
@@ -143,7 +143,7 @@ RSpec.describe Reports::Content do
         item: {
           title: 'the title',
           primary_organisation_content_id: primary_org_id,
-          content_uuid: content_uuid,
+          warehouse_item_id: warehouse_item_id,
         })
     end
 
@@ -166,7 +166,7 @@ RSpec.describe Reports::Content do
         },
         item: { title: 'the title',
           primary_organisation_content_id: primary_org_id,
-          content_uuid: content_uuid, })
+          warehouse_item_id: warehouse_item_id, })
     end
 
     it 'returns a empty array' do

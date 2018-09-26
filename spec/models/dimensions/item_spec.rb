@@ -150,8 +150,8 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '#promote!' do
     let(:item) { build :dimensions_item, latest: false }
-    let(:content_uuid) { 'content-uuid' }
-    let(:old_item) { build :dimensions_item, content_uuid: content_uuid }
+    let(:warehouse_item_id) { 'warehouse-item-id' }
+    let(:old_item) { build :dimensions_item, warehouse_item_id: warehouse_item_id }
 
     before do
       item.promote!(old_item)
@@ -165,8 +165,8 @@ RSpec.describe Dimensions::Item, type: :model do
       expect(old_item.latest).to be false
     end
 
-    it 'copies the content_uuid from the old item' do
-      expect(item.reload.content_uuid).to eq(content_uuid)
+    it 'copies the warehouse_item_id from the old item' do
+      expect(item.reload.warehouse_item_id).to eq(warehouse_item_id)
     end
   end
 

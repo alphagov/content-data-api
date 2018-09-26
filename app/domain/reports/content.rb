@@ -14,7 +14,7 @@ class Reports::Content
       .joins(:dimensions_date).merge(slice_dates)
       .joins(:dimensions_item).merge(slice_items)
       .joins(latest_join)
-      .group('latest.content_uuid', *group_columns)
+      .group('latest.warehouse_item_id', *group_columns)
       .order(order_by)
       .limit(100)
       .pluck(*group_columns, *aggregates)
@@ -37,7 +37,7 @@ private
   end
 
   def order_by
-    Arel.sql('latest.content_uuid')
+    Arel.sql('latest.warehouse_item_id')
   end
 
   def sum(column)
@@ -45,7 +45,7 @@ private
   end
 
   def latest_join
-    "INNER JOIN dimensions_items latest ON latest.content_uuid = dimensions_items.content_uuid AND latest.latest = true"
+    "INNER JOIN dimensions_items latest ON latest.warehouse_item_id = dimensions_items.warehouse_item_id AND latest.latest = true"
   end
 
   def array_to_hash(array)

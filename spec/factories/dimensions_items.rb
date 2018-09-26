@@ -9,6 +9,6 @@ FactoryBot.define do
     sequence(:publishing_api_payload_version)
     schema_name { 'detailed_guide' }
     document_type { 'detailed_guide' }
-    content_uuid { "#{content_id}:#{locale}" }
+    warehouse_item_id { "#{content_id}:#{locale}" }
   end
 end

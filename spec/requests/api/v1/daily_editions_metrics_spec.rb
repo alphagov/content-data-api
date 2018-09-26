@@ -5,21 +5,21 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   before { create(:user) }
 
   let!(:base_path) { '/base_path' }
-  let(:content_uuid) { '35058ac0-fb70-4220-81dc-c8b14bededdc' }
+  let(:warehouse_item_id) { '35058ac0-fb70-4220-81dc-c8b14bededdc' }
 
   before do
     create_metric(base_path: base_path, date: '2018-01-13',
       edition: {
         number_of_pdfs: 30, number_of_word_files: 30, readability_score: 123
       },
-      item: { latest: false, content_uuid: content_uuid })
+      item: { latest: false, warehouse_item_id: warehouse_item_id })
     create_metric(base_path: base_path, date: '2018-01-14',
       edition: {
         number_of_pdfs: 20, number_of_word_files: 20, readability_score: 5
       },
-      item: { latest: true, content_uuid: content_uuid })
-    create_metric base_path: base_path, date: '2018-01-15', item: { content_uuid: content_uuid, latest: true }
-    create_metric base_path: base_path, date: '2018-01-16', item: { content_uuid: content_uuid, latest: true }
+      item: { latest: true, warehouse_item_id: warehouse_item_id })
+    create_metric base_path: base_path, date: '2018-01-15', item: { warehouse_item_id: warehouse_item_id, latest: true }
+    create_metric base_path: base_path, date: '2018-01-16', item: { warehouse_item_id: warehouse_item_id, latest: true }
   end
 
   it 'returns the `number of pdfs` between two dates' do

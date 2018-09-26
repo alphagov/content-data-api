@@ -64,16 +64,15 @@ ActiveRecord::Schema.define(version: 2018_09_26_105207) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
-    t.string "content_uuid"
+    t.string "warehouse_item_id"
     t.json "raw_json"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
-    t.index ["content_uuid", "base_path", "title", "document_type"], name: "index_for_content_query"
-    t.index ["content_uuid", "latest"], name: "index_dimensions_items_content_uuid_latest"
-    t.index ["content_uuid"], name: "index_dimensions_items_content_uuid"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
+    t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
+    t.index ["warehouse_item_id", "latest"], name: "index_dimensions_items_warehouse_item_id_latest"
+    t.index ["warehouse_item_id"], name: "index_dimensions_items_warehouse_item_id"
   end
 
   create_table "events_feedexes", force: :cascade do |t|
