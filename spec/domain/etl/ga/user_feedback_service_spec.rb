@@ -52,7 +52,7 @@ RSpec.describe Etl::GA::UserFeedbackService do
           .to yield_successive_args(arg1, arg2)
       end
 
-      it 'yields successive report data if some actions are missing' do
+      it 'yields successive report data if some actions are missing defaulting to 0' do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
@@ -66,7 +66,7 @@ RSpec.describe Etl::GA::UserFeedbackService do
         arg1 = [
           a_hash_including(
             'page_path' => '/foo',
-            'is_this_useful_yes' => nil,
+            'is_this_useful_yes' => 0,
             'is_this_useful_no' => 10,
             'date' => '2018-02-20',
           ),
@@ -75,7 +75,7 @@ RSpec.describe Etl::GA::UserFeedbackService do
           a_hash_including(
             'page_path' => '/bar',
             'is_this_useful_yes' => 3,
-            'is_this_useful_no' => nil,
+            'is_this_useful_no' => 0,
             'date' => '2018-02-20',
           )
         ]

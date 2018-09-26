@@ -81,8 +81,8 @@ private
     key, value = *hash
     no_action = value.find { |v| v['ffNoClick'] }
     yes_action = value.find { |v| v['ffYesClick'] }
-    yes = yes_action['ffYesClick'] if yes_action
-    no = no_action['ffNoClick'] if no_action
+    yes = yes_action ? yes_action['ffYesClick'] : 0
+    no = no_action ? no_action['ffNoClick'] : 0
     {
       "page_path" => key,
       "is_this_useful_yes" => yes,
