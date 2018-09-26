@@ -153,29 +153,6 @@ RSpec.describe '/api/v1/metrics/', type: :request do
         expect(json).to eq(build_time_series_response('pageviews'))
       end
 
-      it 'returns `satisfaction_score` values between two dates' do
-        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[satisfaction_score] }
-        satisfaction_score = {
-          satisfaction_score: [
-            {
-              date: "2018-01-13",
-              value: 0.25
-            },
-            {
-              date: "2018-01-14",
-              value: 0.25
-            },
-            {
-              date: "2018-01-15",
-              value: 0.25
-            }
-          ]
-        }
-
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json).to eq(satisfaction_score)
-      end
-
       it 'returns `feedex issues` between two dates' do
         get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
 

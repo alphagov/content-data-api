@@ -11,16 +11,6 @@ class Facts::Metric < ApplicationRecord
     joins(dimensions_item: :facts_edition)
   end
 
-  def is_this_useful_yes=(value)
-    super(value)
-    self.satisfaction_score = Facts::Calculations::SatisfactionScore.apply(self)
-  end
-
-  def is_this_useful_no=(value)
-    super(value)
-    self.satisfaction_score = Facts::Calculations::SatisfactionScore.apply(self)
-  end
-
   scope :for_yesterday, -> { where(dimensions_date: Dimensions::Date.find_or_create(Date.yesterday)) }
   scope :from_day_before_to, ->(date) { where(dimensions_date: Dimensions::Date.between(date - 1, date)) }
 
