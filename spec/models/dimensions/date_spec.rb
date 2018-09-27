@@ -19,20 +19,20 @@ RSpec.describe Dimensions::Date, type: :model do
   it { is_expected.to validate_presence_of(:month_name) }
   it do
     is_expected.to validate_inclusion_of(:month_name)
-                     .in_array(
-                       %w(
+      .in_array(
+        %w(
                         January February March April May June July August
                         September October November December
                        )
-                     )
+      )
   end
 
   it { is_expected.to validate_presence_of(:month_name_abbreviated) }
   it do
     is_expected.to validate_inclusion_of(:month_name_abbreviated)
-                     .in_array(
-                       %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
-                     )
+      .in_array(
+        %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
+      )
   end
 
   it { is_expected.to validate_presence_of(:week) }
@@ -58,24 +58,24 @@ RSpec.describe Dimensions::Date, type: :model do
   it { is_expected.to validate_presence_of(:day_name) }
   it do
     is_expected.to validate_inclusion_of(:day_name)
-                     .in_array(
-                       %w(
+      .in_array(
+        %w(
                         Monday Tuesday Wednesday Thursday Friday
                         Saturday Sunday
                        )
-                     )
+      )
   end
 
   it { is_expected.to validate_presence_of(:day_name_abbreviated) }
   it do
     is_expected.to validate_inclusion_of(:day_name_abbreviated)
-                     .in_array(%w(Mon Tue Wed Thu Fri Sat Sun))
+      .in_array(%w(Mon Tue Wed Thu Fri Sat Sun))
   end
 
   it { is_expected.to validate_presence_of(:weekday_weekend) }
   it do
     is_expected.to validate_inclusion_of(:weekday_weekend)
-                     .in_array(%w(Weekday Weekend))
+      .in_array(%w(Weekday Weekend))
   end
 
   describe '.build' do
@@ -105,41 +105,42 @@ RSpec.describe Dimensions::Date, type: :model do
 
   describe '.create_with' do
     it 'builds and saves a new date dimension' do
-      dimension_date = Dimensions::Date.create_with(date)
+      dimensions_date = Dimensions::Date.create_with(date)
       expect(Dimensions::Date.count).to eq(1)
-      expect(Dimensions::Date.first).to eq(dimension_date)
+      expect(Dimensions::Date.first).to eq(dimensions_date)
     end
   end
+
 
   describe '.find_or_create' do
     let(:date) { ::Date.new(2017, 12, 21) }
 
     context 'when a dimension exists for the given date' do
       it 'should return the existing dimension' do
-        dimension_date = create(:dimensions_date, date: date)
-        dimension_date.save!
+        dimensions_date = create(:dimensions_date, date: date)
+        dimensions_date.save!
 
-        expect(Dimensions::Date.find_or_create(date)).to eq(dimension_date)
+        expect(Dimensions::Date.find_or_create(date)).to eq(dimensions_date)
       end
     end
 
     context 'when a dimension does not exist for the given date' do
       it 'should return the newly created dimension' do
-        dimension_date = Dimensions::Date.find_or_create(date)
+        dimensions_date = Dimensions::Date.find_or_create(date)
 
         expect(Dimensions::Date.count).to eq(1)
-        expect(dimension_date.date).to eq(date)
+        expect(dimensions_date.date).to eq(date)
       end
     end
 
     context 'when a dimension created under losing race conditions' do
       it 'should return the existing dimension' do
-        dimension_date = Dimensions::Date.build(date)
+        dimensions_date = Dimensions::Date.build(date)
         allow(Dimensions::Date).to receive(:create) {
-          dimension_date.save
+          dimensions_date.save
           raise ActiveRecord::RecordNotUnique
         }
-        expect(Dimensions::Date.find_or_create(date)).to eq(dimension_date)
+        expect(Dimensions::Date.find_or_create(date)).to eq(dimensions_date)
       end
     end
   end

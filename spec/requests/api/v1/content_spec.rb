@@ -1,5 +1,4 @@
 RSpec.describe '/content' do
-  include ItemSetupHelpers
   before do
     create :user
   end
@@ -11,68 +10,63 @@ RSpec.describe '/content' do
 
   context 'when successful' do
     before do
-      create_metric(base_path: '/path/1', date: '2018-01-01',
-        daily: {
-          unique_pageviews: 100,
-          is_this_useful_yes: 50,
-          is_this_useful_no: 20,
-          number_of_internal_searches: 20,
-        },
-        item: {
-          title: 'old title',
-          document_type: 'news_story',
-          primary_organisation_content_id: primary_org_id,
-          latest: false,
-          warehouse_item_id: warehouse_item_id,
-        })
-
-      create_metric(base_path: '/new/base/path', date: '2018-01-02',
-        daily: {
-          unique_pageviews: 133,
-          is_this_useful_yes: 150,
-          is_this_useful_no: 30,
-          number_of_internal_searches: 200
-        },
-        item: {
-          title: 'latest title',
-          document_type: 'latest_doc_type',
-          primary_organisation_content_id: primary_org_id,
-          latest: true,
-          warehouse_item_id: warehouse_item_id,
-        })
-      create_metric(base_path: '/path/2', date: '2018-01-02',
-        daily: {
-          unique_pageviews: 100,
-          is_this_useful_yes: 10,
-          is_this_useful_no: 10,
-          number_of_internal_searches: 1
-        },
-        item: {
-          title: 'another title',
-          document_type: 'organisation',
-          primary_organisation_content_id: primary_org_id,
-          warehouse_item_id: another_warehouse_item_id,
-        })
-      create_metric(base_path: '/another/org/path', date: '2018-01-02',
-        daily: {
-          unique_pageviews: 34,
-          is_this_useful_yes: 22,
-          is_this_useful_no: 10,
-          number_of_internal_searches: 15
-        },
-        item: {
-          title: 'another org title',
-          document_type: 'news_story',
-          primary_organisation_content_id: another_org_id,
-        })
-      get "/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+      old_edition = create :edition,
+        base_path: '/path/1',
+        date: '2018-01-01',
+        title: 'old-title',
+        primary_organisation_content_id: primary_org_id
+      create :metric,
+        date: '2018-01-01',
+        edition: old_edition,
+        unique_pageviews: 100,
+        is_this_useful_yes: 50,
+        is_this_useful_no: 20,
+        number_of_internal_searches: 20
+      new_edition = create :edition,
+        replaces: old_edition,
+        date: '2018-01-02',
+        base_path: '/new/base/path',
+        title: 'latest title',
+        document_type: 'latest_doc_type',
+        primary_organisation_content_id: primary_org_id
+      create :metric,
+        edition: new_edition,
+        date: '2018-01-02',
+        unique_pageviews: 133,
+        is_this_useful_yes: 150,
+        is_this_useful_no: 30,
+        number_of_internal_searches: 200
+      different_edition = create :edition,
+        base_path: '/path/2',
+        date: '2018-01-02',
+        title: 'another title',
+        document_type: 'organisation',
+        primary_organisation_content_id: primary_org_id,
+        warehouse_item_id: another_warehouse_item_id
+      create :metric,
+        edition: different_edition,
+        date: '2018-01-02',
+        unique_pageviews: 100,
+        is_this_useful_yes: 10,
+        is_this_useful_no: 10,
+        number_of_internal_searches: 1
+      another_org_edition = create :edition,
+        base_path: '/another/org/path',
+        date: '2018-01-02',
+        title: 'another org title',
+        document_type: 'news_story',
+        primary_organisation_content_id: another_org_id
+      create :metric,
+        edition: another_org_edition,
+        unique_pageviews: 34
+      get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
     end
 
     it 'is successful' do
       expect(response.status).to eq(200)
     end
 
-    it 'returns the data summarized with metadata from latest item' do
+    it 'returns aggregated metrics from all versions with metadata from the latest version' do
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:results]).to eq(
         [
