@@ -1,10 +1,10 @@
 class Monitor::Messages
-  def self.run(message)
-    new.run(message)
+  def self.run(routing_key)
+    new.run(routing_key)
   end
 
-  def run(message)
-    statsd_for_messages!(message)
+  def run(routing_key)
+    statsd_for_messages!(routing_key)
   end
 
   def self.increment_discarded
@@ -13,8 +13,8 @@ class Monitor::Messages
 
 private
 
-  def statsd_for_messages!(message)
-    GovukStatsd.increment(monitoring_code(message.delivery_info['routing_key']))
+  def statsd_for_messages!(routing_key)
+    GovukStatsd.increment(monitoring_code(routing_key))
   end
 
   def monitoring_code(routing_key)

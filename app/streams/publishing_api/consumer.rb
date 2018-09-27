@@ -2,7 +2,7 @@ module PublishingAPI
   class Consumer
     def process(message)
       if valid_routing_key?(message)
-        MessageProcessorJob.perform_later(message.payload)
+        MessageProcessorJob.perform_later(message.payload, message.delivery_info.routing_key)
       else
         Monitor::Messages.increment_discarded
       end
