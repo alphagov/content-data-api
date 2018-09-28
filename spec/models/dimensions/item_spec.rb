@@ -5,6 +5,7 @@ RSpec.describe Dimensions::Item, type: :model do
   it { is_expected.to validate_presence_of(:base_path) }
   it { is_expected.to validate_presence_of(:publishing_api_payload_version) }
   it { is_expected.to validate_presence_of(:schema_name) }
+  it { is_expected.to validate_presence_of(:warehouse_item_id) }
 
   describe 'Filtering' do
     subject { Dimensions::Item }
