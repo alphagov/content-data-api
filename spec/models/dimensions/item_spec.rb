@@ -5,6 +5,7 @@ RSpec.describe Dimensions::Item, type: :model do
   it { is_expected.to validate_presence_of(:base_path) }
   it { is_expected.to validate_presence_of(:publishing_api_payload_version) }
   it { is_expected.to validate_presence_of(:schema_name) }
+  it { is_expected.to validate_presence_of(:warehouse_item_id) }
 
   describe 'Filtering' do
     subject { Dimensions::Item }
@@ -44,7 +45,6 @@ RSpec.describe Dimensions::Item, type: :model do
     describe '.outdated_subpages' do
       let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:locale) { 'fr' }
-      let!(:outdated_item) { create :dimensions_item, base_path: '/path-1/part-2', locale: locale, content_id: content_id }
 
       it 'filters out the passed paths' do
         create :dimensions_item, base_path: '/path-1', locale: locale, content_id: content_id
@@ -151,18 +151,23 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '#promote!' do
     let(:item) { build :dimensions_item, latest: false }
+    let(:warehouse_item_id) { 'warehouse-item-id' }
+    let(:old_item) { build :dimensions_item, warehouse_item_id: warehouse_item_id }
+
+    before do
+      item.promote!(old_item)
+    end
 
     it 'set the latest attribute to true' do
-      item.promote!(build(:dimensions_item))
-
       expect(item.latest).to be true
     end
 
-    it 'set the latest attribute to false for the old version' do
-      old_item = build :dimensions_item
-      item.promote!(old_item)
-
+    it 'sets the latest attribute to false for the old version' do
       expect(old_item.latest).to be false
+    end
+
+    it 'copies the warehouse_item_id from the old item' do
+      expect(item.reload.warehouse_item_id).to eq(warehouse_item_id)
     end
   end
 

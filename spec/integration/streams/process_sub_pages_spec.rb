@@ -14,31 +14,40 @@ RSpec.describe "Process sub-pages for multipart content types" do
   end
 
   context 'for a guide' do
-    it "separates the parts of multipart content types" do
-      message = build(:message, :with_parts)
+    let(:content_id) { 'b3cfaf44-4f01-453b-8c10-3c195bdb94d1' }
+    it "separates the parts of multipart content types with different uuids" do
+      message = build(:message,
+        :with_parts,
+        content_id: content_id,
+        locale: 'en')
       subject.process(message)
 
-      parts = Dimensions::Item.pluck(:base_path, :title).to_set
+      parts = Dimensions::Item.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
-        ["/base-path", "Part 1"],
-        ["/base-path/part2", "Part 2"],
-        ["/base-path/part3", "Part 3"],
-        ["/base-path/part4", "Part 4"]
+        ["/base-path", "Part 1", "#{content_id}:en:/base-path"],
+        ["/base-path/part2", "Part 2", "#{content_id}:en:/base-path/part2"],
+        ["/base-path/part3", "Part 3", "#{content_id}:en:/base-path/part3"],
+        ["/base-path/part4", "Part 4", "#{content_id}:en:/base-path/part4"]
       ]
     end
   end
 
   context 'for travel advice' do
-    it "separates the parts of multipart content types" do
-      message = build(:message, :travel_advice)
+    let(:content_id) { 'fefbf6af-8510-432d-8126-c1bf11fadec1' }
+    it "separates the parts of multipart content types with different uuids" do
+      message = build(:message,
+        :travel_advice,
+        base_path: '/travel/advice',
+        content_id: content_id,
+        locale: 'fr')
       subject.process(message)
-      parts = Dimensions::Item.pluck(:base_path, :title).to_set
+      parts = Dimensions::Item.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
-        ["/base-path", "Summary"],
-        ["/base-path/part1", "Part 1"],
-        ["/base-path/part2", "Part 2"],
+        %W(/travel/advice Summary #{content_id}:fr:/travel/advice),
+        ["/travel/advice/part1", "Part 1", "#{content_id}:fr:/travel/advice/part1"],
+        ["/travel/advice/part2", "Part 2", "#{content_id}:fr:/travel/advice/part2"],
       ]
     end
   end

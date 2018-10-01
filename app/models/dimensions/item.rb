@@ -6,6 +6,7 @@ class Dimensions::Item < ApplicationRecord
   validates :base_path, presence: true
   validates :schema_name, presence: true
   validates :publishing_api_payload_version, presence: true
+  validates :warehouse_item_id, presence: true
 
   scope :by_base_path, ->(base_path) { where('base_path like (?)', base_path) }
   scope :by_content_id, ->(content_id) { where(content_id: content_id) }
@@ -20,8 +21,12 @@ class Dimensions::Item < ApplicationRecord
     latest_by_content_id(content_id, locale)
       .where.not(base_path: exclude_paths)
   end
+
   def promote!(old_item)
-    old_item.deprecate! if old_item
+    if old_item
+      old_item.deprecate!
+      assign_attributes warehouse_item_id: old_item.warehouse_item_id
+    end
     update!(latest: true)
   end
 

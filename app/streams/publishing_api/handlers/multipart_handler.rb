@@ -35,6 +35,7 @@ private
       base_path: base_path,
       title: title,
       document_text: document_text,
+      warehouse_item_id: "#{content_id}:#{locale}:#{base_path}",
       **all_attributes
     )
     item.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_item, item))

@@ -1,28 +1,25 @@
 module ItemSetupHelpers
   def create_metric(base_path: '/base-path', date:, edition: {}, daily: {}, item: {})
-    dimensions_item = dimensions_item(item.merge(base_path: base_path))
     dimensions_date = dimensions_date(date)
-    ensure_edition_exists(dimensions_item, dimensions_date, edition)
+    dimensions_item = dimensions_item(item.merge(base_path: base_path), edition, dimensions_date)
     create :metric, daily.merge(
       dimensions_date: dimensions_date,
       dimensions_item: dimensions_item
     )
   end
 
-  def create_edition(base_path:, date:, edition: {}, item: {})
-    ensure_edition_exists(dimensions_item(item.merge(base_path: base_path)), dimensions_date(date), edition)
+  def create_edition(base_path: '/base-path', date:, edition: {}, item: {})
+    dimensions_item(item.merge(base_path: base_path), edition, dimensions_date(date)).reload.facts_edition
   end
 
 private
 
-  def ensure_edition_exists(dimensions_item, dimensions_date, edition_attrs)
-    if Facts::Edition.find_by(dimensions_item: dimensions_item).nil?
-      create(:facts_edition, edition_attrs.merge(dimensions_item: dimensions_item, dimensions_date: dimensions_date))
-    end
-  end
-
-  def dimensions_item(attrs)
-    create(:dimensions_item, attrs)
+  def dimensions_item(attrs, edition, dimensions_date)
+    existing_item = Dimensions::Item.find_by(warehouse_item_id: attrs[:warehouse_item_id], latest: attrs[:latest])
+    return existing_item if existing_item
+    new_item = create(:dimensions_item, attrs)
+    create(:facts_edition, edition.merge(dimensions_item: new_item, dimensions_date: dimensions_date))
+    new_item
   end
 
   def dimensions_date(date)

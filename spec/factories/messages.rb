@@ -9,6 +9,8 @@ FactoryBot.define do
       base_path { '/base-path' }
       routing_key { 'news_story.major' }
       attributes { {} }
+      content_id { SecureRandom.uuid }
+      locale { 'en' }
     end
 
     delivery_info { OpenStruct.new(routing_key: routing_key) }
@@ -17,6 +19,8 @@ FactoryBot.define do
       GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
         result['base_path'] = base_path
         result['payload_version'] = payload_version
+        result['content_id'] = content_id
+        result['locale'] = locale
         result.merge! attributes
       end
     end
@@ -28,6 +32,8 @@ FactoryBot.define do
         GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
           result['base_path'] = base_path
           result['payload_version'] = payload_version
+          result['content_id'] = content_id
+          result['locale'] = locale
           result['details']['parts'] =
             [
               {
@@ -106,6 +112,8 @@ FactoryBot.define do
         GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
           result['base_path'] = base_path
           result['payload_version'] = payload_version
+          result['content_id'] = content_id
+          result['locale'] = locale
           result['details']['summary'] = [
             "content_type" => "text/html",
             "content" => summary
