@@ -44,7 +44,7 @@ private
   def load_metrics_query(date_to_s)
     <<~SQL
       UPDATE facts_metrics
-      SET number_of_internal_searches = s.number_of_internal_searches
+      SET searches = s.number_of_internal_searches
       FROM (
         SELECT number_of_internal_searches,
                dimensions_items.id

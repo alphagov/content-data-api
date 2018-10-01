@@ -11,37 +11,37 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
     before { allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it 'update the facts with the GA metrics' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { is_this_useful_no: 1, is_this_useful_yes: 2 }
-      fact2 = create_metric base_path: '/path2', date: '2018-02-20', daily: { is_this_useful_no: 20, is_this_useful_yes: 10 }
+      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { useful_no: 1, useful_yes: 2 }
+      fact2 = create_metric base_path: '/path2', date: '2018-02-20', daily: { useful_no: 20, useful_yes: 10 }
 
-      expect(fact1).to have_attributes(is_this_useful_no: 1, is_this_useful_yes: 2)
-      expect(fact2).to have_attributes(is_this_useful_no: 20, is_this_useful_yes: 10)
+      expect(fact1).to have_attributes(useful_no: 1, useful_yes: 2)
+      expect(fact2).to have_attributes(useful_no: 20, useful_yes: 10)
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(is_this_useful_no: 1, is_this_useful_yes: 1)
-      expect(fact1.satisfaction_score).to be_within(0.1).of(0.5)
-      expect(fact2.reload).to have_attributes(is_this_useful_no: 5, is_this_useful_yes: 10)
-      expect(fact2.satisfaction_score).to be_within(0.1).of(0.67)
+      expect(fact1.reload).to have_attributes(useful_no: 1, useful_yes: 1)
+      expect(fact1.satisfaction).to be_within(0.1).of(0.5)
+      expect(fact2.reload).to have_attributes(useful_no: 5, useful_yes: 10)
+      expect(fact2.satisfaction).to be_within(0.1).of(0.67)
     end
 
     it 'does not update metrics for other days' do
       fact1 = create_metric base_path: '/path1', date: '2018-02-20',
-        daily: { is_this_useful_no: 20, is_this_useful_yes: 10 }
+                            daily: { useful_no: 20, useful_yes: 10 }
 
       day_before = date - 1
       described_class.process(date: day_before)
 
-      expect(fact1.reload).to have_attributes(is_this_useful_no: 20, is_this_useful_yes: 10)
+      expect(fact1.reload).to have_attributes(useful_no: 20, useful_yes: 10)
     end
 
     it 'does not update metrics for other items' do
       fact = create_metric base_path: '/non-matching-path', date: '2018-02-20',
-        daily: { is_this_useful_no: 99, is_this_useful_yes: 90 }
+                           daily: { useful_no: 99, useful_yes: 90 }
 
       described_class.process(date: date)
 
-      expect(fact.reload).to have_attributes(is_this_useful_no: 99, is_this_useful_yes: 90)
+      expect(fact.reload).to have_attributes(useful_no: 99, useful_yes: 90)
     end
 
     it "deletes events after updating facts metrics" do
@@ -63,7 +63,7 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
 
         described_class.process(date: date)
 
-        expect(fact1.reload).to have_attributes(is_this_useful_no: 1, is_this_useful_yes: 1)
+        expect(fact1.reload).to have_attributes(useful_no: 1, useful_yes: 1)
       end
     end
   end
@@ -71,18 +71,18 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
   context 'When is_this_useful values are received from GA' do
     let!(:fact) { create_metric base_path: '/path1', date: '2018-02-20' }
 
-    it 'sets `satisfaction_score = 1.0` with `yes: 1` and `no: 0`' do
+    it 'sets `satisfaction = 1.0` with `yes: 1` and `no: 0`' do
       allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 1, useful_no: 0))
       described_class.process(date: date)
 
-      expect(fact.reload.satisfaction_score).to be_within(0.1).of(1.0)
+      expect(fact.reload.satisfaction).to be_within(0.1).of(1.0)
     end
 
-    it 'sets `satisfaction_score = 0.0` with `useful_yes:0` and `no: 1`' do
+    it 'sets `satisfaction = 0.0` with `useful_yes:0` and `no: 1`' do
       allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 0, useful_no: 1))
       described_class.process(date: date)
 
-      expect(fact.reload.satisfaction_score).to be_within(0.1).of(0.0)
+      expect(fact.reload.satisfaction).to be_within(0.1).of(0.0)
     end
   end
 

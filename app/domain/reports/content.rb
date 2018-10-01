@@ -25,10 +25,10 @@ private
 
   def aggregates
     [
-      sum('unique_pageviews'),
-      sum('is_this_useful_yes'),
-      sum('is_this_useful_no'),
-      sum('number_of_internal_searches')
+      sum('upviews'),
+      sum('useful_yes'),
+      sum('useful_no'),
+      sum('searches')
     ]
   end
 
@@ -54,10 +54,10 @@ private
       base_path: array[0],
       title: array[1],
       document_type: array[2],
-      unique_pageviews: array[3],
-      satisfaction_score: satisfaction_responses.zero? ? nil : array[4].to_f / satisfaction_responses,
+      upviews: array[3],
+      satisfaction: satisfaction_responses.zero? ? nil : array[4].to_f / satisfaction_responses,
       satisfaction_score_responses: satisfaction_responses,
-      number_of_internal_searches: array[6],
+      searches: array[6],
     }
   end
 

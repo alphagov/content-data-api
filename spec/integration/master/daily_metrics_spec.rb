@@ -44,21 +44,21 @@ RSpec.describe 'Master process spec' do
 
   def validate_google_analytics!
     expect(latest_metric).to have_attributes(
-      pageviews: 11,
-      unique_pageviews: 12,
+      pviews: 11,
+      upviews: 12,
     )
   end
 
   def validate_satisfaction_score!
     expect(latest_metric).to have_attributes(
-      is_this_useful_yes: 1,
-      is_this_useful_no: 1,
-      satisfaction_score: 0.5
+      useful_yes: 1,
+      useful_no: 1,
+      satisfaction: 0.5
     )
   end
 
   def validate_feedex!
-    expect(latest_metric).to have_attributes(feedex_comments: 21)
+    expect(latest_metric).to have_attributes(feedex: 21)
   end
 
   def validate_monitoring!

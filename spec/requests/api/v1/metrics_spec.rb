@@ -71,7 +71,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for badly formatted dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: 'today', to: '2018-01-15', metrics: %w[pageviews] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: 'today', to: '2018-01-15', metrics: %w[pviews] }
 
       expect(response.status).to eq(400)
 
@@ -87,7 +87,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for bad date ranges' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-16', to: '2018-01-15', metrics: %w[pageviews] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-16', to: '2018-01-15', metrics: %w[pviews] }
 
       expect(response.status).to eq(400)
 
@@ -119,7 +119,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns an error for unknown parameters' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla", metrics: %w[pageviews] }
+      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla", metrics: %w[pviews] }
 
       expect(response.status).to eq(400)
 
@@ -138,37 +138,37 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   describe 'Daily metrics' do
     context 'succcessful response' do
       before do
-        create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, feedex_comments: 10, is_this_useful_yes: 10, is_this_useful_no: 30
-        create :metric, dimensions_item: item_fr, dimensions_date: day2, pageviews: 100, feedex_comments: 200, is_this_useful_yes: 10, is_this_useful_no: 30
-        create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, feedex_comments: 20, is_this_useful_yes: 10, is_this_useful_no: 30
-        create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30, feedex_comments: 30, is_this_useful_yes: 10, is_this_useful_no: 30
-        create :metric, dimensions_item: item, dimensions_date: day4, pageviews: 40, feedex_comments: 40, is_this_useful_yes: 10, is_this_useful_no: 30
+        create :metric, dimensions_item: item, dimensions_date: day1, pviews: 10, feedex: 10, useful_yes: 10, useful_no: 30
+        create :metric, dimensions_item: item_fr, dimensions_date: day2, pviews: 100, feedex: 200, useful_yes: 10, useful_no: 30
+        create :metric, dimensions_item: item, dimensions_date: day2, pviews: 20, feedex: 20, useful_yes: 10, useful_no: 30
+        create :metric, dimensions_item: item, dimensions_date: day3, pviews: 30, feedex: 30, useful_yes: 10, useful_no: 30
+        create :metric, dimensions_item: item, dimensions_date: day4, pviews: 40, feedex: 40, useful_yes: 10, useful_no: 30
         create :facts_edition, dimensions_item: item, dimensions_date: day1
       end
 
-      it 'returns `pageviews` values between two dates' do
-        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[pageviews] }
+      it 'returns `pviews` values between two dates' do
+        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[pviews] }
 
         json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json).to eq(build_time_series_response('pageviews'))
+        expect(json).to eq(build_time_series_response('pviews'))
       end
 
       it 'returns `feedex issues` between two dates' do
-        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
+        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex] }
 
         json = JSON.parse(response.body)
-        expect(json.deep_symbolize_keys).to eq(build_time_series_response('feedex_comments'))
+        expect(json.deep_symbolize_keys).to eq(build_time_series_response('feedex'))
       end
 
       describe "Summary information" do
         it 'returns the sum of feedex comments' do
-          get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
+          get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex] }
 
 
           json = JSON.parse(response.body)
 
           expect(json.deep_symbolize_keys).to include(
-            feedex_comments: 60
+            feedex: 60
           )
         end
       end
@@ -185,7 +185,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     end
 
     it 'returns the metadata from the latest item' do
-      get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex_comments] }
+      get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex] }
 
       json = JSON.parse(response.body)
 
@@ -203,7 +203,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
     context 'when the base path does not exist' do
       it 'returns a 404 response' do
         get '/api/v1/metrics/non/existant/base/path',
-        params: { from: '2018-01-01', to: '2018-06-01', metrics: %w[pageviews] }
+        params: { from: '2018-01-01', to: '2018-06-01', metrics: %w[pviews] }
         expect(response.status).to eq(404)
 
         json = JSON.parse(response.body)
@@ -227,7 +227,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
       expect(json.count).to eq(::Metric.find_all.length)
 
-      expect(json).to include("name" => "pageviews",
+      expect(json).to include("name" => "pviews",
         "description" => "Number of pageviews",
         "source" => "Google Analytics")
     end

@@ -16,25 +16,25 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(number_of_internal_searches: 1)
-      expect(fact2.reload).to have_attributes(number_of_internal_searches: 2)
+      expect(fact1.reload).to have_attributes(searches: 1)
+      expect(fact2.reload).to have_attributes(searches: 2)
     end
 
     it "does not update metrics for other days" do
-      fact1 = create_metric base_path: "/path1", date: '2018-02-20', daily: { number_of_internal_searches: 20 }
+      fact1 = create_metric base_path: "/path1", date: '2018-02-20', daily: { searches: 20 }
 
       day_before = date - 1
       described_class.process(date: day_before)
 
-      expect(fact1.reload).to have_attributes(number_of_internal_searches: 20)
+      expect(fact1.reload).to have_attributes(searches: 20)
     end
 
     it "does not update metrics for other items" do
-      fact = create_metric base_path: "/non-matching-path", date: '2018-02-20', daily: { number_of_internal_searches: 99 }
+      fact = create_metric base_path: "/non-matching-path", date: '2018-02-20', daily: { searches: 99 }
 
       described_class.process(date: date)
 
-      expect(fact.reload).to have_attributes(number_of_internal_searches: 99)
+      expect(fact.reload).to have_attributes(searches: 99)
     end
 
     it "deletes events after updating facts metrics" do
@@ -56,7 +56,7 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
 
         described_class.process(date: date)
 
-        expect(fact1.reload).to have_attributes(number_of_internal_searches: 1)
+        expect(fact1.reload).to have_attributes(searches: 1)
       end
 
       it "deletes events after updating facts metrics" do

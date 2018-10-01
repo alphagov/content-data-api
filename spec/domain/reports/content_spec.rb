@@ -19,17 +19,17 @@ RSpec.describe Reports::Content do
       create :metric,
         edition: edition,
         date: '2018-01-01',
-        unique_pageviews: 100,
-        is_this_useful_yes: 50,
-        is_this_useful_no: 20,
-        number_of_internal_searches: 20
+        upviews: 100,
+        useful_yes: 50,
+        useful_no: 20,
+        searches: 20
       create :metric,
         edition: edition,
         date: '2018-01-02',
-        unique_pageviews: 133,
-        is_this_useful_yes: 150,
-        is_this_useful_no: 30,
-        number_of_internal_searches: 200
+        upviews: 133,
+        useful_yes: 150,
+        useful_no: 30,
+        searches: 200
 
       other_edition = create :edition,
         base_path: '/path/2',
@@ -41,17 +41,17 @@ RSpec.describe Reports::Content do
       create :metric,
         edition: other_edition,
         date: '2018-01-01',
-        unique_pageviews: 5,
-        is_this_useful_yes: 5,
-        is_this_useful_no: 4,
-        number_of_internal_searches: 4
+        upviews: 5,
+        useful_yes: 5,
+        useful_no: 4,
+        searches: 4
       create :metric,
         edition: other_edition,
         date: '2018-01-02',
-        unique_pageviews: 15,
-        is_this_useful_yes: 5,
-        is_this_useful_no: 6,
-        number_of_internal_searches: 3
+        upviews: 15,
+        useful_yes: 5,
+        useful_no: 6,
+        searches: 3
     end
 
     it 'aggregates the data by content item' do
@@ -61,20 +61,20 @@ RSpec.describe Reports::Content do
           {
             base_path: '/path/1',
             title: 'item 1 title',
-            unique_pageviews: 233,
+            upviews: 233,
             document_type: 'news_story',
-            satisfaction_score: 0.8,
+            satisfaction: 0.8,
             satisfaction_score_responses: 250,
-            number_of_internal_searches: 220
+            searches: 220
           },
           {
             base_path: '/path/2',
             title: 'item 2 title',
-            unique_pageviews: 20,
+            upviews: 20,
             document_type: 'press_release',
-            satisfaction_score: 0.5,
+            satisfaction: 0.5,
             satisfaction_score_responses: 20,
-            number_of_internal_searches: 7
+            searches: 7
           }
         ]
       )
@@ -94,10 +94,10 @@ RSpec.describe Reports::Content do
       create :metric,
         edition: old_edition,
         date: '2018-01-02',
-        unique_pageviews: 100,
-        is_this_useful_yes: 10,
-        is_this_useful_no: 10,
-        number_of_internal_searches: 15
+        upviews: 100,
+        useful_yes: 10,
+        useful_no: 10,
+        searches: 15
       new_edition = create :edition,
         replaces: old_edition,
         base_path: '/new/base/path',
@@ -108,10 +108,10 @@ RSpec.describe Reports::Content do
       create :metric,
         edition: new_edition,
         date: '2018-01-02',
-        unique_pageviews: 100,
-        is_this_useful_yes: 50,
-        is_this_useful_no: 50,
-        number_of_internal_searches: 5
+        upviews: 100,
+        useful_yes: 50,
+        useful_no: 50,
+        searches: 5
     end
 
     it 'returns aggregated metrics from all versions with metadata from the latest version' do
@@ -120,11 +120,11 @@ RSpec.describe Reports::Content do
       expect(results.first).to eq(
         base_path: '/new/base/path',
         title: 'new title',
-        unique_pageviews: 200,
+        upviews: 200,
         document_type: 'press_release',
-        satisfaction_score: 0.5,
+        satisfaction: 0.5,
         satisfaction_score_responses: 120,
-        number_of_internal_searches: 20
+        searches: 20
       )
     end
   end
@@ -137,14 +137,14 @@ RSpec.describe Reports::Content do
       create :metric,
              edition: edition,
              date: '2018-01-01',
-             is_this_useful_yes: 0,
-             is_this_useful_no: 0
+             useful_yes: 0,
+             useful_no: 0
     end
 
-    it 'returns the nil for the satisfaction_score' do
+    it 'returns the nil for the satisfaction' do
       results = described_class.retrieve(from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id)
       expect(results.first).to include(
-        satisfaction_score: nil,
+        satisfaction: nil,
         satisfaction_score_responses: 0
       )
     end

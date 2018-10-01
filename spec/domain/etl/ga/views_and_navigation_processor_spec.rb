@@ -20,25 +20,25 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1, entrances: 10, exits: 5, bounce_rate: 50, avg_time_on_page: 60, bounces: 31, time_on_page: 20)
-      expect(fact2.reload).to have_attributes(pageviews: 2, unique_pageviews: 2, entrances: 20, exits: 10, bounce_rate: 100, avg_time_on_page: 30, bounces: 50, time_on_page: 23)
+      expect(fact1.reload).to have_attributes(pviews: 1, upviews: 1, entrances: 10, exits: 5, bounce_rate: 50, avg_page_time: 60, bounces: 31, page_time: 20)
+      expect(fact2.reload).to have_attributes(pviews: 2, upviews: 2, entrances: 20, exits: 10, bounce_rate: 100, avg_page_time: 30, bounces: 50, page_time: 23)
     end
 
     it 'does not update metrics for other days' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { pageviews: 20, unique_pageviews: 10 }
+      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { pviews: 20, upviews: 10 }
 
       day_before = date - 1
       described_class.process(date: day_before)
 
-      expect(fact1.reload).to have_attributes(pageviews: 20, unique_pageviews: 10)
+      expect(fact1.reload).to have_attributes(pviews: 20, upviews: 10)
     end
 
     it 'does not update metrics for other items' do
-      fact = create_metric base_path: '/non-matching-path', date: '2018-02-20', daily: { pageviews: 99, unique_pageviews: 90 }
+      fact = create_metric base_path: '/non-matching-path', date: '2018-02-20', daily: { pviews: 99, upviews: 90 }
 
       described_class.process(date: date)
 
-      expect(fact.reload).to have_attributes(pageviews: 99, unique_pageviews: 90)
+      expect(fact.reload).to have_attributes(pviews: 99, upviews: 90)
     end
 
     it "deletes events after updating facts metrics" do
@@ -60,7 +60,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
         described_class.process(date: date)
 
-        expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1)
+        expect(fact1.reload).to have_attributes(pviews: 1, upviews: 1)
       end
     end
   end

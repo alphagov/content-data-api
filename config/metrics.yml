@@ -1,29 +1,29 @@
 daily:
-  - name: 'pageviews'
+  - name: 'pviews'
     description: "Number of pageviews"
     source: 'Google Analytics'
 
-  - name: 'unique_pageviews'
+  - name: 'upviews'
     description: "Number of unique pageviews"
     source: 'Google Analytics'
 
-  - name: 'feedex_comments'
+  - name: 'feedex' 
     description: "Number of reported content issues"
     source: 'Feedback explorer'
 
-  - name: 'is_this_useful_no'
+  - name: 'useful_no'
     description: "Total number of people who did not find the page helpful"
     source: 'Google Analytics'
 
-  - name: 'is_this_useful_yes'
+  - name: 'useful_yes'
     description: "Total number of people who found the page helpful"
     source: 'Google Analytics'
 
-  - name: 'satisfaction_score'
+  - name: 'satisfaction'
     description: "Calculated percentage score based on `is_this_useful_yes` and `is_this_useful_no` values."
     source: 'custom'
 
-  - name: 'number_of_internal_searches'
+  - name: 'searches'
     description: "Number of times a user searches for something else on GOV.UK from the page"
     source: 'Google Analytics'
 
@@ -39,7 +39,7 @@ daily:
     description: "Number of sessions that started on this page and exited without viewing any others"
     source: 'Google Analytics'
 
-  - name: 'avg_time_on_page'
+  - name: 'avg_page_time'
     description: "Amount of time users spend on this page on average"
     source: 'Google Analytics'
 

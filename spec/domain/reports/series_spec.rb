@@ -7,24 +7,24 @@ RSpec.describe Reports::Series do
   let!(:item) { create :dimensions_item, content_id: content_id, base_path: base_path, locale: 'en' }
 
   before do
-    create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10
-    create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20
-    create :metric, dimensions_item: item, dimensions_date: day3, pageviews: 30
+    create :metric, dimensions_item: item, dimensions_date: day1, pviews: 10
+    create :metric, dimensions_item: item, dimensions_date: day2, pviews: 20
+    create :metric, dimensions_item: item, dimensions_date: day3, pviews: 30
     create :facts_edition, dimensions_item: item, dimensions_date: day1
   end
 
   it 'presents the values_by_date' do
-    series = Reports::Series.new('pageviews', Facts::Metric.all)
+    series = Reports::Series.new('pviews', Facts::Metric.all)
     expect(series.values_by_date).to eq expected_values
   end
 
   it 'presents the total' do
-    series = Reports::Series.new('pageviews', Facts::Metric.all)
+    series = Reports::Series.new('pviews', Facts::Metric.all)
     expect(series.total).to eq 60
   end
 
   it 'presents the latest' do
-    series = Reports::Series.new('pageviews', Facts::Metric.all)
+    series = Reports::Series.new('pviews', Facts::Metric.all)
     expect(series.latest).to eq 30
   end
 

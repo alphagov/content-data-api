@@ -44,14 +44,14 @@ private
   def load_metrics_query(date_to_s)
     <<~SQL
       UPDATE facts_metrics
-      SET unique_pageviews = s.unique_pageviews,
-          pageviews = s.pageviews,
+      SET upviews = s.unique_pageviews,
+          pviews = s.pageviews,
           entrances = s.entrances,
           exits = s.exits,
           bounce_rate = s.bounce_rate,
-          avg_time_on_page = s.avg_time_on_page,
+          avg_page_time = s.avg_time_on_page,
           bounces = s.bounces,
-          time_on_page = s.time_on_page
+          page_time = s.time_on_page
       FROM (
         SELECT pageviews,
                unique_pageviews,

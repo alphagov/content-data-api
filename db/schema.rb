@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_28_150637) do
+ActiveRecord::Schema.define(version: 2018_10_01_125635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,10 +64,9 @@ ActiveRecord::Schema.define(version: 2018_09_28_150637) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
+    t.string "warehouse_item_id"
     t.json "raw_json"
-    t.string "warehouse_item_id", null: false
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
     t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
@@ -123,19 +122,19 @@ ActiveRecord::Schema.define(version: 2018_09_28_150637) do
     t.bigint "dimensions_item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "pageviews", default: 0
-    t.integer "unique_pageviews", default: 0
-    t.integer "feedex_comments", default: 0
-    t.integer "is_this_useful_yes", default: 0, null: false
-    t.integer "is_this_useful_no", default: 0, null: false
-    t.integer "number_of_internal_searches", default: 0
+    t.integer "pviews", default: 0
+    t.integer "upviews", default: 0
+    t.integer "feedex", default: 0
+    t.integer "useful_yes", default: 0, null: false
+    t.integer "useful_no", default: 0, null: false
+    t.integer "searches", default: 0
     t.integer "exits", default: 0
     t.integer "entrances", default: 0
     t.integer "bounce_rate", default: 0
-    t.integer "avg_time_on_page", default: 0
+    t.integer "avg_page_time", default: 0
     t.integer "bounces", default: 0
-    t.integer "time_on_page", default: 0
-    t.float "satisfaction_score", default: 0.0, null: false
+    t.integer "page_time", default: 0
+    t.float "satisfaction", default: 0.0, null: false
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
   end
 
