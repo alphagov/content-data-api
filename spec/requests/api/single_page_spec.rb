@@ -13,16 +13,18 @@ RSpec.describe '/single_page', type: :request do
       publishing_app: 'whitehall',
       first_published_at: '2018-07-17T10:35:59.000Z',
       public_updated_at: '2018-07-17T10:35:57.000Z',
-      primary_organisation_title: 'The ministry'
+      primary_organisation_title: 'The ministry',
+      facts: {
+        'words': 30
+      }
   end
 
   before do
     create :user
-    day1 = create :dimensions_date, date: Date.new(2018, 1, 0o1)
-    day2 = create :dimensions_date, date: Date.new(2018, 1, 0o2)
+    day1 = create :dimensions_date, date: Date.new(2018, 1, 1)
+    day2 = create :dimensions_date, date: Date.new(2018, 1, 2)
     create :metric, dimensions_item: item, dimensions_date: day1, pviews: 10, upviews: 10
     create :metric, dimensions_item: item, dimensions_date: day2, pviews: 20, upviews: 20
-    create :facts_edition, dimensions_item: item, dimensions_date: day1
   end
 
   context 'when correct parameters supplied' do
@@ -86,6 +88,23 @@ RSpec.describe '/single_page', type: :request do
       }
       expected = {
         'edition_metrics' => a_collection_including(*expected_metrics)
+      }
+      expect(body).to include(expected)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns the value of an edition metrics' do
+      get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
+
+      body = JSON.parse(response.body)
+
+      expected = {
+        'edition_metrics' => a_collection_including(
+          a_hash_including(
+            "value" => 30,
+            "name" => 'words'
+          )
+        )
       }
       expect(body).to include(expected)
       expect(response).to have_http_status(:ok)
