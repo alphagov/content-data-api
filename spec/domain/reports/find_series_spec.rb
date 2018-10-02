@@ -27,8 +27,8 @@ RSpec.describe Reports::FindSeries do
       today = Date.today
       tomorrow = today + 1
 
-      metric1 = create_metric base_path: '/path/1', date: today, edition: { word_count: 10_000 }
-      metric2 = create_metric base_path: '/path/2', date: tomorrow, edition: { word_count: 20_000 }
+      metric1 = create_metric base_path: '/path/1', date: today, edition: { words: 10_000 }
+      metric2 = create_metric base_path: '/path/2', date: tomorrow, edition: { words: 20_000 }
       metric3 = create_metric base_path: '/path/3', date: tomorrow
 
       series = described_class.new.run

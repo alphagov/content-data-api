@@ -29,24 +29,24 @@ class Facts::Metric < ApplicationRecord
       content_purpose_subgroup
       first_published_at
       public_updated_at
-      pageviews
+      pviews
       primary_organisation_title
       primary_organisation_content_id
-      unique_pageviews
-      feedex_comments
-      number_of_pdfs
-      number_of_word_files
-      readability_score
-      is_this_useful_yes
-      is_this_useful_no
-      number_of_internal_searches
-      word_count
-      string_length
-      sentence_count
+      upviews
+      feedex
+      pdf_count
+      doc_count
+      readability
+      useful_yes
+      useful_no
+      searches
+      words
+      chars
+      sentences
       entrances
       exits
       bounce_rate
-      avg_time_on_page
+      avg_page_time
     ]
   end
 end

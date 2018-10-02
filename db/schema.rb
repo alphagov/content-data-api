@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_01_125635) do
+ActiveRecord::Schema.define(version: 2018_10_02_110036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,20 +85,20 @@ ActiveRecord::Schema.define(version: 2018_10_01_125635) do
   create_table "events_gas", force: :cascade do |t|
     t.date "date"
     t.string "page_path"
-    t.integer "pageviews", default: 0
-    t.integer "unique_pageviews", default: 0
+    t.integer "pviews", default: 0
+    t.integer "upviews", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "is_this_useful_yes", default: 0
-    t.integer "is_this_useful_no", default: 0
+    t.integer "useful_yes", default: 0
+    t.integer "useful_no", default: 0
     t.integer "process_name", null: false
-    t.integer "number_of_internal_searches", default: 0
+    t.integer "searches", default: 0
     t.integer "exits", default: 0
     t.integer "entrances", default: 0
     t.integer "bounce_rate", default: 0
-    t.integer "avg_time_on_page", default: 0
+    t.integer "avg_page_time", default: 0
     t.integer "bounces", default: 0
-    t.integer "time_on_page", default: 0
+    t.integer "page_time", default: 0
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
     t.index ["process_name", "date", "page_path"], name: "index_events_gas_on_process_name_and_date_and_page_path", unique: true
   end
@@ -106,12 +106,12 @@ ActiveRecord::Schema.define(version: 2018_10_01_125635) do
   create_table "facts_editions", force: :cascade do |t|
     t.date "dimensions_date_id", null: false
     t.bigint "dimensions_item_id", null: false
-    t.integer "number_of_pdfs"
-    t.integer "number_of_word_files"
-    t.integer "readability_score"
-    t.integer "string_length"
-    t.integer "sentence_count"
-    t.integer "word_count"
+    t.integer "pdf_count"
+    t.integer "doc_count"
+    t.integer "readability"
+    t.integer "chars"
+    t.integer "sentences"
+    t.integer "words"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dimensions_item_id", "dimensions_date_id"], name: "editions_item_id_date_id", unique: true

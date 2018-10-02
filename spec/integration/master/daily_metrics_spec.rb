@@ -70,15 +70,15 @@ RSpec.describe 'Master process spec' do
       [
         {
           'page_path' => '/path-1',
-          'pageviews' => 11,
-          'unique_pageviews' => 12,
+          'pviews' => 11,
+          'upviews' => 12,
           'date' => '2018-02-20',
           'process_name' => 'views',
         },
         {
           'page_path' => '/path2',
-          'pageviews' => 2,
-          'unique_pageviews' => 2,
+          'pviews' => 2,
+          'upviews' => 2,
           'date' => '2018-02-20',
           'process_name' => 'views',
         },
@@ -91,15 +91,15 @@ RSpec.describe 'Master process spec' do
       [
         {
           'page_path' => '/path-1',
-          'is_this_useful_no' => 1,
-          'is_this_useful_yes' => 12,
+          'useful_no' => 1,
+          'useful_yes' => 12,
           'date' => '2018-02-20',
           'process_name' => 'user_feedback',
         },
         {
           'page_path' => '/path2',
-          'is_this_useful_no' => 122,
-          'is_this_useful_yes' => 1,
+          'useful_no' => 122,
+          'useful_yes' => 1,
           'date' => '2018-02-20',
           'process_name' => 'user_feedback',
         },
@@ -112,15 +112,15 @@ RSpec.describe 'Master process spec' do
       [
         {
           'page_path' => '/path1',
-          'number_of_internal_searches' => 1,
+          'searches' => 1,
           'date' => '2018-02-20',
-          'process_name' => 'number_of_internal_searches'
+          'process_name' => 'searches'
         },
         {
           'page_path' => '/path2',
-          'number_of_internal_searches' => 2,
+          'searches' => 2,
           'date' => '2018-02-20',
-          'process_name' => 'number_of_internal_searches'
+          'process_name' => 'searches'
         },
       ]
     )

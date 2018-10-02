@@ -35,16 +35,16 @@ RSpec.describe Etl::GA::UserFeedbackService do
         arg1 = [
           a_hash_including(
             'page_path' => '/foo',
-            'is_this_useful_yes' => 7,
-            'is_this_useful_no' => 10,
+            'useful_yes' => 7,
+            'useful_no' => 10,
             'date' => '2018-02-20',
           ),
         ]
         arg2 = [
           a_hash_including(
             'page_path' => '/bar',
-            'is_this_useful_yes' => 3,
-            'is_this_useful_no' => 13,
+            'useful_yes' => 3,
+            'useful_no' => 13,
             'date' => '2018-02-20',
           )
         ]
@@ -66,16 +66,16 @@ RSpec.describe Etl::GA::UserFeedbackService do
         arg1 = [
           a_hash_including(
             'page_path' => '/foo',
-            'is_this_useful_yes' => 0,
-            'is_this_useful_no' => 10,
+            'useful_yes' => 0,
+            'useful_no' => 10,
             'date' => '2018-02-20',
           ),
         ]
         arg2 = [
           a_hash_including(
             'page_path' => '/bar',
-            'is_this_useful_yes' => 3,
-            'is_this_useful_no' => 0,
+            'useful_yes' => 3,
+            'useful_no' => 0,
             'date' => '2018-02-20',
           )
         ]

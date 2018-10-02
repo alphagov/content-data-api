@@ -5,12 +5,12 @@ RSpec.describe Facts::Edition do
   let(:new_date) { create :dimensions_date }
   let(:quality_metrics) do
     {
-      number_of_pdfs: 1,
-      number_of_word_files: 1,
-      readability_score: 97,
-      string_length: 21,
-      sentence_count: 1,
-      word_count: 4,
+      pdf_count: 1,
+      doc_count: 1,
+      readability: 97,
+      chars: 21,
+      sentences: 1,
+      words: 4,
     }
   end
 

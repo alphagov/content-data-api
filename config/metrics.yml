@@ -20,7 +20,7 @@ daily:
     source: 'Google Analytics'
 
   - name: 'satisfaction'
-    description: "Calculated percentage score based on `is_this_useful_yes` and `is_this_useful_no` values."
+    description: "Calculated percentage score based on `useful_yes` and `useful_no` values."
     source: 'custom'
 
   - name: 'searches'
@@ -44,25 +44,25 @@ daily:
     source: 'Google Analytics'
 
 edition:
-  - name: 'number_of_pdfs'
+  - name: 'pdf_count'
     description: "Number of .pdf attachments"
     source: 'Publishing API'
 
-  - name: 'number_of_word_files'
+  - name: 'doc_count'
     description: "Number of .doc attachments"
     source: 'Publishing API'
 
-  - name: 'readability_score'
+  - name: 'readability'
     description: "Flesch-Kincaid Reading Ease score"
 
-  - name: 'string_length'
+  - name: 'chars'
     description: "Total number of characters used in the text"
     source: 'custom'
 
-  - name: 'sentence_count'
+  - name: 'sentences'
     description: "Total number of sentences detected in the text"
     source: 'custom'
 
-  - name: 'word_count'
+  - name: 'words'
     description: "Total number of words detected in the text"
     source: 'custom'

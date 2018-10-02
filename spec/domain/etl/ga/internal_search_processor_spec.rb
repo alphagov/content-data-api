@@ -38,7 +38,7 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
     end
 
     it "deletes events after updating facts metrics" do
-      create :ga_event, :with_number_of_internal_searches, date: date - 1, page_path: '/path1'
+      create :ga_event, :with_searches, date: date - 1, page_path: '/path1'
 
       described_class.process(date: date)
 
@@ -47,8 +47,8 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
 
     context "when there are events from other days" do
       before do
-        create :ga_event, :with_number_of_internal_searches, date: date - 1, page_path: '/path1'
-        create :ga_event, :with_number_of_internal_searches, date: date - 2, page_path: '/path1'
+        create :ga_event, :with_searches, date: date - 1, page_path: '/path1'
+        create :ga_event, :with_searches, date: date - 2, page_path: '/path1'
       end
 
       it "only updates metrics for the current day" do
@@ -75,15 +75,15 @@ private
     [
       {
         'page_path' => '/path1',
-        'number_of_internal_searches' => 1,
+        'searches' => 1,
         'date' => '2018-02-20',
-        'process_name' => 'number_of_internal_searches'
+        'process_name' => 'searches'
       },
       {
         'page_path' => '/path2',
-        'number_of_internal_searches' => 2,
+        'searches' => 2,
         'date' => '2018-02-20',
-        'process_name' => 'number_of_internal_searches'
+        'process_name' => 'searches'
       },
     ]
   end
@@ -92,15 +92,15 @@ private
     [
       {
         'page_path' => '/https://www.gov.uk/path1',
-        'number_of_internal_searches' => 1,
+        'searches' => 1,
         'date' => '2018-02-20',
-        'process_name' => 'number_of_internal_searches'
+        'process_name' => 'searches'
       },
       {
         'page_path' => '/path2',
-        'number_of_internal_searches' => 2,
+        'searches' => 2,
         'date' => '2018-02-20',
-        'process_name' => 'number_of_internal_searches'
+        'process_name' => 'searches'
       },
     ]
   end

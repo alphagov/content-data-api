@@ -20,8 +20,8 @@ private
     attributes = { page_path: sanitised_page_path }
 
     if duplicate_event
-      attributes[:pageviews] = event.pageviews + duplicate_event.pageviews
-      attributes[:unique_pageviews] = event.unique_pageviews + duplicate_event.unique_pageviews
+      attributes[:pviews] = event.pviews + duplicate_event.pviews
+      attributes[:upviews] = event.upviews + duplicate_event.upviews
 
       duplicate_event.destroy
     end

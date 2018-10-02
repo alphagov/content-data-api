@@ -129,7 +129,7 @@ RSpec.describe Reports::Content do
     end
   end
 
-  context 'when no is_this_useful.. responses' do
+  context 'when no useful_yes/no.. responses' do
     before do
       edition = create :edition,
         date: '2018-01-01',

@@ -16,18 +16,18 @@ RSpec.describe 'Import edition metrics' do
 
     item = Dimensions::Item.first
     expect(item.facts_edition).to have_attributes(
-      number_of_pdfs: 1,
-      number_of_word_files: 1,
-      readability_score: 97,
-      string_length: 21,
-      sentence_count: 1,
-      word_count: 4
+      pdf_count: 1,
+      doc_count: 1,
+      readability: 97,
+      chars: 21,
+      sentences: 1,
+      words: 4
     )
   end
 
   let(:existing_quality_metrics) do
     {
-      word_count: 3,
+      words: 3,
     }
   end
 

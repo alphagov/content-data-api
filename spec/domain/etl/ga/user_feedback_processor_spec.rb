@@ -68,7 +68,7 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
     end
   end
 
-  context 'When is_this_useful values are received from GA' do
+  context 'When useful_yes/no values are received from GA' do
     let!(:fact) { create_metric base_path: '/path1', date: '2018-02-20' }
 
     it 'sets `satisfaction = 1.0` with `yes: 1` and `no: 0`' do
@@ -92,15 +92,15 @@ private
     [
       {
         'page_path' => '/path1',
-        'is_this_useful_yes' => useful_yes,
-        'is_this_useful_no' => useful_no,
+        'useful_yes' => useful_yes,
+        'useful_no' => useful_no,
         'date' => '2018-02-20',
         'process_name' => 'user_feedback',
       },
       {
         'page_path' => '/path2',
-        'is_this_useful_no' => 5,
-        'is_this_useful_yes' => 10,
+        'useful_no' => 5,
+        'useful_yes' => 10,
         'date' => '2018-02-20',
         'process_name' => 'user_feedback',
       },

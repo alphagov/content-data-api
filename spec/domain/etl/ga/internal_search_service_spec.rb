@@ -32,12 +32,12 @@ RSpec.describe Etl::GA::InternalSearchService do
         arg1 = [
           a_hash_including(
             'page_path' => '/foo',
-            'number_of_internal_searches' => 1,
+            'searches' => 1,
             'date' => '2018-02-20',
           ),
           a_hash_including(
             'page_path' => '/bar',
-            'number_of_internal_searches' => 2,
+            'searches' => 2,
             'date' => '2018-02-20',
           )
         ]
@@ -45,7 +45,7 @@ RSpec.describe Etl::GA::InternalSearchService do
         arg2 = [
           a_hash_including(
             'page_path' => '/cool',
-            'number_of_internal_searches' => 3,
+            'searches' => 3,
             'date' => '2018-02-20',
           )
         ]

@@ -32,40 +32,40 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
         arg1 = [
           a_hash_including(
             'page_path' => '/foo',
-            'pageviews' => 1,
-            'unique_pageviews' => 1,
+            'pviews' => 1,
+            'upviews' => 1,
             'entrances' => 1,
             'exits' => 1,
             'bounce_rate' => 1,
-            'avg_time_on_page' => 1,
+            'avg_page_time' => 1,
             'bounces' => 1,
-            'time_on_page' => 1,
+            'page_time' => 1,
             'date' => '2018-02-20',
           ),
           a_hash_including(
             'page_path' => '/bar',
-            'pageviews' => 2,
-            'unique_pageviews' => 2,
+            'pviews' => 2,
+            'upviews' => 2,
             'entrances' => 2,
             'exits' => 2,
             'bounce_rate' => 2,
-            'avg_time_on_page' => 2,
+            'avg_page_time' => 2,
             'bounces' => 2,
-            'time_on_page' => 2,
+            'page_time' => 2,
             'date' => '2018-02-20',
           )
         ]
         arg2 = [
           a_hash_including(
             'page_path' => '/cool',
-            'pageviews' => 3,
-            'unique_pageviews' => 3,
+            'pviews' => 3,
+            'upviews' => 3,
             'entrances' => 3,
             'exits' => 3,
             'bounce_rate' => 3,
-            'avg_time_on_page' => 3,
+            'avg_page_time' => 3,
             'bounces' => 3,
-            'time_on_page' => 3,
+            'page_time' => 3,
             'date' => '2018-02-20',
           )
         ]
