@@ -15,4 +15,3 @@ json.metrics @series do |series|
     json.value value.values.first
   end
 end
-

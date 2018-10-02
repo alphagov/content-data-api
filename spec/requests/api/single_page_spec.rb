@@ -4,7 +4,7 @@ RSpec.describe '/single_page', type: :request do
   let!(:expected_metrics_names) { %w[unique_pageviews pageviews] }
   let!(:base_path) { '/base_path' }
   let!(:item) do
-    create :dimensions_item, 
+    create :dimensions_item,
       latest: true,
       title: 'the title',
       base_path: base_path,
@@ -15,19 +15,19 @@ RSpec.describe '/single_page', type: :request do
       primary_organisation_title: 'The ministry'
   end
 
-  before do 
+  before do
     create :user
-    day1 = create :dimensions_date, date: Date.new(2018, 1, 01)
-    day2 = create :dimensions_date, date: Date.new(2018, 1, 02)
+    day1 = create :dimensions_date, date: Date.new(2018, 1, 0o1)
+    day2 = create :dimensions_date, date: Date.new(2018, 1, 0o2)
     create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, unique_pageviews: 10
     create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, unique_pageviews: 20
     create :facts_edition, dimensions_item: item, dimensions_date: day1
   end
-  
+
   context 'when correct parameters supplied' do
     it 'returns the metadata' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
-      
+
       body = JSON.parse(response.body)
 
       expected = {
@@ -47,7 +47,7 @@ RSpec.describe '/single_page', type: :request do
 
     it 'returns the time period' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
-      
+
       body = JSON.parse(response.body)
 
       expected = {
@@ -62,11 +62,11 @@ RSpec.describe '/single_page', type: :request do
 
     it 'returns expected metrics' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
-      
+
       body = JSON.parse(response.body)
 
-      expected_metrics = expected_metrics_names.map { 
-        |metric_name| a_hash_including({"name" => metric_name})
+      expected_metrics = expected_metrics_names.map { |metric_name|
+        a_hash_including("name" => metric_name)
       }
       expected = {
         'metrics' => a_collection_including(*expected_metrics)
@@ -77,15 +77,15 @@ RSpec.describe '/single_page', type: :request do
 
     it 'returns the aggregated value for a metric' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
-      
+
       body = JSON.parse(response.body)
 
       expected = {
         'metrics' => a_collection_including(
-          a_hash_including({
+          a_hash_including(
             "total" => 30,
             "name" => 'unique_pageviews'
-          })
+          )
         )
       }
       expect(body).to include(expected)
@@ -94,18 +94,18 @@ RSpec.describe '/single_page', type: :request do
 
     it 'returns the time series for a metric' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
-      
+
       body = JSON.parse(response.body)
 
       expected = {
         'metrics' => a_collection_including(
-          a_hash_including({
+          a_hash_including(
             'name' => 'unique_pageviews',
             'time_series' => a_collection_including(
-              {'date' => '2018-01-01', 'value' => 10},
-              {'date' => '2018-01-02', 'value' => 20}
+              { 'date' => '2018-01-01', 'value' => 10 },
+              'date' => '2018-01-02', 'value' => 20
             )
-          })
+          )
         )
       }
       expect(body).to include(expected)
@@ -116,12 +116,12 @@ RSpec.describe '/single_page', type: :request do
   context 'with to param missing' do
     it 'returns an error' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01' }
-      
+
       body = JSON.parse(response.body)
 
       expected = {
         'title' => 'One or more parameters is invalid',
-        'invalid_params' =>{
+        'invalid_params' => {
           'to' => [
             "can't be blank",
             "Dates should use the format YYYY-MM-DD"
@@ -137,12 +137,12 @@ RSpec.describe '/single_page', type: :request do
   context 'with from param missing' do
     it 'returns an error' do
       get "/single_page/#{base_path}", params: { to: '2018-01-31' }
-      
+
       body = JSON.parse(response.body)
 
       expected = {
         'title' => 'One or more parameters is invalid',
-        'invalid_params' =>{
+        'invalid_params' => {
           'from' => [
             "can't be blank",
             "Dates should use the format YYYY-MM-DD"
@@ -158,12 +158,12 @@ RSpec.describe '/single_page', type: :request do
   context 'with from and to params missing' do
     it 'returns an error' do
       get "/single_page/#{base_path}"
-      
+
       body = JSON.parse(response.body)
 
       expected = {
         'title' => 'One or more parameters is invalid',
-        'invalid_params' =>{
+        'invalid_params' => {
           'from' => [
             "can't be blank",
             "Dates should use the format YYYY-MM-DD"
@@ -179,5 +179,4 @@ RSpec.describe '/single_page', type: :request do
       expect(response).to have_http_status(400)
     end
   end
-
 end
