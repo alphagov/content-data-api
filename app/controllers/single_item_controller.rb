@@ -8,7 +8,7 @@ class SingleItemController < Api::BaseController
     @metadata = metadata
   end
 
-  private
+private
 
   def query_series
     Reports::FindSeries.new
@@ -31,7 +31,7 @@ class SingleItemController < Api::BaseController
   def permitted_params
     params.permit(:from, :to, :base_path, :format)
   end
-  
+
   def base_path
     params[:base_path]
   end
@@ -39,7 +39,7 @@ class SingleItemController < Api::BaseController
   def validate_params!
     unless api_request.valid?
       error_response(
-          "validation-error",
+        "validation-error",
           title: "One or more parameters is invalid",
           invalid_params: api_request.errors.to_hash
       )
