@@ -42,7 +42,6 @@ class Reports::FindSeries
     metrics = metrics
       .joins(dimensions_item: :facts_edition).merge(items)
       .joins(:dimensions_date).merge(dates)
-
     if @metric_names
       @metric_names.map { |metric_name| Reports::Series.new(metric_name, metrics) }
     else

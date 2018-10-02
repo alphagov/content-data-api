@@ -15,6 +15,7 @@ FactoryBot.define do
       replaces { nil }
       facts { {} }
     end
+    
     to_create do |new_edition, evaluator|
       if evaluator.replaces
         new_edition.promote! evaluator.replaces
@@ -25,7 +26,7 @@ FactoryBot.define do
       FactoryBot.create :facts_edition, evaluator.facts.merge(
         dimensions_date: dim_date,
         dimensions_item: new_edition,
-        )
+      )
       new_edition
     end
   end

@@ -2,7 +2,7 @@ RSpec.describe Reports::FindMetadata do
   let!(:base_path) { '/base_path' }
 
   before do
-    create :dimensions_item,
+    create :edition,
       latest: true,
       title: 'the title',
       base_path: base_path,
@@ -12,7 +12,7 @@ RSpec.describe Reports::FindMetadata do
       public_updated_at: '2018-07-17T10:35:57.000Z',
       primary_organisation_title: 'The ministry'
 
-    create :dimensions_item,
+    create :edition,
       latest: false,
       title: 'the old title',
       base_path: base_path,

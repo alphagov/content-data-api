@@ -23,17 +23,17 @@ private
       .between(from: @from, to: @to)
       .by_base_path(@base_path)
       .by_metrics(%i(
-        unique_pageviews
-        pageviews
-        feedex_comments
-        satisfaction_score
-        number_of_internal_searches
+        upviews
+        pviews
+        feedex
+        satisfaction
+        searches
       ))
       .run
   end
 
   def query_edition_metrics
-    Reports::FindEditionMetrics.run(@base_path, %w[word_count number_of_pdfs])
+    Reports::FindEditionMetrics.run(@base_path, %w[words pdf_count])
   end
 
   def api_request

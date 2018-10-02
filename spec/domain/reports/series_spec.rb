@@ -12,26 +12,21 @@ RSpec.describe Reports::Series do
     create :metric, edition: item, date: day3, pviews: 30
   end
 
-  it 'presents the values_by_date' do
+  it 'return the time series' do
     series = Reports::Series.new('pviews', Facts::Metric.all)
-    expect(series.values_by_date).to eq expected_values
+    expect(series.time_series).to eq expected_values
   end
 
-  it 'presents the total' do
+  it 'return the total value for time period' do
     series = Reports::Series.new('pviews', Facts::Metric.all)
     expect(series.total).to eq 60
   end
 
-  it 'presents the latest' do
-    series = Reports::Series.new('pviews', Facts::Metric.all)
-    expect(series.latest).to eq 30
-  end
-
   def expected_values
     [
-      { "2018-01-13" => 10 },
-      { "2018-01-14" => 20 },
-      { "2018-01-15" => 30 }
+      { date: "2018-01-13", value: 10 },
+      { date: "2018-01-14", value: 20 },
+      { date: "2018-01-15", value: 30 }
     ]
   end
 end
