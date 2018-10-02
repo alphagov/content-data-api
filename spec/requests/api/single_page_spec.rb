@@ -1,7 +1,7 @@
 require 'securerandom'
 
 RSpec.describe '/single_page', type: :request do
-  let!(:expected_metrics_names) { %w[unique_pageviews pageviews] }
+  let!(:expected_metrics_names) { %w[unique_pageviews pageviews feedex_comments number_of_internal_searches] }
   let!(:base_path) { '/base_path' }
   let!(:item) do
     create :dimensions_item,
@@ -60,7 +60,7 @@ RSpec.describe '/single_page', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'returns expected metrics' do
+    it 'returns expected time series metrics' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
 
       body = JSON.parse(response.body)
@@ -69,19 +69,19 @@ RSpec.describe '/single_page', type: :request do
         a_hash_including("name" => metric_name)
       }
       expected = {
-        'metrics' => a_collection_including(*expected_metrics)
+        'time_series_metrics' => a_collection_including(*expected_metrics)
       }
       expect(body).to include(expected)
       expect(response).to have_http_status(:ok)
     end
 
-    it 'returns the aggregated value for a metric' do
+    it 'returns expected edition metrics' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
 
       body = JSON.parse(response.body)
 
       expected = {
-        'metrics' => a_collection_including(
+        'time_series_metrics' => a_collection_including(
           a_hash_including(
             "total" => 30,
             "name" => 'unique_pageviews'
@@ -92,13 +92,13 @@ RSpec.describe '/single_page', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'returns the time series for a metric' do
+    it 'returns the time series values for a time series metric' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
 
       body = JSON.parse(response.body)
 
       expected = {
-        'metrics' => a_collection_including(
+        'time_series_metrics' => a_collection_including(
           a_hash_including(
             'name' => 'unique_pageviews',
             'time_series' => a_collection_including(

@@ -7,11 +7,11 @@ json.time_period do
   json.to @to
 end
 
-json.metrics @time_series_metrics do |series|
+json.time_series_metrics @time_series_metrics do |series|
   json.name series.metric_name
   json.total series.total
-  json.time_series series.values_by_date do |value|
-    json.date value.keys.first
-    json.value value.values.first
+  json.time_series series.time_series do |time_point|
+    json.date time_point[:date]
+    json.value time_point[:value]
   end
 end
