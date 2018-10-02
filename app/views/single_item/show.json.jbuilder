@@ -15,3 +15,8 @@ json.time_series_metrics @time_series_metrics do |series|
     json.value time_point[:value]
   end
 end
+
+json.edition_metrics @edition_metrics do |metric|
+  json.name metric[:name]
+  json.value metric[:value]
+end
