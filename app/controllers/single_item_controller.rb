@@ -4,24 +4,36 @@ class SingleItemController < Api::BaseController
   def show
     @to = params[:to]
     @from = params[:from]
-    @series = query_series
+    @base_path = format_base_path_param
     @metadata = metadata
+    @time_series_metrics = query_time_series_metrics
+    @edition_metrics = query_edition_metrics
   end
 
 private
 
-  def query_series
-    Reports::FindSeries.new
-        .between(from: @from, to: @to)
-        .by_base_path(format_base_path_param)
-        .by_metrics(%i(unique_pageviews pageviews))
-        .run
+  def metadata
+    metadata = Reports::FindMetadata.run(@base_path)
+    raise Api::NotFoundError.new("#{api_request.base_path} not found") if metadata.nil?
+    metadata
   end
 
-  def metadata
-    latest_item = Dimensions::Item.latest_by_base_path(format_base_path_param).first
-    raise Api::NotFoundError.new("#{api_request.base_path} not found") if latest_item.nil?
-    latest_item.metadata
+  def query_time_series_metrics
+    Reports::FindSeries.new
+      .between(from: @from, to: @to)
+      .by_base_path(@base_path)
+      .by_metrics(%i(
+        unique_pageviews
+        pageviews
+        feedex_comments
+        satisfaction_score
+        number_of_internal_searches
+      ))
+      .run
+  end
+
+  def query_edition_metrics
+    Reports::FindEditionMetrics.run(@base_path, %w[word_count number_of_pdfs])
   end
 
   def api_request
