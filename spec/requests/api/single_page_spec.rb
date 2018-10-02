@@ -1,10 +1,11 @@
 require 'securerandom'
 
 RSpec.describe '/single_page', type: :request do
-  let!(:expected_metrics_names) { %w[unique_pageviews pageviews] }
+  let!(:expected_time_series_metrics) { %w[upviews pviews feedex searches satisfaction] }
+  let!(:expected_edition_metrics) { %w[words pdf_count] }
   let!(:base_path) { '/base_path' }
   let!(:item) do
-    create :dimensions_item,
+    create :edition,
       latest: true,
       title: 'the title',
       base_path: base_path,
@@ -19,8 +20,8 @@ RSpec.describe '/single_page', type: :request do
     create :user
     day1 = create :dimensions_date, date: Date.new(2018, 1, 0o1)
     day2 = create :dimensions_date, date: Date.new(2018, 1, 0o2)
-    create :metric, dimensions_item: item, dimensions_date: day1, pageviews: 10, unique_pageviews: 10
-    create :metric, dimensions_item: item, dimensions_date: day2, pageviews: 20, unique_pageviews: 20
+    create :metric, dimensions_item: item, dimensions_date: day1, pviews: 10, upviews: 10
+    create :metric, dimensions_item: item, dimensions_date: day2, pviews: 20, upviews: 20
     create :facts_edition, dimensions_item: item, dimensions_date: day1
   end
 
@@ -60,47 +61,45 @@ RSpec.describe '/single_page', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'returns expected metrics' do
+    it 'returns expected time series metrics' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
 
       body = JSON.parse(response.body)
 
-      expected_metrics = expected_metrics_names.map { |metric_name|
+      expected_metrics = expected_time_series_metrics.map { |metric_name|
         a_hash_including("name" => metric_name)
       }
       expected = {
-        'metrics' => a_collection_including(*expected_metrics)
+        'time_series_metrics' => a_collection_including(*expected_metrics)
       }
       expect(body).to include(expected)
       expect(response).to have_http_status(:ok)
     end
 
-    it 'returns the aggregated value for a metric' do
+    it 'returns expected edition metrics' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
 
       body = JSON.parse(response.body)
 
+      expected_metrics = expected_edition_metrics.map { |metric_name|
+        a_hash_including("name" => metric_name)
+      }
       expected = {
-        'metrics' => a_collection_including(
-          a_hash_including(
-            "total" => 30,
-            "name" => 'unique_pageviews'
-          )
-        )
+        'edition_metrics' => a_collection_including(*expected_metrics)
       }
       expect(body).to include(expected)
       expect(response).to have_http_status(:ok)
     end
 
-    it 'returns the time series for a metric' do
+    it 'returns the time series values for a time series metric' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
 
       body = JSON.parse(response.body)
 
       expected = {
-        'metrics' => a_collection_including(
+        'time_series_metrics' => a_collection_including(
           a_hash_including(
-            'name' => 'unique_pageviews',
+            'name' => 'upviews',
             'time_series' => a_collection_including(
               { 'date' => '2018-01-01', 'value' => 10 },
               'date' => '2018-01-02', 'value' => 20
