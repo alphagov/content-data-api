@@ -1,25 +1,19 @@
-require 'securerandom'
-
 RSpec.describe '/api/v1/metrics/', type: :request do
-  include ItemSetupHelpers
   before { create(:user) }
 
   let!(:base_path) { '/base_path' }
   let(:warehouse_item_id) { '35058ac0-fb70-4220-81dc-c8b14bededdc' }
 
   before do
-    create_metric(base_path: base_path, date: '2018-01-13',
-      edition: {
-        pdf_count: 30, doc_count: 30, readability: 123
-      },
-      item: { latest: false, warehouse_item_id: warehouse_item_id })
-    create_metric(base_path: base_path, date: '2018-01-14',
-      edition: {
-        pdf_count: 20, doc_count: 20, readability: 5
-      },
-      item: { latest: true, warehouse_item_id: warehouse_item_id })
-    create_metric base_path: base_path, date: '2018-01-15', item: { warehouse_item_id: warehouse_item_id, latest: true }
-    create_metric base_path: base_path, date: '2018-01-16', item: { warehouse_item_id: warehouse_item_id, latest: true }
+    edition = create :edition, base_path: base_path, date: '2018-01-13', warehouse_item_id: warehouse_item_id, facts: {
+                       pdf_count: 30, doc_count: 30, readability: 123
+                     }
+    create :metric, edition: edition, date: '2018-01-13'
+    new_edition = create :edition, replaces: edition, base_path: base_path, date: '2018-01-14', facts: {
+                           pdf_count: 20, doc_count: 20, readability: 5
+                     }
+    create :metric, edition: new_edition, date: '2018-01-14'
+    create :metric, edition: new_edition, date: '2018-01-15'
   end
 
   it 'returns the `number of pdfs` between two dates' do

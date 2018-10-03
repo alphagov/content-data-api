@@ -2,7 +2,6 @@ require "gds-api-adapters"
 require 'traceable'
 
 RSpec.describe Etl::GA::InternalSearchProcessor do
-  include ItemSetupHelpers
   subject { described_class }
 
   let(:date) { Date.new(2018, 2, 20) }
@@ -11,8 +10,10 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
     before { allow(Etl::GA::InternalSearchService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it "updates the facts with GA metrics" do
-      fact1 = create_metric base_path: "/path1", date: '2018-02-20'
-      fact2 = create_metric base_path: "/path2", date: '2018-02-20'
+      edition1 = create :edition, date: '2018-02-20', base_path: "/path1"
+      fact1 = create :metric, edition: edition1, date: '2018-02-20'
+      edition2 = create :edition, base_path: "/path2", date: '2018-02-20'
+      fact2 = create :metric, edition: edition2, date: '2018-02-20'
 
       described_class.process(date: date)
 
@@ -21,7 +22,8 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
     end
 
     it "does not update metrics for other days" do
-      fact1 = create_metric base_path: "/path1", date: '2018-02-20', daily: { searches: 20 }
+      create :edition, base_path: "/path1", date: '2018-02-20'
+      fact1 = create :metric, date: '2018-02-20', searches: 20
 
       day_before = date - 1
       described_class.process(date: day_before)
@@ -30,7 +32,8 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
     end
 
     it "does not update metrics for other items" do
-      fact = create_metric base_path: "/non-matching-path", date: '2018-02-20', daily: { searches: 99 }
+      edition = create :edition, base_path: "/non-matching-path", date: '2018-02-20'
+      fact = create :metric, edition: edition, date: '2018-02-20', searches: 99
 
       described_class.process(date: date)
 
@@ -52,7 +55,8 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
       end
 
       it "only updates metrics for the current day" do
-        fact1 = create_metric base_path: '/path1', date: '2018-02-20'
+        edition = create :edition, base_path: '/path1', date: '2018-02-20'
+        fact1 = create :metric, edition: edition, date: '2018-02-20'
 
         described_class.process(date: date)
 

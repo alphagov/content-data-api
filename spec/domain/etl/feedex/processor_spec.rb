@@ -1,16 +1,15 @@
 require 'gds-api-adapters'
 
 RSpec.describe Etl::Feedex::Processor do
-  include ItemSetupHelpers
-
   let(:date) { Date.new(2018, 2, 20) }
-
 
   context 'When the base_path matches the feedex path' do
     before { allow_any_instance_of(Etl::Feedex::Service).to receive(:find_in_batches).and_yield(feedex_response) }
     it 'update the facts with the feedex metrics' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20'
-      fact2 = create_metric base_path: '/path2', date: '2018-02-20'
+      edition1 = create :edition, base_path: '/path1', date: '2018-02-20'
+      fact1 = create :metric, edition: edition1, date: '2018-02-20'
+      edition2 = create :edition, base_path: '/path2', date: '2018-02-20'
+      fact2 = create :metric, edition: edition2, date: '2018-02-20'
 
       described_class.process(date: date)
 
@@ -19,7 +18,8 @@ RSpec.describe Etl::Feedex::Processor do
     end
 
     it 'does not update metrics for other days' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { feedex: 1 }
+      edition1 = create :edition, base_path: '/path1', date: '2018-02-20'
+      fact1 = create :metric, edition: edition1, date: '2018-02-20', feedex: 1
       day_before = date - 1
       described_class.process(date: day_before)
 
@@ -27,7 +27,8 @@ RSpec.describe Etl::Feedex::Processor do
     end
 
     it 'does not update metrics for other items' do
-      fact = create_metric base_path: '/non-matching-path', date: '2018-02-20', daily: { feedex: 9 }
+      edition = create :edition, base_path: '/non-matching-path'
+      fact = create :metric, edition: edition, date: '2018-02-20', feedex: 9
 
       described_class.process(date: date)
 
@@ -35,7 +36,8 @@ RSpec.describe Etl::Feedex::Processor do
     end
 
     it 'deletes the events that matches the base_path of an item' do
-      create_metric base_path: '/path1', date: '2018-02-20'
+      edition = create :edition, base_path: '/path1', date: '2018-02-20'
+      create :metric, edition: edition, date: '2018-02-20', feedex: 1
 
       described_class.process(date: date)
 
@@ -51,7 +53,8 @@ RSpec.describe Etl::Feedex::Processor do
     end
 
     it 'only updates metrics for the current day' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20'
+      edition = create :edition, base_path: '/path1'
+      fact1 = create :metric, edition: edition, date: '2018-02-20'
 
       described_class.process(date: date)
 
@@ -59,7 +62,8 @@ RSpec.describe Etl::Feedex::Processor do
     end
 
     it 'only deletes the events for the current day that matches' do
-      create_metric base_path: '/path1', date: '2018-02-20'
+      edition = create :edition, base_path: '/path1'
+      create :metric, edition: edition, date: '2018-02-20'
 
       described_class.process(date: date)
 

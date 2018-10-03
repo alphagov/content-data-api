@@ -1,5 +1,4 @@
 RSpec.describe Monitor::Etl do
-
   around do |example|
     Timecop.freeze(Date.new(2018, 1, 15)) { example.run }
   end

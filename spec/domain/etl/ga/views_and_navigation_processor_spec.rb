@@ -2,7 +2,6 @@ require 'gds-api-adapters'
 require 'traceable'
 
 RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
-  include ItemSetupHelpers
   subject { described_class }
 
   let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
@@ -13,10 +12,11 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
   context 'When the base_path matches the GA path' do
     before { allow(Etl::GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(ga_response) }
-
     it 'update the facts with the GA metrics' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20'
-      fact2 = create_metric base_path: '/path2', date: '2018-02-20'
+      edition1 = create :edition, base_path: '/path1', date: '2018-02-20'
+      edition2 = create :edition, base_path: '/path2', date: '2018-02-20'
+      fact1 = create :metric, edition: edition1, date: '2018-02-20'
+      fact2 = create :metric, edition: edition2, date: '2018-02-20'
 
       described_class.process(date: date)
 
@@ -25,7 +25,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
     end
 
     it 'does not update metrics for other days' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { pviews: 20, upviews: 10 }
+      edition = create :edition, date: '2018-02-20', base_path: '/path1'
+      fact1 = create :metric, edition: edition, date: '2018-02-20', pviews: 20, upviews: 10
 
       day_before = date - 1
       described_class.process(date: day_before)
@@ -34,7 +35,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
     end
 
     it 'does not update metrics for other items' do
-      fact = create_metric base_path: '/non-matching-path', date: '2018-02-20', daily: { pviews: 99, upviews: 90 }
+      edition = create :edition, base_path: '/non-matching-path', date: '2018-02-20'
+      fact = create :metric, edition: edition, date: '2018-02-20', pviews: 99, upviews: 90
 
       described_class.process(date: date)
 
@@ -56,7 +58,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
       end
 
       it 'only updates metrics for the current day' do
-        fact1 = create_metric base_path: '/path1', date: '2018-02-20'
+        edition = create :edition, date: '2018-02-20', base_path: '/path1'
+        fact1 = create :metric, edition: edition, date: '2018-02-20'
 
         described_class.process(date: date)
 
