@@ -1,6 +1,4 @@
 RSpec.describe Monitor::Dimensions do
-  include ItemSetupHelpers
-
   around do |example|
     Timecop.freeze(Date.new(2018, 1, 15)) { example.run }
   end

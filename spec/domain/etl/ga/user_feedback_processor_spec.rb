@@ -2,7 +2,6 @@ require 'gds-api-adapters'
 require 'traceable'
 
 RSpec.describe Etl::GA::UserFeedbackProcessor do
-  include ItemSetupHelpers
   subject { described_class }
 
   let(:date) { Date.new(2018, 2, 20) }
