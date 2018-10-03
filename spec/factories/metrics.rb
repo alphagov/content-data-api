@@ -6,7 +6,7 @@ FactoryBot.define do
     upviews { 5 }
     transient do
       date { Time.zone.today }
-      edition { create :dimensions_item }
+      edition { create :edition }
     end
   end
 end

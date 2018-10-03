@@ -1,5 +1,5 @@
 module ItemSetupHelpers
-  def create_metric(base_path: '/base-path', date:, edition: {}, daily: {}, item: {})
+  def create_metrico(base_path: '/base-path', date:, edition: {}, daily: {}, item: {})
     dimensions_date = dimensions_date(date)
     dimensions_item = dimensions_item(item.merge(base_path: base_path), edition, dimensions_date)
     create :metric, daily.merge(
