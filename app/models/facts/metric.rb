@@ -1,14 +1,14 @@
 class Facts::Metric < ApplicationRecord
   belongs_to :dimensions_date, class_name: 'Dimensions::Date'
-  belongs_to :dimensions_item, class_name: 'Dimensions::Item'
+  belongs_to :dimensions_edition, class_name: 'Dimensions::Edition'
 
-  has_one :facts_edition, through: :dimensions_item
+  has_one :facts_edition, through: :dimensions_edition
 
   validates :dimensions_date, presence: true
-  validates :dimensions_item, presence: true
+  validates :dimensions_edition, presence: true
 
   scope :with_edition_metrics, -> do
-    joins(dimensions_item: :facts_edition)
+    joins(dimensions_edition: :facts_edition)
   end
 
   scope :for_yesterday, -> { where(dimensions_date: Dimensions::Date.find_or_create(Date.yesterday)) }

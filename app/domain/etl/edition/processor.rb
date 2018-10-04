@@ -3,10 +3,10 @@ class Etl::Edition::Processor
     new(*args).process
   end
 
-  def initialize(old_item, new_item, date = Date.today)
+  def initialize(old_edition, new_edition, date = Date.today)
     @dimensions_date = Dimensions::Date.find_or_create(date)
-    @old_item = old_item
-    @new_item = new_item
+    @old_edition = old_edition
+    @new_edition = new_edition
   end
 
   def process
@@ -15,21 +15,21 @@ class Etl::Edition::Processor
 
 private
 
-  attr_reader :dimensions_date, :new_item
+  attr_reader :dimensions_date, :new_edition
 
   def create_new_edition
     Facts::Edition.create!(
-      pdf_count: Etl::Item::Metadata::NumberOfPdfs.parse(new_item.raw_json),
-      doc_count: Etl::Item::Metadata::NumberOfWordFiles.parse(new_item.raw_json),
+      pdf_count: Etl::Item::Metadata::NumberOfPdfs.parse(new_edition.raw_json),
+      doc_count: Etl::Item::Metadata::NumberOfWordFiles.parse(new_edition.raw_json),
       dimensions_date: dimensions_date,
-      dimensions_item: new_item,
+      dimensions_edition: new_edition,
       **quality_metrics
     )
   end
 
   def quality_metrics
-    return {} if new_item.document_text.nil?
-    result = Odyssey.flesch_kincaid_re(new_item.document_text, true)
+    return {} if new_edition.document_text.nil?
+    result = Odyssey.flesch_kincaid_re(new_edition.document_text, true)
     {
       readability: result.fetch('score'),
       chars: result.fetch('string_length'),

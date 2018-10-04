@@ -10,7 +10,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     expect {
       subject.process(message)
-    }.to change(Dimensions::Item, :count).by(4)
+    }.to change(Dimensions::Edition, :count).by(4)
   end
 
   context 'for a guide' do
@@ -22,7 +22,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
         locale: 'en')
       subject.process(message)
 
-      parts = Dimensions::Item.pluck(:base_path, :title, :warehouse_item_id).to_set
+      parts = Dimensions::Edition.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
         ["/base-path", "Part 1", "#{content_id}:en:/base-path"],
@@ -42,7 +42,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
         content_id: content_id,
         locale: 'fr')
       subject.process(message)
-      parts = Dimensions::Item.pluck(:base_path, :title, :warehouse_item_id).to_set
+      parts = Dimensions::Edition.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
         %W(/travel/advice Summary #{content_id}:fr:/travel/advice),
@@ -55,15 +55,15 @@ RSpec.describe "Process sub-pages for multipart content types" do
   it "deprecates only the parts that have changed" do
     message = build(:message, :with_parts)
     subject.process(message)
-    expect(Dimensions::Item.count).to eq(4)
+    expect(Dimensions::Edition.count).to eq(4)
 
     message.payload["details"]["parts"][1]["body"] = "this is a change"
     message.payload["payload_version"] = message.payload["payload_version"] + 1
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(5)
-    expect(Dimensions::Item.latest.count).to eq(4)
+    expect(Dimensions::Edition.count).to eq(5)
+    expect(Dimensions::Edition.latest.count).to eq(4)
   end
 
   it "increases the number of latest items when a subpage is added" do
@@ -85,8 +85,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(5)
-    expect(Dimensions::Item.latest.count).to eq(5)
+    expect(Dimensions::Edition.count).to eq(5)
+    expect(Dimensions::Edition.latest.count).to eq(5)
   end
 
   it "decreases the number of latest items when a subpage is removed" do
@@ -98,8 +98,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(4)
-    expect(Dimensions::Item.latest.count).to eq(3)
+    expect(Dimensions::Edition.count).to eq(4)
+    expect(Dimensions::Edition.latest.count).to eq(3)
   end
 
   it "still grows the dimension if parts are renamed" do
@@ -111,8 +111,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Item.count).to eq(5)
-    expect(Dimensions::Item.latest.count).to eq(4)
+    expect(Dimensions::Edition.count).to eq(5)
+    expect(Dimensions::Edition.latest.count).to eq(4)
   end
 
   context "when base paths in the message already belong to items with a different content id" do
@@ -127,8 +127,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
       another_message.payload["base_path"] = "/some-url"
       subject.process(another_message)
 
-      expect(Dimensions::Item.count).to eq(8)
-      expect(Dimensions::Item.latest.count).to eq(4)
+      expect(Dimensions::Edition.count).to eq(8)
+      expect(Dimensions::Edition.latest.count).to eq(4)
     end
   end
 
@@ -142,8 +142,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
           message.payload["base_path"] = "/#{type}-url"
           subject.process(message)
 
-          item = Dimensions::Item.where(base_path: "/#{type}-url", latest: true).first
-          part = Dimensions::Item.where(base_path: "/#{type}-url/part2", latest: true).first
+          item = Dimensions::Edition.where(base_path: "/#{type}-url", latest: true).first
+          part = Dimensions::Edition.where(base_path: "/#{type}-url/part2", latest: true).first
 
           expect(item.base_path).to eq("/#{type}-url")
           expect(part.base_path).to eq("/#{type}-url/part2")
@@ -157,7 +157,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
       message2 = build :message, payload: message.payload.dup
       message2.payload['payload_version'] = message.payload['payload_version'] + 1
 
-      expect { subject.process(message2) }.not_to change(Dimensions::Item, :count)
+      expect { subject.process(message2) }.not_to change(Dimensions::Edition, :count)
     end
   end
 
@@ -185,7 +185,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     it_behaves_like 'when unchanged'
 
     it "extracts the Summary" do
-      item = Dimensions::Item.where(base_path: "/travel-advice", latest: true).first
+      item = Dimensions::Edition.where(base_path: "/travel-advice", latest: true).first
       expect(item).to have_attributes(expected_attributes(
                                         base_path: '/travel-advice',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
@@ -197,7 +197,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     it 'extracts /travel-advice/part1' do
-      item = Dimensions::Item.where(base_path: "/travel-advice/part1", latest: true).first
+      item = Dimensions::Edition.where(base_path: "/travel-advice/part1", latest: true).first
 
       expect(item).to have_attributes(expected_attributes(
                                         base_path: '/travel-advice/part1',
@@ -210,7 +210,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     it 'extracts /travel-advice/part2' do
-      item = Dimensions::Item.where(base_path: "/travel-advice/part2", latest: true).first
+      item = Dimensions::Edition.where(base_path: "/travel-advice/part2", latest: true).first
       expect(item).to have_attributes(expected_attributes(
                                         base_path: '/travel-advice/part2',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
@@ -222,7 +222,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     it 'deprecates any other items' do
-      query = Dimensions::Item.where(base_path: "/travel-advice/part3")
+      query = Dimensions::Edition.where(base_path: "/travel-advice/part3")
       expect(query.count).to eq(1)
       expect(query.first.latest).to eq(false)
     end
@@ -259,7 +259,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
 
     it 'extracts part 1 on the base path' do
-      item = Dimensions::Item.where(base_path: "/guide", latest: true).first
+      item = Dimensions::Edition.where(base_path: "/guide", latest: true).first
       expect(item).to have_attributes(expected_attributes(
                                         base_path: '/guide',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
@@ -271,7 +271,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     it 'extracts part 2 under the base path' do
-      item = Dimensions::Item.where(base_path: '/guide/part2', latest: true).first
+      item = Dimensions::Edition.where(base_path: '/guide/part2', latest: true).first
       expect(item).to have_attributes(expected_attributes(
                                         base_path: '/guide/part2',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
@@ -283,7 +283,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     it 'extracts part 3 under the base path' do
-      item = Dimensions::Item.where(base_path: '/guide/part3', latest: true).first
+      item = Dimensions::Edition.where(base_path: '/guide/part3', latest: true).first
       expect(item).to have_attributes(expected_attributes(
                                         base_path: '/guide/part3',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
@@ -295,7 +295,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     it 'extracts part 4 under the base path' do
-      item = Dimensions::Item.where(base_path: '/guide/part4', latest: true).first
+      item = Dimensions::Edition.where(base_path: '/guide/part4', latest: true).first
       expect(item).to have_attributes(expected_attributes(
                                         base_path: '/guide/part4',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
@@ -307,7 +307,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     it 'deprecates any other items' do
-      query = Dimensions::Item.where(base_path: "/guide/part5")
+      query = Dimensions::Edition.where(base_path: "/guide/part5")
       expect(query.count).to eq(1)
       expect(query.first.latest).to eq(false)
     end

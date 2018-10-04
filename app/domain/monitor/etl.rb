@@ -43,6 +43,6 @@ private
   end
 
   def editions
-    @editions = metrics.joins(dimensions_item: :facts_edition)
+    @editions = metrics.joins(dimensions_edition: :facts_edition)
   end
 end

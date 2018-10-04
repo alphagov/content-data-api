@@ -26,19 +26,19 @@ RSpec.describe 'Master process spec' do
   end
 
   def latest_version
-    Dimensions::Item.find_by(latest: true, content_id: 'id1')
+    Dimensions::Edition.find_by(latest: true, content_id: 'id1')
   end
 
   def latest_metric
     Facts::Metric
-      .joins(:dimensions_item)
-      .where(dimensions_items: { latest: true, content_id: 'id1' })
+      .joins(:dimensions_edition)
+      .where(dimensions_editions: { latest: true, content_id: 'id1' })
       .first
   end
 
   def validate_facts_metrics!
     expect(Facts::Metric.count).to eq(2)
-    expect(Facts::Metric.pluck(:dimensions_item_id)).to match_array([an_edition.id, latest_version.id])
+    expect(Facts::Metric.pluck(:dimensions_edition_id)).to match_array([an_edition.id, latest_version.id])
     expect(Facts::Metric.pluck(:dimensions_date_id).uniq).to match_array(Date.new(2018, 2, 20))
   end
 

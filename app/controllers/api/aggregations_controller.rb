@@ -17,9 +17,9 @@ private
   end
 
   def metadata
-    latest_item = Dimensions::Item.latest_by_base_path(format_base_path_param).first
-    raise Api::NotFoundError.new("#{api_request.base_path} not found") if latest_item.nil?
-    latest_item.metadata
+    latest_edition = Dimensions::Edition.latest_by_base_path(format_base_path_param).first
+    raise Api::NotFoundError.new("#{api_request.base_path} not found") if latest_edition.nil?
+    latest_edition.metadata
   end
 
   delegate :from, :to, :base_path, :metrics, to: :api_request

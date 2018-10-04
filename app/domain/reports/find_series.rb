@@ -40,7 +40,7 @@ class Reports::FindSeries
 
     metrics = Facts::Metric.all
     metrics = metrics
-      .joins(dimensions_item: :facts_edition).merge(items)
+      .joins(dimensions_edition: :facts_edition).merge(items)
       .joins(:dimensions_date).merge(dates)
 
     if @metric_names
@@ -59,7 +59,7 @@ private
   end
 
   def slice_content_items
-    items = Dimensions::Item.all
+    items = Dimensions::Edition.all
     items = items.by_locale('en')
     items = items.by_organisation_id(@org_id) unless @org_id.blank?
     items = items.by_base_path(@base_path) unless @base_path.blank?
