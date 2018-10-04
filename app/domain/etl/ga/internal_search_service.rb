@@ -21,11 +21,11 @@ class Etl::GA::InternalSearchService
 private
 
   def append_labels(values)
-    page_path, number_of_internal_searches = *values
+    page_path, searches = *values
     {
       'page_path' => page_path,
-      'number_of_internal_searches' => number_of_internal_searches,
-      'process_name' => 'number_of_internal_searches'
+      'searches' => searches,
+      'process_name' => 'searches'
     }
   end
 

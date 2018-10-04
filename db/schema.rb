@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_28_150637) do
+ActiveRecord::Schema.define(version: 2018_10_04_070753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2018_09_28_150637) do
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
     t.string "primary_organisation_title"
-    t.string "primary_organisation_content_id"
+    t.string "organisation_id"
     t.boolean "primary_organisation_withdrawn"
     t.string "locale"
     t.bigint "publishing_api_payload_version", null: false
@@ -64,13 +64,12 @@ ActiveRecord::Schema.define(version: 2018_09_28_150637) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
-    t.json "raw_json"
     t.string "warehouse_item_id", null: false
+    t.json "raw_json"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
-    t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
+    t.index ["organisation_id"], name: "index_dimensions_items_primary_organisation_content_id"
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
     t.index ["warehouse_item_id", "latest"], name: "index_dimensions_items_warehouse_item_id_latest"
     t.index ["warehouse_item_id"], name: "index_dimensions_items_warehouse_item_id"
@@ -86,20 +85,20 @@ ActiveRecord::Schema.define(version: 2018_09_28_150637) do
   create_table "events_gas", force: :cascade do |t|
     t.date "date"
     t.string "page_path"
-    t.integer "pageviews", default: 0
-    t.integer "unique_pageviews", default: 0
+    t.integer "pviews", default: 0
+    t.integer "upviews", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "is_this_useful_yes", default: 0
-    t.integer "is_this_useful_no", default: 0
+    t.integer "useful_yes", default: 0
+    t.integer "useful_no", default: 0
     t.integer "process_name", null: false
-    t.integer "number_of_internal_searches", default: 0
+    t.integer "searches", default: 0
     t.integer "exits", default: 0
     t.integer "entrances", default: 0
     t.integer "bounce_rate", default: 0
-    t.integer "avg_time_on_page", default: 0
+    t.integer "avg_page_time", default: 0
     t.integer "bounces", default: 0
-    t.integer "time_on_page", default: 0
+    t.integer "page_time", default: 0
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
     t.index ["process_name", "date", "page_path"], name: "index_events_gas_on_process_name_and_date_and_page_path", unique: true
   end
@@ -107,12 +106,12 @@ ActiveRecord::Schema.define(version: 2018_09_28_150637) do
   create_table "facts_editions", force: :cascade do |t|
     t.date "dimensions_date_id", null: false
     t.bigint "dimensions_item_id", null: false
-    t.integer "number_of_pdfs"
-    t.integer "number_of_word_files"
-    t.integer "readability_score"
-    t.integer "string_length"
-    t.integer "sentence_count"
-    t.integer "word_count"
+    t.integer "pdf_count"
+    t.integer "doc_count"
+    t.integer "readability"
+    t.integer "chars"
+    t.integer "sentences"
+    t.integer "words"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["dimensions_item_id", "dimensions_date_id"], name: "editions_item_id_date_id", unique: true
@@ -123,19 +122,19 @@ ActiveRecord::Schema.define(version: 2018_09_28_150637) do
     t.bigint "dimensions_item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "pageviews", default: 0
-    t.integer "unique_pageviews", default: 0
-    t.integer "feedex_comments", default: 0
-    t.integer "is_this_useful_yes", default: 0, null: false
-    t.integer "is_this_useful_no", default: 0, null: false
-    t.integer "number_of_internal_searches", default: 0
+    t.integer "pviews", default: 0
+    t.integer "upviews", default: 0
+    t.integer "feedex", default: 0
+    t.integer "useful_yes", default: 0, null: false
+    t.integer "useful_no", default: 0, null: false
+    t.integer "searches", default: 0
     t.integer "exits", default: 0
     t.integer "entrances", default: 0
     t.integer "bounce_rate", default: 0
-    t.integer "avg_time_on_page", default: 0
+    t.integer "avg_page_time", default: 0
     t.integer "bounces", default: 0
-    t.integer "time_on_page", default: 0
-    t.float "satisfaction_score", default: 0.0, null: false
+    t.integer "page_time", default: 0
+    t.float "satisfaction", default: 0.0, null: false
     t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
   end
 

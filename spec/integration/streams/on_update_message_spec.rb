@@ -111,7 +111,7 @@ RSpec.describe PublishingAPI::Consumer do
     let(:new_base_path) { '/new/base/path' }
 
     it 'creates the new item with the warehouse_item_id of the old item' do
-      create :dimensions_item,
+      create :edition,
         base_path: '/old/base/path',
         content_id: content_id,
         locale: locale,

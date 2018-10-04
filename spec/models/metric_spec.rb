@@ -1,26 +1,26 @@
 RSpec.describe Metric do
   EDITION_METRICS =
     %w(
-      number_of_pdfs
-      number_of_word_files
-      readability_score
-      sentence_count
-      string_length
-      word_count
+      pdf_count
+      doc_count
+      readability
+      sentences
+      chars
+      words
     ).freeze
 
   DAILY_METRICS =
     %w(
-      avg_time_on_page
+      avg_page_time
       bounce_rate
       entrances
       exits
-      feedex_comments
-      is_this_useful_no
-      is_this_useful_yes
-      number_of_internal_searches
-      pageviews
-      unique_pageviews
+      feedex
+      useful_no
+      useful_yes
+      searches
+      pviews
+      upviews
     ).freeze
 
   describe '.find_all' do

@@ -1,6 +1,4 @@
 RSpec.describe Monitor::Facts do
-  include ItemSetupHelpers
-
   around do |example|
     Timecop.freeze(Date.new(2018, 1, 15)) { example.run }
   end
@@ -20,8 +18,8 @@ RSpec.describe Monitor::Facts do
   it 'sends StatsD counter for `daily` metrics' do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_metrics", 1)
 
-    create_metric date: Date.yesterday
-    create_metric date: Date.today
+    create :metric, date: Date.yesterday
+    create :metric, date: Date.today
 
     subject.run
   end
@@ -29,8 +27,8 @@ RSpec.describe Monitor::Facts do
   it 'sends StatsD counter for facts editions' do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.all_editions", 2)
 
-    create_metric date: Date.yesterday, base_path: '/foo'
-    create_metric date: Date.today, base_path: '/bar'
+    create :edition, date: Date.yesterday, base_path: '/foo'
+    create :edition, date: Date.today, base_path: '/bar'
 
     subject.run
   end
@@ -38,8 +36,8 @@ RSpec.describe Monitor::Facts do
   it 'sends StatsD counter for `daily` editions' do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_editions", 1)
 
-    create_metric date: Date.yesterday, base_path: '/foo'
-    create_metric date: Date.today, base_path: '/bar'
+    create :edition, date: Date.yesterday, base_path: '/foo'
+    create :edition, date: Date.today, base_path: '/bar'
 
     subject.run
   end

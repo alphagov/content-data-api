@@ -13,6 +13,7 @@ FactoryBot.define do
     transient do
       date { Time.zone.today }
       replaces { nil }
+      facts { {} }
     end
     to_create do |new_edition, evaluator|
       if evaluator.replaces
@@ -20,6 +21,12 @@ FactoryBot.define do
       else
         new_edition.save!
       end
+      dim_date = FactoryBot.create :dimensions_date, date: evaluator.date
+      FactoryBot.create :facts_edition, evaluator.facts.merge(
+        dimensions_date: dim_date,
+        dimensions_item: new_edition,
+        )
+      new_edition
     end
   end
 end

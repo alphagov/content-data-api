@@ -85,8 +85,8 @@ private
     no = no_action ? no_action['ffNoClick'] : 0
     {
       "page_path" => key,
-      "is_this_useful_yes" => yes,
-      "is_this_useful_no" => no,
+      "useful_yes" => yes,
+      "useful_no" => no,
       "date" => value.first['date'],
       'process_name' => 'user_feedback'
     }

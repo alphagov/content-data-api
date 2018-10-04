@@ -6,9 +6,9 @@ RSpec.describe 'Master process spec' do
     end
   end
 
-  let!(:an_item) { create :dimensions_item }
-  let!(:outdated_item) { create :dimensions_item, content_id: 'id1', base_path: '/path-1', latest: false }
-  let!(:item) { create :dimensions_item, content_id: 'id1', base_path: '/path-1', latest: true }
+  let!(:an_edition) { create :edition }
+  let!(:outdated_edition) { create :edition, content_id: 'id1', base_path: '/path-1', latest: false }
+  let!(:edition) { create :edition, content_id: 'id1', base_path: '/path-1', latest: true }
 
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response
@@ -38,27 +38,27 @@ RSpec.describe 'Master process spec' do
 
   def validate_facts_metrics!
     expect(Facts::Metric.count).to eq(2)
-    expect(Facts::Metric.pluck(:dimensions_item_id)).to match_array([an_item.id, latest_version.id])
+    expect(Facts::Metric.pluck(:dimensions_item_id)).to match_array([an_edition.id, latest_version.id])
     expect(Facts::Metric.pluck(:dimensions_date_id).uniq).to match_array(Date.new(2018, 2, 20))
   end
 
   def validate_google_analytics!
     expect(latest_metric).to have_attributes(
-      pageviews: 11,
-      unique_pageviews: 12,
+      pviews: 11,
+      upviews: 12,
     )
   end
 
   def validate_satisfaction_score!
     expect(latest_metric).to have_attributes(
-      is_this_useful_yes: 1,
-      is_this_useful_no: 1,
-      satisfaction_score: 0.5
+      useful_yes: 1,
+      useful_no: 1,
+      satisfaction: 0.5
     )
   end
 
   def validate_feedex!
-    expect(latest_metric).to have_attributes(feedex_comments: 21)
+    expect(latest_metric).to have_attributes(feedex: 21)
   end
 
   def validate_monitoring!
@@ -70,15 +70,15 @@ RSpec.describe 'Master process spec' do
       [
         {
           'page_path' => '/path-1',
-          'pageviews' => 11,
-          'unique_pageviews' => 12,
+          'pviews' => 11,
+          'upviews' => 12,
           'date' => '2018-02-20',
           'process_name' => 'views',
         },
         {
           'page_path' => '/path2',
-          'pageviews' => 2,
-          'unique_pageviews' => 2,
+          'pviews' => 2,
+          'upviews' => 2,
           'date' => '2018-02-20',
           'process_name' => 'views',
         },
@@ -91,15 +91,15 @@ RSpec.describe 'Master process spec' do
       [
         {
           'page_path' => '/path-1',
-          'is_this_useful_no' => 1,
-          'is_this_useful_yes' => 12,
+          'useful_no' => 1,
+          'useful_yes' => 12,
           'date' => '2018-02-20',
           'process_name' => 'user_feedback',
         },
         {
           'page_path' => '/path2',
-          'is_this_useful_no' => 122,
-          'is_this_useful_yes' => 1,
+          'useful_no' => 122,
+          'useful_yes' => 1,
           'date' => '2018-02-20',
           'process_name' => 'user_feedback',
         },
@@ -112,15 +112,15 @@ RSpec.describe 'Master process spec' do
       [
         {
           'page_path' => '/path1',
-          'number_of_internal_searches' => 1,
+          'searches' => 1,
           'date' => '2018-02-20',
-          'process_name' => 'number_of_internal_searches'
+          'process_name' => 'searches'
         },
         {
           'page_path' => '/path2',
-          'number_of_internal_searches' => 2,
+          'searches' => 2,
           'date' => '2018-02-20',
-          'process_name' => 'number_of_internal_searches'
+          'process_name' => 'searches'
         },
       ]
     )

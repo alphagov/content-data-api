@@ -1,6 +1,4 @@
 RSpec.describe Monitor::Etl do
-  include ItemSetupHelpers
-
   around do |example|
     Timecop.freeze(Date.new(2018, 1, 15)) { example.run }
   end
@@ -13,7 +11,7 @@ RSpec.describe Monitor::Etl do
     it "sends StatsD counter for daily metric: `#{metric_name}` for previous day" do
       expect(GovukStatsd).to receive(:count).with("monitor.etl.daily.#{metric_name}", 10)
 
-      create_metric date: yesterday, daily: { metric_name => 10 }
+      create :metric, date: yesterday, metric_name => 10
       subject.run
     end
   end
@@ -22,7 +20,8 @@ RSpec.describe Monitor::Etl do
     it "sends StatsD counter for edition metric `#{metric_name}` for previous day" do
       expect(GovukStatsd).to receive(:count).with("monitor.etl.edition.#{metric_name}", 10)
 
-      create_metric date: yesterday, edition: { metric_name => 10 }
+      edition = create :edition, date: yesterday, facts: { metric_name => 10 }
+      create :metric, edition: edition, date: yesterday
       subject.run
     end
   end

@@ -18,22 +18,22 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
   context 'when an event exists with the same page_path after formatting' do
     subject { Dummy.new }
 
-    let!(:event2) { create(:ga_event, :with_views, page_path: "/https://www.gov.uk/topics", unique_pageviews: 1, pageviews: 1) }
+    let!(:event2) { create(:ga_event, :with_views, page_path: "/https://www.gov.uk/topics", upviews: 1, pviews: 1) }
 
     before(:each) do
-      create(:ga_event, :with_views, page_path: "/topics", unique_pageviews: 100, pageviews: 200)
+      create(:ga_event, :with_views, page_path: "/topics", upviews: 100, pviews: 200)
     end
 
-    it 'updates events with their combined pageviews' do
+    it 'updates events with their combined pviews' do
       subject.format_events_with_invalid_prefix
 
-      expect(event2.reload.pageviews).to eq 201
+      expect(event2.reload.pviews).to eq 201
     end
 
-    it 'updates events with their combined unique_pageviews' do
+    it 'updates events with their combined upviews' do
       subject.format_events_with_invalid_prefix
 
-      expect(event2.reload.unique_pageviews).to eq 101
+      expect(event2.reload.upviews).to eq 101
     end
 
     it 'deletes the duplicated event' do

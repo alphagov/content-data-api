@@ -43,12 +43,12 @@ private
   def load_metrics_query(date_to_s)
     <<~SQL
       UPDATE facts_metrics
-      SET is_this_useful_no = s.is_this_useful_no,
-          is_this_useful_yes = s.is_this_useful_yes,
-          satisfaction_score = s.is_this_useful_yes / (s.is_this_useful_yes + s.is_this_useful_no::float)
+      SET useful_no = s.useful_no,
+          useful_yes = s.useful_yes,
+          satisfaction= s.useful_yes / (s.useful_yes + s.useful_no::float)
       FROM (
-        SELECT is_this_useful_no,
-               is_this_useful_yes,
+        SELECT useful_no,
+               useful_yes,
                dimensions_items.id
         FROM events_gas, dimensions_items
         WHERE page_path = base_path

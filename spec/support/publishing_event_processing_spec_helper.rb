@@ -36,7 +36,7 @@ module PublishingEventProcessingSpecHelper
       latest: true,
       document_text: 'some content',
       phase: 'live',
-      primary_organisation_content_id: org_content_id,
+      organisation_id: org_content_id,
       primary_organisation_title: 'the-org',
       primary_organisation_withdrawn: false, publishing_app: 'calendars',
       rendering_app: 'calendars',

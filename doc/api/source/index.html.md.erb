@@ -79,22 +79,22 @@ curl -H 'Authorization: Bearer your-token-here' https://content-performance-mana
 {
   "description": "Number of pageviews",
   "source": "Google Analytics",
-  "metric_id": "pageviews"
+  "metric_id": "pviews"
 },
 {
   "description": "Number of unique pageviews",
   "source": "Google Analytics",
-  "metric_id": "unique_pageviews"
+  "metric_id": "upviews"
 },
 {
   "description": "Number of reported content issues",
   "source": "Feedback explorer",
-  "metric_id": "feedex_comments"
+  "metric_id": "feedex"
 },
 {
   "description": "Number of .pdf attachments",
   "source": "Publishing API",
-  "metric_id": "number_of_pdfs"
+  "metric_id": "pdf_count"
 },
 ...
 ]
@@ -107,7 +107,7 @@ You can use the `/metrics/[metric-id]/[base_path]/` endpoint to get the value of
 To summarise the recorded data over a requested time frame:
 
 ```shell
-curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-28&to=2018-02-28&metric=pageviews
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-28&to=2018-02-28&metric=pviews
 ```
 
 The `from` and `to` query parameters specify the date range to query.
@@ -115,7 +115,7 @@ The `from` and `to` query parameters specify the date range to query.
 To get data points for each day in the requested time frame:
 
 ```shell
-curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/time-series/vat-rates?from=2018-02-28&to=2018-02-28&metric=pageviews
+curl -H 'Authorization: Bearer your-token-here' https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/time-series/vat-rates?from=2018-02-28&to=2018-02-28&metric=pviews
 ```
 
 ## API reference

@@ -14,51 +14,51 @@ RSpec.describe '/content' do
         base_path: '/path/1',
         date: '2018-01-01',
         title: 'old-title',
-        primary_organisation_content_id: primary_org_id
+        organisation_id: primary_org_id
       create :metric,
         date: '2018-01-01',
         edition: old_edition,
-        unique_pageviews: 100,
-        is_this_useful_yes: 50,
-        is_this_useful_no: 20,
-        number_of_internal_searches: 20
+        upviews: 100,
+        useful_yes: 50,
+        useful_no: 20,
+        searches: 20
       new_edition = create :edition,
         replaces: old_edition,
         date: '2018-01-02',
         base_path: '/new/base/path',
         title: 'latest title',
         document_type: 'latest_doc_type',
-        primary_organisation_content_id: primary_org_id
+        organisation_id: primary_org_id
       create :metric,
         edition: new_edition,
         date: '2018-01-02',
-        unique_pageviews: 133,
-        is_this_useful_yes: 150,
-        is_this_useful_no: 30,
-        number_of_internal_searches: 200
+        upviews: 133,
+        useful_yes: 150,
+        useful_no: 30,
+        searches: 200
       different_edition = create :edition,
         base_path: '/path/2',
         date: '2018-01-02',
         title: 'another title',
         document_type: 'organisation',
-        primary_organisation_content_id: primary_org_id,
+        organisation_id: primary_org_id,
         warehouse_item_id: another_warehouse_item_id
       create :metric,
         edition: different_edition,
         date: '2018-01-02',
-        unique_pageviews: 100,
-        is_this_useful_yes: 10,
-        is_this_useful_no: 10,
-        number_of_internal_searches: 1
+        upviews: 100,
+        useful_yes: 10,
+        useful_no: 10,
+        searches: 1
       another_org_edition = create :edition,
         base_path: '/another/org/path',
         date: '2018-01-02',
         title: 'another org title',
         document_type: 'news_story',
-        primary_organisation_content_id: another_org_id
+        organisation_id: another_org_id
       create :metric,
         edition: another_org_edition,
-        unique_pageviews: 34
+        upviews: 34
       get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
     end
 
@@ -73,20 +73,20 @@ RSpec.describe '/content' do
           {
             base_path: '/new/base/path',
             title: 'latest title',
-            unique_pageviews: 233,
+            upviews: 233,
             document_type: 'latest_doc_type',
-            satisfaction_score: 0.8,
+            satisfaction: 0.8,
             satisfaction_score_responses: 250,
-            number_of_internal_searches: 220
+            searches: 220
           },
           {
             base_path: '/path/2',
             title: 'another title',
-            unique_pageviews: 100,
+            upviews: 100,
             document_type: 'organisation',
-            satisfaction_score: 0.5,
+            satisfaction: 0.5,
             satisfaction_score_responses: 20,
-            number_of_internal_searches: 1
+            searches: 1
           }
         ]
       )

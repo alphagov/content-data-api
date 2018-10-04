@@ -2,43 +2,45 @@ require 'gds-api-adapters'
 require 'traceable'
 
 RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
-  include ItemSetupHelpers
   subject { described_class }
 
-  let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
-  let!(:item2) { create :dimensions_item, base_path: '/path2', latest: true }
+  let!(:edition1) { create :edition, base_path: '/path1', latest: true }
+  let!(:edition2) { create :edition, base_path: '/path2', latest: true }
 
   let(:date) { Date.new(2018, 2, 20) }
 
 
   context 'When the base_path matches the GA path' do
     before { allow(Etl::GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(ga_response) }
-
     it 'update the facts with the GA metrics' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20'
-      fact2 = create_metric base_path: '/path2', date: '2018-02-20'
+      edition1 = create :edition, base_path: '/path1', date: '2018-02-20'
+      edition2 = create :edition, base_path: '/path2', date: '2018-02-20'
+      fact1 = create :metric, edition: edition1, date: '2018-02-20'
+      fact2 = create :metric, edition: edition2, date: '2018-02-20'
 
       described_class.process(date: date)
 
-      expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1, entrances: 10, exits: 5, bounce_rate: 50, avg_time_on_page: 60, bounces: 31, time_on_page: 20)
-      expect(fact2.reload).to have_attributes(pageviews: 2, unique_pageviews: 2, entrances: 20, exits: 10, bounce_rate: 100, avg_time_on_page: 30, bounces: 50, time_on_page: 23)
+      expect(fact1.reload).to have_attributes(pviews: 1, upviews: 1, entrances: 10, exits: 5, bounce_rate: 50, avg_page_time: 60, bounces: 31, page_time: 20)
+      expect(fact2.reload).to have_attributes(pviews: 2, upviews: 2, entrances: 20, exits: 10, bounce_rate: 100, avg_page_time: 30, bounces: 50, page_time: 23)
     end
 
     it 'does not update metrics for other days' do
-      fact1 = create_metric base_path: '/path1', date: '2018-02-20', daily: { pageviews: 20, unique_pageviews: 10 }
+      edition = create :edition, date: '2018-02-20', base_path: '/path1'
+      fact1 = create :metric, edition: edition, date: '2018-02-20', pviews: 20, upviews: 10
 
       day_before = date - 1
       described_class.process(date: day_before)
 
-      expect(fact1.reload).to have_attributes(pageviews: 20, unique_pageviews: 10)
+      expect(fact1.reload).to have_attributes(pviews: 20, upviews: 10)
     end
 
     it 'does not update metrics for other items' do
-      fact = create_metric base_path: '/non-matching-path', date: '2018-02-20', daily: { pageviews: 99, unique_pageviews: 90 }
+      edition = create :edition, base_path: '/non-matching-path', date: '2018-02-20'
+      fact = create :metric, edition: edition, date: '2018-02-20', pviews: 99, upviews: 90
 
       described_class.process(date: date)
 
-      expect(fact.reload).to have_attributes(pageviews: 99, unique_pageviews: 90)
+      expect(fact.reload).to have_attributes(pviews: 99, upviews: 90)
     end
 
     it "deletes events after updating facts metrics" do
@@ -56,11 +58,12 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
       end
 
       it 'only updates metrics for the current day' do
-        fact1 = create_metric base_path: '/path1', date: '2018-02-20'
+        edition = create :edition, date: '2018-02-20', base_path: '/path1'
+        fact1 = create :metric, edition: edition, date: '2018-02-20'
 
         described_class.process(date: date)
 
-        expect(fact1.reload).to have_attributes(pageviews: 1, unique_pageviews: 1)
+        expect(fact1.reload).to have_attributes(pviews: 1, upviews: 1)
       end
     end
   end
@@ -71,29 +74,29 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
     [
       {
         'page_path' => '/path1',
-        'pageviews' => 1,
-        'unique_pageviews' => 1,
+        'pviews' => 1,
+        'upviews' => 1,
         'date' => '2018-02-20',
         'process_name' => 'views',
         'entrances' => 10,
         'exits' => 5,
         'bounce_rate' => 50,
-        'avg_time_on_page' => 60,
+        'avg_page_time' => 60,
         'bounces' => 31,
-        'time_on_page' => 20,
+        'page_time' => 20,
       },
       {
         'page_path' => '/path2',
-        'pageviews' => 2,
-        'unique_pageviews' => 2,
+        'pviews' => 2,
+        'upviews' => 2,
         'date' => '2018-02-20',
         'process_name' => 'views',
         'entrances' => 20,
         'exits' => 10,
         'bounce_rate' => 100,
-        'avg_time_on_page' => 30,
+        'avg_page_time' => 30,
         'bounces' => 50,
-        'time_on_page' => 23,
+        'page_time' => 23,
       },
     ]
   end
@@ -102,29 +105,29 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
     [
       {
         'page_path' => '/https://www.gov.uk/path1',
-        'pageviews' => 1,
-        'unique_pageviews' => 1,
+        'pviews' => 1,
+        'upviews' => 1,
         'date' => '2018-02-20',
         'process_name' => 'views',
         'entrances' => 10,
         'exits' => 5,
         'bounce_rate' => 50,
-        'avg_time_on_page' => 60,
+        'avg_page_time' => 60,
         'bounces' => 66,
-        'time_on_page' => 86,
+        'page_time' => 86,
       },
       {
         'page_path' => '/path2',
-        'pageviews' => 2,
-        'unique_pageviews' => 2,
+        'pviews' => 2,
+        'upviews' => 2,
         'date' => '2018-02-20',
         'process_name' => 'views',
         'entrances' => 20,
         'exits' => 10,
         'bounce_rate' => 100,
-        'avg_time_on_page' => 30,
+        'avg_page_time' => 30,
         'bounces' => 15,
-        'time_on_page' => 63,
+        'page_time' => 63,
       },
     ]
   end

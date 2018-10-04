@@ -1,29 +1,29 @@
 daily:
-  - name: 'pageviews'
+  - name: 'pviews'
     description: "Number of pageviews"
     source: 'Google Analytics'
 
-  - name: 'unique_pageviews'
+  - name: 'upviews'
     description: "Number of unique pageviews"
     source: 'Google Analytics'
 
-  - name: 'feedex_comments'
+  - name: 'feedex' 
     description: "Number of reported content issues"
     source: 'Feedback explorer'
 
-  - name: 'is_this_useful_no'
+  - name: 'useful_no'
     description: "Total number of people who did not find the page helpful"
     source: 'Google Analytics'
 
-  - name: 'is_this_useful_yes'
+  - name: 'useful_yes'
     description: "Total number of people who found the page helpful"
     source: 'Google Analytics'
 
-  - name: 'satisfaction_score'
-    description: "Calculated percentage score based on `is_this_useful_yes` and `is_this_useful_no` values."
+  - name: 'satisfaction'
+    description: "Calculated percentage score based on `useful_yes` and `useful_no` values."
     source: 'custom'
 
-  - name: 'number_of_internal_searches'
+  - name: 'searches'
     description: "Number of times a user searches for something else on GOV.UK from the page"
     source: 'Google Analytics'
 
@@ -39,30 +39,30 @@ daily:
     description: "Number of sessions that started on this page and exited without viewing any others"
     source: 'Google Analytics'
 
-  - name: 'avg_time_on_page'
+  - name: 'avg_page_time'
     description: "Amount of time users spend on this page on average"
     source: 'Google Analytics'
 
 edition:
-  - name: 'number_of_pdfs'
+  - name: 'pdf_count'
     description: "Number of .pdf attachments"
     source: 'Publishing API'
 
-  - name: 'number_of_word_files'
+  - name: 'doc_count'
     description: "Number of .doc attachments"
     source: 'Publishing API'
 
-  - name: 'readability_score'
+  - name: 'readability'
     description: "Flesch-Kincaid Reading Ease score"
 
-  - name: 'string_length'
+  - name: 'chars'
     description: "Total number of characters used in the text"
     source: 'custom'
 
-  - name: 'sentence_count'
+  - name: 'sentences'
     description: "Total number of sentences detected in the text"
     source: 'custom'
 
-  - name: 'word_count'
+  - name: 'words'
     description: "Total number of words detected in the text"
     source: 'custom'
