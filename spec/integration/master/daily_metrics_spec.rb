@@ -6,9 +6,9 @@ RSpec.describe 'Master process spec' do
     end
   end
 
-  let!(:an_item) { create :dimensions_item }
-  let!(:outdated_item) { create :dimensions_item, content_id: 'id1', base_path: '/path-1', latest: false }
-  let!(:item) { create :dimensions_item, content_id: 'id1', base_path: '/path-1', latest: true }
+  let!(:an_edition) { create :edition }
+  let!(:outdated_edition) { create :edition, content_id: 'id1', base_path: '/path-1', latest: false }
+  let!(:edition) { create :edition, content_id: 'id1', base_path: '/path-1', latest: true }
 
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response
@@ -38,7 +38,7 @@ RSpec.describe 'Master process spec' do
 
   def validate_facts_metrics!
     expect(Facts::Metric.count).to eq(2)
-    expect(Facts::Metric.pluck(:dimensions_item_id)).to match_array([an_item.id, latest_version.id])
+    expect(Facts::Metric.pluck(:dimensions_item_id)).to match_array([an_edition.id, latest_version.id])
     expect(Facts::Metric.pluck(:dimensions_date_id).uniq).to match_array(Date.new(2018, 2, 20))
   end
 

@@ -173,7 +173,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     before do
-      create :dimensions_item,
+      create :edition,
         base_path: '/travel-advice/part3',
         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
         locale: 'fr',
@@ -245,7 +245,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
 
     before do
-      create :dimensions_item,
+      create :edition,
         base_path: '/guide/part5',
         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
         locale: 'fr',

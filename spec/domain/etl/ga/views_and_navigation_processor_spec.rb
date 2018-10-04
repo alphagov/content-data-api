@@ -4,8 +4,8 @@ require 'traceable'
 RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
   subject { described_class }
 
-  let!(:item1) { create :dimensions_item, base_path: '/path1', latest: true }
-  let!(:item2) { create :dimensions_item, base_path: '/path2', latest: true }
+  let!(:edition1) { create :edition, base_path: '/path1', latest: true }
+  let!(:edition2) { create :edition, base_path: '/path2', latest: true }
 
   let(:date) { Date.new(2018, 2, 20) }
 

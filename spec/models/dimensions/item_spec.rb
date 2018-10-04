@@ -11,32 +11,32 @@ RSpec.describe Dimensions::Item, type: :model do
     subject { Dimensions::Item }
 
     it '.by_base_path' do
-      item1 = create(:dimensions_item, base_path: '/path1')
-      create(:dimensions_item, base_path: '/path2')
+      item1 = create(:edition, base_path: '/path1')
+      create(:edition, base_path: '/path2')
 
       results = subject.by_base_path('/path1')
       expect(results).to match_array([item1])
     end
 
     it '.by_content_id' do
-      item1 = create(:dimensions_item, content_id: 'id1')
-      create(:dimensions_item, content_id: 'id2')
+      item1 = create(:edition, content_id: 'id1')
+      create(:edition, content_id: 'id2')
 
       results = subject.by_content_id('id1')
       expect(results).to match_array([item1])
     end
 
     it '.by_organisation_id' do
-      item1 = create(:dimensions_item, organisation_id: 'org-1')
-      create(:dimensions_item, organisation_id: 'org-2')
+      item1 = create(:edition, organisation_id: 'org-1')
+      create(:edition, organisation_id: 'org-2')
 
       results = subject.by_organisation_id('org-1')
       expect(results).to match_array([item1])
     end
 
     it '.by_locale' do
-      item1 = create(:dimensions_item, locale: 'fr')
-      create(:dimensions_item, locale: 'de')
+      item1 = create(:edition, locale: 'fr')
+      create(:edition, locale: 'de')
 
       results = subject.by_locale('fr')
       expect(results).to match_array(item1)
@@ -47,25 +47,25 @@ RSpec.describe Dimensions::Item, type: :model do
       let(:locale) { 'fr' }
 
       it 'filters out the passed paths' do
-        create :dimensions_item, base_path: '/path-1', locale: locale, content_id: content_id
-        create :dimensions_item, base_path: '/path-1/part-1', locale: locale, content_id: content_id
-        create :dimensions_item, base_path: '/path-1/part-2.fr', locale: locale, content_id: content_id
-        create :dimensions_item, base_path: '/path-1/part-2', locale: 'en', content_id: content_id
+        create :edition, base_path: '/path-1', locale: locale, content_id: content_id
+        create :edition, base_path: '/path-1/part-1', locale: locale, content_id: content_id
+        create :edition, base_path: '/path-1/part-2.fr', locale: locale, content_id: content_id
+        create :edition, base_path: '/path-1/part-2', locale: 'en', content_id: content_id
         expect(Dimensions::Item.outdated_subpages(content_id, locale, ['/path-1', '/path-1/part-1']).map(&:base_path)).to eq(['/path-1/part-2.fr'])
       end
     end
 
     it '.by_document_type' do
-      item1 = create(:dimensions_item, document_type: 'guide')
-      create(:dimensions_item, document_type: 'local_transaction')
+      item1 = create(:edition, document_type: 'guide')
+      create(:edition, document_type: 'local_transaction')
 
       results = subject.by_document_type('guide')
       expect(results).to match_array([item1])
     end
 
     it '.latest' do
-      item1 = create :dimensions_item, latest: true
-      _item2 = create :dimensions_item, latest: false
+      item1 = create :edition, latest: true
+      _item2 = create :edition, latest: false
 
       expect(subject.latest).to match_array([item1])
     end
@@ -79,7 +79,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
       let!(:item_1_1) do
         create(
-          :dimensions_item,
+          :edition,
           document_type: 'guide',
           base_path: base_path_1_1,
           content_id: content_id_1
@@ -88,7 +88,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
       let!(:item_1_2) do
         create(
-          :dimensions_item,
+          :edition,
           document_type: 'guide',
           base_path: base_path_1_2,
           content_id: content_id_1
@@ -97,7 +97,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
       let!(:item_2) do
         create(
-          :dimensions_item,
+          :edition,
           document_type: 'guide',
           base_path: '/bar',
           content_id: content_id_2
@@ -120,7 +120,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
       it "excludes items with a different locale" do
         translation = create(
-          :dimensions_item,
+          :edition,
           document_type: 'guide',
           base_path: '/bar.fr',
           content_id: content_id_2,
@@ -150,9 +150,9 @@ RSpec.describe Dimensions::Item, type: :model do
   end
 
   describe '#promote!' do
-    let(:item) { build :dimensions_item, latest: false }
+    let(:item) { build :edition, latest: false }
     let(:warehouse_item_id) { 'warehouse-item-id' }
-    let(:old_item) { build :dimensions_item, warehouse_item_id: warehouse_item_id }
+    let(:old_item) { build :edition, warehouse_item_id: warehouse_item_id }
 
     before do
       item.promote!(old_item)
@@ -173,7 +173,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '#change_from?' do
     let(:attrs) { { base_path: '/base/path' } }
-    let(:item) { create :dimensions_item, base_path: '/base/path' }
+    let(:item) { create :edition, base_path: '/base/path' }
 
     it 'returns true if would be changed by the given attributes' do
       expect(item.change_from?(attrs.merge(base_path: '/new/base/path'))).to eq(true)
@@ -190,7 +190,7 @@ RSpec.describe Dimensions::Item, type: :model do
 
   describe '#metadata' do
     let(:item) do
-      create :dimensions_item,
+      create :edition,
         title: 'The Title',
         base_path: '/the/base/path',
         first_published_at: '2018-01-01',

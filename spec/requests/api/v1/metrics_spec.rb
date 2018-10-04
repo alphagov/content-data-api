@@ -3,17 +3,18 @@ require 'securerandom'
 RSpec.describe '/api/v1/metrics/', type: :request do
   before { create(:user) }
 
-  let!(:day1) { create :dimensions_date, date: Date.new(2018, 1, 13) }
-  let!(:day2) { create :dimensions_date, date: Date.new(2018, 1, 14) }
-  let!(:day3) { create :dimensions_date, date: Date.new(2018, 1, 15) }
-  let!(:day4) { create :dimensions_date, date: Date.new(2018, 1, 16) }
+  let!(:day1) { Date.new(2018, 1, 13) }
+  let!(:day2) { Date.new(2018, 1, 14) }
+  let!(:day3) { Date.new(2018, 1, 15) }
+  let!(:day4) { Date.new(2018, 1, 16) }
   let!(:content_id) { SecureRandom.uuid }
   let!(:base_path) { '/base_path' }
 
-  let!(:item) do
-    create :dimensions_item,
+  let!(:edition) do
+    create :edition,
       content_id: content_id,
       title: 'the title',
+      date: day1,
       base_path: base_path,
       document_type: 'guide',
       locale: 'en',
@@ -22,7 +23,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       public_updated_at: '2018-04-25',
       primary_organisation_title: 'The ministry'
   end
-  let!(:item_fr) { create :dimensions_item, content_id: content_id, locale: 'de' }
+  let!(:edition_fr) { create :edition, content_id: content_id, locale: 'de' }
 
   describe "an API response" do
     it "should be cacheable until the end of the day" do
@@ -138,12 +139,11 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   describe 'Daily metrics' do
     context 'succcessful response' do
       before do
-        create :metric, dimensions_item: item, dimensions_date: day1, pviews: 10, feedex: 10, useful_yes: 10, useful_no: 30
-        create :metric, dimensions_item: item_fr, dimensions_date: day2, pviews: 100, feedex: 200, useful_yes: 10, useful_no: 30
-        create :metric, dimensions_item: item, dimensions_date: day2, pviews: 20, feedex: 20, useful_yes: 10, useful_no: 30
-        create :metric, dimensions_item: item, dimensions_date: day3, pviews: 30, feedex: 30, useful_yes: 10, useful_no: 30
-        create :metric, dimensions_item: item, dimensions_date: day4, pviews: 40, feedex: 40, useful_yes: 10, useful_no: 30
-        create :facts_edition, dimensions_item: item, dimensions_date: day1
+        create :metric, edition: edition, date: day1, pviews: 10, feedex: 10, useful_yes: 10, useful_no: 30
+        create :metric, edition: edition_fr, date: day2, pviews: 100, feedex: 200, useful_yes: 10, useful_no: 30
+        create :metric, edition: edition, date: day2, pviews: 20, feedex: 20, useful_yes: 10, useful_no: 30
+        create :metric, edition: edition, date: day3, pviews: 30, feedex: 30, useful_yes: 10, useful_no: 30
+        create :metric, edition: edition, date: day4, pviews: 40, feedex: 40, useful_yes: 10, useful_no: 30
       end
 
       it 'returns `pviews` values between two dates' do
@@ -184,7 +184,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
       end
     end
 
-    it 'returns the metadata from the latest item' do
+    it 'returns the metadata from the latest edition' do
       get "//api/v1/metrics/#{base_path}", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex] }
 
       json = JSON.parse(response.body)

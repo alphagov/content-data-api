@@ -5,7 +5,7 @@ RSpec.describe '/api/v1/metrics/', type: :request do
   let(:warehouse_item_id) { '35058ac0-fb70-4220-81dc-c8b14bededdc' }
 
   before do
-    edition = create :edition, base_path: base_path, date: '2018-01-13', warehouse_item_id: warehouse_item_id, facts: {
+    edition = create :edition, base_path: base_path, date: '2018-01-13', facts: {
                        pdf_count: 30, doc_count: 30, readability: 123
                      }
     create :metric, edition: edition, date: '2018-01-13'
