@@ -14,7 +14,7 @@ RSpec.describe Reports::Content do
         date: '2018-01-01',
         title: 'item 1 title',
         document_type: 'news_story',
-        primary_organisation_content_id: primary_org_id,
+        organisation_id: primary_org_id,
         warehouse_item_id: warehouse_item_id
       create :metric,
         edition: edition,
@@ -36,7 +36,7 @@ RSpec.describe Reports::Content do
         date: '2018-01-01',
         title: 'item 2 title',
         document_type: 'press_release',
-        primary_organisation_content_id: primary_org_id,
+        organisation_id: primary_org_id,
         warehouse_item_id: another_warehouse_item_id
       create :metric,
         edition: other_edition,
@@ -88,7 +88,7 @@ RSpec.describe Reports::Content do
         date: '2018-01-01',
         title: 'old title',
         document_type: 'news_story',
-        primary_organisation_content_id: primary_org_id,
+        organisation_id: primary_org_id,
         latest: false,
         warehouse_item_id: warehouse_item_id
       create :metric,
@@ -104,7 +104,7 @@ RSpec.describe Reports::Content do
         date: '2018-01-02',
         title: 'new title',
         document_type: 'press_release',
-        primary_organisation_content_id: primary_org_id
+        organisation_id: primary_org_id
       create :metric,
         edition: new_edition,
         date: '2018-01-02',
@@ -133,7 +133,7 @@ RSpec.describe Reports::Content do
     before do
       edition = create :edition,
         date: '2018-01-01',
-        primary_organisation_content_id: primary_org_id
+        organisation_id: primary_org_id
       create :metric,
              edition: edition,
              date: '2018-01-01',

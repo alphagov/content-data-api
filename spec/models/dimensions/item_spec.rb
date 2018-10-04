@@ -27,8 +27,8 @@ RSpec.describe Dimensions::Item, type: :model do
     end
 
     it '.by_organisation_id' do
-      item1 = create(:dimensions_item, primary_organisation_content_id: 'org-1')
-      create(:dimensions_item, primary_organisation_content_id: 'org-2')
+      item1 = create(:dimensions_item, organisation_id: 'org-1')
+      create(:dimensions_item, organisation_id: 'org-2')
 
       results = subject.by_organisation_id('org-1')
       expect(results).to match_array([item1])

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_02_110036) do
+ActiveRecord::Schema.define(version: 2018_10_04_070753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2018_10_02_110036) do
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
     t.string "primary_organisation_title"
-    t.string "primary_organisation_content_id"
+    t.string "organisation_id"
     t.boolean "primary_organisation_withdrawn"
     t.string "locale"
     t.bigint "publishing_api_payload_version", null: false
@@ -64,12 +64,12 @@ ActiveRecord::Schema.define(version: 2018_10_02_110036) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
-    t.string "warehouse_item_id"
+    t.string "warehouse_item_id", null: false
     t.json "raw_json"
     t.index ["base_path"], name: "index_dimensions_items_on_base_path"
     t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
     t.index ["latest"], name: "index_dimensions_items_on_latest"
-    t.index ["primary_organisation_content_id"], name: "index_dimensions_items_primary_organisation_content_id"
+    t.index ["organisation_id"], name: "index_dimensions_items_primary_organisation_content_id"
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
     t.index ["warehouse_item_id", "latest"], name: "index_dimensions_items_warehouse_item_id_latest"
     t.index ["warehouse_item_id"], name: "index_dimensions_items_warehouse_item_id"

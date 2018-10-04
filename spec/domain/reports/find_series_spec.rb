@@ -43,8 +43,8 @@ RSpec.describe Reports::FindSeries do
       day0 = Date.new(2018, 1, 12)
       day1 = Date.new(2018, 1, 13)
       day2 = Date.new(2018, 1, 14)
-      edition1 = create :edition, date: day0, primary_organisation_content_id: 'org-1'
-      edition2 = create :edition, date: day1, primary_organisation_content_id: 'org-2'
+      edition1 = create :edition, date: day0, organisation_id: 'org-1'
+      edition2 = create :edition, date: day1, organisation_id: 'org-2'
 
       metric1 = create(:metric, edition: edition1, date: day0)
       metric2 = create(:metric, edition: edition1, date: day1)

@@ -9,7 +9,7 @@ class PublishingAPI::Handlers::BaseHandler
       content_purpose_supergroup: message.payload['content_purpose_supergroup'],
       content_purpose_subgroup: message.payload['content_purpose_subgroup'],
       first_published_at: parse_time('first_published_at'),
-      primary_organisation_content_id: primary_organisation['content_id'],
+      organisation_id: primary_organisation['content_id'],
       primary_organisation_title: primary_organisation['title'],
       primary_organisation_withdrawn: primary_organisation['withdrawn'],
       public_updated_at: parse_time('public_updated_at'),

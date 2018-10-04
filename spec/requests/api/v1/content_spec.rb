@@ -14,7 +14,7 @@ RSpec.describe '/content' do
         base_path: '/path/1',
         date: '2018-01-01',
         title: 'old-title',
-        primary_organisation_content_id: primary_org_id
+        organisation_id: primary_org_id
       create :metric,
         date: '2018-01-01',
         edition: old_edition,
@@ -28,7 +28,7 @@ RSpec.describe '/content' do
         base_path: '/new/base/path',
         title: 'latest title',
         document_type: 'latest_doc_type',
-        primary_organisation_content_id: primary_org_id
+        organisation_id: primary_org_id
       create :metric,
         edition: new_edition,
         date: '2018-01-02',
@@ -41,7 +41,7 @@ RSpec.describe '/content' do
         date: '2018-01-02',
         title: 'another title',
         document_type: 'organisation',
-        primary_organisation_content_id: primary_org_id,
+        organisation_id: primary_org_id,
         warehouse_item_id: another_warehouse_item_id
       create :metric,
         edition: different_edition,
@@ -55,7 +55,7 @@ RSpec.describe '/content' do
         date: '2018-01-02',
         title: 'another org title',
         document_type: 'news_story',
-        primary_organisation_content_id: another_org_id
+        organisation_id: another_org_id
       create :metric,
         edition: another_org_edition,
         upviews: 34
