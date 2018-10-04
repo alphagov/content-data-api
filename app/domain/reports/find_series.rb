@@ -30,17 +30,17 @@ class Reports::FindSeries
     self
   end
 
-  def content_items
-    slice_content_items
+  def editions
+    slice_editions
   end
 
   def run
     dates = slice_dates
-    items = slice_content_items
+    editions = slice_editions
 
     metrics = Facts::Metric.all
     metrics = metrics
-      .joins(dimensions_edition: :facts_edition).merge(items)
+      .joins(dimensions_edition: :facts_edition).merge(editions)
       .joins(:dimensions_date).merge(dates)
 
     if @metric_names
@@ -58,12 +58,12 @@ private
     dates
   end
 
-  def slice_content_items
-    items = Dimensions::Edition.all
-    items = items.by_locale('en')
-    items = items.by_organisation_id(@org_id) unless @org_id.blank?
-    items = items.by_base_path(@base_path) unless @base_path.blank?
-    items = items.by_document_type(@document_type) unless @document_type.blank?
-    items
+  def slice_editions
+    editions = Dimensions::Edition.all
+    editions = editions.by_locale('en')
+    editions = editions.by_organisation_id(@org_id) unless @org_id.blank?
+    editions = editions.by_base_path(@base_path) unless @base_path.blank?
+    editions = editions.by_document_type(@document_type) unless @document_type.blank?
+    editions
   end
 end

@@ -88,7 +88,7 @@ RSpec.describe Reports::FindSeries do
     end
   end
 
-  describe '#content_items' do
+  describe '#editions' do
     it 'return the content items included in the report' do
       day0 = Date.new(2018, 1, 12)
       day1 = Date.new(2018, 1, 13)
@@ -102,7 +102,7 @@ RSpec.describe Reports::FindSeries do
       create(:metric, edition: edition2, date: day1)
       create(:metric, edition: edition2, date: day2)
 
-      expect(described_class.new.content_items).to match_array([edition1, edition2])
+      expect(described_class.new.editions).to match_array([edition1, edition2])
     end
   end
 end

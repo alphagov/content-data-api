@@ -19,14 +19,14 @@ class PublishingAPI::Handlers::SingleItemHandler < PublishingAPI::Handlers::Base
 private
 
   def new_edition(document_text)
-    item = Dimensions::Edition.new(
+    new_edition = Dimensions::Edition.new(
       base_path: base_path,
       title: title,
       document_text: document_text,
       warehouse_item_id: "#{content_id}:#{locale}",
       **all_attributes
     )
-    item.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_edition, item))
-    item
+    new_edition.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_edition, new_edition))
+    new_edition
   end
 end

@@ -137,15 +137,15 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     multipart_types.each do |type|
       context type do
-        it "it creates an item with base path and no slug for first part" do
+        it "it creates an edition with base path and no slug for first part" do
           message = build(:message, type.to_sym)
           message.payload["base_path"] = "/#{type}-url"
           subject.process(message)
 
-          item = Dimensions::Edition.where(base_path: "/#{type}-url", latest: true).first
+          edition = Dimensions::Edition.where(base_path: "/#{type}-url", latest: true).first
           part = Dimensions::Edition.where(base_path: "/#{type}-url/part2", latest: true).first
 
-          expect(item.base_path).to eq("/#{type}-url")
+          expect(edition.base_path).to eq("/#{type}-url")
           expect(part.base_path).to eq("/#{type}-url/part2")
         end
       end
@@ -185,39 +185,39 @@ RSpec.describe "Process sub-pages for multipart content types" do
     it_behaves_like 'when unchanged'
 
     it "extracts the Summary" do
-      item = Dimensions::Edition.where(base_path: "/travel-advice", latest: true).first
-      expect(item).to have_attributes(expected_attributes(
-                                        base_path: '/travel-advice',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: "Summary content",
-                                        document_type: "travel_advice",
-                                        schema_name: "travel_advice",
-                                        title: "Summary",
+      edition = Dimensions::Edition.where(base_path: "/travel-advice", latest: true).first
+      expect(edition).to have_attributes(expected_attributes(
+                                           base_path: '/travel-advice',
+                                           content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                           document_text: "Summary content",
+                                           document_type: "travel_advice",
+                                           schema_name: "travel_advice",
+                                           title: "Summary",
       ))
     end
 
     it 'extracts /travel-advice/part1' do
-      item = Dimensions::Edition.where(base_path: "/travel-advice/part1", latest: true).first
+      edition = Dimensions::Edition.where(base_path: "/travel-advice/part1", latest: true).first
 
-      expect(item).to have_attributes(expected_attributes(
-                                        base_path: '/travel-advice/part1',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: "Here 1",
-                                        document_type: "travel_advice",
-                                        schema_name: "travel_advice",
-                                        title: "Part 1",
+      expect(edition).to have_attributes(expected_attributes(
+                                           base_path: '/travel-advice/part1',
+                                           content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                           document_text: "Here 1",
+                                           document_type: "travel_advice",
+                                           schema_name: "travel_advice",
+                                           title: "Part 1",
       ))
     end
 
     it 'extracts /travel-advice/part2' do
-      item = Dimensions::Edition.where(base_path: "/travel-advice/part2", latest: true).first
-      expect(item).to have_attributes(expected_attributes(
-                                        base_path: '/travel-advice/part2',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: "be 2",
-                                        document_type: "travel_advice",
-                                        schema_name: "travel_advice",
-                                        title: "Part 2",
+      edition = Dimensions::Edition.where(base_path: "/travel-advice/part2", latest: true).first
+      expect(edition).to have_attributes(expected_attributes(
+                                           base_path: '/travel-advice/part2',
+                                           content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                           document_text: "be 2",
+                                           document_type: "travel_advice",
+                                           schema_name: "travel_advice",
+                                           title: "Part 2",
       ))
     end
 
@@ -259,50 +259,50 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
 
     it 'extracts part 1 on the base path' do
-      item = Dimensions::Edition.where(base_path: "/guide", latest: true).first
-      expect(item).to have_attributes(expected_attributes(
-                                        base_path: '/guide',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: 'Here 1',
-                                        document_type: 'guide',
-                                        schema_name: 'guide',
-                                        title: 'Part 1',
+      edition = Dimensions::Edition.where(base_path: "/guide", latest: true).first
+      expect(edition).to have_attributes(expected_attributes(
+                                           base_path: '/guide',
+                                           content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                           document_text: 'Here 1',
+                                           document_type: 'guide',
+                                           schema_name: 'guide',
+                                           title: 'Part 1',
       ))
     end
 
     it 'extracts part 2 under the base path' do
-      item = Dimensions::Edition.where(base_path: '/guide/part2', latest: true).first
-      expect(item).to have_attributes(expected_attributes(
-                                        base_path: '/guide/part2',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: 'be 2',
-                                        document_type: 'guide',
-                                        schema_name: 'guide',
-                                        title: 'Part 2',
+      edition = Dimensions::Edition.where(base_path: '/guide/part2', latest: true).first
+      expect(edition).to have_attributes(expected_attributes(
+                                           base_path: '/guide/part2',
+                                           content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                           document_text: 'be 2',
+                                           document_type: 'guide',
+                                           schema_name: 'guide',
+                                           title: 'Part 2',
       ))
     end
 
     it 'extracts part 3 under the base path' do
-      item = Dimensions::Edition.where(base_path: '/guide/part3', latest: true).first
-      expect(item).to have_attributes(expected_attributes(
-                                        base_path: '/guide/part3',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: 'some 3',
-                                        document_type: 'guide',
-                                        schema_name: 'guide',
-                                        title: 'Part 3',
+      edition = Dimensions::Edition.where(base_path: '/guide/part3', latest: true).first
+      expect(edition).to have_attributes(expected_attributes(
+                                           base_path: '/guide/part3',
+                                           content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                           document_text: 'some 3',
+                                           document_type: 'guide',
+                                           schema_name: 'guide',
+                                           title: 'Part 3',
       ))
     end
 
     it 'extracts part 4 under the base path' do
-      item = Dimensions::Edition.where(base_path: '/guide/part4', latest: true).first
-      expect(item).to have_attributes(expected_attributes(
-                                        base_path: '/guide/part4',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: 'content 4.',
-                                        document_type: 'guide',
-                                        schema_name: 'guide',
-                                        title: 'Part 4',
+      edition = Dimensions::Edition.where(base_path: '/guide/part4', latest: true).first
+      expect(edition).to have_attributes(expected_attributes(
+                                           base_path: '/guide/part4',
+                                           content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                           document_text: 'content 4.',
+                                           document_type: 'guide',
+                                           schema_name: 'guide',
+                                           title: 'Part 4',
       ))
     end
 

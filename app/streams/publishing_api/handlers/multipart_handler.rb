@@ -31,14 +31,14 @@ private
     title = message.title_for(part)
     document_text = Etl::Edition::Content::Parser.extract_content(message.payload, subpage_path: part['slug'])
     return unless update_required?(old_edition: old_edition, base_path: base_path, title: title, document_text: document_text)
-    item = Dimensions::Edition.new(
+    new_edition = Dimensions::Edition.new(
       base_path: base_path,
       title: title,
       document_text: document_text,
       warehouse_item_id: "#{content_id}:#{locale}:#{base_path}",
       **all_attributes
     )
-    item.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_edition, item))
-    item.promote!(old_edition)
+    new_edition.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_edition, new_edition))
+    new_edition.promote!(old_edition)
   end
 end

@@ -2,7 +2,7 @@ require 'sidekiq/testing'
 RSpec.describe 'Import edition metrics' do
   subject { PublishingAPI::Consumer.new }
 
-  it 'stores content item metrics' do
+  it 'stores content edition metrics' do
     message = build(:message, schema_name: 'publication', base_path: '/new-path')
     message.payload['details']['body'] = 'This is good content.'
     message.payload['details']['documents'] = [
@@ -12,8 +12,8 @@ RSpec.describe 'Import edition metrics' do
 
     subject.process(message)
 
-    item = Dimensions::Edition.first
-    expect(item.facts_edition).to have_attributes(
+    edition = Dimensions::Edition.first
+    expect(edition.facts_edition).to have_attributes(
       pdf_count: 1,
       doc_count: 1,
       readability: 97,
