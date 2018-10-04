@@ -11,7 +11,7 @@ class PublishingAPI::Handlers::SingleItemHandler < PublishingAPI::Handlers::Base
 
   def process
     @old_edition = Dimensions::Edition.find_by(content_id: content_id, locale: locale, latest: true)
-    document_text = Etl::Item::Content::Parser.extract_content(message.payload)
+    document_text = Etl::Edition::Content::Parser.extract_content(message.payload)
     return unless update_required? old_edition: old_edition, title: title, base_path: base_path, document_text: document_text
     new_edition(document_text).promote!(old_edition)
   end

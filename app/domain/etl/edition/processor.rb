@@ -19,8 +19,8 @@ private
 
   def create_new_edition
     Facts::Edition.create!(
-      pdf_count: Etl::Item::Metadata::NumberOfPdfs.parse(new_edition.raw_json),
-      doc_count: Etl::Item::Metadata::NumberOfWordFiles.parse(new_edition.raw_json),
+      pdf_count: Etl::Edition::Metadata::NumberOfPdfs.parse(new_edition.raw_json),
+      doc_count: Etl::Edition::Metadata::NumberOfWordFiles.parse(new_edition.raw_json),
       dimensions_date: dimensions_date,
       dimensions_edition: new_edition,
       **quality_metrics

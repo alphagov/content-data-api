@@ -29,7 +29,7 @@ private
     base_path = message.base_path_for_part(part, index)
     old_edition = Dimensions::Edition.latest_by_base_path(base_path).first
     title = message.title_for(part)
-    document_text = Etl::Item::Content::Parser.extract_content(message.payload, subpage_path: part['slug'])
+    document_text = Etl::Edition::Content::Parser.extract_content(message.payload, subpage_path: part['slug'])
     return unless update_required?(old_edition: old_edition, base_path: base_path, title: title, document_text: document_text)
     item = Dimensions::Edition.new(
       base_path: base_path,

@@ -133,7 +133,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
   end
 
   context "when multi part content types have different first parts" do
-    multipart_types = Etl::Item::Content::Parsers::Parts.new.schemas
+    multipart_types = Etl::Edition::Content::Parsers::Parts.new.schemas
 
     multipart_types.each do |type|
       context type do
