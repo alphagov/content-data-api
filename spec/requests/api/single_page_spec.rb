@@ -23,8 +23,8 @@ RSpec.describe '/single_page', type: :request do
     create :user
     day1 = create :dimensions_date, date: Date.new(2018, 1, 1)
     day2 = create :dimensions_date, date: Date.new(2018, 1, 2)
-    create :metric, dimensions_item: item, dimensions_date: day1, pviews: 10, upviews: 10
-    create :metric, dimensions_item: item, dimensions_date: day2, pviews: 20, upviews: 20
+    create :metric, dimensions_edition: item, dimensions_date: day1, pviews: 10, upviews: 10
+    create :metric, dimensions_edition: item, dimensions_date: day2, pviews: 20, upviews: 20
   end
 
   context 'when correct parameters supplied' do
