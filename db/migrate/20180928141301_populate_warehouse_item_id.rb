@@ -1,4 +1,7 @@
 class PopulateWarehouseItemId < ActiveRecord::Migration[5.2]
+	class Dimensions::Item < ActiveRecord::Base
+	end
+
   def change
     multipart_types = %w[travel_advice guide]
 
