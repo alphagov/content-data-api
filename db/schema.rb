@@ -64,8 +64,8 @@ ActiveRecord::Schema.define(version: 2018_10_04_120457) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
-    t.string "warehouse_item_id", null: false
     t.json "raw_json"
+    t.string "warehouse_item_id", null: false
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
     t.index ["latest"], name: "index_dimensions_editions_on_latest"
