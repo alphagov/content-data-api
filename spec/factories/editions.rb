@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :edition, class: Dimensions::Item do
+  factory :edition, class: Dimensions::Edition do
     latest { true }
     locale { 'en' }
     sequence(:content_id) { |i| "content_id - #{i}" }
@@ -24,7 +24,7 @@ FactoryBot.define do
       dim_date = FactoryBot.create :dimensions_date, date: evaluator.date
       FactoryBot.create :facts_edition, evaluator.facts.merge(
         dimensions_date: dim_date,
-        dimensions_item: new_edition,
+        dimensions_edition: new_edition,
         )
       new_edition
     end

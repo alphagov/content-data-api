@@ -12,7 +12,7 @@ class Reports::Content
   def retrieve
     Facts::Metric.all
       .joins(:dimensions_date).merge(slice_dates)
-      .joins(:dimensions_item).merge(slice_items)
+      .joins(:dimensions_edition).merge(slice_editions)
       .joins(latest_join)
       .group('latest.warehouse_item_id', *group_columns)
       .order(order_by)
@@ -45,7 +45,7 @@ private
   end
 
   def latest_join
-    "INNER JOIN dimensions_items latest ON latest.warehouse_item_id = dimensions_items.warehouse_item_id AND latest.latest = true"
+    "INNER JOIN dimensions_editions latest ON latest.warehouse_item_id = dimensions_editions.warehouse_item_id AND latest.latest = true"
   end
 
   def array_to_hash(array)
@@ -61,8 +61,8 @@ private
     }
   end
 
-  def slice_items
-    Dimensions::Item.by_organisation_id(@organsation_id)
+  def slice_editions
+    Dimensions::Edition.by_organisation_id(@organsation_id)
   end
 
   def slice_dates

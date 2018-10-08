@@ -10,9 +10,9 @@ RSpec.describe Etl::Master::MetricsProcessor do
     subject.process
 
     expect(Facts::Metric.count).to eq(2)
-    expect(Facts::Metric.find_by(dimensions_item: item)).to have_attributes(
+    expect(Facts::Metric.find_by(dimensions_edition: item)).to have_attributes(
       dimensions_date: Dimensions::Date.find_or_create(Date.new(2018, 3, 15)),
-      dimensions_item: item,
+      dimensions_edition: item,
     )
   end
 

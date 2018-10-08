@@ -15,28 +15,28 @@ private
 
   def statsd_for_latest_base_paths!
     path = path_for('latest_base_paths')
-    count = Dimensions::Item.latest.count
+    count = Dimensions::Edition.latest.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_all_base_paths!
     path = path_for('base_paths')
-    count = Dimensions::Item.count
+    count = Dimensions::Edition.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_latest_content_items!
     path = path_for('latest_content_items')
-    count = Dimensions::Item.latest.count('distinct content_id')
+    count = Dimensions::Edition.latest.count('distinct content_id')
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_all_content_items!
     path = path_for('content_items')
-    count = Dimensions::Item.count('distinct content_id')
+    count = Dimensions::Edition.count('distinct content_id')
 
     GovukStatsd.count(path, count)
   end

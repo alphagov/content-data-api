@@ -25,13 +25,13 @@ module Etl
         log process: :metrics, message: 'about to get the Dimensions::Date'
         dimensions_date = Dimensions::Date.find_or_create(date)
         log process: :metrics, message: 'got the Dimensions::Date'
-        Dimensions::Item.latest.find_in_batches(batch_size: 50000)
+        Dimensions::Edition.latest.find_in_batches(batch_size: 50000)
           .with_index do |batch, index|
           log process: :metrics, message: "processing #{batch.length} items in batch #{index}"
           values = batch.pluck(:id).map do |value|
             {
               dimensions_date_id: dimensions_date.date,
-              dimensions_item_id: value,
+              dimensions_edition_id: value,
             }
           end
           Facts::Metric.import(values, validate: false)

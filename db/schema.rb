@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_04_070753) do
+ActiveRecord::Schema.define(version: 2018_10_04_120457) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 2018_10_04_070753) do
     t.index ["date_name"], name: "index_dimensions_dates_on_date_name"
   end
 
-  create_table "dimensions_items", force: :cascade do |t|
+  create_table "dimensions_editions", force: :cascade do |t|
     t.string "content_id", null: false
     t.string "title"
     t.string "base_path", null: false
@@ -66,13 +66,13 @@ ActiveRecord::Schema.define(version: 2018_10_04_070753) do
     t.datetime "last_edited_at"
     t.string "warehouse_item_id", null: false
     t.json "raw_json"
-    t.index ["base_path"], name: "index_dimensions_items_on_base_path"
-    t.index ["content_id", "latest"], name: "index_dimensions_items_on_content_id_and_latest"
-    t.index ["latest"], name: "index_dimensions_items_on_latest"
-    t.index ["organisation_id"], name: "index_dimensions_items_primary_organisation_content_id"
+    t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
+    t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
+    t.index ["latest"], name: "index_dimensions_editions_on_latest"
+    t.index ["organisation_id"], name: "index_dimensions_editions_organisation_id"
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
-    t.index ["warehouse_item_id", "latest"], name: "index_dimensions_items_warehouse_item_id_latest"
-    t.index ["warehouse_item_id"], name: "index_dimensions_items_warehouse_item_id"
+    t.index ["warehouse_item_id", "latest"], name: "index_dimensions_editions_warehouse_item_id_latest"
+    t.index ["warehouse_item_id"], name: "index_dimensions_editions_warehouse_item_id"
   end
 
   create_table "events_feedexes", force: :cascade do |t|
@@ -105,7 +105,7 @@ ActiveRecord::Schema.define(version: 2018_10_04_070753) do
 
   create_table "facts_editions", force: :cascade do |t|
     t.date "dimensions_date_id", null: false
-    t.bigint "dimensions_item_id", null: false
+    t.bigint "dimensions_edition_id", null: false
     t.integer "pdf_count"
     t.integer "doc_count"
     t.integer "readability"
@@ -114,12 +114,12 @@ ActiveRecord::Schema.define(version: 2018_10_04_070753) do
     t.integer "words"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["dimensions_item_id", "dimensions_date_id"], name: "editions_item_id_date_id", unique: true
+    t.index ["dimensions_edition_id", "dimensions_date_id"], name: "facts_editions_edition_id_date_id", unique: true
   end
 
   create_table "facts_metrics", force: :cascade do |t|
     t.date "dimensions_date_id", null: false
-    t.bigint "dimensions_item_id", null: false
+    t.bigint "dimensions_edition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "pviews", default: 0
@@ -135,7 +135,7 @@ ActiveRecord::Schema.define(version: 2018_10_04_070753) do
     t.integer "bounces", default: 0
     t.integer "page_time", default: 0
     t.float "satisfaction", default: 0.0, null: false
-    t.index ["dimensions_date_id", "dimensions_item_id"], name: "metrics_item_id_date_id", unique: true
+    t.index ["dimensions_date_id", "dimensions_edition_id"], name: "metrics_edition_id_date_id", unique: true
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(version: 2018_10_04_070753) do
   end
 
   add_foreign_key "facts_editions", "dimensions_dates", primary_key: "date"
-  add_foreign_key "facts_editions", "dimensions_items"
+  add_foreign_key "facts_editions", "dimensions_editions"
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
-  add_foreign_key "facts_metrics", "dimensions_items"
+  add_foreign_key "facts_metrics", "dimensions_editions"
 end

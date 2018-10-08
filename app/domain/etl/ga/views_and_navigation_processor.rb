@@ -61,12 +61,12 @@ private
                avg_page_time,
                bounces,
                page_time,
-               dimensions_items.id
-        FROM events_gas, dimensions_items
+               dimensions_editions.id
+        FROM events_gas, dimensions_editions
         WHERE page_path = base_path
               AND events_gas.date = '#{date_to_s}'
       ) AS s
-      WHERE dimensions_item_id = s.id AND dimensions_date_id = '#{date_to_s}'
+      WHERE dimensions_edition_id = s.id AND dimensions_date_id = '#{date_to_s}'
     SQL
   end
 

@@ -10,7 +10,7 @@ class PublishingAPI::Messages::BaseMessage
     locale = @payload.fetch('locale', nil)
     content_id = @payload.fetch('content_id')
 
-    payload_version <= Dimensions::Item.where(
+    payload_version <= Dimensions::Edition.where(
       content_id: content_id,
       locale: locale
     ).maximum('publishing_api_payload_version').to_i
