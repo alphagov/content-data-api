@@ -1,4 +1,4 @@
-RSpec.describe Reports::FindEditionMetrics do
+RSpec.describe Queries::FindEditionMetrics do
   context 'multiple editions' do
     let!(:edition) do
       create :edition,

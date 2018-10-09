@@ -1,4 +1,4 @@
-class Reports::Series
+class Queries::Series
   attr_reader :metric_name, :all_metrics, :time_series
 
   def initialize(metric_name, all_metrics)

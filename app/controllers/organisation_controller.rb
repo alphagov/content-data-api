@@ -1,5 +1,5 @@
 class OrganisationController < Api::BaseController
   def index
-    @organisations = Reports::Organisation.retrieve
+    @organisations = Queries::FindAllOrganisations.retrieve
   end
 end

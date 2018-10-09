@@ -9,7 +9,7 @@ class Api::AggregationsController < Api::BaseController
 private
 
   def query_series
-    Reports::FindSeries.new
+    Queries::FindSeries.new
        .between(from: from, to: to)
        .by_base_path(format_base_path_param)
        .by_metrics(params[:metrics])

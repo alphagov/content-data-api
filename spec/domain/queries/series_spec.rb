@@ -1,4 +1,4 @@
-RSpec.describe Reports::Series do
+RSpec.describe Queries::Series do
   let!(:day1) { Date.new(2018, 1, 13) }
   let!(:day2) { Date.new(2018, 1, 14) }
   let!(:day3) { Date.new(2018, 1, 15) }
@@ -13,12 +13,12 @@ RSpec.describe Reports::Series do
   end
 
   it 'return the time series' do
-    series = Reports::Series.new('pviews', Facts::Metric.all)
+    series = Queries::Series.new('pviews', Facts::Metric.all)
     expect(series.time_series).to eq expected_values
   end
 
   it 'return the total value for time period' do
-    series = Reports::Series.new('pviews', Facts::Metric.all)
+    series = Queries::Series.new('pviews', Facts::Metric.all)
     expect(series.total).to eq 60
   end
 

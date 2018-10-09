@@ -1,4 +1,4 @@
-class Reports::FindEditionMetrics
+class Queries::FindEditionMetrics
   def self.run(base_path, metrics_names)
     item = Dimensions::Edition.find_by(base_path: base_path, latest: true)
     edition = item.facts_edition

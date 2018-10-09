@@ -1,4 +1,4 @@
-class Reports::Organisation
+class Queries::FindAllOrganisations
   def self.retrieve
     new.retrieve
   end
