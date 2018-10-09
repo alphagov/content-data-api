@@ -37,9 +37,10 @@ RSpec.describe PublishingAPI::Messages::MultipartMessage do
           ]
         }
 
-      title = subject.new(build(:message).payload).title_for(part)
+      message = build(:message, attributes: { 'title' => 'Main title' })
+      title = subject.new(message.payload).title_for(part)
 
-      expect(title).to eq("Title for part")
+      expect(title).to eq("Main title: Title for part")
     end
   end
 

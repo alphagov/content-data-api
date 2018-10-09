@@ -30,7 +30,7 @@ module PublishingAPI
     end
 
     def title_for(part)
-      part.fetch('title')
+      "#{main_title}: #{part.fetch('title')}"
     end
 
     def base_path_for_part(part, index)
@@ -48,6 +48,10 @@ module PublishingAPI
 
     def base_path
       @payload.fetch('base_path')
+    end
+
+    def main_title
+      @payload.fetch('title')
     end
   end
 end

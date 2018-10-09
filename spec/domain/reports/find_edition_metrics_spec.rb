@@ -1,13 +1,13 @@
 RSpec.describe Reports::FindEditionMetrics do
   context 'multiple editions' do
-    before do
+    let!(:edition) do
       create :edition,
-        base_path: '/base_path',
-        date: '2018-01-01',
-        facts: {
-          'words': 10_000,
-          'pdf_count': 3
-        }
+             base_path: '/base_path',
+             date: '2018-01-01',
+             facts: {
+               'words': 10_000,
+                     'pdf_count': 3
+             }
     end
 
     it "returns editions metrics filtered by specified metrics" do
@@ -21,6 +21,7 @@ RSpec.describe Reports::FindEditionMetrics do
 
     it "returns editions metrics for latest edition" do
       create :edition,
+        replaces: edition,
         base_path: '/base_path',
         date: '2018-02-01',
         facts: {
