@@ -1,7 +1,7 @@
 require 'securerandom'
 
 RSpec.describe '/single_page', type: :request do
-  let!(:expected_time_series_metrics) { %w[upviews pviews feedex searches satisfaction] }
+  let!(:expected_time_series_metrics) { %w[upviews pviews feedex searches satisfaction useful_yes useful_no] }
   let!(:expected_edition_metrics) { %w[words pdf_count] }
   let!(:base_path) { '/base_path' }
   let!(:item) do

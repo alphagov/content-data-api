@@ -27,6 +27,8 @@ private
         pviews
         feedex
         satisfaction
+        useful_yes
+        useful_no
         searches
       ))
       .run
