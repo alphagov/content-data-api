@@ -1,4 +1,4 @@
-RSpec.describe Reports::Content do
+RSpec.describe Queries::FindContent do
   let(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
   let(:warehouse_item_id) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
   let(:another_warehouse_item_id) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }

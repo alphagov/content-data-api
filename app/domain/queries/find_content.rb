@@ -1,4 +1,4 @@
-class Reports::Content
+class Queries::FindContent
   def self.retrieve(from:, to:, organisation_id:)
     new(from, to, organisation_id).retrieve
   end

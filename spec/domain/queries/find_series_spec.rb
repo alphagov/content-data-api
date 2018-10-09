@@ -1,4 +1,4 @@
-RSpec.describe Reports::FindSeries do
+RSpec.describe Queries::FindSeries do
   context "all" do
     it "returns a series of all metrics" do
       create :metric, date: Date.today

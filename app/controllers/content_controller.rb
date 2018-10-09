@@ -2,7 +2,7 @@ class ContentController < Api::BaseController
   before_action :validate_params!
 
   def show
-    @content = Reports::Content.retrieve(
+    @content = Queries::FindContent.retrieve(
       from: params[:from],
       to: params[:to],
       organisation_id: params[:organisation_id]

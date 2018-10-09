@@ -13,13 +13,13 @@ class SingleItemController < Api::BaseController
 private
 
   def metadata
-    metadata = Reports::FindMetadata.run(@base_path)
+    metadata = Queries::FindMetadata.run(@base_path)
     raise Api::NotFoundError.new("#{api_request.base_path} not found") if metadata.nil?
     metadata
   end
 
   def query_time_series_metrics
-    Reports::FindSeries.new
+    Queries::FindSeries.new
       .between(from: @from, to: @to)
       .by_base_path(@base_path)
       .by_metrics(%i(
@@ -35,7 +35,7 @@ private
   end
 
   def query_edition_metrics
-    Reports::FindEditionMetrics.run(@base_path, %w[words pdf_count])
+    Queries::FindEditionMetrics.run(@base_path, %w[words pdf_count])
   end
 
   def api_request

@@ -1,4 +1,4 @@
-RSpec.describe Reports::FindMetadata do
+RSpec.describe Queries::FindMetadata do
   let!(:base_path) { '/base_path' }
 
   before do

@@ -1,4 +1,4 @@
-class Reports::FindSeries
+class Queries::FindSeries
   def between(from:, to:)
     @from = from
     @to = to
@@ -43,7 +43,7 @@ class Reports::FindSeries
       .joins(dimensions_edition: :facts_edition).merge(editions)
       .joins(:dimensions_date).merge(dates)
     if @metric_names
-      @metric_names.map { |metric_name| Reports::Series.new(metric_name, metrics) }
+      @metric_names.map { |metric_name| Queries::Series.new(metric_name, metrics) }
     else
       metrics
     end
