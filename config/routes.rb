@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   end
 
   get '/content', to: 'content#show'
+  get '/single_page/*base_path', to: 'single_item#show', defaults: { format: :json }
 end
