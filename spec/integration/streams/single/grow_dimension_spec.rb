@@ -40,7 +40,6 @@ RSpec.describe PublishingAPI::Consumer do
     expect(Dimensions::Edition.first).to have_attributes(latest: true)
   end
 
-
   it 'does not grow the dimension if the event carries no changes in an attribute' do
     message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
     message2 = build :message, payload: message.payload.dup
