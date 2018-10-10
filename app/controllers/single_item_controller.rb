@@ -2,8 +2,6 @@ class SingleItemController < Api::BaseController
   before_action :validate_params!
 
   def show
-    @to = params[:to]
-    @from = params[:from]
     @base_path = format_base_path_param
     @metadata = find_metadata
     @time_series_metrics = find_time_series
@@ -20,7 +18,7 @@ private
 
   def find_time_series
     Queries::FindSeries.new
-      .between(from: @from, to: @to)
+      .between(from: from, to: to)
       .by_base_path(@base_path)
       .by_metrics(%i(
         upviews

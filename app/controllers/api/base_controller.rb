@@ -31,6 +31,14 @@ class Api::BaseController < ApplicationController
     "/#{base_path}"
   end
 
+  def from
+    params[:from]
+  end
+
+  def to
+    params[:to]
+  end
+
 private
 
   def set_cache_headers
