@@ -49,14 +49,4 @@ private
   def base_path
     params[:base_path]
   end
-
-  def validate_params!
-    unless api_request.valid?
-      error_response(
-        "validation-error",
-          title: "One or more parameters is invalid",
-          invalid_params: api_request.errors.to_hash
-      )
-    end
-  end
 end
