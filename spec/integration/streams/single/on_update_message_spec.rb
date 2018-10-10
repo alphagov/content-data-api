@@ -2,6 +2,7 @@ require 'govuk_message_queue_consumer/test_helpers'
 
 RSpec.describe PublishingAPI::Consumer do
   include PublishingEventProcessingSpecHelper
+
   let(:subject) { described_class.new }
 
   it 'does not notify error if message is missing `locale`' do
