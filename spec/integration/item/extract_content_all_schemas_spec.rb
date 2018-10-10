@@ -6,8 +6,8 @@ RSpec.describe 'Process parser', type: :integration do
   context 'with a list of content schemas' do
     SchemasIterator.each_schema do |schema_name, schema|
       it "extracts the content for: #{schema_name}" do
-        sample = GovukSchemas::RandomExample.new(schema: schema).payload
-        expect(Etl::Edition::Content::Parser.extract_content(sample)).to be_a(String).or eq(nil)
+        payload = SchemasIterator.payload_for(schema_name, schema)
+        expect(Etl::Edition::Content::Parser.extract_content(payload)).to be_a(String).or eq(nil)
       end
     end
   end
