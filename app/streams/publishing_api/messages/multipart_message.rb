@@ -12,11 +12,6 @@ module PublishingAPI
       PublishingAPI::Handlers::MultipartHandler
     end
 
-    def invalid?
-      mandatory_fields = @payload.values_at('base_path', 'schema_name')
-      mandatory_fields.any?(&:nil?)
-    end
-
     def parts
       message_parts = @payload.dig('details', 'parts').dup
       if doc_type == 'travel_advice'

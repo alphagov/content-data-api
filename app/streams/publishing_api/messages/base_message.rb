@@ -5,6 +5,11 @@ class PublishingAPI::Messages::BaseMessage
     @payload = payload
   end
 
+  def invalid?
+    mandatory_fields = @payload.values_at('base_path', 'schema_name')
+    mandatory_fields.any?(&:nil?)
+  end
+
   def is_old_message?
     payload_version = @payload.fetch('payload_version').to_i
     locale = @payload.fetch('locale', nil)
