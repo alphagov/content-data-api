@@ -142,11 +142,10 @@ RSpec.describe PublishingAPI::Consumer do
     end
 
     SchemasIterator.each_schema do |schema_name, schema|
-      payload = GovukSchemas::RandomExample.new(schema: schema).payload
       unless %w{travel_advice guide}.include?(schema_name) || schema_name.include?('placeholder')
-
         %w{major minor links republish unpublish}.each do |update_type|
           it "handles event for: `#{schema_name}` with no errors for a `#{update_type}` update" do
+            payload = GovukSchemas::RandomExample.new(schema: schema).payload
             message = build(:message, payload: payload, routing_key: "#{schema_name}.#{update_type}")
 
             subject.process(message)
