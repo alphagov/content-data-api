@@ -14,11 +14,11 @@ class AddDefaultValueToFeedbackMetrics < ActiveRecord::Migration[5.2]
 
     say 'Updating `satisfaction_score` values in `facts_metrics`'
     ActiveRecord::Base.connection.execute(
-        <<~SQL
+      <<~SQL
         UPDATE facts_metrics
         SET satisfaction_score = is_this_useful_yes / (is_this_useful_yes + is_this_useful_no::float)
         WHERE (is_this_useful_yes + is_this_useful_no > 0)
-    SQL
+      SQL
     )
   end
 end
