@@ -329,10 +329,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
       allow(GovukError).to receive(:notify)
     end
 
-    schemas = GovukSchemas::Schema.all(schema_type: 'notification')
-    schemas.each_value do |schema|
+    SchemasIterator.each_schema do |schema_name, schema|
       payload = GovukSchemas::RandomExample.new(schema: schema).payload
-      schema_name = payload.dig('schema_name')
       if %w{travel_advice guide}.include?(schema_name) && !schema_name.include?('placeholder')
 
         %w{major minor links republish unpublish}.each do |update_type|
