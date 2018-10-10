@@ -1,7 +1,7 @@
 module PublishingAPI
   class Consumer
     def process(message)
-      if valid_routing_key?(message)
+      if valid_message?(message)
         MessageProcessorJob.perform_later(message.payload, message.delivery_info.routing_key)
       else
         Monitor::Messages.increment_discarded
@@ -14,6 +14,15 @@ module PublishingAPI
     end
 
   private
+
+    def valid_message?(message)
+      valid_routing_key?(message) &&
+        valid_schema?(message)
+    end
+
+    def valid_schema?(message)
+      !message.payload['schema_name'].include?('placeholder')
+    end
 
     def valid_routing_key?(message)
       routing_key = message.delivery_info.routing_key
