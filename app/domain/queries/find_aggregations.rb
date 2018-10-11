@@ -17,8 +17,6 @@ class Queries::FindAggregations
     editions = slice_editions
 
     metric_names = Metric.find_all_names
-    aggregations = metric_names.map { |name| Arel.sql("SUM(#{name})") }
-
     metrics = Facts::Metric.all
     metrics = metrics
       .joins(dimensions_edition: :facts_edition).merge(editions)
@@ -34,6 +32,11 @@ class Queries::FindAggregations
   end
 
   private
+
+  def aggregations
+    metric_names = Metric.find_all_names
+    metric_names.map { |name| Arel.sql("SUM(#{name})") }
+  end
 
   def slice_dates
     dates = Dimensions::Date.all
