@@ -20,7 +20,7 @@ private
     end
 
     metrics.each do |metric|
-      errors.add("metric", "is not included in the list") unless Metric.find_all.map(&:name).include?(metric)
+      errors.add("metric", "is not included in the list") unless Metric.find_all_names.include?(metric)
     end
   end
 end
