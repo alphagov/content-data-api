@@ -66,4 +66,10 @@ RSpec.describe Queries::FindAggregations do
 
     expect(result.fetch(:satisfaction)).to eq(0.3333333333333333)
   end
+
+  it 'returns nil values when no results' do
+    result = Queries::FindAggregations.new.run
+
+    expect(result).to match(hash_including('pviews' => nil, 'upviews' => nil))
+  end
 end
