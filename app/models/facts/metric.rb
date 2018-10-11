@@ -4,6 +4,13 @@ class Facts::Metric < ApplicationRecord
 
   has_one :facts_edition, through: :dimensions_edition
 
+  delegate :pdf_count,
+    :doc_count,
+    :readability,
+    :chars,
+    :sentences,
+    :words, to: :facts_edition
+
   validates :dimensions_date, presence: true
   validates :dimensions_edition, presence: true
 

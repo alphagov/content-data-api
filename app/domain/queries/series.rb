@@ -13,11 +13,7 @@ class Queries::Series
   def time_series
     @all_metrics.map do |metric|
       date = metric.dimensions_date_id.to_s
-      value = if Metric.is_edition_metric?(metric_name)
-                metric.facts_edition.send(metric_name)
-              else
-                metric.send(metric_name)
-              end
+      value = metric.send(metric_name)
       { date: date, value: value }
     end
   end
