@@ -45,7 +45,7 @@ class Queries::FindSeries
     if @metric_names
       @metric_names.map { |metric_name| Queries::Series.new(metric_name, metrics) }
     else
-      metrics
+      Metric.find_all.map(&:name).map { |metric_name| Queries::Series.new(metric_name, metrics) }
     end
   end
 

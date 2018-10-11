@@ -2,6 +2,8 @@ class SingleItemController < Api::BaseController
   before_action :validate_params!
 
   def show
+    @from = from
+    @to = to
     @base_path = format_base_path_param
     @metadata = find_metadata
     @time_series_metrics = find_time_series
