@@ -25,7 +25,12 @@ class Queries::FindAggregations
       .joins(:dimensions_date).merge(dates)
       .pluck(*aggregations).first
 
-    Hash[metric_names.zip(metrics)].with_indifferent_access
+    result = Hash[metric_names.zip(metrics)].with_indifferent_access
+    if result[:useful_yes] != nil and result[:useful_no] != nil
+      result[:satisfaction] = result.fetch(:useful_yes) / (result.fetch(:useful_yes) + result.fetch(:useful_no)).to_f
+    end
+
+    result
   end
 
   private
