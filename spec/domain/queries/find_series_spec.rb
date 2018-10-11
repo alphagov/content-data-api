@@ -33,15 +33,12 @@ RSpec.describe Queries::FindSeries do
 
   context "by_organisation" do
     it "returns a series of metrics filtered by organisation" do
-      day0 = Date.new(2018, 1, 12)
-      day1 = Date.new(2018, 1, 13)
-      day2 = Date.new(2018, 1, 14)
-      edition1 = create :edition, date: day0, organisation_id: 'org-1'
-      edition2 = create :edition, date: day1, organisation_id: 'org-2'
+      edition1 = create :edition, date: '2018-1-12', organisation_id: 'org-1'
+      edition2 = create :edition, date: '2018-1-13', organisation_id: 'org-2'
 
-      create(:metric, edition: edition1, date: day0)
-      create(:metric, edition: edition1, date: day1)
-      create(:metric, edition: edition2, date: day2)
+      create(:metric, edition: edition1, date: '2018-1-12')
+      create(:metric, edition: edition1, date: '2018-1-13')
+      create(:metric, edition: edition2, date: '2018-1-14')
 
       series = described_class.new.by_organisation_id('org-1').run
 
@@ -54,17 +51,14 @@ RSpec.describe Queries::FindSeries do
 
   context "by_base_path" do
     it "returns a series of metrics for a base path" do
-      day0 = Date.new(2018, 1, 12)
-      day1 = Date.new(2018, 1, 13)
-      day2 = Date.new(2018, 1, 14)
-      edition1 = create(:edition, date: day0, base_path: '/path1')
-      edition2 = create(:edition, date: day0, base_path: '/path2')
+      edition1 = create(:edition, date: '2018-1-12', base_path: '/path1')
+      edition2 = create(:edition, date: '2018-1-12', base_path: '/path2')
 
-      create :metric, edition: edition1, date: day0
-      create :metric, edition: edition1, date: day1
-      create :metric, edition: edition1, date: day2
-      create :metric, edition: edition2, date: day1
-      create :metric, edition: edition2, date: day2
+      create :metric, edition: edition1, date: '2018-1-12'
+      create :metric, edition: edition1, date: '2018-1-13'
+      create :metric, edition: edition1, date: '2018-1-14'
+      create :metric, edition: edition2, date: '2018-1-13'
+      create :metric, edition: edition2, date: '2018-1-14'
 
       result = described_class.new.by_base_path('/path1').run
 
@@ -78,17 +72,14 @@ RSpec.describe Queries::FindSeries do
 
   describe '#editions' do
     it 'return the content items included in the report' do
-      day0 = Date.new(2018, 1, 12)
-      day1 = Date.new(2018, 1, 13)
-      day2 = Date.new(2018, 1, 14)
-      edition1 = create(:edition, base_path: '/path1', date: day0)
-      edition2 = create(:edition, base_path: '/path2', date: day0)
+      edition1 = create(:edition, base_path: '/path1', date: '2018-1-12')
+      edition2 = create(:edition, base_path: '/path2', date: '2018-1-12')
 
-      create(:metric, edition: edition1, date: day0)
-      create(:metric, edition: edition1, date: day1)
-      create(:metric, edition: edition1, date: day2)
-      create(:metric, edition: edition2, date: day1)
-      create(:metric, edition: edition2, date: day2)
+      create(:metric, edition: edition1, date: '2018-1-12')
+      create(:metric, edition: edition1, date: '2018-1-13')
+      create(:metric, edition: edition1, date: '2018-1-14')
+      create(:metric, edition: edition2, date: '2018-1-13')
+      create(:metric, edition: edition2, date: '2018-1-14')
 
       result = described_class.new.by_base_path('/path1').run
       expect(result.first.time_series).to eq([
