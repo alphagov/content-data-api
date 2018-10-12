@@ -16,22 +16,31 @@ class Queries::FindAggregations
     dates = slice_dates
     editions = slice_editions
 
-    metric_names = Metric.find_all_names
     metrics = Facts::Metric.all
     metrics = metrics
       .joins(dimensions_edition: :facts_edition).merge(editions)
       .joins(:dimensions_date).merge(dates)
       .pluck(*aggregations).first
 
-    result = Hash[metric_names.zip(metrics)].with_indifferent_access
-    if result[:useful_yes] != nil and result[:useful_no] != nil
-      result[:satisfaction] = result.fetch(:useful_yes) / (result.fetch(:useful_yes) + result.fetch(:useful_no)).to_f
-    end
+    result = build_response(metrics)
+    result[:satisfaction] = calculate_satisfaction_score(result)
 
     result
   end
 
-  private
+private
+
+  def calculate_satisfaction_score(result)
+    useful_yes = result[:useful_yes].to_i
+    useful_no = result[:useful_no].to_i
+
+    (useful_yes + useful_no).zero? ? 0 : useful_yes / (useful_yes + useful_no).to_f
+  end
+
+  def build_response(metrics)
+    metric_names = Metric.find_all_names
+    Hash[metric_names.zip(metrics)].with_indifferent_access
+  end
 
   def aggregations
     metric_names = Metric.find_all_names

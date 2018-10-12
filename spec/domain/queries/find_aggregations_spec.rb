@@ -52,19 +52,26 @@ RSpec.describe Queries::FindAggregations do
     expect(result.fetch(:words)).to eq(22)
   end
 
-  it 'recalculate the `satisfaction-score` aggregation' do
-    edition = create :edition, base_path: '/path/1', date: '2018-01-01'
-    create :metric, edition: edition, date: '2018-01-01', useful_yes: 1, useful_no: 2
-    create :metric, edition: edition, date: '2018-01-02', useful_yes: 1, useful_no: 2
-    create :metric, edition: edition, date: '2018-01-03', useful_yes: 1, useful_no: 2
-    create :metric, edition: edition, date: '2018-01-04', useful_yes: 1, useful_no: 2
+  describe 'Satisfaction score' do
+    it 'recalculate the `satisfaction-score` aggregation' do
+      edition = create :edition, base_path: '/path/1', date: '2018-01-02'
+      create :metric, edition: edition, date: '2018-01-02', useful_yes: 2, useful_no: 0
+      create :metric, edition: edition, date: '2018-01-03', useful_yes: 1, useful_no: 2
 
-    result = Queries::FindAggregations.new.between(
-      from: '2018-01-02',
-      to: '2018-01-03'
-    ).run
+      result = Queries::FindAggregations.new.run
 
-    expect(result.fetch(:satisfaction)).to eq(0.3333333333333333)
+      expect(result.fetch(:satisfaction)).to eq(0.6)
+    end
+
+    it 'return 0 if no responses' do
+      edition = create :edition, base_path: '/path/1', date: '2018-01-01'
+      create :metric, edition: edition, date: '2018-01-01', useful_yes: 0, useful_no: 0
+      create :metric, edition: edition, date: '2018-01-02', useful_yes: 0, useful_no: 0
+
+      result = Queries::FindAggregations.new.run
+
+      expect(result.fetch(:satisfaction)).to be_zero
+    end
   end
 
   it 'returns nil values when no results' do
