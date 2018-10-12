@@ -26,9 +26,12 @@ RSpec.describe Queries::FindSeries do
 
   context "by_metric" do
     it "returns a series of metrics filtered by the passed in metric" do
-      create :metric, date: Date.today, pviews: 1
+      create :metric, date: '2018-05-13', pviews: 1
 
-      expect(described_class.new.by_metrics(%w(pviews)).run.length).to eq(1)
+      series = described_class.new.by_metrics(%w(pviews)).run
+      expect(series.first.time_series).to eq([
+        { date: '2018-05-13', value: 1 },
+      ])
     end
   end
 
