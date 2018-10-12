@@ -76,20 +76,22 @@ RSpec.describe Queries::FindSeries do
 
   describe '#editions' do
     it 'return the content items included in the report' do
-      edition1 = create :edition, base_path: '/path1', date: '2018-1-12'
-      edition2 = create :edition, base_path: '/path2', date: '2018-1-12'
+      edition1 = create :edition, base_path: '/path1', date: '2018-1-12', facts: { words: 1 }
+      edition2 = create :edition, base_path: '/path2', date: '2018-1-12', facts: { words: 2 }
 
-      create :metric, edition: edition1, date: '2018-1-12', pviews: 1
-      create :metric, edition: edition1, date: '2018-1-13', pviews: 2
-      create :metric, edition: edition1, date: '2018-1-14', pviews: 4
-      create :metric, edition: edition2, date: '2018-1-13', pviews: 5
-      create :metric, edition: edition2, date: '2018-1-14', pviews: 6
+      create :metric, edition: edition1, date: '2018-1-12'
+      create :metric, edition: edition1, date: '2018-1-13'
+      create :metric, edition: edition1, date: '2018-1-14'
+      create :metric, edition: edition2, date: '2018-1-13'
+      create :metric, edition: edition2, date: '2018-1-14'
 
-      result = described_class.new.by_metrics(%w(pviews)).by_base_path('/path1').run
+      result = described_class.new.by_metrics(%w(words)).run
       expect(result.first.time_series).to eq([
         { date: "2018-01-12", value: 1 },
+        { date: "2018-01-13", value: 1 },
+        { date: "2018-01-14", value: 1 },
         { date: "2018-01-13", value: 2 },
-        { date: "2018-01-14", value: 4 },
+        { date: "2018-01-14", value: 2 }
       ])
     end
   end
