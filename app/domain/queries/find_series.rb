@@ -42,11 +42,9 @@ class Queries::FindSeries
     metrics = metrics
       .joins(dimensions_edition: :facts_edition).merge(editions)
       .joins(:dimensions_date).merge(dates)
-    if @metric_names
-      @metric_names.map { |metric_name| Queries::Series.new(metric_name, metrics) }
-    else
-      metrics
-    end
+
+    metric_names = @metric_names || Metric.find_all_names
+    metric_names.map { |metric_name| Queries::Series.new(metric_name, metrics) }
   end
 
 private

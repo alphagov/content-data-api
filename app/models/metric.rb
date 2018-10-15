@@ -7,6 +7,10 @@ class Metric
     @find_all ||= (daily_metrics + edition_metrics).sort
   end
 
+  def self.find_all_names
+    find_all.map(&:name)
+  end
+
   def self.is_edition_metric?(metric_name)
     edition_metrics.map(&:name).include?(metric_name)
   end

@@ -33,6 +33,16 @@ RSpec.describe Metric do
     end
   end
 
+  describe '.find_all_names' do
+    it "returns a list of all metrics" do
+      metric_names = Metric.find_all_names
+
+      expect(metric_names.length).to eq(17)
+      a_metric = metric_names.first
+      expect(a_metric).to eq('avg_page_time')
+    end
+  end
+
   describe '.is_edition_metric?' do
     EDITION_METRICS.each do |metric|
       it "returns true for #{metric}" do

@@ -3,8 +3,8 @@ class ContentController < Api::BaseController
 
   def show
     @content = Queries::FindContent.retrieve(
-      from: params[:from],
-      to: params[:to],
+      from: from,
+      to: to,
       organisation_id: params[:organisation_id]
     )
     render json: { results: @content }.to_json

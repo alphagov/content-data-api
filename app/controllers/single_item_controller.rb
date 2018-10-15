@@ -2,25 +2,25 @@ class SingleItemController < Api::BaseController
   before_action :validate_params!
 
   def show
-    @to = params[:to]
-    @from = params[:from]
+    @from = from
+    @to = to
     @base_path = format_base_path_param
-    @metadata = metadata
-    @time_series_metrics = query_time_series_metrics
-    @edition_metrics = query_edition_metrics
+    @metadata = find_metadata
+    @time_series_metrics = find_time_series
+    @edition_metrics = find_editions
   end
 
 private
 
-  def metadata
+  def find_metadata
     metadata = Queries::FindMetadata.run(@base_path)
     raise Api::NotFoundError.new("#{api_request.base_path} not found") if metadata.nil?
     metadata
   end
 
-  def query_time_series_metrics
+  def find_time_series
     Queries::FindSeries.new
-      .between(from: @from, to: @to)
+      .between(from: from, to: to)
       .by_base_path(@base_path)
       .by_metrics(%i(
         upviews
@@ -34,7 +34,7 @@ private
       .run
   end
 
-  def query_edition_metrics
+  def find_editions
     Queries::FindEditionMetrics.run(@base_path, %w[words pdf_count])
   end
 
@@ -48,15 +48,5 @@ private
 
   def base_path
     params[:base_path]
-  end
-
-  def validate_params!
-    unless api_request.valid?
-      error_response(
-        "validation-error",
-          title: "One or more parameters is invalid",
-          invalid_params: api_request.errors.to_hash
-      )
-    end
   end
 end
