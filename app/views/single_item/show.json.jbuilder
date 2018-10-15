@@ -9,7 +9,7 @@ end
 
 json.time_series_metrics @time_series_metrics do |series|
   json.name series.metric_name
-  json.total series.total
+  json.total @aggregations.fetch(series.metric_name)
   json.time_series series.time_series do |time_point|
     json.date time_point[:date]
     json.value time_point[:value]

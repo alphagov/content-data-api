@@ -8,6 +8,7 @@ class SingleItemController < Api::BaseController
     @metadata = find_metadata
     @time_series_metrics = find_time_series
     @edition_metrics = find_editions
+    @aggregations = find_aggregations
   end
 
 private
@@ -36,6 +37,13 @@ private
 
   def find_editions
     Queries::FindEditionMetrics.run(@base_path, %w[words pdf_count])
+  end
+
+  def find_aggregations
+    Queries::FindAggregations.new
+      .between(from: from, to: to)
+      .by_base_path(@base_path)
+      .run
   end
 
   def api_request

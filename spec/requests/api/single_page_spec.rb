@@ -23,8 +23,8 @@ RSpec.describe '/single_page', type: :request do
     create :user
     day1 = create :dimensions_date, date: Date.new(2018, 1, 1)
     day2 = create :dimensions_date, date: Date.new(2018, 1, 2)
-    create :metric, dimensions_edition: item, dimensions_date: day1, pviews: 10, upviews: 10
-    create :metric, dimensions_edition: item, dimensions_date: day2, pviews: 20, upviews: 20
+    create :metric, dimensions_edition: item, dimensions_date: day1, pviews: 10, upviews: 10, useful_yes: 1, useful_no: 1
+    create :metric, dimensions_edition: item, dimensions_date: day2, pviews: 20, upviews: 20, useful_yes: 10, useful_no: 0
   end
 
   context 'when correct parameters supplied' do
@@ -103,6 +103,40 @@ RSpec.describe '/single_page', type: :request do
           a_hash_including(
             "value" => 30,
             "name" => 'words'
+          )
+        )
+      }
+      expect(body).to include(expected)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns the aggregated values for each metric' do
+      get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
+
+      body = JSON.parse(response.body)
+
+      expected = {
+        'time_series_metrics' => a_collection_including(
+          a_hash_including(
+            'name' => 'upviews',
+            'total' => 30
+            )
+          )
+      }
+      expect(body).to include(expected)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns the satisfaction score for time period' do
+      get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
+
+      body = JSON.parse(response.body)
+
+      expected = {
+        'time_series_metrics' => a_collection_including(
+          a_hash_including(
+            'name' => 'satisfaction',
+            'total' => 0.9166666666666666
           )
         )
       }
