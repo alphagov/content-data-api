@@ -1,7 +1,7 @@
 RSpec.describe Queries::FindAggregations do
   it 'has aggregations for all metric names' do
     result = Queries::FindAggregations.new.run
-    expect(result.keys).to eq(Metric.find_all_names)
+    expect(result.keys).to eq(Metric.find_all_names.map(&:to_sym))
   end
 
   it 'return aggregated values for daily metrics' do
@@ -10,7 +10,6 @@ RSpec.describe Queries::FindAggregations do
     create :metric, edition: edition, date: '2018-01-02', pviews: 3
 
     result = Queries::FindAggregations.new.run
-    expect(result.fetch('pviews')).to eq(5)
     expect(result.fetch(:pviews)).to eq(5)
   end
 
@@ -77,6 +76,6 @@ RSpec.describe Queries::FindAggregations do
   it 'returns nil values when no results' do
     result = Queries::FindAggregations.new.run
 
-    expect(result).to match(hash_including('pviews' => nil, 'upviews' => nil))
+    expect(result).to match(hash_including(pviews: nil, upviews: nil))
   end
 end

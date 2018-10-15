@@ -39,7 +39,7 @@ private
 
   def build_response(metrics)
     metric_names = Metric.find_all_names
-    Hash[metric_names.zip(metrics)].with_indifferent_access
+    Hash[metric_names.zip(metrics)].deep_symbolize_keys
   end
 
   def aggregations
