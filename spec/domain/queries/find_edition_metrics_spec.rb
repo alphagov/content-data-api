@@ -6,7 +6,7 @@ RSpec.describe Queries::FindEditionMetrics do
              date: '2018-01-01',
              facts: {
                'words': 10_000,
-                     'pdf_count': 3
+               'pdf_count': 3,
              }
     end
 
@@ -15,7 +15,7 @@ RSpec.describe Queries::FindEditionMetrics do
 
       expect(metrics).to match_array([{
         name: 'words',
-        value: 10_000
+        value: 10_000,
       }])
     end
 
@@ -26,7 +26,7 @@ RSpec.describe Queries::FindEditionMetrics do
         date: '2018-02-01',
         facts: {
           'words': 20_000,
-          'pdf_count': 5
+          'pdf_count': 5,
         }
 
       metrics = described_class.run('/base_path', %w[words pdf_count])
