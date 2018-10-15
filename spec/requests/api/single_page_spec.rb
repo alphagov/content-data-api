@@ -1,8 +1,6 @@
 require 'securerandom'
 
 RSpec.describe '/single_page', type: :request do
-  let!(:expected_time_series_metrics) { %w[upviews pviews feedex searches satisfaction useful_yes useful_no] }
-  let!(:expected_edition_metrics) { %w[words pdf_count] }
   let!(:base_path) { '/base_path' }
   let!(:item) do
     create :edition,
@@ -68,7 +66,8 @@ RSpec.describe '/single_page', type: :request do
 
       body = JSON.parse(response.body)
 
-      expected_metrics = expected_time_series_metrics.map { |metric_name|
+      metric_names = Metric.daily_metrics.map(&:name)
+      expected_metrics = metric_names.map { |metric_name|
         a_hash_including("name" => metric_name)
       }
       expected = {
@@ -83,7 +82,8 @@ RSpec.describe '/single_page', type: :request do
 
       body = JSON.parse(response.body)
 
-      expected_metrics = expected_edition_metrics.map { |metric_name|
+      metric_names = Metric.edition_metrics.map(&:name)
+      expected_metrics = metric_names.map { |metric_name|
         a_hash_including("name" => metric_name)
       }
       expected = {
