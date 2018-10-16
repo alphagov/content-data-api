@@ -7,7 +7,8 @@ class ContentController < Api::BaseController
       to: to,
       organisation_id: params[:organisation_id]
     )
-    render json: { results: @content }.to_json
+    @organisation_id = params[:organisation_id]
+    render json: { results: @content, organisation_id: @organisation_id }.to_json
   end
 
   def api_request
