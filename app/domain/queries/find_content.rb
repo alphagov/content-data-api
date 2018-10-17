@@ -1,12 +1,10 @@
 class Queries::FindContent
-  def self.retrieve(from:, to:, organisation_id:)
-    new(from, to, organisation_id).retrieve
+  def self.retrieve(api_request:)
+    new(api_request).retrieve
   end
 
-  def initialize(from, to, organisation_id)
-    @from = from
-    @to = to
-    @organsation_id = organisation_id
+  def initialize(api_request)
+    @api_request = api_request
   end
 
   def retrieve
@@ -62,10 +60,10 @@ private
   end
 
   def slice_editions
-    Dimensions::Edition.by_organisation_id(@organsation_id)
+    Dimensions::Edition.by_organisation_id(@api_request.organisation_id)
   end
 
   def slice_dates
-    Dimensions::Date.between(@from, @to)
+    Dimensions::Date.between(@api_request.from, @api_request.to)
   end
 end
