@@ -91,6 +91,12 @@ RSpec.describe '/content' do
         ]
       )
     end
+
+    it 'returns organisation id' do
+      get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:organisation_id]).to eq primary_org_id
+    end
   end
 
   describe "an API response" do
