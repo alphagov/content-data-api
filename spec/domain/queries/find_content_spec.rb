@@ -2,7 +2,7 @@ RSpec.describe Queries::FindContent do
   let(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
   let(:warehouse_item_id) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
   let(:another_warehouse_item_id) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
-  let(:api_request) { Api::ContentRequest.new(from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id) }
+  let(:content_filters) { Api::ContentRequest.new(from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id) }
 
   before do
     create :user
@@ -56,7 +56,7 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'aggregates the data by content item' do
-      results = described_class.retrieve(api_request: api_request)
+      results = described_class.retrieve(content_filters: content_filters)
       expect(results).to eq(
         [
           {
@@ -116,7 +116,7 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'returns aggregated metrics from all versions with metadata from the latest version' do
-      results = described_class.retrieve(api_request: api_request)
+      results = described_class.retrieve(content_filters: content_filters)
       expect(results.count).to eq(1)
       expect(results.first).to eq(
         base_path: '/new/base/path',
@@ -127,6 +127,27 @@ RSpec.describe Queries::FindContent do
         satisfaction_score_responses: 120,
         searches: 20
       )
+    end
+
+    it 'returns items matching the document_type of the latest version' do
+      by_document_type = Api::ContentRequest.new(from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: 'press_release')
+      results = described_class.retrieve(content_filters: by_document_type)
+      expect(results.count).to eq(1)
+      expect(results.first).to eq(
+        base_path: '/new/base/path',
+        title: 'new title',
+        upviews: 200,
+        document_type: 'press_release',
+        satisfaction: 0.5,
+        satisfaction_score_responses: 120,
+        searches: 20
+                               )
+    end
+
+    it 'does not return items matching the document_type of older versions' do
+      by_document_type = Api::ContentRequest.new(from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: 'news_story')
+      results = described_class.retrieve(content_filters: by_document_type)
+      expect(results.count).to eq(0)
     end
   end
 
@@ -143,7 +164,7 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'returns the nil for the satisfaction' do
-      results = described_class.retrieve(api_request: api_request)
+      results = described_class.retrieve(content_filters: content_filters)
       expect(results.first).to include(
         satisfaction: nil,
         satisfaction_score_responses: 0
@@ -157,14 +178,14 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'returns a empty array' do
-      results = described_class.retrieve(api_request: api_request)
+      results = described_class.retrieve(content_filters: content_filters)
       expect(results).to be_empty
     end
   end
 
   context 'when no items exist for the organisation' do
     it 'returns a empty array' do
-      results = described_class.retrieve(api_request: api_request)
+      results = described_class.retrieve(content_filters: content_filters)
       expect(results).to be_empty
     end
   end

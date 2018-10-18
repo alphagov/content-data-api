@@ -2,7 +2,7 @@ class ContentController < Api::BaseController
   before_action :validate_params!
 
   def show
-    @content = Queries::FindContent.retrieve(api_request: api_request)
+    @content = Queries::FindContent.retrieve(content_filters: api_request)
     @organisation_id = params[:organisation_id]
     render json: { results: @content, organisation_id: @organisation_id }.to_json
   end
@@ -14,7 +14,7 @@ class ContentController < Api::BaseController
 private
 
   def permitted_params
-    params.permit(:from, :to, :organisation_id, :format)
+    params.permit(:from, :to, :organisation_id, :document_type, :format)
   end
 
   def validate_params!

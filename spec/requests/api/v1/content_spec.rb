@@ -14,6 +14,7 @@ RSpec.describe '/content' do
         base_path: '/path/1',
         date: '2018-01-01',
         title: 'old-title',
+        document_type: 'old_doc_type',
         organisation_id: primary_org_id
       create :metric,
         date: '2018-01-01',
@@ -59,14 +60,11 @@ RSpec.describe '/content' do
       create :metric,
         edition: another_org_edition,
         upviews: 34
-      get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
-    end
-
-    it 'is successful' do
-      expect(response.status).to eq(200)
     end
 
     it 'returns aggregated metrics from all versions with metadata from the latest version' do
+      get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
+      expect(response.status).to eq(200)
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:results]).to eq(
         [
@@ -96,6 +94,13 @@ RSpec.describe '/content' do
       get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:organisation_id]).to eq primary_org_id
+    end
+
+    it 'filters by document_type' do
+      get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id, document_type: 'latest_doc_type' }
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results].count).to eq(1)
     end
   end
 
