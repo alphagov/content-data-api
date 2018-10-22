@@ -1,10 +1,10 @@
 class Queries::FindContent
-  def self.retrieve(content_filters:)
-    new(content_filters).retrieve
+  def self.retrieve(filter:)
+    new(filter).retrieve
   end
 
-  def initialize(content_filters)
-    @content_filters = content_filters
+  def initialize(filter)
+    @filter = filter
   end
 
   def retrieve
@@ -60,12 +60,12 @@ private
   end
 
   def slice_editions
-    editions = Dimensions::Edition.by_organisation_id(@content_filters.organisation_id)
-    editions = editions.where('latest.document_type = ?', @content_filters.document_type) if @content_filters.document_type
+    editions = Dimensions::Edition.by_organisation_id(@filter.organisation_id)
+    editions = editions.where('latest.document_type = ?', @filter.document_type) if @filter.document_type
     editions
   end
 
   def slice_dates
-    Dimensions::Date.between(@content_filters.from, @content_filters.to)
+    Dimensions::Date.between(@filter.from, @filter.to)
   end
 end
