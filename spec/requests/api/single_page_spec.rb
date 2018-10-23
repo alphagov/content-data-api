@@ -7,6 +7,7 @@ RSpec.describe '/single_page', type: :request do
       latest: true,
       title: 'the title',
       base_path: base_path,
+      content_id: 'the-content-id',
       document_type: 'guide',
       publishing_app: 'whitehall',
       first_published_at: '2018-07-17T10:35:59.000Z',
@@ -35,6 +36,7 @@ RSpec.describe '/single_page', type: :request do
         'metadata' => {
           "title" => 'the title',
           "base_path" => base_path,
+          "content_id" => 'the-content-id',
           "document_type" => 'guide',
           "publishing_app" => 'whitehall',
           "first_published_at" => "2018-07-17T10:35:59.000Z",

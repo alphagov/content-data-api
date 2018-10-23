@@ -6,6 +6,7 @@ RSpec.describe Queries::FindMetadata do
       latest: true,
       title: 'the title',
       base_path: base_path,
+      content_id: 'content_id - 1',
       document_type: 'guide',
       publishing_app: 'whitehall',
       first_published_at: '2018-07-17T10:35:59.000Z',
@@ -28,6 +29,7 @@ RSpec.describe Queries::FindMetadata do
     expect(metadata).to eq(
       title: 'the title',
       base_path: base_path,
+      content_id: 'content_id - 1',
       document_type: 'guide',
       publishing_app: 'whitehall',
       first_published_at: '2018-07-17T10:35:59.000Z',
