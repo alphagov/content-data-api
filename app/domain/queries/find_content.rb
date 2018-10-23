@@ -3,13 +3,6 @@ class Queries::FindContent
     new(filter).call
   end
 
-  def initialize(filter)
-    @from = filter.fetch(:from)
-    @to = filter.fetch(:to)
-    @organisation_id = filter.fetch(:organisation_id)
-    @document_type = filter.fetch(:document_type)
-  end
-
   def call
     Facts::Metric.all
       .joins(:dimensions_date).merge(slice_dates)
@@ -25,6 +18,13 @@ class Queries::FindContent
 private
 
   attr_reader :from, :to, :organisation_id, :document_type
+
+  def initialize(filter)
+    @from = filter.fetch(:from)
+    @to = filter.fetch(:to)
+    @organisation_id = filter.fetch(:organisation_id)
+    @document_type = filter.fetch(:document_type)
+  end
 
   def aggregates
     [
