@@ -89,8 +89,8 @@ RSpec.describe Queries::FindSeries do
       expect(result.first.time_series).to eq([
         { date: "2018-01-12", value: 1 },
         { date: "2018-01-13", value: 1 },
-        { date: "2018-01-14", value: 1 },
         { date: "2018-01-13", value: 2 },
+        { date: "2018-01-14", value: 1 },
         { date: "2018-01-14", value: 2 }
       ])
     end

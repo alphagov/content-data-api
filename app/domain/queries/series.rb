@@ -11,11 +11,12 @@ class Queries::Series
   end
 
   def time_series
-    @all_metrics.map do |metric|
+    time_series = @all_metrics.map do |metric|
       {
         date: metric.dimensions_date_id.to_s,
         value: metric.public_send(metric_name)
       }
     end
+    time_series.sort_by { |point| point[:date] }
   end
 end
