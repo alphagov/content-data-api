@@ -88,8 +88,8 @@ RSpec.describe Queries::FindContent do
 
     it 'returns aggregated metrics from all versions with metadata from the latest version' do
       results = described_class.call(filter: filter)
-      expect(results).to eq([
-        {
+      expect(results).to eq(
+        [{
           base_path: '/new/base/path',
           title: 'new title',
           upviews: 200,
@@ -97,7 +97,8 @@ RSpec.describe Queries::FindContent do
           satisfaction: 0.5,
           satisfaction_score_responses: 120,
           searches: 20,
-        }])
+        }]
+      )
     end
 
     it 'returns items matching the document_type of the latest version' do
@@ -180,6 +181,5 @@ RSpec.describe Queries::FindContent do
 
       expect(-> { described_class.call(filter: filter) }).to raise_error(KeyError)
     end
-
   end
 end

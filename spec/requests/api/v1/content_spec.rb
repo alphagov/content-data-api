@@ -3,7 +3,7 @@ RSpec.describe '/content' do
     create :user
   end
 
-  let(:primary_org_id) { SecureRandom.uuid }
+  let(:primary_org_id) { '17d84dc6-e5b5-4065-a8b5-8783bd934938' }
   let(:another_org_id) { SecureRandom.uuid }
   let(:warehouse_item_id) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
   let(:another_warehouse_item_id) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
@@ -104,35 +104,7 @@ RSpec.describe '/content' do
     end
   end
 
-  describe "an API response" do
-    it "should be cacheable until the end of the day" do
-      Timecop.freeze(Time.zone.local(2020, 1, 1, 0, 0, 0)) do
-        get "/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
-
-        expect(response.headers['ETag']).to be_present
-        expect(response.headers['Cache-Control']).to eq "max-age=3600, public"
-      end
-    end
-
-    it "expires at 1am" do
-      Timecop.freeze(Time.zone.local(2020, 1, 1, 1, 0, 0)) do
-        get "/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
-
-        expect(response.headers['ETag']).to be_present
-        expect(response.headers['Cache-Control']).to eq "max-age=0, public"
-      end
-    end
-
-    it "can be cached for up to a day" do
-      Timecop.freeze(Time.zone.local(2020, 1, 1, 1, 0, 1)) do
-        get "/content", params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
-
-        expect(response.headers['ETag']).to be_present
-        expect(response.headers['Cache-Control']).to eq "max-age=86399, public"
-      end
-    end
-  end
-
+  include_examples 'API response', '/content', from: '2018-01-01', to: '2018-09-01', organisation_id: '17d84dc6-e5b5-4065-a8b5-8783bd934938'
 
   context 'with invalid params' do
     it 'returns an error for badly formatted dates' do
