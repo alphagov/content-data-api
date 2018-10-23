@@ -1,5 +1,7 @@
 class Queries::FindContent
   def self.call(filter:)
+    filter.assert_valid_keys :from, :to, :organisation_id, :document_type
+
     new(filter).call
   end
 

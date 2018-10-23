@@ -155,4 +155,31 @@ RSpec.describe Queries::FindContent do
       expect(results).to be_empty
     end
   end
+
+  context 'when invalid filter' do
+    it 'raises an error if no `organisation_id` attribute' do
+      filter.delete :organisation_id
+
+      expect(-> { described_class.call(filter: filter) }).to raise_error(KeyError)
+    end
+
+    it 'raises an error if no `document_type` attribute' do
+      filter.delete :document_type
+
+      expect(-> { described_class.call(filter: filter) }).to raise_error(KeyError)
+    end
+
+    it 'raises an error if no `to` attribute' do
+      filter.delete :to
+
+      expect(-> { described_class.call(filter: filter) }).to raise_error(KeyError)
+    end
+
+    it 'raises an error if no `from` attribute' do
+      filter.delete :from
+
+      expect(-> { described_class.call(filter: filter) }).to raise_error(KeyError)
+    end
+
+  end
 end
