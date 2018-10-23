@@ -1,6 +1,6 @@
 class Queries::FindContent
-  def self.retrieve(filter:)
-    new(filter).retrieve
+  def self.call(filter:)
+    new(filter).call
   end
 
   def initialize(filter)
@@ -10,7 +10,7 @@ class Queries::FindContent
     @document_type = filter.fetch(:document_type)
   end
 
-  def retrieve
+  def call
     Facts::Metric.all
       .joins(:dimensions_date).merge(slice_dates)
       .joins(:dimensions_edition).merge(slice_editions)

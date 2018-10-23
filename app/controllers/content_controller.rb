@@ -2,7 +2,7 @@ class ContentController < Api::BaseController
   before_action :validate_params!
 
   def show
-    @content = Queries::FindContent.retrieve(filter: api_request.to_filter)
+    @content = Queries::FindContent.call(filter: api_request.to_filter)
     @organisation_id = params[:organisation_id]
 
     render json: { results: @content, organisation_id: @organisation_id }.to_json

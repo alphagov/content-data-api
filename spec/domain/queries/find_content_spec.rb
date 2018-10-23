@@ -57,7 +57,7 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'aggregates the data by content item' do
-      results = described_class.retrieve(filter: filter)
+      results = described_class.call(filter: filter)
       expect(results).to eq(
         [
           {
@@ -117,7 +117,7 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'returns aggregated metrics from all versions with metadata from the latest version' do
-      results = described_class.retrieve(filter: filter)
+      results = described_class.call(filter: filter)
       expect(results.count).to eq(1)
       expect(results.first).to eq(
         base_path: '/new/base/path',
@@ -132,7 +132,7 @@ RSpec.describe Queries::FindContent do
 
     it 'returns items matching the document_type of the latest version' do
       by_document_type = { from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: 'press_release' }
-      results = described_class.retrieve(filter: by_document_type)
+      results = described_class.call(filter: by_document_type)
       expect(results.count).to eq(1)
       expect(results.first).to eq(
         base_path: '/new/base/path',
@@ -147,7 +147,7 @@ RSpec.describe Queries::FindContent do
 
     it 'does not return items matching the document_type of older versions' do
       by_document_type = { from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: 'news_story' }
-      results = described_class.retrieve(filter: by_document_type)
+      results = described_class.call(filter: by_document_type)
       expect(results.count).to eq(0)
     end
   end
@@ -165,7 +165,7 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'returns the nil for the satisfaction' do
-      results = described_class.retrieve(filter: filter)
+      results = described_class.call(filter: filter)
       expect(results.first).to include(
         satisfaction: nil,
         satisfaction_score_responses: 0
@@ -179,14 +179,14 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'returns a empty array' do
-      results = described_class.retrieve(filter: filter)
+      results = described_class.call(filter: filter)
       expect(results).to be_empty
     end
   end
 
   context 'when no items exist for the organisation' do
     it 'returns a empty array' do
-      results = described_class.retrieve(filter: filter)
+      results = described_class.call(filter: filter)
       expect(results).to be_empty
     end
   end
