@@ -71,7 +71,7 @@ RSpec.describe Queries::FindContent do
     before do
       old_edition = create :edition,
         date: '2018-01-01',
-        organisation_id: primary_org_id,
+        organisation_id: 'another-primary-org-id',
         latest: false,
         warehouse_item_id: warehouse_item_id
       create :metric, edition: old_edition, date: '2018-01-02', upviews: 100, useful_yes: 10, useful_no: 10, searches: 15
