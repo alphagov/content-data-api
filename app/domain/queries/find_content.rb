@@ -4,7 +4,10 @@ class Queries::FindContent
   end
 
   def initialize(filter)
-    @filter = filter
+    @from = filter.fetch(:from)
+    @to = filter.fetch(:to)
+    @organisation_id = filter.fetch(:organisation_id)
+    @document_type = filter.fetch(:document_type)
   end
 
   def retrieve
@@ -20,6 +23,8 @@ class Queries::FindContent
   end
 
 private
+
+  attr_reader :from, :to, :organisation_id, :document_type
 
   def aggregates
     [
@@ -60,12 +65,12 @@ private
   end
 
   def slice_editions
-    editions = Dimensions::Edition.by_organisation_id(@filter.organisation_id)
-    editions = editions.where('latest.document_type = ?', @filter.document_type) if @filter.document_type
+    editions = Dimensions::Edition.by_organisation_id(organisation_id)
+    editions = editions.where('latest.document_type = ?', document_type) if document_type
     editions
   end
 
   def slice_dates
-    Dimensions::Date.between(@filter.from, @filter.to)
+    Dimensions::Date.between(from, to)
   end
 end

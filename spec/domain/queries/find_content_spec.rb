@@ -2,7 +2,8 @@ RSpec.describe Queries::FindContent do
   let(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
   let(:warehouse_item_id) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
   let(:another_warehouse_item_id) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
-  let(:filter) { Api::ContentRequest.new(from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id) }
+
+  let(:filter) { { from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: nil } }
 
   before do
     create :user
@@ -130,7 +131,7 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'returns items matching the document_type of the latest version' do
-      by_document_type = Api::ContentRequest.new(from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: 'press_release')
+      by_document_type = { from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: 'press_release' }
       results = described_class.retrieve(filter: by_document_type)
       expect(results.count).to eq(1)
       expect(results.first).to eq(
@@ -145,7 +146,7 @@ RSpec.describe Queries::FindContent do
     end
 
     it 'does not return items matching the document_type of older versions' do
-      by_document_type = Api::ContentRequest.new(from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: 'news_story')
+      by_document_type = { from: '2018-01-01', to: '2018-02-01', organisation_id: primary_org_id, document_type: 'news_story' }
       results = described_class.retrieve(filter: by_document_type)
       expect(results.count).to eq(0)
     end
