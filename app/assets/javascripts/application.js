@@ -11,7 +11,6 @@
 // about supported directives.
 //
 //= require polyfills/bind
-//= require cable
 
 // --- Analytics ---
 
