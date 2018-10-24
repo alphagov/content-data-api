@@ -11,4 +11,6 @@ RSpec.describe '/document_types' do
     json = JSON.parse(response.body).deep_symbolize_keys
     expect(json).to eq(document_types: %w(guide manual))
   end
+
+  include_examples 'API response', '/document_types'
 end

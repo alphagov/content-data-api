@@ -1,15 +1,11 @@
 class Queries::FindContent
-  def self.retrieve(from:, to:, organisation_id:)
-    new(from, to, organisation_id).retrieve
+  def self.call(filter:)
+    filter.assert_valid_keys :from, :to, :organisation_id, :document_type
+
+    new(filter).call
   end
 
-  def initialize(from, to, organisation_id)
-    @from = from
-    @to = to
-    @organsation_id = organisation_id
-  end
-
-  def retrieve
+  def call
     Facts::Metric.all
       .joins(:dimensions_date).merge(slice_dates)
       .joins(:dimensions_edition).merge(slice_editions)
@@ -22,6 +18,15 @@ class Queries::FindContent
   end
 
 private
+
+  attr_reader :from, :to, :organisation_id, :document_type
+
+  def initialize(filter)
+    @from = filter.fetch(:from)
+    @to = filter.fetch(:to)
+    @organisation_id = filter.fetch(:organisation_id)
+    @document_type = filter.fetch(:document_type)
+  end
 
   def aggregates
     [
@@ -62,10 +67,13 @@ private
   end
 
   def slice_editions
-    Dimensions::Edition.by_organisation_id(@organsation_id)
+    editions = Dimensions::Edition.all
+    editions = editions.where('latest.organisation_id = ?', organisation_id)
+    editions = editions.where('latest.document_type = ?', document_type) if document_type
+    editions
   end
 
   def slice_dates
-    Dimensions::Date.between(@from, @to)
+    Dimensions::Date.between(from, to)
   end
 end

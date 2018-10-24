@@ -16,4 +16,6 @@ RSpec.describe '/organisations' do
       ]
     )
   end
+
+  include_examples 'API response', '/organisations'
 end

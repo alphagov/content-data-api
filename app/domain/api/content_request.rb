@@ -1,10 +1,21 @@
 class Api::ContentRequest < Api::BaseRequest
-  attr_reader :organisation_id
+  attr_reader :organisation_id, :document_type
   validate :valid_organisation_id
 
   def initialize(params)
     super(params)
+
     @organisation_id = params[:organisation_id]
+    @document_type = params[:document_type]
+  end
+
+  def to_filter
+    {
+      organisation_id: organisation_id,
+      document_type: document_type,
+      from: from,
+      to: to,
+    }
   end
 
 private
