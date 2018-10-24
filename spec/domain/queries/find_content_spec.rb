@@ -103,15 +103,8 @@ RSpec.describe Queries::FindContent do
 
     it 'returns items matching the document_type of the latest version' do
       results = described_class.call(filter: filter.merge(document_type: 'press_release'))
-      expect(results).to eq([{
-        base_path: '/new/base/path',
-        title: 'new title',
-        upviews: 200,
-        document_type: 'press_release',
-        satisfaction: 0.5,
-        satisfaction_score_responses: 120,
-        searches: 20,
-      }])
+
+      expect(results.first).to include(document_type: 'press_release')
     end
 
     it 'does not return items matching the document_type of older versions' do
