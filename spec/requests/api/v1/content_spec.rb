@@ -112,12 +112,36 @@ RSpec.describe '/content' do
         expect(json[:results].first[:base_path]).to eq('/new/base/path')
       end
 
+      it 'returns the first page pagination info' do
+        get '/content', params: { from: '2018-01-01',
+                                  to: '2018-09-01',
+                                  organisation_id: primary_org_id,
+                                  page: 1,
+                                  page_size: 1 }
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json).to include(
+          page: 1,
+          total_results: 2
+        )
+      end
+
       it 'returns the second page of the data' do
         get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id, page: 2, page_size: 1 }
         expect(response.status).to eq(200)
         json = JSON.parse(response.body).deep_symbolize_keys
         expect(json[:results].count).to eq(1)
         expect(json[:results].first[:base_path]).to eq('/path/2')
+      end
+
+      it 'returns the second page pagination info' do
+        get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id, page: 2, page_size: 1 }
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json).to include(
+          page: 2,
+          total_results: 2
+        )
       end
     end
   end

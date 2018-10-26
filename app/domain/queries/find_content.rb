@@ -6,16 +6,19 @@ class Queries::FindContent
   end
 
   def call
-    Facts::Metric.all
+    results = Facts::Metric.all
       .joins(:dimensions_date).merge(slice_dates)
       .joins(:dimensions_edition).merge(slice_editions)
       .joins(latest_join)
       .group('latest.warehouse_item_id', *group_columns)
       .order(order_by)
-      .page(@page)
+      .page(@page).without_count
       .per(@page_size)
-      .pluck(*group_columns, *aggregates)
-      .map(&method(:array_to_hash))
+    {
+      results: results.pluck(*group_columns, *aggregates).map(&method(:array_to_hash)),
+      page: @page,
+      total_results: edition_count
+    }
   end
 
 private
@@ -67,6 +70,12 @@ private
       satisfaction_score_responses: satisfaction_responses,
       searches: array[6],
     }
+  end
+
+  def edition_count
+    editions = Dimensions::Edition.latest.by_organisation_id(organisation_id)
+    editions = editions.by_document_type(document_type) if document_type
+    editions.count
   end
 
   def slice_editions
