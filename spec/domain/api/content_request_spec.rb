@@ -6,6 +6,8 @@ RSpec.describe Api::ContentRequest do
         organisation_id: 'the-id',
         from: '2018-01-01',
         to: '2018-01-31',
+        page: '1',
+        page_size: '20',
       )
 
       expect(request.to_filter).to eq(
@@ -13,6 +15,8 @@ RSpec.describe Api::ContentRequest do
         organisation_id: 'the-id',
         from: '2018-01-01',
         to: '2018-01-31',
+        page: 1,
+        page_size: 20,
       )
     end
 
@@ -29,6 +33,8 @@ RSpec.describe Api::ContentRequest do
         organisation_id: nil,
         from: nil,
         to: nil,
+        page: nil,
+        page_size: nil,
       )
     end
   end

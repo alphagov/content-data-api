@@ -113,6 +113,36 @@ RSpec.describe Queries::FindContent do
     end
   end
 
+  context 'when pagination parameters are provided' do
+    before do
+      (1..4).each do |n|
+        edition = create :edition,
+                         date: '2018-01-01',
+                         base_path: "/path/#{n}",
+                         organisation_id: primary_org_id
+        create :metric, edition: edition, date: '2018-01-01'
+      end
+    end
+
+    it 'returns the first page of data' do
+      results = described_class.call(filter: filter.merge(page: 1, page_size: 2))
+      paths = results.map { |hsh| hsh[:base_path] }
+      expect(paths).to eq(['/path/1', '/path/2'])
+    end
+
+    it 'returns the second page of data' do
+      results = described_class.call(filter: filter.merge(page: 2, page_size: 2))
+      paths = results.map { |hsh| hsh[:base_path] }
+      expect(paths).to eq(['/path/3', '/path/4'])
+    end
+
+    it 'responds to the page_size parameter' do
+      results = described_class.call(filter: filter.merge(page: 1, page_size: 3))
+      paths = results.map { |hsh| hsh[:base_path] }
+      expect(paths).to eq(['/path/1', '/path/2', '/path/3'])
+    end
+  end
+
   context 'when no useful_yes/no.. responses' do
     before do
       edition = create :edition,

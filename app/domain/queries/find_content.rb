@@ -1,6 +1,6 @@
 class Queries::FindContent
   def self.call(filter:)
-    filter.assert_valid_keys :from, :to, :organisation_id, :document_type
+    filter.assert_valid_keys :from, :to, :organisation_id, :document_type, :page, :page_size
 
     new(filter).call
   end
@@ -12,7 +12,8 @@ class Queries::FindContent
       .joins(latest_join)
       .group('latest.warehouse_item_id', *group_columns)
       .order(order_by)
-      .limit(100)
+      .page(@page)
+      .per(@page_size)
       .pluck(*group_columns, *aggregates)
       .map(&method(:array_to_hash))
   end
@@ -26,6 +27,8 @@ private
     @to = filter.fetch(:to)
     @organisation_id = filter.fetch(:organisation_id)
     @document_type = filter.fetch(:document_type)
+    @page = filter[:page] || 1
+    @page_size = filter[:page_size] || 100
   end
 
   def aggregates
@@ -42,7 +45,7 @@ private
   end
 
   def order_by
-    Arel.sql('latest.warehouse_item_id')
+    Arel.sql('latest.base_path')
   end
 
   def sum(column)

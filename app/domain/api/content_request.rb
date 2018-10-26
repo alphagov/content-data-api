@@ -1,12 +1,15 @@
 class Api::ContentRequest < Api::BaseRequest
-  attr_reader :organisation_id, :document_type
+  attr_reader :organisation_id, :document_type, :page, :page_size
   validate :valid_organisation_id
+  validates_numericality_of :page, :page_size, allow_nil: true
 
   def initialize(params)
     super(params)
 
     @organisation_id = params[:organisation_id]
     @document_type = params[:document_type]
+    @page = params[:page].try(:to_i)
+    @page_size = params[:page_size].try(:to_i)
   end
 
   def to_filter
@@ -15,6 +18,8 @@ class Api::ContentRequest < Api::BaseRequest
       document_type: document_type,
       from: from,
       to: to,
+      page: page,
+      page_size: page_size
     }
   end
 
