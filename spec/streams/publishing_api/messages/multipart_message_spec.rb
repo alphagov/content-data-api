@@ -1,5 +1,7 @@
 RSpec.describe PublishingAPI::Messages::MultipartMessage do
   subject { described_class }
+  include_examples 'BaseMessage#historically_political?'
+  include_examples 'BaseMessage#withdrawn_notice?'
 
   describe ".is_multipart?" do
     it "returns true if message is for multipart item" do
