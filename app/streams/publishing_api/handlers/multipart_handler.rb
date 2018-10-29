@@ -38,6 +38,7 @@ private
       warehouse_item_id: "#{content_id}:#{locale}:#{base_path}",
       **all_attributes
     )
+    new_edition.latest = false
     new_edition.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_edition, new_edition))
     new_edition.promote!(old_edition)
   end

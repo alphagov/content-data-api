@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_25_133812) do
+ActiveRecord::Schema.define(version: 2018_10_25_134740) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 2018_10_25_133812) do
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
     t.index ["latest", "document_type"], name: "index_dimensions_editions_on_latest_and_document_type"
     t.index ["latest", "organisation_id", "primary_organisation_title"], name: "index_dimensions_editions_on_latest_org_id_org_title"
+    t.index ["latest", "warehouse_item_id"], name: "index_dimensions_editions_on_latest_and_warehouse_item_id", unique: true, where: "(latest = true)"
     t.index ["latest"], name: "index_dimensions_editions_on_latest"
     t.index ["organisation_id"], name: "index_dimensions_editions_organisation_id"
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"

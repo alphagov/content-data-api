@@ -9,7 +9,7 @@ FactoryBot.define do
     sequence(:publishing_api_payload_version)
     schema_name { 'detailed_guide' }
     document_type { 'detailed_guide' }
-    warehouse_item_id { "#{content_id}:#{locale}" }
+    warehouse_item_id { "#{content_id}:#{locale}:#{base_path}" }
     transient do
       date { Time.zone.today }
       replaces { nil }
