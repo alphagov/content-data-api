@@ -13,6 +13,8 @@ RSpec.describe '/single_page', type: :request do
       first_published_at: '2018-07-17T10:35:59.000Z',
       public_updated_at: '2018-07-17T10:35:57.000Z',
       primary_organisation_title: 'The ministry',
+      withdrawn: false,
+      historical: false,
       facts: {
         'words': 30
       }
@@ -41,10 +43,12 @@ RSpec.describe '/single_page', type: :request do
           "publishing_app" => 'whitehall',
           "first_published_at" => "2018-07-17T10:35:59.000Z",
           "public_updated_at" => '2018-07-17T10:35:57.000Z',
-          "primary_organisation_title" => 'The ministry'
+          "primary_organisation_title" => 'The ministry',
+          "withdrawn" => false,
+          "historical" => false
         }
       }
-      expect(body).to include(expected)
+      expect(body['metadata']).to include(expected['metadata'])
       expect(response).to have_http_status(:ok)
     end
 

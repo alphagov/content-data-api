@@ -50,7 +50,9 @@ class Dimensions::Edition < ApplicationRecord
       public_updated_at: public_updated_at,
       publishing_app: publishing_app,
       document_type: document_type,
-      primary_organisation_title: primary_organisation_title
+      primary_organisation_title: primary_organisation_title,
+      withdrawn: withdrawn,
+      historical: historical
     }
   end
 end
