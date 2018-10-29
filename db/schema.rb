@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_29_112946) do
+ActiveRecord::Schema.define(version: 2018_10_25_132726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 2018_10_29_112946) do
     t.integer "page_time", default: 0
     t.float "satisfaction", default: 0.0, null: false
     t.index ["dimensions_date_id", "dimensions_edition_id"], name: "metrics_edition_id_date_id", unique: true
+    t.index ["dimensions_edition_id"], name: "index_facts_metrics_on_dimensions_edition_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
