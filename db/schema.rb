@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_25_135539) do
+ActiveRecord::Schema.define(version: 2018_10_29_112946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,11 +65,12 @@ ActiveRecord::Schema.define(version: 2018_10_25_135539) do
     t.string "update_type"
     t.datetime "last_edited_at"
     t.string "warehouse_item_id", null: false
+    t.json "raw_json"
     t.boolean "withdrawn"
     t.boolean "historical"
-    t.json "raw_json"
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
+    t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "document_type"], name: "index_dimensions_editions_on_latest_and_document_type"
     t.index ["latest", "organisation_id", "primary_organisation_title"], name: "index_dimensions_editions_on_latest_org_id_org_title"
     t.index ["latest", "warehouse_item_id"], name: "index_dimensions_editions_on_latest_and_warehouse_item_id", unique: true, where: "(latest = true)"
