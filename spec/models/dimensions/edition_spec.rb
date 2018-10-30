@@ -218,4 +218,32 @@ RSpec.describe Dimensions::Edition, type: :model do
       )
     end
   end
+
+  describe 'Unique constraint on `warehouse_item_id` and `latest`' do
+    it 'prevent duplicating `warehouse_item_id` for latest items' do
+      create :edition, warehouse_item_id: 'value', latest: true
+
+      expect(-> { create :edition, warehouse_item_id: 'value', latest: true }).to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it 'does not prevent duplicating `warehouse_item_id` for old items' do
+      create :edition, warehouse_item_id: 'value', latest: true
+
+      expect(-> { create :edition, warehouse_item_id: 'value', latest: false }).to_not raise_error
+    end
+  end
+
+  describe 'Unique constraint on `base_path` and `latest`' do
+    it 'prevent duplicating `base_path` for latest items' do
+      create :edition, base_path: 'value', latest: true
+
+      expect(-> { create :edition, base_path: 'value', latest: true }).to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it 'does not prevent duplicating `base_path` for old items' do
+      create :edition, base_path: 'value', latest: true
+
+      expect(-> { create :edition, base_path: 'value', latest: false }).to_not raise_error
+    end
+  end
 end

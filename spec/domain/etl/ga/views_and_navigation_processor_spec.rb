@@ -4,18 +4,18 @@ require 'traceable'
 RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
   subject { described_class }
 
-  let!(:edition1) { create :edition, base_path: '/path1', latest: true }
-  let!(:edition2) { create :edition, base_path: '/path2', latest: true }
+  let!(:edition1) { create :edition, base_path: '/path1', latest: true, date: '2018-02-20' }
+  let!(:edition2) { create :edition, base_path: '/path2', latest: true, date: '2018-02-20' }
 
   let(:date) { Date.new(2018, 2, 20) }
 
 
   context 'When the base_path matches the GA path' do
     before { allow(Etl::GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(ga_response) }
+
     it 'update the facts with the GA metrics' do
-      edition1 = create :edition, base_path: '/path1', date: '2018-02-20'
-      edition2 = create :edition, base_path: '/path2', date: '2018-02-20'
-      fact1 = create :metric, edition: edition1, date: '2018-02-20'
+      fact1 = create :metric, edition: edition1,
+        date: '2018-02-20'
       fact2 = create :metric, edition: edition2, date: '2018-02-20'
 
       described_class.process(date: date)
@@ -25,8 +25,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
     end
 
     it 'does not update metrics for other days' do
-      edition = create :edition, date: '2018-02-20', base_path: '/path1'
-      fact1 = create :metric, edition: edition, date: '2018-02-20', pviews: 20, upviews: 10
+      fact1 = create :metric, edition: edition1, date: '2018-02-20', pviews: 20, upviews: 10
 
       day_before = date - 1
       described_class.process(date: day_before)
@@ -58,8 +57,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
       end
 
       it 'only updates metrics for the current day' do
-        edition = create :edition, date: '2018-02-20', base_path: '/path1'
-        fact1 = create :metric, edition: edition, date: '2018-02-20'
+        fact1 = create :metric, edition: edition1, date: '2018-02-20'
 
         described_class.process(date: date)
 

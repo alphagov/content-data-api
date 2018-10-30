@@ -64,15 +64,16 @@ ActiveRecord::Schema.define(version: 2018_10_29_112946) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
-    t.json "raw_json"
     t.string "warehouse_item_id", null: false
+    t.json "raw_json"
     t.boolean "withdrawn"
     t.boolean "historical"
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
+    t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "document_type"], name: "index_dimensions_editions_on_latest_and_document_type"
     t.index ["latest", "organisation_id", "primary_organisation_title"], name: "index_dimensions_editions_on_latest_org_id_org_title"
+    t.index ["latest", "warehouse_item_id"], name: "index_dimensions_editions_on_latest_and_warehouse_item_id", unique: true, where: "(latest = true)"
     t.index ["latest"], name: "index_dimensions_editions_on_latest"
     t.index ["organisation_id"], name: "index_dimensions_editions_organisation_id"
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
@@ -141,6 +142,7 @@ ActiveRecord::Schema.define(version: 2018_10_29_112946) do
     t.integer "page_time", default: 0
     t.float "satisfaction", default: 0.0, null: false
     t.index ["dimensions_date_id", "dimensions_edition_id"], name: "metrics_edition_id_date_id", unique: true
+    t.index ["dimensions_edition_id"], name: "index_facts_metrics_on_dimensions_edition_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
