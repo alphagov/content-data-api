@@ -1,4 +1,5 @@
 class Queries::FindContent
+  DEFAULT_PAGE_SIZE = 100
   def self.call(filter:)
     filter.assert_valid_keys :from, :to, :organisation_id, :document_type, :page, :page_size
 
@@ -31,7 +32,7 @@ private
     @organisation_id = filter.fetch(:organisation_id)
     @document_type = filter.fetch(:document_type)
     @page = filter[:page] || 1
-    @page_size = filter[:page_size] || 100
+    @page_size = filter[:page_size] || DEFAULT_PAGE_SIZE
   end
 
   def aggregates
