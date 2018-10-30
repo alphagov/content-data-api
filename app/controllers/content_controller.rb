@@ -5,9 +5,7 @@ class ContentController < Api::BaseController
     filter = api_request.to_filter
     content = Queries::FindContent.call(filter: filter)
 
-    render json: content.merge(
-      organisation_id: params[:organisation_id]
-    ).to_json
+    render json: content.to_json
   end
 
 private

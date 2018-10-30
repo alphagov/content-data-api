@@ -90,12 +90,6 @@ RSpec.describe '/content' do
       )
     end
 
-    it 'returns organisation id' do
-      get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
-      json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json[:organisation_id]).to eq primary_org_id
-    end
-
     it 'filters by document_type' do
       get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id, document_type: 'latest_doc_type' }
       expect(response.status).to eq(200)
