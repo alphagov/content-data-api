@@ -20,6 +20,8 @@ class PublishingAPI::Handlers::BaseHandler
       analytics_identifier: message.payload.fetch('analytics_identifier', nil),
       update_type: message.payload.fetch('update_type', nil),
       latest: true,
+      withdrawn: message.withdrawn_notice?,
+      historical: message.historically_political?,
       raw_json: message.payload
     }
   end

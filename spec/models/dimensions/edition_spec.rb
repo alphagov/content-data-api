@@ -198,7 +198,9 @@ RSpec.describe Dimensions::Edition, type: :model do
         public_updated_at: '2018-05-20',
         publishing_app: 'publisher',
         document_type: 'guide',
-        primary_organisation_title: 'The ministry'
+        primary_organisation_title: 'The ministry',
+        withdrawn: false,
+        historical: false
     end
 
     it 'returns the correct attributes' do
@@ -210,7 +212,9 @@ RSpec.describe Dimensions::Edition, type: :model do
         public_updated_at: Time.new(2018, 5, 20).strftime("%Y-%m-%d"),
         publishing_app: 'publisher',
         document_type: 'guide',
-        primary_organisation_title: 'The ministry'
+        primary_organisation_title: 'The ministry',
+        withdrawn: false,
+        historical: false
       )
     end
   end

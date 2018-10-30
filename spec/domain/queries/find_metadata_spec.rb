@@ -11,7 +11,9 @@ RSpec.describe Queries::FindMetadata do
       publishing_app: 'whitehall',
       first_published_at: '2018-07-17T10:35:59.000Z',
       public_updated_at: '2018-07-17T10:35:57.000Z',
-      primary_organisation_title: 'The ministry'
+      primary_organisation_title: 'The ministry',
+      withdrawn: false,
+      historical: false
 
     create :edition,
       latest: false,
@@ -21,7 +23,9 @@ RSpec.describe Queries::FindMetadata do
       publishing_app: 'whitehall',
       first_published_at: '2018-06-17T10:35:59.000Z',
       public_updated_at: '2018-06-17T10:35:57.000Z',
-      primary_organisation_title: 'The ministry'
+      primary_organisation_title: 'The ministry',
+      withdrawn: false,
+      historical: false
   end
 
   it "returns metadata for latest edition" do
@@ -34,7 +38,9 @@ RSpec.describe Queries::FindMetadata do
       publishing_app: 'whitehall',
       first_published_at: '2018-07-17T10:35:59.000Z',
       public_updated_at: '2018-07-17T10:35:57.000Z',
-      primary_organisation_title: 'The ministry'
+      primary_organisation_title: 'The ministry',
+      withdrawn: false,
+      historical: false
     )
   end
 

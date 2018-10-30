@@ -20,4 +20,22 @@ class PublishingAPI::Messages::BaseMessage
       locale: locale
     ).maximum('publishing_api_payload_version').to_i
   end
+
+  def withdrawn_notice?
+    @payload.dig('withdrawn_notice', :explanation).present?
+  end
+
+  def historically_political?
+    historical? && political?
+  end
+
+private
+
+  def political?
+    @payload.dig('details', 'political') || false
+  end
+
+  def historical?
+    @payload.dig('details', 'government').present? && !@payload.dig('details', 'government', 'current')
+  end
 end
