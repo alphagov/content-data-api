@@ -42,7 +42,7 @@ RSpec.describe Queries::FindContent do
 
     it 'aggregates the data by content item' do
       results = described_class.call(filter: filter)
-      expect(results).to eq(
+      expect(results[:results]).to eq(
         [
           {
             base_path: '/path/1',
@@ -88,7 +88,7 @@ RSpec.describe Queries::FindContent do
 
     it 'returns aggregated metrics from all versions with metadata from the latest version' do
       results = described_class.call(filter: filter)
-      expect(results).to eq(
+      expect(results[:results]).to eq(
         [{
           base_path: '/new/base/path',
           title: 'new title',
@@ -104,12 +104,75 @@ RSpec.describe Queries::FindContent do
     it 'returns items matching the document_type of the latest version' do
       results = described_class.call(filter: filter.merge(document_type: 'press_release'))
 
-      expect(results.first).to include(document_type: 'press_release')
+      expect(results[:results].first).to include(document_type: 'press_release')
     end
 
     it 'does not return items matching the document_type of older versions' do
       results = described_class.call(filter: filter.merge(document_type: 'news_story'))
-      expect(results.count).to eq(0)
+      expect(results[:results].count).to eq(0)
+    end
+  end
+
+  context 'when pagination parameters are provided' do
+    before do
+      (1..4).each do |n|
+        edition = create :edition,
+                         date: '2018-01-01',
+                         base_path: "/path/#{n}",
+                         organisation_id: primary_org_id
+        create :metric, edition: edition, date: '2018-01-01'
+      end
+    end
+
+    it 'returns the first page of data with pagination info' do
+      results = described_class.call(filter: filter.merge(page: 1, page_size: 2))
+      paths = results[:results].map { |hsh| hsh[:base_path] }
+      expect(paths).to eq(['/path/1', '/path/2'])
+      expect(results).to include(
+        page: 1,
+        total_results: 4,
+                         )
+    end
+
+    it 'returns the second page of data' do
+      results = described_class.call(filter: filter.merge(page: 2, page_size: 2))
+      paths = results[:results].map { |hsh| hsh[:base_path] }
+      expect(paths).to eq(['/path/3', '/path/4'])
+      expect(results).to include(
+        page: 2,
+        total_results: 4,
+                         )
+    end
+
+    it 'responds to the page_size parameter' do
+      results = described_class.call(filter: filter.merge(page: 1, page_size: 5))
+      paths = results[:results].map { |hsh| hsh[:base_path] }
+      expect(paths).to eq(['/path/1', '/path/2', '/path/3', '/path/4'])
+      expect(results).to include(
+        page: 1,
+        total_results: 4,
+                         )
+    end
+  end
+
+  context 'when no pagination parameters are provided' do
+    before do
+      (1..101).each do |n|
+        edition = create :edition,
+                         date: '2018-01-01',
+                         base_path: "/path/#{n}",
+                         organisation_id: primary_org_id
+        create :metric, edition: edition, date: '2018-01-01'
+      end
+    end
+
+    it 'defaults to page 1 with page size of 100' do
+      results = described_class.call(filter: filter)
+      expect(results[:results].count).to eq(100)
+      expect(results).to include(
+        page: 1,
+        total_results: 101
+                         )
     end
   end
 
@@ -127,7 +190,7 @@ RSpec.describe Queries::FindContent do
 
     it 'returns the nil for the satisfaction' do
       results = described_class.call(filter: filter)
-      expect(results.first).to include(
+      expect(results[:results].first).to include(
         satisfaction: nil,
         satisfaction_score_responses: 0
       )
@@ -139,14 +202,14 @@ RSpec.describe Queries::FindContent do
 
     it 'returns a empty array' do
       results = described_class.call(filter: filter)
-      expect(results).to be_empty
+      expect(results[:results]).to be_empty
     end
   end
 
   context 'when no items exist for the organisation' do
     it 'returns a empty array' do
       results = described_class.call(filter: filter)
-      expect(results).to be_empty
+      expect(results[:results]).to be_empty
     end
   end
 

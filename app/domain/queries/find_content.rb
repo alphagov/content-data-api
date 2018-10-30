@@ -1,20 +1,25 @@
 class Queries::FindContent
+  DEFAULT_PAGE_SIZE = 100
   def self.call(filter:)
-    filter.assert_valid_keys :from, :to, :organisation_id, :document_type
+    filter.assert_valid_keys :from, :to, :organisation_id, :document_type, :page, :page_size
 
     new(filter).call
   end
 
   def call
-    Facts::Metric.all
+    results = Facts::Metric.all
       .joins(:dimensions_date).merge(slice_dates)
       .joins(:dimensions_edition).merge(slice_editions)
       .joins(latest_join)
       .group('latest.warehouse_item_id', *group_columns)
       .order(order_by)
-      .limit(100)
-      .pluck(*group_columns, *aggregates)
-      .map(&method(:array_to_hash))
+      .page(@page).without_count
+      .per(@page_size)
+    {
+      results: results.pluck(*group_columns, *aggregates).map(&method(:array_to_hash)),
+      page: @page,
+      total_results: edition_count
+    }
   end
 
 private
@@ -26,6 +31,8 @@ private
     @to = filter.fetch(:to)
     @organisation_id = filter.fetch(:organisation_id)
     @document_type = filter.fetch(:document_type)
+    @page = filter[:page] || 1
+    @page_size = filter[:page_size] || DEFAULT_PAGE_SIZE
   end
 
   def aggregates
@@ -42,7 +49,7 @@ private
   end
 
   def order_by
-    Arel.sql('latest.warehouse_item_id')
+    Arel.sql('latest.base_path')
   end
 
   def sum(column)
@@ -64,6 +71,12 @@ private
       satisfaction_score_responses: satisfaction_responses,
       searches: array[6],
     }
+  end
+
+  def edition_count
+    editions = Dimensions::Edition.latest.by_organisation_id(organisation_id)
+    editions = editions.by_document_type(document_type) if document_type
+    editions.count
   end
 
   def slice_editions
