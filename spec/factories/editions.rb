@@ -10,6 +10,9 @@ FactoryBot.define do
     schema_name { 'detailed_guide' }
     document_type { 'detailed_guide' }
     warehouse_item_id { "#{content_id}:#{locale}:#{base_path}" }
+    withdrawn { false }
+    historical { false }
+
     transient do
       date { Time.zone.today }
       replaces { nil }
