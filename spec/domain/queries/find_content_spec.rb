@@ -155,6 +155,27 @@ RSpec.describe Queries::FindContent do
     end
   end
 
+  context 'when no pagination parameters are provided' do
+    before do
+      (1..101).each do |n|
+        edition = create :edition,
+                         date: '2018-01-01',
+                         base_path: "/path/#{n}",
+                         organisation_id: primary_org_id
+        create :metric, edition: edition, date: '2018-01-01'
+      end
+    end
+
+    it 'defaults to page 1 with page size of 100' do
+      results = described_class.call(filter: filter)
+      expect(results[:results].count).to eq(100)
+      expect(results).to include(
+        page: 1,
+        total_results: 101
+                         )
+    end
+  end
+
   context 'when no useful_yes/no.. responses' do
     before do
       edition = create :edition,
