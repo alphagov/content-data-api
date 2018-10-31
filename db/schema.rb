@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_01_163411) do
+ActiveRecord::Schema.define(version: 2018_10_31_112754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,12 +64,11 @@ ActiveRecord::Schema.define(version: 2018_11_01_163411) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
-    t.json "raw_json"
     t.string "warehouse_item_id", null: false
+    t.json "raw_json"
     t.boolean "withdrawn", null: false
     t.boolean "historical", null: false
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
     t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "document_type"], name: "index_dimensions_editions_on_latest_and_document_type"
@@ -80,6 +79,17 @@ ActiveRecord::Schema.define(version: 2018_11_01_163411) do
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
     t.index ["warehouse_item_id", "latest"], name: "index_dimensions_editions_warehouse_item_id_latest"
     t.index ["warehouse_item_id"], name: "index_dimensions_editions_warehouse_item_id"
+  end
+
+  create_table "dimensions_months", id: false, force: :cascade do |t|
+    t.string "id", null: false
+    t.string "month_name", null: false
+    t.string "month_name_abbreviated", null: false
+    t.integer "month_number", null: false
+    t.integer "quarter", null: false
+    t.integer "year", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "events_feedexes", force: :cascade do |t|
