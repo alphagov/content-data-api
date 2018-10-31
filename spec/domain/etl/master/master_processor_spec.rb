@@ -41,6 +41,8 @@ RSpec.describe Etl::Master::MasterProcessor do
 
   it 'update GA metrics in the Facts table' do
     expect(Etl::GA::ViewsAndNavigationProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
+    expect(Etl::GA::UserFeedbackProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
+    expect(Etl::GA::InternalSearchProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
 
     subject.process
   end
