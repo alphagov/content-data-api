@@ -53,6 +53,12 @@ RSpec.describe Etl::Master::MasterProcessor do
     subject.process
   end
 
+  it 'calculate the aggregations' do
+    expect(Etl::Aggregations::Monthly).to receive(:process).with(date: Date.new(2018, 2, 19))
+
+    subject.process
+  end
+
   describe 'Monitoring' do
     context 'the day before' do
       it 'monitors ETL processes' do

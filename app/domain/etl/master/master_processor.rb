@@ -18,6 +18,8 @@ class Etl::Master::MasterProcessor
       Etl::GA::UserFeedbackProcessor.process(date: date)
       Etl::GA::InternalSearchProcessor.process(date: date)
       Etl::Feedex::Processor.process(date: date)
+
+      Etl::Aggregations::Monthly.process(date: date)
     end
 
     time(process: :monitor) do
