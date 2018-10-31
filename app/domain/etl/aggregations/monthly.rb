@@ -8,6 +8,7 @@ class Etl::Aggregations::Monthly
   end
 
   def process
+    ::Aggregations::MonthlyMetric.where(dimensions_month_id: month).delete_all
     ActiveRecord::Base.connection.execute(query)
   end
 

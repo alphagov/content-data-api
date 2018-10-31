@@ -10,7 +10,7 @@ RSpec.describe Etl::Aggregations::Monthly do
 
   end
 
-  it 'calculates the monthly aggregations for a month' do
+  it 'calculates monthly aggregations for a given date' do
     create :metric, edition: edition1, date: '2018-02-20', pviews: 20, upviews: 10
     create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
     create :metric, edition: edition1, date: '2018-02-22', pviews: 60, upviews: 30
@@ -37,7 +37,7 @@ RSpec.describe Etl::Aggregations::Monthly do
     )
   end
 
-  it 'does not include metrics from other months' do
+  it 'does not include metrics from other months in the calculations' do
     create :metric, edition: edition1, date: '2018-01-31', pviews: 20, upviews: 10
     create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
     create :metric, edition: edition1, date: '2018-03-01', pviews: 60, upviews: 30
@@ -53,5 +53,34 @@ RSpec.describe Etl::Aggregations::Monthly do
       pviews: 40,
       upviews: 20,
     )
+  end
+
+  describe 'it can run multiple times for any month' do
+    it 'is idempotent' do
+      create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
+
+      subject.process(date: date)
+      subject.process(date: date)
+
+      results = Aggregations::MonthlyMetric.all
+
+      expect(results.count).to eq(1)
+    end
+
+    it 'does not delete aggregations for other months' do
+      last_month = (date - 30.days)
+
+      create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
+      subject.process(date: date)
+
+      create :metric, edition: edition1, date: '2018-01-21', pviews: 40, upviews: 20
+      subject.process(date: last_month)
+
+      subject.process(date: date)
+      subject.process(date: last_month)
+
+      expect(Aggregations::MonthlyMetric.where(dimensions_month_id: '2018-01').count).to eq(1)
+      expect(Aggregations::MonthlyMetric.where(dimensions_month_id: '2018-02').count).to eq(1)
+    end
   end
 end
