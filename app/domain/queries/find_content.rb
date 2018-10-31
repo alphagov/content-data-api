@@ -13,11 +13,12 @@ class Queries::FindContent
       .joins(latest_join)
       .group('latest.warehouse_item_id', *group_columns)
       .order(order_by)
-      .page(@page).without_count
+      .page(@page)
       .per(@page_size)
     {
       results: results.pluck(*group_columns, *aggregates).map(&method(:array_to_hash)),
       page: @page,
+      total_pages: results.total_pages,
       total_results: edition_count
     }
   end

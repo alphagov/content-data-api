@@ -130,6 +130,7 @@ RSpec.describe Queries::FindContent do
       expect(paths).to eq(['/path/1', '/path/2'])
       expect(results).to include(
         page: 1,
+        total_pages: 2,
         total_results: 4,
                          )
     end
@@ -140,6 +141,7 @@ RSpec.describe Queries::FindContent do
       expect(paths).to eq(['/path/3', '/path/4'])
       expect(results).to include(
         page: 2,
+        total_pages: 2,
         total_results: 4,
                          )
     end
@@ -150,6 +152,7 @@ RSpec.describe Queries::FindContent do
       expect(paths).to eq(['/path/1', '/path/2', '/path/3', '/path/4'])
       expect(results).to include(
         page: 1,
+        total_pages: 1,
         total_results: 4,
                          )
     end
@@ -171,6 +174,7 @@ RSpec.describe Queries::FindContent do
       expect(results[:results].count).to eq(100)
       expect(results).to include(
         page: 1,
+        total_pages: 2,
         total_results: 101
                          )
     end
