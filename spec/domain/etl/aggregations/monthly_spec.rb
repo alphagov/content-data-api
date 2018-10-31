@@ -1,7 +1,14 @@
 RSpec.describe Etl::Aggregations::Monthly do
   subject { described_class }
-  let!(:edition1) { create :edition, base_path: '/path1', latest: true, date: '2018-02-20' }
-  let!(:edition2) { create :edition, base_path: '/path2', latest: true, date: '2018-02-20' }
+
+  let(:date) { Date.new(2018, 2, 20) }
+
+  let(:edition1) { create :edition, base_path: '/path1', latest: true, date: '2018-02-20' }
+  let(:edition2) { create :edition, base_path: '/path2', latest: true, date: '2018-02-20' }
+
+  before do
+
+  end
 
   it 'calculates the monthly aggregations for a month' do
     create :metric, edition: edition1, date: '2018-02-20', pviews: 20, upviews: 10
@@ -11,7 +18,7 @@ RSpec.describe Etl::Aggregations::Monthly do
     create :metric, edition: edition2, date: '2018-02-20', pviews: 100, upviews: 10
     create :metric, edition: edition2, date: '2018-02-21', pviews: 200, upviews: 20
 
-    subject.process(date: Date.new(2018, 2, 20))
+    subject.process(date: date)
 
     results = Aggregations::MonthlyMetric.all
 
@@ -35,7 +42,7 @@ RSpec.describe Etl::Aggregations::Monthly do
     create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
     create :metric, edition: edition1, date: '2018-03-01', pviews: 60, upviews: 30
 
-    subject.process(date: Date.new(2018, 2, 20))
+    subject.process(date: date)
 
     results = Aggregations::MonthlyMetric.all
 
