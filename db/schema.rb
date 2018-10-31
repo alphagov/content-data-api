@@ -10,10 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_31_112754) do
+ActiveRecord::Schema.define(version: 2018_10_31_124930) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "aggregations_monthly_metrics", force: :cascade do |t|
+    t.string "dimensions_month_id", null: false
+    t.bigint "dimensions_edition_id", null: false
+    t.integer "pviews", default: 0, null: false
+    t.integer "upviews", default: 0, null: false
+    t.integer "feedex", default: 0, null: false
+    t.integer "useful_yes", default: 0, null: false
+    t.integer "useful_no", default: 0, null: false
+    t.integer "searches", default: 0, null: false
+    t.integer "exits", default: 0, null: false
+    t.integer "entrances", default: 0, null: false
+    t.integer "bounce_rate", default: 0, null: false
+    t.integer "avg_page_time", default: 0, null: false
+    t.integer "bounces", default: 0, null: false
+    t.integer "page_time", default: 0, null: false
+    t.float "satisfaction", default: 0.0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dimensions_edition_id", "dimensions_month_id"], name: "index_editions_months_unique", unique: true
+    t.index ["dimensions_edition_id"], name: "index_aggregations_monthly_metrics_on_dimensions_edition_id"
+    t.index ["dimensions_month_id"], name: "index_aggregations_monthly_metrics_on_dimensions_month_id"
+  end
 
   create_table "dimensions_dates", primary_key: "date", id: :date, force: :cascade do |t|
     t.string "date_name", null: false
