@@ -29,4 +29,22 @@ RSpec.describe Etl::Aggregations::Monthly do
       upviews: 30
     )
   end
+
+  it 'does not include metrics from other months' do
+    create :metric, edition: edition1, date: '2018-01-31', pviews: 20, upviews: 10
+    create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
+    create :metric, edition: edition1, date: '2018-03-01', pviews: 60, upviews: 30
+
+    subject.process(date: Date.new(2018, 2, 20))
+
+    results = Aggregations::MonthlyMetric.all
+
+    expect(results.count).to eq(1)
+    expect(results.first).to have_attributes(
+      dimensions_month_id: '2018-02',
+      dimensions_edition_id: edition1.id,
+      pviews: 40,
+      upviews: 20,
+    )
+  end
 end
