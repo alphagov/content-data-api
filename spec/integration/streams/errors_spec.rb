@@ -2,7 +2,7 @@ require 'sidekiq/testing'
 require 'govuk_message_queue_consumer/test_helpers'
 require 'gds_api/test_helpers/content_store'
 
-RSpec.describe Streams::PublishingAPI::Consumer do
+RSpec.describe Streams::Consumer do
   let(:subject) { described_class.new }
 
   it_behaves_like 'a message queue processor'
@@ -11,7 +11,7 @@ RSpec.describe Streams::PublishingAPI::Consumer do
 
   context 'when an error happens' do
     before {
-      expect_any_instance_of(Streams::PublishingAPI::Messages::SingleItemMessage).to receive(:invalid?).and_raise(StandardError.new)
+      expect_any_instance_of(Streams::Messages::SingleItemMessage).to receive(:invalid?).and_raise(StandardError.new)
     }
 
     it "logs the error" do
@@ -29,7 +29,7 @@ RSpec.describe Streams::PublishingAPI::Consumer do
 
   context "when message has missing mandatory fields" do
     before {
-      allow_any_instance_of(Streams::PublishingAPI::Messages::SingleItemMessage).to receive(:invalid?).and_raise(StandardError)
+      allow_any_instance_of(Streams::Messages::SingleItemMessage).to receive(:invalid?).and_raise(StandardError)
     }
 
     context "missing field is base_path" do

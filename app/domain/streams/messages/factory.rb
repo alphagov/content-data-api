@@ -1,4 +1,4 @@
-module Streams::PublishingAPI::Messages
+module Streams::Messages
   class Factory
     def self.build(payload)
       if MultipartMessage.is_multipart?(payload)

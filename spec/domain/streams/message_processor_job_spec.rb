@@ -1,4 +1,4 @@
-RSpec.describe Streams::PublishingAPI::MessageProcessorJob do
+RSpec.describe Streams::MessageProcessorJob do
   it 'increments `monitor.messages.*` ' do
     message = build(:message, routing_key: 'news_story.major')
     expect(GovukStatsd).to receive(:increment).with("monitor.messages.major")

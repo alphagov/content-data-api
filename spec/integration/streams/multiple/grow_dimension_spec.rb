@@ -3,7 +3,7 @@ require 'govuk_message_queue_consumer/test_helpers/mock_message'
 RSpec.describe "Process sub-pages for multipart content types" do
   include PublishingEventProcessingSpecHelper
 
-  let(:subject) { Streams::PublishingAPI::Consumer.new }
+  let(:subject) { Streams::Consumer.new }
 
   it "grows the dimension for each subpage" do
     message = build(:message, :with_parts)
