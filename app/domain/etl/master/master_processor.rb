@@ -27,6 +27,7 @@ class Etl::Master::MasterProcessor
         Monitor::Etl.run
         Monitor::Dimensions.run
         Monitor::Facts.run
+        Monitor::Aggregations.run
       end
     end
   end

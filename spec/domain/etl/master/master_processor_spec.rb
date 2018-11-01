@@ -78,6 +78,12 @@ RSpec.describe Etl::Master::MasterProcessor do
 
         subject.process
       end
+
+      it 'monitor Aggregations' do
+        expect(Monitor::Aggregations).to receive(:run)
+
+        subject.process
+      end
     end
 
     context 'not the day before' do

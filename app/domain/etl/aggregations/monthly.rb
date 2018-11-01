@@ -17,7 +17,7 @@ private
   attr_reader :date
 
   def delete_month
-    Aggregations::MonthlyMetric.where(dimensions_month_id: month).delete_all
+    ::Aggregations::MonthlyMetric.where(dimensions_month_id: month).delete_all
   end
 
   def aggregate_month
