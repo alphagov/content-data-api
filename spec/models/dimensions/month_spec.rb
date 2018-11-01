@@ -18,23 +18,6 @@ RSpec.describe Dimensions::Month, type: :model do
   it { is_expected.to validate_numericality_of(:quarter).only_integer }
   it { is_expected.to validate_inclusion_of(:quarter).in_range(1..4) }
 
-  describe '.build_from_string' do
-    subject { described_class }
-
-    it 'builds a month dimension' do
-      date = subject.build_from_string('2018-12')
-
-      expect(date).to have_attributes(
-        id: '2018-12',
-        month_number: 12,
-        month_name: 'December',
-        month_name_abbreviated: 'Dec',
-        quarter: 4,
-        year: 2018,
-      )
-    end
-  end
-
   describe '.find_or_create' do
     subject { described_class }
 
@@ -66,7 +49,7 @@ RSpec.describe Dimensions::Month, type: :model do
 
     it 'returns current month' do
       Timecop.freeze(2018, 10, 12) do
-        current_month = Dimensions::Month.build_from_string('2018-10')
+        current_month = Dimensions::Month.find_or_create(Date.today)
 
         expect(subject.current).to eq(current_month)
       end

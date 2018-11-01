@@ -10,13 +10,18 @@ class Etl::Aggregations::Monthly
   end
 
   def process
+    create_month
     delete_month
     aggregate_month
   end
 
 private
 
-  attr_reader :date
+  attr_reader :date, :month
+
+  def create_month
+    @month = Dimensions::Month.find_or_create(date)
+  end
 
   def delete_month
     ::Aggregations::MonthlyMetric.where(dimensions_month_id: month).delete_all
@@ -32,10 +37,6 @@ private
 
   def to
     date.end_of_month
-  end
-
-  def month
-    Dimensions::Month.build(from)
   end
 
   def aggregation_query

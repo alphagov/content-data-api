@@ -7,14 +7,8 @@ class Dimensions::Month < ApplicationRecord
   validates :month_name, presence: true, inclusion: { in: ::Date::MONTHNAMES }
   validates :month_name_abbreviated, presence: true, inclusion: { in: ::Date::ABBR_MONTHNAMES }
 
-  def self.build_from_string(month_s)
-    year, month = *month_s.split('-')
-
-    build Date.new(year.to_i, month.to_i, 1)
-  end
-
   def self.current
-    build(Date.today)
+    find_or_create(Date.today)
   end
 
   def self.find_or_create(date)

@@ -5,7 +5,12 @@ FactoryBot.define do
       edition { create :edition }
     end
 
-    dimensions_month { Dimensions::Month.build_from_string(month) }
+    dimensions_month do
+      y, m = *month.split('-').map(&:to_i)
+
+      Dimensions::Month.find_or_create(Date.new(y, m, 1))
+    end
+
     dimensions_edition { edition }
 
     pviews { 10 }
