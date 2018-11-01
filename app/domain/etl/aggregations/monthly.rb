@@ -8,13 +8,21 @@ class Etl::Aggregations::Monthly
   end
 
   def process
-    ::Aggregations::MonthlyMetric.where(dimensions_month_id: month).delete_all
-    ActiveRecord::Base.connection.execute(query)
+    delete_month
+    aggregate_month
   end
 
 private
 
   attr_reader :date
+
+  def delete_month
+    Aggregations::MonthlyMetric.where(dimensions_month_id: month).delete_all
+  end
+
+  def aggregate_month
+    ActiveRecord::Base.connection.execute(aggregation_query)
+  end
 
   def from
     date.beginning_of_month
@@ -28,7 +36,7 @@ private
     Dimensions::Month.build(from)
   end
 
-  def query
+  def aggregation_query
     <<~SQL
       INSERT INTO aggregations_monthly_metrics (
         dimensions_month_id,
