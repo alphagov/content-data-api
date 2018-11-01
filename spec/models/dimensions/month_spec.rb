@@ -35,6 +35,32 @@ RSpec.describe Dimensions::Month, type: :model do
     end
   end
 
+  describe '.find_or_create' do
+    subject { described_class }
+
+    context 'when month does exist' do
+      before { subject.current.save }
+
+      it 'returns the month if it exists' do
+        expect(-> { subject.find_or_create(Date.today) }).to change(Dimensions::Month, :count).by(0)
+      end
+
+      it 'returns the month' do
+        expect(subject.find_or_create(Date.today)).to eq(Dimensions::Month.current)
+      end
+    end
+
+    context 'when month does not exist' do
+      it 'creates the month' do
+        expect(-> { subject.find_or_create(Date.today) }).to change(Dimensions::Month, :count).by(1)
+      end
+
+      it 'returns the month' do
+        expect(subject.find_or_create(Date.today)).to eq(Dimensions::Month.current)
+      end
+    end
+  end
+
   describe '.current' do
     subject { described_class }
 

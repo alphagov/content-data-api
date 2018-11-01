@@ -17,6 +17,14 @@ class Dimensions::Month < ApplicationRecord
     build(Date.today)
   end
 
+  def self.find_or_create(date)
+    month = build(date)
+    month.save!
+    month
+  rescue ActiveRecord::RecordNotUnique
+    find(month.id)
+  end
+
   def self.build(date)
     new(
       id: format('%04d-%02d', date.year, date.month),
