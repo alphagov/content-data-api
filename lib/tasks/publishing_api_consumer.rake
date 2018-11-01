@@ -1,4 +1,4 @@
-require_relative '../../app/streams/publishing_api/consumer'
+require_relative '../../app/domain/streams/publishing_api/consumer'
 
 namespace :publishing_api do
   desc "Run worker to publishing API from rabbitmq"
@@ -6,7 +6,7 @@ namespace :publishing_api do
     begin
       GovukMessageQueueConsumer::Consumer.new(
         queue_name: "content_performance_manager",
-        processor: PublishingAPI::Consumer.new,
+        processor: Streams::PublishingAPI::Consumer.new,
       ).run
     rescue SignalException
       logger.info "SignalException suppressed"
@@ -18,7 +18,7 @@ namespace :publishing_api do
     begin
       GovukMessageQueueConsumer::Consumer.new(
         queue_name: "content_performance_manager_govuk_importer",
-        processor: PublishingAPI::Consumer.new,
+        processor: Streams::PublishingAPI::Consumer.new,
       ).run
     rescue SignalException
       logger.info "SignalException suppressed"

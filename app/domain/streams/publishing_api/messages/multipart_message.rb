@@ -1,4 +1,4 @@
-module PublishingAPI
+module Streams::PublishingAPI
   class Messages::MultipartMessage < Messages::BaseMessage
     def initialize(payload)
       super
@@ -9,7 +9,7 @@ module PublishingAPI
     end
 
     def handler
-      PublishingAPI::Handlers::MultipartHandler
+      Streams::PublishingAPI::Handlers::MultipartHandler
     end
 
     def parts

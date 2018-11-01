@@ -1,4 +1,4 @@
-class PublishingAPI::Handlers::SingleItemHandler < PublishingAPI::Handlers::BaseHandler
+class Streams::PublishingAPI::Handlers::SingleItemHandler < Streams::PublishingAPI::Handlers::BaseHandler
   def self.process(*args)
     new(*args).process
   end
