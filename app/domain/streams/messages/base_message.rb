@@ -1,4 +1,4 @@
-class Streams::PublishingAPI::Messages::BaseMessage
+class Streams::Messages::BaseMessage
   attr_reader :payload
 
   def initialize(payload)

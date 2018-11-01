@@ -1,4 +1,4 @@
-class Streams::PublishingAPI::Handlers::BaseHandler
+class Streams::Handlers::BaseHandler
   def all_attributes
     {
       content_id: content_id,

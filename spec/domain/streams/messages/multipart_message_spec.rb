@@ -1,4 +1,4 @@
-RSpec.describe Streams::PublishingAPI::Messages::MultipartMessage do
+RSpec.describe Streams::Messages::MultipartMessage do
   subject { described_class }
   include_examples 'BaseMessage#historically_political?'
   include_examples 'BaseMessage#withdrawn_notice?'
