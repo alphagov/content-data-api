@@ -35,6 +35,18 @@ RSpec.describe Dimensions::Month, type: :model do
     end
   end
 
+  describe '.current' do
+    subject { described_class }
+
+    it 'returns current month' do
+      Timecop.freeze(2018, 10, 12) do
+        current_month = Dimensions::Month.build_from_string('2018-10')
+
+        expect(subject.current).to eq(current_month)
+      end
+    end
+  end
+
   describe '.build' do
     subject { described_class }
 

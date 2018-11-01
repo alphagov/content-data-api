@@ -11,6 +11,10 @@ class Dimensions::Month < ApplicationRecord
     build Date.new(year.to_i, month.to_i, 1)
   end
 
+  def self.current
+    build(Date.today)
+  end
+
   def self.build(date)
     new(
       id: format('%04d-%02d', date.year, date.month),
