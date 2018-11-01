@@ -41,6 +41,8 @@ RSpec.describe Etl::Master::MasterProcessor do
 
   it 'update GA metrics in the Facts table' do
     expect(Etl::GA::ViewsAndNavigationProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
+    expect(Etl::GA::UserFeedbackProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
+    expect(Etl::GA::InternalSearchProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
 
     subject.process
   end
@@ -49,6 +51,24 @@ RSpec.describe Etl::Master::MasterProcessor do
     expect(Etl::Feedex::Processor).to receive(:process).with(date: Date.new(2018, 2, 19))
 
     subject.process
+  end
+
+  describe 'Aggregations' do
+    context 'when the day before' do
+      it 'calculate the aggregations' do
+        expect(Etl::Aggregations::Monthly).to receive(:process).with(date: Date.new(2018, 2, 19))
+
+        subject.process
+      end
+    end
+
+    context 'when not the day before' do
+      it 'does not calculate the aggregations' do
+        expect(Etl::Aggregations::Monthly).to_not receive(:process).with(date: Date.new(2018, 2, 18))
+
+        subject.process(date: Date.new(2018, 2, 18))
+      end
+    end
   end
 
   describe 'Monitoring' do
@@ -67,6 +87,12 @@ RSpec.describe Etl::Master::MasterProcessor do
 
       it 'monitor Facts' do
         expect(Monitor::Facts).to receive(:run)
+
+        subject.process
+      end
+
+      it 'monitor Aggregations' do
+        expect(Monitor::Aggregations).to receive(:run)
 
         subject.process
       end

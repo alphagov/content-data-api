@@ -22,6 +22,7 @@ RSpec.describe 'Master process spec' do
     validate_facts_metrics!
     validate_google_analytics!
     validate_feedex!
+    validate_aggregations!
     validate_monitoring!
   end
 
@@ -54,6 +55,18 @@ RSpec.describe 'Master process spec' do
       useful_yes: 1,
       useful_no: 1,
       satisfaction: 0.5
+    )
+  end
+
+  def validate_aggregations!
+    expect(Aggregations::MonthlyMetric.count).to eq(2)
+
+    aggregation = Aggregations::MonthlyMetric.find_by(dimensions_edition_id: latest_version.id)
+    expect(aggregation).to have_attributes(
+      dimensions_month_id: '2018-02',
+      dimensions_edition_id: latest_version.id,
+      pviews: 11,
+      upviews: 12,
     )
   end
 

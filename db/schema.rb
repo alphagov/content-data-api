@@ -15,6 +15,29 @@ ActiveRecord::Schema.define(version: 2018_11_01_163411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "aggregations_monthly_metrics", force: :cascade do |t|
+    t.string "dimensions_month_id", null: false
+    t.bigint "dimensions_edition_id", null: false
+    t.integer "pviews", default: 0, null: false
+    t.integer "upviews", default: 0, null: false
+    t.integer "feedex", default: 0, null: false
+    t.integer "useful_yes", default: 0, null: false
+    t.integer "useful_no", default: 0, null: false
+    t.integer "searches", default: 0, null: false
+    t.integer "exits", default: 0, null: false
+    t.integer "entrances", default: 0, null: false
+    t.integer "bounce_rate", default: 0, null: false
+    t.integer "avg_page_time", default: 0, null: false
+    t.integer "bounces", default: 0, null: false
+    t.integer "page_time", default: 0, null: false
+    t.float "satisfaction", default: 0.0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dimensions_edition_id", "dimensions_month_id"], name: "index_editions_months_unique", unique: true
+    t.index ["dimensions_edition_id"], name: "index_aggregations_monthly_metrics_on_dimensions_edition_id"
+    t.index ["dimensions_month_id"], name: "index_aggregations_monthly_metrics_on_dimensions_month_id"
+  end
+
   create_table "dimensions_dates", primary_key: "date", id: :date, force: :cascade do |t|
     t.string "date_name", null: false
     t.string "date_name_abbreviated", null: false
@@ -64,12 +87,11 @@ ActiveRecord::Schema.define(version: 2018_11_01_163411) do
     t.string "previous_version"
     t.string "update_type"
     t.datetime "last_edited_at"
-    t.json "raw_json"
     t.string "warehouse_item_id", null: false
+    t.json "raw_json"
     t.boolean "withdrawn", null: false
     t.boolean "historical", null: false
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
     t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "document_type"], name: "index_dimensions_editions_on_latest_and_document_type"
@@ -80,6 +102,18 @@ ActiveRecord::Schema.define(version: 2018_11_01_163411) do
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
     t.index ["warehouse_item_id", "latest"], name: "index_dimensions_editions_warehouse_item_id_latest"
     t.index ["warehouse_item_id"], name: "index_dimensions_editions_warehouse_item_id"
+  end
+
+  create_table "dimensions_months", id: false, force: :cascade do |t|
+    t.string "id", null: false
+    t.string "month_name", null: false
+    t.string "month_name_abbreviated", null: false
+    t.integer "month_number", null: false
+    t.integer "quarter", null: false
+    t.integer "year", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["id"], name: "index_dimensions_months_on_id", unique: true
   end
 
   create_table "events_feedexes", force: :cascade do |t|
@@ -160,6 +194,7 @@ ActiveRecord::Schema.define(version: 2018_11_01_163411) do
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
+  add_foreign_key "aggregations_monthly_metrics", "dimensions_months"
   add_foreign_key "facts_editions", "dimensions_dates", primary_key: "date"
   add_foreign_key "facts_editions", "dimensions_editions"
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"

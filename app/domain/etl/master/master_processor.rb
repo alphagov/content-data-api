@@ -18,6 +18,8 @@ class Etl::Master::MasterProcessor
       Etl::GA::UserFeedbackProcessor.process(date: date)
       Etl::GA::InternalSearchProcessor.process(date: date)
       Etl::Feedex::Processor.process(date: date)
+
+      Etl::Aggregations::Monthly.process(date: date) unless historic_data?
     end
 
     time(process: :monitor) do
@@ -25,6 +27,7 @@ class Etl::Master::MasterProcessor
         Monitor::Etl.run
         Monitor::Dimensions.run
         Monitor::Facts.run
+        Monitor::Aggregations.run
       end
     end
   end
