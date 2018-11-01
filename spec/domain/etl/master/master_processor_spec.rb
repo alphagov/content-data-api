@@ -53,10 +53,22 @@ RSpec.describe Etl::Master::MasterProcessor do
     subject.process
   end
 
-  it 'calculate the aggregations' do
-    expect(Etl::Aggregations::Monthly).to receive(:process).with(date: Date.new(2018, 2, 19))
+  describe 'Aggregations' do
+    context 'when the day before' do
+      it 'calculate the aggregations' do
+        expect(Etl::Aggregations::Monthly).to receive(:process).with(date: Date.new(2018, 2, 19))
 
-    subject.process
+        subject.process
+      end
+    end
+
+    context 'when not the day before' do
+      it 'does not calculate the aggregations' do
+        expect(Etl::Aggregations::Monthly).to_not receive(:process).with(date: Date.new(2018, 2, 18))
+
+        subject.process(date: Date.new(2018, 2, 18))
+      end
+    end
   end
 
   describe 'Monitoring' do

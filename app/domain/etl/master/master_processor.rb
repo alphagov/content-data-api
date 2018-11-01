@@ -19,7 +19,7 @@ class Etl::Master::MasterProcessor
       Etl::GA::InternalSearchProcessor.process(date: date)
       Etl::Feedex::Processor.process(date: date)
 
-      Etl::Aggregations::Monthly.process(date: date)
+      Etl::Aggregations::Monthly.process(date: date) unless historic_data?
     end
 
     time(process: :monitor) do
