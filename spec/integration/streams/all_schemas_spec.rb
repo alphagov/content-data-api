@@ -1,7 +1,7 @@
 require 'govuk_message_queue_consumer/test_helpers'
 
 RSpec.describe 'Process all schemas' do
-  let(:subject) { PublishingAPI::Consumer.new }
+  let(:subject) { Streams::PublishingAPI::Consumer.new }
 
   SchemasIterator.each_schema do |schema_name, schema|
     %w{major minor links republish unpublish}.each do |update_type|

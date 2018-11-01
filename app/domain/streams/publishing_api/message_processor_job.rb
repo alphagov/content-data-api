@@ -1,4 +1,4 @@
-module PublishingAPI
+module Streams::PublishingAPI
   class MessageProcessorJob < ActiveJob::Base
     def perform(payload, routing_key)
       message = Messages::Factory.build(payload)

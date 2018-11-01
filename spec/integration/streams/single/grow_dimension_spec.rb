@@ -1,6 +1,6 @@
 require 'govuk_message_queue_consumer/test_helpers'
 
-RSpec.describe PublishingAPI::Consumer do
+RSpec.describe Streams::PublishingAPI::Consumer do
   include PublishingEventProcessingSpecHelper
 
   let(:subject) { described_class.new }

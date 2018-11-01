@@ -1,6 +1,6 @@
 require 'sidekiq/testing'
 RSpec.describe 'Import edition metrics' do
-  subject { PublishingAPI::Consumer.new }
+  subject { Streams::PublishingAPI::Consumer.new }
 
   it 'stores content edition metrics' do
     message = build(:message, schema_name: 'publication', base_path: '/new-path')
