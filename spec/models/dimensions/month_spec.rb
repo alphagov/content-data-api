@@ -64,9 +64,9 @@ RSpec.describe Dimensions::Month, type: :model do
     end
 
     it 'uses two digits to build the month' do
-      date = subject.build(2018, 2)
+      date = subject.build(Date.new(2018, 12, 1))
 
-      expect(date).to have_attributes(id: '2018-02')
+      expect(date).to have_attributes(id: '2018-12')
     end
   end
 end

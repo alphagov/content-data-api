@@ -7,7 +7,6 @@ RSpec.describe Etl::Aggregations::Monthly do
   let(:edition2) { create :edition, base_path: '/path2', latest: true, date: '2018-02-20' }
 
   before do
-
   end
 
   it 'calculates monthly aggregations for a given date' do

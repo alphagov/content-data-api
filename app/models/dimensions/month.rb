@@ -1,4 +1,6 @@
 class Dimensions::Month < ApplicationRecord
+  self.primary_key = :id
+
   validates :year, presence: true, numericality: { only_integer: true }
   validates :quarter, presence: true, numericality: { only_integer: true }, inclusion: { in: (1..4) }
   validates :month_number, presence: true, numericality: { only_integer: true }, inclusion: { in: (1..12) }
