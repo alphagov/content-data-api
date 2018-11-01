@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_31_124930) do
+ActiveRecord::Schema.define(version: 2018_11_01_163411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 2018_10_31_124930) do
     t.integer "year", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["id"], name: "index_dimensions_months_on_id", unique: true
   end
 
   create_table "events_feedexes", force: :cascade do |t|
@@ -193,6 +194,7 @@ ActiveRecord::Schema.define(version: 2018_10_31_124930) do
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
+  add_foreign_key "aggregations_monthly_metrics", "dimensions_months"
   add_foreign_key "facts_editions", "dimensions_dates", primary_key: "date"
   add_foreign_key "facts_editions", "dimensions_editions"
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
