@@ -6,9 +6,6 @@ RSpec.describe Etl::Aggregations::Monthly do
   let(:edition1) { create :edition, base_path: '/path1', latest: true, date: '2018-02-20' }
   let(:edition2) { create :edition, base_path: '/path2', latest: true, date: '2018-02-20' }
 
-  before do
-  end
-
   it 'calculates monthly aggregations for a given date' do
     create :metric, edition: edition1, date: '2018-02-20', pviews: 20, upviews: 10
     create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
@@ -52,6 +49,17 @@ RSpec.describe Etl::Aggregations::Monthly do
       pviews: 40,
       upviews: 20,
     )
+  end
+
+  Metric.daily_metrics.map(&:name).each do |metric_name|
+    it "Calculates aggregations for metric: `#{metric_name}`" do
+      create :metric, edition: edition1, date: '2018-02-21', metric_name => 10
+      create :metric, edition: edition1, date: '2018-02-22', metric_name => 20
+
+      subject.process(date: date)
+
+      expect(Aggregations::MonthlyMetric.first).to have_attributes(metric_name => 30)
+    end
   end
 
   describe 'it can run multiple times for any month' do
