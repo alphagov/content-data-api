@@ -5,6 +5,12 @@ class Dimensions::Month < ApplicationRecord
   validates :month_name, presence: true, inclusion: { in: ::Date::MONTHNAMES }
   validates :month_name_abbreviated, presence: true, inclusion: { in: ::Date::ABBR_MONTHNAMES }
 
+  def self.build_from_string(month_s)
+    year, month = *month_s.split('-')
+
+    build Date.new(year.to_i, month.to_i, 1)
+  end
+
   def self.build(date)
     new(
       id: format('%04d-%02d', date.year, date.month),
