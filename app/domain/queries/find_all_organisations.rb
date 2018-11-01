@@ -5,8 +5,15 @@ class Queries::FindAllOrganisations
 
   def retrieve
     Dimensions::Edition.latest
-      .select(:organisation_id, :primary_organisation_title)
-      .distinct
-      .order(:primary_organisation_title).to_a
+      .where(document_type: 'organisation')
+      .order(:title)
+      .pluck(:content_id, :title)
+      .map(&method(:convert_result))
+  end
+
+private
+
+  def convert_result(arry)
+    { organisation_id: arry[0], title: arry[1] }
   end
 end

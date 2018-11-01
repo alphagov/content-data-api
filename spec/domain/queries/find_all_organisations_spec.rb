@@ -2,17 +2,16 @@ RSpec.describe Queries::FindAllOrganisations do
   context 'when we have data' do
     before do
       create :user
-      create :edition, organisation_id: 'org-1-id', primary_organisation_title: 'z Org'
-      create :edition, organisation_id: 'org-1-id', primary_organisation_title: 'z Org'
-      create :edition, organisation_id: 'org-2-id', primary_organisation_title: 'a Org'
+      create :edition, document_type: 'organisation', content_id: 'org-1-id', title: 'z Org'
+      create :edition, document_type: 'organisation', content_id: 'org-2-id', title: 'a Org'
     end
 
     it 'returns distinct organisations ordered by primary_organisation_title' do
       results = described_class.retrieve
-      expect(results.pluck(:primary_organisation_title, :organisation_id)).to eq([
-                          ['a Org', 'org-2-id'],
-                          ['z Org', 'org-1-id']
-                        ])
+      expect(results).to eq([
+                            { title: 'a Org', organisation_id: 'org-2-id' },
+                            { title: 'z Org', organisation_id: 'org-1-id' }
+                          ])
     end
   end
 

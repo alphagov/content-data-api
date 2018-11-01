@@ -1,9 +1,8 @@
 RSpec.describe '/organisations' do
   before do
     create :user
-    create :edition, organisation_id: 'org-1-id', primary_organisation_title: 'z Org'
-    create :edition, organisation_id: 'org-1-id', primary_organisation_title: 'z Org'
-    create :edition, organisation_id: 'org-2-id', primary_organisation_title: 'a Org'
+    create :edition, document_type: 'organisation', content_id: 'org-1-id', title: 'z Org'
+    create :edition, document_type: 'organisation', content_id: 'org-2-id', title: 'a Org'
   end
 
   it 'returns distinct organisations ordered by title' do
