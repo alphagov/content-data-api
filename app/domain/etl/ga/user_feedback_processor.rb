@@ -11,7 +11,7 @@ class Etl::GA::UserFeedbackProcessor
   end
 
   def process
-    time(process: :ga) do
+    time(process: :ga_feedback) do
       extract_events
       transform_events
       load_metrics
