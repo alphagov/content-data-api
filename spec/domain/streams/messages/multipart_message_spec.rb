@@ -1,4 +1,6 @@
 RSpec.describe Streams::Messages::MultipartMessage do
+  include PublishingEventProcessingSpecHelper
+
   subject { described_class }
   include_examples 'BaseMessage#historically_political?'
   include_examples 'BaseMessage#withdrawn_notice?'
@@ -81,6 +83,54 @@ RSpec.describe Streams::Messages::MultipartMessage do
       base_path = subject.new(build(:message, :with_parts).payload).base_path_for_part(part_one, 1)
 
       expect(base_path).to eq("/base-path/part-1")
+    end
+  end
+
+  describe '#extract_edition_attributes' do
+    let(:instance) { subject.new(message.payload) }
+
+    context 'when the schema is a Guide' do
+      let(:message) do
+        message_attributes = message_attributes('document_type': 'guide')
+        msg = build(:message, :with_parts, attributes: message_attributes)
+        msg.payload['details']['body'] = '<p>some content</p>'
+        msg
+      end
+
+      it 'return the attributes in an array' do
+        attributes = instance.extract_edition_attributes
+        common_attributes = expected_raw_attributes(
+          content_id: message.payload['content_id'],
+          raw_json: message.payload,
+          schema_name: 'guide'
+        ) 
+        expect(attributes).to eq([
+          common_attributes.merge(
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path",
+            document_text: 'Here 1',
+            title: 'the-title: Part 1',
+            base_path: '/base-path'
+          ),
+          common_attributes.merge(
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part2",
+            document_text: 'be 2',
+            title: 'the-title: Part 2',
+            base_path: '/base-path/part2'
+          ),
+          common_attributes.merge(
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part3",
+            document_text: 'some 3',
+            title: 'the-title: Part 3',
+            base_path: '/base-path/part3'
+          ),
+          common_attributes.merge(
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part4",
+            document_text: 'content 4.',
+            title: 'the-title: Part 4',
+            base_path: '/base-path/part4'
+          )
+        ])
+      end
     end
   end
 

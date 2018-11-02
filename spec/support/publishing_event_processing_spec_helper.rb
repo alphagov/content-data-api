@@ -50,6 +50,8 @@ module PublishingEventProcessingSpecHelper
       primary_organisation_withdrawn: "false",
       public_updated_at: "2018-04-20T12:00:40+01:00",
       first_published_at: "2018-04-19T12:00:40+01:00",
+      withdrawn: false,
+      historical: false
     ).merge(overrides)
   end
 
