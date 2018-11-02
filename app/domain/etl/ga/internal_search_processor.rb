@@ -11,7 +11,7 @@ class Etl::GA::InternalSearchProcessor
   end
 
   def process
-    time(process: :ga) do
+    time(process: :ga_search) do
       extract_events
       transform_events
       load_metrics

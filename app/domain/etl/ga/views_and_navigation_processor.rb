@@ -11,7 +11,7 @@ class Etl::GA::ViewsAndNavigationProcessor
   end
 
   def process
-    time(process: :ga) do
+    time(process: :ga_views_navigation) do
       extract_events
       transform_events
       load_metrics

@@ -10,9 +10,11 @@ class Etl::Aggregations::Monthly
   end
 
   def process
-    create_month
-    delete_month
-    aggregate_month
+    time(process: :aggregations) do
+      create_month
+      delete_month
+      aggregate_month
+    end
   end
 
 private
