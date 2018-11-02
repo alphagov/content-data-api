@@ -5,7 +5,7 @@ class Streams::Messages::BaseMessage
     @payload = payload
   end
 
-  def build_attributes(base_path:, title:, document_text:)
+  def build_attributes(base_path:, title:, document_text:, warehouse_item_id:)
     {
       content_id: content_id,
       base_path: base_path,
@@ -29,6 +29,7 @@ class Streams::Messages::BaseMessage
       analytics_identifier: @payload.fetch('analytics_identifier', nil),
       update_type: @payload.fetch('update_type', nil),
       latest: true,
+      warehouse_item_id: warehouse_item_id,
       withdrawn: withdrawn_notice?,
       historical: historically_political?,
       raw_json: @payload

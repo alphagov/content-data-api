@@ -19,16 +19,12 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       attributes = instance.extract_edition_attributes
       expect(attributes.length).to eq(1)
       expect(attributes.first).to eq(
-        expected_attributes(
+        expected_raw_attributes(
           content_id: message.payload['content_id'],
-          base_path: '/base-path',
-          title: 'the-title',
           document_text: 'some content',
           historical: false,
+          warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}",
           withdrawn: true,
-          primary_organisation_withdrawn: "false",
-          public_updated_at: "2018-04-20T12:00:40+01:00",
-          first_published_at: "2018-04-19T12:00:40+01:00",
           raw_json: message.payload
         )
       )
