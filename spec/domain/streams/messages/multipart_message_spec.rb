@@ -132,6 +132,45 @@ RSpec.describe Streams::Messages::MultipartMessage do
         ])
       end
     end
+
+    context 'when the schema is a Travel Advice' do
+      let(:message) do
+        override_attributes = message_attributes.reject { |k, _ | k == 'document_type' }
+        msg = build(:message, :travel_advice, attributes: override_attributes)
+        msg.payload['details']['body'] = '<p>some content</p>'
+        msg
+      end
+
+      it 'return the attributes in an array' do
+        attributes = instance.extract_edition_attributes
+        common_attributes = expected_raw_attributes(
+          content_id: message.payload['content_id'],
+          raw_json: message.payload,
+          schema_name: 'travel_advice',
+          document_type: 'travel_advice'
+        ) 
+        expect(attributes).to eq([
+          common_attributes.merge(
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path",
+            document_text: 'summary content',
+            title: 'the-title: Summary',
+            base_path: '/base-path'
+          ),
+          common_attributes.merge(
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part1",
+            document_text: 'Here 1',
+            title: 'the-title: Part 1',
+            base_path: '/base-path/part1'
+          ),
+          common_attributes.merge(
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part2",
+            document_text: 'be 2',
+            title: 'the-title: Part 2',
+            base_path: '/base-path/part2'
+          )
+        ])
+      end
+    end
   end
 
   context "Travel Advice" do
