@@ -39,7 +39,7 @@ RSpec.describe Streams::Consumer do
     expect(Dimensions::Edition.first).to have_attributes(
       publishing_api_payload_version: 2,
       latest: true
-)
+    )
   end
 
   it 'does not grow the dimension if the event carries no changes in an attribute' do

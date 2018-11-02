@@ -1,4 +1,8 @@
 class Streams::Handlers::BaseHandler
+  def find_old_edition(attrs)
+    { attrs: attrs, old_edition: Dimensions::Edition.find_by(content_id: attrs[:content_id], locale: attrs[:locale], latest: true) }
+  end
+
   def all_attributes
     {
       content_id: content_id,

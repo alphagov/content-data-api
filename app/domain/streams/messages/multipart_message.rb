@@ -61,7 +61,7 @@ module Streams
       @payload.fetch('title')
     end
 
-    private
+  private
 
     def document_text_for_part(slug)
       Etl::Edition::Content::Parser.extract_content(@payload, subpage_path: slug)

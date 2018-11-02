@@ -103,7 +103,7 @@ RSpec.describe Streams::Messages::MultipartMessage do
           content_id: message.payload['content_id'],
           raw_json: message.payload,
           schema_name: 'guide'
-        ) 
+        )
         expect(attributes).to eq([
           common_attributes.merge(
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path",
@@ -135,7 +135,7 @@ RSpec.describe Streams::Messages::MultipartMessage do
 
     context 'when the schema is a Travel Advice' do
       let(:message) do
-        override_attributes = message_attributes.reject { |k, _ | k == 'document_type' }
+        override_attributes = message_attributes.reject { |k, _| k == 'document_type' }
         msg = build(:message, :travel_advice, attributes: override_attributes)
         msg.payload['details']['body'] = '<p>some content</p>'
         msg
@@ -148,7 +148,7 @@ RSpec.describe Streams::Messages::MultipartMessage do
           raw_json: message.payload,
           schema_name: 'travel_advice',
           document_type: 'travel_advice'
-        ) 
+        )
         expect(attributes).to eq([
           common_attributes.merge(
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path",
