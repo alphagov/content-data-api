@@ -15,10 +15,9 @@ RSpec.describe Streams::Messages::SingleItemMessage do
     end
     let(:instance) { subject.new(message.payload) }
 
-    it 'return the attributes as the single item in an array' do
+    it 'returns the attributes' do
       attributes = instance.extract_edition_attributes
-      expect(attributes.length).to eq(1)
-      expect(attributes.first).to eq(
+      expect(attributes).to eq(
         expected_raw_attributes(
           content_id: message.payload['content_id'],
           document_text: 'some content',

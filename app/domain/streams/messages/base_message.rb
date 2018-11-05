@@ -28,7 +28,7 @@ class Streams::Messages::BaseMessage
       rendering_app: @payload.fetch('rendering_app', nil),
       analytics_identifier: @payload.fetch('analytics_identifier', nil),
       update_type: @payload.fetch('update_type', nil),
-      latest: true,
+      latest: false,
       warehouse_item_id: warehouse_item_id,
       withdrawn: withdrawn_notice?,
       historical: historically_political?,

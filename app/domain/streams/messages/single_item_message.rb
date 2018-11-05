@@ -5,12 +5,12 @@ module Streams
     end
 
     def extract_edition_attributes
-      [build_attributes(
+      build_attributes(
         base_path: base_path,
         title: title,
         document_text: document_text,
         warehouse_item_id: "#{content_id}:#{locale}"
-      )]
+      )
     end
 
     def handler
@@ -24,7 +24,7 @@ module Streams
     end
 
     def title
-      @payload.fetch('title')
+      @payload['title']
     end
 
     def document_text

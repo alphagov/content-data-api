@@ -10,19 +10,20 @@ class Streams::Handlers::MultipartHandler < Streams::Handlers::BaseHandler
   attr_reader :message
 
   def process
-    deprecate_redundant_paths
-    message.parts.each.with_index do |part, index|
-      update_part(part, index)
-    end
+    edition_attribute_list = message.extract_edition_attributes
+    base_paths = edition_attribute_list.map { |hsh| hsh[:base_path] }
+    deprecate_redundant_paths(base_paths)
+    update_editions(edition_attribute_list.map(&method(:find_old_edition)))
   end
 
 private
 
-  def deprecate_redundant_paths
-    parts_base_paths = message.parts.map.with_index do |part, index|
-      message.base_path_for_part(part, index)
-    end
-    Dimensions::Edition.outdated_subpages(content_id, locale, parts_base_paths).update(latest: false)
+  def find_old_edition(hash)
+    { attrs: hash, old_edition: Dimensions::Edition.latest_by_base_path(hash[:base_path]).first }
+  end
+
+  def deprecate_redundant_paths(current_base_paths)
+    Dimensions::Edition.outdated_subpages(content_id, locale, current_base_paths).update(latest: false)
   end
 
   def update_part(part, index)
