@@ -13,29 +13,10 @@ class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
     attrs = message.extract_edition_attributes
     update_editions [attrs: attrs, old_edition: find_old_edition(attrs[:content_id], attrs[:locale])]
   end
-  # def process
-  #   @old_edition = Dimensions::Edition.find_by(content_id: content_id, locale: locale, latest: true)
-  #   document_text = Etl::Edition::Content::Parser.extract_content(message.payload)
-  #   return unless update_required? old_edition: old_edition, title: title, base_path: base_path, document_text: document_text
-  #   new_edition(document_text).promote!(old_edition)
-  # end
 
 private
 
   def find_old_edition(content_id, locale)
     Dimensions::Edition.find_by(content_id: content_id, locale: locale, latest: true)
-  end
-
-  def new_edition(document_text)
-    new_edition = Dimensions::Edition.new(
-      base_path: base_path,
-      title: title,
-      document_text: document_text,
-      warehouse_item_id: "#{content_id}:#{locale}",
-      **all_attributes
-    )
-    new_edition.latest = false
-    new_edition.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_edition, new_edition))
-    new_edition
   end
 end

@@ -25,22 +25,4 @@ private
   def deprecate_redundant_paths(current_base_paths)
     Dimensions::Edition.outdated_subpages(content_id, locale, current_base_paths).update(latest: false)
   end
-
-  def update_part(part, index)
-    base_path = message.base_path_for_part(part, index)
-    old_edition = Dimensions::Edition.latest_by_base_path(base_path).first
-    title = message.title_for(part)
-    document_text = Etl::Edition::Content::Parser.extract_content(message.payload, subpage_path: part['slug'])
-    return unless update_required?(old_edition: old_edition, base_path: base_path, title: title, document_text: document_text)
-    new_edition = Dimensions::Edition.new(
-      base_path: base_path,
-      title: title,
-      document_text: document_text,
-      warehouse_item_id: "#{content_id}:#{locale}:#{base_path}",
-      **all_attributes
-    )
-    new_edition.latest = false
-    new_edition.assign_attributes(facts_edition: Etl::Edition::Processor.process(old_edition, new_edition))
-    new_edition.promote!(old_edition)
-  end
 end
