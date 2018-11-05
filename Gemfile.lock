@@ -173,7 +173,7 @@ GEM
       sidekiq (>= 5, < 6)
       sidekiq-logging-json (~> 0.0)
       sidekiq-statsd (~> 0.1)
-    groupdate (4.0.2)
+    groupdate (4.1.0)
       activesupport (>= 4.2)
     guard (2.14.2)
       formatador (>= 0.2.4)
