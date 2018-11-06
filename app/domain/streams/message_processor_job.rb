@@ -13,9 +13,7 @@ module Streams
       Monitor::Messages.run(routing_key)
 
       ActiveRecord::Base.transaction do
-        handler = message.handler
-
-        handler.process(message)
+        message.handler.process
       end
     end
   end

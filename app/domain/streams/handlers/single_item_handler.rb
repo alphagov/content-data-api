@@ -3,14 +3,13 @@ class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
     new(*args).process
   end
 
-  def initialize(message)
-    @message = message
+  def initialize(attrs)
+    @attrs = attrs
   end
 
-  attr_reader :message, :old_edition
+  attr_reader :attrs, :old_edition
 
   def process
-    attrs = message.extract_edition_attributes
     update_editions [attrs: attrs, old_edition: find_old_edition(attrs[:content_id], attrs[:locale])]
   end
 

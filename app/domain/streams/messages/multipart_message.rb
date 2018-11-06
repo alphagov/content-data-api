@@ -9,7 +9,11 @@ module Streams
     end
 
     def handler
-      Streams::Handlers::MultipartHandler
+      Streams::Handlers::MultipartHandler.new(
+        extract_edition_attributes,
+        content_id,
+        locale
+      )
     end
 
     def extract_edition_attributes

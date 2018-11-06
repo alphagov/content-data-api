@@ -14,7 +14,7 @@ module Streams
     end
 
     def handler
-      Streams::Handlers::SingleItemHandler
+      Streams::Handlers::SingleItemHandler.new(extract_edition_attributes)
     end
 
   private

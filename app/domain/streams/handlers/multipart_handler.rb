@@ -1,19 +1,16 @@
 class Streams::Handlers::MultipartHandler < Streams::Handlers::BaseHandler
-  def self.process(*args)
-    new(*args).process
+  def initialize(attr_list, content_id, locale)
+    @attr_list = attr_list
+    @content_id = content_id
+    @locale = locale
   end
 
-  def initialize(message)
-    @message = message
-  end
-
-  attr_reader :message
+  attr_reader :attr_list, :content_id, :locale
 
   def process
-    edition_attribute_list = message.extract_edition_attributes
-    base_paths = edition_attribute_list.map { |hsh| hsh[:base_path] }
+    base_paths = attr_list.map { |hsh| hsh[:base_path] }
     deprecate_redundant_paths(base_paths)
-    update_editions(edition_attribute_list.map(&method(:find_old_edition)))
+    update_editions(attr_list.map(&method(:find_old_edition)))
   end
 
 private
