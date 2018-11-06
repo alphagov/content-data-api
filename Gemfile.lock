@@ -55,6 +55,7 @@ GEM
     ast (2.4.0)
     autoprefixer-rails (8.0.0)
       execjs
+    awesome_print (1.8.0)
     aws-xray-sdk (0.10.2)
       oj (~> 3.0)
     better_errors (2.5.0)
@@ -492,6 +493,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
+  awesome_print
   better_errors
   binding_of_caller
   byebug

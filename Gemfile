@@ -12,6 +12,7 @@ gem 'plek'
 
 # Third party gems
 gem 'activerecord-import'
+gem 'awesome_print'
 gem 'chartkick'
 gem 'deepsort'
 gem 'draper'
