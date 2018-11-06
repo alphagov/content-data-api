@@ -5,7 +5,7 @@ module Streams
     def perform(payload, routing_key)
       message = Messages::Factory.build(payload)
 
-      if message.invalid? || message.is_old_message?
+      if message.invalid?
         Monitor::Messages.increment_discarded
         return
       end
