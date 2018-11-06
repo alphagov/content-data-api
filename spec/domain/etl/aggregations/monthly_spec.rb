@@ -33,6 +33,20 @@ RSpec.describe Etl::Aggregations::Monthly do
     )
   end
 
+  it 'can be applied multiple times for different months' do
+    create :metric, edition: edition1, date: '2018-01-31', pviews: 20, upviews: 10
+    create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
+    create :metric, edition: edition1, date: '2018-03-01', pviews: 60, upviews: 30
+
+    subject.process(date: Date.new(2018, 1, 1))
+    subject.process(date: Date.new(2018, 2, 1))
+    subject.process(date: Date.new(2018, 3, 1))
+
+    results = Aggregations::MonthlyMetric.all
+
+    expect(results.count).to eq(3)
+  end
+
   it 'does not include metrics from other months in the calculations' do
     create :metric, edition: edition1, date: '2018-01-31', pviews: 20, upviews: 10
     create :metric, edition: edition1, date: '2018-02-21', pviews: 40, upviews: 20
