@@ -28,6 +28,8 @@ module Streams
       end
     end
 
+  private
+
     def parts
       message_parts = @payload.dig('details', 'parts').dup
       if doc_type == 'travel_advice'
@@ -64,8 +66,6 @@ module Streams
     def main_title
       @payload.fetch('title')
     end
-
-  private
 
     def document_text_for_part(slug)
       Etl::Edition::Content::Parser.extract_content(@payload, subpage_path: slug)

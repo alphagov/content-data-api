@@ -41,27 +41,12 @@ class Streams::Messages::BaseMessage
     mandatory_fields.any?(&:nil?)
   end
 
-  def is_old_message?
-    payload_version = @payload.fetch('payload_version').to_i
-    locale = @payload.fetch('locale', nil)
-    content_id = @payload.fetch('content_id')
-
-    payload_version <= Dimensions::Edition.where(
-      content_id: content_id,
-      locale: locale
-    ).maximum('publishing_api_payload_version').to_i
-  end
-
   def withdrawn_notice?
     @payload.dig('withdrawn_notice', :explanation).present?
   end
 
   def historically_political?
     historical? && political?
-  end
-
-  def base_path
-    @payload.fetch('base_path')
   end
 
   def content_id

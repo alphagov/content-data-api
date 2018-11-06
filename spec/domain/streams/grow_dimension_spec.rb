@@ -16,7 +16,7 @@ RSpec.describe Streams::GrowDimension do
              )).to eq(true)
     end
 
-    it 'returns false if payload version is  the same' do
+    it 'returns false if payload version is the same' do
       expect(subject.should_grow?(
                old_edition: edition,
                attrs: new_attrs.merge(publishing_api_payload_version: '4')
