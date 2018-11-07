@@ -68,7 +68,7 @@ module Streams
     end
 
     def document_text_for_part(slug)
-      Etl::Edition::Content::Parser.extract_content(@payload, subpage_path: slug)
+      ::Etl::Edition::Content::Parser.extract_content(@payload, subpage_path: slug)
     end
   end
 end

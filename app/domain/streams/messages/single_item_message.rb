@@ -28,7 +28,7 @@ module Streams
     end
 
     def document_text
-      Etl::Edition::Content::Parser.extract_content(@payload)
+      ::Etl::Edition::Content::Parser.extract_content(@payload)
     end
   end
 end
