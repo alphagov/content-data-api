@@ -1,12 +1,10 @@
 class Etl::Edition::Content::Parser
-  include Singleton
-
   def initialize
     register_parsers
   end
 
-  def self.extract_content(*args, subpage_path: nil)
-    instance.extract_content(*args, subpage_path: subpage_path)
+  def self.extract_content(json, subpage_path: nil)
+    new.extract_content(json, subpage_path: subpage_path)
   end
 
   def extract_content(json, subpage_path: nil)

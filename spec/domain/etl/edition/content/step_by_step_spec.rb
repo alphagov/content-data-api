@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   it "returns content json if schema_name is 'step_by_step_nav'" do
     json = { schema_name: "step_by_step_nav", details: { step_by_step_nav: {

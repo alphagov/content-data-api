@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   describe "#extract_content" do
     context "when valid schema" do
@@ -25,7 +25,7 @@ RSpec.describe Etl::Edition::Content::Parser do
     context "when invalid schema" do
       describe "has no schema_name and no base_path" do
         it "raises an InvalidSchemaError and returns nil" do
-          subject.extract_content document_type: 'answer'
+          subject.extract_content(document_type: 'answer')
           expect(GovukError).to receive(:notify).
             with(Etl::Edition::Content::Parser::InvalidSchemaError.new("Schema does not exist: "), extra: { base_path: "" })
           expect(subject.extract_content(document_type: 'answer')).to be_nil

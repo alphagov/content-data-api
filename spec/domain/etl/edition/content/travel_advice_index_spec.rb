@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   it "returns nil if json does not have children array" do
     json = { schema_name: "travel_advice_index",

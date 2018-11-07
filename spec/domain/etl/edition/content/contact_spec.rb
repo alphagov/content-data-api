@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   it "does not return phone numbers if there is no 'phone_numbers' key" do
     json = {

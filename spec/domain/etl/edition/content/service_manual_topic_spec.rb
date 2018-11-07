@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   it "returns description if json does not have 'groups' key" do
     json = { schema_name: "service_manual_topic",
