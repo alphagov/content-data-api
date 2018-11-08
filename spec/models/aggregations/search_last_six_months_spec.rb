@@ -1,6 +1,8 @@
 RSpec.describe Aggregations::SearchLastSixMonths, type: :model do
   subject { described_class }
 
+  it_behaves_like 'a materialized view', described_class.table_name
+
   it 'aggregates metrics for the last six months' do
     edition1 = create :edition, base_path: '/path1', date: 2.months.ago
     create :metric, edition: edition1, date: Date.yesterday, upviews: 5, useful_yes: 6, useful_no: 7, searches: 8
