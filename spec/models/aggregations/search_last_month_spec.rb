@@ -1,6 +1,8 @@
 RSpec.describe Aggregations::SearchLastMonth, type: :model do
   subject { described_class }
 
+  it_behaves_like 'a materialized view', described_class.table_name
+
   let(:from) { Date.today.last_month.beginning_of_month }
   let(:to) { Date.today.last_month.end_of_month }
 
