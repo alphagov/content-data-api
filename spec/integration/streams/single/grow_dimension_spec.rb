@@ -39,7 +39,7 @@ RSpec.describe Streams::Consumer do
     expect(Dimensions::Edition.first).to have_attributes(
       publishing_api_payload_version: 2,
       latest: true
-)
+    )
   end
 
   it 'does not grow the dimension if the event carries no changes in an attribute' do
@@ -85,7 +85,7 @@ RSpec.describe Streams::Consumer do
       message.payload['details']['body'] = '<p>some content</p>'
       subject.process(message)
       latest_edition = Dimensions::Edition.latest.find_by(base_path: '/base-path')
-      expect(latest_edition).to have_attributes(expected_attributes(content_id: message.payload['content_id']))
+      expect(latest_edition).to have_attributes(expected_edition_attributes(content_id: message.payload['content_id']))
     end
 
     it 'assigns the same warehouse_item_id to the new edition' do

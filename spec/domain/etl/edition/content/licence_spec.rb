@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   it "returns content json if schema is 'licence'" do
     json = { schema_name: 'licence',

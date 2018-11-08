@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   let(:valid_types) do
     %w[

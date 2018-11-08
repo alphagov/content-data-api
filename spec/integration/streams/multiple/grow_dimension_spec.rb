@@ -193,7 +193,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     it "extracts the Summary" do
       item = Dimensions::Edition.where(base_path: "/travel-advice", latest: true).first
-      expect(item).to have_attributes(expected_attributes(
+      expect(item).to have_attributes(expected_edition_attributes(
                                         base_path: '/travel-advice',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
                                         document_text: "Summary content",
@@ -206,7 +206,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
     it 'extracts /travel-advice/part1' do
       item = Dimensions::Edition.where(base_path: "/travel-advice/part1", latest: true).first
 
-      expect(item).to have_attributes(expected_attributes(
+      expect(item).to have_attributes(expected_edition_attributes(
                                         base_path: '/travel-advice/part1',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
                                         document_text: "Here 1",
@@ -218,7 +218,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     it 'extracts /travel-advice/part2' do
       item = Dimensions::Edition.where(base_path: "/travel-advice/part2", latest: true).first
-      expect(item).to have_attributes(expected_attributes(
+      expect(item).to have_attributes(expected_edition_attributes(
                                         base_path: '/travel-advice/part2',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
                                         document_text: "be 2",
@@ -267,7 +267,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     it 'extracts part 1 on the base path' do
       item = Dimensions::Edition.where(base_path: "/guide", latest: true).first
-      expect(item).to have_attributes(expected_attributes(
+      expect(item).to have_attributes(expected_edition_attributes(
                                         base_path: '/guide',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
                                         document_text: 'Here 1',
@@ -279,7 +279,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     it 'extracts part 2 under the base path' do
       item = Dimensions::Edition.where(base_path: '/guide/part2', latest: true).first
-      expect(item).to have_attributes(expected_attributes(
+      expect(item).to have_attributes(expected_edition_attributes(
                                         base_path: '/guide/part2',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
                                         document_text: 'be 2',
@@ -291,7 +291,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     it 'extracts part 3 under the base path' do
       item = Dimensions::Edition.where(base_path: '/guide/part3', latest: true).first
-      expect(item).to have_attributes(expected_attributes(
+      expect(item).to have_attributes(expected_edition_attributes(
                                         base_path: '/guide/part3',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
                                         document_text: 'some 3',
@@ -303,7 +303,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     it 'extracts part 4 under the base path' do
       item = Dimensions::Edition.where(base_path: '/guide/part4', latest: true).first
-      expect(item).to have_attributes(expected_attributes(
+      expect(item).to have_attributes(expected_edition_attributes(
                                         base_path: '/guide/part4',
                                         content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
                                         document_text: 'content 4.',

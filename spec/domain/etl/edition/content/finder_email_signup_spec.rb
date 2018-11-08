@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   describe "FinderEmailSignup" do
     it "returns description if json does not have 'email_signup_choice' key" do

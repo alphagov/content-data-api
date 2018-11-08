@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   it "returns title and body if json does not have 'children' key" do
     json = {

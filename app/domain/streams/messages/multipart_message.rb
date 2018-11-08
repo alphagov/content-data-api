@@ -9,8 +9,26 @@ module Streams
     end
 
     def handler
-      Streams::Handlers::MultipartHandler
+      Streams::Handlers::MultipartHandler.new(
+        extract_edition_attributes,
+        content_id,
+        locale
+      )
     end
+
+    def extract_edition_attributes
+      parts.map.with_index do |part, index|
+        base_path = base_path_for_part(part, index)
+        build_attributes(
+          base_path: base_path,
+          title: title_for(part),
+          document_text: document_text_for_part(part['slug']),
+          warehouse_item_id: "#{content_id}:#{locale}:#{base_path}"
+        )
+      end
+    end
+
+  private
 
     def parts
       message_parts = @payload.dig('details', 'parts').dup
@@ -47,6 +65,10 @@ module Streams
 
     def main_title
       @payload.fetch('title')
+    end
+
+    def document_text_for_part(slug)
+      ::Etl::Edition::Content::Parser.extract_content(@payload, subpage_path: slug)
     end
   end
 end

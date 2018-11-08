@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   it "returns nil if json does not have 'external_related_links' key" do
     json = { schema_name: "generic_with_external_related_links",

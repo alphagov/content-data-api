@@ -1,5 +1,5 @@
 RSpec.describe Etl::Edition::Content::Parser do
-  subject { described_class.instance }
+  subject { described_class }
 
   describe "EmailAlertSignup" do
     it "returns summary if json does not have 'breadcrumbs' key" do

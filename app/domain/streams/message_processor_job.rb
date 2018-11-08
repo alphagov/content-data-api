@@ -1,11 +1,13 @@
+require_dependency('streams/messages/factory')
+
 module Streams
   class MessageProcessorJob < ActiveJob::Base
     retry_on ActiveRecord::RecordNotUnique, wait: 5.seconds, attempts: 3
 
     def perform(payload, routing_key)
-      message = Messages::Factory.build(payload)
+      message = Streams::Messages::Factory.build(payload)
 
-      if message.invalid? || message.is_old_message?
+      if message.invalid?
         Monitor::Messages.increment_discarded
         return
       end
@@ -13,9 +15,7 @@ module Streams
       Monitor::Messages.run(routing_key)
 
       ActiveRecord::Base.transaction do
-        handler = message.handler
-
-        handler.process(message)
+        message.handler.process
       end
     end
   end

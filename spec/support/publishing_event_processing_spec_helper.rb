@@ -19,7 +19,7 @@ module PublishingEventProcessingSpecHelper
     }.merge(overrides)
   end
 
-  def expected_attributes(overrides = {})
+  def expected_edition_attributes(overrides = {})
     {
       content_id: 'content-id-1',
       base_path: '/base-path',
@@ -43,6 +43,17 @@ module PublishingEventProcessingSpecHelper
       analytics_identifier: 'analytics_identifier',
       update_type: 'major',
     }.merge(overrides)
+  end
+
+  def expected_raw_attributes(overrides = {})
+    expected_edition_attributes.merge(
+      primary_organisation_withdrawn: "false",
+      public_updated_at: "2018-04-20T12:00:40+01:00",
+      first_published_at: "2018-04-19T12:00:40+01:00",
+      withdrawn: false,
+      historical: false,
+      latest: false
+    ).merge(overrides)
   end
 
 private
