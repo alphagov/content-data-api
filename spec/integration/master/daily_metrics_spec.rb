@@ -1,10 +1,6 @@
 RSpec.describe 'Master process spec' do
-  let(:today) { Date.new(2018, 2, 21) }
-  around do |example|
-    Timecop.freeze(today) do
-      example.run
-    end
-  end
+  let(:today) { Date.today.to_s }
+  let(:yesterday) { Date.yesterday.to_s }
 
   let!(:an_edition) { create :edition }
   let!(:outdated_edition) { create :edition, content_id: 'id1', base_path: '/path-1', latest: false }
@@ -41,7 +37,7 @@ RSpec.describe 'Master process spec' do
   def validate_facts_metrics!
     expect(Facts::Metric.count).to eq(2)
     expect(Facts::Metric.pluck(:dimensions_edition_id)).to match_array([an_edition.id, latest_version.id])
-    expect(Facts::Metric.pluck(:dimensions_date_id).uniq).to match_array(Date.new(2018, 2, 20))
+    expect(Facts::Metric.pluck(:dimensions_date_id).uniq).to match_array(yesterday.to_date)
   end
 
   def validate_google_analytics!
@@ -64,7 +60,7 @@ RSpec.describe 'Master process spec' do
 
     aggregation = Aggregations::MonthlyMetric.find_by(dimensions_edition_id: latest_version.id)
     expect(aggregation).to have_attributes(
-      dimensions_month_id: '2018-02',
+      dimensions_month_id: Dimensions::Month.current.id,
       dimensions_edition_id: latest_version.id,
       pviews: 11,
       upviews: 12,
@@ -93,14 +89,14 @@ RSpec.describe 'Master process spec' do
           'page_path' => '/path-1',
           'pviews' => 11,
           'upviews' => 12,
-          'date' => '2018-02-20',
+          'date' => yesterday,
           'process_name' => 'views',
         },
         {
           'page_path' => '/path2',
           'pviews' => 2,
           'upviews' => 2,
-          'date' => '2018-02-20',
+          'date' => yesterday,
           'process_name' => 'views',
         },
       ]
@@ -114,14 +110,14 @@ RSpec.describe 'Master process spec' do
           'page_path' => '/path-1',
           'useful_no' => 1,
           'useful_yes' => 12,
-          'date' => '2018-02-20',
+          'date' => yesterday,
           'process_name' => 'user_feedback',
         },
         {
           'page_path' => '/path2',
           'useful_no' => 122,
           'useful_yes' => 1,
-          'date' => '2018-02-20',
+          'date' => yesterday,
           'process_name' => 'user_feedback',
         },
       ]
@@ -134,13 +130,13 @@ RSpec.describe 'Master process spec' do
         {
           'page_path' => '/path1',
           'searches' => 1,
-          'date' => '2018-02-20',
+          'date' => yesterday,
           'process_name' => 'searches'
         },
         {
           'page_path' => '/path2',
           'searches' => 2,
-          'date' => '2018-02-20',
+          'date' => yesterday,
           'process_name' => 'searches'
         },
       ]
@@ -154,15 +150,15 @@ RSpec.describe 'Master process spec' do
   def stub_feedex_response
     response = {
       'results': [{
-        'date': '2018-02-20',
+        'date': yesterday,
         'path': '/path-1',
         'count': 21
       }, {
-        'date': '2018-02-20',
+        'date': yesterday,
         'path': '/path2',
         'count': 1
       }, {
-        'date': '2018-02-20',
+        'date': yesterday,
         'path': '/path3',
         'count': 1
       }],
@@ -172,7 +168,7 @@ RSpec.describe 'Master process spec' do
       'page_size': 3
     }.to_json
 
-    stub_request(:get, 'http://support-api.dev.gov.uk/feedback-by-day/2018-02-20?page=1&per_page=10000').
+    stub_request(:get, "http://support-api.dev.gov.uk/feedback-by-day/#{yesterday}?page=1&per_page=10000").
       to_return(status: 200, body: response, headers: {})
   end
 end
