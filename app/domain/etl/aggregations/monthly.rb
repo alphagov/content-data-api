@@ -10,7 +10,7 @@ class Etl::Aggregations::Monthly
   end
 
   def process
-    time(process: :aggregations) do
+    time(process: :aggregations_monthly) do
       create_month
       delete_month
       aggregate_month
