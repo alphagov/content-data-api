@@ -1,4 +1,6 @@
 RSpec.describe Aggregations::SearchLastMonth, type: :model do
+  include MonthlyAggregations
+
   subject { described_class }
 
   it_behaves_like 'a materialized view', described_class.table_name
@@ -12,7 +14,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
     create :metric, edition: edition1, date: to, upviews: 10, useful_yes: 7, useful_no: 8, searches: 9
     create :metric, edition: edition1, date: (from + 15.days), upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
 
-    Etl::Aggregations::Monthly.process(date: from)
+    calculate_monthly_aggregations!
     subject.refresh
 
     expect(subject.count).to eq(1)
@@ -32,7 +34,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
     create :metric, edition: edition1, date: from + 1.day
     create :metric, edition: edition2, date: from + 2.days
 
-    Etl::Aggregations::Monthly.process(date: from)
+    calculate_monthly_aggregations!
     subject.refresh
 
     expect(subject.pluck(:dimensions_edition_id)).to match_array([edition1.id, edition2.id])
@@ -44,7 +46,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
       edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
       create :metric, edition: edition1, date: (from - 1.day)
 
-      Etl::Aggregations::Monthly.process(date: from)
+      calculate_monthly_aggregations!
       subject.refresh
 
       expect(subject.count).to eq(0)
@@ -54,7 +56,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
       edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
       create :metric, edition: edition1, date: (to + 1.day)
 
-      Etl::Aggregations::Monthly.process(date: from)
+      calculate_monthly_aggregations!
       subject.refresh
 
       expect(subject.count).to eq(0)
@@ -68,7 +70,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
     create :metric, edition: edition1, date: from
     create :metric, edition: edition2, date: from + 1.day
 
-    Etl::Aggregations::Monthly.process(date: from)
+    calculate_monthly_aggregations!
     subject.refresh
 
     expect(subject.count).to eq(1)
