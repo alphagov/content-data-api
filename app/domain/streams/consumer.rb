@@ -2,7 +2,7 @@ module Streams
   class Consumer
     def process(message)
       if valid_message?(message)
-        MessageProcessorJob.perform_later(message.payload, message.delivery_info.routing_key)
+        Streams::MessageProcessorJob.perform_later(message.payload, message.delivery_info.routing_key)
       else
         Monitor::Messages.increment_discarded
       end
