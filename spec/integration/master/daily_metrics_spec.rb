@@ -24,6 +24,7 @@ RSpec.describe 'Master process spec' do
     validate_feedex!
     validate_aggregations!
     validate_monitoring!
+    validate_search_views!
   end
 
   def latest_version
@@ -76,6 +77,13 @@ RSpec.describe 'Master process spec' do
 
   def validate_monitoring!
     expect(GovukStatsd).to have_received(:count).at_least(1).times
+  end
+
+  def validate_search_views!
+    expect(Aggregations::SearchLastThirtyDays.all).to_not be_empty
+    expect(Aggregations::SearchLastThreeMonths.all).to_not be_empty
+    expect(Aggregations::SearchLastSixMonths.all).to_not be_empty
+    expect(Aggregations::SearchLastTwelveMonths.all).to_not be_empty
   end
 
   def stub_google_analytics_response
