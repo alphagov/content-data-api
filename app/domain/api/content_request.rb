@@ -1,4 +1,6 @@
-class Api::ContentRequest < Api::BaseRequest
+class Api::ContentRequest
+  include ActiveModel::Validations
+
   attr_reader :organisation_id, :document_type, :page, :page_size, :date_range
   validate :valid_organisation_id
   validate :valid_date_range
@@ -6,8 +8,6 @@ class Api::ContentRequest < Api::BaseRequest
   validates_numericality_of :page, :page_size, allow_nil: true
 
   def initialize(params)
-    super(params)
-
     @organisation_id = params[:organisation_id]
     @document_type = params[:document_type]
     @page = params[:page].try(:to_i)
@@ -22,8 +22,6 @@ class Api::ContentRequest < Api::BaseRequest
       date_range: date_range,
       page: page,
       page_size: page_size,
-      to: to,
-      from: from,
     }
   end
 

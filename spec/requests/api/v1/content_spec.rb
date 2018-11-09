@@ -1,191 +1,143 @@
 RSpec.describe '/content' do
-  before do
-    create :user
-  end
+  include MonthlyAggregations
 
-  let(:primary_org_id) { '17d84dc6-e5b5-4065-a8b5-8783bd934938' }
-  let(:another_org_id) { SecureRandom.uuid }
-  let(:warehouse_item_id) { '87d87ac6-e5b5-4065-a8b5-b7a43db648d2' }
-  let(:another_warehouse_item_id) { 'ebf0dd2f-9d99-48e3-84d0-e94a2108ef45' }
+  before { create :user }
 
-  context 'when successful' do
+  let(:organisation_id) { 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+
+  describe 'Aggregations' do
     before do
-      old_edition = create :edition,
-        base_path: '/path/1',
-        date: '2018-01-01',
-        title: 'old-title',
-        document_type: 'old_doc_type',
-        organisation_id: primary_org_id
-      create :metric,
-        date: '2018-01-01',
-        edition: old_edition,
-        upviews: 100,
-        useful_yes: 50,
-        useful_no: 20,
-        searches: 20
-      new_edition = create :edition,
-        replaces: old_edition,
-        date: '2018-01-02',
-        base_path: '/new/base/path',
-        title: 'latest title',
-        document_type: 'latest_doc_type',
-        organisation_id: primary_org_id
-      create :metric,
-        edition: new_edition,
-        date: '2018-01-02',
-        upviews: 133,
-        useful_yes: 150,
-        useful_no: 30,
-        searches: 200
-      different_edition = create :edition,
-        base_path: '/path/2',
-        date: '2018-01-02',
-        title: 'another title',
-        document_type: 'organisation',
-        organisation_id: primary_org_id,
-        warehouse_item_id: another_warehouse_item_id
-      create :metric,
-        edition: different_edition,
-        date: '2018-01-02',
-        upviews: 100,
-        useful_yes: 10,
-        useful_no: 10,
-        searches: 1
-      another_org_edition = create :edition,
-        base_path: '/another/org/path',
-        date: '2018-01-02',
-        title: 'another org title',
-        document_type: 'news_story',
-        organisation_id: another_org_id
-      create :metric,
-        edition: another_org_edition,
-        upviews: 34
+      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id
+      create :metric, date: 15.days.ago, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
+
+      edition2 = create :edition, replaces: edition1, organisation_id: organisation_id, base_path: '/path-01'
+      create :metric, date: 5.days.ago, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 2, searches: 2
+
+      edition3 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-02'
+      create :metric, date: 10.days.ago, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+
+      calculate_monthly_aggregations!
+      refresh_views
     end
 
-    it 'returns aggregated metrics from all versions with metadata from the latest version' do
-      get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id }
-      expect(response.status).to eq(200)
+    subject { get '/content', params: { date_range: 'last-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' } }
+
+    it 'returns 200 status' do
+      subject
+
+      expect(response).to have_http_status(200)
+    end
+
+    it 'returns aggregated metrics' do
+      subject
+
       json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json[:results]).to eq(
-        [
-          {
-            base_path: '/new/base/path',
-            title: 'latest title',
-            upviews: 233,
-            document_type: 'latest_doc_type',
-            satisfaction: 0.8,
-            satisfaction_score_responses: 250,
-            searches: 220
-          },
-          {
-            base_path: '/path/2',
-            title: 'another title',
-            upviews: 100,
-            document_type: 'organisation',
-            satisfaction: 0.5,
-            satisfaction_score_responses: 20,
-            searches: 1
-          }
-        ]
+      expect(json[:results]).to contain_exactly(
+        a_hash_including(
+          base_path: '/path-01',
+          upviews: 150,
+          satisfaction: 0.7142857142857143,
+          satisfaction_score_responses: 77,
+          searches: 22
+        ),
+        a_hash_including(
+          base_path: '/path-02',
+          upviews: 10,
+          satisfaction: 0.5,
+          satisfaction_score_responses: 20,
+          searches: 10
+        )
       )
+    end
+  end
+
+  describe 'Filter by document type' do
+    before do
+      edition1 = create :edition, date: 1.month.ago, document_type: 'a-document-type', organisation_id: organisation_id
+      create :metric, date: 15.days.ago, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
+
+      edition2 = create :edition, date: 1.month.ago, organisation_id: organisation_id
+      create :metric, date: 10.days.ago, edition: edition2, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+
+      calculate_monthly_aggregations!
+      refresh_views
+    end
+
+    subject { get '/content', params: { date_range: 'last-30-days', document_type: 'a-document-type', organisation_id: organisation_id } }
+
+    it 'returns 200 status' do
+      subject
+
+      expect(response).to have_http_status(200)
     end
 
     it 'filters by document_type' do
-      get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id, document_type: 'latest_doc_type' }
-      expect(response.status).to eq(200)
+      subject
+
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:results].count).to eq(1)
     end
+  end
 
-    context 'when pagination parameters are provided' do
-      it 'returns the first page of the data' do
-        get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id, page: 1, page_size: 1 }
-        expect(response.status).to eq(200)
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json[:results].count).to eq(1)
-        expect(json[:results].first[:base_path]).to eq('/new/base/path')
-      end
+  describe 'Pagination' do
+    before do
+      edition1 = create :edition, organisation_id: organisation_id, document_type: 'a-document-type', base_path: '/path-01'
+      create :metric, date: 15.days.ago, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
 
-      it 'returns the first page pagination info' do
-        get '/content', params: { from: '2018-01-01',
-                                  to: '2018-09-01',
-                                  organisation_id: primary_org_id,
-                                  page: 1,
-                                  page_size: 1 }
-        expect(response.status).to eq(200)
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json).to include(
-          page: 1,
-          total_results: 2
-        )
-      end
+      edition2 = create :edition, organisation_id: organisation_id, base_path: '/path-02'
+      create :metric, date: 10.days.ago, edition: edition2, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
 
-      it 'returns the second page of the data' do
-        get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id, page: 2, page_size: 1 }
-        expect(response.status).to eq(200)
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json[:results].count).to eq(1)
-        expect(json[:results].first[:base_path]).to eq('/path/2')
-      end
+      calculate_monthly_aggregations!
+      refresh_views
+    end
 
-      it 'returns the second page pagination info' do
-        get '/content', params: { from: '2018-01-01', to: '2018-09-01', organisation_id: primary_org_id, page: 2, page_size: 1 }
-        expect(response.status).to eq(200)
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json).to include(
-          page: 2,
-          total_results: 2
-        )
-      end
+    it 'returns the first page of the data' do
+      get '/content', params: { date_range: 'last-30-days', organisation_id: organisation_id, page: 1, page_size: 1 }
+
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results]).to contain_exactly(a_hash_including(base_path: '/path-01'))
+      expect(json).to include(page: 1, total_results: 2)
+    end
+
+    it 'returns the second page of the data' do
+      get '/content', params: { date_range: 'last-30-days', organisation_id: organisation_id, page: 2, page_size: 1 }
+
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results]).to contain_exactly(a_hash_including(base_path: '/path-02'))
+      expect(json).to include(page: 2, total_results: 2)
     end
   end
 
-  include_examples 'API response', '/content', from: '2018-01-01', to: '2018-09-01', organisation_id: '17d84dc6-e5b5-4065-a8b5-8783bd934938'
+  include_examples 'API response', '/content', date_range: 'last-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2'
 
   context 'with invalid params' do
     it 'returns an error for badly formatted dates' do
-      get "/content", params: { from: 'today', to: '2018-01-15', organisation_id: '386ea723-d8fc-4581-8e53-bb8ee9aa8c03' }
+      get '/content', params: { date_range: 'invalid-range', organisation_id: '386ea723-d8fc-4581-8e53-bb8ee9aa8c03' }
 
       expect(response.status).to eq(400)
 
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
-        "title" => "One or more parameters is invalid",
-        "invalid_params" => { "from" => ["Dates should use the format YYYY-MM-DD"] }
-      }
-
-      expect(json).to eq(expected_error_response)
-    end
-
-    it 'returns an error for bad date ranges' do
-      get "/content/", params: { from: '2018-01-16', to: '2018-01-15', organisation_id: '1182a3ed-a9a3-482c-81e1-0a9ecfb847d0' }
-
-      expect(response.status).to eq(400)
-
-      json = JSON.parse(response.body)
-
-      expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
-        "title" => "One or more parameters is invalid",
-        "invalid_params" => { "from,to" => ["`from` parameter can't be after the `to` parameter"] }
+        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error',
+        'title' => 'One or more parameters is invalid',
+        'invalid_params' => { 'date_range' => ['this is not a valid date range'] }
       }
 
       expect(json).to eq(expected_error_response)
     end
 
     it 'returns an error for invalid organisation_id' do
-      get "/content/", params: { from: '2018-01-16', to: '2018-01-17', organisation_id: 'blah' }
+      get '/content/', params: { from: '2018-01-16', to: '2018-01-17', organisation_id: 'blah' }
 
       expect(response.status).to eq(400)
 
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
-        "title" => "One or more parameters is invalid",
-        "invalid_params" => { "organisation_id" => ["this is not a valid organisation id"] }
+        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error',
+        'title' => 'One or more parameters is invalid',
+        'invalid_params' => { 'organisation_id' => ['this is not a valid organisation id'] }
       }
 
       expect(json).to eq(expected_error_response)
