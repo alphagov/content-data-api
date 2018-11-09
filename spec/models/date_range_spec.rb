@@ -5,6 +5,16 @@ RSpec.describe DateRange do
     end
   end
 
+  describe '.valid?' do
+    it 'returns false if invalid parameter' do
+      expect(DateRange.valid?(:invalid_parameter)).to be_falsey
+    end
+
+    it 'returns true if valid parameters' do
+      expect(DateRange.valid?('last-30-days')).to be_truthy
+    end
+  end
+
   context 'When invalid parameters' do
     it 'raises an ArgumentError' do
       expect(-> { DateRange.new(:invalid_parameter) }).to raise_error(ArgumentError)

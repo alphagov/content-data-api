@@ -1,7 +1,7 @@
 class Queries::FindContent
   DEFAULT_PAGE_SIZE = 100
   def self.call(filter:)
-    filter.assert_valid_keys :from, :to, :organisation_id, :document_type, :page, :page_size
+    filter.assert_valid_keys :date_range, :organisation_id, :document_type, :page, :page_size, :from, :to
 
     new(filter).call
   end
@@ -28,8 +28,8 @@ private
   attr_reader :from, :to, :organisation_id, :document_type
 
   def initialize(filter)
-    @from = filter.fetch(:from)
-    @to = filter.fetch(:to)
+    @from = filter[:from] || filter.fetch(:date_range).from
+    @to = filter[:to] || filter.fetch(:date_range).to
     @organisation_id = filter.fetch(:organisation_id)
     @document_type = filter.fetch(:document_type)
     @page = filter[:page] || 1

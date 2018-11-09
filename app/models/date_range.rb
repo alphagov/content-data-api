@@ -1,10 +1,20 @@
 class DateRange
-  attr_reader :time_period, :to, :from
+  attr_reader :time_period
+  attr_accessor :to, :from
 
   def initialize(time_period)
     @time_period = time_period
     @to = date_to_range[:to]
     @from = date_to_range[:from]
+  end
+
+  def self.valid?(time_period)
+    time_period.in?(['last-30-days', 'last-month', 'last-3-months', 'last-6-months', 'last-year', 'last-2-years'])
+  end
+
+  def self.build(from:, to:)
+    @from = from
+    @to = to
   end
 
 private
