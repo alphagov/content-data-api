@@ -1,3 +1,4 @@
+require_dependency 'concerns/traceable'
 class Etl::GA::ViewsAndNavigationProcessor
   include Concerns::Traceable
   include Etl::GA::Concerns::TransformPath
