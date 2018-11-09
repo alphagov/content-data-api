@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_01_163411) do
+ActiveRecord::Schema.define(version: 2018_11_07_170246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -199,4 +199,142 @@ ActiveRecord::Schema.define(version: 2018_11_01_163411) do
   add_foreign_key "facts_editions", "dimensions_editions"
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
   add_foreign_key "facts_metrics", "dimensions_editions"
+
+  create_view "aggregations_search_last_thirty_days", materialized: true,  sql_definition: <<-SQL
+      SELECT dimensions_editions.warehouse_item_id,
+      max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+      sum(facts_metrics.upviews) AS upviews,
+      sum(facts_metrics.useful_yes) AS useful_yes,
+      sum(facts_metrics.useful_no) AS useful_no,
+      sum(facts_metrics.searches) AS searches
+     FROM ((facts_metrics
+       JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
+       JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
+    WHERE (facts_metrics.dimensions_date_id >= (('now'::text)::date - '30 days'::interval day))
+    GROUP BY dimensions_editions.warehouse_item_id;
+  SQL
+
+  add_index "aggregations_search_last_thirty_days", ["dimensions_edition_id", "upviews"], name: "index_on_last_thirty_days_edition_id_upviews"
+
+  create_view "aggregations_search_last_months", materialized: true,  sql_definition: <<-SQL
+      SELECT dimensions_editions.warehouse_item_id,
+      max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
+      sum(aggregations_monthly_metrics.upviews) AS upviews,
+      sum(aggregations_monthly_metrics.useful_yes) AS useful_yes,
+      sum(aggregations_monthly_metrics.useful_no) AS useful_no,
+      sum(aggregations_monthly_metrics.searches) AS searches
+     FROM ((aggregations_monthly_metrics
+       JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
+       JOIN dimensions_editions ON ((dimensions_editions.id = aggregations_monthly_metrics.dimensions_edition_id)))
+    WHERE ((dimensions_months.id)::text = to_char((now() - '1 mon'::interval), 'YYYY-MM'::text))
+    GROUP BY dimensions_editions.warehouse_item_id;
+  SQL
+
+  add_index "aggregations_search_last_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_month_edition_id_upviews"
+
+  create_view "aggregations_search_last_three_months", materialized: true,  sql_definition: <<-SQL
+      SELECT agg.warehouse_item_id,
+      max(agg.dimensions_edition_id) AS dimensions_edition_id,
+      sum(agg.upviews) AS upviews,
+      sum(agg.useful_yes) AS useful_yes,
+      sum(agg.useful_no) AS useful_no,
+      sum(agg.searches) AS searches
+     FROM ( SELECT dimensions_editions.warehouse_item_id,
+              max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
+              sum(aggregations_monthly_metrics.upviews) AS upviews,
+              sum(aggregations_monthly_metrics.useful_yes) AS useful_yes,
+              sum(aggregations_monthly_metrics.useful_no) AS useful_no,
+              sum(aggregations_monthly_metrics.searches) AS searches
+             FROM ((aggregations_monthly_metrics
+               JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
+               JOIN dimensions_editions ON ((dimensions_editions.id = aggregations_monthly_metrics.dimensions_edition_id)))
+            WHERE ((dimensions_months.id)::text >= to_char((now() - '2 mons'::interval), 'YYYY-MM'::text))
+            GROUP BY dimensions_editions.warehouse_item_id
+          UNION
+           SELECT dimensions_editions.warehouse_item_id,
+              max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+              sum(facts_metrics.upviews) AS upviews,
+              sum(facts_metrics.useful_yes) AS useful_yes,
+              sum(facts_metrics.useful_no) AS useful_no,
+              sum(facts_metrics.searches) AS searches
+             FROM ((facts_metrics
+               JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
+               JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
+            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '3 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '2 mons'::interval)))
+            GROUP BY dimensions_editions.warehouse_item_id) agg
+    GROUP BY agg.warehouse_item_id;
+  SQL
+
+  add_index "aggregations_search_last_three_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_three_months_edition_id_upviews"
+
+  create_view "aggregations_search_last_six_months", materialized: true,  sql_definition: <<-SQL
+      SELECT agg.warehouse_item_id,
+      max(agg.dimensions_edition_id) AS dimensions_edition_id,
+      sum(agg.upviews) AS upviews,
+      sum(agg.useful_yes) AS useful_yes,
+      sum(agg.useful_no) AS useful_no,
+      sum(agg.searches) AS searches
+     FROM ( SELECT dimensions_editions.warehouse_item_id,
+              max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
+              sum(aggregations_monthly_metrics.upviews) AS upviews,
+              sum(aggregations_monthly_metrics.useful_yes) AS useful_yes,
+              sum(aggregations_monthly_metrics.useful_no) AS useful_no,
+              sum(aggregations_monthly_metrics.searches) AS searches
+             FROM ((aggregations_monthly_metrics
+               JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
+               JOIN dimensions_editions ON ((dimensions_editions.id = aggregations_monthly_metrics.dimensions_edition_id)))
+            WHERE ((dimensions_months.id)::text >= to_char((now() - '5 mons'::interval), 'YYYY-MM'::text))
+            GROUP BY dimensions_editions.warehouse_item_id
+          UNION
+           SELECT dimensions_editions.warehouse_item_id,
+              max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+              sum(facts_metrics.upviews) AS upviews,
+              sum(facts_metrics.useful_yes) AS useful_yes,
+              sum(facts_metrics.useful_no) AS useful_no,
+              sum(facts_metrics.searches) AS searches
+             FROM ((facts_metrics
+               JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
+               JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
+            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '5 mons'::interval)))
+            GROUP BY dimensions_editions.warehouse_item_id) agg
+    GROUP BY agg.warehouse_item_id;
+  SQL
+
+  add_index "aggregations_search_last_six_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_six_months_edition_id_upviews"
+
+  create_view "aggregations_search_last_twelve_months", materialized: true,  sql_definition: <<-SQL
+      SELECT agg.warehouse_item_id,
+      max(agg.dimensions_edition_id) AS dimensions_edition_id,
+      sum(agg.upviews) AS upviews,
+      sum(agg.useful_yes) AS useful_yes,
+      sum(agg.useful_no) AS useful_no,
+      sum(agg.searches) AS searches
+     FROM ( SELECT dimensions_editions.warehouse_item_id,
+              max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
+              sum(aggregations_monthly_metrics.upviews) AS upviews,
+              sum(aggregations_monthly_metrics.useful_yes) AS useful_yes,
+              sum(aggregations_monthly_metrics.useful_no) AS useful_no,
+              sum(aggregations_monthly_metrics.searches) AS searches
+             FROM ((aggregations_monthly_metrics
+               JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
+               JOIN dimensions_editions ON ((dimensions_editions.id = aggregations_monthly_metrics.dimensions_edition_id)))
+            WHERE ((dimensions_months.id)::text >= to_char((now() - '11 mons'::interval), 'YYYY-MM'::text))
+            GROUP BY dimensions_editions.warehouse_item_id
+          UNION
+           SELECT dimensions_editions.warehouse_item_id,
+              max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+              sum(facts_metrics.upviews) AS upviews,
+              sum(facts_metrics.useful_yes) AS useful_yes,
+              sum(facts_metrics.useful_no) AS useful_no,
+              sum(facts_metrics.searches) AS searches
+             FROM ((facts_metrics
+               JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
+               JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
+            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '11 mons'::interval)))
+            GROUP BY dimensions_editions.warehouse_item_id) agg
+    GROUP BY agg.warehouse_item_id;
+  SQL
+
+  add_index "aggregations_search_last_twelve_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_twelve_months_edition_id_upviews"
+
 end

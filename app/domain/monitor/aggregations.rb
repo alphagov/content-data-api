@@ -12,7 +12,7 @@ private
 
   def statsd_for_all_monthly_aggregations!
     path = path_for('all')
-    count = Aggregations::MonthlyMetric.count
+    count = ::Aggregations::MonthlyMetric.count
 
     GovukStatsd.count(path, count)
   end

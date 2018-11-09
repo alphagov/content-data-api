@@ -16,6 +16,9 @@ RSpec.describe Etl::Master::MasterProcessor do
     allow(Etl::Feedex::Processor).to receive(:process)
     allow(Etl::Master::MetricsProcessor).to receive(:process)
     allow(Monitor::Etl).to receive(:run)
+
+    allow(Etl::Aggregations::Monthly).to receive(:process)
+    allow(Etl::Aggregations::Search).to receive(:process)
   end
 
   describe 'runs only once per day' do
@@ -55,16 +58,28 @@ RSpec.describe Etl::Master::MasterProcessor do
 
   describe 'Aggregations' do
     context 'when the day before' do
-      it 'calculate the aggregations' do
+      it 'calculate the monthly aggregations' do
         expect(Etl::Aggregations::Monthly).to receive(:process).with(date: Date.new(2018, 2, 19))
+
+        subject.process
+      end
+
+      it 'calculates the search aggregations' do
+        expect(Etl::Aggregations::Search).to receive(:process)
 
         subject.process
       end
     end
 
     context 'when not the day before' do
-      it 'does not calculate the aggregations' do
+      it 'does not calculate the monthly aggregations' do
         expect(Etl::Aggregations::Monthly).to_not receive(:process).with(date: Date.new(2018, 2, 18))
+
+        subject.process(date: Date.new(2018, 2, 18))
+      end
+
+      it 'does not calculate the monthly aggregations' do
+        expect(Etl::Aggregations::Search).to_not receive(:process)
 
         subject.process(date: Date.new(2018, 2, 18))
       end
