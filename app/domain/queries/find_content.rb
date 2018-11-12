@@ -12,7 +12,7 @@ class Queries::FindContent
     results = Aggregations::SearchLastThirtyDays.all
                 .joins('INNER JOIN dimensions_editions ON aggregations_search_last_thirty_days.dimensions_edition_id = dimensions_editions.id')
                 .merge(slice_editions)
-                .order('upviews desc')
+                .order(order_by)
                 .page(@page)
                 .per(@page_size)
     {
@@ -24,6 +24,10 @@ class Queries::FindContent
   end
 
 private
+
+  def order_by
+    'upviews desc'
+  end
 
   attr_reader :organisation_id, :document_type, :date_range
 
