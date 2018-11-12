@@ -1,5 +1,5 @@
 RSpec.describe Queries::FindContent do
-  include MonthlyAggregations
+  include AggregationsSupport
 
   let(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
 
@@ -24,8 +24,7 @@ RSpec.describe Queries::FindContent do
     create :metric, edition: edition2, date: 10.days.ago, upviews: 15, useful_yes: 8, useful_no: 19, searches: 10
     create :metric, edition: edition2, date: 11.days.ago, upviews: 10, useful_yes: 5, useful_no: 1, searches: 11
 
-    calculate_monthly_aggregations!
-    refresh_views
+    recalculate_aggregations!
 
     response = described_class.call(filter: filter)
     expect(response[:results]).to contain_exactly(
@@ -50,8 +49,7 @@ RSpec.describe Queries::FindContent do
     create :metric, edition: edition1, date: 15.days.ago
     create :metric, edition: edition2, date: 10.days.ago
 
-    calculate_monthly_aggregations!
-    refresh_views
+    recalculate_aggregations!
 
     response = described_class.call(filter: filter)
     expect(response[:results]).to contain_exactly(
@@ -67,8 +65,7 @@ RSpec.describe Queries::FindContent do
         create :metric, edition: edition, date: 15.days.ago, upviews: (100 - n)
       end
 
-      calculate_monthly_aggregations!
-      refresh_views
+      recalculate_aggregations!
     end
 
     it 'returns the first page of data with pagination info' do
@@ -103,8 +100,7 @@ RSpec.describe Queries::FindContent do
       edition = create :edition, organisation_id: primary_org_id
       create :metric, edition: edition, date: 15.days.ago, useful_yes: 0, useful_no: 0
 
-      calculate_monthly_aggregations!
-      refresh_views
+      recalculate_aggregations!
     end
 
     it 'returns the nil for the satisfaction' do
@@ -120,8 +116,7 @@ RSpec.describe Queries::FindContent do
     before do
       create :edition, date: '2018-02-01'
 
-      calculate_monthly_aggregations!
-      refresh_views
+      recalculate_aggregations!
     end
 
     it 'returns a empty array' do

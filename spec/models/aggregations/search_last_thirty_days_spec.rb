@@ -1,5 +1,5 @@
 RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
-  include MonthlyAggregations
+  include AggregationsSupport
 
   subject { described_class }
 
@@ -11,8 +11,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
     create :metric, edition: edition1, date: 15.days.ago, upviews: 10, useful_yes: 7, useful_no: 8, searches: 9
     create :metric, edition: edition1, date: 31.days.ago, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
 
-    calculate_monthly_aggregations!
-    subject.refresh
+    recalculate_aggregations!
 
     expect(subject.count).to eq(1)
     expect(subject.first).to have_attributes(upviews: 15, useful_yes: 13, useful_no: 15, searches: 17)
@@ -26,8 +25,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
     create :metric, edition: edition1, date: 16.days.ago
     create :metric, edition: edition2, date: 30.days.ago
 
-    calculate_monthly_aggregations!
-    subject.refresh
+    recalculate_aggregations!
 
     expect(subject.pluck(:dimensions_edition_id)).to match_array([edition1.id, edition2.id])
   end
@@ -37,8 +35,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
       edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
       create :metric, edition: edition1, date: 31.days.ago
 
-      calculate_monthly_aggregations!
-      subject.refresh
+      recalculate_aggregations!
 
       expect(subject.count).to eq(0)
     end
@@ -47,8 +44,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
       edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
       create :metric, edition: edition1, date: Date.yesterday
 
-      calculate_monthly_aggregations!
-      subject.refresh
+      recalculate_aggregations!
 
       expect(subject.count).to eq(1)
     end
@@ -62,8 +58,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
     create :metric, edition: edition1, date: 15.days.ago
     create :metric, edition: edition2, date: 15.days.ago
 
-    calculate_monthly_aggregations!
-    subject.refresh
+    recalculate_aggregations!
 
     expect(subject.count).to eq(1)
     expect(subject.first).to have_attributes(dimensions_edition_id: edition2.id)

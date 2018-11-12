@@ -1,5 +1,12 @@
-module MonthlyAggregations
-  def calculate_monthly_aggregations!
+module AggregationsSupport
+  def recalculate_aggregations!
+    refresh_last_year_of_monthly_aggregations
+    refresh_views
+  end
+
+private
+
+  def refresh_last_year_of_monthly_aggregations
     Etl::Aggregations::Monthly.process(date: Date.today)
 
     12.times { |index| Etl::Aggregations::Monthly.process(date: index.month.ago) }

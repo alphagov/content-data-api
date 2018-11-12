@@ -1,5 +1,5 @@
 RSpec.describe '/content' do
-  include MonthlyAggregations
+  include AggregationsSupport
 
   before { create :user }
 
@@ -16,8 +16,7 @@ RSpec.describe '/content' do
       edition3 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-02'
       create :metric, date: 10.days.ago, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
 
-      calculate_monthly_aggregations!
-      refresh_views
+      recalculate_aggregations!
     end
 
     subject { get '/content', params: { date_range: 'last-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' } }
@@ -59,8 +58,7 @@ RSpec.describe '/content' do
       edition2 = create :edition, date: 1.month.ago, organisation_id: organisation_id
       create :metric, date: 10.days.ago, edition: edition2, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
 
-      calculate_monthly_aggregations!
-      refresh_views
+      recalculate_aggregations!
     end
 
     subject { get '/content', params: { date_range: 'last-30-days', document_type: 'a-document-type', organisation_id: organisation_id } }
@@ -87,8 +85,7 @@ RSpec.describe '/content' do
       edition2 = create :edition, organisation_id: organisation_id, base_path: '/path-02'
       create :metric, date: 10.days.ago, edition: edition2, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
 
-      calculate_monthly_aggregations!
-      refresh_views
+      recalculate_aggregations!
     end
 
     it 'returns the first page of the data' do
