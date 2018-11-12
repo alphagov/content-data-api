@@ -177,7 +177,6 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
-    hash_diff (1.0.0)
     hashdiff (0.3.7)
     hashie (3.5.7)
     http-cookie (1.0.3)
@@ -502,7 +501,6 @@ DEPENDENCIES
   govuk_schemas (= 3.2.0)
   govuk_sidekiq (~> 3)
   guard-rspec
-  hash_diff
   httparty
   jbuilder
   jquery-rails
