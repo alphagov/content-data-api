@@ -95,7 +95,6 @@ GEM
     debug_inspector (0.0.3)
     declarative (0.0.10)
     declarative-option (0.1.0)
-    deepsort (0.4.1)
     diff-lcs (1.3)
     docile (1.3.0)
     domain_name (0.5.20180417)
@@ -504,7 +503,6 @@ DEPENDENCIES
   chartkick
   coffee-script
   database_cleaner
-  deepsort
   draper
   factory_bot_rails
   gds-api-adapters (~> 54.1.2)
