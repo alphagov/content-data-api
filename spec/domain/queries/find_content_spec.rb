@@ -95,6 +95,24 @@ RSpec.describe Queries::FindContent do
     end
   end
 
+  describe 'Order' do
+    it 'defaults order by unique pageviews' do
+      edition1 = create :edition, title: 'last', organisation_id: primary_org_id
+      edition2 = create :edition, title: 'middle', organisation_id: primary_org_id
+      edition3 = create :edition, title: 'first', organisation_id: primary_org_id
+
+      create :metric, edition: edition1, date: 15.days.ago, upviews: 1
+      create :metric, edition: edition2, date: 15.days.ago, upviews: 2
+      create :metric, edition: edition3, date: 15.days.ago, upviews: 3
+      recalculate_aggregations!
+
+      response = described_class.call(filter: filter)
+
+      titles = response.fetch(:results).map { |result| result.fetch(:title) }
+      expect(titles).to eq(%w(first middle last))
+    end
+  end
+
   describe 'when no useful_yes/no.. responses' do
     before do
       edition = create :edition, organisation_id: primary_org_id
