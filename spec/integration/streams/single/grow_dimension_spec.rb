@@ -123,4 +123,40 @@ RSpec.describe Streams::Consumer do
       expect(new_edition).to have_attributes(warehouse_item_id: warehouse_item_id, base_path: new_base_path)
     end
   end
+
+  context 'when handling unpublishing related messages' do
+    it 'it does not grow dimensions_editions unnecessarily' do
+      edition = create :edition
+
+      first_gone_message = build(
+        :message,
+        payload: {
+          'document_type' => 'gone',
+          'schema_name' => 'gone',
+          'base_path' => edition.base_path,
+          'publishing_app' => 'whitehall',
+          'details' => {
+            'explanation' => '',
+            'alternative_path' => ''
+          },
+          'routes' => [
+            {
+              'path' => edition.content_id,
+              'type' => 'exact'
+            }
+          ],
+          'content_id' => edition.content_id,
+          'payload_version' => 2
+        }
+      )
+
+      second_gone_message = build :message, payload: first_gone_message.payload.dup
+      second_gone_message.payload['payload_version'] = 3
+
+      expect {
+        subject.process(first_gone_message)
+        subject.process(second_gone_message)
+      }.to change(Dimensions::Edition, :count).by(1)
+    end
+  end
 end

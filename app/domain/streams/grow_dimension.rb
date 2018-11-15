@@ -37,6 +37,6 @@ private
   end
 
   def excluded_from_comparison?(key, _value)
-    %i[publishing_api_payload_version public_updated_at id update_at created_at latest].include? key
+    %i[publishing_api_payload_version public_updated_at id update_at created_at latest warehouse_item_id].include? key
   end
 end
