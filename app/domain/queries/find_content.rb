@@ -9,8 +9,9 @@ class Queries::FindContent
   end
 
   def call
-    results = Aggregations::SearchLastThirtyDays.all
-                .joins('INNER JOIN dimensions_editions ON aggregations_search_last_thirty_days.dimensions_edition_id = dimensions_editions.id')
+    view = Queries::SelectView.new(date_range).run
+    results = view[:model_name].all
+                .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
                 .merge(slice_editions)
                 .order(order_by)
                 .page(@page)
@@ -37,6 +38,7 @@ private
     @search_term = filter[:search_term]
     @page = filter[:page] || 1
     @page_size = filter[:page_size] || DEFAULT_PAGE_SIZE
+    @date_range = filter.fetch(:date_range)
   end
 
   def aggregates
@@ -44,15 +46,15 @@ private
   end
 
   def array_to_hash(array)
-    satisfaction_responses = array[4] + array[5]
+    satisfaction_responses = array[4].to_i + array[5].to_i
     {
       base_path: array[0],
       title: array[1],
       document_type: array[2],
-      upviews: array[3],
-      satisfaction: satisfaction_responses.zero? ? nil : array[4].to_f / satisfaction_responses,
-      satisfaction_score_responses: satisfaction_responses,
-      searches: array[6],
+      upviews: array[3].to_i,
+      satisfaction: satisfaction_responses.zero? ? nil : (array[4].to_f / satisfaction_responses).to_f,
+      satisfaction_score_responses: satisfaction_responses.to_i,
+      searches: array[6].to_i,
     }
   end
 

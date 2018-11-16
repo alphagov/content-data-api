@@ -7,46 +7,155 @@ RSpec.describe '/content' do
 
   describe 'Aggregations' do
     before do
+      this_month_date = Date.today.beginning_of_month
+      last_month_date = Date.today - 1.month
       edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id
-      create :metric, date: 15.days.ago, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
+      create :metric, date: this_month_date, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
 
       edition2 = create :edition, replaces: edition1, organisation_id: organisation_id, base_path: '/path-01'
-      create :metric, date: 5.days.ago, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 2, searches: 2
+      create :metric, date: this_month_date, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
+      create :metric, date: 5.months.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
 
-      edition3 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-02'
-      create :metric, date: 10.days.ago, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+      edition3 = create :edition, date: 3.months.ago, organisation_id: organisation_id, base_path: '/path-02'
+      create :metric, date: this_month_date, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+      create :metric, date: last_month_date, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
+      create :metric, date: 11.months.ago, edition: edition3, upviews: 1000, useful_yes: 1000, useful_no: 1000, searches: 1000
 
       recalculate_aggregations!
     end
 
-    subject { get '/content', params: { date_range: 'last-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' } }
+    context 'last 30 days' do
+      it 'returns 200 status' do
+        get '/content', params: { date_range: 'last-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        expect(response).to have_http_status(200)
+      end
 
-    it 'returns 200 status' do
-      subject
-
-      expect(response).to have_http_status(200)
+      it 'returns aggregated metrics' do
+        get '/content', params: { date_range: 'last-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json[:results]).to contain_exactly(
+          a_hash_including(
+            base_path: '/path-01',
+            upviews: 150,
+            satisfaction: 0.6875,
+            satisfaction_score_responses: 80,
+            searches: 22
+          ),
+          a_hash_including(
+            base_path: '/path-02',
+            upviews: 10,
+            satisfaction: 0.5,
+            satisfaction_score_responses: 20,
+            searches: 10
+          )
+        )
+      end
     end
 
-    it 'returns aggregated metrics' do
-      subject
+    context 'last month' do
+      it 'returns 200 status' do
+        get '/content', params: { date_range: 'last-month', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        expect(response).to have_http_status(200)
+      end
 
-      json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json[:results]).to contain_exactly(
-        a_hash_including(
-          base_path: '/path-01',
-          upviews: 150,
-          satisfaction: 0.7142857142857143,
-          satisfaction_score_responses: 77,
-          searches: 22
-        ),
-        a_hash_including(
-          base_path: '/path-02',
-          upviews: 10,
-          satisfaction: 0.5,
-          satisfaction_score_responses: 20,
-          searches: 10
+      it 'returns aggregated metrics' do
+        get '/content', params: { date_range: 'last-month', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json[:results]).to contain_exactly(
+          a_hash_including(
+            base_path: '/path-02',
+            upviews: 100,
+            satisfaction: 0.5,
+            satisfaction_score_responses: 200,
+            searches: 100
+          )
         )
-      )
+      end
+    end
+
+    context 'last 3 months' do
+      it 'returns 200 status' do
+        get '/content', params: { date_range: 'last-3-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns aggregated metrics' do
+        get '/content', params: { date_range: 'last-3-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        json = JSON.parse(response.body).deep_symbolize_keys
+
+        expect(json[:results]).to contain_exactly(
+          a_hash_including(
+            base_path: '/path-01',
+            upviews: 150,
+            satisfaction: 0.6875,
+            satisfaction_score_responses: 80,
+            searches: 22
+          ),
+          a_hash_including(
+            base_path: '/path-02',
+            upviews: 110,
+            satisfaction: 0.5,
+            satisfaction_score_responses: 220,
+            searches: 110
+          )
+        )
+      end
+    end
+
+    context 'last 6 months' do
+      it 'returns 200 status' do
+        get '/content', params: { date_range: 'last-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns aggregated metrics' do
+        get '/content', params: { date_range: 'last-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json[:results]).to contain_exactly(
+          a_hash_including(
+            base_path: '/path-01',
+            upviews: 170,
+            satisfaction: 0.625,
+            satisfaction_score_responses: 120,
+            searches: 42
+          ),
+          a_hash_including(
+            base_path: '/path-02',
+            upviews: 110,
+            satisfaction: 0.5,
+            satisfaction_score_responses: 220,
+            searches: 110
+          )
+        )
+      end
+    end
+
+    context 'last year' do
+      it 'returns 200 status' do
+        get '/content', params: { date_range: 'last-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns aggregated metrics' do
+        get '/content', params: { date_range: 'last-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+        json = JSON.parse(response.body).deep_symbolize_keys
+        expect(json[:results]).to contain_exactly(
+          a_hash_including(
+            base_path: '/path-01',
+            upviews: 170,
+            satisfaction: 0.625,
+            satisfaction_score_responses: 120,
+            searches: 42
+          ),
+          a_hash_including(
+            base_path: '/path-02',
+            upviews: 1110,
+            satisfaction: 0.5,
+            satisfaction_score_responses: 2220,
+            searches: 1110
+          )
+        )
+      end
     end
   end
 
@@ -207,7 +316,7 @@ RSpec.describe '/content' do
     end
 
     it 'returns an error for invalid organisation_id' do
-      get '/content/', params: { from: '2018-01-16', to: '2018-01-17', organisation_id: 'blah' }
+      get '/content/', params: { date_range: 'last-30-days', organisation_id: 'blah' }
 
       expect(response.status).to eq(400)
 

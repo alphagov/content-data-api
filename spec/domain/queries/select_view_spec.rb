@@ -1,0 +1,25 @@
+RSpec.describe Queries::SelectView do
+  let(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
+
+  describe '#select_view' do
+    it 'returns last 30 days view if date range is `last-30-days`' do
+      expect(described_class.new('last-30-days').run).to eq(model_name: Aggregations::SearchLastThirtyDays, table_name: 'last_thirty_days')
+    end
+
+    it 'returns last month view if date range is `last-month`' do
+      expect(described_class.new('last-month').run).to eq(model_name: Aggregations::SearchLastMonth, table_name: 'last_months')
+    end
+
+    it 'returns last 3 months view if date range is `last-3-months`' do
+      expect(described_class.new('last-3-months').run).to eq(model_name: Aggregations::SearchLastThreeMonths, table_name: 'last_three_months')
+    end
+
+    it 'returns last 6 months view if date range is `last-6-months`' do
+      expect(described_class.new('last-6-months').run).to eq(model_name: Aggregations::SearchLastSixMonths, table_name: 'last_six_months')
+    end
+
+    it 'returns last year view if date range is `last-year`' do
+      expect(described_class.new('last-year').run).to eq(model_name: Aggregations::SearchLastTwelveMonths, table_name: 'last_twelve_months')
+    end
+  end
+end
