@@ -15,6 +15,19 @@ namespace :etl do
     end
   end
 
+  desc 'Delete existing metrics and Run Etl Master process across a range of dates'
+  task :rerun_master, %i[from to] => [:environment] do |_t, args|
+    from = args[:from].to_date
+    to = args[:to].to_date
+    (from..to).each do |date|
+      puts "Deleting existing metrics for #{date}"
+      Facts::Metric.where(dimensions_date_id: date).delete_all
+      puts "Running Etl::Master process for #{date}"
+      Etl::Master::MasterProcessor.process(date: date)
+      puts "finished running Etl::Master for #{date}"
+    end
+  end
+
   desc 'Populate GA metrics for a date'
   task :ga, [:date] => [:environment] do |_t, args|
     date = args[:date]
