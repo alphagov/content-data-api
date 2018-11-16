@@ -20,11 +20,13 @@ namespace :etl do
     from = args[:from].to_date
     to = args[:to].to_date
     (from..to).each do |date|
-      puts "Deleting existing metrics for #{date}"
-      Facts::Metric.where(dimensions_date_id: date).delete_all
-      puts "Running Etl::Master process for #{date}"
-      Etl::Master::MasterProcessor.process(date: date)
-      puts "finished running Etl::Master for #{date}"
+      ActiveRecord::Base.transaction do
+        puts "Deleting existing metrics for #{date}"
+        Facts::Metric.where(dimensions_date_id: date).delete_all
+        puts "Running Etl::Master process for #{date}"
+        Etl::Master::MasterProcessor.process(date: date)
+        puts "finished running Etl::Master for #{date}"
+      end
     end
   end
 
