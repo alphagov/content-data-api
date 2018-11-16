@@ -6,7 +6,7 @@ FactoryBot.define do
       base_path { '/base-path' }
       content_id { SecureRandom.uuid }
       destination { '/new/base-path' }
-      sequence(:payload_version) { |i| 10 + i }
+      payload_version { generate :payload }
     end
 
     delivery_info { OpenStruct.new(routing_key: 'redirect.links') }
