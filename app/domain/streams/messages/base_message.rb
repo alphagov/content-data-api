@@ -5,7 +5,7 @@ class Streams::Messages::BaseMessage
     @payload = payload
   end
 
-  def build_attributes(base_path:, title:, document_text:, warehouse_item_id:)
+  def build_attributes(base_path:, title: nil, document_text: nil, warehouse_item_id:)
     {
       content_id: content_id,
       base_path: base_path,
