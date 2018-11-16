@@ -27,8 +27,8 @@ RSpec.describe Streams::Consumer do
 
   context 'when multiple locales for the same content_id' do
     it 'grows the dimensions for en and fr' do
-      fr_message = build :message, base_path: '/base-path/french', content_id: content_id, attributes: { 'payload_version' => 2 }
-      en_message = build :message, base_path: '/base-path/english', content_id: content_id, attributes: { 'payload_version' => 3 }
+      fr_message = build :message, base_path: '/base-path/french', content_id: content_id, attributes: { 'payload_version' => 2 }, locale: 'fr'
+      en_message = build :message, base_path: '/base-path/english', content_id: content_id, attributes: { 'payload_version' => 3 }, locale: 'en'
 
       subject.process(fr_message)
       subject.process(en_message)

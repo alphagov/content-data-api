@@ -23,7 +23,7 @@ RSpec.describe Streams::Messages::RedirectMessage do
       expect(attributes).to include(
         document_type: 'redirect',
         content_id: message.payload['content_id'],
-        warehouse_item_id: message.payload['content_id'].to_s,
+        warehouse_item_id: nil,
         raw_json: message.payload
       )
     end

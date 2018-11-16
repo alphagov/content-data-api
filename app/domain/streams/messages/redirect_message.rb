@@ -5,10 +5,7 @@ module Streams
     end
 
     def extract_edition_attributes
-      build_attributes(
-        base_path: base_path,
-        warehouse_item_id: content_id.to_s
-      )
+      build_attributes(base_path: base_path)
     end
 
     def self.is_redirect?(payload)

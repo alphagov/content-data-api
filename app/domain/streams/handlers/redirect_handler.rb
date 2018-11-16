@@ -10,7 +10,11 @@ class Streams::Handlers::RedirectHandler < Streams::Handlers::BaseHandler
   attr_reader :attrs, :old_edition
 
   def process
-    update_editions [attrs: attrs, old_edition: find_old_edition(attrs[:base_path])]
+    old_edition = find_old_edition(attrs[:base_path])
+    raise 'Redirect without a previous edition?' unless old_edition.present?
+
+    attrs[:warehouse_item_id] = old_edition.warehouse_item_id
+    update_editions [attrs: attrs, old_edition: old_edition]
   end
 
 private

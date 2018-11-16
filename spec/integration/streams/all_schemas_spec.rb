@@ -15,15 +15,4 @@ RSpec.describe 'Process all schemas' do
       end
     end
   end
-
-  describe 'redirect schema' do
-    let(:schema) { GovukSchemas::Schema.find(notification_schema: 'redirect') }
-    let(:message) { build(:redirect_message) }
-
-    it 'handles events for redirect with no errors for republish update' do
-      expect(GovukError).not_to receive(:notify)
-
-      subject.process(message)
-    end
-  end
 end
