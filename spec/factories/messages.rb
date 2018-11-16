@@ -1,9 +1,13 @@
 require 'govuk_message_queue_consumer/test_helpers/mock_message'
 
 FactoryBot.define do
+  sequence :payload do |i|
+    10 + i
+  end
+
   factory :message, class: GovukMessageQueueConsumer::MockMessage do
     transient do
-      sequence(:payload_version) { |i| 10 + i }
+      payload_version { generate :payload }
       schema_name { 'detailed_guide' }
       document_type { 'detailed_guide' }
       base_path { '/base-path' }
