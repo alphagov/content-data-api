@@ -5,6 +5,10 @@ class Etl::Master::MasterProcessor
     new(*args).process
   end
 
+  def self.process_aggregations(*args)
+    new(*args).process_aggregations
+  end
+
   def initialize(date: Date.yesterday)
     @date = date
   end
@@ -19,10 +23,7 @@ class Etl::Master::MasterProcessor
       Etl::GA::InternalSearchProcessor.process(date: date)
       Etl::Feedex::Processor.process(date: date)
 
-      unless historic_data?
-        Etl::Aggregations::Monthly.process(date: date)
-        Etl::Aggregations::Search.process
-      end
+      process_aggregations unless historic_data?
     end
 
     time(process: :monitor) do
@@ -33,6 +34,11 @@ class Etl::Master::MasterProcessor
         Monitor::Aggregations.run
       end
     end
+  end
+
+  def process_aggregations
+    Etl::Aggregations::Monthly.process(date: date)
+    Etl::Aggregations::Search.process
   end
 
   def already_run?
