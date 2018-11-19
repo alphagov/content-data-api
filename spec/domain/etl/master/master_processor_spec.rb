@@ -142,4 +142,18 @@ RSpec.describe Etl::Master::MasterProcessor do
     expect(Etl::GA::ViewsAndNavigationProcessor).to have_received(:process).with(date: another_date)
     expect(Etl::Feedex::Processor).to have_received(:process).with(date: another_date)
   end
+
+  describe '.process_aggregations' do
+    before do
+      subject.process_aggregations(date: date)
+    end
+
+    it 'runs the Aggregations::Monthly process' do
+      expect(Etl::Aggregations::Monthly).to have_received(:process).with(date: date)
+    end
+
+    it 'runs the Aggregations::Search process' do
+      expect(Etl::Aggregations::Monthly).to have_received(:process)
+    end
+  end
 end
