@@ -9,9 +9,9 @@ namespace :etl do
     from = args[:from].to_date
     to = args[:to].to_date
     (from..to).each do |date|
-      puts "repopulating GA pviews for #{date}"
+      console_log "repopulating GA pviews for #{date}"
       Etl::GA::ViewsAndNavigationProcessor.process(date: date)
-      puts "finished repopulating GA pviews for #{date}"
+      console_log "finished repopulating GA pviews for #{date}"
     end
   end
 
@@ -21,11 +21,11 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       ActiveRecord::Base.transaction do
-        puts "Deleting existing metrics for #{date}"
+        console_log "Deleting existing metrics for #{date}"
         Facts::Metric.where(dimensions_date_id: date).delete_all
-        puts "Running Etl::Master process for #{date}"
+        console_log "Running Etl::Master process for #{date}"
         Etl::Master::MasterProcessor.process(date: date)
-        puts "finished running Etl::Master for #{date}"
+        console_log "finished running Etl::Master for #{date}"
       end
     end
   end
@@ -34,5 +34,9 @@ namespace :etl do
   task :ga, [:date] => [:environment] do |_t, args|
     date = args[:date]
     GA.process(date: date.to_date)
+  end
+
+  def console_log(str)
+    puts str unless Rails.env.test?
   end
 end
