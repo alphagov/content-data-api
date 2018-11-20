@@ -9,7 +9,7 @@ RSpec.describe Streams::Messages::RedirectMessage do
   describe '#redirect?' do
     context 'when payload has redirect as schema type and no locale' do
       it 'returns true' do
-        expect(subject.is_redirect?(payload)).to eq(true)
+        expect(subject.is_redirect?(payload.except('locale'))).to eq(true)
       end
     end
   end

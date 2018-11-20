@@ -24,7 +24,6 @@ FactoryBot.define do
         result['redirects'][0]['path'] = '/new/base-path'
         result['redirects'][0]['type'] = 'exact'
         result['redirects'][0]['destination'] = destination
-        result.except!('locale')
         result
       end
     end
