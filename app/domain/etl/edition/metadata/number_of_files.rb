@@ -23,7 +23,7 @@ module Etl::Edition::Metadata::NumberOfFiles
 
   def self.filter_links(all_links, extensions_regex)
     # Sample: \.(doc|docx|docm)$
-    regex = /\.(#{extensions_regex.join('|')})$/
+    regex = /\.(#{extensions_regex.join('|')})$/i
 
     all_links.grep(regex).length
   end
