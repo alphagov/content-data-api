@@ -6,6 +6,8 @@ RSpec.describe Queries::FindAllDocumentTypes do
       create :edition, document_type: 'travel_advice', latest: true
       create :edition, document_type: 'manual', latest: true
       create :edition, document_type: 'service-manual', latest: false
+      create :edition, document_type: 'gone', latest: true
+      create :edition, document_type: 'redirect', latest: true
     end
 
     it 'returns distinct document types of latest editions' do
@@ -16,6 +18,16 @@ RSpec.describe Queries::FindAllDocumentTypes do
     it 'does not return document types of editions that are not the latest' do
       results = described_class.retrieve
       expect(results.pluck(:document_type)).to_not include('service-manual')
+    end
+
+    it 'does not return `gone`' do
+      results = described_class.retrieve
+      expect(results.pluck(:document_type)).to_not include('gone')
+    end
+
+    it 'does not return `redirect`' do
+      results = described_class.retrieve
+      expect(results.pluck(:document_type)).to_not include('redirect')
     end
   end
 
