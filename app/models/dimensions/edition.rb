@@ -21,7 +21,7 @@ class Dimensions::Edition < ApplicationRecord
     latest_by_content_id(content_id, locale)
       .where.not(base_path: exclude_paths)
   end
-
+  scope :live_content, -> { where.not(document_type: %w[redirect gone]) }
   def promote!(old_edition)
     if old_edition
       old_edition.deprecate!

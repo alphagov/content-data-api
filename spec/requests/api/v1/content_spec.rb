@@ -77,6 +77,34 @@ RSpec.describe '/content' do
     end
   end
 
+  describe 'Live content' do
+    subject { get '/content', params: { date_range: 'last-30-days', organisation_id: organisation_id } }
+
+    before do
+      create_edition_and_metric('redirect')
+      create_edition_and_metric('gone')
+      create_edition_and_metric('news_story')
+      recalculate_aggregations!
+    end
+
+    it 'filters out `gone` and `redirect`' do
+      subject
+
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results].count).to eq(1)
+      expect(json[:results].first).to include(document_type: 'news_story')
+    end
+  end
+
+  def create_edition_and_metric(document_type)
+    edition = create :edition,
+                     document_type: document_type,
+                     date: 15.days.ago,
+                     organisation_id: organisation_id
+    create :metric, edition: edition, date: 15.days.ago
+    edition
+  end
+
   describe 'Pagination' do
     before do
       edition1 = create :edition, organisation_id: organisation_id, document_type: 'a-document-type', base_path: '/path-01'
