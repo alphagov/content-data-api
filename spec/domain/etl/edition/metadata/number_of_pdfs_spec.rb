@@ -34,6 +34,11 @@ module Performance
       expect(subject.parse(response)).to eq(0)
     end
 
+    it "returns 1 if the attachment file is `.PDF`" do
+      response = build_response('documents' => '<div class=\"attachment-details\">\n<a href=\"link.PDF\">1</a>\n\n\n\n</div>')
+      expect(subject.parse(response)).to eq(1)
+    end
+
     def build_response(details)
       content_item_for_base_path('/a-base-path').merge('details' => details)
     end
