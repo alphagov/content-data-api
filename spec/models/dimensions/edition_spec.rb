@@ -254,4 +254,47 @@ RSpec.describe Dimensions::Edition, type: :model do
       expect(-> { create :edition, base_path: 'value', latest: false }).to_not raise_error
     end
   end
+
+  describe '.search' do
+    subject { Dimensions::Edition }
+
+    context 'by title' do
+      it 'returns matching titles' do
+        edition = create :edition, title: 'a long title'
+        create :edition
+
+        expect(subject.search('a long title')).to match_array(edition)
+      end
+
+      it 'is not case sensitive' do
+        edition = create :edition, title: 'Getting married in Spain'
+        create :edition
+
+        expect(subject.search('getting married in Spain')).to match_array(edition)
+      end
+
+      it 'matches all words' do
+        edition = create :edition, title: 'How to change your car'
+        create :edition
+
+        expect(subject.search('How to change your car another-word')).to be_empty
+      end
+
+      describe 'stemming' do
+        it 'include plurals' do
+          edition = create :edition, title: 'How to change your car'
+          create :edition
+
+          expect(subject.search('How to change your cars')).to match_array(edition)
+        end
+
+        it 'include similar words' do
+          edition = create :edition, title: 'How to change your car'
+          create :edition
+
+          expect(subject.search('how changing cars')).to match_array(edition)
+        end
+      end
+    end
+  end
 end

@@ -23,6 +23,10 @@ class Dimensions::Edition < ApplicationRecord
   end
   scope :relevant_content, -> { where.not(document_type: %w[redirect gone]) }
 
+  def self.search(query)
+    where("to_tsvector('english',title) @@ plainto_tsquery('english', :q)", q: query)
+  end
+
   def promote!(old_edition)
     if old_edition
       old_edition.deprecate!

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_07_170246) do
+ActiveRecord::Schema.define(version: 2018_11_21_135744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 2018_11_07_170246) do
     t.json "raw_json"
     t.boolean "withdrawn", null: false
     t.boolean "historical", null: false
+    t.index "to_tsvector('english'::regconfig, COALESCE((title)::text, ''::text))", name: "dimensions_editions_title", using: :gin
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
     t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
