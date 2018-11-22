@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_07_170246) do
+ActiveRecord::Schema.define(version: 2018_11_20_164728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 2018_11_07_170246) do
     t.string "primary_organisation_title"
     t.string "organisation_id"
     t.boolean "primary_organisation_withdrawn"
-    t.string "locale"
+    t.string "locale", null: false
     t.bigint "publishing_api_payload_version", null: false
     t.string "content_purpose_supergroup"
     t.string "content_purpose_subgroup"
