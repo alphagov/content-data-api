@@ -42,11 +42,11 @@ RSpec.describe Dimensions::Edition, type: :model do
       expect(results).to match_array(edition1)
     end
 
-    it '.live_content' do
+    it '.relevant_content' do
       edition = create :edition, document_type: 'news_story'
       create :edition, document_type: 'redirect'
       create :edition, document_type: 'gone'
-      results = subject.live_content
+      results = subject.relevant_content
       expect(results).to match_array(edition)
     end
 

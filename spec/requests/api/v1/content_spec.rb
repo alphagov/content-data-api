@@ -77,7 +77,7 @@ RSpec.describe '/content' do
     end
   end
 
-  describe 'Live content' do
+  describe 'Relevant content' do
     subject { get '/content', params: { date_range: 'last-30-days', organisation_id: organisation_id } }
 
     before do
