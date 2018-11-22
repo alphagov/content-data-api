@@ -4,6 +4,9 @@ RSpec.describe '/document_types' do
     create :edition, document_type: 'guide'
     create :edition, document_type: 'manual'
     create :edition, document_type: 'manual'
+    # `gone` and `redirect` should not appear in the results
+    create :edition, document_type: 'redirect'
+    create :edition, document_type: 'gone'
   end
 
   it 'returns distinct document types ordered by title' do

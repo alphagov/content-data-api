@@ -56,7 +56,7 @@ private
   end
 
   def slice_editions
-    editions = Dimensions::Edition.all
+    editions = Dimensions::Edition.relevant_content
     editions = editions.where('organisation_id = ?', organisation_id)
     editions = editions.where('document_type = ?', document_type) if document_type
     editions

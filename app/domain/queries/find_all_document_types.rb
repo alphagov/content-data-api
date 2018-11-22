@@ -5,6 +5,7 @@ class Queries::FindAllDocumentTypes
 
   def retrieve
     Dimensions::Edition.latest
+      .relevant_content
       .select(:document_type)
       .distinct
       .order(:document_type).to_a
