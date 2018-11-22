@@ -156,4 +156,34 @@ RSpec.describe Queries::FindContent do
       expect(-> { described_class.call(filter: filter) }).to raise_error(ArgumentError)
     end
   end
+
+  describe 'Filter by title / url' do
+    it 'returns the editions matching a title' do
+      edition1 = create :edition, title: 'this is a big title', date: 2.months.ago, organisation_id: primary_org_id
+      edition2 = create :edition, title: 'this is a small title', date: 2.months.ago, organisation_id: primary_org_id
+
+      create :metric, edition: edition1, date: 15.days.ago
+      create :metric, edition: edition2, date: 14.days.ago
+      recalculate_aggregations!
+
+      result = described_class.call(filter: filter.merge(q: 'big title'))
+      expect(result[:results]).to contain_exactly(
+        hash_including(title: 'this is a big title'),
+      )
+    end
+
+    it 'returns the editions matching a base_path' do
+      edition1 = create :edition, base_path: '/this/is/a/big/base-path', date: 2.months.ago, organisation_id: primary_org_id
+      edition2 = create :edition, base_path: '/this/is/a/small/base-path', date: 2.months.ago, organisation_id: primary_org_id
+
+      create :metric, edition: edition1, date: 15.days.ago
+      create :metric, edition: edition2, date: 14.days.ago
+      recalculate_aggregations!
+
+      result = described_class.call(filter: filter.merge(q: 'big base-path'))
+      expect(result[:results]).to contain_exactly(
+        hash_including(base_path: '/this/is/a/big/base-path'),
+      )
+    end
+  end
 end
