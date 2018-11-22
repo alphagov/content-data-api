@@ -24,7 +24,12 @@ class Dimensions::Edition < ApplicationRecord
   scope :relevant_content, -> { where.not(document_type: %w[redirect gone]) }
 
   def self.search(query)
-    where("to_tsvector('english',title) @@ plainto_tsquery('english', :q)", q: query)
+    sql = <<~SQL
+      to_tsvector('english',title) @@ plainto_tsquery('english', :q) or
+      to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :q2)
+    SQL
+
+    where(sql, q: query, q2: query.tr('/', ' '))
   end
 
   def promote!(old_edition)

@@ -274,7 +274,7 @@ RSpec.describe Dimensions::Edition, type: :model do
       end
 
       it 'matches all words' do
-        edition = create :edition, title: 'How to change your car'
+        create :edition, title: 'How to change your car'
         create :edition
 
         expect(subject.search('How to change your car another-word')).to be_empty
@@ -293,6 +293,52 @@ RSpec.describe Dimensions::Edition, type: :model do
           create :edition
 
           expect(subject.search('how changing cars')).to match_array(edition)
+        end
+      end
+    end
+
+    context 'by base_path' do
+      it 'returns matching base_paths' do
+        edition = create :edition, base_path: '/foo/bar/me'
+        create :edition
+
+        expect(subject.search('/foo/bar/me')).to match_array(edition)
+      end
+
+      it 'returns matching base_paths ignoring the `/`' do
+        edition = create :edition, base_path: ' foo bar me'
+        create :edition
+
+        expect(subject.search('/foo/bar/me')).to match_array(edition)
+      end
+
+      it 'is not case sensitive' do
+        edition = create :edition, base_path: 'foo bar me'
+        create :edition
+
+        expect(subject.search('foo bars me')).to match_array(edition)
+      end
+
+      it 'matches all words' do
+        create :edition, base_path: 'foo bar me'
+        create :edition
+
+        expect(subject.search('foo bar nothing')).to be_empty
+      end
+
+      describe 'stemming' do
+        it 'include plurals' do
+          edition = create :edition, base_path: '/foo/bar/renew-your-license'
+          create :edition
+
+          expect(subject.search('renew your license')).to match_array(edition)
+        end
+
+        it 'include similar words' do
+          edition = create :edition, base_path: '/driving/license/for-your-car'
+          create :edition
+
+          expect(subject.search('for-your-cars')).to match_array(edition)
         end
       end
     end
