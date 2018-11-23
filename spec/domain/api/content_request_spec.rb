@@ -4,6 +4,7 @@ RSpec.describe Api::ContentRequest do
       request = Api::ContentRequest.new(
         document_type: 'guide',
         organisation_id: 'the-id',
+        q: 'a title or url',
         page: '1',
         page_size: '20',
         date_range: 'last-30-days',
@@ -12,6 +13,7 @@ RSpec.describe Api::ContentRequest do
       expect(request.to_filter).to eq(
         document_type: 'guide',
         organisation_id: 'the-id',
+        q: 'a title or url',
         page: 1,
         page_size: 20,
         date_range: 'last-30-days',
@@ -28,6 +30,7 @@ RSpec.describe Api::ContentRequest do
         document_type: nil,
         organisation_id: nil,
         page: nil,
+        q: nil,
         page_size: nil,
         date_range: nil,
       )

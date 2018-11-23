@@ -77,6 +77,60 @@ RSpec.describe '/content' do
     end
   end
 
+  describe 'Filter by title' do
+    before do
+      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id, title: 'title1'
+      edition2 = create :edition, date: 1.month.ago, organisation_id: organisation_id, title: 'title2'
+
+      create :metric, date: 15.days.ago, edition: edition1
+      create :metric, date: 10.days.ago, edition: edition2
+
+      recalculate_aggregations!
+    end
+
+    subject { get '/content', params: { date_range: 'last-30-days', q: 'title1', organisation_id: organisation_id } }
+
+    it 'returns 200 status' do
+      subject
+
+      expect(response).to have_http_status(200)
+    end
+
+    it 'filters by title' do
+      subject
+
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results].count).to eq(1)
+    end
+  end
+
+  describe 'Filter by base_path' do
+    before do
+      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: 'base_path1'
+      edition2 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: 'base_path2'
+
+      create :metric, date: 15.days.ago, edition: edition1
+      create :metric, date: 10.days.ago, edition: edition2
+
+      recalculate_aggregations!
+    end
+
+    subject { get '/content', params: { date_range: 'last-30-days', q: 'base_path1', organisation_id: organisation_id } }
+
+    it 'returns 200 status' do
+      subject
+
+      expect(response).to have_http_status(200)
+    end
+
+    it 'filters by base_path' do
+      subject
+
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results].count).to eq(1)
+    end
+  end
+
   describe 'Relevant content' do
     subject { get '/content', params: { date_range: 'last-30-days', organisation_id: organisation_id } }
 
