@@ -5,14 +5,6 @@ RSpec.describe Streams::Consumer do
 
   let(:subject) { described_class.new }
 
-  it 'does not notify error if message is missing `locale`' do
-    message = build(:message)
-    message.payload.except!('locale')
-
-    expect(GovukError).not_to receive(:notify)
-    subject.process(message)
-  end
-
   it 'grows the dimension with update events' do
     expect {
       subject.process(build(:message))
@@ -121,6 +113,30 @@ RSpec.describe Streams::Consumer do
 
       new_edition = Dimensions::Edition.latest.find_by(content_id: content_id)
       expect(new_edition).to have_attributes(warehouse_item_id: warehouse_item_id, base_path: new_base_path)
+    end
+  end
+
+  context 'when handling unpublishing related messages' do
+    it 'it does not grow dimensions_editions unnecessarily' do
+      edition = create :edition
+      base_payload_version = edition.publishing_api_payload_version
+
+      first_gone_message = build(
+        :gone_message,
+        edition.slice(:base_path, :locale, :content_id)
+      )
+      first_gone_message.payload['payload_version'] = base_payload_version + 1
+
+      second_gone_message = build :message, payload: first_gone_message.payload.dup
+      second_gone_message.payload['payload_version'] = base_payload_version + 2
+
+      expect {
+        subject.process(first_gone_message)
+      }.to change(Dimensions::Edition, :count).by(1)
+
+      expect {
+        subject.process(second_gone_message)
+      }.to change(Dimensions::Edition, :count).by(0)
     end
   end
 end

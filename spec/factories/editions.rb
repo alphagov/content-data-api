@@ -2,9 +2,9 @@ FactoryBot.define do
   factory :edition, class: Dimensions::Edition do
     latest { true }
     locale { 'en' }
-    sequence(:content_id) { |i| "content_id - #{i}" }
+    sequence(:content_id) { SecureRandom.uuid }
     sequence(:title) { |i| "title - #{i}" }
-    sequence(:base_path) { |i| "link - #{i}" }
+    sequence(:base_path) { |i| "/base-path-#{i}" }
     sequence(:description) { |i| "description - #{i}" }
     sequence(:publishing_api_payload_version)
     schema_name { 'detailed_guide' }

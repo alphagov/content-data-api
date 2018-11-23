@@ -1,4 +1,7 @@
 class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
+  class MissingLocaleError < StandardError
+  end
+
   def self.process(*args)
     new(*args).process
   end
@@ -16,6 +19,8 @@ class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
 private
 
   def find_old_edition(content_id, locale)
+    raise MissingLocaleError unless locale
+
     Dimensions::Edition.find_by(content_id: content_id, locale: locale, latest: true)
   end
 end
