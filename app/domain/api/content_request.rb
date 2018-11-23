@@ -1,7 +1,7 @@
 class Api::ContentRequest
   include ActiveModel::Validations
 
-  attr_reader :organisation_id, :document_type, :page, :page_size, :date_range, :q
+  attr_reader :organisation_id, :document_type, :page, :page_size, :date_range, :search_term
   validate :valid_organisation_id
   validate :valid_date_range
 
@@ -11,7 +11,7 @@ class Api::ContentRequest
     @organisation_id = params[:organisation_id]
     @document_type = params[:document_type]
     @page = params[:page].try(:to_i)
-    @q = params[:q]
+    @search_term = params[:search_term]
     @page_size = params[:page_size].try(:to_i)
     @date_range = params[:date_range]
   end
@@ -21,7 +21,7 @@ class Api::ContentRequest
       organisation_id: organisation_id,
       document_type: document_type,
       date_range: date_range,
-      q: q,
+      search_term: search_term,
       page: page,
       page_size: page_size,
     }

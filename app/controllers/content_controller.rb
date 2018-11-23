@@ -15,7 +15,7 @@ private
   end
 
   def permitted_params
-    params.permit(:from, :to, :organisation_id, :document_type, :format, :page, :page_size, :date_range, :q)
+    params.permit(:from, :to, :organisation_id, :document_type, :format, :page, :page_size, :date_range, :search_term)
   end
 
   def validate_params!

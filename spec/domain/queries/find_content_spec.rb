@@ -166,7 +166,7 @@ RSpec.describe Queries::FindContent do
       create :metric, edition: edition2, date: 14.days.ago
       recalculate_aggregations!
 
-      result = described_class.call(filter: filter.merge(q: 'big title'))
+      result = described_class.call(filter: filter.merge(search_term: 'big title'))
       expect(result[:results]).to contain_exactly(
         hash_including(title: 'this is a big title'),
       )
@@ -180,7 +180,7 @@ RSpec.describe Queries::FindContent do
       create :metric, edition: edition2, date: 14.days.ago
       recalculate_aggregations!
 
-      result = described_class.call(filter: filter.merge(q: 'big base-path'))
+      result = described_class.call(filter: filter.merge(search_term: 'big base-path'))
       expect(result[:results]).to contain_exactly(
         hash_including(base_path: '/this/is/a/big/base-path'),
       )

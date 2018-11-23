@@ -25,11 +25,11 @@ class Dimensions::Edition < ApplicationRecord
 
   def self.search(query)
     sql = <<~SQL
-      to_tsvector('english',title) @@ plainto_tsquery('english', :q) or
-      to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :q2)
+      to_tsvector('english',title) @@ plainto_tsquery('english', :search_term) or
+      to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :search_term_without_slash)
     SQL
 
-    where(sql, q: query, q2: query.tr('/', ' '))
+    where(sql, search_term: query, search_term_without_slash: query.tr('/', ' '))
   end
 
   def promote!(old_edition)

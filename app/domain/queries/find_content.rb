@@ -3,7 +3,7 @@ class Queries::FindContent
 
   def self.call(filter:)
     raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
-    filter.assert_valid_keys :q, :date_range, :organisation_id, :document_type, :page, :page_size
+    filter.assert_valid_keys :search_term, :date_range, :organisation_id, :document_type, :page, :page_size
 
     new(filter).call
   end
@@ -29,12 +29,12 @@ private
     'upviews desc'
   end
 
-  attr_reader :organisation_id, :document_type, :date_range, :q
+  attr_reader :organisation_id, :document_type, :date_range, :search_term
 
   def initialize(filter)
     @organisation_id = filter.fetch(:organisation_id)
     @document_type = filter.fetch(:document_type)
-    @q = filter[:q]
+    @search_term = filter[:search_term]
     @page = filter[:page] || 1
     @page_size = filter[:page_size] || DEFAULT_PAGE_SIZE
   end
@@ -60,7 +60,7 @@ private
     editions = Dimensions::Edition.relevant_content
     editions = editions.where('organisation_id = ?', organisation_id)
     editions = editions.where('document_type = ?', document_type) if document_type
-    editions = editions.search(q) if q.present?
+    editions = editions.search(search_term) if search_term.present?
     editions
   end
 end

@@ -88,7 +88,7 @@ RSpec.describe '/content' do
       recalculate_aggregations!
     end
 
-    subject { get '/content', params: { date_range: 'last-30-days', q: 'title1', organisation_id: organisation_id } }
+    subject { get '/content', params: { date_range: 'last-30-days', search_term: 'title1', organisation_id: organisation_id } }
 
     it 'returns 200 status' do
       subject
@@ -115,7 +115,7 @@ RSpec.describe '/content' do
       recalculate_aggregations!
     end
 
-    subject { get '/content', params: { date_range: 'last-30-days', q: 'base_path1', organisation_id: organisation_id } }
+    subject { get '/content', params: { date_range: 'last-30-days', search_term: 'base_path1', organisation_id: organisation_id } }
 
     it 'returns 200 status' do
       subject
