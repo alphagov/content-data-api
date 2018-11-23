@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_22_105601) do
+ActiveRecord::Schema.define(version: 2018_11_23_142713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,10 +95,8 @@ ActiveRecord::Schema.define(version: 2018_11_22_105601) do
     t.index "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "dimensions_editions_base_path", using: :gin
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
-    t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "document_type"], name: "index_dimensions_editions_on_latest_and_document_type"
     t.index ["latest", "organisation_id", "primary_organisation_title"], name: "index_dimensions_editions_on_latest_org_id_org_title"
-    t.index ["latest", "warehouse_item_id"], name: "index_dimensions_editions_on_latest_and_warehouse_item_id", unique: true, where: "(latest = true)"
     t.index ["latest"], name: "index_dimensions_editions_on_latest"
     t.index ["organisation_id"], name: "index_dimensions_editions_organisation_id"
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
