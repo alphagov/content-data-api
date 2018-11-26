@@ -11,6 +11,12 @@ RSpec.describe Streams::Consumer do
     }.to change(Dimensions::Edition, :count).by(1)
   end
 
+  it 'grows the publishing api events with message' do
+    expect {
+      subject.process(build(:message))
+    }.to change(Events::PublishingApi, :count).by(1)
+  end
+
   it 'is idempotent' do
     message = build :message
 
