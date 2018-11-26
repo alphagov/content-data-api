@@ -16,7 +16,7 @@ RSpec.describe Etl::Aggregations::Monthly do
 
     subject.process(date: date)
 
-    results = Aggregations::MonthlyMetric.all
+    results = Aggregations::MonthlyMetric.all.order(pviews: :asc)
 
     expect(results.count).to eq(2)
     expect(results).to all(have_attributes(dimensions_month_id: '2018-02'))

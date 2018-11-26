@@ -58,6 +58,104 @@ RSpec.describe Queries::FindContent do
     )
   end
 
+  describe 'Other date ranges' do
+    let(:this_month_date) { Date.today }
+    let(:edition1) { create :edition, base_path: '/path1', date: 2.months.ago, organisation_id: primary_org_id }
+    let(:edition2) { create :edition, base_path: '/path2', date: 2.months.ago, organisation_id: primary_org_id }
+
+    it 'returns aggregations for last month' do
+      last_month_date = (Date.today - 1.month)
+      create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
+      create :metric, edition: edition1, date: last_month_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
+      create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 8, useful_no: 19, searches: 10
+      create :metric, edition: edition2, date: last_month_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
+
+      filter = {
+        date_range: 'last-month',
+        organisation_id: primary_org_id,
+        document_type: nil
+      }
+
+      recalculate_aggregations!
+
+      response = described_class.call(filter: filter)
+
+      expect(response[:results]).to contain_exactly(
+        hash_including(upviews: 20, searches: 1, satisfaction: 0.8, satisfaction_score_responses: 5),
+        hash_including(upviews: 10, searches: 11, satisfaction: 0.8, satisfaction_score_responses: 5),
+      )
+    end
+
+    it 'returns aggregations for last 3 months' do
+      two_months_ago_date = (Date.today - 2.month)
+      create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
+      create :metric, edition: edition1, date: two_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
+      create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
+      create :metric, edition: edition2, date: two_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
+
+      filter = {
+        date_range: 'last-3-months',
+        organisation_id: primary_org_id,
+        document_type: nil
+      }
+
+      recalculate_aggregations!
+
+      response = described_class.call(filter: filter)
+
+      expect(response[:results]).to contain_exactly(
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+      )
+    end
+
+    it 'returns aggregations for last 6 months' do
+      five_months_ago_date = (Date.today - 5.month)
+      create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
+      create :metric, edition: edition1, date: five_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
+      create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
+      create :metric, edition: edition2, date: five_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
+
+      filter = {
+        date_range: 'last-6-months',
+        organisation_id: primary_org_id,
+        document_type: nil
+      }
+
+      recalculate_aggregations!
+
+      response = described_class.call(filter: filter)
+
+      expect(response[:results]).to contain_exactly(
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+      )
+    end
+
+    it 'returns aggregations for last year' do
+      eleven_months_ago_date = (Date.today - 11.month)
+      create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
+      create :metric, edition: edition1, date: eleven_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
+      create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
+      create :metric, edition: edition2, date: eleven_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
+
+      filter = {
+        date_range: 'last-year',
+        organisation_id: primary_org_id,
+        document_type: nil
+      }
+
+      recalculate_aggregations!
+
+      response = described_class.call(filter: filter)
+
+      expect(response[:results]).to contain_exactly(
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+      )
+    end
+  end
+
   describe 'Pagination' do
     before do
       4.times do |n|
