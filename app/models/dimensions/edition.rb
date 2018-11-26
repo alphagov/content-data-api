@@ -46,7 +46,7 @@ class Dimensions::Edition < ApplicationRecord
   end
 
   def change_from?(attributes)
-    assign_attributes(attributes.reject { |k, _| k == :raw_json })
+    assign_attributes(attributes)
     dirty = changed?
     reload
     dirty

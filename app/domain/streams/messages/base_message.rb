@@ -33,7 +33,6 @@ class Streams::Messages::BaseMessage
       warehouse_item_id: warehouse_item_id,
       withdrawn: withdrawn_notice?,
       historical: historically_political?,
-      raw_json: @payload
     }
   end
 

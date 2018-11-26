@@ -135,11 +135,9 @@ RSpec.describe Streams::Consumer do
 
       second_gone_message = build :message, payload: first_gone_message.payload.dup
       second_gone_message.payload['payload_version'] = base_payload_version + 2
-
       expect {
         subject.process(first_gone_message)
       }.to change(Dimensions::Edition, :count).by(1)
-
       expect {
         subject.process(second_gone_message)
       }.to change(Dimensions::Edition, :count).by(0)

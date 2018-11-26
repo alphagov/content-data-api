@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_26_095403) do
+ActiveRecord::Schema.define(version: 2018_11_26_152543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,7 +88,6 @@ ActiveRecord::Schema.define(version: 2018_11_26_095403) do
     t.string "update_type"
     t.datetime "last_edited_at"
     t.string "warehouse_item_id", null: false
-    t.json "raw_json"
     t.boolean "withdrawn", null: false
     t.boolean "historical", null: false
     t.bigint "publishing_api_event_id"

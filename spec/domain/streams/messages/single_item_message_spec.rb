@@ -24,7 +24,6 @@ RSpec.describe Streams::Messages::SingleItemMessage do
           historical: false,
           warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}",
           withdrawn: true,
-          raw_json: message.payload
         )
       )
     end
