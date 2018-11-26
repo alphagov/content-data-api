@@ -6,8 +6,10 @@ class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
     new(*args).process
   end
 
-  def initialize(attrs)
+  def initialize(attrs, payload, routing_key)
     @attrs = attrs
+    @payload = payload
+    @routing_key = routing_key
   end
 
   attr_reader :attrs, :old_edition

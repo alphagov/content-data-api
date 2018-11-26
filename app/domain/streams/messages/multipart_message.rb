@@ -12,7 +12,9 @@ module Streams
       Streams::Handlers::MultipartHandler.new(
         extract_edition_attributes,
         content_id,
-        locale
+        locale,
+        @payload,
+        @routing_key
       )
     end
 
