@@ -13,7 +13,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       msg.payload['withdrawn_notice'] = { explanation: 'something' }
       msg
     end
-    let(:instance) { subject.new(message.payload) }
+    let(:instance) { subject.new(message.payload, "routing_key") }
 
     it 'returns the attributes' do
       attributes = instance.extract_edition_attributes

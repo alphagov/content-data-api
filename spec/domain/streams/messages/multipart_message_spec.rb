@@ -16,7 +16,7 @@ RSpec.describe Streams::Messages::MultipartMessage do
   end
 
   describe '#extract_edition_attributes' do
-    let(:instance) { subject.new(message.payload) }
+    let(:instance) { subject.new(message.payload, "routing_key") }
 
     context 'when the schema is a Guide' do
       let(:message) do
