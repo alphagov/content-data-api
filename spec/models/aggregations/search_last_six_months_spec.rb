@@ -30,26 +30,47 @@ RSpec.describe Aggregations::SearchLastSixMonths, type: :model do
     expect(subject.pluck(:dimensions_edition_id)).to match_array([edition1.id, edition2.id])
   end
 
-  describe 'Boundaries' do
-    it 'does not include metrics before 3 months' do
+  describe 'Boundary: last six months from yesterday' do
+    it 'include metrics from 6 months ago starting in yesterday' do
       edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
-      create :metric, edition: edition1, date: (6.months.ago - 1.day)
+      create :metric, edition: edition1, date: (Date.yesterday - 6.months), upviews: 10
 
       recalculate_aggregations!
 
-      expect(subject.count).to eq(0)
+      expect(subject.sum(:upviews)).to eq(10)
+    end
+
+    it 'does not include metrics from 6 months and 2 days ago' do
+      edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+      create :metric, edition: edition1, date: (6.months.ago - 2.days), upviews: 10
+
+      recalculate_aggregations!
+
+      expect(subject.sum(:upviews)).to eq(0.0)
     end
 
     it 'does include yesterday' do
       edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
-      create :metric, edition: edition1, date: Date.yesterday
+      create :metric, edition: edition1, date: Date.yesterday, upviews: 10
 
       recalculate_aggregations!
 
-      expect(subject.count).to eq(1)
+      expect(subject.sum(:upviews)).to eq(10.0)
     end
   end
 
+  it 'does not count metrics twice' do
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    to = Date.yesterday
+    from = Date.yesterday - 6.months
+    (from..to).each do |date|
+      create :metric, edition: edition1, date: date, upviews: 10
+    end
+
+    recalculate_aggregations!
+
+    expect(subject.sum(:upviews)).to eq(10.0 * Facts::Metric.count)
+  end
 
   it 'is linked to the latest dimension edition' do
     edition1 = create :edition

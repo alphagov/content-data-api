@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_26_120610) do
+ActiveRecord::Schema.define(version: 2018_11_26_135420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -245,7 +245,7 @@ ActiveRecord::Schema.define(version: 2018_11_26_120610) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '3 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '2 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (('yesterday'::text)::date - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - '5 mons'::interval), 'YYYY-MM-01'::text))::date))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL
@@ -268,7 +268,7 @@ ActiveRecord::Schema.define(version: 2018_11_26_120610) do
              FROM ((aggregations_monthly_metrics
                JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
                JOIN dimensions_editions ON ((dimensions_editions.id = aggregations_monthly_metrics.dimensions_edition_id)))
-            WHERE ((dimensions_months.id)::text >= to_char((now() - '5 mons'::interval), 'YYYY-MM'::text))
+            WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - '5 mons'::interval), 'YYYY-MM'::text))
             GROUP BY dimensions_editions.warehouse_item_id
           UNION
            SELECT dimensions_editions.warehouse_item_id,
@@ -280,7 +280,7 @@ ActiveRecord::Schema.define(version: 2018_11_26_120610) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '5 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (('yesterday'::text)::date - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('yesterday'::text)::date - '5 mons'::interval)))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL
@@ -315,7 +315,7 @@ ActiveRecord::Schema.define(version: 2018_11_26_120610) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '11 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (CURRENT_DATE - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (CURRENT_DATE - '11 mons'::interval)))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL
