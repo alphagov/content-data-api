@@ -18,18 +18,18 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
   create_table "aggregations_monthly_metrics", force: :cascade do |t|
     t.string "dimensions_month_id", null: false
     t.bigint "dimensions_edition_id", null: false
-    t.integer "pviews", default: 0, null: false
-    t.integer "upviews", default: 0, null: false
-    t.integer "feedex", default: 0, null: false
+    t.integer "pviews"
+    t.integer "upviews"
+    t.integer "feedex"
     t.integer "useful_yes", default: 0, null: false
     t.integer "useful_no", default: 0, null: false
-    t.integer "searches", default: 0, null: false
-    t.integer "exits", default: 0, null: false
-    t.integer "entrances", default: 0, null: false
-    t.integer "bounce_rate", default: 0, null: false
-    t.integer "avg_page_time", default: 0, null: false
-    t.integer "bounces", default: 0, null: false
-    t.integer "page_time", default: 0, null: false
+    t.integer "searches"
+    t.integer "exits"
+    t.integer "entrances"
+    t.integer "bounce_rate"
+    t.integer "avg_page_time"
+    t.integer "bounces"
+    t.integer "page_time"
     t.float "satisfaction", default: 0.0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -126,20 +126,20 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
   create_table "events_gas", force: :cascade do |t|
     t.date "date"
     t.string "page_path"
-    t.integer "pviews", default: 0
-    t.integer "upviews", default: 0
+    t.integer "pviews"
+    t.integer "upviews"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "useful_yes", default: 0
     t.integer "useful_no", default: 0
     t.integer "process_name", null: false
-    t.integer "searches", default: 0
-    t.integer "exits", default: 0
-    t.integer "entrances", default: 0
-    t.integer "bounce_rate", default: 0
-    t.integer "avg_page_time", default: 0
-    t.integer "bounces", default: 0
-    t.integer "page_time", default: 0
+    t.integer "searches"
+    t.integer "exits"
+    t.integer "entrances"
+    t.integer "bounce_rate"
+    t.integer "avg_page_time"
+    t.integer "bounces"
+    t.integer "page_time"
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
     t.index ["process_name", "date", "page_path"], name: "index_events_gas_on_process_name_and_date_and_page_path", unique: true
   end
@@ -163,18 +163,18 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
     t.bigint "dimensions_edition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "pviews", default: 0
-    t.integer "upviews", default: 0
-    t.integer "feedex", default: 0
+    t.integer "pviews"
+    t.integer "upviews"
+    t.integer "feedex"
     t.integer "useful_yes", default: 0, null: false
     t.integer "useful_no", default: 0, null: false
-    t.integer "searches", default: 0
-    t.integer "exits", default: 0
-    t.integer "entrances", default: 0
-    t.integer "bounce_rate", default: 0
-    t.integer "avg_page_time", default: 0
-    t.integer "bounces", default: 0
-    t.integer "page_time", default: 0
+    t.integer "searches"
+    t.integer "exits"
+    t.integer "entrances"
+    t.integer "bounce_rate"
+    t.integer "avg_page_time"
+    t.integer "bounces"
+    t.integer "page_time"
     t.float "satisfaction", default: 0.0, null: false
     t.index ["dimensions_date_id", "dimensions_edition_id"], name: "metrics_edition_id_date_id", unique: true
     t.index ["dimensions_edition_id"], name: "index_facts_metrics_on_dimensions_edition_id"
@@ -210,7 +210,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
      FROM ((facts_metrics
        JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
        JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-    WHERE (facts_metrics.dimensions_date_id >= (CURRENT_DATE - '30 days'::interval day))
+    WHERE (facts_metrics.dimensions_date_id >= (('now'::text)::date - '30 days'::interval day))
     GROUP BY dimensions_editions.warehouse_item_id;
   SQL
 
@@ -260,7 +260,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (CURRENT_DATE - '3 mons'::interval)) AND (facts_metrics.dimensions_date_id < (CURRENT_DATE - '2 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '3 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '2 mons'::interval)))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL
@@ -295,7 +295,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (CURRENT_DATE - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (CURRENT_DATE - '5 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '5 mons'::interval)))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL
@@ -330,7 +330,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (CURRENT_DATE - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (CURRENT_DATE - '11 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '11 mons'::interval)))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL
