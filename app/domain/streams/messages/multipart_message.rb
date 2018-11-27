@@ -18,12 +18,11 @@ module Streams
 
     def extract_edition_attributes
       parts.map.with_index do |part, index|
-        base_path = base_path_for_part(part, index)
         build_attributes(
-          base_path: base_path,
+          base_path: base_path_for_part(part, index),
           title: title_for(part),
           document_text: document_text_for_part(part['slug']),
-          warehouse_item_id: "#{content_id}:#{locale}:#{base_path}"
+          warehouse_item_id: warehouse_item_id_for_part(part, index)
         )
       end
     end
@@ -47,10 +46,29 @@ module Streams
     end
 
     def base_path_for_part(part, index)
-      slug = part.fetch('slug')
-      return base_path if index.zero?
+      part_sub_path = sub_path_for_part(part, index)
 
-      "#{base_path}/#{slug}"
+      if part_sub_path
+        "#{base_path}/#{part_sub_path}"
+      else
+        base_path
+      end
+    end
+
+    def sub_path_for_part(part, index)
+      return nil if index.zero?
+
+      part.fetch('slug')
+    end
+
+    def warehouse_item_id_for_part(part, index)
+      if index.zero?
+        "#{content_id}:#{locale}"
+      else
+        part_sub_path = sub_path_for_part(part, index)
+
+        "#{content_id}:#{locale}:#{part_sub_path}"
+      end
     end
 
     attr_reader :payload, :message_parts

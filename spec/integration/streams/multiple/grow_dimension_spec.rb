@@ -29,10 +29,10 @@ RSpec.describe "Process sub-pages for multipart content types" do
       parts = Dimensions::Edition.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
-        ["/base-path", "Main Title: Part 1", "#{content_id}:en:/base-path"],
-        ["/base-path/part2", "Main Title: Part 2", "#{content_id}:en:/base-path/part2"],
-        ["/base-path/part3", "Main Title: Part 3", "#{content_id}:en:/base-path/part3"],
-        ["/base-path/part4", "Main Title: Part 4", "#{content_id}:en:/base-path/part4"]
+        ["/base-path", "Main Title: Part 1", "#{content_id}:en"],
+        ["/base-path/part2", "Main Title: Part 2", "#{content_id}:en:part2"],
+        ["/base-path/part3", "Main Title: Part 3", "#{content_id}:en:part3"],
+        ["/base-path/part4", "Main Title: Part 4", "#{content_id}:en:part4"]
       ]
     end
   end
@@ -52,9 +52,9 @@ RSpec.describe "Process sub-pages for multipart content types" do
       parts = Dimensions::Edition.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
-        ["/travel/advice", "The Title: Summary", "#{content_id}:fr:/travel/advice"],
-        ["/travel/advice/part1", "The Title: Part 1", "#{content_id}:fr:/travel/advice/part1"],
-        ["/travel/advice/part2", "The Title: Part 2", "#{content_id}:fr:/travel/advice/part2"],
+        ["/travel/advice", "The Title: Summary", "#{content_id}:fr"],
+        ["/travel/advice/part1", "The Title: Part 1", "#{content_id}:fr:part1"],
+        ["/travel/advice/part2", "The Title: Part 2", "#{content_id}:fr:part2"],
       ]
     end
   end
