@@ -16,11 +16,11 @@ private
     case date_range
     when 'last-month'
       Aggregations::SearchLastMonth
-    when 'last-3-months'
+    when 'past-3-months'
       Aggregations::SearchLastThreeMonths
-    when 'last-6-months'
+    when 'past-6-months'
       Aggregations::SearchLastSixMonths
-    when 'last-year'
+    when 'past-year'
       Aggregations::SearchLastTwelveMonths
     else
       Aggregations::SearchLastThirtyDays
@@ -31,11 +31,11 @@ private
     case date_range
     when 'last-month'
       'last_months'
-    when 'last-3-months'
+    when 'past-3-months'
       'last_three_months'
-    when 'last-6-months'
+    when 'past-6-months'
       'last_six_months'
-    when 'last-year'
+    when 'past-year'
       'last_twelve_months'
     else
       'last_thirty_days'
@@ -43,7 +43,7 @@ private
   end
 
   def valid_date_range?
-    ['last-30-days', 'last-month', 'last-3-months', 'last-6-months', 'last-year'].include?(date_range)
+    ['past-30-days', 'last-month', 'past-3-months', 'past-6-months', 'past-year'].include?(date_range)
   end
 
   class InvalidDateRangeError < StandardError
