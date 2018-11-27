@@ -1,5 +1,5 @@
 class RemoveDefaultZerosFromEventsGas < ActiveRecord::Migration[5.2]
-  COLS = %i[pviews upviews searches exits entrances bounces bounce_rate avg_page_time page_time]
+  COLS = %i[pviews upviews searches exits entrances bounces bounce_rate avg_page_time page_time].freeze
 
   def up
     COLS.each do |col|

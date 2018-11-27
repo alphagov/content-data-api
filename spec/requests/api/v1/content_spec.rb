@@ -7,8 +7,8 @@ RSpec.describe '/content' do
 
   describe 'Aggregations' do
     before do
-      this_month_date = Date.today.beginning_of_month
-      last_month_date = Date.today - 1.month
+      this_month_date = Date.yesterday.beginning_of_month
+      last_month_date = Date.yesterday - 1.month
       edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id
       create :metric, date: this_month_date, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
 
