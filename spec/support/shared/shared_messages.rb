@@ -1,7 +1,7 @@
 RSpec.shared_examples 'BaseMessage#historically_political?' do
   describe '#historically_political?' do
     let(:payload) { build(:message).payload }
-    let(:message) { described_class.new(payload) }
+    let(:message) { described_class.new(payload, "routing_key") }
     subject { message.historically_political? }
 
     context 'when payload has current goverment as false and has political as true' do
@@ -38,7 +38,7 @@ end
 RSpec.shared_examples 'BaseMessage#withdrawn_notice?' do
   describe '#withdrawn_notice?' do
     let(:payload) { build(:message).payload }
-    let(:message) { described_class.new(payload) }
+    let(:message) { described_class.new(payload, "routing_key") }
     subject { message.withdrawn_notice? }
 
     context 'when payload has withdrawn notice with explanation' do

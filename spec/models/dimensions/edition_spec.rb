@@ -190,10 +190,6 @@ RSpec.describe Dimensions::Edition, type: :model do
     it 'returns false if would not be changed by the given attributes' do
       expect(edition.change_from?(attrs)).to eq(false)
     end
-
-    it 'ignores the raw_json attribute' do
-      expect(edition.change_from?(attrs.merge(raw_json: '{}'))).to eq(false)
-    end
   end
 
   describe '#metadata' do

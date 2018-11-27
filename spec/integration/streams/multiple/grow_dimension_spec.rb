@@ -13,6 +13,14 @@ RSpec.describe "Process sub-pages for multipart content types" do
     }.to change(Dimensions::Edition, :count).by(4)
   end
 
+  it "grows the publishing api events with message" do
+    message = build(:message, :with_parts)
+
+    expect {
+      subject.process(message)
+    }.to change(Events::PublishingApi, :count).by(1)
+  end
+
   context 'for a guide' do
     let(:content_id) { '3079e1a9-4b07-4012-af68-8b86f918fae9' }
 

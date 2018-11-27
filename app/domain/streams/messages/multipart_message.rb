@@ -1,7 +1,7 @@
 module Streams
   class Messages::MultipartMessage < Messages::BaseMessage
-    def initialize(payload)
-      super
+    def initialize(payload, routing_key)
+      super(payload, routing_key)
     end
 
     def self.is_multipart?(payload)
@@ -12,7 +12,9 @@ module Streams
       Streams::Handlers::MultipartHandler.new(
         extract_edition_attributes,
         content_id,
-        locale
+        locale,
+        @payload,
+        @routing_key
       )
     end
 

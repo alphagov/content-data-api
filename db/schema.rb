@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_23_142713) do
+ActiveRecord::Schema.define(version: 2018_11_26_152543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,9 +88,9 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
     t.string "update_type"
     t.datetime "last_edited_at"
     t.string "warehouse_item_id", null: false
-    t.json "raw_json"
     t.boolean "withdrawn", null: false
     t.boolean "historical", null: false
+    t.bigint "publishing_api_event_id"
     t.index "to_tsvector('english'::regconfig, (title)::text)", name: "dimensions_editions_title", using: :gin
     t.index "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "dimensions_editions_base_path", using: :gin
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
     t.index ["latest", "warehouse_item_id"], name: "index_dimensions_editions_on_latest_and_warehouse_item_id", unique: true, where: "(latest = true)"
     t.index ["latest"], name: "index_dimensions_editions_on_latest"
     t.index ["organisation_id"], name: "index_dimensions_editions_organisation_id"
+    t.index ["publishing_api_event_id"], name: "index_dimensions_editions_on_publishing_api_event_id"
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
     t.index ["warehouse_item_id", "latest"], name: "index_dimensions_editions_warehouse_item_id_latest"
     t.index ["warehouse_item_id"], name: "index_dimensions_editions_warehouse_item_id"
@@ -182,6 +183,13 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
     t.index ["dimensions_edition_id"], name: "index_facts_metrics_on_dimensions_edition_id"
   end
 
+  create_table "publishing_api_events", force: :cascade do |t|
+    t.string "routing_key"
+    t.jsonb "payload"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -197,6 +205,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
   end
 
   add_foreign_key "aggregations_monthly_metrics", "dimensions_months"
+  add_foreign_key "dimensions_editions", "publishing_api_events"
   add_foreign_key "facts_editions", "dimensions_dates", primary_key: "date"
   add_foreign_key "facts_editions", "dimensions_editions"
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
@@ -212,7 +221,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
      FROM ((facts_metrics
        JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
        JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-    WHERE (facts_metrics.dimensions_date_id >= (('now'::text)::date - '30 days'::interval day))
+    WHERE (facts_metrics.dimensions_date_id >= (CURRENT_DATE - '30 days'::interval day))
     GROUP BY dimensions_editions.warehouse_item_id;
   SQL
 
@@ -262,7 +271,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '3 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '2 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (CURRENT_DATE - '3 mons'::interval)) AND (facts_metrics.dimensions_date_id < (CURRENT_DATE - '2 mons'::interval)))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL
@@ -297,7 +306,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '5 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (CURRENT_DATE - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (CURRENT_DATE - '5 mons'::interval)))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL
@@ -332,7 +341,7 @@ ActiveRecord::Schema.define(version: 2018_11_23_142713) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (('now'::text)::date - '11 mons'::interval)))
+            WHERE ((facts_metrics.dimensions_date_id >= (CURRENT_DATE - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (CURRENT_DATE - '11 mons'::interval)))
             GROUP BY dimensions_editions.warehouse_item_id) agg
     GROUP BY agg.warehouse_item_id;
   SQL

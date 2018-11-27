@@ -16,7 +16,7 @@ RSpec.describe Streams::Messages::MultipartMessage do
   end
 
   describe '#extract_edition_attributes' do
-    let(:instance) { subject.new(message.payload) }
+    let(:instance) { subject.new(message.payload, "routing_key") }
 
     context 'when the schema is a Guide' do
       let(:message) do
@@ -30,7 +30,6 @@ RSpec.describe Streams::Messages::MultipartMessage do
         attributes = instance.extract_edition_attributes
         common_attributes = expected_raw_attributes(
           content_id: message.payload['content_id'],
-          raw_json: message.payload,
           schema_name: 'guide'
         )
         expect(attributes).to eq([
@@ -74,7 +73,6 @@ RSpec.describe Streams::Messages::MultipartMessage do
         attributes = instance.extract_edition_attributes
         common_attributes = expected_raw_attributes(
           content_id: message.payload['content_id'],
-          raw_json: message.payload,
           schema_name: 'travel_advice',
           document_type: 'travel_advice'
         )
