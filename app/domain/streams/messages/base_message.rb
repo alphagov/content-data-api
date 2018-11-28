@@ -1,11 +1,12 @@
 class Streams::Messages::BaseMessage
   attr_reader :payload
 
-  def initialize(payload)
+  def initialize(payload, routing_key)
     @payload = payload
+    @routing_key = routing_key
   end
 
-  def build_attributes(base_path:, title: nil, document_text: nil, warehouse_item_id: nil)
+  def build_attributes(base_path:, title:, document_text:, warehouse_item_id:)
     {
       content_id: content_id,
       base_path: base_path,
@@ -32,7 +33,6 @@ class Streams::Messages::BaseMessage
       warehouse_item_id: warehouse_item_id,
       withdrawn: withdrawn_notice?,
       historical: historically_political?,
-      raw_json: @payload
     }
   end
 

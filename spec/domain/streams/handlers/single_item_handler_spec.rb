@@ -13,7 +13,7 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
     )
   end
 
-  subject { described_class.new(attrs) }
+  subject { described_class.new(attrs, {}, "routing_key") }
 
   context 'when attrs match the old edition' do
     let(:attrs) do

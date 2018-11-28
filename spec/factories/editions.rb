@@ -13,6 +13,7 @@ FactoryBot.define do
     organisation_id { '17d84dc6-e5b5-4065-a8b5-8783bd934938' }
     withdrawn { false }
     historical { false }
+    association :publishing_api_event
 
     transient do
       date { Time.zone.today }

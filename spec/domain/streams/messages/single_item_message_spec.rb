@@ -14,7 +14,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       msg.payload['withdrawn_notice'] = { explanation: 'something' }
       msg
     end
-    let(:instance) { subject.new(message.payload) }
+    let(:instance) { subject.new(message.payload, "routing_key") }
 
     it 'returns the attributes' do
       attributes = instance.extract_edition_attributes
@@ -25,7 +25,6 @@ RSpec.describe Streams::Messages::SingleItemMessage do
           historical: false,
           warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}",
           withdrawn: true,
-          raw_json: message.payload
         )
       )
     end

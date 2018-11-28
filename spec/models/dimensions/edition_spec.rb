@@ -190,10 +190,6 @@ RSpec.describe Dimensions::Edition, type: :model do
     it 'returns false if would not be changed by the given attributes' do
       expect(edition.change_from?(attrs)).to eq(false)
     end
-
-    it 'ignores the raw_json attribute' do
-      expect(edition.change_from?(attrs.merge(raw_json: '{}'))).to eq(false)
-    end
   end
 
   describe '#metadata' do
@@ -224,6 +220,34 @@ RSpec.describe Dimensions::Edition, type: :model do
         withdrawn: false,
         historical: false
       )
+    end
+  end
+
+  describe 'Unique constraint on `warehouse_item_id` and `latest`' do
+    it 'prevent duplicating `warehouse_item_id` for latest items' do
+      create :edition, warehouse_item_id: 'value', latest: true
+
+      expect(-> { create :edition, warehouse_item_id: 'value', latest: true }).to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it 'does not prevent duplicating `warehouse_item_id` for old items' do
+      create :edition, warehouse_item_id: 'value', latest: true
+
+      expect(-> { create :edition, warehouse_item_id: 'value', latest: false }).to_not raise_error
+    end
+  end
+
+  describe 'Unique constraint on `base_path` and `latest`' do
+    it 'prevent duplicating `base_path` for latest items' do
+      create :edition, base_path: 'value', latest: true
+
+      expect(-> { create :edition, base_path: 'value', latest: true }).to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it 'does not prevent duplicating `base_path` for old items' do
+      create :edition, base_path: 'value', latest: true
+
+      expect(-> { create :edition, base_path: 'value', latest: false }).to_not raise_error
     end
   end
 

@@ -17,7 +17,7 @@ RSpec.describe Streams::Messages::MultipartMessage do
   end
 
   describe '#extract_edition_attributes' do
-    let(:instance) { subject.new(message.payload) }
+    let(:instance) { subject.new(message.payload, "routing_key") }
 
     context 'when the schema is a Guide' do
       let(:message) do
@@ -31,30 +31,29 @@ RSpec.describe Streams::Messages::MultipartMessage do
         attributes = instance.extract_edition_attributes
         common_attributes = expected_raw_attributes(
           content_id: message.payload['content_id'],
-          raw_json: message.payload,
           schema_name: 'guide'
         )
         expect(attributes).to eq([
           common_attributes.merge(
-            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path",
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}",
             document_text: 'Here 1',
             title: 'the-title: Part 1',
             base_path: '/base-path'
           ),
           common_attributes.merge(
-            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part2",
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part2",
             document_text: 'be 2',
             title: 'the-title: Part 2',
             base_path: '/base-path/part2'
           ),
           common_attributes.merge(
-            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part3",
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part3",
             document_text: 'some 3',
             title: 'the-title: Part 3',
             base_path: '/base-path/part3'
           ),
           common_attributes.merge(
-            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part4",
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part4",
             document_text: 'content 4.',
             title: 'the-title: Part 4',
             base_path: '/base-path/part4'
@@ -75,25 +74,24 @@ RSpec.describe Streams::Messages::MultipartMessage do
         attributes = instance.extract_edition_attributes
         common_attributes = expected_raw_attributes(
           content_id: message.payload['content_id'],
-          raw_json: message.payload,
           schema_name: 'travel_advice',
           document_type: 'travel_advice'
         )
         expect(attributes).to eq([
           common_attributes.merge(
-            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path",
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}",
             document_text: 'summary content',
             title: 'the-title: Summary',
             base_path: '/base-path'
           ),
           common_attributes.merge(
-            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part1",
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part1",
             document_text: 'Here 1',
             title: 'the-title: Part 1',
             base_path: '/base-path/part1'
           ),
           common_attributes.merge(
-            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:/base-path/part2",
+            warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part2",
             document_text: 'be 2',
             title: 'the-title: Part 2',
             base_path: '/base-path/part2'
