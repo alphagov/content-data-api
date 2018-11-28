@@ -159,7 +159,7 @@ RSpec.describe Queries::FindContent do
   describe 'Filter by all organisations' do
     let(:filter) do
       {
-        date_range: 'last-30-days',
+        date_range: 'past-30-days',
         organisation_id: 'all',
         document_type: nil
       }
@@ -179,6 +179,32 @@ RSpec.describe Queries::FindContent do
       expect(response[:results]).to contain_exactly(
         hash_including(base_path: edition1.base_path),
         hash_including(base_path: edition2.base_path)
+      )
+    end
+  end
+
+  describe 'Filter by null organisations' do
+    let(:filter) do
+      {
+        date_range: 'past-30-days',
+        organisation_id: 'none',
+        document_type: nil
+      }
+    end
+
+    let(:edition1) { create :edition, date: 15.days.ago, organisation_id: nil }
+
+    before do
+      create :metric, edition: edition1, date: 15.days.ago
+      edition2 = create :edition, date: 15.days.ago, organisation_id: primary_org_id
+      create :metric, edition: edition2, date: 15.days.ago
+      recalculate_aggregations!
+    end
+
+    it 'returns content from editions which have no organisation' do
+      response = described_class.call(filter: filter)
+      expect(response[:results]).to contain_exactly(
+        hash_including(base_path: edition1.base_path)
       )
     end
   end

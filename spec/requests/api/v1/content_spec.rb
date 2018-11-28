@@ -290,7 +290,7 @@ RSpec.describe '/content' do
     let(:edition1) { create :edition, organisation_id: organisation_id, date: 15.days.ago }
     let(:edition2) { create :edition, organisation_id: another_org_id, date: 15.days.ago }
 
-    subject { get '/content', params: { date_range: 'last-30-days', organisation_id: 'all' } }
+    subject { get '/content', params: { date_range: 'past-30-days', organisation_id: 'all' } }
 
     before do
       create :metric, edition: edition1, date: 15.days.ago
@@ -302,9 +302,28 @@ RSpec.describe '/content' do
       subject
 
       json = JSON.parse(response.body).deep_symbolize_keys
-      expect(json[:results].count).to eq(2)
       expected_results = [edition1.base_path, edition2.base_path]
       expect(json[:results].map { |res| res[:base_path] }).to eq(expected_results)
+    end
+  end
+
+  describe 'Filter by no organisation' do
+    let(:edition1) { create :edition, organisation_id: nil, date: 15.days.ago }
+
+    subject { get '/content', params: { date_range: 'past-30-days', organisation_id: 'none' } }
+
+    before do
+      create :metric, edition: edition1, date: 15.days.ago
+      edition2 = create :edition, organisation_id: organisation_id, date: 15.days.ago
+      create :metric, edition: edition2, date: 15.days.ago
+      recalculate_aggregations!
+    end
+
+    it 'only returns data where organisation is null' do
+      subject
+
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results].map { |res| res[:base_path] }).to eq([edition1.base_path])
     end
   end
 

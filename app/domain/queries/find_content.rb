@@ -60,7 +60,11 @@ private
 
   def slice_editions
     editions = Dimensions::Edition.relevant_content
-    editions = editions.where('organisation_id = ?', organisation_id) unless organisation_id == 'all'
+    if organisation_id == 'none'
+      editions = editions.where('organisation_id IS NULL')
+    else
+      editions = editions.where('organisation_id = ?', organisation_id) unless organisation_id == 'all'
+    end
     editions = editions.where('document_type = ?', document_type) if document_type
     editions = editions.search(search_term) if search_term.present?
     editions
