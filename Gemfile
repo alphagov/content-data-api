@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby File.read('.ruby-version').chomp
 
 # GOV.UK gems and forks
-gem 'gds-api-adapters', '~> 54.1.2'
+gem 'gds-api-adapters', '~> 54.1.3'
 gem 'gds-sso'
 gem 'govuk_admin_template', '~> 6.5'
 gem 'govuk_app_config'
@@ -25,7 +25,7 @@ gem 'odyssey'
 gem 'pg'
 gem 'puma'
 gem 'rack-proxy'
-gem 'rails', '~> 5.1'
+gem 'rails', '~> 5.2'
 gem 'ruby-progressbar'
 gem 'sass-rails'
 gem 'scenic'
@@ -58,6 +58,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'rails-controller-testing'
+  gem "rack", ">= 2.0.6"
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
