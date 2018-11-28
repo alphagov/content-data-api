@@ -156,6 +156,33 @@ RSpec.describe Queries::FindContent do
     end
   end
 
+  describe 'Filter by all organisations' do
+    let(:filter) do
+      {
+        date_range: 'last-30-days',
+        organisation_id: 'all',
+        document_type: nil
+      }
+    end
+
+    let(:edition1) { create :edition, date: 15.days.ago }
+    let(:edition2) { create :edition, date: 15.days.ago }
+
+    before do
+      create :metric, edition: edition1, upviews: 20, date: 15.days.ago
+      create :metric, edition: edition2, upviews: 10, date: 15.days.ago
+      recalculate_aggregations!
+    end
+
+    it 'returns content from all organisations' do
+      response = described_class.call(filter: filter)
+      expect(response[:results]).to contain_exactly(
+        hash_including(base_path: edition1.base_path),
+        hash_including(base_path: edition2.base_path)
+      )
+    end
+  end
+
   describe 'Pagination' do
     before do
       4.times do |n|

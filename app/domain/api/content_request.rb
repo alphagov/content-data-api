@@ -36,6 +36,7 @@ private
   end
 
   def valid_organisation_id
+    return true if %w[all].include? organisation_id
     return true if UUID.validate organisation_id
     errors.add('organisation_id', 'this is not a valid organisation id')
   end
