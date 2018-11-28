@@ -7,7 +7,7 @@ RSpec.describe Api::ContentRequest do
         search_term: 'a title or url',
         page: '1',
         page_size: '20',
-        date_range: 'last-30-days',
+        date_range: 'past-30-days',
       )
 
       expect(request.to_filter).to eq(
@@ -16,7 +16,7 @@ RSpec.describe Api::ContentRequest do
         search_term: 'a title or url',
         page: 1,
         page_size: 20,
-        date_range: 'last-30-days',
+        date_range: 'past-30-days',
       )
     end
 

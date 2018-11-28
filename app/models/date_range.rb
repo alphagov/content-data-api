@@ -9,7 +9,7 @@ class DateRange
   end
 
   def self.valid?(time_period)
-    time_period.in?(['last-30-days', 'last-month', 'last-3-months', 'last-6-months', 'last-year', 'last-2-years'])
+    time_period.in?(['past-30-days', 'last-month', 'past-3-months', 'past-6-months', 'past-year', 'past-2-years'])
   end
 
   def self.build(from:, to:)
@@ -21,7 +21,7 @@ private
 
   def date_to_range
     case time_period
-    when 'last-30-days'
+    when 'past-30-days'
       {
         from: (Date.today - 30.days).to_s,
         to: Date.today.to_s
@@ -31,22 +31,22 @@ private
         from: Date.today.last_month.beginning_of_month.to_s,
         to: Date.today.last_month.end_of_month.to_s
       }
-    when 'last-3-months'
+    when 'past-3-months'
       {
         from: (Date.today - 3.months).to_s,
         to: Date.today.to_s
       }
-    when 'last-6-months'
+    when 'past-6-months'
       {
         from: (Date.today - 6.months).to_s,
         to: Date.today.to_s
       }
-    when 'last-year'
+    when 'past-year'
       {
         from: (Date.today - 1.year).to_s,
         to: Date.today.to_s
       }
-    when 'last-2-years'
+    when 'past-2-years'
       {
         from: (Date.today - 2.years).to_s,
         to: Date.today.to_s

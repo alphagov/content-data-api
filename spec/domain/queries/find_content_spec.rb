@@ -5,7 +5,7 @@ RSpec.describe Queries::FindContent do
 
   let(:filter) do
     {
-      date_range: 'last-30-days',
+      date_range: 'past-30-days',
       organisation_id: primary_org_id,
       document_type: nil
     }
@@ -15,7 +15,7 @@ RSpec.describe Queries::FindContent do
     create :user
   end
 
-  it 'returns the aggregations for the last 30 days' do
+  it 'returns the aggregations for the past 30 days' do
     edition1 = create :edition, base_path: '/path1', date: 2.months.ago, organisation_id: primary_org_id
     edition2 = create :edition, base_path: '/path2', date: 2.months.ago, organisation_id: primary_org_id
 
@@ -33,7 +33,7 @@ RSpec.describe Queries::FindContent do
     )
   end
 
-  it 'returns the metadata for the last 30 days' do
+  it 'returns the metadata for the past 30 days' do
     edition1 = create :edition,
       base_path: '/path1',
       organisation_id: primary_org_id,
@@ -86,7 +86,7 @@ RSpec.describe Queries::FindContent do
       )
     end
 
-    it 'returns aggregations for last 3 months' do
+    it 'returns aggregations for past 3 months' do
       two_months_ago_date = (Date.today - 2.month)
       create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition1, date: two_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
@@ -94,7 +94,7 @@ RSpec.describe Queries::FindContent do
       create :metric, edition: edition2, date: two_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
 
       filter = {
-        date_range: 'last-3-months',
+        date_range: 'past-3-months',
         organisation_id: primary_org_id,
         document_type: nil
       }
@@ -109,7 +109,7 @@ RSpec.describe Queries::FindContent do
       )
     end
 
-    it 'returns aggregations for last 6 months' do
+    it 'returns aggregations for past 6 months' do
       five_months_ago_date = (Date.today - 5.month)
       create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition1, date: five_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
@@ -117,7 +117,7 @@ RSpec.describe Queries::FindContent do
       create :metric, edition: edition2, date: five_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
 
       filter = {
-        date_range: 'last-6-months',
+        date_range: 'past-6-months',
         organisation_id: primary_org_id,
         document_type: nil
       }
@@ -132,7 +132,7 @@ RSpec.describe Queries::FindContent do
       )
     end
 
-    it 'returns aggregations for last year' do
+    it 'returns aggregations for past year' do
       eleven_months_ago_date = (Date.today - 11.month)
       create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition1, date: eleven_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
@@ -140,7 +140,7 @@ RSpec.describe Queries::FindContent do
       create :metric, edition: edition2, date: eleven_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
 
       filter = {
-        date_range: 'last-year',
+        date_range: 'past-year',
         organisation_id: primary_org_id,
         document_type: nil
       }
