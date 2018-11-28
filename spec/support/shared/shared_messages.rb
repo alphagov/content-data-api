@@ -56,7 +56,7 @@ end
 RSpec.shared_examples 'BaseMessage#invalid?' do
   describe '#invalid?' do
     let(:payload) { build(:message).payload }
-    let(:message) { described_class.new(payload) }
+    let(:message) { described_class.new(payload, "routing_key") }
     subject { message.invalid? }
 
     context 'with normal payload' do
