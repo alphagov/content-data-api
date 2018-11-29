@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_29_111315) do
+ActiveRecord::Schema.define(version: 2018_11_29_115927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 2018_11_29_111315) do
   create_table "events_feedexes", force: :cascade do |t|
     t.date "date"
     t.string "page_path"
-    t.integer "feedex_comments"
+    t.integer "feedex_comments", default: 0
     t.index ["page_path", "date"], name: "index_events_feedexes_on_page_path_and_date"
   end
 
