@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 2018_11_26_152658) do
+ActiveRecord::Schema.define(version: 2018_11_29_111315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,7 +35,6 @@ ActiveRecord::Schema.define(version: 2018_11_26_152658) do
     t.datetime "updated_at", null: false
     t.index ["dimensions_edition_id", "dimensions_month_id"], name: "index_editions_months_unique", unique: true
     t.index ["dimensions_edition_id"], name: "index_aggregations_monthly_metrics_on_dimensions_edition_id"
-    t.index ["dimensions_month_id", "dimensions_edition_id", "upviews"], name: "idx_month_edition_upviews"
     t.index ["dimensions_month_id"], name: "index_aggregations_monthly_metrics_on_dimensions_month_id"
   end
 
@@ -93,12 +91,9 @@ ActiveRecord::Schema.define(version: 2018_11_26_152658) do
     t.boolean "withdrawn", null: false
     t.boolean "historical", null: false
     t.bigint "publishing_api_event_id"
-    t.index "to_tsvector('english'::regconfig, (((title)::text || ' '::text) || replace((base_path)::text, '/'::text, ' '::text)))", name: "dimensions_editions_base_path_title", using: :gin
     t.index "to_tsvector('english'::regconfig, (title)::text)", name: "dimensions_editions_title", using: :gin
-    t.index "to_tsvector('english'::regconfig, (title)::text)", name: "dimensions_editions_title_base_path", using: :gin
     t.index "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "dimensions_editions_base_path", using: :gin
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
     t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
     t.index ["latest", "document_type"], name: "index_dimensions_editions_on_latest_and_document_type"
@@ -134,20 +129,20 @@ ActiveRecord::Schema.define(version: 2018_11_26_152658) do
   create_table "events_gas", force: :cascade do |t|
     t.date "date"
     t.string "page_path"
-    t.integer "pviews"
-    t.integer "upviews"
+    t.integer "pviews", default: 0
+    t.integer "upviews", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "useful_yes", default: 0
     t.integer "useful_no", default: 0
     t.integer "process_name", null: false
-    t.integer "searches"
-    t.integer "exits"
-    t.integer "entrances"
-    t.integer "bounce_rate"
-    t.integer "avg_page_time"
-    t.integer "bounces"
-    t.integer "page_time"
+    t.integer "searches", default: 0
+    t.integer "exits", default: 0
+    t.integer "entrances", default: 0
+    t.integer "bounce_rate", default: 0
+    t.integer "avg_page_time", default: 0
+    t.integer "bounces", default: 0
+    t.integer "page_time", default: 0
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
     t.index ["process_name", "date", "page_path"], name: "index_events_gas_on_process_name_and_date_and_page_path", unique: true
   end
