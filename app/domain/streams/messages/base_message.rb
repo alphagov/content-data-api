@@ -41,7 +41,7 @@ class Streams::Messages::BaseMessage
   end
 
   def withdrawn_notice?
-    @payload.dig('withdrawn_notice', :explanation).present?
+    @payload.dig('withdrawn_notice', "explanation").present?
   end
 
   def historically_political?

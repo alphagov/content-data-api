@@ -11,7 +11,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       msg = build(:message, attributes: message_attributes)
       msg.payload['details']['body'] = '<p>some content</p>'
       msg.payload['details']['government'] = { 'current' => true }
-      msg.payload['withdrawn_notice'] = { explanation: 'something' }
+      msg.payload['withdrawn_notice'] = { "explanation" => 'something' }
       msg
     end
     let(:instance) { subject.new(message.payload, "routing_key") }
