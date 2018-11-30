@@ -42,7 +42,7 @@ RSpec.shared_examples 'BaseMessage#withdrawn_notice?' do
     subject { message.withdrawn_notice? }
 
     context 'when payload has withdrawn notice with explanation' do
-      before { payload['withdrawn_notice'] = { explanation: 'Not relevant' } }
+      before { payload['withdrawn_notice'] = { "explanation" => 'Not relevant' } }
       it { is_expected.to eq true }
     end
 
