@@ -17,6 +17,10 @@ private
 
   def do_process(klass)
     name = klass.name.demodulize.underscore
-    time(process: name) { klass.refresh }
+    time(process: name) do
+      ActiveRecord::Base.transaction do
+        klass.refresh
+      end
+    end
   end
 end
