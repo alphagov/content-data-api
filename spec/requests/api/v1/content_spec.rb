@@ -6,25 +6,24 @@ RSpec.describe '/content' do
   let(:organisation_id) { 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
 
   describe 'Aggregations' do
-    before do
-      this_month_date = Date.yesterday.beginning_of_month
-      last_month_date = Date.yesterday - 1.month
-      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id
-      create :metric, date: this_month_date, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
-
-      edition2 = create :edition, replaces: edition1, organisation_id: organisation_id, base_path: '/path-01'
-      create :metric, date: this_month_date, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
-      create :metric, date: 5.months.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
-
-      edition3 = create :edition, date: 3.months.ago, organisation_id: organisation_id, base_path: '/path-02'
-      create :metric, date: this_month_date, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
-      create :metric, date: last_month_date, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
-      create :metric, date: 11.months.ago, edition: edition3, upviews: 1000, useful_yes: 1000, useful_no: 1000, searches: 1000
-
-      recalculate_aggregations!
-    end
+    let(:edition1) { create :edition, date: 1.month.ago, organisation_id: organisation_id }
+    let(:edition2) { create :edition, replaces: edition1, organisation_id: organisation_id, base_path: '/path-01' }
+    let(:edition3) { create :edition, date: 3.months.ago, organisation_id: organisation_id, base_path: '/path-02' }
+    let(:beginning_of_this_month) { Date.yesterday.beginning_of_month }
+    let(:beginning_of_last_month) { Date.yesterday.beginning_of_month - 1.month }
 
     context 'last 30 days' do
+      before do
+        create :metric, date: 12.days.ago, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
+        create :metric, date: 15.days.ago, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+        create :metric, date: 30.days.ago, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
+        # should not include metrics below
+        create :metric, date: 32.days.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
+        create :metric, date: 45.days.ago, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
+
+        recalculate_aggregations!
+      end
+
       it 'returns 200 status' do
         get '/content', params: { date_range: 'past-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -53,6 +52,16 @@ RSpec.describe '/content' do
     end
 
     context 'last month' do
+      before do
+        create :metric, date: beginning_of_last_month, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
+        # should not include metrics below
+        create :metric, date: beginning_of_this_month, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
+        create :metric, date: beginning_of_this_month, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
+        create :metric, date: beginning_of_this_month, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+
+        recalculate_aggregations!
+      end
+
       it 'returns 200 status' do
         get '/content', params: { date_range: 'last-month', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -74,6 +83,17 @@ RSpec.describe '/content' do
     end
 
     context 'last 3 months' do
+      before do
+        create :metric, date: beginning_of_this_month, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
+        create :metric, date: beginning_of_this_month, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
+        create :metric, date: beginning_of_last_month, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
+        create :metric, date: 2.months.ago, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+        # should not include metrics below
+        create :metric, date: 5.months.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
+
+        recalculate_aggregations!
+      end
+
       it 'returns 200 status' do
         get '/content', params: { date_range: 'past-3-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -103,6 +123,18 @@ RSpec.describe '/content' do
     end
 
     context 'last 6 months' do
+      before do
+        create :metric, date: beginning_of_this_month, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
+        create :metric, date: beginning_of_this_month, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
+        create :metric, date: beginning_of_this_month, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+        create :metric, date: beginning_of_last_month, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
+        create :metric, date: 5.months.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
+        # should not include metrics below
+        create :metric, date: 11.months.ago, edition: edition3, upviews: 1000, useful_yes: 1000, useful_no: 1000, searches: 1000
+
+        recalculate_aggregations!
+      end
+
       it 'returns 200 status' do
         get '/content', params: { date_range: 'past-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -131,6 +163,19 @@ RSpec.describe '/content' do
     end
 
     context 'last year' do
+      before do
+        create :metric, date: beginning_of_this_month, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
+        create :metric, date: beginning_of_this_month, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
+        create :metric, date: beginning_of_this_month, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+        create :metric, date: beginning_of_last_month, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
+        create :metric, date: 5.months.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
+        create :metric, date: 11.months.ago, edition: edition3, upviews: 1000, useful_yes: 1000, useful_no: 1000, searches: 1000
+        # should not include metrics below
+        create :metric, date: 13.months.ago, edition: edition3, upviews: 1000, useful_yes: 1000, useful_no: 1000, searches: 1000
+
+        recalculate_aggregations!
+      end
+
       it 'returns 200 status' do
         get '/content', params: { date_range: 'past-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
