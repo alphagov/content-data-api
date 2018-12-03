@@ -29,6 +29,20 @@ RSpec.describe '/single_page', type: :request do
   end
 
   context 'when correct parameters supplied' do
+    context 'when the page is the homepage' do
+      before do
+        create :edition, base_path: '/', title: 'GOV.UK homepage'
+      end
+
+      it 'returns data for the homepage' do
+        get "/single_page", params: { from: '2018-01-01', to: '2018-01-31' }
+
+        body = JSON.parse(response.body).deep_symbolize_keys
+        expect(response).to have_http_status(200)
+        expect(body[:metadata][:title]).to eq('GOV.UK homepage')
+      end
+    end
+
     it 'returns the metadata' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
 
