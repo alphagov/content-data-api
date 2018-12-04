@@ -6,10 +6,21 @@ class Etl::Aggregations::Search
   end
 
   def process
-    time(process: :aggregations_thirty_days) { ::Aggregations::SearchLastThirtyDays.refresh }
-    time(process: :aggregations_last_month) { ::Aggregations::SearchLastMonth.refresh }
-    time(process: :aggregations_last_three_months) { ::Aggregations::SearchLastThreeMonths.refresh }
-    time(process: :aggregations_last_six_months) { ::Aggregations::SearchLastSixMonths.refresh }
-    time(process: :aggregations_last_twelve_months) { ::Aggregations::SearchLastTwelveMonths.refresh }
+    do_process(::Aggregations::SearchLastThirtyDays)
+    do_process(::Aggregations::SearchLastMonth)
+    do_process(::Aggregations::SearchLastThreeMonths)
+    do_process(::Aggregations::SearchLastSixMonths)
+    do_process(::Aggregations::SearchLastTwelveMonths)
+  end
+
+private
+
+  def do_process(klass)
+    name = klass.name.demodulize.underscore
+    time(process: name) do
+      ActiveRecord::Base.transaction do
+        klass.refresh
+      end
+    end
   end
 end
