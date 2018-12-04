@@ -285,6 +285,48 @@ RSpec.describe '/content' do
     end
   end
 
+  describe 'Filter by all organisations' do
+    let(:another_org_id) { 'c97bbc95-967a-4678-848b-6f393171f194' }
+    let(:edition1) { create :edition, organisation_id: organisation_id, date: 15.days.ago }
+    let(:edition2) { create :edition, organisation_id: another_org_id, date: 15.days.ago }
+
+    subject { get '/content', params: { date_range: 'past-30-days', organisation_id: 'all' } }
+
+    before do
+      create :metric, edition: edition1, date: 15.days.ago
+      create :metric, edition: edition2, date: 15.days.ago
+      recalculate_aggregations!
+    end
+
+    it 'returns data from both organisations' do
+      subject
+
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expected_results = [edition1.base_path, edition2.base_path]
+      expect(json[:results].map { |res| res[:base_path] }).to eq(expected_results)
+    end
+  end
+
+  describe 'Filter by no organisation' do
+    let(:edition1) { create :edition, organisation_id: nil, date: 15.days.ago }
+
+    subject { get '/content', params: { date_range: 'past-30-days', organisation_id: 'none' } }
+
+    before do
+      create :metric, edition: edition1, date: 15.days.ago
+      edition2 = create :edition, organisation_id: organisation_id, date: 15.days.ago
+      create :metric, edition: edition2, date: 15.days.ago
+      recalculate_aggregations!
+    end
+
+    it 'only returns data where organisation is null' do
+      subject
+
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results].map { |res| res[:base_path] }).to eq([edition1.base_path])
+    end
+  end
+
   describe 'Relevant content' do
     subject { get '/content', params: { date_range: 'past-30-days', organisation_id: organisation_id } }
 

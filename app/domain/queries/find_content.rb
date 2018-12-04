@@ -1,5 +1,7 @@
 class Queries::FindContent
   DEFAULT_PAGE_SIZE = 100
+  ALL = 'all'.freeze
+  NONE = 'none'.freeze
 
   def self.call(filter:)
     raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
@@ -60,7 +62,11 @@ private
 
   def slice_editions
     editions = Dimensions::Edition.relevant_content
-    editions = editions.where('organisation_id = ?', organisation_id)
+    if organisation_id == NONE
+      editions = editions.where('organisation_id IS NULL')
+    elsif  organisation_id != ALL
+      editions = editions.by_organisation_id(organisation_id)
+    end
     editions = editions.where('document_type = ?', document_type) if document_type
     editions = editions.search(search_term) if search_term.present?
     editions
