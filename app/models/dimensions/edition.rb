@@ -22,7 +22,7 @@ class Dimensions::Edition < ApplicationRecord
     latest_by_content_id(content_id, locale)
       .where.not(base_path: exclude_paths)
   end
-  scope :relevant_content, -> { where.not(document_type: %w[redirect gone]) }
+  scope :relevant_content, -> { where.not(document_type: %w[redirect gone vanish unpublishing need]) }
 
   def self.search(query)
     sql = <<~SQL
