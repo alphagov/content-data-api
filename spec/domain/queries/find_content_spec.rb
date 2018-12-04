@@ -166,7 +166,7 @@ RSpec.describe Queries::FindContent do
     end
 
     let(:edition1) { create :edition, date: 15.days.ago }
-    let(:edition2) { create :edition, date: 15.days.ago }
+    let(:edition2) { create :edition, date: 15.days.ago, organisation_id: nil }
 
     before do
       create :metric, edition: edition1, upviews: 20, date: 15.days.ago

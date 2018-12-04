@@ -64,8 +64,8 @@ private
     editions = Dimensions::Edition.relevant_content
     if organisation_id == NONE
       editions = editions.where('organisation_id IS NULL')
-    else
-      editions = editions.by_organisation_id(organisation_id) unless organisation_id == ALL
+    elsif  organisation_id != ALL
+      editions = editions.by_organisation_id(organisation_id)
     end
     editions = editions.where('document_type = ?', document_type) if document_type
     editions = editions.search(search_term) if search_term.present?
