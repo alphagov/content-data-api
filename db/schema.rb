@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_04_144330) do
+ActiveRecord::Schema.define(version: 2018_12_04_145159) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -351,5 +351,6 @@ ActiveRecord::Schema.define(version: 2018_12_04_144330) do
   SQL
 
   add_index "aggregations_search_last_twelve_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_twelve_months_edition_id_upviews"
+  add_index "aggregations_search_last_twelve_months", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_twelve_months_unique", unique: true
 
 end
