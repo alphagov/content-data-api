@@ -46,6 +46,9 @@ RSpec.describe Dimensions::Edition, type: :model do
       edition = create :edition, document_type: 'news_story'
       create :edition, document_type: 'redirect'
       create :edition, document_type: 'gone'
+      create :edition, document_type: 'vanish'
+      create :edition, document_type: 'unpublishing'
+      create :edition, document_type: 'need'
       results = subject.relevant_content
       expect(results).to match_array(edition)
     end

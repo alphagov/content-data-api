@@ -334,10 +334,13 @@ RSpec.describe '/content' do
       create_edition_and_metric('redirect')
       create_edition_and_metric('gone')
       create_edition_and_metric('news_story')
+      create_edition_and_metric('vanish')
+      create_edition_and_metric('unpublishing')
+      create_edition_and_metric('need')
       recalculate_aggregations!
     end
 
-    it 'filters out `gone` and `redirect`' do
+    it 'filters out `gone`, `redirect`, `vanish`, `unpublishing` and `need`' do
       subject
 
       json = JSON.parse(response.body).deep_symbolize_keys
