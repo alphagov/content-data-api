@@ -1,6 +1,6 @@
 RSpec.shared_examples 'a materialized view' do |table_name|
   it 'refresh the materialized view' do
-    expect(Scenic.database).to receive(:refresh_materialized_view).with(table_name, concurrently: false, cascade: false)
+    expect(Scenic.database).to receive(:refresh_materialized_view).with(table_name, concurrently: true, cascade: false)
 
     subject.refresh
   end
