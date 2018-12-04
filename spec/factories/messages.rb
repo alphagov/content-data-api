@@ -21,6 +21,7 @@ FactoryBot.define do
         result['payload_version'] = payload_version
         result['content_id'] = content_id
         result['locale'] = locale
+        result.delete('withdrawn_notice')
         result.merge! attributes
       end
     end
@@ -34,6 +35,7 @@ FactoryBot.define do
           result['payload_version'] = payload_version
           result['content_id'] = content_id
           result['locale'] = locale
+          result.delete('withdrawn_notice')
           result['details']['parts'] =
             [
               {
@@ -114,6 +116,7 @@ FactoryBot.define do
           result['payload_version'] = payload_version
           result['content_id'] = content_id
           result['locale'] = locale
+          result.delete('withdrawn_notice')
           result['details']['summary'] = [
             "content_type" => "text/html",
             "content" => summary
