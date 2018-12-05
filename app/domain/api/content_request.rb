@@ -1,4 +1,5 @@
 class Api::ContentRequest
+  VALID_TIME_PERIODS = ['past-30-days', 'last-month', 'past-3-months', 'past-6-months', 'past-year'].freeze
   include ActiveModel::Validations
 
   attr_reader :organisation_id, :document_type, :page, :page_size, :date_range, :search_term
@@ -30,8 +31,7 @@ class Api::ContentRequest
 private
 
   def valid_date_range
-    return true if DateRange.valid?(date_range) || date_range.blank?
-
+    return true if date_range.in?(VALID_TIME_PERIODS) || date_range.blank?
     errors.add('date_range', 'this is not a valid date range')
   end
 
