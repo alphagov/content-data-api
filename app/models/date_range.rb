@@ -23,33 +23,33 @@ private
     case time_period
     when 'past-30-days'
       {
-        from: (Date.today - 30.days).to_s,
-        to: Date.today.to_s
+        from: (Date.yesterday - 29.days).to_s,
+        to: Date.yesterday.to_s
       }
     when 'last-month'
       {
-        from: Date.today.last_month.beginning_of_month.to_s,
-        to: Date.today.last_month.end_of_month.to_s
+        from: Date.yesterday.last_month.beginning_of_month.to_s,
+        to: Date.yesterday.last_month.end_of_month.to_s
       }
     when 'past-3-months'
       {
-        from: (Date.today - 3.months).to_s,
-        to: Date.today.to_s
+        from: ((Date.yesterday - 3.months) + 1.day).to_s,
+        to: Date.yesterday.to_s
       }
     when 'past-6-months'
       {
-        from: (Date.today - 6.months).to_s,
-        to: Date.today.to_s
+        from: ((Date.yesterday - 6.months) + 1.day).to_s,
+        to: Date.yesterday.to_s
       }
     when 'past-year'
       {
-        from: (Date.today - 1.year).to_s,
-        to: Date.today.to_s
+        from: ((Date.yesterday - 1.year) + 1.day).to_s,
+        to: Date.yesterday.to_s
       }
     when 'past-2-years'
       {
-        from: (Date.today - 2.years).to_s,
-        to: Date.today.to_s
+        from: ((Date.yesterday - 2.years) + 1.day).to_s,
+        to: Date.yesterday.to_s
       }
     else
       raise ArgumentError.new(time_period)

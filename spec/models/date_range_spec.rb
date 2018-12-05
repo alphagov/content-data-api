@@ -26,7 +26,7 @@ RSpec.describe DateRange do
 
     subject { DateRange.new(time_period) }
 
-    it { is_expected.to have_attributes(to: '2018-12-25') }
+    it { is_expected.to have_attributes(to: '2018-12-24') }
     it { is_expected.to have_attributes(from: '2018-11-25') }
     it { is_expected.to have_attributes(time_period: 'past-30-days') }
   end
@@ -46,7 +46,7 @@ RSpec.describe DateRange do
 
     subject { DateRange.new(time_period) }
 
-    it { is_expected.to have_attributes(to: '2018-12-25') }
+    it { is_expected.to have_attributes(to: '2018-12-24') }
     it { is_expected.to have_attributes(from: '2018-09-25') }
     it { is_expected.to have_attributes(time_period: 'past-3-months') }
   end
@@ -56,7 +56,7 @@ RSpec.describe DateRange do
 
     subject { DateRange.new(time_period) }
 
-    it { is_expected.to have_attributes(to: '2018-12-25') }
+    it { is_expected.to have_attributes(to: '2018-12-24') }
     it { is_expected.to have_attributes(from: '2018-06-25') }
     it { is_expected.to have_attributes(time_period: 'past-6-months') }
   end
@@ -66,7 +66,7 @@ RSpec.describe DateRange do
 
     subject { DateRange.new(time_period) }
 
-    it { is_expected.to have_attributes(to: '2018-12-25') }
+    it { is_expected.to have_attributes(to: '2018-12-24') }
     it { is_expected.to have_attributes(from: '2017-12-25') }
     it { is_expected.to have_attributes(time_period: 'past-year') }
   end
