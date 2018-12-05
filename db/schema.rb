@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_04_145159) do
+ActiveRecord::Schema.define(version: 2018_12_05_154240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,23 +264,6 @@ ActiveRecord::Schema.define(version: 2018_12_04_145159) do
   add_index "aggregations_search_last_six_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_six_months_edition_id_upviews"
   add_index "aggregations_search_last_six_months", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_six_months_unique", unique: true
 
-  create_view "aggregations_search_last_thirty_days", materialized: true,  sql_definition: <<-SQL
-      SELECT dimensions_editions.warehouse_item_id,
-      max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
-      sum(facts_metrics.upviews) AS upviews,
-      sum(facts_metrics.useful_yes) AS useful_yes,
-      sum(facts_metrics.useful_no) AS useful_no,
-      sum(facts_metrics.searches) AS searches
-     FROM ((facts_metrics
-       JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
-       JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
-    WHERE ((facts_metrics.dimensions_date_id >= (('yesterday'::text)::date - '30 days'::interval day)) AND (facts_metrics.dimensions_date_id < ('now'::text)::date))
-    GROUP BY dimensions_editions.warehouse_item_id;
-  SQL
-
-  add_index "aggregations_search_last_thirty_days", ["dimensions_edition_id", "upviews"], name: "index_on_last_thirty_days_edition_id_upviews"
-  add_index "aggregations_search_last_thirty_days", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_thirty_days_unique", unique: true
-
   create_view "aggregations_search_last_three_months", materialized: true,  sql_definition: <<-SQL
       SELECT agg.warehouse_item_id,
       max(agg.dimensions_edition_id) AS dimensions_edition_id,
@@ -352,5 +335,22 @@ ActiveRecord::Schema.define(version: 2018_12_04_145159) do
 
   add_index "aggregations_search_last_twelve_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_twelve_months_edition_id_upviews"
   add_index "aggregations_search_last_twelve_months", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_twelve_months_unique", unique: true
+
+  create_view "aggregations_search_last_thirty_days", materialized: true,  sql_definition: <<-SQL
+      SELECT dimensions_editions.warehouse_item_id,
+      max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+      sum(facts_metrics.upviews) AS upviews,
+      sum(facts_metrics.useful_yes) AS useful_yes,
+      sum(facts_metrics.useful_no) AS useful_no,
+      sum(facts_metrics.searches) AS searches
+     FROM ((facts_metrics
+       JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
+       JOIN dimensions_editions ON ((dimensions_editions.id = facts_metrics.dimensions_edition_id)))
+    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '30 days'::interval day)) AND (facts_metrics.dimensions_date_id < ('now'::text)::date))
+    GROUP BY dimensions_editions.warehouse_item_id;
+  SQL
+
+  add_index "aggregations_search_last_thirty_days", ["dimensions_edition_id", "upviews"], name: "index_on_last_thirty_days_edition_id_upviews"
+  add_index "aggregations_search_last_thirty_days", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_thirty_days_unique", unique: true
 
 end
