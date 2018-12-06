@@ -27,88 +27,6 @@ RSpec.describe '/api/v1/metrics/', type: :request do
 
   include_examples 'API response', '/api/v1/metrics'
 
-  describe "invalid requests" do
-    it 'returns an error for metrics not on the whitelist' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[number_of_puns] }
-
-      expect(response.status).to eq(400)
-
-      json = JSON.parse(response.body)
-
-      expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
-        "title" => "One or more parameters is invalid",
-        "invalid_params" => { "metric" => ["is not included in the list"] }
-      }
-
-      expect(json).to eq(expected_error_response)
-    end
-
-    it 'returns an error for badly formatted dates' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: 'today', to: '2018-01-15', metrics: %w[pviews] }
-
-      expect(response.status).to eq(400)
-
-      json = JSON.parse(response.body)
-
-      expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
-        "title" => "One or more parameters is invalid",
-        "invalid_params" => { "from" => ["Dates should use the format YYYY-MM-DD"] }
-      }
-
-      expect(json).to eq(expected_error_response)
-    end
-
-    it 'returns an error for bad date ranges' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-16', to: '2018-01-15', metrics: %w[pviews] }
-
-      expect(response.status).to eq(400)
-
-      json = JSON.parse(response.body)
-
-      expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
-        "title" => "One or more parameters is invalid",
-        "invalid_params" => { "from,to" => ["`from` parameter can't be after the `to` parameter"] }
-      }
-
-      expect(json).to eq(expected_error_response)
-    end
-
-    it 'returns an error for missing metrics parameter' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15' }
-
-      expect(response.status).to eq(400)
-
-      json = JSON.parse(response.body)
-
-      expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error",
-        "title" => "One or more parameters is invalid",
-        "invalid_params" => { "metrics" => ["can't be blank"] }
-      }
-
-      expect(json).to eq(expected_error_response)
-    end
-
-    it 'returns an error for unknown parameters' do
-      get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-14', to: '2018-01-15', extra: "bla", metrics: %w[pviews] }
-
-      expect(response.status).to eq(400)
-
-      json = JSON.parse(response.body)
-
-      expected_error_response = {
-        "type" => "https://content-performance-api.publishing.service.gov.uk/errors.html#unknown-parameter",
-        "title" => "One or more parameter names are invalid",
-        "invalid_params" => %w[extra]
-      }
-
-      expect(json).to eq(expected_error_response)
-    end
-  end
-
   describe 'Daily metrics' do
     context 'succcessful response' do
       before do
@@ -117,20 +35,6 @@ RSpec.describe '/api/v1/metrics/', type: :request do
         create :metric, edition: edition, date: day2, pviews: 20, feedex: 20, useful_yes: 10, useful_no: 30
         create :metric, edition: edition, date: day3, pviews: 30, feedex: 30, useful_yes: 10, useful_no: 30
         create :metric, edition: edition, date: day4, pviews: 40, feedex: 40, useful_yes: 10, useful_no: 30
-      end
-
-      it 'returns `pviews` values between two dates' do
-        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[pviews] }
-
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json).to eq(build_time_series_response('pviews'))
-      end
-
-      it 'returns `feedex issues` between two dates' do
-        get "/api/v1/metrics/#{base_path}/time-series", params: { from: '2018-01-13', to: '2018-01-15', metrics: %w[feedex] }
-
-        json = JSON.parse(response.body)
-        expect(json.deep_symbolize_keys).to eq(build_time_series_response('feedex'))
       end
 
       describe "Summary information" do
