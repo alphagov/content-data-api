@@ -22,7 +22,7 @@ class Queries::FindContent
       results: results.pluck(*aggregates).map(&method(:array_to_hash)),
       page: @page,
       total_pages: results.total_pages,
-      total_results: slice_editions.count
+      total_results: slice_editions.latest.count
     }
   end
 

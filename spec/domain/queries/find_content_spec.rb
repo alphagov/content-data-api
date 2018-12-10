@@ -212,9 +212,21 @@ RSpec.describe Queries::FindContent do
   describe 'Pagination' do
     before do
       4.times do |n|
-        edition = create :edition, base_path: "/path/#{n}", organisation_id: primary_org_id
+        edition = create :edition,
+          base_path: "/path/#{n}",
+          organisation_id: primary_org_id,
+          warehouse_item_id: "item-#{n}"
         create :metric, edition: edition, date: 15.days.ago, upviews: (100 - n)
       end
+
+      # not latest edition - should not affect total results
+      old_edition = create :edition,
+        base_path: '/path/0',
+        organisation_id: primary_org_id,
+        latest: false,
+        warehouse_item_id: 'item-0'
+      create :metric, edition: old_edition, date: 15.days.ago
+
 
       recalculate_aggregations!
     end
