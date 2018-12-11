@@ -374,7 +374,7 @@ RSpec.describe '/content' do
 
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:results]).to contain_exactly(a_hash_including(base_path: '/path-01'))
-      expect(json).to include(page: 1, total_results: 2)
+      expect(json).to include(page: 1, total_pages: 2, total_results: 2)
     end
 
     it 'returns the second page of the data' do
@@ -382,7 +382,7 @@ RSpec.describe '/content' do
 
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:results]).to contain_exactly(a_hash_including(base_path: '/path-02'))
-      expect(json).to include(page: 2, total_results: 2)
+      expect(json).to include(page: 2, total_pages: 2, total_results: 2)
     end
   end
 

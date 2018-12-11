@@ -5,7 +5,10 @@ class ContentController < Api::BaseController
     filter = api_request.to_filter
     content = Queries::FindContent.call(filter: filter)
 
-    render json: content.to_json
+    @content_items = content[:results]
+    @page = content[:page]
+    @total_pages = content[:total_pages]
+    @total_results = content[:total_results]
   end
 
 private
