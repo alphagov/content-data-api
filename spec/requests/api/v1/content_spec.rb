@@ -5,63 +5,69 @@ RSpec.describe '/content' do
 
   let(:organisation_id) { 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
 
-  describe 'Aggregations' do
-    let(:edition1) { create :edition, date: 1.month.ago, organisation_id: organisation_id }
-    let(:edition2) { create :edition, replaces: edition1, organisation_id: organisation_id, base_path: '/path-01' }
-    let(:edition3) { create :edition, date: 3.months.ago, organisation_id: organisation_id, base_path: '/path-02' }
+  describe 'metrics' do
+    it 'contains the expected metrics' do
+      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-01'
+      create :metric, date: 1.day.ago, edition: edition1, pviews: 1, upviews: 1, feedex: 1, useful_no: 1, useful_yes: 1, searches: 1
+      recalculate_aggregations!
+
+      get '/content', params: { date_range: 'past-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results]).to contain_exactly(
+        a_hash_including(
+          base_path: '/path-01',
+          pviews: 1,
+          upviews: 1,
+          feedex: 1,
+          useful_no: 1,
+          useful_yes: 1,
+          satisfaction: 0.5,
+          satisfaction_score_responses: 2,
+          searches: 1
+        )
+      )
+    end
+  end
+
+  describe 'time periods' do
+    let(:edition1) { create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-01' }
+    let(:edition2) { create :edition, date: 3.months.ago, organisation_id: organisation_id, base_path: '/path-02' }
     let(:beginning_of_this_month) { Date.yesterday.beginning_of_month }
     let(:beginning_of_last_month) { Date.yesterday.beginning_of_month - 1.month }
 
-    context 'last 30 days' do
-      before do
-        create :metric, date: 12.days.ago, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
-        create :metric, date: 15.days.ago, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
-        create :metric, date: 30.days.ago, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
-        # should not include metrics below
-        create :metric, date: 32.days.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
-        create :metric, date: 45.days.ago, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
+    before do
+      create :metric, date: 1.day.ago, edition: edition1, pviews: 1
+      create :metric, date: 1.month.ago.beginning_of_month, edition: edition1, pviews: 10
+      create :metric, date: 2.months.ago, edition: edition1, pviews: 100
+      create :metric, date: 5.months.ago, edition: edition1, pviews: 1000
+      create :metric, date: 11.months.ago, edition: edition1, pviews: 10000
 
-        recalculate_aggregations!
-      end
+      create :metric, date: 1.day.ago, edition: edition2, pviews: 2
+      create :metric, date: 1.month.ago.beginning_of_month, edition: edition2, pviews: 20
+      create :metric, date: 2.months.ago, edition: edition2, pviews: 200
+      create :metric, date: 5.months.ago, edition: edition2, pviews: 2000
+      create :metric, date: 11.months.ago, edition: edition2, pviews: 20000
 
+      recalculate_aggregations!
+    end
+
+    context 'past 30 days' do
       it 'returns 200 status' do
         get '/content', params: { date_range: 'past-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
       end
 
-      it 'returns aggregated metrics' do
+      it 'returns metrics in the correct time period' do
         get '/content', params: { date_range: 'past-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         json = JSON.parse(response.body).deep_symbolize_keys
         expect(json[:results]).to contain_exactly(
-          a_hash_including(
-            base_path: '/path-01',
-            upviews: 150,
-            satisfaction: 0.6875,
-            satisfaction_score_responses: 80,
-            searches: 22
-          ),
-          a_hash_including(
-            base_path: '/path-02',
-            upviews: 10,
-            satisfaction: 0.5,
-            satisfaction_score_responses: 20,
-            searches: 10
-          )
+          a_hash_including(base_path: '/path-01', pviews: 1),
+          a_hash_including(base_path: '/path-02', pviews: 2)
         )
       end
     end
 
     context 'last month' do
-      before do
-        create :metric, date: beginning_of_last_month, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
-        # should not include metrics below
-        create :metric, date: beginning_of_this_month, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
-        create :metric, date: beginning_of_this_month, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
-        create :metric, date: beginning_of_this_month, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
-
-        recalculate_aggregations!
-      end
-
       it 'returns 200 status' do
         get '/content', params: { date_range: 'last-month', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -71,29 +77,13 @@ RSpec.describe '/content' do
         get '/content', params: { date_range: 'last-month', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         json = JSON.parse(response.body).deep_symbolize_keys
         expect(json[:results]).to contain_exactly(
-          a_hash_including(
-            base_path: '/path-02',
-            upviews: 100,
-            satisfaction: 0.5,
-            satisfaction_score_responses: 200,
-            searches: 100
-          )
+          a_hash_including(base_path: '/path-01', pviews: 10),
+          a_hash_including(base_path: '/path-02', pviews: 20)
         )
       end
     end
 
-    context 'last 3 months' do
-      before do
-        create :metric, date: beginning_of_this_month, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
-        create :metric, date: beginning_of_this_month, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
-        create :metric, date: beginning_of_last_month, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
-        create :metric, date: 2.months.ago, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
-        # should not include metrics below
-        create :metric, date: 5.months.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
-
-        recalculate_aggregations!
-      end
-
+    context 'past 3 months' do
       it 'returns 200 status' do
         get '/content', params: { date_range: 'past-3-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -104,37 +94,13 @@ RSpec.describe '/content' do
         json = JSON.parse(response.body).deep_symbolize_keys
 
         expect(json[:results]).to contain_exactly(
-          a_hash_including(
-            base_path: '/path-01',
-            upviews: 150,
-            satisfaction: 0.6875,
-            satisfaction_score_responses: 80,
-            searches: 22
-          ),
-          a_hash_including(
-            base_path: '/path-02',
-            upviews: 110,
-            satisfaction: 0.5,
-            satisfaction_score_responses: 220,
-            searches: 110
-          )
+          a_hash_including(base_path: '/path-01', pviews: 111),
+          a_hash_including(base_path: '/path-02', pviews: 222)
         )
       end
     end
 
-    context 'last 6 months' do
-      before do
-        create :metric, date: beginning_of_this_month, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
-        create :metric, date: beginning_of_this_month, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
-        create :metric, date: beginning_of_this_month, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
-        create :metric, date: beginning_of_last_month, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
-        create :metric, date: 5.months.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
-        # should not include metrics below
-        create :metric, date: 11.months.ago, edition: edition3, upviews: 1000, useful_yes: 1000, useful_no: 1000, searches: 1000
-
-        recalculate_aggregations!
-      end
-
+    context 'past 6 months' do
       it 'returns 200 status' do
         get '/content', params: { date_range: 'past-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -144,38 +110,13 @@ RSpec.describe '/content' do
         get '/content', params: { date_range: 'past-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         json = JSON.parse(response.body).deep_symbolize_keys
         expect(json[:results]).to contain_exactly(
-          a_hash_including(
-            base_path: '/path-01',
-            upviews: 170,
-            satisfaction: 0.625,
-            satisfaction_score_responses: 120,
-            searches: 42
-          ),
-          a_hash_including(
-            base_path: '/path-02',
-            upviews: 110,
-            satisfaction: 0.5,
-            satisfaction_score_responses: 220,
-            searches: 110
-          )
+          a_hash_including(base_path: '/path-01', pviews: 1111),
+          a_hash_including(base_path: '/path-02', pviews: 2222)
         )
       end
     end
 
-    context 'last year' do
-      before do
-        create :metric, date: beginning_of_this_month, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
-        create :metric, date: beginning_of_this_month, edition: edition2, upviews: 50, useful_yes: 5, useful_no: 5, searches: 2
-        create :metric, date: beginning_of_this_month, edition: edition3, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
-        create :metric, date: beginning_of_last_month, edition: edition3, upviews: 100, useful_yes: 100, useful_no: 100, searches: 100
-        create :metric, date: 5.months.ago, edition: edition2, upviews: 20, useful_yes: 20, useful_no: 20, searches: 20
-        create :metric, date: 11.months.ago, edition: edition3, upviews: 1000, useful_yes: 1000, useful_no: 1000, searches: 1000
-        # should not include metrics below
-        create :metric, date: 13.months.ago, edition: edition3, upviews: 1000, useful_yes: 1000, useful_no: 1000, searches: 1000
-
-        recalculate_aggregations!
-      end
-
+    context 'past year' do
       it 'returns 200 status' do
         get '/content', params: { date_range: 'past-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -185,20 +126,8 @@ RSpec.describe '/content' do
         get '/content', params: { date_range: 'past-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         json = JSON.parse(response.body).deep_symbolize_keys
         expect(json[:results]).to contain_exactly(
-          a_hash_including(
-            base_path: '/path-01',
-            upviews: 170,
-            satisfaction: 0.625,
-            satisfaction_score_responses: 120,
-            searches: 42
-          ),
-          a_hash_including(
-            base_path: '/path-02',
-            upviews: 1110,
-            satisfaction: 0.5,
-            satisfaction_score_responses: 2220,
-            searches: 1110
-          )
+          a_hash_including(base_path: '/path-01', pviews: 11111),
+          a_hash_including(base_path: '/path-02', pviews: 22222)
         )
       end
     end
