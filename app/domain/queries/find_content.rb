@@ -18,8 +18,9 @@ class Queries::FindContent
                 .order(order_by)
                 .page(@page)
                 .per(@page_size)
+                .select(*aggregates)
     {
-      results: results.pluck(*aggregates).map(&method(:array_to_hash)),
+      results: results.map(&method(:array_to_hash)),
       page: @page,
       total_pages: results.total_pages,
       total_results: slice_editions.latest.count
@@ -44,19 +45,23 @@ private
   end
 
   def aggregates
-    %w(base_path title document_type upviews useful_yes useful_no searches)
+    %i(base_path title document_type upviews pviews useful_yes useful_no searches feedex)
   end
 
   def array_to_hash(array)
-    satisfaction_responses = array[4].to_i + array[5].to_i
+    satisfaction_responses = array[:useful_yes].to_i + array[:useful_no].to_i
     {
-      base_path: array[0],
-      title: array[1],
-      document_type: array[2],
-      upviews: array[3].to_i,
-      satisfaction: satisfaction_responses.zero? ? nil : (array[4].to_f / satisfaction_responses).to_f,
+      base_path: array[:base_path],
+      title: array[:title],
+      document_type: array[:document_type],
+      upviews: array[:upviews].to_i,
+      pviews: array[:pviews].to_i,
+      useful_yes: array[:useful_yes].to_i,
+      useful_no: array[:useful_no].to_i,
+      feedex: array[:feedex].to_i,
+      satisfaction: satisfaction_responses.zero? ? nil : (array[:useful_yes].to_f / satisfaction_responses).to_f,
       satisfaction_score_responses: satisfaction_responses.to_i,
-      searches: array[6].to_i,
+      searches: array[:searches].to_i,
     }
   end
 
