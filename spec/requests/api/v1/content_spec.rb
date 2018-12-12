@@ -5,9 +5,9 @@ RSpec.describe '/content' do
 
   let(:organisation_id) { 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
 
-  describe 'metrics' do
+  describe 'content item attributes' do
     it 'contains the expected metrics' do
-      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-01'
+      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-01', facts: { pdf_count: 10, words: 300 }
       create :metric, date: 1.day.ago, edition: edition1, pviews: 1, upviews: 1, feedex: 1, useful_no: 1, useful_yes: 1, searches: 1
       recalculate_aggregations!
 
@@ -15,7 +15,6 @@ RSpec.describe '/content' do
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:results]).to contain_exactly(
         a_hash_including(
-          base_path: '/path-01',
           pviews: 1,
           upviews: 1,
           feedex: 1,
@@ -23,7 +22,26 @@ RSpec.describe '/content' do
           useful_yes: 1,
           satisfaction: 0.5,
           satisfaction_score_responses: 2,
-          searches: 1
+          searches: 1,
+          pdf_count: 10,
+          word_count: 300
+        )
+      )
+    end
+
+    it 'contains the expected metadata' do
+      edition1 = create :edition, date: 1.month.ago, title: 'title', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2', document_type: 'guide', base_path: '/path-01'
+      create :metric, date: 1.day.ago, edition: edition1
+      recalculate_aggregations!
+
+      get '/content', params: { date_range: 'past-30-days', organisation_id: 'all' }
+      json = JSON.parse(response.body).deep_symbolize_keys
+      expect(json[:results]).to contain_exactly(
+        a_hash_including(
+          base_path: '/path-01',
+          title: 'title',
+          organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2',
+          document_type: 'guide'
         )
       )
     end

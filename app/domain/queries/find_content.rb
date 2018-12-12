@@ -14,6 +14,7 @@ class Queries::FindContent
     view = Queries::SelectView.new(date_range).run
     results = view[:model_name].all
                 .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
+                .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
                 .merge(slice_editions)
                 .order(order_by)
                 .page(@page)
@@ -45,7 +46,7 @@ private
   end
 
   def aggregates
-    %i(base_path title document_type upviews pviews useful_yes useful_no searches feedex)
+    %i(base_path title organisation_id document_type upviews pviews useful_yes useful_no searches feedex pdf_count words)
   end
 
   def array_to_hash(array)
@@ -53,6 +54,7 @@ private
     {
       base_path: array[:base_path],
       title: array[:title],
+      organisation_id: array[:organisation_id],
       document_type: array[:document_type],
       upviews: array[:upviews].to_i,
       pviews: array[:pviews].to_i,
@@ -62,6 +64,8 @@ private
       satisfaction: satisfaction_responses.zero? ? nil : (array[:useful_yes].to_f / satisfaction_responses).to_f,
       satisfaction_score_responses: satisfaction_responses.to_i,
       searches: array[:searches].to_i,
+      pdf_count: array[:pdf_count].to_i,
+      words: array[:words].to_i,
     }
   end
 
