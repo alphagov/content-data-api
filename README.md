@@ -55,7 +55,7 @@ To run the test suite:
  ```
 
 ## Populating data
-If you are a GOV.UK developer using the development VM, you can [run the replication script to populate the database](https://docs.publishing.service.gov.uk/manual/get-started.html#7-import-production-data).
+If you are a GOV.UK developer using the development VM, you can [run the replication script to populate the database](doc/import_production_data.md).
 
 To run the ETL process locally, you need to  [set up Google Analytics credentials in development](doc/google_analytics_setup.md).
 
