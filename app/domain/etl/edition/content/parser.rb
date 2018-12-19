@@ -75,6 +75,7 @@ private
 
   def parse_html(html)
     return if html.nil?
+
     html.delete!("\n")
     Nokogiri::HTML.parse(html).text
   end

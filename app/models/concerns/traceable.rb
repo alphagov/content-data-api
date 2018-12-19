@@ -7,6 +7,7 @@ module Concerns::Traceable
   included do
     def time(process:)
       raise ArgumentError "No block was given to Traceable#time" unless block_given?
+
       started = Time.now
       logger.info "Process: '#{process}' started at #{started.to_formatted_s(:db)}"
       yield

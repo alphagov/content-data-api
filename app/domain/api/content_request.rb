@@ -32,12 +32,14 @@ private
 
   def valid_date_range
     return true if date_range.in?(VALID_TIME_PERIODS) || date_range.blank?
+
     errors.add('date_range', 'this is not a valid date range')
   end
 
   def valid_organisation_id
     return true if %w[all none].include? organisation_id
     return true if UUID.validate organisation_id
+
     errors.add('organisation_id', 'this is not a valid organisation id')
   end
 end
