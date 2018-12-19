@@ -29,6 +29,7 @@ private
 
   def quality_metrics
     return {} if new_edition.document_text.nil?
+
     result = Odyssey.flesch_kincaid_re(new_edition.document_text, true)
     {
       readability: result.fetch('score'),

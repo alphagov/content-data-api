@@ -16,6 +16,7 @@ private
   def find_metadata
     metadata = Queries::FindMetadata.run(@base_path)
     raise Api::NotFoundError.new("#{api_request.base_path} not found") if metadata.nil?
+
     metadata
   end
 

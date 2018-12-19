@@ -3,6 +3,7 @@ class Etl::Edition::Content::Parsers::TravelAdviceIndex
     html = []
     children = json.dig("links", "children")
     return if children.nil?
+
     children.each do |child|
       country = child.dig("country", "name")
       html << country unless country.nil?

@@ -16,6 +16,7 @@ class Etl::Feedex::Service
       yield convert_results(response['results'])
 
       break if response['pages'] == current_page
+
       current_page += 1
     end
   end
