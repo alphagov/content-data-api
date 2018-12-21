@@ -221,8 +221,18 @@ RSpec.describe Dimensions::Edition, type: :model do
         document_type: 'guide',
         primary_organisation_title: 'The ministry',
         withdrawn: false,
-        historical: false
+        historical: false,
+        parent_content_id: ''
       )
+    end
+  end
+
+  describe '#parent_content_id' do
+    it 'returns content_id of parent manual for a manual_section' do
+      create :edition, content_id: 'the-parent', base_path: '/prefix-path/the-parent-path', document_type: 'manual'
+      child = create :edition, base_path: '/prefix-path/the-parent-path/child-path', document_type: 'manual_section'
+
+      expect(child.parent_content_id).to eq('the-parent')
     end
   end
 
