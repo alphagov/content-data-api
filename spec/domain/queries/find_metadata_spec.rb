@@ -30,6 +30,7 @@ RSpec.describe Queries::FindMetadata do
 
   it "returns metadata for latest edition" do
     metadata = described_class.run('/base_path')
+
     expect(metadata).to eq(
       title: 'the title',
       base_path: base_path,
@@ -40,7 +41,8 @@ RSpec.describe Queries::FindMetadata do
       public_updated_at: '2018-07-17T10:35:57.000Z',
       primary_organisation_title: 'The ministry',
       withdrawn: false,
-      historical: false
+      historical: false,
+      parent_content_id: ''
     )
   end
 
