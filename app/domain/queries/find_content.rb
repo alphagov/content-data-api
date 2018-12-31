@@ -1,8 +1,4 @@
 class Queries::FindContent
-  DEFAULT_PAGE_SIZE = 100
-  ALL = 'all'.freeze
-  NONE = 'none'.freeze
-
   def self.call(filter:)
     raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
 
@@ -28,6 +24,10 @@ class Queries::FindContent
   end
 
 private
+
+  DEFAULT_PAGE_SIZE = 100
+  ALL = 'all'.freeze
+  NONE = 'none'.freeze
 
   def order_by
     'upviews desc'
