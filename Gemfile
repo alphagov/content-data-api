@@ -57,8 +57,8 @@ group :development, :test do
   gem 'phantomjs'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rails-controller-testing'
   gem "rack", ">= 2.0.6"
+  gem 'rails-controller-testing'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false

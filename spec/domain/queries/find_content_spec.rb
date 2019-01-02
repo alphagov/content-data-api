@@ -227,7 +227,6 @@ RSpec.describe Queries::FindContent do
         warehouse_item_id: 'item-0'
       create :metric, edition: old_edition, date: 15.days.ago
 
-
       recalculate_aggregations!
     end
 
@@ -347,6 +346,58 @@ RSpec.describe Queries::FindContent do
       expect(result[:results]).to contain_exactly(
         hash_including(base_path: '/this/is/a/big/base-path'),
       )
+    end
+
+    describe 'search by base_path with full URLs' do
+      before do
+        edition1 = create :edition, base_path: '/base-path', date: 2.months.ago, organisation_id: primary_org_id
+
+        create :metric, edition: edition1, date: 15.days.ago
+        recalculate_aggregations!
+      end
+
+      subject { described_class.call(filter: filter.merge(search_term: search_term))[:results] }
+
+
+      context 'when search terms include the protocol (http)' do
+        let(:search_term) { 'http://base-path' }
+
+        it 'return editions matching the base_path' do
+          expect(subject).to contain_exactly(
+            hash_including(base_path: '/base-path'),
+          )
+        end
+      end
+
+      context 'when search terms include the protocol (https)' do
+        let(:search_term) { 'https://base-path' }
+
+        it 'return editions matching the base_path' do
+          expect(subject).to contain_exactly(
+            hash_including(base_path: '/base-path'),
+          )
+        end
+      end
+
+      context 'when search terms include domain gov.uk' do
+        let(:search_term) { 'gov.uk/base-path' }
+
+        it 'return editions matching the base_path' do
+          expect(subject).to contain_exactly(
+            hash_including(base_path: '/base-path'),
+          )
+        end
+      end
+
+      context 'when search terms include domain www.gov.uk' do
+        let(:search_term) { 'www.gov.uk/base-path' }
+
+        it 'return editions matching the base_path' do
+          expect(subject).to contain_exactly(
+            hash_including(base_path: '/base-path'),
+          )
+        end
+      end
     end
   end
 end
