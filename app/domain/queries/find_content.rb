@@ -1,8 +1,4 @@
 class Queries::FindContent
-  DEFAULT_PAGE_SIZE = 100
-  ALL = 'all'.freeze
-  NONE = 'none'.freeze
-
   def self.call(filter:)
     raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
 
@@ -29,6 +25,10 @@ class Queries::FindContent
 
 private
 
+  DEFAULT_PAGE_SIZE = 100
+  ALL = 'all'.freeze
+  NONE = 'none'.freeze
+
   def order_by
     'upviews desc'
   end
@@ -38,10 +38,19 @@ private
   def initialize(filter)
     @organisation_id = filter.fetch(:organisation_id)
     @document_type = filter.fetch(:document_type)
-    @search_term = filter[:search_term]
+    @search_term = parse_search_term(filter[:search_term]) if filter[:search_term]
     @page = filter[:page] || 1
     @page_size = filter[:page_size] || DEFAULT_PAGE_SIZE
     @date_range = filter.fetch(:date_range)
+  end
+
+  def parse_search_term(search_term)
+    protocol = /http(s)?:\/\//
+    domain = /(www\.)?gov\.uk/
+
+    search_term.
+      gsub(protocol, '').
+      gsub(domain, '')
   end
 
   def aggregates
