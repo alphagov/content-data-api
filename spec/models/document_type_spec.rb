@@ -19,5 +19,15 @@ RSpec.describe DocumentType do
         have_attributes(id: 'guide')
       ])
     end
+
+    it 'humanizes document type names' do
+      create(:edition, document_type: 'news_story')
+      create(:edition, document_type: 'aaib_report')
+
+      expect(DocumentType.find_all).to match_array([
+        have_attributes(name: 'News story'),
+        have_attributes(name: 'AAIB report')
+      ])
+    end
   end
 end

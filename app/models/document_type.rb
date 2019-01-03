@@ -17,7 +17,10 @@ class DocumentType
       .order(:document_type)
 
     editions.map do |edition|
-      self.new(id: edition[:document_type], name: edition[:document_type])
+      self.new(
+        id: edition[:document_type],
+        name: edition[:document_type].humanize
+      )
     end
   end
 end
