@@ -11,12 +11,14 @@ class Queries::FindContent
     view = Queries::SelectView.new(date_range).run
     results = view[:model_name].all
                 .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
+                .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
                 .merge(slice_editions)
                 .order(order_by)
                 .page(@page)
                 .per(@page_size)
+                .select(*aggregates)
     {
-      results: results.pluck(*aggregates).map(&method(:array_to_hash)),
+      results: results.map(&method(:array_to_hash)),
       page: @page,
       total_pages: results.total_pages,
       total_results: slice_editions.latest.count
@@ -54,19 +56,26 @@ private
   end
 
   def aggregates
-    %w(base_path title document_type upviews useful_yes useful_no searches)
+    %i(base_path title organisation_id document_type upviews pviews useful_yes useful_no searches feedex pdf_count words)
   end
 
   def array_to_hash(array)
-    satisfaction_responses = array[4].to_i + array[5].to_i
+    satisfaction_responses = array[:useful_yes].to_i + array[:useful_no].to_i
     {
-      base_path: array[0],
-      title: array[1],
-      document_type: array[2],
-      upviews: array[3].to_i,
-      satisfaction: satisfaction_responses.zero? ? nil : (array[4].to_f / satisfaction_responses).to_f,
+      base_path: array[:base_path],
+      title: array[:title],
+      organisation_id: array[:organisation_id],
+      document_type: array[:document_type],
+      upviews: array[:upviews].to_i,
+      pviews: array[:pviews].to_i,
+      useful_yes: array[:useful_yes].to_i,
+      useful_no: array[:useful_no].to_i,
+      feedex: array[:feedex].to_i,
+      satisfaction: satisfaction_responses.zero? ? nil : (array[:useful_yes].to_f / satisfaction_responses).to_f,
       satisfaction_score_responses: satisfaction_responses.to_i,
-      searches: array[6].to_i,
+      searches: array[:searches].to_i,
+      pdf_count: array[:pdf_count].to_i,
+      words: array[:words].to_i,
     }
   end
 
