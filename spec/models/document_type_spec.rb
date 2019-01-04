@@ -1,6 +1,5 @@
 RSpec.describe DocumentType do
   describe '.find_all' do
-
     it 'returns a list of document types' do
       create(:edition, document_type: 'news_story')
       create(:edition, document_type: 'guide')
