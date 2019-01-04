@@ -24,7 +24,10 @@ class Etl::Feedex::Service
 private
 
   def support_api_with_long_timeout
-    GdsApi::SupportApi.new(Plek.new.find('support-api')).tap do |client|
+    GdsApi::SupportApi.new(
+      Plek.new.find('support-api'),
+      bearer_token: ENV['SUPPORT_API_BEARER_TOKEN'],
+    ).tap do |client|
       client.options[:timeout] = 15
     end
   end

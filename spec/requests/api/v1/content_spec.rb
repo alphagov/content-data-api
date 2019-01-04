@@ -250,7 +250,7 @@ RSpec.describe '/content' do
 
       json = JSON.parse(response.body).deep_symbolize_keys
       expected_results = [edition1.base_path, edition2.base_path]
-      expect(json[:results].map { |res| res[:base_path] }).to eq(expected_results)
+      expect(json[:results].map { |res| res[:base_path] }).to match_array(expected_results)
     end
   end
 
