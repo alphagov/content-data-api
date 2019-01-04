@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     get '/v1/metrics/', to: "metrics#index"
     get '/v1/healthcheck', to: "healthcheck#index"
+    get '/v1/organisations', to: 'organisations#index'
   end
 
   get '/content', to: 'content#show'
