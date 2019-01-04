@@ -1,5 +1,6 @@
 RSpec.describe DocumentType do
   describe '.find_all' do
+
     it 'returns a list of document types' do
       create(:edition, document_type: 'news_story')
       create(:edition, document_type: 'guide')
@@ -27,6 +28,22 @@ RSpec.describe DocumentType do
       expect(DocumentType.find_all).to match_array([
         have_attributes(name: 'News story'),
         have_attributes(name: 'AAIB report')
+      ])
+    end
+
+    it 'sorts result by name' do
+      create(:edition, document_type: 'news_story')
+      create(:edition, document_type: 'aaib_report')
+
+      expect(DocumentType.find_all).to be_sorted_by(&:name)
+    end
+
+    it 'returns only document types of latest editions' do
+      create(:edition, document_type: 'news_story')
+      create(:edition, document_type: 'guidance', latest: false)
+
+      expect(DocumentType.find_all).to match_array([
+        have_attributes(id: 'news_story'),
       ])
     end
   end
