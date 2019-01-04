@@ -12,6 +12,7 @@ gem 'plek'
 
 # Third party gems
 gem 'activerecord-import'
+gem 'active_model_serializers'
 gem 'awesome_print'
 gem 'chartkick'
 gem 'google-api-client', '~> 0.27'

@@ -17,6 +17,16 @@ servers:
   - url: 'http://content-performance-manager.dev.gov.uk/api/v1'
     description: Development
 paths:
+  '/organisations/':
+    get:
+      summary: Get all organisations
+      responses:
+        '200':
+           description: A list of organisations
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ArrayOfOrganisations'
   '/metrics/':
     get:
       summary: List all available metrics.
@@ -178,6 +188,19 @@ components:
       type: http
       scheme: bearer
   schemas:
+    Organisation:
+      requires:
+        - id
+        - name
+      properties:
+        id:
+          type: string 
+        name:
+          type: string
+    ArrayOfOrganisations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Organisation'
     Metric:
       description: |
         Information about a metric returned by the API.
