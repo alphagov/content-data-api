@@ -7,7 +7,7 @@ Rails.application.load_tasks
 
 namespace :lint do
   task :ruby do
-    sh "bundle exec govuk-lint-ruby app config lib spec"
+    sh "bundle exec rubocop app config lib spec"
   end
 
   task :sass do
