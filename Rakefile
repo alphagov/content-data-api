@@ -9,11 +9,7 @@ namespace :lint do
   task :ruby do
     sh "bundle exec rubocop app config lib spec"
   end
-
-  task :sass do
-    sh "bundle exec govuk-lint-sass app/assets/stylesheets"
-  end
 end
 
-task lint: ["lint:ruby", "lint:sass"]
+task lint: ["lint:ruby"]
 task default: %i[spec lint]
