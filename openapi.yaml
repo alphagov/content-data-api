@@ -27,6 +27,16 @@ paths:
              application/json:
                schema:
                  $ref: '#/components/schemas/ArrayOfOrganisations'
+  '/document_types/':
+    get:
+      summary: Get all document types
+      responses:
+        '200':
+           description: A list of document types
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ArrayOfDocumentTypes'
   '/metrics/':
     get:
       summary: List all available metrics.
@@ -201,6 +211,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Organisation'
+    DocumentType:
+      requires:
+        - id
+        - name
+      properties:
+        id:
+          type: string 
+        name:
+          type: string
+    ArrayOfDocumentTypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/DocumentType'
     Metric:
       description: |
         Information about a metric returned by the API.
