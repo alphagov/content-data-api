@@ -113,7 +113,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.25)
     formatador (0.2.5)
-    gds-api-adapters (55.0.2)
+    gds-api-adapters (57.0.0)
       addressable
       link_header
       null_logger
@@ -501,7 +501,7 @@ DEPENDENCIES
   coffee-script
   database_cleaner
   factory_bot_rails
-  gds-api-adapters (~> 55.0.2)
+  gds-api-adapters (~> 57.0.0)
   gds-sso
   google-api-client (~> 0.27)
   govuk-lint (= 3.10.0)
