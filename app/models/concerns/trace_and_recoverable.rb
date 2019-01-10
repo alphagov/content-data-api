@@ -14,5 +14,15 @@ module Concerns::TraceAndRecoverable
         GovukError.notify(e)
       end
     end
+
+    def trap
+      raise ArgumentError "No block was given to TraceAndRecoverable#trap" unless block_given?
+
+      begin
+        yield
+      rescue StandardError => e
+        GovukError.notify(e)
+      end
+    end
   end
 end

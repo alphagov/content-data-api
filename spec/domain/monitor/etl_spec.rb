@@ -25,4 +25,17 @@ RSpec.describe Monitor::Etl do
       subject.run
     end
   end
+
+  describe 'exception thrown by during processing' do
+    let(:error) { StandardError.new }
+    before do
+      allow(GovukError).to receive(:notify)
+      allow(Metric).to receive(:edition_metrics).and_raise(error)
+    end
+
+    it 'traps and logs the error to Sentry' do
+      expect { subject.run }.not_to raise_error
+      expect(GovukError).to have_received(:notify).with(error)
+    end
+  end
 end
