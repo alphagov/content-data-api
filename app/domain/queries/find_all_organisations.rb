@@ -5,7 +5,7 @@ class Queries::FindAllOrganisations
 
   def retrieve
     Dimensions::Edition.latest
-      .where(document_type: 'organisation')
+      .where(document_type: 'organisation', locale: 'en')
       .order(:title)
       .pluck(:content_id, :title)
       .map(&method(:convert_result))
