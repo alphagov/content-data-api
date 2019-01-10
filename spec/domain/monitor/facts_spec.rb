@@ -41,7 +41,7 @@ RSpec.describe Monitor::Facts do
 
     subject.run
   end
-  
+
   describe 'exception thrown by during processing' do
     let(:error) { StandardError.new }
     before do
@@ -54,5 +54,4 @@ RSpec.describe Monitor::Facts do
       expect(GovukError).to have_received(:notify).with(error)
     end
   end
-
 end
