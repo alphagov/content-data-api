@@ -1,14 +1,16 @@
 class Monitor::Dimensions
+  include Concerns::TraceAndRecoverable
   def self.run(*args)
     new(*args).run
   end
 
   def run
-    statsd_for_all_base_paths!
-    statsd_for_latest_base_paths!
-
-    statsd_for_all_content_items!
-    statsd_for_latest_content_items!
+    trap do
+      statsd_for_all_base_paths!
+      statsd_for_latest_base_paths!
+      statsd_for_all_content_items!
+      statsd_for_latest_content_items!
+    end
   end
 
 private
