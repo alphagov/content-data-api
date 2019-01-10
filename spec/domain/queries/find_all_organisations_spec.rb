@@ -3,6 +3,7 @@ RSpec.describe Queries::FindAllOrganisations do
     before do
       create :user
       create :edition, document_type: 'organisation', content_id: 'org-1-id', title: 'z Org'
+      create :edition, document_type: 'organisation', content_id: 'org-1-id', title: 'aber Org', locale: 'cy'
       create :edition, document_type: 'organisation', content_id: 'org-2-id', title: 'a Org'
     end
 
