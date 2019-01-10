@@ -1,14 +1,17 @@
 class Monitor::Facts
+  include Concerns::TraceAndRecoverable
+
   def self.run(*args)
     new(*args).run
   end
 
   def run
-    statsd_for_all_metrics!
-    statsd_for_yesterday_metrics!
-
-    statsd_for_total_editions!
-    statsd_for_yesterday_editions!
+    trap do
+      statsd_for_all_metrics!
+      statsd_for_yesterday_metrics!
+      statsd_for_total_editions!
+      statsd_for_yesterday_editions!
+    end
   end
 
 private

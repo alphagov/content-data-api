@@ -1,6 +1,6 @@
-require_dependency 'concerns/traceable'
+require_dependency 'concerns/trace_and_recoverable'
 class Etl::GA::ViewsAndNavigationProcessor
-  include Concerns::Traceable
+  include Concerns::TraceAndRecoverable
   include Etl::GA::Concerns::TransformPath
 
   def self.process(*args)
@@ -12,7 +12,7 @@ class Etl::GA::ViewsAndNavigationProcessor
   end
 
   def process
-    time(process: :ga_views_navigation) do
+    time_and_trap(process: :ga_views_navigation) do
       extract_events
       transform_events
       load_metrics

@@ -1,11 +1,14 @@
 class Monitor::Etl
+  include Concerns::TraceAndRecoverable
   def self.run(*args)
     new(*args).run
   end
 
   def run
-    statsd_for_performance_metrics!
-    statsd_for_edition_metrics!
+    trap do
+      statsd_for_performance_metrics!
+      statsd_for_edition_metrics!
+    end
   end
 
 private

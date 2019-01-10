@@ -1,5 +1,5 @@
 class Etl::Feedex::Processor
-  include Concerns::Traceable
+  include Concerns::TraceAndRecoverable
 
   def self.process(*args)
     new(*args).process
@@ -10,7 +10,7 @@ class Etl::Feedex::Processor
   end
 
   def process
-    time(process: :feedex) do
+    time_and_trap(process: :feedex) do
       extract_events
       load_metrics
     end

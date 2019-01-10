@@ -1,11 +1,15 @@
 class Monitor::Aggregations
+  include Concerns::TraceAndRecoverable
+
   def self.run(*args)
     new(*args).run
   end
 
   def run
-    statsd_for_all_monthly_aggregations!
-    statsd_for_current_month!
+    trap do
+      statsd_for_all_monthly_aggregations!
+      statsd_for_current_month!
+    end
   end
 
 private
