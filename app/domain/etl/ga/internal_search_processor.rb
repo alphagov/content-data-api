@@ -1,5 +1,5 @@
 class Etl::GA::InternalSearchProcessor
-  include Concerns::Traceable
+  include Concerns::TraceAndRecoverable
   include Etl::GA::Concerns::TransformPath
 
   def self.process(*args)
@@ -11,7 +11,7 @@ class Etl::GA::InternalSearchProcessor
   end
 
   def process
-    time(process: :ga_search) do
+    time_and_trap(process: :ga_search) do
       extract_events
       transform_events
       load_metrics
