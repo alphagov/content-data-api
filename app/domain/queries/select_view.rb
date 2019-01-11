@@ -14,33 +14,23 @@ class Queries::SelectView
 private
 
   def model_name
-    case date_range
-    when 'last-month'
-      Aggregations::SearchLastMonth
-    when 'past-3-months'
-      Aggregations::SearchLastThreeMonths
-    when 'past-6-months'
-      Aggregations::SearchLastSixMonths
-    when 'past-year'
-      Aggregations::SearchLastTwelveMonths
-    else
-      Aggregations::SearchLastThirtyDays
-    end
+    aggregations = {
+      'last-month' => Aggregations::SearchLastMonth,
+      'past-3-months' => Aggregations::SearchLastThreeMonths,
+      'past-6-months' => Aggregations::SearchLastSixMonths,
+      'past-year' => Aggregations::SearchLastTwelveMonths,
+    }
+    aggregations[date_range] || Aggregations::SearchLastThirtyDays
   end
 
   def table_name
-    case date_range
-    when 'last-month'
-      'last_months'
-    when 'past-3-months'
-      'last_three_months'
-    when 'past-6-months'
-      'last_six_months'
-    when 'past-year'
-      'last_twelve_months'
-    else
-      'last_thirty_days'
-    end
+    table_names = {
+      'last-month' => 'last_months',
+      'past-3-months' => 'last_three_months',
+      'past-6-months' => 'last_six_months',
+      'past-year' => 'last_twelve_months'
+    }
+    table_names[date_range] || 'last_thirty_days'
   end
 
   def valid_date_range?
