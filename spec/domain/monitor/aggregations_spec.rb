@@ -24,16 +24,5 @@ RSpec.describe Monitor::Aggregations do
     subject.run
   end
 
-  describe 'exception thrown by during processing' do
-    let(:error) { StandardError.new }
-    before do
-      allow(GovukError).to receive(:notify)
-      allow(::Aggregations::MonthlyMetric).to receive(:count).and_raise(error)
-    end
-
-    it 'traps and logs the error to Sentry' do
-      expect { subject.run }.not_to raise_error
-      expect(GovukError).to have_received(:notify).with(error)
-    end
-  end
+  it_behaves_like 'traps and logs errors in run', ::Aggregations::MonthlyMetric, :count
 end

@@ -54,4 +54,6 @@ RSpec.describe Monitor::Facts do
       expect(GovukError).to have_received(:notify).with(error)
     end
   end
+
+  it_behaves_like 'traps and logs errors in run', Facts::Metric, :count
 end

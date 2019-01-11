@@ -2,6 +2,7 @@ require 'gds-api-adapters'
 
 RSpec.describe Etl::Feedex::Processor do
   let(:date) { Date.new(2018, 2, 20) }
+  let(:subject) { described_class }
 
   context 'When the base_path matches the feedex path' do
     before { allow_any_instance_of(Etl::Feedex::Service).to receive(:find_in_batches).and_yield(feedex_response) }
@@ -105,18 +106,7 @@ RSpec.describe Etl::Feedex::Processor do
     end
   end
 
-  describe 'exception thrown by during processing' do
-    let(:error) { StandardError.new }
-    before do
-      allow(GovukError).to receive(:notify)
-      allow(Etl::Feedex::Service).to receive(:find_in_batches).and_raise(error)
-    end
-
-    it 'traps and logs the error to Sentry' do
-      expect { described_class.process(date: date) }.not_to raise_error
-      expect(GovukError).to have_received(:notify).with(error)
-    end
-  end
+  it_behaves_like 'traps and logs errors in process', Etl::Feedex::Service, :find_in_batches
 
 private
 
