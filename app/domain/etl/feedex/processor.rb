@@ -22,7 +22,7 @@ private
 
   def extract_events
     batch = 1
-    feedex_service.find_in_batches do |events|
+    Etl::Feedex::Service.find_in_batches(date, BATCH_SIZE) do |events|
       log process: :feedex, message: "Processing #{events.length} events in batch #{batch}"
       Events::Feedex.import(events, batch_size: BATCH_SIZE)
       batch += 1
@@ -73,8 +73,4 @@ private
   end
 
   attr_reader :date
-
-  def feedex_service
-    @feedex_service ||= Etl::Feedex::Service.new(date, BATCH_SIZE)
-  end
 end

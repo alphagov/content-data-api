@@ -109,7 +109,7 @@ RSpec.describe Etl::Feedex::Processor do
     let(:error) { StandardError.new }
     before do
       allow(GovukError).to receive(:notify)
-      allow_any_instance_of(Etl::Feedex::Service).to receive(:find_in_batches).and_raise(error)
+      allow(Etl::Feedex::Service).to receive(:find_in_batches).and_raise(error)
     end
 
     it 'traps and logs the error to Sentry' do
