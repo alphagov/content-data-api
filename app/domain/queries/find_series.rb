@@ -6,12 +6,6 @@ class Queries::FindSeries
     self
   end
 
-  def by_document_type(document_type)
-    @document_type = document_type
-
-    self
-  end
-
   def by_base_path(base_path)
     @base_path = base_path
 
@@ -53,7 +47,6 @@ private
     editions = Dimensions::Edition.all
     editions = editions.by_locale('en')
     editions = editions.by_base_path(@base_path) unless @base_path.blank?
-    editions = editions.by_document_type(@document_type) unless @document_type.blank?
     editions
   end
 end
