@@ -3,6 +3,10 @@ require 'gds_api/support_api'
 class Etl::Feedex::Service
   attr_reader :date, :batch_size, :support_api
 
+  def self.find_in_batches(*args, &block)
+    new(*args).find_in_batches(&block)
+  end
+
   def initialize(date, batch_size, support_api = nil)
     @date = date
     @batch_size = batch_size
