@@ -35,24 +35,6 @@ RSpec.describe Queries::FindSeries do
     end
   end
 
-  context "by_organisation" do
-    it "returns a series of metrics filtered by organisation" do
-      edition1 = create :edition, date: '2018-1-12', organisation_id: 'org-1'
-      edition2 = create :edition, date: '2018-1-13', organisation_id: 'org-2'
-
-      create :metric, edition: edition1, date: '2018-1-12', pviews: 1
-      create :metric, edition: edition1, date: '2018-1-13', pviews: 2
-      create :metric, edition: edition2, date: '2018-1-14', pviews: 1
-
-      series = described_class.new.by_metrics(%w(pviews)).by_organisation_id('org-1').run
-
-      expect(series.first.time_series).to eq([
-        { date: '2018-01-12', value: 1 },
-        { date: '2018-01-13', value: 2 },
-      ])
-    end
-  end
-
   context "by_base_path" do
     it "returns a series of metrics for a base path" do
       edition1 = create :edition, date: '2018-1-12', base_path: '/path1'
