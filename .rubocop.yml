@@ -1,3 +1,5 @@
+inherit_gem:
+  govuk-lint: "configs/rubocop/all.yml"
 AllCops:
     TargetRubyVersion: 2.3
 Metrics/BlockLength:
