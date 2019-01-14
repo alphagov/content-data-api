@@ -511,7 +511,6 @@ DEPENDENCIES
   guard-rspec
   httparty
   jbuilder
-  jquery-rails
   kaminari
   listen
   nokogiri (~> 1.10)
