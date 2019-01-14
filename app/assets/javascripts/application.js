@@ -11,8 +11,3 @@
 // about supported directives.
 //
 //= require polyfills/bind
-
-// --- Analytics ---
-
-//= require Chart.bundle
-//= require chartkick
