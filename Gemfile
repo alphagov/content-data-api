@@ -37,12 +37,6 @@ group :development do
   gem 'web-console'
 end
 
-group :test do
-  # This is a dependency for Teaspoon and a known issue
-  # See https://github.com/jejacks0n/teaspoon/issues/405
-  gem 'coffee-script'
-end
-
 group :development, :test do
   gem 'byebug'
   gem 'capybara'
