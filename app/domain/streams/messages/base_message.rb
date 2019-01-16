@@ -14,7 +14,6 @@ class Streams::Messages::BaseMessage
       publishing_api_payload_version: @payload.fetch('payload_version'),
       document_type: @payload.fetch('document_type'),
       locale: locale,
-      content_purpose_document_supertype: @payload['content_purpose_document_supertype'],
       content_purpose_supergroup: @payload['content_purpose_supergroup'],
       content_purpose_subgroup: @payload['content_purpose_subgroup'],
       document_text: document_text,
