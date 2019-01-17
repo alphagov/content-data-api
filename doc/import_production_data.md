@@ -30,3 +30,22 @@ The important switches are:
 `-r` - reset the ignore list (import content_performance_manager which is ignored)
 
 `-i "service-manual-publisher publishing_api ....` - ignore the other postgres databases
+
+## Using the `govuk data` tool
+
+It's also possible to import data for the Content Performance Manager
+using the experimental [`govuk data`][govuk-data-docs] tool.
+
+[govuk-data-docs]: https://github.com/alphagov/govuk-guix/blob/master/doc/local-data.md
+
+To see what data is available, run:
+
+```
+govuk data list content-performance-manager
+```
+
+To load the default extract, run:
+
+```
+govuk data load content-performance-manager
+```
