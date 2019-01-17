@@ -1,9 +1,9 @@
 class Finders::AllDocumentTypes
-  def self.retrieve
-    new.retrieve
+  def self.run
+    new.run
   end
 
-  def retrieve
+  def run
     all_document_types = ActiveRecord::Base.connection
                            .execute(distinct_document_types_sql)
                            .field_values('document_type')

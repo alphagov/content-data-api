@@ -1,6 +1,6 @@
 class Api::OrganisationsController < Api::BaseController
   def index
-    @organisations = Finders::AllOrganisations.retrieve
+    @organisations = Finders::AllOrganisations.run
     render json: @organisations
   end
 end

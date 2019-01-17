@@ -10,12 +10,12 @@ RSpec.describe Finders::AllOrganisations do
       end
 
       it 'returns a list of organisations' do
-        organisations = subject.retrieve
+        organisations = subject.run
         expect(organisations).to all be_a(Organisation)
       end
 
       it 'returns a list sorted by title' do
-        organisations = subject.retrieve
+        organisations = subject.run
 
         expect(organisations).to be_sorted_by(&:name)
       end
@@ -28,13 +28,13 @@ RSpec.describe Finders::AllOrganisations do
       end
 
       it 'returns only english locales by default' do
-        organisations = subject.retrieve
+        organisations = subject.run
 
         expect(organisations).to match_array([have_attributes(name: 'English Name')])
       end
 
       it 'returns welsh locales when specified' do
-        organisations = subject.retrieve(locale: 'cy')
+        organisations = subject.run(locale: 'cy')
 
         expect(organisations).to match_array([have_attributes(name: 'Enw Cymraeg')])
       end
@@ -42,7 +42,7 @@ RSpec.describe Finders::AllOrganisations do
 
     context 'when no data' do
       it 'returns an empty array' do
-        expect(described_class.retrieve).to eq([])
+        expect(described_class.run).to eq([])
       end
     end
   end

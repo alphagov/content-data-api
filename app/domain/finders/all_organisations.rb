@@ -1,9 +1,9 @@
 class Finders::AllOrganisations
-  def self.retrieve(locale: 'en')
-    new.retrieve(locale)
+  def self.run(locale: 'en')
+    new.run(locale)
   end
 
-  def retrieve(locale)
+  def run(locale)
     editions = Dimensions::Edition.latest
                  .select(:content_id, :title, :locale)
                  .where(document_type: 'organisation', locale: locale)

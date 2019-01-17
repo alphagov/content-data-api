@@ -6,7 +6,7 @@ RSpec.describe Finders::AllDocumentTypes do
       create(:edition, document_type: 'news_story')
       create(:edition, document_type: 'guide')
 
-      expect(subject.retrieve).to all(be_a(DocumentType))
+      expect(subject.run).to all(be_a(DocumentType))
     end
 
     it 'filter irrelevent document types' do
@@ -17,7 +17,7 @@ RSpec.describe Finders::AllDocumentTypes do
       create(:edition, document_type: 'unpublishing')
       create(:edition, document_type: 'need')
 
-      expect(subject.retrieve).to match_array([
+      expect(subject.run).to match_array([
         have_attributes(id: 'guide')
       ])
     end
@@ -26,7 +26,7 @@ RSpec.describe Finders::AllDocumentTypes do
       create(:edition, document_type: 'news_story')
       create(:edition, document_type: 'aaib_report')
 
-      expect(subject.retrieve).to match_array([
+      expect(subject.run).to match_array([
         have_attributes(name: 'News story'),
         have_attributes(name: 'AAIB report')
       ])
@@ -36,20 +36,20 @@ RSpec.describe Finders::AllDocumentTypes do
       create(:edition, document_type: 'news_story')
       create(:edition, document_type: 'aaib_report')
 
-      expect(subject.retrieve).to be_sorted_by(&:name)
+      expect(subject.run).to be_sorted_by(&:name)
     end
 
     it 'returns only document types of latest editions' do
       create(:edition, document_type: 'news_story')
       create(:edition, document_type: 'guidance', latest: false)
 
-      expect(subject.retrieve).to match_array([
+      expect(subject.run).to match_array([
         have_attributes(id: 'news_story'),
       ])
     end
 
     it 'returns an empty array when no data' do
-      expect(described_class.retrieve).to eq([])
+      expect(described_class.run).to eq([])
     end
   end
 end
