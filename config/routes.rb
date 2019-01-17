@@ -15,5 +15,4 @@ Rails.application.routes.draw do
   get '/content', to: 'content#show', defaults: { format: :json }
   get '/single_page/(*base_path)', to: 'single_item#show', defaults: { format: :json }
   get '/organisations', to: 'organisation#index', defaults: { format: :json }
-  get '/document_types', to: 'document_type#index', defaults: { format: :json }
 end

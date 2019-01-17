@@ -1,38 +1,54 @@
 RSpec.describe Queries::FindAllDocumentTypes do
-  context 'when we have data' do
-    before do
-      create :user
-      create :edition, document_type: 'guide', latest: true
-      create :edition, document_type: 'travel_advice', latest: true
-      create :edition, document_type: 'manual', latest: true
-      create :edition, document_type: 'service-manual', latest: false
-      create :edition, document_type: 'gone', latest: true
-      create :edition, document_type: 'redirect', latest: true
+  subject { described_class }
+
+  describe '.find_all' do
+    it 'returns a list of document types' do
+      create(:edition, document_type: 'news_story')
+      create(:edition, document_type: 'guide')
+
+      expect(subject.retrieve).to all(be_a(DocumentType))
     end
 
-    it 'returns distinct document types of latest editions' do
-      results = described_class.retrieve
-      expect(results.pluck(:document_type)).to eq(%w(guide manual travel_advice))
+    it 'filter irrelevent document types' do
+      create(:edition, document_type: 'guide')
+      create(:edition, document_type: 'redirect')
+      create(:edition, document_type: 'gone')
+      create(:edition, document_type: 'vanish')
+      create(:edition, document_type: 'unpublishing')
+      create(:edition, document_type: 'need')
+
+      expect(subject.retrieve).to match_array([
+        have_attributes(id: 'guide')
+      ])
     end
 
-    it 'does not return document types of editions that are not the latest' do
-      results = described_class.retrieve
-      expect(results.pluck(:document_type)).to_not include('service-manual')
+    it 'humanizes document type names' do
+      create(:edition, document_type: 'news_story')
+      create(:edition, document_type: 'aaib_report')
+
+      expect(subject.retrieve).to match_array([
+        have_attributes(name: 'News story'),
+        have_attributes(name: 'AAIB report')
+      ])
     end
 
-    it 'does not return `gone`' do
-      results = described_class.retrieve
-      expect(results.pluck(:document_type)).to_not include('gone')
+    it 'sorts result by name' do
+      create(:edition, document_type: 'news_story')
+      create(:edition, document_type: 'aaib_report')
+
+      expect(subject.retrieve).to be_sorted_by(&:name)
     end
 
-    it 'does not return `redirect`' do
-      results = described_class.retrieve
-      expect(results.pluck(:document_type)).to_not include('redirect')
-    end
-  end
+    it 'returns only document types of latest editions' do
+      create(:edition, document_type: 'news_story')
+      create(:edition, document_type: 'guidance', latest: false)
 
-  context 'when there is no data' do
-    it 'returns an empty array' do
+      expect(subject.retrieve).to match_array([
+        have_attributes(id: 'news_story'),
+      ])
+    end
+
+    it 'returns an empty array when no data' do
       expect(described_class.retrieve).to eq([])
     end
   end

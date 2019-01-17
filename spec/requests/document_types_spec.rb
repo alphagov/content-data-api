@@ -13,10 +13,13 @@ RSpec.describe '/document_types' do
   end
 
   it 'returns distinct document types ordered by title' do
-    get '/document_types'
+    get '/api/v1/document_types'
     json = JSON.parse(response.body).deep_symbolize_keys
-    expect(json).to eq(document_types: %w(guide manual))
+    expect(json).to eq(document_types: [
+      { id: 'guide', name: 'Guide' },
+      { id: 'manual', name: 'Manual' }
+    ])
   end
 
-  include_examples 'API response', '/document_types'
+  include_examples 'API response', '/api/v1/document_types'
 end
