@@ -68,7 +68,6 @@ RSpec.describe Streams::GrowDimension do
           base_path
           document_text
           document_type
-          content_purpose_document_supertype
           content_purpose_supergroup
           content_purpose_subgroup
           organisation_id
