@@ -1,4 +1,4 @@
-class Finders::FindAggregations
+class Finders::Aggregations
   def between(from:, to:)
     @from = from
     @to = to

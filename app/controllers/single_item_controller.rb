@@ -32,7 +32,7 @@ private
   end
 
   def find_aggregations
-    Finders::FindAggregations.new
+    Finders::Aggregations.new
       .between(from: from, to: to)
       .by_base_path(@base_path)
       .run
