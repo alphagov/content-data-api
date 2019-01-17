@@ -50,13 +50,11 @@ private
         upviews,
         entrances,
         searches,
-        bounce_rate,
         feedex,
         satisfaction,
         useful_yes,
         useful_no,
         exits,
-        avg_page_time,
         updated_at,
         created_at
       )
@@ -66,13 +64,11 @@ private
         sum(upviews),
         sum(entrances),
         sum(searches),
-        sum(bounce_rate),
         sum(feedex),
         sum(satisfaction),
         sum(useful_yes),
         sum(useful_no),
         sum(exits),
-        sum(avg_page_time),
         now(),
         now()
       FROM facts_metrics

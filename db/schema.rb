@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_16_142924) do
+ActiveRecord::Schema.define(version: 2019_01_17_125756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 2019_01_16_142924) do
     t.integer "exits"
     t.integer "entrances"
     t.integer "bounce_rate"
-    t.integer "avg_page_time"
     t.integer "bounces"
     t.integer "page_time"
     t.float "satisfaction", default: 0.0, null: false
@@ -140,7 +139,6 @@ ActiveRecord::Schema.define(version: 2019_01_16_142924) do
     t.integer "exits", default: 0
     t.integer "entrances", default: 0
     t.integer "bounce_rate", default: 0
-    t.integer "avg_page_time", default: 0
     t.integer "bounces", default: 0
     t.integer "page_time", default: 0
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
@@ -175,7 +173,6 @@ ActiveRecord::Schema.define(version: 2019_01_16_142924) do
     t.integer "exits", default: 0, null: false
     t.integer "entrances", default: 0, null: false
     t.integer "bounce_rate", default: 0, null: false
-    t.integer "avg_page_time", default: 0, null: false
     t.integer "bounces", default: 0, null: false
     t.integer "page_time", default: 0, null: false
     t.float "satisfaction", default: 0.0, null: false

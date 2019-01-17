@@ -21,7 +21,7 @@ class Etl::GA::ViewsAndNavigationService
 private
 
   def append_data_labels(values)
-    page_path, pviews, upviews, entrances, exits, bounce_rate, avg_page_time, bounces, page_time = *values
+    page_path, pviews, upviews, entrances, exits, bounces, page_time = *values
 
     {
       'page_path' => page_path,
@@ -30,8 +30,6 @@ private
       'process_name' => 'views',
       'entrances' => entrances,
       'exits' => exits,
-      'bounce_rate' => bounce_rate,
-      'avg_page_time' => avg_page_time,
       'bounces' => bounces,
       'page_time' => page_time
     }
@@ -78,7 +76,6 @@ private
         { expression: 'ga:uniquePageviews' },
         { expression: 'ga:entrances' },
         { expression: 'ga:exits' },
-        { expression: 'ga:bounceRate' },
         { expression: 'ga:avgTimeOnPage' },
         { expression: 'ga:bounces' },
         { expression: 'ga:timeOnPage' },

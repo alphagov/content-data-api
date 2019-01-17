@@ -49,8 +49,6 @@ private
           pviews = s.pviews,
           entrances = s.entrances,
           exits = s.exits,
-          bounce_rate = s.bounce_rate,
-          avg_page_time = s.avg_page_time,
           bounces = s.bounces,
           page_time = s.page_time
       FROM (
@@ -58,8 +56,6 @@ private
                upviews,
                entrances,
                exits,
-               bounce_rate,
-               avg_page_time,
                bounces,
                page_time,
                dimensions_editions.id

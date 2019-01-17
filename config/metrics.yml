@@ -35,14 +35,6 @@ daily:
     description: "Number of session that ended with this page"
     source: 'Google Analytics'
 
-  - name: 'bounce_rate'
-    description: "Number of sessions that started on this page and exited without viewing any others"
-    source: 'Google Analytics'
-
-  - name: 'avg_page_time'
-    description: "Amount of time users spend on this page on average"
-    source: 'Google Analytics'
-
 edition:
   - name: 'pdf_count'
     description: "Number of .pdf attachments"
