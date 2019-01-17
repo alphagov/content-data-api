@@ -11,8 +11,8 @@ gem 'govuk_sidekiq', '~> 3'
 gem 'plek'
 
 # Third party gems
-gem 'activerecord-import'
 gem 'active_model_serializers'
+gem 'activerecord-import'
 gem 'awesome_print'
 gem 'google-api-client', '~> 0.27'
 gem 'govuk_message_queue_consumer', '~> 3.2'
