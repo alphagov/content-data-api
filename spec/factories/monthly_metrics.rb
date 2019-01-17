@@ -21,7 +21,6 @@ FactoryBot.define do
     searches { 10 }
     exits { 10 }
     entrances { 10 }
-    avg_page_time { 10 }
     bounces { 10 }
     page_time { 10 }
     satisfaction { 10.0 }

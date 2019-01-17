@@ -3,7 +3,7 @@ RSpec.describe Queries::FindSeries do
     it "returns a series of all metrics" do
       create :metric, date: Date.today, pviews: 1
 
-      expect(described_class.new.run.length).to eq(16)
+      expect(described_class.new.run.length).to eq(15)
     end
   end
 

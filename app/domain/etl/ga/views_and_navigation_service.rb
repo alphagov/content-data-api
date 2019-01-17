@@ -21,7 +21,7 @@ class Etl::GA::ViewsAndNavigationService
 private
 
   def append_data_labels(values)
-    page_path, pviews, upviews, entrances, exits, avg_page_time, bounces, page_time = *values
+    page_path, pviews, upviews, entrances, exits, bounces, page_time = *values
 
     {
       'page_path' => page_path,
@@ -30,7 +30,6 @@ private
       'process_name' => 'views',
       'entrances' => entrances,
       'exits' => exits,
-      'avg_page_time' => avg_page_time,
       'bounces' => bounces,
       'page_time' => page_time
     }
