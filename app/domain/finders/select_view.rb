@@ -1,4 +1,4 @@
-class Queries::SelectView
+class Finders::SelectView
   attr_reader :date_range
 
   def initialize(date_range)

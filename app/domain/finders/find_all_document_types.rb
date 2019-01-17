@@ -1,4 +1,4 @@
-class Queries::FindAllDocumentTypes
+class Finders::FindAllDocumentTypes
   def self.retrieve
     new.retrieve
   end

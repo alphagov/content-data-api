@@ -1,4 +1,4 @@
-RSpec.describe Queries::FindMetadata do
+RSpec.describe Finders::FindMetadata do
   let!(:base_path) { '/base_path' }
 
   before do

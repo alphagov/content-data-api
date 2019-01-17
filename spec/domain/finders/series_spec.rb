@@ -1,4 +1,4 @@
-RSpec.describe Queries::Series do
+RSpec.describe Finders::Series do
   let!(:day1) { Date.new(2018, 1, 13) }
   let!(:day2) { Date.new(2018, 1, 14) }
   let!(:day3) { Date.new(2018, 1, 15) }
@@ -13,7 +13,7 @@ RSpec.describe Queries::Series do
   end
 
   it 'return the time series in order' do
-    series = Queries::Series.new('pviews', Facts::Metric.all)
+    series = Finders::Series.new('pviews', Facts::Metric.all)
     expect(series.time_series).to eq([
       { date: "2018-01-13", value: 10 },
       { date: "2018-01-14", value: 20 },
@@ -22,7 +22,7 @@ RSpec.describe Queries::Series do
   end
 
   it 'return the total value for time period' do
-    series = Queries::Series.new('pviews', Facts::Metric.all)
+    series = Finders::Series.new('pviews', Facts::Metric.all)
     expect(series.total).to eq 60
   end
 end

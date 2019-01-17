@@ -1,4 +1,4 @@
-class Queries::FindSeries
+class Finders::FindAggregations
   def between(from:, to:)
     @from = from
     @to = to
@@ -12,16 +12,6 @@ class Queries::FindSeries
     self
   end
 
-  def by_metrics(metrics)
-    @metric_names = metrics
-
-    self
-  end
-
-  def editions
-    slice_editions
-  end
-
   def run
     dates = slice_dates
     editions = slice_editions
@@ -30,12 +20,32 @@ class Queries::FindSeries
     metrics = metrics
       .joins(dimensions_edition: :facts_edition).merge(editions)
       .joins(:dimensions_date).merge(dates)
+      .pluck(*aggregations).first
 
-    metric_names = @metric_names || Metric.find_all_names
-    metric_names.map { |metric_name| Queries::Series.new(metric_name, metrics) }
+    result = build_response(metrics)
+    result[:satisfaction] = calculate_satisfaction_score(result)
+
+    result
   end
 
 private
+
+  def calculate_satisfaction_score(result)
+    useful_yes = result[:useful_yes].to_i
+    useful_no = result[:useful_no].to_i
+
+    (useful_yes + useful_no).zero? ? 0 : useful_yes / (useful_yes + useful_no).to_f
+  end
+
+  def build_response(metrics)
+    metric_names = Metric.find_all_names
+    Hash[metric_names.zip(metrics)].deep_symbolize_keys
+  end
+
+  def aggregations
+    metric_names = Metric.find_all_names
+    metric_names.map { |name| Arel.sql("SUM(#{name})") }
+  end
 
   def slice_dates
     dates = Dimensions::Date.all

@@ -1,6 +1,6 @@
-RSpec.describe Queries::FindAggregations do
+RSpec.describe Finders::FindAggregations do
   it 'has aggregations for all metric names' do
-    result = Queries::FindAggregations.new.run
+    result = Finders::FindAggregations.new.run
     expect(result.keys).to eq(Metric.find_all_names.map(&:to_sym))
   end
 
@@ -9,7 +9,7 @@ RSpec.describe Queries::FindAggregations do
     create :metric, edition: edition, date: '2018-01-01', pviews: 2
     create :metric, edition: edition, date: '2018-01-02', pviews: 3
 
-    result = Queries::FindAggregations.new.run
+    result = Finders::FindAggregations.new.run
     expect(result.fetch(:pviews)).to eq(5)
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Queries::FindAggregations do
     edition2 = create :edition, base_path: '/path/2', date: '2018-01-01'
     create :metric, edition: edition2, date: '2018-01-02', pviews: 3
 
-    result = Queries::FindAggregations.new.by_base_path('/path/1').run
+    result = Finders::FindAggregations.new.by_base_path('/path/1').run
     expect(result.fetch(:pviews)).to eq(5)
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Queries::FindAggregations do
     create :metric, edition: edition, date: '2018-01-03', pviews: 4
     create :metric, edition: edition, date: '2018-01-04', pviews: 5
 
-    result = Queries::FindAggregations.new.between(
+    result = Finders::FindAggregations.new.between(
       from: '2018-01-02',
       to: '2018-01-03'
     ).run
@@ -46,7 +46,7 @@ RSpec.describe Queries::FindAggregations do
 
     create :metric, edition: edition1, date: '2018-01-01', pviews: 2
     create :metric, edition: edition2, date: '2018-01-02', pviews: 2
-    result = Queries::FindAggregations.new.run
+    result = Finders::FindAggregations.new.run
 
     expect(result.fetch(:words)).to eq(22)
   end
@@ -57,7 +57,7 @@ RSpec.describe Queries::FindAggregations do
       create :metric, edition: edition, date: '2018-01-02', useful_yes: 2, useful_no: 0
       create :metric, edition: edition, date: '2018-01-03', useful_yes: 1, useful_no: 2
 
-      result = Queries::FindAggregations.new.run
+      result = Finders::FindAggregations.new.run
 
       expect(result.fetch(:satisfaction)).to eq(0.6)
     end
@@ -67,14 +67,14 @@ RSpec.describe Queries::FindAggregations do
       create :metric, edition: edition, date: '2018-01-01', useful_yes: 0, useful_no: 0
       create :metric, edition: edition, date: '2018-01-02', useful_yes: 0, useful_no: 0
 
-      result = Queries::FindAggregations.new.run
+      result = Finders::FindAggregations.new.run
 
       expect(result.fetch(:satisfaction)).to be_zero
     end
   end
 
   it 'returns nil values when no results' do
-    result = Queries::FindAggregations.new.run
+    result = Finders::FindAggregations.new.run
 
     expect(result).to match(hash_including(pviews: nil, upviews: nil))
   end

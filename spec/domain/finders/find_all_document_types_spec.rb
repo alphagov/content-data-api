@@ -1,4 +1,4 @@
-RSpec.describe Queries::FindAllDocumentTypes do
+RSpec.describe Finders::FindAllDocumentTypes do
   subject { described_class }
 
   describe '.find_all' do

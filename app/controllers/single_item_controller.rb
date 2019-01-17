@@ -14,25 +14,25 @@ class SingleItemController < Api::BaseController
 private
 
   def find_metadata
-    metadata = Queries::FindMetadata.run(@base_path)
+    metadata = Finders::FindMetadata.run(@base_path)
     raise Api::NotFoundError.new("#{api_request.base_path} not found") if metadata.nil?
 
     metadata
   end
 
   def find_time_series
-    Queries::FindSeries.new
+    Finders::FindSeries.new
       .between(from: from, to: to)
       .by_base_path(@base_path)
       .run
   end
 
   def find_editions
-    Queries::FindEditionMetrics.run(@base_path)
+    Finders::FindEditionMetrics.run(@base_path)
   end
 
   def find_aggregations
-    Queries::FindAggregations.new
+    Finders::FindAggregations.new
       .between(from: from, to: to)
       .by_base_path(@base_path)
       .run
