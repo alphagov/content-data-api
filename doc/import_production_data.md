@@ -20,7 +20,7 @@ database, add the following arguments to those given in the
 instructions for both download and import:
 
 ```
--m -e -q -t -r -i "service-manual-publisher publishing_api link_checker_api email-alert-monitor content_data_admin content_tagger content_publisher organisations-publisher email-alert-api content-register policy-publisher content_audit_tool ckan local-links-manager support_contacts transition"
+-m -e -q -t -r -i "service-manual-publisher publishing_api link_checker_api email-alert-monitor content_data_admin content_tagger content_publisher organisations-publisher email-alert-api content-register content_audit_tool ckan local-links-manager support_contacts transition"
 ```
 
 The important switches are:
