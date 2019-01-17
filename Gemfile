@@ -18,7 +18,6 @@ gem 'google-api-client', '~> 0.27'
 gem 'govuk_message_queue_consumer', '~> 3.2'
 gem 'httparty'
 gem 'jbuilder'
-gem 'jquery-rails'
 gem 'kaminari'
 gem 'nokogiri', '~> 1.10'
 gem 'odyssey'
@@ -29,7 +28,6 @@ gem 'rails', '~> 5.2'
 gem 'ruby-progressbar'
 gem 'sass-rails'
 gem 'scenic'
-gem 'uglifier'
 gem 'unicorn'
 gem 'uuid'
 
@@ -37,12 +35,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'web-console'
-end
-
-group :test do
-  # This is a dependency for Teaspoon and a known issue
-  # See https://github.com/jejacks0n/teaspoon/issues/405
-  gem 'coffee-script'
 end
 
 group :development, :test do
