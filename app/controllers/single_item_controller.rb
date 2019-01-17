@@ -28,7 +28,7 @@ private
   end
 
   def find_editions
-    Finders::FindEditionMetrics.run(@base_path)
+    Finders::EditionMetrics.run(@base_path)
   end
 
   def find_aggregations

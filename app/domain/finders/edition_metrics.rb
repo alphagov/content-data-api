@@ -1,4 +1,4 @@
-class Finders::FindEditionMetrics
+class Finders::EditionMetrics
   def self.run(base_path, metric_names = nil)
     metric_names ||= Metric.edition_metrics.map(&:name)
 
