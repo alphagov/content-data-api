@@ -1,4 +1,4 @@
-class Finders::FindContent
+class Finders::Content
   def self.call(filter:)
     raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
 
