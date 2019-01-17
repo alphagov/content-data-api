@@ -4,13 +4,23 @@ class Finders::AllOrganisations
   end
 
   def run(locale)
-    editions = Dimensions::Edition.latest
-                 .select(:content_id, :title, :locale)
-                 .where(document_type: 'organisation', locale: locale)
-                 .order(:title)
+    editions = find_all(locale)
+    editions.map { |edition| new_organisation(edition) }
+  end
 
-    editions.map do |edition|
-      Organisation.new(id: edition[:content_id], name: edition[:title])
-    end
+private
+
+  def new_organisation(org)
+    Organisation.new(
+      id: org[:content_id],
+      name: org[:title]
+    )
+  end
+
+  def find_all(locale)
+    Dimensions::Edition.latest
+      .select(:content_id, :title, :locale)
+      .where(document_type: 'organisation', locale: locale)
+      .order(:title)
   end
 end
