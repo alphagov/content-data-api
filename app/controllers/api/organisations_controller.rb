@@ -1,6 +1,6 @@
 class Api::OrganisationsController < Api::BaseController
   def index
-    @organisations = Organisation.find_all
+    @organisations = Queries::FindAllOrganisations.retrieve
     render json: @organisations
   end
 end

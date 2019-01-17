@@ -6,15 +6,15 @@ RSpec.describe '/organisations' do
   end
 
   it 'returns distinct organisations ordered by title' do
-    get '/organisations'
+    get '/api/v1/organisations'
     json = JSON.parse(response.body).deep_symbolize_keys
     expect(json).to eq(
       organisations: [
-        { title: 'a Org', organisation_id: 'org-2-id' },
-        { title: 'z Org', organisation_id: 'org-1-id' }
+        { name: 'a Org', id: 'org-2-id' },
+        { name: 'z Org', id: 'org-1-id' }
       ]
     )
   end
 
-  include_examples 'API response', '/organisations'
+  include_examples 'API response', '/api/v1/organisations'
 end

@@ -1,24 +1,49 @@
 RSpec.describe Queries::FindAllOrganisations do
-  context 'when we have data' do
-    before do
-      create :user
-      create :edition, document_type: 'organisation', content_id: 'org-1-id', title: 'z Org'
-      create :edition, document_type: 'organisation', content_id: 'org-1-id', title: 'aber Org', locale: 'cy'
-      create :edition, document_type: 'organisation', content_id: 'org-2-id', title: 'a Org'
+  subject { described_class }
+
+  describe '.find_all' do
+    context 'sorting' do
+      before do
+        create(:edition, document_type: 'organisation', title: 'Organisation C')
+        create(:edition, document_type: 'organisation', title: 'Organisation A')
+        create(:edition, document_type: 'organisation', title: 'Organisation B')
+      end
+
+      it 'returns a list of organisations' do
+        organisations = subject.retrieve
+        expect(organisations).to all be_a(Organisation)
+      end
+
+      it 'returns a list sorted by title' do
+        organisations = subject.retrieve
+
+        expect(organisations).to be_sorted_by(&:name)
+      end
     end
 
-    it 'returns distinct organisations ordered by primary_organisation_title' do
-      results = described_class.retrieve
-      expect(results).to eq([
-                            { title: 'a Org', organisation_id: 'org-2-id' },
-                            { title: 'z Org', organisation_id: 'org-1-id' }
-                          ])
-    end
-  end
+    context 'locales' do
+      before do
+        create(:edition, document_type: 'organisation', content_id: '1', title: 'English Name', locale: 'en')
+        create(:edition, document_type: 'organisation', content_id: '1', title: 'Enw Cymraeg', locale: 'cy')
+      end
 
-  context 'when there is no data' do
-    it 'returns an empty array' do
-      expect(described_class.retrieve).to eq([])
+      it 'returns only english locales by default' do
+        organisations = subject.retrieve
+
+        expect(organisations).to match_array([have_attributes(name: 'English Name')])
+      end
+
+      it 'returns welsh locales when specified' do
+        organisations = subject.retrieve(locale: 'cy')
+
+        expect(organisations).to match_array([have_attributes(name: 'Enw Cymraeg')])
+      end
+    end
+
+    context 'when no data' do
+      it 'returns an empty array' do
+        expect(described_class.retrieve).to eq([])
+      end
     end
   end
 end

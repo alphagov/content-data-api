@@ -1,19 +1,16 @@
 class Queries::FindAllOrganisations
-  def self.retrieve
-    new.retrieve
+  def self.retrieve(locale: 'en')
+    new.retrieve(locale)
   end
 
-  def retrieve
-    Dimensions::Edition.latest
-      .where(document_type: 'organisation', locale: 'en')
-      .order(:title)
-      .pluck(:content_id, :title)
-      .map(&method(:convert_result))
-  end
+  def retrieve(locale)
+    editions = Dimensions::Edition.latest
+                 .select(:content_id, :title, :locale)
+                 .where(document_type: 'organisation', locale: locale)
+                 .order(:title)
 
-private
-
-  def convert_result(arry)
-    { organisation_id: arry[0], title: arry[1] }
+    editions.map do |edition|
+      Organisation.new(id: edition[:content_id], name: edition[:title])
+    end
   end
 end

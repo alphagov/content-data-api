@@ -8,15 +8,4 @@ class Organisation
     @id = id
     @name = name
   end
-
-  def self.find_all(locale: 'en')
-    editions = Dimensions::Edition.latest
-      .select(:content_id, :title, :locale)
-      .where(document_type: 'organisation', locale: locale)
-      .order(:title)
-
-    editions.map do |edition|
-      self.new(id: edition[:content_id], name: edition[:title])
-    end
-  end
 end
