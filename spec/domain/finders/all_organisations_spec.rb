@@ -1,4 +1,4 @@
-RSpec.describe Finders::FindAllOrganisations do
+RSpec.describe Finders::AllOrganisations do
   subject { described_class }
 
   describe '.find_all' do

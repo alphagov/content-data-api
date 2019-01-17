@@ -1,4 +1,4 @@
-class Finders::FindAllOrganisations
+class Finders::AllOrganisations
   def self.retrieve(locale: 'en')
     new.retrieve(locale)
   end
