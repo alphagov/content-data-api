@@ -14,7 +14,7 @@ class SingleItemController < Api::BaseController
 private
 
   def find_metadata
-    metadata = Finders::FindMetadata.run(@base_path)
+    metadata = Finders::Metadata.run(@base_path)
     raise Api::NotFoundError.new("#{api_request.base_path} not found") if metadata.nil?
 
     metadata
