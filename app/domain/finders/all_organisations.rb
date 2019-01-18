@@ -13,13 +13,14 @@ private
   def new_organisation(org)
     Organisation.new(
       id: org[:content_id],
-      name: org[:title]
+      name: org[:title],
+      acronym: org[:acronym]
     )
   end
 
   def find_all(locale)
     Dimensions::Edition.latest
-      .select(:content_id, :title, :locale)
+      .select(:content_id, :title, :locale, :acronym)
       .where(document_type: 'organisation', locale: locale)
       .order(:title)
   end
