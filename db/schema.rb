@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_17_125756) do
+ActiveRecord::Schema.define(version: 2019_01_18_140551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 2019_01_17_125756) do
     t.boolean "withdrawn", null: false
     t.boolean "historical", null: false
     t.bigint "publishing_api_event_id"
+    t.string "acronym"
     t.index "to_tsvector('english'::regconfig, (title)::text)", name: "dimensions_editions_title", using: :gin
     t.index "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "dimensions_editions_base_path", using: :gin
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"

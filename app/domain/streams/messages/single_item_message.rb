@@ -10,6 +10,8 @@ module Streams
         title: title,
         document_text: document_text,
         warehouse_item_id: "#{content_id}:#{locale}"
+      ).merge(
+        acronym: acronym
       )
     end
 
@@ -33,6 +35,11 @@ module Streams
 
     def document_text
       ::Etl::Edition::Content::Parser.extract_content(@payload)
+    end
+
+    def acronym
+      acronym = @payload.dig('details', 'acronym')
+      acronym.blank? ? nil : acronym
     end
   end
 end
