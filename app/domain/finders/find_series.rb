@@ -1,4 +1,4 @@
-class Queries::FindSeries
+class Finders::FindSeries
   def between(from:, to:)
     @from = from
     @to = to
@@ -32,7 +32,7 @@ class Queries::FindSeries
       .joins(:dimensions_date).merge(dates)
 
     metric_names = @metric_names || Metric.find_all_names
-    metric_names.map { |metric_name| Queries::Series.new(metric_name, metrics) }
+    metric_names.map { |metric_name| Finders::Series.new(metric_name, metrics) }
   end
 
 private

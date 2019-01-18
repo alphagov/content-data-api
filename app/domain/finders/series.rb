@@ -1,4 +1,4 @@
-class Queries::Series
+class Finders::Series
   attr_reader :metric_name
 
   def initialize(metric_name, all_metrics)

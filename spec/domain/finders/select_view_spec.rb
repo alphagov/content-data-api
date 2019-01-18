@@ -1,4 +1,4 @@
-RSpec.describe Queries::SelectView do
+RSpec.describe Finders::SelectView do
   let(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
 
   describe '#select_view' do

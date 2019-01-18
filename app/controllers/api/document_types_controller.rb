@@ -1,6 +1,6 @@
 class Api::DocumentTypesController < Api::BaseController
   def index
-    @document_types = DocumentType.find_all
+    @document_types = Finders::AllDocumentTypes.run
     render json: @document_types
   end
 end

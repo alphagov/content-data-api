@@ -1,4 +1,4 @@
-RSpec.describe Queries::FindEditionMetrics do
+RSpec.describe Finders::EditionMetrics do
   context 'multiple editions' do
     let!(:edition) do
       create :edition,

@@ -1,4 +1,4 @@
-class Queries::SelectView
+class Finders::SelectView
   attr_reader :date_range
 
   def initialize(date_range)
@@ -15,12 +15,12 @@ private
 
   def model_name
     aggregations = {
-      'last-month' => Aggregations::SearchLastMonth,
-      'past-3-months' => Aggregations::SearchLastThreeMonths,
-      'past-6-months' => Aggregations::SearchLastSixMonths,
-      'past-year' => Aggregations::SearchLastTwelveMonths,
+      'last-month' => ::Aggregations::SearchLastMonth,
+      'past-3-months' => ::Aggregations::SearchLastThreeMonths,
+      'past-6-months' => ::Aggregations::SearchLastSixMonths,
+      'past-year' => ::Aggregations::SearchLastTwelveMonths,
     }
-    aggregations[date_range] || Aggregations::SearchLastThirtyDays
+    aggregations[date_range] || ::Aggregations::SearchLastThirtyDays
   end
 
   def table_name

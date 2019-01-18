@@ -1,4 +1,4 @@
-RSpec.describe Queries::FindSeries do
+RSpec.describe Finders::FindSeries do
   context "all" do
     it "returns a series of all metrics" do
       create :metric, date: Date.today, pviews: 1

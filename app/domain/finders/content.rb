@@ -1,4 +1,4 @@
-class Queries::FindContent
+class Finders::Content
   def self.call(filter:)
     raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
 
@@ -8,7 +8,7 @@ class Queries::FindContent
   end
 
   def call
-    view = Queries::SelectView.new(date_range).run
+    view = Finders::SelectView.new(date_range).run
     results = view[:model_name].all
                 .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
                 .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
