@@ -6,7 +6,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
   include_examples 'BaseMessage#historically_political?'
   include_examples 'BaseMessage#withdrawn_notice?'
 
-  describe '#extract_edition_attributes' do
+  describe '#edition_attributes' do
     let(:message) do
       msg = build(:message, attributes: message_attributes)
       msg.payload['details']['body'] = '<p>some content</p>'
@@ -14,10 +14,11 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       msg.payload['withdrawn_notice'] = { "explanation" => 'something' }
       msg
     end
+
     let(:instance) { subject.new(message.payload, "routing_key") }
 
     it 'returns the attributes' do
-      attributes = instance.extract_edition_attributes
+      attributes = instance.edition_attributes
       expect(attributes).to eq(
         expected_raw_attributes(
           content_id: message.payload['content_id'],

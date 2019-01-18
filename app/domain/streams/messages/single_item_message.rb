@@ -4,7 +4,7 @@ module Streams
       super(payload, routing_key)
     end
 
-    def extract_edition_attributes
+    def edition_attributes
       build_attributes(
         base_path: base_path,
         title: title,
@@ -15,7 +15,7 @@ module Streams
 
     def handler
       Streams::Handlers::SingleItemHandler.new(
-        extract_edition_attributes,
+        edition_attributes,
         @payload,
         @routing_key
       )
