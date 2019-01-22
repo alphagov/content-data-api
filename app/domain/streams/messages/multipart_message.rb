@@ -10,7 +10,7 @@ module Streams
 
     def handler
       Streams::Handlers::MultipartHandler.new(
-        extract_edition_attributes,
+        edition_attributes,
         content_id,
         locale,
         @payload,
@@ -18,7 +18,7 @@ module Streams
       )
     end
 
-    def extract_edition_attributes
+    def edition_attributes
       parts.map.with_index do |part, index|
         build_attributes(
           base_path: base_path_for_part(part, index),

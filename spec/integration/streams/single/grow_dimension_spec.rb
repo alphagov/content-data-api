@@ -122,6 +122,17 @@ RSpec.describe Streams::Consumer do
     end
   end
 
+  context 'when the message is for an organisation' do
+    it 'assigns the acronym' do
+      message = build :message, base_path: '/base-path', attributes: message_attributes
+      message.payload['details']['acronym'] = 'HMRC'
+      subject.process(message)
+
+      latest_edition = Dimensions::Edition.latest.find_by(base_path: '/base-path')
+      expect(latest_edition).to have_attributes(acronym: 'HMRC')
+    end
+  end
+
   context 'when handling unpublishing related messages' do
     it 'it does not grow dimensions_editions unnecessarily' do
       edition = create :edition

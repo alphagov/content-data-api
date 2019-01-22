@@ -4,18 +4,20 @@ module Streams
       super(payload, routing_key)
     end
 
-    def extract_edition_attributes
+    def edition_attributes
       build_attributes(
         base_path: base_path,
         title: title,
         document_text: document_text,
         warehouse_item_id: "#{content_id}:#{locale}"
+      ).merge(
+        acronym: acronym
       )
     end
 
     def handler
       Streams::Handlers::SingleItemHandler.new(
-        extract_edition_attributes,
+        edition_attributes,
         @payload,
         @routing_key
       )
@@ -33,6 +35,11 @@ module Streams
 
     def document_text
       ::Etl::Edition::Content::Parser.extract_content(@payload)
+    end
+
+    def acronym
+      acronym = @payload.dig('details', 'acronym')
+      acronym.blank? ? nil : acronym
     end
   end
 end

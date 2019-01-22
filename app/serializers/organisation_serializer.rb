@@ -1,3 +1,3 @@
 class OrganisationSerializer < ActiveModel::Serializer
-  attributes :id, :name
+  attributes :id, :name, :acronym
 end
