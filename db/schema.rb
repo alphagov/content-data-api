@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(version: 2019_01_18_145538) do
     t.integer "searches"
     t.integer "exits"
     t.integer "entrances"
-    t.integer "bounce_rate"
     t.integer "bounces"
     t.integer "page_time"
     t.float "satisfaction", default: 0.0, null: false
@@ -139,7 +138,6 @@ ActiveRecord::Schema.define(version: 2019_01_18_145538) do
     t.integer "searches", default: 0
     t.integer "exits", default: 0
     t.integer "entrances", default: 0
-    t.integer "bounce_rate", default: 0
     t.integer "bounces", default: 0
     t.integer "page_time", default: 0
     t.index ["page_path", "date"], name: "index_events_gas_on_page_path_and_date"
@@ -173,7 +171,6 @@ ActiveRecord::Schema.define(version: 2019_01_18_145538) do
     t.integer "searches", default: 0, null: false
     t.integer "exits", default: 0, null: false
     t.integer "entrances", default: 0, null: false
-    t.integer "bounce_rate", default: 0, null: false
     t.integer "bounces", default: 0, null: false
     t.integer "page_time", default: 0, null: false
     t.float "satisfaction", default: 0.0, null: false
