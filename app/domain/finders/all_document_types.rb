@@ -4,25 +4,13 @@ class Finders::AllDocumentTypes
   end
 
   def run
-    ActiveRecord::Base.connection
-      .execute(query)
-      .field_values('document_type')
-      .reject { |dt| DocumentType::IGNORED_TYPES.include? dt }
-      .map { |dt| DocumentType.new(id: dt, name: dt.humanize) }
-  end
-
-private
-
-  def query
-    <<-SQL
-      WITH RECURSIVE temp AS (
-        (SELECT document_type FROM dimensions_editions WHERE latest ORDER BY document_type LIMIT 1)
-          UNION ALL
-         SELECT (SELECT document_type FROM dimensions_editions WHERE document_type > temp.document_type AND latest ORDER BY document_type LIMIT 1)
-         FROM temp
-         WHERE temp.document_type IS NOT NULL
-      )
-      SELECT document_type FROM temp WHERE document_type IS NOT NULL;
-    SQL
+    Dimensions::Edition
+      .latest
+      .select('distinct document_type')
+      .where.not(document_type: DocumentType::IGNORED_TYPES)
+      .order(document_type: :asc)
+      .map do |edition|
+        DocumentType.new(id: edition.document_type, name: edition.document_type.humanize)
+      end
   end
 end
