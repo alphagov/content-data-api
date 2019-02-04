@@ -7,5 +7,13 @@ module Healthchecks
     def status
       Dimensions::Date.first ? OK : CRITICAL
     end
+
+    def message
+      "Can't connect to Database"
+    end
+
+    def enabled?
+      true
+    end
   end
 end
