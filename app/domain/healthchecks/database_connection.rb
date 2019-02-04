@@ -5,7 +5,7 @@ module Healthchecks
     end
 
     def status
-      Dimensions::Date.first ? OK : CRITICAL
+      Dimensions::Date.first ? :ok : :critical
     end
 
     def message
