@@ -9,10 +9,16 @@ module Healthchecks
     end
 
     def message
-      "There are #{metrics.count} metrics for #{Date.yesterday}"
+      "ETL :: no daily metrics for yesterday"
     end
 
-  private
+    def enabled?
+      time = Time.zone.now
+
+      time.hour >= 9 && time.min > 30
+    end
+
+    private
 
     def metrics
       @metrics ||= Facts::Metric.where(dimensions_date_id: Date.yesterday)

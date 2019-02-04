@@ -1,5 +1,5 @@
 RSpec.describe Healthchecks::DailyMetricsCheck do
-  let(:today) { Date.new(2018, 1, 15) }
+  let(:today) { Time.new(2018, 1, 15, 16, 0, 0) }
 
   around do |example|
     Timecop.freeze(today) { example.run }
@@ -17,13 +17,17 @@ RSpec.describe Healthchecks::DailyMetricsCheck do
     end
   end
 
-  context 'When there are no metrics' do
-    it 'returns status :critical' do
-      expect(subject.status).to eq(:critical)
+  describe '#enabled?' do
+    context 'before 9:30 am' do
+      let (:today) { Time.new(2018, 1, 15, 9, 29, 0) }
+
+      it { is_expected.to_not be_enabled}
     end
 
-    it 'returns a detailed message' do
-      expect(subject.message).to eq('There are 0 metrics for 2018-01-14')
+    context 'after 9:30 am' do
+      let (:today) { Time.new(2018, 1, 15, 9, 31, 0) }
+
+      it { is_expected.to be_enabled}
     end
   end
 end
