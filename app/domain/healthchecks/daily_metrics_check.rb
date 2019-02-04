@@ -13,12 +13,20 @@ module Healthchecks
     end
 
     def enabled?
-      time = Time.zone.now
-
-      time.hour >= 9 && time.min > 30
+      healthchecks_enabled? && within_time_range?
     end
 
-    private
+  private
+
+    def healthchecks_enabled?
+      ENV['ETL_HEALTHCHECK_ENABLED'] == '1'
+    end
+
+    def within_time_range?
+      time = Time.zone.now
+
+      time.hour >= Integer(ENV['ETL_HEALTHCHECK_ENABLED_FROM_HOUR'])
+    end
 
     def metrics
       @metrics ||= Facts::Metric.where(dimensions_date_id: Date.yesterday)
