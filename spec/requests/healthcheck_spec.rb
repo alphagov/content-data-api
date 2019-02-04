@@ -3,7 +3,7 @@ RSpec.describe '/healthcheck' do
     get '/healthcheck'
     json = JSON.parse(response.body)
 
-    expect(json['checks']).to include('database_connectivity')
+    expect(json['checks']).to include('database_status')
   end
 
   it "is not cacheable" do
