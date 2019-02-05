@@ -27,7 +27,6 @@ gem 'rails', '~> 5.2'
 gem 'ruby-progressbar'
 gem 'sass-rails'
 gem 'scenic'
-gem 'unicorn'
 gem 'uuid'
 
 group :development do
