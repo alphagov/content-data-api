@@ -1,9 +1,16 @@
 module Healthchecks
   class EtlGoogleAnalytics
+    include ActiveModel::Model
     include Concerns::TimeRange
 
+    attr_accessor :metric
+
+    def self.build(metric)
+      new(metric: metric)
+    end
+
     def name
-      :etl_google_analytics_pviews
+      "etl_google_analytics_#{metric}".to_sym
     end
 
     def status

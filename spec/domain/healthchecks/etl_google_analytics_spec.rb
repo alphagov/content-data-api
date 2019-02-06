@@ -3,6 +3,8 @@ RSpec.describe Healthchecks::EtlGoogleAnalytics do
 
   include_examples 'Healthcheck enabled/disabled within time range'
 
+  subject { described_class.build(:pviews) }
+
   describe "#status" do
     let(:yesterday) { Date.yesterday }
 
