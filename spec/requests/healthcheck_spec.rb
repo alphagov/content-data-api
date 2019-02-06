@@ -3,7 +3,8 @@ RSpec.describe '/healthcheck' do
     get '/healthcheck'
     json = JSON.parse(response.body)
 
-    expect(json['checks']).to include('database_status')
+    expect(json['checks']).to include('database_status').
+      and(include('etl_google_analytics_pviews'))
   end
 
   it "is not cacheable" do
