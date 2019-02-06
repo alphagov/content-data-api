@@ -24,7 +24,7 @@ module Healthchecks
   private
 
     def adition_of_metric_values
-      Facts::Metric.for_yesterday.sum(:pviews)
+      Facts::Metric.for_yesterday.where('pviews > 0').count
     end
   end
 end
