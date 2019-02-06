@@ -3,8 +3,25 @@ RSpec.describe Etl::Feedex::Service do
   let(:subject) { described_class.new(date, 20, support_api) }
 
   describe '#find_in_batches' do
+    let(:date) { Date.new(2018, 2, 1) }
+
+    context 'when there are no results' do
+      let(:response) { { 'results' => [], 'current_page' => 1, 'pages' => 0 } }
+
+      before do
+        allow(support_api).to receive(:feedback_by_day).with(date, 1, 20).and_return(response)
+      end
+
+      it 'yields no results' do
+        expected_date = Date.parse('01/02/2018')
+
+        expect { |b| subject.find_in_batches(&b) }.to yield_successive_args([])
+        expect(support_api).to have_received(:feedback_by_day).with(expected_date, 1, 20)
+        expect(support_api).not_to have_received(:feedback_by_day).with(expected_date, 2, 20)
+      end
+    end
+
     context 'when there are results' do
-      let(:date) { Date.new(2018, 2, 1) }
       let(:response_1) do
         {
           'results' => [

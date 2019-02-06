@@ -19,7 +19,7 @@ class Etl::Feedex::Service
       response = support_api.feedback_by_day(date, current_page, @batch_size)
       yield convert_results(response['results'])
 
-      break if response['pages'] == current_page
+      break if response['pages'].zero? || response['pages'] == current_page
 
       current_page += 1
     end
