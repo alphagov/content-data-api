@@ -36,6 +36,7 @@ private
       chars: result.fetch('string_length'),
       sentences: result.fetch('sentence_count'),
       words: result.fetch('word_count'),
+      reading_time: Etl::Edition::Content::ReadingTime.calculate(result.fetch('word_count')),
     }
   end
 end

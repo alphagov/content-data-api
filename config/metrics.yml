@@ -58,3 +58,7 @@ edition:
   - name: 'words'
     description: "Total number of words detected in the text"
     source: 'custom'
+
+  - name: 'reading_time'
+    description: 'Typical time to read all words'
+    source: 'custom'
