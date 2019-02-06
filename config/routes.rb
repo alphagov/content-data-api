@@ -18,5 +18,6 @@ Rails.application.routes.draw do
     Healthchecks::DailyMetricsCheck,
     Healthchecks::DatabaseConnection,
     Healthchecks::EtlGoogleAnalytics.build(:pviews),
+    Healthchecks::EtlGoogleAnalytics.build(:upviews),
   )
 end
