@@ -7,7 +7,9 @@ RSpec.describe Finders::Content do
     {
       date_range: 'past-30-days',
       organisation_id: primary_org_id,
-      document_type: nil
+      document_type: nil,
+      sort_attribute: nil,
+      sort_direction: nil
     }
   end
 
@@ -70,15 +72,9 @@ RSpec.describe Finders::Content do
       create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 8, useful_no: 19, searches: 10
       create :metric, edition: edition2, date: last_month_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
 
-      filter = {
-        date_range: 'last-month',
-        organisation_id: primary_org_id,
-        document_type: nil
-      }
-
       recalculate_aggregations!
 
-      response = described_class.call(filter: filter)
+      response = described_class.call(filter: filter.merge(date_range: 'last-month'))
 
       expect(response[:results]).to contain_exactly(
         hash_including(upviews: 20, searches: 1, satisfaction: 0.8, satisfaction_score_responses: 5),
@@ -93,15 +89,9 @@ RSpec.describe Finders::Content do
       create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition2, date: two_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
 
-      filter = {
-        date_range: 'past-3-months',
-        organisation_id: primary_org_id,
-        document_type: nil
-      }
-
       recalculate_aggregations!
 
-      response = described_class.call(filter: filter)
+      response = described_class.call(filter: filter.merge(date_range: 'past-3-months'))
 
       expect(response[:results]).to contain_exactly(
         hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
@@ -116,15 +106,9 @@ RSpec.describe Finders::Content do
       create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition2, date: five_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
 
-      filter = {
-        date_range: 'past-6-months',
-        organisation_id: primary_org_id,
-        document_type: nil
-      }
-
       recalculate_aggregations!
 
-      response = described_class.call(filter: filter)
+      response = described_class.call(filter: filter.merge(date_range: 'past-6-months'))
 
       expect(response[:results]).to contain_exactly(
         hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
@@ -139,15 +123,9 @@ RSpec.describe Finders::Content do
       create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition2, date: eleven_months_ago_date, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
 
-      filter = {
-        date_range: 'past-year',
-        organisation_id: primary_org_id,
-        document_type: nil
-      }
-
       recalculate_aggregations!
 
-      response = described_class.call(filter: filter)
+      response = described_class.call(filter: filter.merge(date_range: 'past-year'))
 
       expect(response[:results]).to contain_exactly(
         hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
@@ -157,14 +135,6 @@ RSpec.describe Finders::Content do
   end
 
   describe 'Filter by all organisations' do
-    let(:filter) do
-      {
-        date_range: 'past-30-days',
-        organisation_id: 'all',
-        document_type: nil
-      }
-    end
-
     let(:edition1) { create :edition, date: 15.days.ago }
     let(:edition2) { create :edition, date: 15.days.ago, organisation_id: nil }
 
@@ -175,7 +145,7 @@ RSpec.describe Finders::Content do
     end
 
     it 'returns content from all organisations' do
-      response = described_class.call(filter: filter)
+      response = described_class.call(filter: filter.merge(organisation_id: 'all'))
       expect(response[:results]).to contain_exactly(
         hash_including(base_path: edition1.base_path),
         hash_including(base_path: edition2.base_path)
@@ -184,14 +154,6 @@ RSpec.describe Finders::Content do
   end
 
   describe 'Filter by null organisations' do
-    let(:filter) do
-      {
-        date_range: 'past-30-days',
-        organisation_id: 'none',
-        document_type: nil
-      }
-    end
-
     let(:edition1) { create :edition, date: 15.days.ago, organisation_id: nil }
 
     before do
@@ -202,7 +164,7 @@ RSpec.describe Finders::Content do
     end
 
     it 'returns content from editions which have no organisation' do
-      response = described_class.call(filter: filter)
+      response = described_class.call(filter: filter.merge(organisation_id: nil))
       expect(response[:results]).to contain_exactly(
         hash_including(base_path: edition1.base_path)
       )
@@ -258,20 +220,36 @@ RSpec.describe Finders::Content do
   end
 
   describe 'Order' do
-    it 'defaults order by unique pageviews' do
+    before do
       edition1 = create :edition, title: 'last', organisation_id: primary_org_id
       edition2 = create :edition, title: 'middle', organisation_id: primary_org_id
       edition3 = create :edition, title: 'first', organisation_id: primary_org_id
 
-      create :metric, edition: edition1, date: 15.days.ago, upviews: 1
-      create :metric, edition: edition2, date: 15.days.ago, upviews: 2
-      create :metric, edition: edition3, date: 15.days.ago, upviews: 3
+      create :metric, edition: edition1, date: 15.days.ago, upviews: 1, feedex: 3
+      create :metric, edition: edition2, date: 15.days.ago, upviews: 2, feedex: 2
+      create :metric, edition: edition3, date: 15.days.ago, upviews: 3, feedex: 1
       recalculate_aggregations!
+    end
 
+    it 'defaults order by descending unique pageviews' do
       response = described_class.call(filter: filter)
 
       titles = response.fetch(:results).map { |result| result.fetch(:title) }
       expect(titles).to eq(%w(first middle last))
+    end
+
+    it 'order by other attribute' do
+      response = described_class.call(filter: filter.merge(sort_attribute: 'feedex'))
+
+      titles = response.fetch(:results).map { |result| result.fetch(:title) }
+      expect(titles).to eq(%w(last middle first))
+    end
+
+    it 'order in acending' do
+      response = described_class.call(filter: filter.merge(sort_direction: 'asc'))
+
+      titles = response.fetch(:results).map { |result| result.fetch(:title) }
+      expect(titles).to eq(%w(last middle first))
     end
   end
 

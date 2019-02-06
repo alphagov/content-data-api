@@ -2,7 +2,7 @@ class Finders::Content
   def self.call(filter:)
     raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
 
-    filter.assert_valid_keys :search_term, :date_range, :organisation_id, :document_type, :page, :page_size
+    filter.assert_valid_keys :search_term, :date_range, :organisation_id, :document_type, :page, :page_size, :sort_attribute, :sort_direction
 
     new(filter).call
   end
@@ -13,7 +13,7 @@ class Finders::Content
                 .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
                 .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
                 .merge(slice_editions)
-                .order(order_by)
+                .order(sanitized_order)
                 .page(@page)
                 .per(@page_size)
                 .select(*aggregates)
@@ -31,10 +31,6 @@ private
   ALL = 'all'.freeze
   NONE = 'none'.freeze
 
-  def order_by
-    'upviews desc'
-  end
-
   attr_reader :organisation_id, :document_type, :date_range, :search_term
 
   def initialize(filter)
@@ -44,6 +40,8 @@ private
     @page = filter[:page] || 1
     @page_size = filter[:page_size] || DEFAULT_PAGE_SIZE
     @date_range = filter.fetch(:date_range)
+    @sort_attribute = filter.fetch(:sort_attribute) || 'upviews'
+    @sort_direction = filter.fetch(:sort_direction) || 'desc'
   end
 
   def parse_search_term(search_term)
@@ -53,6 +51,10 @@ private
     search_term.
       gsub(protocol, '').
       gsub(domain, '')
+  end
+
+  def sanitized_order
+    { @sort_attribute.to_sym => @sort_direction.to_sym }
   end
 
   def aggregates
