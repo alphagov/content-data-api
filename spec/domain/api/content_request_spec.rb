@@ -43,10 +43,16 @@ RSpec.describe Api::ContentRequest do
       )
     end
 
-    it 'allows a valid sort attribute without direction' do
-      request = Api::ContentRequest.new(params.merge(sort: 'feedex'))
+    allowed_sort_attributes = %w[
+      title document_type upviews pviews useful_yes useful_no searches feedex pdf_count words
+    ]
 
-      expect(request.to_filter).to include(sort_attribute: 'feedex', sort_direction: nil)
+    allowed_sort_attributes.each do |attribute|
+      it "allows #{attribute} as sort attribute" do
+        request = Api::ContentRequest.new(params.merge(sort: attribute))
+
+        expect(request.to_filter).to include(sort_attribute: attribute, sort_direction: nil)
+      end
     end
 
     it 'allows a valid sort attribute with asc direction' do

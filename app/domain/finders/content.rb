@@ -57,7 +57,7 @@ private
     raise "Order atrribute of #{column} not permitted."    unless aggregates.include?(column.to_s)
     raise "Order direction of #{direction} not permitted." unless %w[ASC DESC].include?(direction.upcase)
 
-    { column => direction }
+    "#{column} #{direction}"
   end
 
   def aggregates

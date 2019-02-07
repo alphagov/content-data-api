@@ -1,4 +1,5 @@
 class Api::ContentRequest
+  VAILD_SORT_ATTRIBUTES = (Metric.daily_metrics.map(&:name) + %w[title document_type]).freeze
   VALID_SORT_DIRECTIONS = %w[asc desc].freeze
   VALID_TIME_PERIODS = ['past-30-days', 'last-month', 'past-3-months', 'past-6-months', 'past-year'].freeze
   include ActiveModel::Validations
@@ -41,8 +42,7 @@ private
   end
 
   def valid_sort_attribute
-    valid_attributes = Metric.daily_metrics.map(&:name)
-    return true if @sort_attribute.in?(valid_attributes) || @sort_attribute.nil?
+    return true if @sort_attribute.in?(VAILD_SORT_ATTRIBUTES) || @sort_attribute.nil?
 
     errors.add('sort', 'this is not a valid sort attribute')
   end
