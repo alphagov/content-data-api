@@ -10,6 +10,7 @@ RSpec.describe Facts::Edition do
       chars: 21,
       sentences: 1,
       words: 4,
+      reading_time: 5,
     }
   end
 

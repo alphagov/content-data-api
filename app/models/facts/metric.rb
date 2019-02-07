@@ -9,7 +9,9 @@ class Facts::Metric < ApplicationRecord
     :readability,
     :chars,
     :sentences,
-    :words, to: :facts_edition
+    :words,
+    :reading_time,
+    to: :facts_edition
 
   validates :dimensions_date, presence: true
   validates :dimensions_edition, presence: true

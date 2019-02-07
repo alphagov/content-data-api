@@ -7,5 +7,6 @@ FactoryBot.define do
     words { 0 }
     chars { 0 }
     readability { 0 }
+    reading_time { 0 }
   end
 end
