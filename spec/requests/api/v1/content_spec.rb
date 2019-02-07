@@ -288,7 +288,7 @@ RSpec.describe '/content' do
       recalculate_aggregations!
     end
 
-    it 'sorts results by daily metric attribute acending' do
+    it 'sorts results by daily metric attribute ascending' do
       get '/content', params: { date_range: 'past-30-days', organisation_id: 'all', sort: 'searches:asc' }
 
       response_body = JSON.parse(response.body).deep_symbolize_keys

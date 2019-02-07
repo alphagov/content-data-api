@@ -245,7 +245,7 @@ RSpec.describe Finders::Content do
       expect(titles).to eq(%w(last middle first))
     end
 
-    it 'order in acending' do
+    it 'order in ascending' do
       response = described_class.call(filter: filter.merge(sort_direction: 'asc'))
 
       titles = response.fetch(:results).map { |result| result.fetch(:title) }
