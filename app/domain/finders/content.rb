@@ -13,7 +13,7 @@ class Finders::Content
                 .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
                 .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
                 .merge(slice_editions)
-                .order(sanitized_order)
+                .order(sanitized_order(@sort_attribute, @sort_direction))
                 .page(@page)
                 .per(@page_size)
                 .select(*aggregates)
@@ -53,12 +53,15 @@ private
       gsub(domain, '')
   end
 
-  def sanitized_order
-    { @sort_attribute.to_sym => @sort_direction.to_sym }
+  def sanitized_order(column, direction)
+    raise "Order atrribute of #{column} not permitted."    unless aggregates.include?(column.to_s)
+    raise "Order direction of #{direction} not permitted." unless %w[ASC DESC].include?(direction.upcase)
+
+    { column => direction }
   end
 
   def aggregates
-    %i(base_path title organisation_id document_type upviews pviews useful_yes useful_no searches feedex pdf_count words)
+    %w(base_path title organisation_id document_type upviews pviews useful_yes useful_no searches feedex pdf_count words)
   end
 
   def array_to_hash(array)
