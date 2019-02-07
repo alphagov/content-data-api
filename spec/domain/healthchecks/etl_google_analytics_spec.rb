@@ -5,31 +5,27 @@ RSpec.describe Healthchecks::EtlGoogleAnalytics do
 
   subject { described_class.build(:pviews) }
 
-  describe "#status" do
-    let(:yesterday) { Date.yesterday }
+  let(:yesterday) { Date.yesterday }
 
-    context 'when there are no metrics' do
-      its(:status) { is_expected.to eq(:critical) }
+  context 'when there are no pviews for yesterday' do
+    before do
+      edition = create :edition
+      create :metric, edition: edition, date: yesterday, pviews: 0
+      create :metric, edition: edition, date: Date.today, pviews: 10
     end
 
-    context 'when there are no pviews for yesterday' do
-      before do
-        edition = create :edition
-        create :metric, edition: edition, date: yesterday, pviews: 0
-        create :metric, edition: edition, date: Date.today, pviews: 10
-      end
+    its(:status) { is_expected.to eq(:critical) }
+    its(:message) { is_expected.to eq('ETL :: no pviews for yesterday') }
+  end
 
-      its(:status) { is_expected.to eq(:critical) }
+  context 'when there are pviews for yesterday' do
+    before do
+      edition = create :edition
+      create :metric, edition: edition, date: yesterday, pviews: 10
+      create :metric, edition: edition, date: Date.today, pviews: 10
     end
 
-    context 'when there are pviews for yesterday' do
-      before do
-        edition = create :edition
-        create :metric, edition: edition, date: yesterday, pviews: 10
-        create :metric, edition: edition, date: Date.today, pviews: 0
-      end
-
-      its(:status) { is_expected.to eq(:ok) }
-    end
+    its(:status) { is_expected.to eq(:ok) }
+    its(:message) { is_expected.to be_nil }
   end
 end

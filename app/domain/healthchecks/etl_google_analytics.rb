@@ -14,17 +14,21 @@ module Healthchecks
     end
 
     def status
-      if adition_of_metric_values.positive?
+      if addition_of_metric_values.positive?
         :ok
       else
         :critical
       end
     end
 
+    def message
+      "ETL :: no #{metric} for yesterday" if status == :critical
+    end
+
   private
 
-    def adition_of_metric_values
-      Facts::Metric.for_yesterday.where('pviews > 0').count
+    def addition_of_metric_values
+      Facts::Metric.for_yesterday.where("#{metric} > 0").count
     end
   end
 end
