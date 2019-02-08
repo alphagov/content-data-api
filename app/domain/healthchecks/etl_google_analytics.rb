@@ -1,7 +1,7 @@
 module Healthchecks
   class EtlGoogleAnalytics
     include ActiveModel::Model
-    include Concerns::TimeRange
+    include Concerns::Deactivable
 
     attr_accessor :metric
 

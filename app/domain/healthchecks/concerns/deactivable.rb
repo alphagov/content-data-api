@@ -1,6 +1,6 @@
 require 'active_support/concern'
 
-module Healthchecks::Concerns::TimeRange
+module Healthchecks::Concerns::Deactivable
   extend ActiveSupport::Concern
 
   included do
@@ -9,10 +9,6 @@ module Healthchecks::Concerns::TimeRange
     end
 
   private
-
-    def adition_of_metric_values
-      Facts::Metric.for_yesterday.sum(:pviews)
-    end
 
     def healthchecks_enabled?
       ENV['ETL_HEALTHCHECK_ENABLED'] == '1'

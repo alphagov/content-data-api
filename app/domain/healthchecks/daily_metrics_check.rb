@@ -1,6 +1,6 @@
 module Healthchecks
   class DailyMetricsCheck
-    include Concerns::TimeRange
+    include Concerns::Deactivable
 
     def name
       :daily_metrics
