@@ -42,5 +42,16 @@ RSpec.shared_examples 'Healthcheck enabled/disabled within time range' do
 
       it { is_expected.to_not be_enabled }
     end
+
+    context 'when ETL check is misconfigured' do
+      before do
+        ENV['ETL_HEALTHCHECK_ENABLED'] = '1'
+        ENV['ETL_HEALTHCHECK_ENABLED_FROM_HOUR'] = '9'
+      end
+
+      let(:today) { Time.new(2018, 1, 15, 1, 0, 0) }
+
+      it { is_expected.to_not be_enabled }
+    end
   end
 end
