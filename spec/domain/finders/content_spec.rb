@@ -60,6 +60,21 @@ RSpec.describe Finders::Content do
     )
   end
 
+  context 'Newly created editions before ETL process' do
+    it 'returns total_results for editions with facts metrics' do
+      edition1 = create :edition, base_path: '/path1', date: 10.days.ago, organisation_id: primary_org_id
+      create :edition, base_path: '/path2', date: 10.days.ago, organisation_id: primary_org_id
+
+      create :metric, edition: edition1, date: 10.days.ago, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
+
+      recalculate_aggregations!
+
+      response = described_class.call(filter: filter)
+
+      expect(response[:total_results]).to eq(1)
+    end
+  end
+
   describe 'Other date ranges' do
     let(:this_month_date) { Date.today }
     let(:edition1) { create :edition, base_path: '/path1', date: 2.months.ago, organisation_id: primary_org_id }

@@ -8,20 +8,11 @@ class Finders::Content
   end
 
   def call
-    view = Finders::SelectView.new(date_range).run
-    results = view[:model_name].all
-                .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
-                .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
-                .merge(slice_editions)
-                .order(sanitized_order(@sort_attribute, @sort_direction))
-                .page(@page)
-                .per(@page_size)
-                .select(*aggregates)
     {
       results: results.map(&method(:array_to_hash)),
       page: @page,
       total_pages: results.total_pages,
-      total_results: slice_editions.latest.count
+      total_results: total_results
     }
   end
 
@@ -42,6 +33,31 @@ private
     @date_range = filter.fetch(:date_range)
     @sort_attribute = filter.fetch(:sort_attribute) || 'upviews'
     @sort_direction = filter.fetch(:sort_direction) || 'desc'
+  end
+
+  def view
+    @view ||= Finders::SelectView.new(date_range).run
+  end
+
+  def editions_with_facts_editions
+    view[:model_name].all
+      .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
+      .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
+  end
+
+  def results
+    editions_with_facts_editions
+      .merge(slice_editions)
+      .order(sanitized_order(@sort_attribute, @sort_direction))
+      .page(@page)
+      .per(@page_size)
+      .select(*aggregates)
+  end
+
+  def total_results
+    editions_with_facts_editions
+      .merge(slice_editions)
+      .count
   end
 
   def parse_search_term(search_term)
