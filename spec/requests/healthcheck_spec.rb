@@ -6,7 +6,7 @@ RSpec.describe '/healthcheck' do
     expect(json['checks']).to include('database_status').
       and(include('etl_google_analytics_pviews')).
       and(include('etl_google_analytics_upviews')).
-      and(include('etl_google_analytics_searches'))
+      and(include('etl_google_analytics_feedex'))
   end
 
   it "is not cacheable" do
