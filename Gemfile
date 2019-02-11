@@ -49,6 +49,7 @@ group :development, :test do
   gem 'pry-rails'
   gem "rack", ">= 2.0.6"
   gem 'rails-controller-testing'
+  gem 'rspec-its'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov', require: false

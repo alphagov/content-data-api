@@ -17,5 +17,7 @@ Rails.application.routes.draw do
   get '/healthcheck', to: GovukHealthcheck.rack_response(
     Healthchecks::DailyMetricsCheck,
     Healthchecks::DatabaseConnection,
+    Healthchecks::EtlGoogleAnalytics.build(:pviews),
+    Healthchecks::EtlGoogleAnalytics.build(:upviews),
   )
 end

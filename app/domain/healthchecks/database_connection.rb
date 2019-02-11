@@ -9,7 +9,7 @@ module Healthchecks
     end
 
     def message
-      "Can't connect to Database"
+      "Can't connect to Database" if status == :critical
     end
 
     def enabled?
