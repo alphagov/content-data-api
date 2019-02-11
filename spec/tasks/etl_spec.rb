@@ -29,6 +29,18 @@ RSpec.describe 'etl.rake', type: task do
     end
   end
 
+  describe 'rake etl:repopulate_feedex' do
+    it 'calls Etl::GA::UserFeedbackProcessor.process with each date' do
+      processor = class_double(Etl::GA::UserFeedbackProcessor, process: true).as_stubbed_const
+
+      Rake::Task['etl:repopulate_feedex'].invoke('2018-11-01', '2018-11-03')
+
+      expect(processor).to have_received(:process).with(date: Date.new(2018, 11, 1))
+      expect(processor).to have_received(:process).with(date: Date.new(2018, 11, 2))
+      expect(processor).to have_received(:process).with(date: Date.new(2018, 11, 3))
+    end
+  end
+
   describe 'rake etl:rerun_master' do
     let!(:processor) do
       class_double(Etl::Master::MasterProcessor,

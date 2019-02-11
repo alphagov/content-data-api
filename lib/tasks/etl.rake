@@ -26,6 +26,17 @@ namespace :etl do
     end
   end
 
+  desc 'Run Etl::GA::UserFeedbackProcessor for range of dates'
+  task :repopulate_feedex, %i[from to] => [:environment] do |_t, args|
+    from = args[:from].to_date
+    to = args[:to].to_date
+    (from..to).each do |date|
+      console_log "repopulating feedex for #{date}"
+      Etl::GA::UserFeedbackProcessor.process(date: date)
+      console_log "finished repopulating feedex for #{date}"
+    end
+  end
+
   desc 'Delete existing metrics and Run Etl Master process across a range of dates'
   task :rerun_master, %i[from to] => [:environment] do |_t, args|
     from = args[:from].to_date
