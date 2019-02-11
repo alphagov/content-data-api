@@ -15,6 +15,17 @@ namespace :etl do
     end
   end
 
+  desc 'Run Etl::GA::InternalSearchProcessor for range of dates'
+  task :repopulate_searches, %i[from to] => [:environment] do |_t, args|
+    from = args[:from].to_date
+    to = args[:to].to_date
+    (from..to).each do |date|
+      console_log "repopulating searches for #{date}"
+      Etl::GA::InternalSearchProcessor.process(date: date)
+      console_log "finished repopulating searches for #{date}"
+    end
+  end
+
   desc 'Delete existing metrics and Run Etl Master process across a range of dates'
   task :rerun_master, %i[from to] => [:environment] do |_t, args|
     from = args[:from].to_date
