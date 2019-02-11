@@ -39,10 +39,14 @@ private
     @view ||= Finders::SelectView.new(date_range).run
   end
 
-  def results
+  def editions_with_facts_editions
     view[:model_name].all
       .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
       .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
+  end
+
+  def results
+    editions_with_facts_editions
       .merge(slice_editions)
       .order(sanitized_order(@sort_attribute, @sort_direction))
       .page(@page)
@@ -51,9 +55,7 @@ private
   end
 
   def total_results
-    view[:model_name].all
-      .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
-      .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
+    editions_with_facts_editions
       .merge(slice_editions)
       .count
   end
