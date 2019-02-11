@@ -55,7 +55,7 @@ private
       .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
       .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
       .merge(slice_editions)
-      .length
+      .count
   end
 
   def parse_search_term(search_term)
