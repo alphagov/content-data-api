@@ -77,7 +77,7 @@ private
   end
 
   def aggregates
-    %w(base_path title organisation_id document_type upviews pviews useful_yes useful_no searches feedex pdf_count words)
+    %w(base_path title organisation_id document_type upviews pviews useful_yes useful_no searches feedex pdf_count words reading_time)
   end
 
   def array_to_hash(array)
@@ -97,6 +97,7 @@ private
       searches: array[:searches].to_i,
       pdf_count: array[:pdf_count].to_i,
       words: array[:words].to_i,
+      reading_time: array[:reading_time].to_i
     }
   end
 

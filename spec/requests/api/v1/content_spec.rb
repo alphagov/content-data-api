@@ -7,7 +7,7 @@ RSpec.describe '/content' do
 
   describe 'content item attributes' do
     it 'contains the expected metrics' do
-      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-01', facts: { pdf_count: 10, words: 300 }
+      edition1 = create :edition, date: 1.month.ago, organisation_id: organisation_id, base_path: '/path-01', facts: { pdf_count: 10, words: 300, reading_time: 2 }
       create :metric, date: 1.day.ago, edition: edition1, pviews: 1, upviews: 1, feedex: 1, useful_no: 1, useful_yes: 1, searches: 1
       recalculate_aggregations!
 
@@ -24,7 +24,8 @@ RSpec.describe '/content' do
           satisfaction_score_responses: 2,
           searches: 1,
           pdf_count: 10,
-          word_count: 300
+          word_count: 300,
+          reading_time: 2
         )
       )
     end

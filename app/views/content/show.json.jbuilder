@@ -13,6 +13,7 @@ json.results @content_items do |content_item|
   json.searches content_item[:searches]
   json.pdf_count content_item[:pdf_count]
   json.word_count content_item[:words]
+  json.reading_time content_item[:reading_time]
 end
 
 json.page @page
