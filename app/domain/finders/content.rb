@@ -8,6 +8,8 @@ class Finders::Content
   end
 
   def call
+    DatabaseHelper.increase_work_mem_for_current_transaction(megabytes: 64)
+
     {
       results: results.map(&method(:array_to_hash)),
       page: @page,
