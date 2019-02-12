@@ -25,6 +25,15 @@ RSpec.describe Finders::Aggregations do
     expect(result.fetch(:pviews)).to eq(5)
   end
 
+  it 'repects base_path with locales' do
+    edition = create :edition, base_path: '/path.cy', date: '2018-01-01', locale: 'cy'
+    create :metric, edition: edition, date: '2018-01-01', pviews: 2
+    create :metric, edition: edition, date: '2018-01-02', pviews: 3
+
+    result = Finders::Aggregations.new.by_base_path('/path.cy').run
+    expect(result.fetch(:pviews)).to eq(5)
+  end
+
   it 'filters by from and to' do
     edition = create :edition, base_path: '/path/1', date: '2018-01-01'
     create :metric, edition: edition, date: '2018-01-01', pviews: 2

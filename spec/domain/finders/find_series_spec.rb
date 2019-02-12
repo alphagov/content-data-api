@@ -76,5 +76,18 @@ RSpec.describe Finders::FindSeries do
         { date: "2018-01-14", value: 2 }
       ])
     end
+
+    it 'return the content items for non english locale' do
+      edition1 = create :edition, base_path: '/path1', date: '2018-1-12', facts: { words: 1 }, locale: 'en'
+      edition2 = create :edition, base_path: '/path1.cy', date: '2018-1-12', facts: { words: 2 }, locale: 'cy'
+
+      create :metric, edition: edition1, date: '2018-1-12'
+      create :metric, edition: edition2, date: '2018-1-13'
+
+      result = described_class.new.by_metrics(%w(words)).by_base_path('/path1.cy').run
+      expect(result.first.time_series).to eq([
+        { date: "2018-01-13", value: 2 },
+      ])
+    end
   end
 end
