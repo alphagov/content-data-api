@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_13_141801) do
+ActiveRecord::Schema.define(version: 2019_02_13_155940) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,9 +87,8 @@ ActiveRecord::Schema.define(version: 2019_02_13_141801) do
     t.boolean "historical", null: false
     t.bigint "publishing_api_event_id"
     t.string "acronym"
-    t.index "to_tsvector('english'::regconfig, (title)::text)", name: "dimensions_editions_title", using: :gin
-    t.index "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "dimensions_editions_base_path", using: :gin
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
+    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
     t.index ["document_type"], name: "index_dimensions_editions_on_document_type"
     t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
@@ -173,13 +172,12 @@ ActiveRecord::Schema.define(version: 2019_02_13_141801) do
     t.integer "bounces", default: 0, null: false
     t.integer "page_time", default: 0, null: false
     t.float "satisfaction", default: 0.0, null: false
-    t.index ["dimensions_date_id", "dimensions_edition_id"], name: "metrics_edition_id_date_id", unique: true
     t.index ["dimensions_date_id", "feedex"], name: "index_facts_metrics_on_dimensions_date_id_and_feedex"
     t.index ["dimensions_date_id", "pviews"], name: "index_facts_metrics_on_dimensions_date_id_and_pviews"
     t.index ["dimensions_date_id", "searches"], name: "index_facts_metrics_on_dimensions_date_id_and_searches"
     t.index ["dimensions_date_id", "upviews"], name: "index_facts_metrics_on_dimensions_date_id_and_upviews"
     t.index ["dimensions_date_id", "useful_no"], name: "index_facts_metrics_on_dimensions_date_id_and_useful_no"
-    t.index ["dimensions_edition_id"], name: "index_facts_metrics_on_dimensions_edition_id"
+    t.index ["dimensions_date_id"], name: "facts_metrics_dimensions_date_id"
   end
 
   create_table "publishing_api_events", force: :cascade do |t|
@@ -225,25 +223,28 @@ ActiveRecord::Schema.define(version: 2019_02_13_141801) do
       aggregations.searches,
       facts_editions.words,
       facts_editions.pdf_count
-     FROM ((( SELECT dimensions_editions_1.warehouse_item_id,
-              max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+     FROM ((( SELECT max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
               sum(facts_metrics.upviews) AS upviews,
               sum(facts_metrics.pviews) AS pviews,
+              sum(facts_metrics.feedex) AS feedex,
               sum(facts_metrics.useful_yes) AS useful_yes,
               sum(facts_metrics.useful_no) AS useful_no,
-              sum(facts_metrics.feedex) AS feedex,
               sum(facts_metrics.searches) AS searches
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '30 days'::interval day)) AND (facts_metrics.dimensions_date_id < ('now'::text)::date))
+            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '30 days'::interval day)) AND ((dimensions_editions_1.document_type)::text <> ALL ((ARRAY['redirect'::character varying, 'gone'::character varying, 'vanish'::character varying, 'unpublishing'::character varying, 'need'::character varying])::text[])))
             GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
-       JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
-    WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
+       JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)));
   SQL
-  add_index "aggregations_search_last_thirty_days", ["dimensions_edition_id", "upviews"], name: "index_on_last_thirty_days_edition_id_upviews"
-  add_index "aggregations_search_last_thirty_days", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_thirty_days_unique", unique: true
+  add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_thirty_days_gin_title", using: :gin
+  add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_thirty_days_gin_base_path", using: :gin
+  add_index "aggregations_search_last_thirty_days", ["document_type", "upviews"], name: "search_last_thirty_days_gin_base_path_document_type"
+  add_index "aggregations_search_last_thirty_days", ["organisation_id", "upviews"], name: "search_last_thirty_days_gin_base_path_organisation_id"
+  add_index "aggregations_search_last_thirty_days", ["pviews", "organisation_id"], name: "index_on_last_thirty_days_upviews_organisations"
+  add_index "aggregations_search_last_thirty_days", ["upviews", "organisation_id"], name: "index_on_last_thirty_days_pviews_organisations"
+  add_index "aggregations_search_last_thirty_days", ["upviews"], name: "search_last_thirty_days_gin_base_path_upviews"
 
   create_view "aggregations_search_last_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -277,8 +278,11 @@ ActiveRecord::Schema.define(version: 2019_02_13_141801) do
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
     WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
   SQL
-  add_index "aggregations_search_last_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_month_edition_id_upviews"
-  add_index "aggregations_search_last_months", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_monthunique", unique: true
+  add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_month_gin_title", using: :gin
+  add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_month_gin_base_path", using: :gin
+  add_index "aggregations_search_last_months", ["document_type", "upviews"], name: "search_last_month_gin_base_path_document_type"
+  add_index "aggregations_search_last_months", ["organisation_id", "upviews"], name: "search_last_month_gin_base_path_organisation_id"
+  add_index "aggregations_search_last_months", ["upviews"], name: "search_last_month_gin_base_path_upviews"
 
   create_view "aggregations_search_last_three_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -335,8 +339,11 @@ ActiveRecord::Schema.define(version: 2019_02_13_141801) do
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
     WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
   SQL
-  add_index "aggregations_search_last_three_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_three_months_edition_id_upviews"
-  add_index "aggregations_search_last_three_months", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_three_months_unique", unique: true
+  add_index "aggregations_search_last_three_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_three_months_gin_title", using: :gin
+  add_index "aggregations_search_last_three_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_three_months_gin_base_path", using: :gin
+  add_index "aggregations_search_last_three_months", ["document_type", "upviews"], name: "search_last_three_months_gin_base_path_document_type"
+  add_index "aggregations_search_last_three_months", ["organisation_id", "upviews"], name: "search_last_three_months_gin_base_path_organisation_id"
+  add_index "aggregations_search_last_three_months", ["upviews"], name: "search_last_three_months_gin_base_path_upviews"
 
   create_view "aggregations_search_last_six_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -393,8 +400,11 @@ ActiveRecord::Schema.define(version: 2019_02_13_141801) do
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
     WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
   SQL
-  add_index "aggregations_search_last_six_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_six_months_edition_id_upviews"
-  add_index "aggregations_search_last_six_months", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_six_months_unique", unique: true
+  add_index "aggregations_search_last_six_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_six_months_gin_title", using: :gin
+  add_index "aggregations_search_last_six_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_six_months_gin_base_path", using: :gin
+  add_index "aggregations_search_last_six_months", ["document_type", "upviews"], name: "search_last_six_months_gin_base_path_document_type"
+  add_index "aggregations_search_last_six_months", ["organisation_id", "upviews"], name: "search_last_six_months_gin_base_path_organisation_id"
+  add_index "aggregations_search_last_six_months", ["upviews"], name: "search_last_six_months_gin_base_path_upviews"
 
   create_view "aggregations_search_last_twelve_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -451,7 +461,10 @@ ActiveRecord::Schema.define(version: 2019_02_13_141801) do
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
     WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
   SQL
-  add_index "aggregations_search_last_twelve_months", ["dimensions_edition_id", "upviews"], name: "index_on_last_twelve_months_edition_id_upviews"
-  add_index "aggregations_search_last_twelve_months", ["dimensions_edition_id", "warehouse_item_id"], name: "index_on_search_last_twelve_months_unique", unique: true
+  add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_twelve_months_gin_title", using: :gin
+  add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_twelve_months_gin_base_path", using: :gin
+  add_index "aggregations_search_last_twelve_months", ["document_type", "upviews"], name: "search_last_twelve_months_gin_base_path_document_type"
+  add_index "aggregations_search_last_twelve_months", ["organisation_id", "upviews"], name: "search_last_twelve_months_gin_base_path_organisation_id"
+  add_index "aggregations_search_last_twelve_months", ["upviews"], name: "search_last_twelve_months_gin_base_path_upviews"
 
 end
