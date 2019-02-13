@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_13_155940) do
+ActiveRecord::Schema.define(version: 2019_02_13_162703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -222,29 +222,31 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
       aggregations.useful_no,
       aggregations.searches,
       facts_editions.words,
-      facts_editions.pdf_count
-     FROM ((( SELECT max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+      facts_editions.pdf_count,
+      facts_editions.reading_time
+     FROM ((( SELECT dimensions_editions_1.warehouse_item_id,
+              max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
               sum(facts_metrics.upviews) AS upviews,
               sum(facts_metrics.pviews) AS pviews,
-              sum(facts_metrics.feedex) AS feedex,
               sum(facts_metrics.useful_yes) AS useful_yes,
               sum(facts_metrics.useful_no) AS useful_no,
+              sum(facts_metrics.feedex) AS feedex,
               sum(facts_metrics.searches) AS searches
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id >= (('now'::text)::date - '30 days'::interval day)) AND ((dimensions_editions_1.document_type)::text <> ALL ((ARRAY['redirect'::character varying, 'gone'::character varying, 'vanish'::character varying, 'unpublishing'::character varying, 'need'::character varying])::text[])))
+            WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '30 days'::interval day)) AND (facts_metrics.dimensions_date_id < ('now'::text)::date))
             GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
-       JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)));
+       JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
+    WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
   SQL
   add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_thirty_days_gin_title", using: :gin
   add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_thirty_days_gin_base_path", using: :gin
   add_index "aggregations_search_last_thirty_days", ["document_type", "upviews"], name: "search_last_thirty_days_gin_base_path_document_type"
   add_index "aggregations_search_last_thirty_days", ["organisation_id", "upviews"], name: "search_last_thirty_days_gin_base_path_organisation_id"
-  add_index "aggregations_search_last_thirty_days", ["pviews", "organisation_id"], name: "index_on_last_thirty_days_upviews_organisations"
-  add_index "aggregations_search_last_thirty_days", ["upviews", "organisation_id"], name: "index_on_last_thirty_days_pviews_organisations"
   add_index "aggregations_search_last_thirty_days", ["upviews"], name: "search_last_thirty_days_gin_base_path_upviews"
+  add_index "aggregations_search_last_thirty_days", ["warehouse_item_id"], name: "aggregations_search_last_thirty_days_pk", unique: true
 
   create_view "aggregations_search_last_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -260,7 +262,8 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
       aggregations.useful_no,
       aggregations.searches,
       facts_editions.words,
-      facts_editions.pdf_count
+      facts_editions.pdf_count,
+      facts_editions.reading_time
      FROM ((( SELECT dimensions_editions_1.warehouse_item_id,
               max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
               sum(aggregations_monthly_metrics.upviews) AS upviews,
@@ -283,6 +286,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
   add_index "aggregations_search_last_months", ["document_type", "upviews"], name: "search_last_month_gin_base_path_document_type"
   add_index "aggregations_search_last_months", ["organisation_id", "upviews"], name: "search_last_month_gin_base_path_organisation_id"
   add_index "aggregations_search_last_months", ["upviews"], name: "search_last_month_gin_base_path_upviews"
+  add_index "aggregations_search_last_months", ["warehouse_item_id"], name: "aggregations_search_last_months_pk", unique: true
 
   create_view "aggregations_search_last_three_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -298,7 +302,8 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
       aggregations.useful_no,
       aggregations.searches,
       facts_editions.words,
-      facts_editions.pdf_count
+      facts_editions.pdf_count,
+      facts_editions.reading_time
      FROM ((( SELECT agg.warehouse_item_id,
               max(agg.dimensions_edition_id) AS dimensions_edition_id,
               sum(agg.upviews) AS upviews,
@@ -344,6 +349,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
   add_index "aggregations_search_last_three_months", ["document_type", "upviews"], name: "search_last_three_months_gin_base_path_document_type"
   add_index "aggregations_search_last_three_months", ["organisation_id", "upviews"], name: "search_last_three_months_gin_base_path_organisation_id"
   add_index "aggregations_search_last_three_months", ["upviews"], name: "search_last_three_months_gin_base_path_upviews"
+  add_index "aggregations_search_last_three_months", ["warehouse_item_id"], name: "aggregations_search_last_three_months_pk", unique: true
 
   create_view "aggregations_search_last_six_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -359,7 +365,8 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
       aggregations.useful_no,
       aggregations.searches,
       facts_editions.words,
-      facts_editions.pdf_count
+      facts_editions.pdf_count,
+      facts_editions.reading_time
      FROM ((( SELECT agg.warehouse_item_id,
               max(agg.dimensions_edition_id) AS dimensions_edition_id,
               sum(agg.upviews) AS upviews,
@@ -405,6 +412,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
   add_index "aggregations_search_last_six_months", ["document_type", "upviews"], name: "search_last_six_months_gin_base_path_document_type"
   add_index "aggregations_search_last_six_months", ["organisation_id", "upviews"], name: "search_last_six_months_gin_base_path_organisation_id"
   add_index "aggregations_search_last_six_months", ["upviews"], name: "search_last_six_months_gin_base_path_upviews"
+  add_index "aggregations_search_last_six_months", ["warehouse_item_id"], name: "aggregations_search_last_six_months_pk", unique: true
 
   create_view "aggregations_search_last_twelve_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -420,7 +428,8 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
       aggregations.useful_no,
       aggregations.searches,
       facts_editions.words,
-      facts_editions.pdf_count
+      facts_editions.pdf_count,
+      facts_editions.reading_time
      FROM ((( SELECT agg.warehouse_item_id,
               max(agg.dimensions_edition_id) AS dimensions_edition_id,
               sum(agg.upviews) AS upviews,
@@ -466,5 +475,6 @@ ActiveRecord::Schema.define(version: 2019_02_13_155940) do
   add_index "aggregations_search_last_twelve_months", ["document_type", "upviews"], name: "search_last_twelve_months_gin_base_path_document_type"
   add_index "aggregations_search_last_twelve_months", ["organisation_id", "upviews"], name: "search_last_twelve_months_gin_base_path_organisation_id"
   add_index "aggregations_search_last_twelve_months", ["upviews"], name: "search_last_twelve_months_gin_base_path_upviews"
+  add_index "aggregations_search_last_twelve_months", ["warehouse_item_id"], name: "aggregations_search_last_twelve_months_pk", unique: true
 
 end
