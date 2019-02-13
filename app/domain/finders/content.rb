@@ -40,14 +40,28 @@ private
   end
 
   def editions_with_facts_editions
-    view[:model_name].all
-      .joins("INNER JOIN dimensions_editions ON aggregations_search_#{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
-      .joins("INNER JOIN facts_editions ON dimensions_editions.id = facts_editions.dimensions_edition_id")
+    result = view[:model_name].all
+    if organisation_id == NONE
+      result = result.where('organisation_id IS NULL')
+    elsif organisation_id != ALL
+      result = result.where(organisation_id: organisation_id)
+    end
+    result = result.where('document_type = ?', document_type) if document_type
+
+    if search_term.present?
+      sql = <<~SQL
+        to_tsvector('english',title) @@ plainto_tsquery('english', :search_term) or
+        to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :search_term_without_slash)
+      SQL
+
+      result = result.where(sql, search_term: search_term, search_term_without_slash: search_term.tr('/', ' '))
+    end
+
+    result
   end
 
   def results
     editions_with_facts_editions
-      .merge(slice_editions)
       .order(sanitized_order(@sort_attribute, @sort_direction))
       .page(@page)
       .per(@page_size)
@@ -56,7 +70,6 @@ private
 
   def total_results
     editions_with_facts_editions
-      .merge(slice_editions)
       .count
   end
 
@@ -70,7 +83,7 @@ private
   end
 
   def sanitized_order(column, direction)
-    raise "Order atrribute of #{column} not permitted."    unless aggregates.include?(column.to_s)
+    raise "Order atrribute of #{column} not permitted." unless aggregates.include?(column.to_s)
     raise "Order direction of #{direction} not permitted." unless %w[ASC DESC].include?(direction.upcase)
 
     "#{column} #{direction}"
@@ -99,17 +112,5 @@ private
       words: array[:words].to_i,
       reading_time: array[:reading_time].to_i
     }
-  end
-
-  def slice_editions
-    editions = Dimensions::Edition.relevant_content
-    if organisation_id == NONE
-      editions = editions.where('organisation_id IS NULL')
-    elsif  organisation_id != ALL
-      editions = editions.by_organisation_id(organisation_id)
-    end
-    editions = editions.where('document_type = ?', document_type) if document_type
-    editions = editions.search(search_term) if search_term.present?
-    editions
   end
 end
