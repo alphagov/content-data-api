@@ -42,17 +42,6 @@ RSpec.describe Dimensions::Edition, type: :model do
       expect(results).to match_array(edition1)
     end
 
-    it '.relevant_content' do
-      edition = create :edition, document_type: 'news_story'
-      create :edition, document_type: 'redirect'
-      create :edition, document_type: 'gone'
-      create :edition, document_type: 'vanish'
-      create :edition, document_type: 'unpublishing'
-      create :edition, document_type: 'need'
-      results = subject.relevant_content
-      expect(results).to match_array(edition)
-    end
-
     describe '.outdated_subpages' do
       let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:locale) { 'fr' }
