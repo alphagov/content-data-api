@@ -55,7 +55,6 @@ private
 
   def slice_editions
     editions = Dimensions::Edition.all
-    editions = editions.by_locale('en')
     editions = editions.by_base_path(@base_path) unless @base_path.blank?
     editions
   end

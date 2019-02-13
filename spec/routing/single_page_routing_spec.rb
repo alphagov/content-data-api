@@ -15,4 +15,13 @@ RSpec.describe 'single page endpoint routing' do
       format: :json
     )
   end
+
+  it 'routes /single_page/base/path.cy' do
+    expect(get: '/single_page/base/path.cy').to route_to(
+      controller: 'single_item',
+      action: 'show',
+      format: :json,
+      base_path: 'base/path.cy'
+    )
+  end
 end
