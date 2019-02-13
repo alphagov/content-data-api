@@ -22,12 +22,9 @@ private
   ALL = 'all'.freeze
   NONE = 'none'.freeze
 
-  attr_reader :organisation_id, :document_type, :date_range, :search_term
-
   def initialize(filter)
-    @organisation_id = filter.fetch(:organisation_id)
-    @document_type = filter.fetch(:document_type)
-    @search_term = parse_search_term(filter[:search_term]) if filter[:search_term]
+    @filter = filter
+
     @page = filter[:page] || 1
     @page_size = filter[:page_size] || DEFAULT_PAGE_SIZE
     @date_range = filter.fetch(:date_range)
@@ -36,32 +33,48 @@ private
   end
 
   def view
-    @view ||= Finders::SelectView.new(date_range).run
+    @view ||= Finders::SelectView.new(@date_range).run
   end
 
-  def editions_with_facts_editions
-    result = view[:model_name].all
+  def apply_filter
+    scope = view[:model_name].all
+    scope = find_by_search_term(scope) if @filter[:search_term].present?
+    scope = find_by_document_type(scope) if @filter[:document_type].present?
+    scope = find_by_organisation(scope)
+
+    scope
+  end
+
+  def find_by_search_term(scope)
+    search_term = parse_search_term(@filter[:search_term])
+
+    sql = <<~SQL
+      to_tsvector('english',title) @@ plainto_tsquery('english', :search_term) or
+      to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :search_term_without_slash)
+    SQL
+
+    scope.where(sql, search_term: search_term, search_term_without_slash: search_term.tr('/', ' '))
+  end
+
+  def find_by_document_type(scope)
+    document_type = @filter.fetch(:document_type)
+
+    scope.where('document_type = ?', document_type)
+  end
+
+  def find_by_organisation(scope)
+    organisation_id = @filter.fetch(:organisation_id)
+
     if organisation_id == NONE
-      result = result.where('organisation_id IS NULL')
+      scope = scope.where('organisation_id IS NULL')
     elsif organisation_id != ALL
-      result = result.where(organisation_id: organisation_id)
+      scope = scope.where(organisation_id: organisation_id)
     end
-    result = result.where('document_type = ?', document_type) if document_type
-
-    if search_term.present?
-      sql = <<~SQL
-        to_tsvector('english',title) @@ plainto_tsquery('english', :search_term) or
-        to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :search_term_without_slash)
-      SQL
-
-      result = result.where(sql, search_term: search_term, search_term_without_slash: search_term.tr('/', ' '))
-    end
-
-    result
+    scope
   end
 
   def results
-    editions_with_facts_editions
+    apply_filter
       .order(sanitized_order(@sort_attribute, @sort_direction))
       .page(@page)
       .per(@page_size)
@@ -69,8 +82,7 @@ private
   end
 
   def total_results
-    editions_with_facts_editions
-      .count
+    apply_filter.count
   end
 
   def parse_search_term(search_term)
