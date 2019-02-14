@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_13_162703) do
+ActiveRecord::Schema.define(version: 2019_02_14_113305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,7 +88,6 @@ ActiveRecord::Schema.define(version: 2019_02_13_162703) do
     t.bigint "publishing_api_event_id"
     t.string "acronym"
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
-    t.index ["content_id", "latest"], name: "idx_latest_content_id"
     t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
     t.index ["document_type"], name: "index_dimensions_editions_on_document_type"
     t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
@@ -172,12 +171,13 @@ ActiveRecord::Schema.define(version: 2019_02_13_162703) do
     t.integer "bounces", default: 0, null: false
     t.integer "page_time", default: 0, null: false
     t.float "satisfaction", default: 0.0, null: false
+    t.index ["dimensions_date_id", "dimensions_edition_id"], name: "metrics_edition_id_date_id", unique: true
     t.index ["dimensions_date_id", "feedex"], name: "index_facts_metrics_on_dimensions_date_id_and_feedex"
     t.index ["dimensions_date_id", "pviews"], name: "index_facts_metrics_on_dimensions_date_id_and_pviews"
     t.index ["dimensions_date_id", "searches"], name: "index_facts_metrics_on_dimensions_date_id_and_searches"
     t.index ["dimensions_date_id", "upviews"], name: "index_facts_metrics_on_dimensions_date_id_and_upviews"
     t.index ["dimensions_date_id", "useful_no"], name: "index_facts_metrics_on_dimensions_date_id_and_useful_no"
-    t.index ["dimensions_date_id"], name: "facts_metrics_dimensions_date_id"
+    t.index ["dimensions_edition_id"], name: "index_facts_metrics_on_dimensions_edition_id"
   end
 
   create_table "publishing_api_events", force: :cascade do |t|
@@ -243,9 +243,9 @@ ActiveRecord::Schema.define(version: 2019_02_13_162703) do
   SQL
   add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_thirty_days_gin_title", using: :gin
   add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_thirty_days_gin_base_path", using: :gin
-  add_index "aggregations_search_last_thirty_days", ["document_type", "upviews"], name: "search_last_thirty_days_gin_base_path_document_type"
-  add_index "aggregations_search_last_thirty_days", ["organisation_id", "upviews"], name: "search_last_thirty_days_gin_base_path_organisation_id"
-  add_index "aggregations_search_last_thirty_days", ["upviews"], name: "search_last_thirty_days_gin_base_path_upviews"
+  add_index "aggregations_search_last_thirty_days", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_thirty_days_document_type"
+  add_index "aggregations_search_last_thirty_days", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_thirty_days_organisation_id"
+  add_index "aggregations_search_last_thirty_days", ["upviews", "warehouse_item_id"], name: "search_last_thirty_days_upviews"
   add_index "aggregations_search_last_thirty_days", ["warehouse_item_id"], name: "aggregations_search_last_thirty_days_pk", unique: true
 
   create_view "aggregations_search_last_months", materialized: true, sql_definition: <<-SQL
@@ -283,9 +283,9 @@ ActiveRecord::Schema.define(version: 2019_02_13_162703) do
   SQL
   add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_month_gin_title", using: :gin
   add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_month_gin_base_path", using: :gin
-  add_index "aggregations_search_last_months", ["document_type", "upviews"], name: "search_last_month_gin_base_path_document_type"
-  add_index "aggregations_search_last_months", ["organisation_id", "upviews"], name: "search_last_month_gin_base_path_organisation_id"
-  add_index "aggregations_search_last_months", ["upviews"], name: "search_last_month_gin_base_path_upviews"
+  add_index "aggregations_search_last_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_month_document_type"
+  add_index "aggregations_search_last_months", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_month_organisation_id"
+  add_index "aggregations_search_last_months", ["upviews", "warehouse_item_id"], name: "search_last_month_upviews"
   add_index "aggregations_search_last_months", ["warehouse_item_id"], name: "aggregations_search_last_months_pk", unique: true
 
   create_view "aggregations_search_last_three_months", materialized: true, sql_definition: <<-SQL
@@ -346,9 +346,9 @@ ActiveRecord::Schema.define(version: 2019_02_13_162703) do
   SQL
   add_index "aggregations_search_last_three_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_three_months_gin_title", using: :gin
   add_index "aggregations_search_last_three_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_three_months_gin_base_path", using: :gin
-  add_index "aggregations_search_last_three_months", ["document_type", "upviews"], name: "search_last_three_months_gin_base_path_document_type"
-  add_index "aggregations_search_last_three_months", ["organisation_id", "upviews"], name: "search_last_three_months_gin_base_path_organisation_id"
-  add_index "aggregations_search_last_three_months", ["upviews"], name: "search_last_three_months_gin_base_path_upviews"
+  add_index "aggregations_search_last_three_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_three_months_document_type"
+  add_index "aggregations_search_last_three_months", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_three_months_organisation_id"
+  add_index "aggregations_search_last_three_months", ["upviews", "warehouse_item_id"], name: "search_last_three_months_upviews"
   add_index "aggregations_search_last_three_months", ["warehouse_item_id"], name: "aggregations_search_last_three_months_pk", unique: true
 
   create_view "aggregations_search_last_six_months", materialized: true, sql_definition: <<-SQL
@@ -409,9 +409,9 @@ ActiveRecord::Schema.define(version: 2019_02_13_162703) do
   SQL
   add_index "aggregations_search_last_six_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_six_months_gin_title", using: :gin
   add_index "aggregations_search_last_six_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_six_months_gin_base_path", using: :gin
-  add_index "aggregations_search_last_six_months", ["document_type", "upviews"], name: "search_last_six_months_gin_base_path_document_type"
-  add_index "aggregations_search_last_six_months", ["organisation_id", "upviews"], name: "search_last_six_months_gin_base_path_organisation_id"
-  add_index "aggregations_search_last_six_months", ["upviews"], name: "search_last_six_months_gin_base_path_upviews"
+  add_index "aggregations_search_last_six_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_six_months_document_type"
+  add_index "aggregations_search_last_six_months", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_six_months_organisation_id"
+  add_index "aggregations_search_last_six_months", ["upviews", "warehouse_item_id"], name: "search_last_six_months_upviews"
   add_index "aggregations_search_last_six_months", ["warehouse_item_id"], name: "aggregations_search_last_six_months_pk", unique: true
 
   create_view "aggregations_search_last_twelve_months", materialized: true, sql_definition: <<-SQL
@@ -472,9 +472,9 @@ ActiveRecord::Schema.define(version: 2019_02_13_162703) do
   SQL
   add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_twelve_months_gin_title", using: :gin
   add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_twelve_months_gin_base_path", using: :gin
-  add_index "aggregations_search_last_twelve_months", ["document_type", "upviews"], name: "search_last_twelve_months_gin_base_path_document_type"
-  add_index "aggregations_search_last_twelve_months", ["organisation_id", "upviews"], name: "search_last_twelve_months_gin_base_path_organisation_id"
-  add_index "aggregations_search_last_twelve_months", ["upviews"], name: "search_last_twelve_months_gin_base_path_upviews"
+  add_index "aggregations_search_last_twelve_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_twelve_months_document_type"
+  add_index "aggregations_search_last_twelve_months", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_twelve_months_organisation_id"
+  add_index "aggregations_search_last_twelve_months", ["upviews", "warehouse_item_id"], name: "search_last_twelve_months_upviews"
   add_index "aggregations_search_last_twelve_months", ["warehouse_item_id"], name: "aggregations_search_last_twelve_months_pk", unique: true
 
 end
