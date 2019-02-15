@@ -4,8 +4,8 @@ class AddIndexesViewAggregationsSearchLastSixMonths < ActiveRecord::Migration[5.
     execute "create index aggregations_search_last_six_months_gin_title on aggregations_search_last_six_months  using gin(to_tsvector('english', title ))"
 
     add_index :aggregations_search_last_six_months, :upviews, name: :search_last_six_months_gin_base_path_upviews
-    add_index :aggregations_search_last_six_months, [:organisation_id, :upviews], name: :search_last_six_months_gin_base_path_organisation_id
-    add_index :aggregations_search_last_six_months, [:document_type, :upviews], name: :search_last_six_months_gin_base_path_document_type
+    add_index :aggregations_search_last_six_months, %i[organisation_id upviews], name: :search_last_six_months_gin_base_path_organisation_id
+    add_index :aggregations_search_last_six_months, %i[document_type upviews], name: :search_last_six_months_gin_base_path_document_type
   end
 
   def down

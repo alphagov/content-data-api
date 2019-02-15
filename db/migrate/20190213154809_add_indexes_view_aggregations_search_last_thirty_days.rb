@@ -4,8 +4,8 @@ class AddIndexesViewAggregationsSearchLastThirtyDays < ActiveRecord::Migration[5
     execute "create index aggregations_search_last_thirty_days_gin_title on aggregations_search_last_thirty_days  using gin(to_tsvector('english', title ))"
 
     add_index :aggregations_search_last_thirty_days, :upviews, name: :search_last_thirty_days_gin_base_path_upviews
-    add_index :aggregations_search_last_thirty_days, [:organisation_id, :upviews], name: :search_last_thirty_days_gin_base_path_organisation_id
-    add_index :aggregations_search_last_thirty_days, [:document_type, :upviews], name: :search_last_thirty_days_gin_base_path_document_type
+    add_index :aggregations_search_last_thirty_days, %i[organisation_id upviews], name: :search_last_thirty_days_gin_base_path_organisation_id
+    add_index :aggregations_search_last_thirty_days, %i[document_type upviews], name: :search_last_thirty_days_gin_base_path_document_type
   end
 
   def down
@@ -17,5 +17,3 @@ class AddIndexesViewAggregationsSearchLastThirtyDays < ActiveRecord::Migration[5
     remove_index :aggregations_search_last_thirty_days, name: :search_last_thirty_days_gin_base_path_document_type
   end
 end
-
-

@@ -20,4 +20,3 @@ class CleanUpUnusedIndexes < ActiveRecord::Migration[5.2]
     remove_index :dimensions_editions, name: :dimensions_editions_base_path
   end
 end
-
