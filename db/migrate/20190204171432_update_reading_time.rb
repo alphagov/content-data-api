@@ -9,7 +9,7 @@ class UpdateReadingTime < ActiveRecord::Migration[5.2]
   def up
     Dimensions::Edition.where(latest: true).find_each do |edition|
       facts = edition.facts_edition
-      if facts.words.present? && facts.words > 0
+      if facts.words.present? && facts.words.positive?
         reading_time = Etl::Edition::Content::ReadingTime.calculate(facts.words)
         facts.update(reading_time: reading_time)
       end

@@ -23,16 +23,6 @@ class Dimensions::Edition < ApplicationRecord
     latest_by_content_id(content_id, locale)
       .where.not(base_path: exclude_paths)
   end
-  scope :relevant_content, -> { where.not(document_type: DocumentType::IGNORED_TYPES) }
-
-  def self.search(query)
-    sql = <<~SQL
-      to_tsvector('english',title) @@ plainto_tsquery('english', :search_term) or
-      to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :search_term_without_slash)
-    SQL
-
-    where(sql, search_term: query, search_term_without_slash: query.tr('/', ' '))
-  end
 
   def promote!(old_edition)
     if old_edition

@@ -42,17 +42,6 @@ RSpec.describe Dimensions::Edition, type: :model do
       expect(results).to match_array(edition1)
     end
 
-    it '.relevant_content' do
-      edition = create :edition, document_type: 'news_story'
-      create :edition, document_type: 'redirect'
-      create :edition, document_type: 'gone'
-      create :edition, document_type: 'vanish'
-      create :edition, document_type: 'unpublishing'
-      create :edition, document_type: 'need'
-      results = subject.relevant_content
-      expect(results).to match_array(edition)
-    end
-
     describe '.outdated_subpages' do
       let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:locale) { 'fr' }
@@ -261,95 +250,6 @@ RSpec.describe Dimensions::Edition, type: :model do
       create :edition, base_path: 'value', latest: true
 
       expect(-> { create :edition, base_path: 'value', latest: false }).to_not raise_error
-    end
-  end
-
-  describe '.search' do
-    subject { Dimensions::Edition }
-
-    context 'by title' do
-      it 'returns matching titles' do
-        edition = create :edition, title: 'a long title'
-        create :edition
-
-        expect(subject.search('a long title')).to match_array(edition)
-      end
-
-      it 'is not case sensitive' do
-        edition = create :edition, title: 'Getting married in Spain'
-        create :edition
-
-        expect(subject.search('getting married in Spain')).to match_array(edition)
-      end
-
-      it 'matches all words' do
-        create :edition, title: 'How to change your car'
-        create :edition
-
-        expect(subject.search('How to change your car another-word')).to be_empty
-      end
-
-      describe 'stemming' do
-        it 'include plurals' do
-          edition = create :edition, title: 'How to change your car'
-          create :edition
-
-          expect(subject.search('How to change your cars')).to match_array(edition)
-        end
-
-        it 'include similar words' do
-          edition = create :edition, title: 'How to change your car'
-          create :edition
-
-          expect(subject.search('how changing cars')).to match_array(edition)
-        end
-      end
-    end
-
-    context 'by base_path' do
-      it 'returns matching base_paths' do
-        edition = create :edition, base_path: '/foo/bar/me'
-        create :edition
-
-        expect(subject.search('/foo/bar/me')).to match_array(edition)
-      end
-
-      it 'returns matching base_paths ignoring the `/`' do
-        edition = create :edition, base_path: ' foo bar me'
-        create :edition
-
-        expect(subject.search('/foo/bar/me')).to match_array(edition)
-      end
-
-      it 'is not case sensitive' do
-        edition = create :edition, base_path: 'foo bar me'
-        create :edition
-
-        expect(subject.search('foo bars me')).to match_array(edition)
-      end
-
-      it 'matches all words' do
-        create :edition, base_path: 'foo bar me'
-        create :edition
-
-        expect(subject.search('foo bar nothing')).to be_empty
-      end
-
-      describe 'stemming' do
-        it 'include plurals' do
-          edition = create :edition, base_path: '/foo/bar/renew-your-license'
-          create :edition
-
-          expect(subject.search('renew your license')).to match_array(edition)
-        end
-
-        it 'include similar words' do
-          edition = create :edition, base_path: '/driving/license/for-your-car'
-          create :edition
-
-          expect(subject.search('for-your-cars')).to match_array(edition)
-        end
-      end
     end
   end
 end
