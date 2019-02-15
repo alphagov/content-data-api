@@ -235,36 +235,63 @@ RSpec.describe Finders::Content do
   end
 
   describe 'Order' do
-    before do
-      edition1 = create :edition, title: 'last', organisation_id: primary_org_id
-      edition2 = create :edition, title: 'middle', organisation_id: primary_org_id
-      edition3 = create :edition, title: 'first', organisation_id: primary_org_id
+    context 'when values do not repeat' do
+      before do
+        edition1 = create :edition, title: 'last', organisation_id: primary_org_id
+        edition2 = create :edition, title: 'middle', organisation_id: primary_org_id
+        edition3 = create :edition, title: 'first', organisation_id: primary_org_id
 
-      create :metric, edition: edition1, date: 15.days.ago, upviews: 1, feedex: 3
-      create :metric, edition: edition2, date: 15.days.ago, upviews: 2, feedex: 2
-      create :metric, edition: edition3, date: 15.days.ago, upviews: 3, feedex: 1
-      recalculate_aggregations!
+        create :metric, edition: edition1, date: 15.days.ago, upviews: 1, feedex: 3
+        create :metric, edition: edition2, date: 15.days.ago, upviews: 2, feedex: 2
+        create :metric, edition: edition3, date: 15.days.ago, upviews: 3, feedex: 1
+        recalculate_aggregations!
+      end
+
+      it 'defaults order by descending unique pageviews' do
+        response = described_class.call(filter: filter)
+
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(first middle last))
+      end
+
+      it 'order by other attribute' do
+        response = described_class.call(filter: filter.merge(sort_attribute: 'feedex'))
+
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(last middle first))
+      end
+
+      it 'order in ascending' do
+        response = described_class.call(filter: filter.merge(sort_direction: 'asc'))
+
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(last middle first))
+      end
     end
 
-    it 'defaults order by descending unique pageviews' do
-      response = described_class.call(filter: filter)
+    context 'when values repeat' do
+      before do
+        edition1 = create :edition, title: 'first', warehouse_item_id: 'w1', organisation_id: primary_org_id
+        edition2 = create :edition, title: 'second', warehouse_item_id: 'w2', organisation_id: primary_org_id
 
-      titles = response.fetch(:results).map { |result| result.fetch(:title) }
-      expect(titles).to eq(%w(first middle last))
-    end
+        create :metric, edition: edition1, date: 15.days.ago, upviews: 1
+        create :metric, edition: edition2, date: 15.days.ago, upviews: 1
+        recalculate_aggregations!
+      end
 
-    it 'order by other attribute' do
-      response = described_class.call(filter: filter.merge(sort_attribute: 'feedex'))
+      it 'use column `warehouse_item_id` to ensure unique order' do
+        response = described_class.call(filter: filter.merge(sort_attribute: 'upviews'))
 
-      titles = response.fetch(:results).map { |result| result.fetch(:title) }
-      expect(titles).to eq(%w(last middle first))
-    end
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(second first))
+      end
 
-    it 'order in ascending' do
-      response = described_class.call(filter: filter.merge(sort_direction: 'asc'))
+      it 'respects the sort direction when sorting by `warehouse_item_id`' do
+        response = described_class.call(filter: filter.merge(sort_attribute: 'upviews', sort_direction: 'asc'))
 
-      titles = response.fetch(:results).map { |result| result.fetch(:title) }
-      expect(titles).to eq(%w(last middle first))
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(first second))
+      end
     end
   end
 
