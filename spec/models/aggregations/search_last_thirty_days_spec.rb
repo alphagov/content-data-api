@@ -4,7 +4,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
   subject { described_class }
 
   it_behaves_like 'a materialized view', described_class.table_name
-  include_examples 'calculates satisfaction'
+  include_examples 'calculates satisfaction', Date.yesterday
 
   it 'aggregates metrics for the last 30 days' do
     edition1 = create :edition, base_path: '/path1', date: 2.months.ago
