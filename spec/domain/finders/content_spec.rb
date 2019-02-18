@@ -245,6 +245,33 @@ RSpec.describe Finders::Content do
   end
 
   describe 'Order' do
+    context 'when there are NULLS' do
+      before do
+        edition1 = create :edition, title: 'first', organisation_id: primary_org_id
+        edition2 = create :edition, title: 'second', organisation_id: primary_org_id
+        edition3 = create :edition, title: 'null', organisation_id: primary_org_id
+
+        create :metric, edition: edition1, date: 15.days.ago, useful_yes: 1, useful_no: 0 # satisfaction = 1.0
+        create :metric, edition: edition2, date: 15.days.ago, useful_yes: 0, useful_no: 1 # satisfaction = 0.0
+        create :metric, edition: edition3, date: 15.days.ago, useful_yes: 0, useful_no: 0 # satisfaction = NULL
+        recalculate_aggregations!
+      end
+
+      it 'orders NULL last when in ascending direction' do
+        response = described_class.call(filter: filter.merge(sort_attribute: 'satisfaction', sort_direction: 'asc'))
+
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(second first null))
+      end
+
+      it 'orders NULL last when in descending direction' do
+        response = described_class.call(filter: filter.merge(sort_attribute: 'satisfaction', sort_direction: 'desc'))
+
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(first second null))
+      end
+    end
+
     context 'when values do not repeat' do
       before do
         edition1 = create :edition, title: 'last', organisation_id: primary_org_id

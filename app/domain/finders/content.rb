@@ -102,7 +102,7 @@ private
     raise "Order atrribute of #{column} not permitted." unless aggregates.include?(column.to_s)
     raise "Order direction of #{direction} not permitted." unless %w[ASC DESC].include?(direction.upcase)
 
-    "#{column} #{direction}, warehouse_item_id #{direction}"
+    "#{column} #{direction} NULLS LAST, warehouse_item_id #{direction}"
   end
 
   def aggregates
