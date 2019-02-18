@@ -30,8 +30,8 @@ RSpec.describe Finders::Content do
 
     response = described_class.call(filter: filter)
     expect(response[:results]).to contain_exactly(
-      hash_including(upviews: 35, searches: 11, satisfaction: 0.5652173913043478, satisfaction_score_responses: 23),
-      hash_including(upviews: 25, searches: 21, satisfaction: 0.3939393939393939, satisfaction_score_responses: 33),
+      hash_including(upviews: 35, searches: 11, satisfaction: 0.565217391304348),
+      hash_including(upviews: 25, searches: 21, satisfaction: 0.393939393939394),
     )
   end
 
@@ -92,8 +92,8 @@ RSpec.describe Finders::Content do
       response = described_class.call(filter: filter.merge(date_range: 'last-month'))
 
       expect(response[:results]).to contain_exactly(
-        hash_including(upviews: 20, searches: 1, satisfaction: 0.8, satisfaction_score_responses: 5),
-        hash_including(upviews: 10, searches: 11, satisfaction: 0.8, satisfaction_score_responses: 5),
+        hash_including(upviews: 20, searches: 1, satisfaction: 0.8),
+        hash_including(upviews: 10, searches: 11, satisfaction: 0.8),
       )
     end
 
@@ -109,8 +109,8 @@ RSpec.describe Finders::Content do
       response = described_class.call(filter: filter.merge(date_range: 'past-3-months'))
 
       expect(response[:results]).to contain_exactly(
-        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
-        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5),
       )
     end
 
@@ -126,8 +126,8 @@ RSpec.describe Finders::Content do
       response = described_class.call(filter: filter.merge(date_range: 'past-6-months'))
 
       expect(response[:results]).to contain_exactly(
-        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
-        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5),
       )
     end
 
@@ -143,8 +143,8 @@ RSpec.describe Finders::Content do
       response = described_class.call(filter: filter.merge(date_range: 'past-year'))
 
       expect(response[:results]).to contain_exactly(
-        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
-        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5),
       )
     end
   end
@@ -317,7 +317,6 @@ RSpec.describe Finders::Content do
       results = described_class.call(filter: filter)
       expect(results[:results].first).to include(
         satisfaction: nil,
-        satisfaction_score_responses: 0
       )
     end
   end

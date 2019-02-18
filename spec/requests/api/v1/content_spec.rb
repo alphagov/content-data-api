@@ -21,7 +21,6 @@ RSpec.describe '/content' do
           useful_no: 1,
           useful_yes: 1,
           satisfaction: 0.5,
-          satisfaction_score_responses: 2,
           searches: 1,
           pdf_count: 10,
           word_count: 300,
