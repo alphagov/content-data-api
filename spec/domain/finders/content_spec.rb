@@ -149,6 +149,16 @@ RSpec.describe Finders::Content do
     end
   end
 
+  describe 'Filter by all document types' do
+    it 'doesnt include document_type in the query' do
+      scope = described_class
+                .new(filter.merge(document_type: 'all'))
+                .send(:apply_filter)
+
+      expect(scope.to_sql).not_to include('document_type')
+    end
+  end
+
   describe 'Filter by all organisations' do
     let(:edition1) { create :edition, date: 15.days.ago }
     let(:edition2) { create :edition, date: 15.days.ago, organisation_id: nil }
