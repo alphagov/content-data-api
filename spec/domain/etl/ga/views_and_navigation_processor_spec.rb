@@ -68,7 +68,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
   it_behaves_like 'traps and logs errors in process', Etl::GA::ViewsAndNavigationService, :find_in_batches
 
-  private
+private
 
   def ga_response
     [
