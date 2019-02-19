@@ -59,7 +59,11 @@ private
   def find_by_document_type(scope)
     document_type = @filter.fetch(:document_type)
 
-    scope.where('document_type = ?', document_type)
+    if document_type == ALL
+      scope
+    else
+      scope.where('document_type = ?', document_type)
+    end
   end
 
   def find_by_organisation(scope)
