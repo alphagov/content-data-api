@@ -4,18 +4,19 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
   subject { described_class }
 
   it_behaves_like 'a materialized view', described_class.table_name
+  include_examples 'calculates satisfaction', Date.yesterday
 
   it 'aggregates metrics for the last 30 days' do
     edition1 = create :edition, base_path: '/path1', date: 2.months.ago
     create :metric, edition: edition1, date: Date.today, upviews: 1, useful_yes: 1, useful_no: 1, searches: 1
-    create :metric, edition: edition1, date: Date.yesterday, upviews: 5, useful_yes: 6, useful_no: 7, searches: 8
-    create :metric, edition: edition1, date: 15.days.ago, upviews: 10, useful_yes: 7, useful_no: 8, searches: 9
+    create :metric, edition: edition1, date: Date.yesterday, upviews: 5, useful_yes: 1, useful_no: 1, searches: 8
+    create :metric, edition: edition1, date: 15.days.ago, upviews: 10, useful_yes: 74, useful_no: 24, searches: 9
     create :metric, edition: edition1, date: 31.days.ago, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
 
     recalculate_aggregations!
 
     expect(subject.count).to eq(1)
-    expect(subject.first).to have_attributes(upviews: 15, useful_yes: 13, useful_no: 15, searches: 17)
+    expect(subject.first).to have_attributes(upviews: 15, useful_yes: 75, useful_no: 25, searches: 17, satisfaction: 0.75)
   end
 
   it 'aggregates by warehouse_item_id' do

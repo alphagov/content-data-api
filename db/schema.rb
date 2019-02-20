@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_14_113305) do
+ActiveRecord::Schema.define(version: 2019_02_18_124214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,6 +220,10 @@ ActiveRecord::Schema.define(version: 2019_02_14_113305) do
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
+          CASE
+              WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
+              ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
+          END AS satisfaction,
       aggregations.searches,
       facts_editions.words,
       facts_editions.pdf_count,
@@ -239,7 +243,7 @@ ActiveRecord::Schema.define(version: 2019_02_14_113305) do
             GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
-    WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
+    WHERE ((dimensions_editions.document_type)::text <> ALL (ARRAY[('gone'::character varying)::text, ('vanish'::character varying)::text, ('need'::character varying)::text, ('unpublishing'::character varying)::text, ('redirect'::character varying)::text]));
   SQL
   add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_thirty_days_gin_title", using: :gin
   add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_thirty_days_gin_base_path", using: :gin
@@ -260,6 +264,10 @@ ActiveRecord::Schema.define(version: 2019_02_14_113305) do
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
+          CASE
+              WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
+              ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
+          END AS satisfaction,
       aggregations.searches,
       facts_editions.words,
       facts_editions.pdf_count,
@@ -279,7 +287,7 @@ ActiveRecord::Schema.define(version: 2019_02_14_113305) do
             GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
-    WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
+    WHERE ((dimensions_editions.document_type)::text <> ALL (ARRAY[('gone'::character varying)::text, ('vanish'::character varying)::text, ('need'::character varying)::text, ('unpublishing'::character varying)::text, ('redirect'::character varying)::text]));
   SQL
   add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_month_gin_title", using: :gin
   add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_month_gin_base_path", using: :gin
@@ -300,6 +308,10 @@ ActiveRecord::Schema.define(version: 2019_02_14_113305) do
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
+          CASE
+              WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
+              ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
+          END AS satisfaction,
       aggregations.searches,
       facts_editions.words,
       facts_editions.pdf_count,
@@ -363,6 +375,10 @@ ActiveRecord::Schema.define(version: 2019_02_14_113305) do
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
+          CASE
+              WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
+              ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
+          END AS satisfaction,
       aggregations.searches,
       facts_editions.words,
       facts_editions.pdf_count,
@@ -426,6 +442,10 @@ ActiveRecord::Schema.define(version: 2019_02_14_113305) do
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
+          CASE
+              WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
+              ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
+          END AS satisfaction,
       aggregations.searches,
       facts_editions.words,
       facts_editions.pdf_count,

@@ -102,15 +102,14 @@ private
     raise "Order atrribute of #{column} not permitted." unless aggregates.include?(column.to_s)
     raise "Order direction of #{direction} not permitted." unless %w[ASC DESC].include?(direction.upcase)
 
-    "#{column} #{direction}, warehouse_item_id #{direction}"
+    "#{column} #{direction} NULLS LAST, warehouse_item_id #{direction}"
   end
 
   def aggregates
-    %w(base_path title organisation_id document_type upviews pviews useful_yes useful_no searches feedex pdf_count words reading_time)
+    %w(base_path title organisation_id document_type upviews pviews useful_yes useful_no satisfaction searches feedex pdf_count words reading_time)
   end
 
   def array_to_hash(array)
-    satisfaction_responses = array[:useful_yes].to_i + array[:useful_no].to_i
     {
       base_path: array[:base_path],
       title: array[:title],
@@ -121,8 +120,7 @@ private
       useful_yes: array[:useful_yes].to_i,
       useful_no: array[:useful_no].to_i,
       feedex: array[:feedex].to_i,
-      satisfaction: satisfaction_responses.zero? ? nil : (array[:useful_yes].to_f / satisfaction_responses).to_f,
-      satisfaction_score_responses: satisfaction_responses.to_i,
+      satisfaction: array[:satisfaction],
       searches: array[:searches].to_i,
       pdf_count: array[:pdf_count].to_i,
       words: array[:words].to_i,

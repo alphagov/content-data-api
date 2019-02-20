@@ -9,7 +9,6 @@ json.results @content_items do |content_item|
   json.useful_yes content_item[:useful_yes]
   json.useful_no content_item[:useful_no]
   json.satisfaction content_item[:satisfaction]
-  json.satisfaction_score_responses content_item[:satisfaction_score_responses]
   json.searches content_item[:searches]
   json.pdf_count content_item[:pdf_count]
   json.word_count content_item[:words]

@@ -30,8 +30,8 @@ RSpec.describe Finders::Content do
 
     response = described_class.call(filter: filter)
     expect(response[:results]).to contain_exactly(
-      hash_including(upviews: 35, searches: 11, satisfaction: 0.5652173913043478, satisfaction_score_responses: 23),
-      hash_including(upviews: 25, searches: 21, satisfaction: 0.3939393939393939, satisfaction_score_responses: 33),
+      hash_including(upviews: 35, searches: 11, satisfaction: 0.565217391304348),
+      hash_including(upviews: 25, searches: 21, satisfaction: 0.393939393939394),
     )
   end
 
@@ -92,8 +92,8 @@ RSpec.describe Finders::Content do
       response = described_class.call(filter: filter.merge(date_range: 'last-month'))
 
       expect(response[:results]).to contain_exactly(
-        hash_including(upviews: 20, searches: 1, satisfaction: 0.8, satisfaction_score_responses: 5),
-        hash_including(upviews: 10, searches: 11, satisfaction: 0.8, satisfaction_score_responses: 5),
+        hash_including(upviews: 20, searches: 1, satisfaction: 0.8),
+        hash_including(upviews: 10, searches: 11, satisfaction: 0.8),
       )
     end
 
@@ -109,8 +109,8 @@ RSpec.describe Finders::Content do
       response = described_class.call(filter: filter.merge(date_range: 'past-3-months'))
 
       expect(response[:results]).to contain_exactly(
-        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
-        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5),
       )
     end
 
@@ -126,8 +126,8 @@ RSpec.describe Finders::Content do
       response = described_class.call(filter: filter.merge(date_range: 'past-6-months'))
 
       expect(response[:results]).to contain_exactly(
-        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
-        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5),
       )
     end
 
@@ -143,8 +143,8 @@ RSpec.describe Finders::Content do
       response = described_class.call(filter: filter.merge(date_range: 'past-year'))
 
       expect(response[:results]).to contain_exactly(
-        hash_including(upviews: 35, searches: 11, satisfaction: 0.5, satisfaction_score_responses: 10),
-        hash_including(upviews: 25, searches: 21, satisfaction: 0.5, satisfaction_score_responses: 10),
+        hash_including(upviews: 35, searches: 11, satisfaction: 0.5),
+        hash_including(upviews: 25, searches: 21, satisfaction: 0.5),
       )
     end
   end
@@ -245,6 +245,33 @@ RSpec.describe Finders::Content do
   end
 
   describe 'Order' do
+    context 'when there are NULLS' do
+      before do
+        edition1 = create :edition, title: 'first', organisation_id: primary_org_id
+        edition2 = create :edition, title: 'second', organisation_id: primary_org_id
+        edition3 = create :edition, title: 'null', organisation_id: primary_org_id
+
+        create :metric, edition: edition1, date: 15.days.ago, useful_yes: 1, useful_no: 0 # satisfaction = 1.0
+        create :metric, edition: edition2, date: 15.days.ago, useful_yes: 0, useful_no: 1 # satisfaction = 0.0
+        create :metric, edition: edition3, date: 15.days.ago, useful_yes: 0, useful_no: 0 # satisfaction = NULL
+        recalculate_aggregations!
+      end
+
+      it 'orders NULL last when in ascending direction' do
+        response = described_class.call(filter: filter.merge(sort_attribute: 'satisfaction', sort_direction: 'asc'))
+
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(second first null))
+      end
+
+      it 'orders NULL last when in descending direction' do
+        response = described_class.call(filter: filter.merge(sort_attribute: 'satisfaction', sort_direction: 'desc'))
+
+        titles = response.fetch(:results).map { |result| result.fetch(:title) }
+        expect(titles).to eq(%w(first second null))
+      end
+    end
+
     context 'when values do not repeat' do
       before do
         edition1 = create :edition, title: 'last', organisation_id: primary_org_id
@@ -317,7 +344,6 @@ RSpec.describe Finders::Content do
       results = described_class.call(filter: filter)
       expect(results[:results].first).to include(
         satisfaction: nil,
-        satisfaction_score_responses: 0
       )
     end
   end

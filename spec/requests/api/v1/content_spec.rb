@@ -21,7 +21,6 @@ RSpec.describe '/content' do
           useful_no: 1,
           useful_yes: 1,
           satisfaction: 0.5,
-          satisfaction_score_responses: 2,
           searches: 1,
           pdf_count: 10,
           word_count: 300,
@@ -277,32 +276,42 @@ RSpec.describe '/content' do
 
   describe 'Sort by' do
     before do
-      edition1 = create :edition, date: 1.month.ago, title: 'Edition A'
-      create :metric, date: 15.days.ago, edition: edition1, upviews: 100, useful_yes: 100, useful_no: 100, searches: 1
+      edition1 = create :edition, date: 1.month.ago, title: 'A', document_type: 'news_story'
+      create :metric, date: 15.days.ago, edition: edition1, upviews: 10, useful_yes: 5, useful_no: 10, searches: 10
 
-      edition2 = create :edition, date: 1.month.ago, title: 'Edition B'
-      create :metric, date: 10.days.ago, edition: edition2, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
+      edition2 = create :edition, date: 1.month.ago, title: 'B', document_type: 'guide'
+      create :metric, date: 10.days.ago, edition: edition2, upviews: 100, useful_yes: 10, useful_no: 5, searches: 1
 
-      edition3 = create :edition, date: 1.month.ago, title: 'Edition C'
-      create :metric, date: 10.days.ago, edition: edition3, upviews: 1, useful_yes: 1, useful_no: 1, searches: 100
+      edition3 = create :edition, date: 1.month.ago, title: 'C', document_type: 'homepage'
+      create :metric, date: 10.days.ago, edition: edition3, upviews: 1, useful_yes: 10, useful_no: 10, searches: 100
 
       recalculate_aggregations!
     end
 
-    it 'sorts results by daily metric attribute ascending' do
-      get '/content', params: { date_range: 'past-30-days', organisation_id: 'all', sort: 'searches:asc' }
+    sort_results = {
+      'title': %w[A B C],
+      'document_type': %w[B C A],
+      'upviews': %w[C A B],
+      'satisfaction': %w[A C B],
+      'searches': %w[B A C]
+    }
 
-      response_body = JSON.parse(response.body).deep_symbolize_keys
-      content_item_titles = response_body[:results].map { |i| i[:title] }
-      expect(content_item_titles).to eq(['Edition A', 'Edition B', 'Edition C'])
-    end
+    sort_results.each do |sort_key, expected_values|
+      it "sorts results by #{sort_key} attribute ascending" do
+        get '/content', params: { date_range: 'past-30-days', organisation_id: 'all', sort: "#{sort_key}:asc" }
 
-    it 'sorts results by descending' do
-      get '/content', params: { date_range: 'past-30-days', organisation_id: 'all', sort: 'searches:desc' }
+        response_body = JSON.parse(response.body).deep_symbolize_keys
+        content_item_titles = response_body[:results].map { |i| i[:title] }
+        expect(content_item_titles).to eq(expected_values)
+      end
 
-      response_body = JSON.parse(response.body).deep_symbolize_keys
-      content_item_titles = response_body[:results].map { |i| i[:title] }
-      expect(content_item_titles).to eq(['Edition C', 'Edition B', 'Edition A'])
+      it "sorts results by #{sort_key} attribute descending" do
+        get '/content', params: { date_range: 'past-30-days', organisation_id: 'all', sort: "#{sort_key}:desc" }
+
+        response_body = JSON.parse(response.body).deep_symbolize_keys
+        content_item_titles = response_body[:results].map { |i| i[:title] }
+        expect(content_item_titles).to eq(expected_values.reverse)
+      end
     end
   end
 
