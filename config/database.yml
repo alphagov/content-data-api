@@ -15,6 +15,4 @@ test:
 
 production:
   <<: *default
-  database: content_performance_manager_production
-  username: content_performance_manager
-  password: <%= ENV['CONTENT-PERFORMANCE-MANAGER_DATABASE_PASSWORD'] %>
+  # Set using the DATABASE_URL environment variable
