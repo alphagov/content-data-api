@@ -51,9 +51,9 @@ module Streams
       part_sub_path = sub_path_for_part(part, index)
 
       if part_sub_path
-        "#{base_path}/#{part_sub_path}"
+        CGI::unescape "#{base_path}/#{part_sub_path}"
       else
-        base_path
+        CGI::unescape base_path
       end
     end
 

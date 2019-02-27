@@ -99,5 +99,19 @@ RSpec.describe Streams::Messages::MultipartMessage do
         ])
       end
     end
+
+    context 'when unescaped characters in base_path' do
+      let(:messages) do
+        message = build(:message, :with_parts, base_path: '/gov.uk')
+        message.payload['details']['parts'][1]['slug'] = '%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%A2'
+
+        subject.new(message.payload, "routing_key")
+      end
+
+      it 'decodes the characters' do
+        expect(messages.edition_attributes[0]).to include(base_path: '/gov.uk')
+        expect(messages.edition_attributes[1]).to include(base_path: '/gov.uk/การย')
+      end
+    end
   end
 end
