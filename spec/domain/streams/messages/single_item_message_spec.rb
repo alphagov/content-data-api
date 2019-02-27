@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 RSpec.describe Streams::Messages::SingleItemMessage do
   include PublishingEventProcessingSpecHelper
 
@@ -30,6 +32,19 @@ RSpec.describe Streams::Messages::SingleItemMessage do
           acronym: nil
         )
       )
+    end
+  end
+
+  context 'when unescaped characters in the base_path' do
+    let(:message) do
+      message = build :message
+      message.payload['base_path'] = '/gov.uk/%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%A2'
+
+      subject.new(message.payload, "routing_key")
+    end
+
+    it 'decodes the characters' do
+      expect(message.edition_attributes).to include(base_path: '/gov.uk/การย')
     end
   end
 

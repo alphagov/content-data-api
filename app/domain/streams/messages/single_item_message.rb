@@ -26,7 +26,7 @@ module Streams
   private
 
     def base_path
-      @payload.fetch('base_path')
+      CGI::unescape @payload.fetch('base_path')
     end
 
     def title
