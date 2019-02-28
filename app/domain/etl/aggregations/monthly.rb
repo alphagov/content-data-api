@@ -65,7 +65,7 @@ private
         sum(entrances),
         sum(searches),
         sum(feedex),
-        sum(satisfaction),
+        calculate_satisfaction(sum(useful_yes), sum(useful_no)),
         sum(useful_yes),
         sum(useful_no),
         sum(exits),

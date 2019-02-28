@@ -65,7 +65,9 @@ RSpec.describe Etl::Aggregations::Monthly do
     )
   end
 
-  Metric.daily_metrics.map(&:name).each do |metric_name|
+  sum_metrics = Metric.daily_metrics.map(&:name)
+  sum_metrics.delete('satisfaction')
+  sum_metrics.each do |metric_name|
     it "Calculates aggregations for metric: `#{metric_name}`" do
       create :metric, edition: edition1, date: '2018-02-21', metric_name => 10
       create :metric, edition: edition1, date: '2018-02-22', metric_name => 20
@@ -74,6 +76,15 @@ RSpec.describe Etl::Aggregations::Monthly do
 
       expect(Aggregations::MonthlyMetric.first).to have_attributes(metric_name => 30)
     end
+  end
+
+  it "Calculates aggregations for metric: satisfaction" do
+    create :metric, edition: edition1, date: '2018-02-21', useful_yes: 5, useful_no: 5, satisfaction: 0.5
+    create :metric, edition: edition1, date: '2018-02-22', useful_yes: 1, useful_no: 0, satisfaction: 1.0
+
+    subject.process(date: date)
+
+    expect(Aggregations::MonthlyMetric.first).to have_attributes(satisfaction: 0.545454545454545)
   end
 
   describe 'it can run multiple times for any month' do
