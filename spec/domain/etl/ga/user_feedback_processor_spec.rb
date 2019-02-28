@@ -81,7 +81,7 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
       expect(fact.reload.satisfaction).to be_within(0.1).of(1.0)
     end
 
-    it 'sets `satisfaction = 0.0` with `useful_yes:0` and `no: 1`' do
+    it 'sets `satisfaction = 0.0` with `useful_yes: 0` and `no: 1`' do
       allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 0, useful_no: 1))
       described_class.process(date: date)
 
