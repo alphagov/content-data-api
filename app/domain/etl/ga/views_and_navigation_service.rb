@@ -1,4 +1,6 @@
 class Etl::GA::ViewsAndNavigationService
+  PAGE_PATH_LENGTH_LIMIT = 1500
+
   def self.find_in_batches(*args, &block)
     new.find_in_batches(*args, &block)
   end
@@ -22,6 +24,8 @@ private
 
   def append_data_labels(values)
     page_path, pviews, upviews, entrances, exits, bounces, page_time = *values
+
+    page_path = page_path.slice(PAGE_PATH_LENGTH_LIMIT) if page_path.length > PAGE_PATH_LENGTH_LIMIT
 
     {
       'page_path' => page_path,

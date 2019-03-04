@@ -11,23 +11,23 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
   describe "#find_in_batches" do
     let(:date) { Date.new(2018, 2, 20) }
 
-    before do
-      allow(google_client).to receive(:fetch_all) do
-        [
-          build_report_data(
-            build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1 1 1))
-          ),
-          build_report_data(
-            build_report_row(dimensions: %w(/bar), metrics: %w(2 2 2 2 2 2 2 2))
-          ),
-          build_report_data(
-            build_report_row(dimensions: %w(/cool), metrics: %w(3 3 3 3 3 3 3 3))
-          ),
-        ]
-      end
-    end
-
     context 'when #find_in_batches is called with a block' do
+      before do
+        allow(google_client).to receive(:fetch_all) do
+          [
+            build_report_data(
+              build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1 1 1))
+            ),
+            build_report_data(
+              build_report_row(dimensions: %w(/bar), metrics: %w(2 2 2 2 2 2 2 2))
+            ),
+            build_report_data(
+              build_report_row(dimensions: %w(/cool), metrics: %w(3 3 3 3 3 3 3 3))
+            ),
+          ]
+        end
+      end
+
       it 'yields successive report data' do
         arg1 = [
           a_hash_including(
@@ -68,5 +68,41 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
           .to yield_successive_args(arg1, arg2)
       end
     end
+
+    context 'when report data has very long page_path' do
+      before do
+        allow(google_client).to receive(:fetch_all) do
+          [
+            build_report_data(
+              build_report_row(dimensions: [long_page_path], metrics: %w(1 1 1 1 1 1 1 1))
+            ),
+          ]
+        end
+      end
+
+      it 'yields shortened page_path value' do
+        arg = [
+          a_hash_including(
+            'page_path' => long_page_path.slice(1500),
+            'pviews' => 1,
+            'upviews' => 1,
+            'entrances' => 1,
+            'exits' => 1,
+            'bounces' => 1,
+            'page_time' => 1,
+            'date' => '2018-02-20',
+          )
+        ]
+
+        expect { |probe| subject.find_in_batches(date: date, batch_size: 1, &probe) }
+          .to yield_with_args(arg)
+      end
+    end
+  end
+
+private
+
+  def long_page_path
+    "/".concat("a" * 1600)
   end
 end
