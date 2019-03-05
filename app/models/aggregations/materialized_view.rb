@@ -1,4 +1,6 @@
-class Aggregations::MaterializedView
+class Aggregations::MaterializedView < ActiveRecord::Base
+  self.abstract_class = true
+
   def self.prepare
     increase_work_mem_for_current_transaction
   end
@@ -12,5 +14,10 @@ class Aggregations::MaterializedView
   # This should never be enabled globally.
   def self.increase_work_mem_for_current_transaction
     ActiveRecord::Base.connection.execute("set local work_mem = '500MB'")
+  end
+
+  def self.refresh
+    prepare
+    Scenic.database.refresh_materialized_view(table_name, concurrently: true, cascade: false)
   end
 end

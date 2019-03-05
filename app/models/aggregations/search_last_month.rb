@@ -1,6 +1,2 @@
-class Aggregations::SearchLastMonth < ApplicationRecord
-  def self.refresh
-    Aggregations::MaterializedView.prepare
-    Scenic.database.refresh_materialized_view(table_name, concurrently: true, cascade: false)
-  end
+class Aggregations::SearchLastMonth < Aggregations::MaterializedView
 end
