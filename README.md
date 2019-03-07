@@ -5,7 +5,7 @@ A data warehouse that stores content and content metrics, to help content owners
 This repository contains:
 - Extract, transform, load (ETL) processes for populating the data warehouse
 - An internal tool for exploring the data (AKA the sandbox)
-- Content performance API ([docs](content-performance-api.publishing.service.gov.uk/#gov-uk-content-performance-api))
+- [An API that exposes metrics and content changes][api-doc]  (content-performance-api.publishing.service.gov.uk/#gov-uk-content-performance-api))
 
 Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback).
 
@@ -59,18 +59,8 @@ If you are a GOV.UK developer using the development VM, you can [run the replica
 
 To run the ETL process locally, you need to  [set up Google Analytics credentials in development](doc/google_analytics_setup.md).
 
-## Updating the API
-### All changes
-Anytime you change what the API accepts as input or returns as output, you need to [update the OpenAPI spec and documentation](doc/api/README.md).
 
-### Backwards incompatable changes
-Currently the API is in alpha, so users should expect backwards incompatable changes without warning.
 
-When the API is live, we will follow the [GDS API technical and data standards](https://www.gov.uk/guidance/gds-api-technical-and-data-standards#iterate-your-api)
-- make backwards compatible changes where possible
-- use a version number as part of the URL when making backwards incompatible changes
-- make a new endpoint available for significant changes
-- provide notices for deprecated endpoints
 
 ## Licence
 
@@ -79,3 +69,4 @@ When the API is live, we will follow the [GDS API technical and data standards](
 [docker]: https://www.docker.com/
 [docker compose]: https://docs.docker.com/compose/overview/
 [GOV.UK replication scripts]: https://docs.publishing.service.gov.uk/manual/replicate-app-data-locally.html
+[api-doc]: /doc/api.md
