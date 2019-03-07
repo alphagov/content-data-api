@@ -48,7 +48,7 @@ To run the test suite:
  $ bundle exec rake
  ```
 
-### Populating data
+## Populating data
 
 If you are a GOV.UK developer using the development VM, you can [run the replication script to populate the database](doc/import_production_data.md).
 

@@ -40,7 +40,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'govuk-lint', '3.11.0'
   gem 'govuk_schemas', '3.2.0'
-  gem 'guard-rspec', require: false
   gem 'listen'
   gem 'pry-byebug'
   gem 'pry-rails'
