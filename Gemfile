@@ -25,7 +25,6 @@ gem 'pg'
 gem 'rack-proxy'
 gem 'rails', '~> 5.2'
 gem 'ruby-progressbar'
-gem 'sass-rails'
 gem 'scenic'
 gem 'uuid'
 
@@ -37,14 +36,12 @@ end
 
 group :development, :test do
   gem 'byebug'
-  gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'govuk-lint', '3.11.0'
   gem 'govuk_schemas', '3.2.0'
   gem 'guard-rspec', require: false
   gem 'listen'
-  gem 'phantomjs'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem "rack", ">= 2.0.6"
