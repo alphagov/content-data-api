@@ -35,12 +35,7 @@ In the development VM, go to:
 
 ```bash
 cd /var/govuk/govuk-puppet/development-vm
-```
-
-Then run:
-
- ```bash
- bowl content-performance-manager
+bundle exec bowl content-performance-manager
  ```
 
 The application can be accessed from:
