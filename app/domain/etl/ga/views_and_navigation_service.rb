@@ -12,6 +12,7 @@ class Etl::GA::ViewsAndNavigationService
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_data_labels))
+      .reject(&method(:long_query_string?))
       .map { |h| h['date'] = date.strftime('%F'); h }
       .each_slice(batch_size) { |slice| yield slice }
   end
@@ -25,8 +26,6 @@ private
   def append_data_labels(values)
     page_path, pviews, upviews, entrances, exits, bounces, page_time = *values
 
-    page_path = page_path.slice(PAGE_PATH_LENGTH_LIMIT) if page_path.length > PAGE_PATH_LENGTH_LIMIT
-
     {
       'page_path' => page_path,
       'pviews' => pviews,
@@ -37,6 +36,10 @@ private
       'bounces' => bounces,
       'page_time' => page_time
     }
+  end
+
+  def long_query_string?(data)
+    data['page_path'].length > PAGE_PATH_LENGTH_LIMIT && !URI.parse(data['page_path']).query.nil?
   end
 
   def extract_dimensions_and_metrics(row)

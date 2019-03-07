@@ -69,21 +69,22 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
       end
     end
 
-    context 'when report data has very long page_path' do
-      before do
+    context 'when report data has page path with long query strings' do
+      it 'should ignore page' do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
-              build_report_row(dimensions: [long_page_path], metrics: %w(1 1 1 1 1 1 1 1))
+              build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1 1 1))
+            ),
+            build_report_data(
+              build_report_row(dimensions: [path_with_long_query], metrics: %w(1 1 1 1 1 1 1 1))
             ),
           ]
         end
-      end
 
-      it 'yields shortened page_path value' do
         arg = [
           a_hash_including(
-            'page_path' => long_page_path.slice(1500),
+            'page_path' => '/foo',
             'pviews' => 1,
             'upviews' => 1,
             'entrances' => 1,
@@ -102,7 +103,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
 
 private
 
-  def long_page_path
-    "/".concat("a" * 1600)
+  def path_with_long_query
+    "/foo?q=".concat("a" * 1600)
   end
 end
