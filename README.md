@@ -7,7 +7,7 @@ This repository contains:
 - An internal tool for exploring the data (AKA the sandbox)
 - Content performance API ([docs](content-performance-api.publishing.service.gov.uk/#gov-uk-content-performance-api))
 
-Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback), and [readability indicators](https://github.com/alphagov/govuk-content-quality-metrics).
+Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback).
 
 ## Live examples
 
