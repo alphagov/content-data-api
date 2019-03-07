@@ -1,3 +1,4 @@
+require_dependency 'concerns/trace_and_recoverable'
 class Etl::GA::InternalSearchProcessor
   include Concerns::TraceAndRecoverable
   include Etl::GA::Concerns::TransformPath

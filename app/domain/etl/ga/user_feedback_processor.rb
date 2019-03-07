@@ -1,3 +1,4 @@
+require_dependency 'concerns/trace_and_recoverable'
 class Etl::GA::UserFeedbackProcessor
   include Concerns::TraceAndRecoverable
   include Etl::GA::Concerns::TransformPath
