@@ -1,9 +1,0 @@
-.env
-.git
-.travis.yml
-/log/*
-/tmp/*
-Dockerfile
-Jenkinsfile
-README.md
-startup.sh

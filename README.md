@@ -66,7 +66,5 @@ To run the ETL process locally, you need to  [set up Google Analytics credential
 
 [MIT License](LICENCE)
 
-[docker]: https://www.docker.com/
-[docker compose]: https://docs.docker.com/compose/overview/
 [GOV.UK replication scripts]: https://docs.publishing.service.gov.uk/manual/replicate-app-data-locally.html
 [api-doc]: /doc/api.md
