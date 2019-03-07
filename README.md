@@ -9,6 +9,11 @@ This repository contains:
 
 Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback), and [readability indicators](https://github.com/alphagov/govuk-content-quality-metrics).
 
+## Live examples
+
+- [List all metrics](https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics)
+- [Last month of data for all organisations](https://content-performance-manager.publishing.service.gov.uk/content?date_range=last-month&search_term=&document_type=all&organisation_id=all)
+
 ## Nomenclature
 
 - **Data warehouse**: the database where we store all the metrics.
