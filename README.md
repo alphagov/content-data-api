@@ -61,4 +61,4 @@ If you are a GOV.UK developer using the development VM, you can [run the replica
 [MIT License](LICENCE)
 
 [GOV.UK replication scripts]: https://docs.publishing.service.gov.uk/manual/replicate-app-data-locally.html
-[api-doc]: /doc/api.md
+[api-doc]: /doc/api
