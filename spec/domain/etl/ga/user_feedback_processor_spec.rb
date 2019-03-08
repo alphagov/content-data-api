@@ -87,6 +87,13 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
 
       expect(fact.reload.satisfaction).to be_within(0.1).of(0.0)
     end
+
+    it 'set `satisfaction = nil` with `useful_yes:0` and `no: 0`' do
+      allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 0, useful_no: 0))
+      described_class.process(date: date)
+
+      expect(fact.reload.satisfaction).to be_nil
+    end
   end
 
   it_behaves_like 'traps and logs errors in process', Etl::GA::UserFeedbackService, :find_in_batches

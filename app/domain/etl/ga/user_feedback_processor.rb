@@ -46,7 +46,7 @@ private
       UPDATE facts_metrics
       SET useful_no = s.useful_no,
           useful_yes = s.useful_yes,
-          satisfaction= s.useful_yes / (s.useful_yes + s.useful_no::float)
+          satisfaction= s.useful_yes / NULLIF((s.useful_yes + s.useful_no::float),0)
       FROM (
         SELECT useful_no,
                useful_yes,
