@@ -8,6 +8,9 @@ class Etl::Edition::Content::Parsers::NoContent
       coming_soon
       completed_transaction
       external_content
+      facet
+      facet_group
+      facet_value
       generic
       homepage
       knowledge_alpha

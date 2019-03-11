@@ -10,6 +10,9 @@ RSpec.describe Etl::Edition::Content::Parser do
       coming_soon
       completed_transaction
       external_content
+      facet
+      facet_group
+      facet_value
       generic
       homepage
       knowledge_alpha
