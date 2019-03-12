@@ -1,13 +1,23 @@
 namespace :data_migrations do
   desc 'Sets all metrics with no useful yes/no responses to have null for satisfaction'
-  task satisfaction_defaults_to_null: :environment do
-    puts "Setting default satisfaction to nil for pages with no responses"
+  task :satisfaction_defaults_to_null, %i[from to] => [:environment] do |_t, args|
+    BATCH_SIZE = 25_000
+    from = args[:from].to_date
+    to = args[:to].to_date
 
-    Facts::Metric
-      .where('useful_yes = 0')
-      .where('useful_no = 0')
-      .update_all(satisfaction: nil)
+    (from..to).each do |date|
+      puts "Setting default satisfaction to nil for pages with no responses for #{date}"
 
-    puts "END"
+      Facts::Metric
+        .where(useful_yes: 0, useful_no: 0)
+        .where(dimensions_date: Dimensions::Date.find(date))
+        .in_batches(of: BATCH_SIZE)
+        .each_with_index do |metrics, index|
+          puts "Updating batch of #{(index + 1) * BATCH_SIZE} records"
+          metrics.update_all(satisfaction: nil)
+        end
+
+      puts "END"
+    end
   end
 end
