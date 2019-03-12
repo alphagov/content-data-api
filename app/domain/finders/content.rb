@@ -115,16 +115,16 @@ private
       title: array[:title],
       organisation_id: array[:organisation_id],
       document_type: array[:document_type],
-      upviews: array[:upviews].to_i,
-      pviews: array[:pviews].to_i,
-      useful_yes: array[:useful_yes].to_i,
-      useful_no: array[:useful_no].to_i,
-      feedex: array[:feedex].to_i,
+      upviews: array[:upviews],
+      pviews: array[:pviews],
+      useful_yes: array[:useful_yes],
+      useful_no: array[:useful_no],
+      feedex: array[:feedex],
       satisfaction: array[:satisfaction],
-      searches: array[:searches].to_i,
-      pdf_count: array[:pdf_count].to_i,
-      words: array[:words].to_i,
-      reading_time: array[:reading_time].to_i
+      searches: array[:searches],
+      pdf_count: array[:pdf_count],
+      words: array[:words],
+      reading_time: array[:reading_time],
     }
   end
 end
