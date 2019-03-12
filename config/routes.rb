@@ -22,5 +22,10 @@ Rails.application.routes.draw do
     Healthchecks::EtlGoogleAnalytics.build(:upviews),
     Healthchecks::EtlGoogleAnalytics.build(:searches),
     Healthchecks::EtlGoogleAnalytics.build(:feedex),
+    Healthchecks::SearchAggregations.build(:last_month),
+    Healthchecks::SearchAggregations.build(:last_six_months),
+    Healthchecks::SearchAggregations.build(:last_thirty_days),
+    Healthchecks::SearchAggregations.build(:last_three_months),
+    Healthchecks::SearchAggregations.build(:last_twelve_months),
   )
 end

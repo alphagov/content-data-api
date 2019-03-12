@@ -15,6 +15,13 @@ namespace :etl do
     end
   end
 
+  desc 'Run Etl::Aggregations::Search'
+  task :repopulate_aggregations_search do
+    console_log "repopulating Search Aggregations"
+    Etl::Aggregations::Search.process
+    console_log "finished repopulating Search Aggregations"
+  end
+
   desc 'Run Etl::GA::ViewsAndNavigationProcessor for range of dates'
   task :repopulateviews, %i[from to] => [:environment] do |_t, args|
     from = args[:from].to_date

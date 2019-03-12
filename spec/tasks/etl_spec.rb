@@ -20,6 +20,16 @@ RSpec.describe 'etl.rake', type: task do
     end
   end
 
+  describe 'rake etl:repopulate_aggregations_search' do
+    it 'calls Etl::Aggregations::Search' do
+      processor = class_double(Etl::Aggregations::Search, process: true).as_stubbed_const
+
+      Rake::Task['etl:repopulate_aggregations_search'].invoke
+
+      expect(processor).to have_received(:process)
+    end
+  end
+
   describe 'rake etl:repopulateviews' do
     it 'calls Etl::GA::ViewsAndNavigationProcessor with each date' do
       processor = class_double(Etl::GA::ViewsAndNavigationProcessor, process: true).as_stubbed_const

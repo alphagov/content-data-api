@@ -1,0 +1,32 @@
+RSpec.describe Healthchecks::SearchAggregations do
+  include AggregationsSupport
+  include_examples 'Healthcheck enabled/disabled within time range'
+
+  let(:subject) { described_class.build(:last_month) }
+
+  its(:name) { is_expected.to eq(:search_last_month) }
+
+  describe 'status' do
+    let!(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
+    let!(:edition) { create :edition, organisation_id: primary_org_id }
+    let!(:metric1) { create :metric, edition: edition, date: 15.days.ago }
+    let!(:metric2) { create :metric, edition: edition, date: 10.days.ago }
+
+    let(:from) { Date.today.last_month.beginning_of_month }
+    let(:to) { Date.today.last_month.end_of_month }
+
+    context 'When there are search views for the last thirty days' do
+      before do
+        recalculate_aggregations!
+      end
+
+      its(:status) { is_expected.to eq(:ok) }
+      its(:message) { is_expected.to eq(nil) }
+    end
+
+    context 'There are no search views for the last month' do
+      its(:status) { is_expected.to eq(:critical) }
+      its(:message) { is_expected.to eq('ETL :: no Last month searches updated from yesterday') }
+    end
+  end
+end

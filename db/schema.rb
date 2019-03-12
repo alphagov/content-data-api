@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_11_164701) do
+ActiveRecord::Schema.define(version: 2019_03_12_141439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -209,72 +209,95 @@ ActiveRecord::Schema.define(version: 2019_03_11_164701) do
   add_foreign_key "facts_metrics", "dimensions_dates", primary_key: "date"
   add_foreign_key "facts_metrics", "dimensions_editions"
 
-  create_view "aggregations_search_last_twelve_months", materialized: true, sql_definition: <<-SQL
+  create_view "aggregations_search_last_thirty_days", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
       dimensions_editions.title,
       dimensions_editions.document_type,
       dimensions_editions.base_path,
       dimensions_editions.organisation_id,
       dimensions_editions.id AS dimensions_edition_id,
-      (aggregations.upviews)::bigint AS upviews,
-      (aggregations.pviews)::bigint AS pviews,
-      (aggregations.feedex)::bigint AS feedex,
-      (aggregations.useful_yes)::bigint AS useful_yes,
-      (aggregations.useful_no)::bigint AS useful_no,
+      aggregations.upviews,
+      aggregations.pviews,
+      aggregations.feedex,
+      aggregations.useful_yes,
+      aggregations.useful_no,
+      ('now'::text)::date AS updated_at,
           CASE
-              WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
+              WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
           END AS satisfaction,
-      (aggregations.searches)::bigint AS searches,
+      aggregations.searches,
       facts_editions.words,
       facts_editions.pdf_count,
       facts_editions.reading_time
-     FROM ((( SELECT agg.warehouse_item_id,
-              max(agg.dimensions_edition_id) AS dimensions_edition_id,
-              sum(agg.upviews) AS upviews,
-              sum(agg.pviews) AS pviews,
-              sum(agg.useful_yes) AS useful_yes,
-              sum(agg.useful_no) AS useful_no,
-              sum(agg.feedex) AS feedex,
-              sum(agg.searches) AS searches
-             FROM ( SELECT dimensions_editions_1.warehouse_item_id,
-                      max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
-                      sum(aggregations_monthly_metrics.upviews) AS upviews,
-                      sum(aggregations_monthly_metrics.pviews) AS pviews,
-                      sum(aggregations_monthly_metrics.useful_yes) AS useful_yes,
-                      sum(aggregations_monthly_metrics.useful_no) AS useful_no,
-                      sum(aggregations_monthly_metrics.feedex) AS feedex,
-                      sum(aggregations_monthly_metrics.searches) AS searches
-                     FROM ((aggregations_monthly_metrics
-                       JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
-                       JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = aggregations_monthly_metrics.dimensions_edition_id)))
-                    WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - '11 mons'::interval), 'YYYY-MM'::text))
-                    GROUP BY dimensions_editions_1.warehouse_item_id
-                  UNION
-                   SELECT dimensions_editions_1.warehouse_item_id,
-                      max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
-                      sum(facts_metrics.upviews) AS upviews,
-                      sum(facts_metrics.pviews) AS pviews,
-                      sum(facts_metrics.useful_yes) AS useful_yes,
-                      sum(facts_metrics.useful_no) AS useful_no,
-                      sum(facts_metrics.feedex) AS feedex,
-                      sum(facts_metrics.searches) AS searches
-                     FROM ((facts_metrics
-                       JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
-                       JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
-                    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - '11 mons'::interval), 'YYYY-MM-01'::text))::date))
-                    GROUP BY dimensions_editions_1.warehouse_item_id) agg
-            GROUP BY agg.warehouse_item_id) aggregations
+     FROM ((( SELECT dimensions_editions_1.warehouse_item_id,
+              max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+              sum(facts_metrics.upviews) AS upviews,
+              sum(facts_metrics.pviews) AS pviews,
+              sum(facts_metrics.useful_yes) AS useful_yes,
+              sum(facts_metrics.useful_no) AS useful_no,
+              sum(facts_metrics.feedex) AS feedex,
+              sum(facts_metrics.searches) AS searches
+             FROM ((facts_metrics
+               JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
+               JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
+            WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '30 days'::interval day)) AND (facts_metrics.dimensions_date_id < ('now'::text)::date))
+            GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
     WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
   SQL
-  add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_twelve_months_gin_title", using: :gin
-  add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_twelve_months_gin_base_path", using: :gin
-  add_index "aggregations_search_last_twelve_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_twelve_months_document_type"
-  add_index "aggregations_search_last_twelve_months", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_twelve_months_organisation_id"
-  add_index "aggregations_search_last_twelve_months", ["upviews", "warehouse_item_id"], name: "search_last_twelve_months_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
-  add_index "aggregations_search_last_twelve_months", ["warehouse_item_id"], name: "aggregations_search_last_twelve_months_pk", unique: true
+  add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_thirty_days_gin_title", using: :gin
+  add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_thirty_days_gin_base_path", using: :gin
+  add_index "aggregations_search_last_thirty_days", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_thirty_days_document_type"
+  add_index "aggregations_search_last_thirty_days", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_thirty_days_organisation_id"
+  add_index "aggregations_search_last_thirty_days", ["upviews", "warehouse_item_id"], name: "search_last_thirty_days_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
+  add_index "aggregations_search_last_thirty_days", ["warehouse_item_id"], name: "aggregations_search_last_thirty_days_pk", unique: true
+
+  create_view "aggregations_search_last_months", materialized: true, sql_definition: <<-SQL
+      SELECT dimensions_editions.warehouse_item_id,
+      dimensions_editions.title,
+      dimensions_editions.document_type,
+      dimensions_editions.base_path,
+      dimensions_editions.organisation_id,
+      dimensions_editions.id AS dimensions_edition_id,
+      aggregations.upviews,
+      aggregations.pviews,
+      aggregations.feedex,
+      aggregations.useful_yes,
+      aggregations.useful_no,
+      ('now'::text)::date AS updated_at,
+          CASE
+              WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
+              ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
+          END AS satisfaction,
+      aggregations.searches,
+      facts_editions.words,
+      facts_editions.pdf_count,
+      facts_editions.reading_time
+     FROM ((( SELECT dimensions_editions_1.warehouse_item_id,
+              max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
+              sum(aggregations_monthly_metrics.upviews) AS upviews,
+              sum(aggregations_monthly_metrics.pviews) AS pviews,
+              sum(aggregations_monthly_metrics.useful_yes) AS useful_yes,
+              sum(aggregations_monthly_metrics.useful_no) AS useful_no,
+              sum(aggregations_monthly_metrics.feedex) AS feedex,
+              sum(aggregations_monthly_metrics.searches) AS searches
+             FROM ((aggregations_monthly_metrics
+               JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
+               JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = aggregations_monthly_metrics.dimensions_edition_id)))
+            WHERE ((dimensions_months.id)::text = to_char((now() - '1 mon'::interval), 'YYYY-MM'::text))
+            GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
+       JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
+       JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
+    WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
+  SQL
+  add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_month_gin_title", using: :gin
+  add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_month_gin_base_path", using: :gin
+  add_index "aggregations_search_last_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_month_document_type"
+  add_index "aggregations_search_last_months", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_month_organisation_id"
+  add_index "aggregations_search_last_months", ["upviews", "warehouse_item_id"], name: "search_last_month_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
+  add_index "aggregations_search_last_months", ["warehouse_item_id"], name: "aggregations_search_last_months_pk", unique: true
 
   create_view "aggregations_search_last_six_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
@@ -288,6 +311,7 @@ ActiveRecord::Schema.define(version: 2019_03_11_164701) do
       (aggregations.feedex)::bigint AS feedex,
       (aggregations.useful_yes)::bigint AS useful_yes,
       (aggregations.useful_no)::bigint AS useful_no,
+      ('now'::text)::date AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -355,6 +379,7 @@ ActiveRecord::Schema.define(version: 2019_03_11_164701) do
       (aggregations.feedex)::bigint AS feedex,
       (aggregations.useful_yes)::bigint AS useful_yes,
       (aggregations.useful_no)::bigint AS useful_no,
+      ('now'::text)::date AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -410,92 +435,72 @@ ActiveRecord::Schema.define(version: 2019_03_11_164701) do
   add_index "aggregations_search_last_three_months", ["upviews", "warehouse_item_id"], name: "search_last_three_months_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
   add_index "aggregations_search_last_three_months", ["warehouse_item_id"], name: "aggregations_search_last_three_months_pk", unique: true
 
-  create_view "aggregations_search_last_months", materialized: true, sql_definition: <<-SQL
+  create_view "aggregations_search_last_twelve_months", materialized: true, sql_definition: <<-SQL
       SELECT dimensions_editions.warehouse_item_id,
       dimensions_editions.title,
       dimensions_editions.document_type,
       dimensions_editions.base_path,
       dimensions_editions.organisation_id,
       dimensions_editions.id AS dimensions_edition_id,
-      aggregations.upviews,
-      aggregations.pviews,
-      aggregations.feedex,
-      aggregations.useful_yes,
-      aggregations.useful_no,
+      (aggregations.upviews)::bigint AS upviews,
+      (aggregations.pviews)::bigint AS pviews,
+      (aggregations.feedex)::bigint AS feedex,
+      (aggregations.useful_yes)::bigint AS useful_yes,
+      (aggregations.useful_no)::bigint AS useful_no,
+      ('now'::text)::date AS updated_at,
           CASE
-              WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
+              WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
           END AS satisfaction,
-      aggregations.searches,
+      (aggregations.searches)::bigint AS searches,
       facts_editions.words,
       facts_editions.pdf_count,
       facts_editions.reading_time
-     FROM ((( SELECT dimensions_editions_1.warehouse_item_id,
-              max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
-              sum(aggregations_monthly_metrics.upviews) AS upviews,
-              sum(aggregations_monthly_metrics.pviews) AS pviews,
-              sum(aggregations_monthly_metrics.useful_yes) AS useful_yes,
-              sum(aggregations_monthly_metrics.useful_no) AS useful_no,
-              sum(aggregations_monthly_metrics.feedex) AS feedex,
-              sum(aggregations_monthly_metrics.searches) AS searches
-             FROM ((aggregations_monthly_metrics
-               JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
-               JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = aggregations_monthly_metrics.dimensions_edition_id)))
-            WHERE ((dimensions_months.id)::text = to_char((now() - '1 mon'::interval), 'YYYY-MM'::text))
-            GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
+     FROM ((( SELECT agg.warehouse_item_id,
+              max(agg.dimensions_edition_id) AS dimensions_edition_id,
+              sum(agg.upviews) AS upviews,
+              sum(agg.pviews) AS pviews,
+              sum(agg.useful_yes) AS useful_yes,
+              sum(agg.useful_no) AS useful_no,
+              sum(agg.feedex) AS feedex,
+              sum(agg.searches) AS searches
+             FROM ( SELECT dimensions_editions_1.warehouse_item_id,
+                      max(aggregations_monthly_metrics.dimensions_edition_id) AS dimensions_edition_id,
+                      sum(aggregations_monthly_metrics.upviews) AS upviews,
+                      sum(aggregations_monthly_metrics.pviews) AS pviews,
+                      sum(aggregations_monthly_metrics.useful_yes) AS useful_yes,
+                      sum(aggregations_monthly_metrics.useful_no) AS useful_no,
+                      sum(aggregations_monthly_metrics.feedex) AS feedex,
+                      sum(aggregations_monthly_metrics.searches) AS searches
+                     FROM ((aggregations_monthly_metrics
+                       JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
+                       JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = aggregations_monthly_metrics.dimensions_edition_id)))
+                    WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - '11 mons'::interval), 'YYYY-MM'::text))
+                    GROUP BY dimensions_editions_1.warehouse_item_id
+                  UNION
+                   SELECT dimensions_editions_1.warehouse_item_id,
+                      max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
+                      sum(facts_metrics.upviews) AS upviews,
+                      sum(facts_metrics.pviews) AS pviews,
+                      sum(facts_metrics.useful_yes) AS useful_yes,
+                      sum(facts_metrics.useful_no) AS useful_no,
+                      sum(facts_metrics.feedex) AS feedex,
+                      sum(facts_metrics.searches) AS searches
+                     FROM ((facts_metrics
+                       JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
+                       JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
+                    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - '11 mons'::interval), 'YYYY-MM-01'::text))::date))
+                    GROUP BY dimensions_editions_1.warehouse_item_id) agg
+            GROUP BY agg.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
     WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
   SQL
-  add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_month_gin_title", using: :gin
-  add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_month_gin_base_path", using: :gin
-  add_index "aggregations_search_last_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_month_document_type"
-  add_index "aggregations_search_last_months", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_month_organisation_id"
-  add_index "aggregations_search_last_months", ["upviews", "warehouse_item_id"], name: "search_last_month_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
-  add_index "aggregations_search_last_months", ["warehouse_item_id"], name: "aggregations_search_last_months_pk", unique: true
-
-  create_view "aggregations_search_last_thirty_days", materialized: true, sql_definition: <<-SQL
-      SELECT dimensions_editions.warehouse_item_id,
-      dimensions_editions.title,
-      dimensions_editions.document_type,
-      dimensions_editions.base_path,
-      dimensions_editions.organisation_id,
-      dimensions_editions.id AS dimensions_edition_id,
-      aggregations.upviews,
-      aggregations.pviews,
-      aggregations.feedex,
-      aggregations.useful_yes,
-      aggregations.useful_no,
-          CASE
-              WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
-              ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
-          END AS satisfaction,
-      aggregations.searches,
-      facts_editions.words,
-      facts_editions.pdf_count,
-      facts_editions.reading_time
-     FROM ((( SELECT dimensions_editions_1.warehouse_item_id,
-              max(facts_metrics.dimensions_edition_id) AS dimensions_edition_id,
-              sum(facts_metrics.upviews) AS upviews,
-              sum(facts_metrics.pviews) AS pviews,
-              sum(facts_metrics.useful_yes) AS useful_yes,
-              sum(facts_metrics.useful_no) AS useful_no,
-              sum(facts_metrics.feedex) AS feedex,
-              sum(facts_metrics.searches) AS searches
-             FROM ((facts_metrics
-               JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
-               JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '30 days'::interval day)) AND (facts_metrics.dimensions_date_id < ('now'::text)::date))
-            GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
-       JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
-       JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
-    WHERE ((dimensions_editions.document_type)::text <> ALL ((ARRAY['gone'::character varying, 'vanish'::character varying, 'need'::character varying, 'unpublishing'::character varying, 'redirect'::character varying])::text[]));
-  SQL
-  add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_thirty_days_gin_title", using: :gin
-  add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_thirty_days_gin_base_path", using: :gin
-  add_index "aggregations_search_last_thirty_days", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_thirty_days_document_type"
-  add_index "aggregations_search_last_thirty_days", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_thirty_days_organisation_id"
-  add_index "aggregations_search_last_thirty_days", ["upviews", "warehouse_item_id"], name: "search_last_thirty_days_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
-  add_index "aggregations_search_last_thirty_days", ["warehouse_item_id"], name: "aggregations_search_last_thirty_days_pk", unique: true
+  add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_twelve_months_gin_title", using: :gin
+  add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_twelve_months_gin_base_path", using: :gin
+  add_index "aggregations_search_last_twelve_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_twelve_months_document_type"
+  add_index "aggregations_search_last_twelve_months", ["organisation_id", "upviews", "warehouse_item_id"], name: "search_last_twelve_months_organisation_id"
+  add_index "aggregations_search_last_twelve_months", ["upviews", "warehouse_item_id"], name: "search_last_twelve_months_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
+  add_index "aggregations_search_last_twelve_months", ["warehouse_item_id"], name: "aggregations_search_last_twelve_months_pk", unique: true
 
 end
