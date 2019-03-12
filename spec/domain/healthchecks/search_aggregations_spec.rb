@@ -8,9 +8,9 @@ RSpec.describe Healthchecks::SearchAggregations do
 
   describe 'status' do
     let!(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
-    let!(:edition) { create :edition, base_path: '/path1', date: 2.months.ago, organisation_id: primary_org_id }
-    let!(:metric1) { create :metric, edition: edition, date: 15.days.ago, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10 }
-    let!(:metric2) { create :metric, edition: edition, date: 10.days.ago, upviews: 20, useful_yes: 5, useful_no: 1, searches: 1 }
+    let!(:edition) { create :edition, organisation_id: primary_org_id }
+    let!(:metric1) { create :metric, edition: edition, date: 15.days.ago }
+    let!(:metric2) { create :metric, edition: edition, date: 10.days.ago }
 
     let(:from) { Date.today.last_month.beginning_of_month }
     let(:to) { Date.today.last_month.end_of_month }
