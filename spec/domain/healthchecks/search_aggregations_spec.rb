@@ -1,6 +1,8 @@
-RSpec.describe Healthchecks::SearchLastMonth do
+RSpec.describe Healthchecks::SearchAggregations do
   include AggregationsSupport
   include_examples 'Healthcheck enabled/disabled within time range'
+
+  let(:subject) { described_class.build(:last_month) }
 
   its(:name) { is_expected.to eq(:search_last_month) }
 
@@ -24,7 +26,7 @@ RSpec.describe Healthchecks::SearchLastMonth do
 
     context 'There are no search views for the last month' do
       its(:status) { is_expected.to eq(:critical) }
-      its(:message) { is_expected.to eq('ETL :: no last month aggregations for searches updated from yesterday') }
+      its(:message) { is_expected.to eq('ETL :: no Last month searches updated from yesterday') }
     end
   end
 end
