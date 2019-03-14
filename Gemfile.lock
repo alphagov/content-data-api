@@ -70,6 +70,7 @@ GEM
     byebug (11.0.1)
     case_transform (0.2)
       activesupport
+    choice (0.2.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
@@ -277,6 +278,11 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
+    rails-erd (1.5.2)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
     railties (5.2.3)
@@ -336,6 +342,7 @@ GEM
       unicode-display_width (~> 1.4.0)
     rubocop-rspec (1.32.0)
       rubocop (>= 0.60.0)
+    ruby-graphviz (1.2.4)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     safe_yaml (1.0.4)
@@ -457,6 +464,7 @@ DEPENDENCIES
   rack-proxy
   rails (~> 5.2)
   rails-controller-testing
+  rails-erd
   rspec-its
   rspec-rails
   ruby-progressbar
