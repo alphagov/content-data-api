@@ -72,7 +72,7 @@ GEM
     builder (3.2.3)
     bunny (2.11.0)
       amq-protocol (~> 2.3.0)
-    byebug (11.0.0)
+    byebug (11.0.1)
     case_transform (0.2)
       activesupport
     coderay (1.1.2)
