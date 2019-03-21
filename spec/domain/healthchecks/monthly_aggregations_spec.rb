@@ -2,7 +2,7 @@ RSpec.describe Healthchecks::MonthlyAggregations do
   include_examples 'Healthcheck enabled/disabled within time range'
 
   around do |example|
-    Timecop.freeze(Date.new(2019, 2, 22)) { example.run }
+    Timecop.freeze(Time.zone.local(2019, 2, 22, 14, 0)) { example.run }
   end
 
   its(:name) { is_expected.to eq(:aggregations) }
