@@ -5,7 +5,6 @@ ruby File.read('.ruby-version').chomp
 # GOV.UK gems and forks
 gem 'gds-api-adapters', '~> 57.5.0'
 gem 'gds-sso'
-gem 'govuk_admin_template', '~> 6.5'
 gem 'govuk_app_config'
 gem 'govuk_sidekiq', '~> 3'
 gem 'plek'
