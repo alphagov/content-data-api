@@ -18,10 +18,38 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
   context 'when an event exists with the same page_path after formatting' do
     subject { Dummy.new }
 
-    let!(:event2) { create(:ga_event, :with_views, page_path: "/https://www.gov.uk/topics", upviews: 1, pviews: 1) }
+    let!(:event2) do
+      create(
+        :ga_event,
+        :with_views,
+        page_path: "/https://www.gov.uk/topics",
+        upviews: 1,
+        pviews: 1,
+        useful_no: 1,
+        useful_yes: 1,
+        searches: 1,
+        entrances: 1,
+        exits: 1
+      )
+    end
 
     before(:each) do
-      create(:ga_event, :with_views, page_path: "/topics", upviews: 100, pviews: 200)
+      create(:ga_event,
+        :with_views,
+        page_path: "/topics",
+        upviews: 100,
+        pviews: 200,
+        useful_no: 300,
+        useful_yes: 400,
+        searches: 500,
+        entrances: 600,
+        exits: 700)
+    end
+
+    it 'updates events with their combined upviews' do
+      subject.format_events_with_invalid_prefix
+
+      expect(event2.reload.upviews).to eq 101
     end
 
     it 'updates events with their combined pviews' do
@@ -30,10 +58,34 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
       expect(event2.reload.pviews).to eq 201
     end
 
-    it 'updates events with their combined upviews' do
+    it 'updates events with their combines useful_no' do
       subject.format_events_with_invalid_prefix
 
-      expect(event2.reload.upviews).to eq 101
+      expect(event2.reload.useful_no).to eq 301
+    end
+
+    it 'updates events with their combines useful_yes' do
+      subject.format_events_with_invalid_prefix
+
+      expect(event2.reload.useful_yes).to eq 401
+    end
+
+    it 'updates events with their combines searches' do
+      subject.format_events_with_invalid_prefix
+
+      expect(event2.reload.searches).to eq 501
+    end
+
+    it 'updates events with their combines entrances' do
+      subject.format_events_with_invalid_prefix
+
+      expect(event2.reload.entrances).to eq 601
+    end
+
+    it 'updates events with their combines exits' do
+      subject.format_events_with_invalid_prefix
+
+      expect(event2.reload.exits).to eq 701
     end
 
     it 'deletes the duplicated event' do
