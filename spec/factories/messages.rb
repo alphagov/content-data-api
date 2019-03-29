@@ -169,7 +169,7 @@ FactoryBot.define do
           }
         ],
         'content_id' => content_id,
-        'payload_version' => 1
+        'payload_version' => payload_version
       }
     end
   end

@@ -5,41 +5,6 @@ RSpec.describe Streams::Consumer do
 
   let(:subject) { described_class.new }
 
-  it 'grows the dimension with update events' do
-    expect {
-      subject.process(build(:message))
-    }.to change(Dimensions::Edition, :count).by(1)
-  end
-
-  it 'grows the publishing api events with message' do
-    expect {
-      subject.process(build(:message))
-    }.to change(Events::PublishingApi, :count).by(1)
-  end
-
-  it 'is idempotent' do
-    message = build :message
-
-    expect {
-      subject.process(message)
-      subject.process(message)
-    }.to change(Dimensions::Edition, :count).by(1)
-  end
-
-  it 'ignores old events' do
-    message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
-    message2 = build :message, payload: message.payload, attributes: { 'payload_version' => 1 }
-
-    expect {
-      subject.process(message)
-      subject.process(message2)
-    }.to change(Dimensions::Edition, :count).by(1)
-    expect(Dimensions::Edition.first).to have_attributes(
-      publishing_api_payload_version: 2,
-      live: true
-    )
-  end
-
   it 'does not grow the dimension if the event carries no changes in an attribute' do
     message = build :message, base_path: '/base-path', attributes: { 'payload_version' => 2 }
     message2 = build :message, payload: message.payload.dup
@@ -102,26 +67,6 @@ RSpec.describe Streams::Consumer do
     end
   end
 
-  context 'when the base path has changed' do
-    let(:content_id) { SecureRandom.uuid }
-    let(:warehouse_item_id) { "#{content_id}:en" }
-    let(:new_base_path) { '/new/base/path' }
-
-    it 'creates the new edition with the warehouse_item_id of the old edition' do
-      create :edition,
-             base_path: '/old/base/path',
-             content_id: content_id,
-             warehouse_item_id: warehouse_item_id,
-             publishing_api_payload_version: 2
-      message = build :message, base_path: new_base_path, content_id: content_id, payload_version: 3
-
-      subject.process(message)
-
-      new_edition = Dimensions::Edition.live.find_by(content_id: content_id)
-      expect(new_edition).to have_attributes(warehouse_item_id: warehouse_item_id, base_path: new_base_path)
-    end
-  end
-
   context 'when the message is for an organisation' do
     it 'assigns the acronym' do
       message = build :message, base_path: '/base-path', attributes: message_attributes
@@ -130,28 +75,6 @@ RSpec.describe Streams::Consumer do
 
       live_edition = Dimensions::Edition.live.find_by(base_path: '/base-path')
       expect(live_edition).to have_attributes(acronym: 'HMRC')
-    end
-  end
-
-  context 'when handling unpublishing related messages' do
-    it 'it does not grow dimensions_editions unnecessarily' do
-      edition = create :edition
-      base_payload_version = edition.publishing_api_payload_version
-
-      first_gone_message = build(
-        :gone_message,
-        edition.slice(:base_path, :locale, :content_id)
-      )
-      first_gone_message.payload['payload_version'] = base_payload_version + 1
-
-      second_gone_message = build :message, payload: first_gone_message.payload.dup
-      second_gone_message.payload['payload_version'] = base_payload_version + 2
-      expect {
-        subject.process(first_gone_message)
-      }.to change(Dimensions::Edition, :count).by(1)
-      expect {
-        subject.process(second_gone_message)
-      }.to change(Dimensions::Edition, :count).by(0)
     end
   end
 end
