@@ -23,13 +23,15 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
         :ga_event,
         :with_views,
         page_path: "/https://www.gov.uk/topics",
+        bounces: 1,
         upviews: 1,
         pviews: 1,
         useful_no: 1,
         useful_yes: 1,
         searches: 1,
         entrances: 1,
-        exits: 1
+        exits: 1,
+        page_time: 1
       )
     end
 
@@ -37,13 +39,45 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
       create(:ga_event,
         :with_views,
         page_path: "/topics",
+        bounces: 1000,
         upviews: 100,
         pviews: 200,
         useful_no: 300,
         useful_yes: 400,
         searches: 500,
         entrances: 600,
-        exits: 700)
+        exits: 700,
+        page_time: 1000)
+    end
+
+    it 'returns the correct number of metrics' do
+      event_attributes = event2.attribute_names
+        .reject { |name| name == 'id' }
+        .reject { |name| name == 'bounces' }
+        .reject { |name| name == 'date' }
+        .reject { |name| name == 'page_path' }
+        .reject { |name| name == 'updated_at' }
+        .reject { |name| name == 'created_at' }
+        .reject { |name| name == 'process_name' }
+        .reject { |name| name == 'page_time' }
+
+      subject.format_events_with_invalid_prefix
+
+      event_attributes.each do |metric_name|
+        expect(event2.reload.send(metric_name)).to be > 1
+      end
+    end
+
+    it 'explicitly ignores bounces' do
+      subject.format_events_with_invalid_prefix
+
+      expect(event2.reload.bounces).to eq(1)
+    end
+
+    it 'explicitly ignores page_time' do
+      subject.format_events_with_invalid_prefix
+
+      expect(event2.reload.page_time).to eq(1)
     end
 
     it 'updates events with their combined upviews' do

@@ -23,6 +23,11 @@ class Metric
     source['daily'].map { |attributes| Metric.new(attributes) }
   end
 
+  def self.ga_metrics
+    ga_source = source['daily'].select { |value| value['source'] == 'Google Analytics' }
+    ga_source.map { |attributes| Metric.new(attributes) }
+  end
+
   def self.source
     @source ||= YAML.load_file(Rails.root.join('config', 'metrics.yml'))
   end

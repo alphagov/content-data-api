@@ -20,13 +20,10 @@ private
     attributes = { page_path: sanitised_page_path }
 
     if duplicate_event
-      attributes[:pviews] = event.pviews + duplicate_event.pviews
-      attributes[:upviews] = event.upviews + duplicate_event.upviews
-      attributes[:useful_no] = event.useful_no + duplicate_event.useful_no
-      attributes[:useful_yes] = event.useful_yes + duplicate_event.useful_yes
-      attributes[:searches] = event.searches + duplicate_event.searches
-      attributes[:entrances] = event.entrances + duplicate_event.entrances
-      attributes[:exits] = event.exits + duplicate_event.exits
+      metric_names = Metric.ga_metrics.map(&:name)
+      metric_names.each do |metric|
+        attributes[metric.to_sym] = event.send(metric) + duplicate_event.send(metric)
+      end
 
       duplicate_event.destroy
     end
