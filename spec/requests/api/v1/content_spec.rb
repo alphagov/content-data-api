@@ -53,39 +53,21 @@ RSpec.describe '/content' do
     let(:beginning_of_this_month) { Date.yesterday.beginning_of_month }
     let(:beginning_of_last_month) { Date.yesterday.beginning_of_month - 1.month }
 
-    before do
-      create :metric, date: 1.day.ago, edition: edition1, pviews: 1
-      create :metric, date: 1.month.ago.beginning_of_month, edition: edition1, pviews: 10
-      create :metric, date: 2.months.ago, edition: edition1, pviews: 100
-      create :metric, date: 5.months.ago, edition: edition1, pviews: 1000
-      create :metric, date: 11.months.ago, edition: edition1, pviews: 10000
-
-      create :metric, date: 1.day.ago, edition: edition2, pviews: 2
-      create :metric, date: 1.month.ago.beginning_of_month, edition: edition2, pviews: 20
-      create :metric, date: 2.months.ago, edition: edition2, pviews: 200
-      create :metric, date: 5.months.ago, edition: edition2, pviews: 2000
-      create :metric, date: 11.months.ago, edition: edition2, pviews: 20000
-
-      recalculate_aggregations!
-    end
-
-    context 'past 30 days' do
-      it 'returns 200 status' do
-        get '/content', params: { date_range: 'past-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
-        expect(response).to have_http_status(200)
-      end
-
-      it 'returns metrics in the correct time period' do
-        get '/content', params: { date_range: 'past-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json[:results]).to contain_exactly(
-          a_hash_including(base_path: '/path-01', pviews: 1),
-          a_hash_including(base_path: '/path-02', pviews: 2)
-        )
-      end
-    end
-
     context 'last month' do
+      before do
+        create :metric, date: 1.month.ago.beginning_of_month, edition: edition1, pviews: 10
+        create :metric, date: 2.months.ago, edition: edition1, pviews: 100
+        create :metric, date: 5.months.ago, edition: edition1, pviews: 1000
+        create :metric, date: 11.months.ago, edition: edition1, pviews: 10000
+
+        create :metric, date: 1.month.ago.beginning_of_month, edition: edition2, pviews: 20
+        create :metric, date: 2.months.ago, edition: edition2, pviews: 200
+        create :metric, date: 5.months.ago, edition: edition2, pviews: 2000
+        create :metric, date: 11.months.ago, edition: edition2, pviews: 20000
+
+        recalculate_aggregations!
+      end
+
       it 'returns 200 status' do
         get '/content', params: { date_range: 'last-month', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
         expect(response).to have_http_status(200)
@@ -101,52 +83,84 @@ RSpec.describe '/content' do
       end
     end
 
-    context 'past 3 months' do
-      it 'returns 200 status' do
-        get '/content', params: { date_range: 'past-3-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
-        expect(response).to have_http_status(200)
+    context 'other periods' do
+      before do
+        create :metric, date: 1.day.ago, edition: edition1, pviews: 1
+        create :metric, date: 2.months.ago, edition: edition1, pviews: 10
+        create :metric, date: 5.months.ago, edition: edition1, pviews: 100
+        create :metric, date: 11.months.ago, edition: edition1, pviews: 1000
+
+        create :metric, date: 1.day.ago, edition: edition2, pviews: 2
+        create :metric, date: 2.months.ago, edition: edition2, pviews: 20
+        create :metric, date: 5.months.ago, edition: edition2, pviews: 200
+        create :metric, date: 11.months.ago, edition: edition2, pviews: 2000
+
+        recalculate_aggregations!
       end
 
-      it 'returns aggregated metrics' do
-        get '/content', params: { date_range: 'past-3-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
-        json = JSON.parse(response.body).deep_symbolize_keys
+      context 'past 30 days' do
+        it 'returns 200 status' do
+          get '/content', params: { date_range: 'past-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+          expect(response).to have_http_status(200)
+        end
 
-        expect(json[:results]).to contain_exactly(
-          a_hash_including(base_path: '/path-01', pviews: 111),
-          a_hash_including(base_path: '/path-02', pviews: 222)
-        )
-      end
-    end
-
-    context 'past 6 months' do
-      it 'returns 200 status' do
-        get '/content', params: { date_range: 'past-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
-        expect(response).to have_http_status(200)
-      end
-
-      it 'returns aggregated metrics' do
-        get '/content', params: { date_range: 'past-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json[:results]).to contain_exactly(
-          a_hash_including(base_path: '/path-01', pviews: 1111),
-          a_hash_including(base_path: '/path-02', pviews: 2222)
-        )
-      end
-    end
-
-    context 'past year' do
-      it 'returns 200 status' do
-        get '/content', params: { date_range: 'past-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
-        expect(response).to have_http_status(200)
+        it 'returns metrics in the correct time period' do
+          get '/content', params: { date_range: 'past-30-days', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:results]).to contain_exactly(
+            a_hash_including(base_path: '/path-01', pviews: 1),
+            a_hash_including(base_path: '/path-02', pviews: 2)
+          )
+        end
       end
 
-      it 'returns aggregated metrics' do
-        get '/content', params: { date_range: 'past-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
-        json = JSON.parse(response.body).deep_symbolize_keys
-        expect(json[:results]).to contain_exactly(
-          a_hash_including(base_path: '/path-01', pviews: 11111),
-          a_hash_including(base_path: '/path-02', pviews: 22222)
-        )
+      context 'past 3 months' do
+        it 'returns 200 status' do
+          get '/content', params: { date_range: 'past-3-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+          expect(response).to have_http_status(200)
+        end
+
+        it 'returns aggregated metrics' do
+          get '/content', params: { date_range: 'past-3-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+          json = JSON.parse(response.body).deep_symbolize_keys
+
+          expect(json[:results]).to contain_exactly(
+            a_hash_including(base_path: '/path-01', pviews: 11),
+            a_hash_including(base_path: '/path-02', pviews: 22)
+          )
+        end
+      end
+
+      context 'past 6 months' do
+        it 'returns 200 status' do
+          get '/content', params: { date_range: 'past-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+          expect(response).to have_http_status(200)
+        end
+
+        it 'returns aggregated metrics' do
+          get '/content', params: { date_range: 'past-6-months', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:results]).to contain_exactly(
+            a_hash_including(base_path: '/path-01', pviews: 111),
+            a_hash_including(base_path: '/path-02', pviews: 222)
+          )
+        end
+      end
+
+      context 'past year' do
+        it 'returns 200 status' do
+          get '/content', params: { date_range: 'past-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+          expect(response).to have_http_status(200)
+        end
+
+        it 'returns aggregated metrics' do
+          get '/content', params: { date_range: 'past-year', organisation_id: 'e12e3c54-b544-4d94-ba1f-9846144374d2' }
+          json = JSON.parse(response.body).deep_symbolize_keys
+          expect(json[:results]).to contain_exactly(
+            a_hash_including(base_path: '/path-01', pviews: 1111),
+            a_hash_including(base_path: '/path-02', pviews: 2222)
+          )
+        end
       end
     end
   end

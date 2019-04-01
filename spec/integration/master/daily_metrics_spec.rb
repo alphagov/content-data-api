@@ -60,7 +60,7 @@ RSpec.describe 'Master process spec' do
 
     aggregation = Aggregations::MonthlyMetric.find_by(dimensions_edition_id: latest_version.id)
     expect(aggregation).to have_attributes(
-      dimensions_month_id: Dimensions::Month.current.id,
+      dimensions_month_id: Date.yesterday.strftime('%Y-%m'),
       dimensions_edition_id: latest_version.id,
       pviews: 11,
       upviews: 12,
