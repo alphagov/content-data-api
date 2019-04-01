@@ -9,7 +9,7 @@ private
   def refresh_last_year_of_monthly_aggregations
     Etl::Aggregations::Monthly.process(date: Date.today)
 
-    12.times { |index| Etl::Aggregations::Monthly.process(date: index.month.ago) }
+    13.times { |index| Etl::Aggregations::Monthly.process(date: index.month.ago) }
   end
 
   def refresh_views
