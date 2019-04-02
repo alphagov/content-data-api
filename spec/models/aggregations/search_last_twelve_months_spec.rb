@@ -37,7 +37,7 @@ RSpec.describe Aggregations::SearchLastTwelveMonths, type: :model do
     expect(subject.pluck(:dimensions_edition_id)).to match_array([edition1.id, edition2.id])
   end
 
-  it 'references the latest dimension edition' do
+  it 'references the live dimension edition' do
     edition1 = create :edition
     edition2 = create :edition, replaces: edition1
 

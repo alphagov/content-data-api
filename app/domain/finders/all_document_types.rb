@@ -16,9 +16,9 @@ private
   def query
     <<-SQL
       WITH RECURSIVE temp AS (
-        (SELECT document_type FROM dimensions_editions WHERE latest ORDER BY document_type LIMIT 1)
+        (SELECT document_type FROM dimensions_editions WHERE live ORDER BY document_type LIMIT 1)
           UNION ALL
-         SELECT (SELECT document_type FROM dimensions_editions WHERE document_type > temp.document_type AND latest ORDER BY document_type LIMIT 1)
+         SELECT (SELECT document_type FROM dimensions_editions WHERE document_type > temp.document_type AND live ORDER BY document_type LIMIT 1)
          FROM temp
          WHERE temp.document_type IS NOT NULL
       )

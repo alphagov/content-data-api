@@ -9,7 +9,7 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
       content_id: content_id,
       base_path: base_path,
       locale: 'en',
-      latest: true
+      live: true
     )
   end
 

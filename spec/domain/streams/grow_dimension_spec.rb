@@ -46,7 +46,7 @@ RSpec.describe Streams::GrowDimension do
 
     context 'when attributes we ignore have changed' do
       let(:attributes_that_should_not_grow_dimension) do
-        %i[publishing_api_payload_version public_updated_at id update_at created_at latest]
+        %i[publishing_api_payload_version public_updated_at id update_at created_at live]
       end
 
       it 'returns false' do

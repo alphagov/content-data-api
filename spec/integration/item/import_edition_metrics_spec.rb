@@ -29,7 +29,7 @@ RSpec.describe 'Import edition metrics' do
     }
   end
 
-  def find_latest_edition(base_path)
-    Dimensions::Edition.latest_by_base_path([base_path]).first.facts_edition
+  def find_live_edition(base_path)
+    Dimensions::Edition.live_by_base_path([base_path]).first.facts_edition
   end
 end

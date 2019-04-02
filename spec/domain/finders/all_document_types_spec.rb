@@ -39,9 +39,9 @@ RSpec.describe Finders::AllDocumentTypes do
       expect(subject.run).to be_sorted_by(&:name)
     end
 
-    it 'returns only document types of latest editions' do
+    it 'returns only document types of live editions' do
       create(:edition, document_type: 'news_story')
-      create(:edition, document_type: 'guidance', latest: false)
+      create(:edition, document_type: 'guidance', live: false)
 
       expect(subject.run).to match_array([
         have_attributes(id: 'news_story'),

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :edition, class: Dimensions::Edition do
-    latest { true }
+    live { true }
     locale { 'en' }
     sequence(:content_id) { SecureRandom.uuid }
     sequence(:title) { |i| "title - #{i}" }

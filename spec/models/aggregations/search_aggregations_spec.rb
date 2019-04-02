@@ -61,7 +61,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
     end
   end
 
-  it 'is linked to the latest dimension edition' do
+  it 'is linked to the live dimension edition' do
     edition1 = create :edition
     edition2 = create :edition, replaces: edition1
 

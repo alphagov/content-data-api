@@ -63,14 +63,14 @@ RSpec.describe Dimensions::Edition, type: :model do
       expect(results).to match_array([edition1])
     end
 
-    it '.latest' do
-      edition1 = create :edition, latest: true
-      create :edition, latest: false
+    it '.live' do
+      edition1 = create :edition, live: true
+      create :edition, live: false
 
-      expect(subject.latest).to match_array([edition1])
+      expect(subject.live).to match_array([edition1])
     end
 
-    describe '.existing_latest_editions' do
+    describe '.existing_live_editions' do
       let(:content_id_1) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:content_id_2) { 'aaaaaaaa-0c34-4942-9111-2331e12cb1c5' }
       let(:base_path_1_1) { '/foo/part1' }
@@ -106,14 +106,14 @@ RSpec.describe Dimensions::Edition, type: :model do
 
       it "includes editions with the same content id as the new thing, even if the base path has changed" do
         new_paths = ['/baz']
-        existing = Dimensions::Edition.existing_latest_editions(content_id_2, 'en', new_paths)
+        existing = Dimensions::Edition.existing_live_editions(content_id_2, 'en', new_paths)
         expect(existing).to eq([edition_2])
       end
 
       it "includes editions with a different content id that clash with a new base path" do
         new_content_id = 'bbbbbbbb-0c34-4942-9111-2331e12cb1c5'
         new_paths = ['/bar']
-        existing = Dimensions::Edition.existing_latest_editions(new_content_id, 'en', new_paths)
+        existing = Dimensions::Edition.existing_live_editions(new_content_id, 'en', new_paths)
 
         expect(existing).to eq([edition_2])
       end
@@ -127,7 +127,7 @@ RSpec.describe Dimensions::Edition, type: :model do
           locale: 'fr'
         )
 
-        existing = Dimensions::Edition.existing_latest_editions(content_id_2, 'en', [base_path_2])
+        existing = Dimensions::Edition.existing_live_editions(content_id_2, 'en', [base_path_2])
 
         expect(existing).to include(edition_2)
         expect(existing).not_to include(translation)
@@ -135,7 +135,7 @@ RSpec.describe Dimensions::Edition, type: :model do
 
       context "when the new document has one part the same and one part different" do
         let(:new_paths) { [base_path_1_1, '/foo/new-part'] }
-        let(:existing) { Dimensions::Edition.existing_latest_editions(content_id_1, 'en', new_paths) }
+        let(:existing) { Dimensions::Edition.existing_live_editions(content_id_1, 'en', new_paths) }
 
         it 'includes all parts that currently map to the content id' do
           expect(existing).to include(edition_1_1)
@@ -150,7 +150,7 @@ RSpec.describe Dimensions::Edition, type: :model do
   end
 
   describe '#promote!' do
-    let(:edition) { build :edition, latest: false }
+    let(:edition) { build :edition, live: false }
     let(:warehouse_item_id) { 'warehouse-item-id' }
     let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
 
@@ -158,12 +158,12 @@ RSpec.describe Dimensions::Edition, type: :model do
       edition.promote!(old_edition)
     end
 
-    it 'set the latest attribute to true' do
-      expect(edition.latest).to be true
+    it 'set the live attribute to true' do
+      expect(edition.live).to be true
     end
 
-    it 'sets the latest attribute to false for the old version' do
-      expect(old_edition.latest).to be false
+    it 'sets the live attribute to false for the old version' do
+      expect(old_edition.live).to be false
     end
 
     it 'copies the warehouse_item_id from the old edition' do
@@ -225,31 +225,31 @@ RSpec.describe Dimensions::Edition, type: :model do
     end
   end
 
-  describe 'Unique constraint on `warehouse_item_id` and `latest`' do
-    it 'prevent duplicating `warehouse_item_id` for latest items' do
-      create :edition, warehouse_item_id: 'value', latest: true
+  describe 'Unique constraint on `warehouse_item_id` and `live`' do
+    it 'prevent duplicating `warehouse_item_id` for live items' do
+      create :edition, warehouse_item_id: 'value', live: true
 
-      expect(-> { create :edition, warehouse_item_id: 'value', latest: true }).to raise_error(ActiveRecord::RecordNotUnique)
+      expect(-> { create :edition, warehouse_item_id: 'value', live: true }).to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it 'does not prevent duplicating `warehouse_item_id` for old items' do
-      create :edition, warehouse_item_id: 'value', latest: true
+      create :edition, warehouse_item_id: 'value', live: true
 
-      expect(-> { create :edition, warehouse_item_id: 'value', latest: false }).to_not raise_error
+      expect(-> { create :edition, warehouse_item_id: 'value', live: false }).to_not raise_error
     end
   end
 
-  describe 'Unique constraint on `base_path` and `latest`' do
-    it 'prevent duplicating `base_path` for latest items' do
-      create :edition, base_path: 'value', latest: true
+  describe 'Unique constraint on `base_path` and `live`' do
+    it 'prevent duplicating `base_path` for live items' do
+      create :edition, base_path: 'value', live: true
 
-      expect(-> { create :edition, base_path: 'value', latest: true }).to raise_error(ActiveRecord::RecordNotUnique)
+      expect(-> { create :edition, base_path: 'value', live: true }).to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it 'does not prevent duplicating `base_path` for old items' do
-      create :edition, base_path: 'value', latest: true
+      create :edition, base_path: 'value', live: true
 
-      expect(-> { create :edition, base_path: 'value', latest: false }).to_not raise_error
+      expect(-> { create :edition, base_path: 'value', live: false }).to_not raise_error
     end
   end
 end

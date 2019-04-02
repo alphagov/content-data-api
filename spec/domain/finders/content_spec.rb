@@ -206,11 +206,11 @@ RSpec.describe Finders::Content do
         create :metric, edition: edition, date: 15.days.ago, upviews: (100 - n)
       end
 
-      # not latest edition - should not affect total results
+      # not live edition - should not affect total results
       old_edition = create :edition,
         base_path: '/path/0',
         organisation_id: primary_org_id,
-        latest: false,
+        live: false,
         warehouse_item_id: 'item-0'
       create :metric, edition: old_edition, date: 15.days.ago
 

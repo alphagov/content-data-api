@@ -3,7 +3,7 @@ RSpec.describe Finders::Metadata do
 
   before do
     create :edition,
-      latest: true,
+      live: true,
       title: 'the title',
       base_path: base_path,
       content_id: 'content_id - 1',
@@ -16,7 +16,7 @@ RSpec.describe Finders::Metadata do
       historical: false
 
     create :edition,
-      latest: false,
+      live: false,
       title: 'the old title',
       base_path: base_path,
       document_type: 'guide',
@@ -28,7 +28,7 @@ RSpec.describe Finders::Metadata do
       historical: false
   end
 
-  it "returns metadata for latest edition" do
+  it "returns metadata for live edition" do
     metadata = described_class.run('/base_path')
 
     expect(metadata).to eq(

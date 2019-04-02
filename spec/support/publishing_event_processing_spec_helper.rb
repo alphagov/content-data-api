@@ -27,7 +27,7 @@ module PublishingEventProcessingSpecHelper
       first_published_at: Time.zone.parse('2018-04-19T12:00:40+01:00'),
       public_updated_at: Time.zone.parse('2018-04-20T12:00:40+01:00'),
       schema_name: 'detailed_guide',
-      latest: true,
+      live: true,
       document_text: 'some content',
       phase: 'live',
       organisation_id: org_content_id,
@@ -47,7 +47,7 @@ module PublishingEventProcessingSpecHelper
       first_published_at: "2018-04-19T12:00:40+01:00",
       withdrawn: false,
       historical: false,
-      latest: false
+      live: false
     ).merge(overrides)
   end
 

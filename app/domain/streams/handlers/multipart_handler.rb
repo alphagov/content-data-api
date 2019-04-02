@@ -18,10 +18,10 @@ class Streams::Handlers::MultipartHandler < Streams::Handlers::BaseHandler
 private
 
   def find_old_edition(hash)
-    { attrs: hash, old_edition: Dimensions::Edition.latest_by_base_path(hash[:base_path]).first }
+    { attrs: hash, old_edition: Dimensions::Edition.live_by_base_path(hash[:base_path]).first }
   end
 
   def deprecate_redundant_paths(current_base_paths)
-    Dimensions::Edition.outdated_subpages(content_id, locale, current_base_paths).update(latest: false)
+    Dimensions::Edition.outdated_subpages(content_id, locale, current_base_paths).update(live: false)
   end
 end

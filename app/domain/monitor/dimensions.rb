@@ -7,17 +7,17 @@ class Monitor::Dimensions
   def run
     trap do
       statsd_for_all_base_paths!
-      statsd_for_latest_base_paths!
+      statsd_for_live_base_paths!
       statsd_for_all_content_items!
-      statsd_for_latest_content_items!
+      statsd_for_live_content_items!
     end
   end
 
 private
 
-  def statsd_for_latest_base_paths!
-    path = path_for('latest_base_paths')
-    count = Dimensions::Edition.latest.count
+  def statsd_for_live_base_paths!
+    path = path_for('live_base_paths')
+    count = Dimensions::Edition.live.count
 
     GovukStatsd.count(path, count)
   end
@@ -29,9 +29,9 @@ private
     GovukStatsd.count(path, count)
   end
 
-  def statsd_for_latest_content_items!
-    path = path_for('latest_content_items')
-    count = Dimensions::Edition.latest.count('distinct content_id')
+  def statsd_for_live_content_items!
+    path = path_for('live_content_items')
+    count = Dimensions::Edition.live.count('distinct content_id')
 
     GovukStatsd.count(path, count)
   end

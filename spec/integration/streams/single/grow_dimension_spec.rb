@@ -36,7 +36,7 @@ RSpec.describe Streams::Consumer do
     }.to change(Dimensions::Edition, :count).by(1)
     expect(Dimensions::Edition.first).to have_attributes(
       publishing_api_payload_version: 2,
-      latest: true
+      live: true
     )
   end
 
@@ -63,8 +63,8 @@ RSpec.describe Streams::Consumer do
         subject.process(message2)
       }.to change(Dimensions::Edition, :count).by(2)
 
-      expect(Dimensions::Edition.find_by(publishing_api_payload_version: 2)).to have_attributes(latest: false)
-      expect(Dimensions::Edition.find_by(publishing_api_payload_version: 4)).to have_attributes(latest: true)
+      expect(Dimensions::Edition.find_by(publishing_api_payload_version: 2)).to have_attributes(live: false)
+      expect(Dimensions::Edition.find_by(publishing_api_payload_version: 4)).to have_attributes(live: true)
     end
 
     it 'grows the dimension' do
@@ -82,8 +82,8 @@ RSpec.describe Streams::Consumer do
       message = build :message, base_path: '/base-path', attributes: message_attributes
       message.payload['details']['body'] = '<p>some content</p>'
       subject.process(message)
-      latest_edition = Dimensions::Edition.latest.find_by(base_path: '/base-path')
-      expect(latest_edition).to have_attributes(expected_edition_attributes(content_id: message.payload['content_id']))
+      live_edition = Dimensions::Edition.live.find_by(base_path: '/base-path')
+      expect(live_edition).to have_attributes(expected_edition_attributes(content_id: message.payload['content_id']))
     end
 
     it 'assigns the same warehouse_item_id to the new edition' do
@@ -117,7 +117,7 @@ RSpec.describe Streams::Consumer do
 
       subject.process(message)
 
-      new_edition = Dimensions::Edition.latest.find_by(content_id: content_id)
+      new_edition = Dimensions::Edition.live.find_by(content_id: content_id)
       expect(new_edition).to have_attributes(warehouse_item_id: warehouse_item_id, base_path: new_base_path)
     end
   end
@@ -128,8 +128,8 @@ RSpec.describe Streams::Consumer do
       message.payload['details']['acronym'] = 'HMRC'
       subject.process(message)
 
-      latest_edition = Dimensions::Edition.latest.find_by(base_path: '/base-path')
-      expect(latest_edition).to have_attributes(acronym: 'HMRC')
+      live_edition = Dimensions::Edition.live.find_by(base_path: '/base-path')
+      expect(live_edition).to have_attributes(acronym: 'HMRC')
     end
   end
 

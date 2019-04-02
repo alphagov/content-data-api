@@ -4,7 +4,7 @@ RSpec.describe '/single_page', type: :request do
   let!(:base_path) { '/base_path' }
   let!(:item) do
     create :edition,
-      latest: true,
+      live: true,
       title: 'the title',
       base_path: base_path,
       content_id: 'the-content-id',

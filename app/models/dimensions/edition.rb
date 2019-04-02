@@ -15,12 +15,12 @@ class Dimensions::Edition < ApplicationRecord
   scope :by_organisation_id, ->(organisation_id) { where(organisation_id: organisation_id) }
   scope :by_document_type, ->(document_type) { where('document_type like (?)', document_type) }
   scope :by_locale, ->(locale) { where(locale: locale) }
-  scope :latest, -> { where(latest: true) }
-  scope :latest_by_content_id, ->(content_id, locale) { where(content_id: content_id, locale: locale, latest: true) }
-  scope :latest_by_base_path, ->(base_paths) { where(base_path: base_paths, latest: true) }
-  scope :existing_latest_editions, ->(content_id, locale, base_paths) { latest_by_content_id(content_id, locale).or(latest_by_base_path(base_paths)) }
+  scope :live, -> { where(live: true) }
+  scope :live_by_content_id, ->(content_id, locale) { where(content_id: content_id, locale: locale, live: true) }
+  scope :live_by_base_path, ->(base_paths) { where(base_path: base_paths, live: true) }
+  scope :existing_live_editions, ->(content_id, locale, base_paths) { live_by_content_id(content_id, locale).or(live_by_base_path(base_paths)) }
   scope :outdated_subpages, ->(content_id, locale, exclude_paths) do
-    latest_by_content_id(content_id, locale)
+    live_by_content_id(content_id, locale)
       .where.not(base_path: exclude_paths)
   end
 
@@ -29,11 +29,11 @@ class Dimensions::Edition < ApplicationRecord
       old_edition.deprecate!
       assign_attributes warehouse_item_id: old_edition.warehouse_item_id
     end
-    update!(latest: true)
+    update!(live: true)
   end
 
   def deprecate!
-    update!(latest: false)
+    update!(live: false)
   end
 
   def change_from?(attributes)

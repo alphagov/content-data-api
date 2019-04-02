@@ -19,7 +19,7 @@ RSpec.describe Finders::EditionMetrics do
       }])
     end
 
-    it "returns editions metrics for latest edition" do
+    it "returns editions metrics for live edition" do
       create :edition,
         replaces: edition,
         base_path: '/base_path',

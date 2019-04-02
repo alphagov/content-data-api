@@ -19,7 +19,7 @@ private
   end
 
   def find_all(locale)
-    Dimensions::Edition.latest
+    Dimensions::Edition.live
       .select(:content_id, :title, :locale, :acronym)
       .where(document_type: 'organisation', locale: locale)
       .order(:title)

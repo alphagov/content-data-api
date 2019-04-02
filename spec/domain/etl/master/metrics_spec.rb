@@ -4,8 +4,8 @@ RSpec.describe Etl::Master::MetricsProcessor do
   subject { described_class.new(date: date) }
 
   it 'creates a Metrics fact per content item' do
-    create :edition, latest: true
-    item = create(:edition, latest: true, content_id: 'cid1')
+    create :edition, live: true
+    item = create(:edition, live: true, content_id: 'cid1')
 
     subject.process
 
@@ -16,9 +16,9 @@ RSpec.describe Etl::Master::MetricsProcessor do
     )
   end
 
-  it 'only create a Metrics Fact entry for Content Items with latest = `true`' do
-    create(:edition, latest: true, content_id: 'cid1')
-    create(:edition, latest: false, content_id: 'cid1')
+  it 'only create a Metrics Fact entry for Content Items with live = `true`' do
+    create(:edition, live: true, content_id: 'cid1')
+    create(:edition, live: false, content_id: 'cid1')
 
     subject.process
 
