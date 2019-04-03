@@ -18,30 +18,6 @@ RSpec.describe Dimensions::Edition, type: :model do
       expect(results).to match_array([edition1])
     end
 
-    it '.by_content_id' do
-      edition1 = create(:edition, content_id: 'id1')
-      create(:edition, content_id: 'id2')
-
-      results = subject.by_content_id('id1')
-      expect(results).to match_array([edition1])
-    end
-
-    it '.by_organisation_id' do
-      edition1 = create(:edition, organisation_id: 'org-1')
-      create(:edition, organisation_id: 'org-2')
-
-      results = subject.by_organisation_id('org-1')
-      expect(results).to match_array([edition1])
-    end
-
-    it '.by_locale' do
-      edition1 = create(:edition, locale: 'fr')
-      create(:edition, locale: 'de')
-
-      results = subject.by_locale('fr')
-      expect(results).to match_array(edition1)
-    end
-
     describe '.outdated_subpages' do
       let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:locale) { 'fr' }
@@ -55,97 +31,11 @@ RSpec.describe Dimensions::Edition, type: :model do
       end
     end
 
-    it '.by_document_type' do
-      edition1 = create(:edition, document_type: 'guide')
-      create(:edition, document_type: 'local_transaction')
-
-      results = subject.by_document_type('guide')
-      expect(results).to match_array([edition1])
-    end
-
     it '.live' do
       edition1 = create :edition, live: true
       create :edition, live: false
 
       expect(subject.live).to match_array([edition1])
-    end
-
-    describe '.existing_live_editions' do
-      let(:content_id_1) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
-      let(:content_id_2) { 'aaaaaaaa-0c34-4942-9111-2331e12cb1c5' }
-      let(:base_path_1_1) { '/foo/part1' }
-      let(:base_path_1_2) { '/foo/part2' }
-      let(:base_path_2) { '/bar' }
-
-      let!(:edition_1_1) do
-        create(
-          :edition,
-          document_type: 'guide',
-          base_path: base_path_1_1,
-          content_id: content_id_1
-        )
-      end
-
-      let!(:edition_1_2) do
-        create(
-          :edition,
-          document_type: 'guide',
-          base_path: base_path_1_2,
-          content_id: content_id_1
-        )
-      end
-
-      let!(:edition_2) do
-        create(
-          :edition,
-          document_type: 'guide',
-          base_path: '/bar',
-          content_id: content_id_2
-        )
-      end
-
-      it "includes editions with the same content id as the new thing, even if the base path has changed" do
-        new_paths = ['/baz']
-        existing = Dimensions::Edition.existing_live_editions(content_id_2, 'en', new_paths)
-        expect(existing).to eq([edition_2])
-      end
-
-      it "includes editions with a different content id that clash with a new base path" do
-        new_content_id = 'bbbbbbbb-0c34-4942-9111-2331e12cb1c5'
-        new_paths = ['/bar']
-        existing = Dimensions::Edition.existing_live_editions(new_content_id, 'en', new_paths)
-
-        expect(existing).to eq([edition_2])
-      end
-
-      it "excludes editions with a different locale" do
-        translation = create(
-          :edition,
-          document_type: 'guide',
-          base_path: '/bar.fr',
-          content_id: content_id_2,
-          locale: 'fr'
-        )
-
-        existing = Dimensions::Edition.existing_live_editions(content_id_2, 'en', [base_path_2])
-
-        expect(existing).to include(edition_2)
-        expect(existing).not_to include(translation)
-      end
-
-      context "when the new document has one part the same and one part different" do
-        let(:new_paths) { [base_path_1_1, '/foo/new-part'] }
-        let(:existing) { Dimensions::Edition.existing_live_editions(content_id_1, 'en', new_paths) }
-
-        it 'includes all parts that currently map to the content id' do
-          expect(existing).to include(edition_1_1)
-          expect(existing).to include(edition_1_2)
-        end
-
-        it "doesn't include editions with completely different content id and base path" do
-          expect(existing).not_to include(edition_2)
-        end
-      end
     end
   end
 

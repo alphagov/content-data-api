@@ -11,14 +11,9 @@ class Dimensions::Edition < ApplicationRecord
   validates :warehouse_item_id, presence: true
 
   scope :by_base_path, ->(base_path) { where('base_path like (?)', base_path) }
-  scope :by_content_id, ->(content_id) { where(content_id: content_id) }
-  scope :by_organisation_id, ->(organisation_id) { where(organisation_id: organisation_id) }
-  scope :by_document_type, ->(document_type) { where('document_type like (?)', document_type) }
-  scope :by_locale, ->(locale) { where(locale: locale) }
   scope :live, -> { where(live: true) }
   scope :live_by_content_id, ->(content_id, locale) { where(content_id: content_id, locale: locale, live: true) }
   scope :live_by_base_path, ->(base_paths) { where(base_path: base_paths, live: true) }
-  scope :existing_live_editions, ->(content_id, locale, base_paths) { live_by_content_id(content_id, locale).or(live_by_base_path(base_paths)) }
   scope :outdated_subpages, ->(content_id, locale, exclude_paths) do
     live_by_content_id(content_id, locale)
       .where.not(base_path: exclude_paths)
