@@ -19,6 +19,21 @@ class Dimensions::Edition < ApplicationRecord
       .where.not(base_path: exclude_paths)
   end
 
+  def self.find_latest(warehouse_item_id)
+    query = <<~SQL
+      SELECT a.*
+      FROM dimensions_editions AS a
+      INNER JOIN (
+          SELECT warehouse_item_id, MAX(publishing_api_event_id) AS publishing_api_event_id
+          FROM dimensions_editions
+          WHERE warehouse_item_id = ?
+          GROUP BY warehouse_item_id
+      ) AS b ON a.warehouse_item_id = b.warehouse_item_id
+      AND a.publishing_api_event_id = b.publishing_api_event_id
+    SQL
+    self.find_by_sql([query, warehouse_item_id]).first
+  end
+
   def promote!(old_edition)
     if old_edition
       old_edition.deprecate!

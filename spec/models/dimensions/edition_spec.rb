@@ -23,10 +23,10 @@ RSpec.describe Dimensions::Edition, type: :model do
       let(:locale) { 'fr' }
 
       it 'filters out the passed paths' do
-        create :edition, base_path: '/path-1', locale: locale, content_id: content_id
-        create :edition, base_path: '/path-1/part-1', locale: locale, content_id: content_id
-        create :edition, base_path: '/path-1/part-2.fr', locale: locale, content_id: content_id
-        create :edition, base_path: '/path-1/part-2', locale: 'en', content_id: content_id
+        create :edition, :multipart, base_path: '/path-1', locale: locale, content_id: content_id
+        create :edition, :multipart, base_path: '/path-1/part-1', locale: locale, content_id: content_id
+        create :edition, :multipart, base_path: '/path-1/part-2.fr', locale: locale, content_id: content_id
+        create :edition, :multipart, base_path: '/path-1/part-2', locale: 'en', content_id: content_id
         expect(Dimensions::Edition.outdated_subpages(content_id, locale, ['/path-1', '/path-1/part-1']).map(&:base_path)).to eq(['/path-1/part-2.fr'])
       end
     end
@@ -36,6 +36,59 @@ RSpec.describe Dimensions::Edition, type: :model do
       create :edition, live: false
 
       expect(subject.live).to match_array([edition1])
+    end
+  end
+
+  describe '.find_latest' do
+    it 'return the most recent editon for a content item' do
+      content_id = SecureRandom.uuid
+      edition1 = create :edition, content_id: content_id, locale: 'en'
+      edition2 = create :edition, content_id: content_id, locale: 'en', replaces: edition1
+
+      warehouse_item_id = "#{content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(edition2)
+    end
+
+    it 'return the most recent editon for a content item for locale' do
+      content_id = SecureRandom.uuid
+      edition1 = create :edition, content_id: content_id, locale: 'en'
+      edition2 = create :edition, content_id: content_id, locale: 'en', replaces: edition1
+      create :edition, content_id: content_id, locale: 'cy'
+
+      warehouse_item_id = "#{content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(edition2)
+    end
+
+    it 'return the most recent editon for content id' do
+      content_id = SecureRandom.uuid
+      edition1 = create :edition, content_id: content_id, locale: 'en'
+      edition2 = create :edition, content_id: content_id, locale: 'en', replaces: edition1
+      create :edition
+      create :edition
+
+      warehouse_item_id = "#{content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(edition2)
+    end
+
+    it 'return nil for no edition for locale' do
+      create :edition, locale: 'cy'
+      content_id = SecureRandom.uuid
+
+      warehouse_item_id = "#{content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(nil)
+    end
+
+    it 'return nil for no edition for content_id' do
+      create :edition
+      other_content_id = SecureRandom.uuid
+
+      warehouse_item_id = "#{other_content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(nil)
     end
   end
 

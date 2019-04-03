@@ -27,8 +27,8 @@ RSpec.describe Monitor::Dimensions do
   it 'sends StatsD counter of content_items' do
     expect(GovukStatsd).to receive(:count).with("monitor.dimensions.content_items", 1)
 
-    create :edition, content_id: 'id1', base_path: '/foo'
-    create :edition, content_id: 'id1', base_path: '/bar'
+    edition1 = create :edition, content_id: 'id1', base_path: '/foo'
+    create :edition, content_id: 'id1', base_path: '/bar', replaces: edition1
 
     subject.run
   end
@@ -36,9 +36,9 @@ RSpec.describe Monitor::Dimensions do
   it 'sends StatsD counter of `live` content_items' do
     expect(GovukStatsd).to receive(:count).with("monitor.dimensions.live_content_items", 1)
 
-    create :edition, content_id: 'id1', base_path: '/foo', live: true
-    create :edition, content_id: 'id1', base_path: '/bar', live: true
-    create :edition, content_id: 'id1', base_path: '/other', live: false
+    edition1 = create :edition, content_id: 'id1', base_path: '/foo'
+    create :edition, content_id: 'id1', base_path: '/bar', replaces: edition1
+    create :edition, content_id: 'id2', base_path: '/other', live: false
     subject.run
   end
 
