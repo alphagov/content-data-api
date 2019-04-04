@@ -130,23 +130,6 @@ RSpec.describe "Process sub-pages for multipart content types" do
     expect(Dimensions::Edition.live.count).to eq(4)
   end
 
-  context "when base paths in the message already belong to items with a different content id" do
-    it "deprecates the clashing items" do
-      message = build(:message, :with_parts)
-      message.payload["content_id"] = "df9b33a8-73ae-4504-91a1-4a397cf1f3c5"
-      message.payload["base_path"] = "/some-url"
-      subject.process(message)
-
-      another_message = build(:message, :with_parts)
-      another_message.payload["content_id"] = "db3df7bc-4315-496a-b3b7-4f0e705a2c1f"
-      another_message.payload["base_path"] = "/some-url"
-      subject.process(another_message)
-
-      expect(Dimensions::Edition.count).to eq(8)
-      expect(Dimensions::Edition.live.count).to eq(4)
-    end
-  end
-
   context "when multi part content types have different first parts" do
     multipart_types = Etl::Edition::Content::Parsers::Parts.new.schemas
 

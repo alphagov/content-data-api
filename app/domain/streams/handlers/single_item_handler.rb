@@ -15,14 +15,14 @@ class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
   attr_reader :attrs, :old_edition
 
   def process
-    update_editions [attrs: attrs, old_edition: find_old_edition(attrs[:content_id], attrs[:locale])]
+    update_editions [attrs: attrs, old_edition: find_old_edition(attrs[:warehouse_item_id], attrs[:locale])]
   end
 
 private
 
-  def find_old_edition(content_id, locale)
+  def find_old_edition(warehouse_item_id, locale)
     raise MissingLocaleError unless locale
 
-    Dimensions::Edition.find_by(content_id: content_id, locale: locale, live: true)
+    Dimensions::Edition.find_latest(warehouse_item_id)
   end
 end

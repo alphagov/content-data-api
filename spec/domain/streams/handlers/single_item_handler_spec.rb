@@ -19,7 +19,7 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
     let(:attrs) do
       old_edition
         .attributes
-        .slice('content_id', 'base_path', 'locale')
+        .slice('content_id', 'base_path', 'locale', 'warehouse_item_id')
         .symbolize_keys
     end
 
