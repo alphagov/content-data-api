@@ -93,24 +93,48 @@ RSpec.describe Dimensions::Edition, type: :model do
   end
 
   describe '#promote!' do
-    let(:edition) { build :edition, live: false }
-    let(:warehouse_item_id) { 'warehouse-item-id' }
-    let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
+    context 'for published edition' do
+      let(:edition) { build :edition, live: false }
+      let(:warehouse_item_id) { 'warehouse-item-id' }
+      let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
 
-    before do
-      edition.promote!(old_edition)
+      before do
+        edition.promote!(old_edition)
+      end
+
+      it 'set the live attribute to true' do
+        expect(edition.live).to be true
+      end
+
+      it 'sets the live attribute to false for the old version' do
+        expect(old_edition.live).to be false
+      end
+
+      it 'copies the warehouse_item_id from the old edition' do
+        expect(edition.reload.warehouse_item_id).to eq(warehouse_item_id)
+      end
     end
 
-    it 'set the live attribute to true' do
-      expect(edition.live).to be true
-    end
+    context 'for unpublished edition' do
+      let(:edition) { build :edition, live: false, document_type: 'gone' }
+      let(:warehouse_item_id) { 'warehouse-item-id' }
+      let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
 
-    it 'sets the live attribute to false for the old version' do
-      expect(old_edition.live).to be false
-    end
+      before do
+        edition.promote!(old_edition)
+      end
 
-    it 'copies the warehouse_item_id from the old edition' do
-      expect(edition.reload.warehouse_item_id).to eq(warehouse_item_id)
+      it 'set the live attribute to true' do
+        expect(edition.live).to be false
+      end
+
+      it 'sets the live attribute to false for the old version' do
+        expect(old_edition.live).to be false
+      end
+
+      it 'copies the warehouse_item_id from the old edition' do
+        expect(edition.warehouse_item_id).to eq(warehouse_item_id)
+      end
     end
   end
 

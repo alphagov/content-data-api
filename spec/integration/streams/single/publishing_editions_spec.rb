@@ -128,7 +128,7 @@ RSpec.describe 'PublishingAPI message queue' do
       have_attributes(
         warehouse_item_id: "#{content_id}:en",
         base_path: '/base-path',
-        live: true,
+        live: false,
         schema_name: 'gone'
       ),
       have_attributes(
@@ -162,7 +162,7 @@ RSpec.describe 'PublishingAPI message queue' do
       have_attributes(
         warehouse_item_id: "#{content_id}:en",
         base_path: '/base-path',
-        live: true,
+        live: false,
         schema_name: 'gone'
       ),
       have_attributes(
@@ -195,7 +195,7 @@ RSpec.describe 'PublishingAPI message queue' do
       have_attributes(
         warehouse_item_id: "#{content_id}:en",
         base_path: '/base-path',
-        live: true,
+        live: false,
         schema_name: 'gone'
       ),
       have_attributes(
@@ -282,4 +282,3 @@ RSpec.describe 'PublishingAPI message queue' do
     expect(message2).to be_acked
   end
 end
-

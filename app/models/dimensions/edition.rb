@@ -39,11 +39,15 @@ class Dimensions::Edition < ApplicationRecord
       old_edition.deprecate!
       assign_attributes warehouse_item_id: old_edition.warehouse_item_id
     end
-    update!(live: true)
+    update!(live: true) unless unpublished?
   end
 
   def deprecate!
     update!(live: false)
+  end
+
+  def unpublished?
+    %w(gone vanish).include?(document_type)
   end
 
   def change_from?(attributes)
