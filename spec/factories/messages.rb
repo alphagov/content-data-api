@@ -173,4 +173,28 @@ FactoryBot.define do
       }
     end
   end
+
+  factory :redirect_message, parent: :message do
+    payload do
+      {
+        'document_type' => 'redirect',
+        'schema_name' => 'redirect',
+        'base_path' => base_path,
+        'locale' => locale,
+        'publishing_app' => 'whitehall',
+        'details' => {
+          'explanation' => '',
+          'alternative_path' => ''
+        },
+        'routes' => [
+          {
+            'path' => content_id,
+            'type' => 'exact'
+          }
+        ],
+        'content_id' => content_id,
+        'payload_version' => payload_version
+      }
+    end
+  end
 end

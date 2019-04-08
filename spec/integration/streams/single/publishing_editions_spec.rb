@@ -179,7 +179,7 @@ RSpec.describe 'PublishingAPI message queue' do
   end
 
 
-  xit 'publishes redirect edition for content item' do
+  it 'publishes redirect edition for content item' do
     expect(GovukStatsd).to receive(:increment)
      .with('monitor.messages.major').twice
 
@@ -188,15 +188,15 @@ RSpec.describe 'PublishingAPI message queue' do
 
     content_id = message.payload['content_id']
 
-    gone_message = build :gone_message, content_id: content_id
-    subject.process(gone_message)
+    redirect_message = build :redirect_message, content_id: content_id
+    subject.process(redirect_message)
 
     expect(Dimensions::Edition.all).to contain_exactly(
       have_attributes(
         warehouse_item_id: "#{content_id}:en",
         base_path: '/base-path',
         live: false,
-        schema_name: 'gone'
+        schema_name: 'redirect'
       ),
       have_attributes(
         warehouse_item_id: "#{content_id}:en",
@@ -205,9 +205,9 @@ RSpec.describe 'PublishingAPI message queue' do
       )
     )
 
-    expect_messages_to_have_publishing_api_events([message, gone_message])
+    expect_messages_to_have_publishing_api_events([message, redirect_message])
     expect(message).to be_acked
-    expect(gone_message).to be_acked
+    expect(redirect_message).to be_acked
   end
 
   it 'publishes edition with new base_path for content item' do
