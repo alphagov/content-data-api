@@ -11,7 +11,7 @@ Data is combined from multiple sources, including the [publishing platform](http
 
 ## Introduction ##
 
-- [What is a data warehouse and it role in GOV.UK][data-warehouse-what-why]
+- [What is a data warehouse and its role in GOV.UK][data-warehouse-what-why]
 - [Database schema: star schema][data-warehouse-schema]
 
 ## Live examples
