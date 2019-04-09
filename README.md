@@ -9,6 +9,11 @@ This repository contains:
 
 Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback).
 
+## Introduction ##
+
+- [What is a data warehouse and its role in GOV.UK][data-warehouse-what-why]
+- [Database schema: star schema][data-warehouse-schema]
+
 ## Live examples
 
 - [List all metrics](https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics)
@@ -62,3 +67,5 @@ If you are a GOV.UK developer using the development VM, you can [run the replica
 
 [GOV.UK replication scripts]: https://docs.publishing.service.gov.uk/manual/replicate-app-data-locally.html
 [api-doc]: /doc/api
+[data-warehouse-what-why]: doc/data-warehouse-what-and-why.md
+[data-warehouse-schema]: doc/data-warehouse-schema.md
