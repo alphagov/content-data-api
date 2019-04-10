@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :edition, class: Dimensions::Edition do
-    latest { true }
+    live { true }
     locale { 'en' }
     sequence(:content_id) { SecureRandom.uuid }
     sequence(:title) { |i| "title - #{i}" }
@@ -9,7 +9,7 @@ FactoryBot.define do
     sequence(:publishing_api_payload_version)
     schema_name { 'detailed_guide' }
     document_type { 'detailed_guide' }
-    warehouse_item_id { "#{content_id}:#{locale}:#{base_path}" }
+    warehouse_item_id { "#{content_id}:#{locale}" }
     organisation_id { '17d84dc6-e5b5-4065-a8b5-8783bd934938' }
     withdrawn { false }
     historical { false }
@@ -33,6 +33,10 @@ FactoryBot.define do
         dimensions_edition: new_edition,
         )
       new_edition
+    end
+
+    trait :multipart do
+      warehouse_item_id { "#{content_id}:#{locale}:#{base_path}" }
     end
   end
 end

@@ -3,8 +3,8 @@ RSpec.describe Etl::Aggregations::Monthly do
 
   let(:date) { Date.new(2018, 2, 20) }
 
-  let(:edition1) { create :edition, base_path: '/path1', latest: true, date: '2018-02-20' }
-  let(:edition2) { create :edition, base_path: '/path2', latest: true, date: '2018-02-20' }
+  let(:edition1) { create :edition, base_path: '/path1', live: true, date: '2018-02-20' }
+  let(:edition2) { create :edition, base_path: '/path2', live: true, date: '2018-02-20' }
 
   it 'calculates monthly aggregations for a given date' do
     create :metric, edition: edition1, date: '2018-02-20', pviews: 20, upviews: 10

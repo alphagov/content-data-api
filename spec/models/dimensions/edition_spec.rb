@@ -18,156 +18,123 @@ RSpec.describe Dimensions::Edition, type: :model do
       expect(results).to match_array([edition1])
     end
 
-    it '.by_content_id' do
-      edition1 = create(:edition, content_id: 'id1')
-      create(:edition, content_id: 'id2')
-
-      results = subject.by_content_id('id1')
-      expect(results).to match_array([edition1])
-    end
-
-    it '.by_organisation_id' do
-      edition1 = create(:edition, organisation_id: 'org-1')
-      create(:edition, organisation_id: 'org-2')
-
-      results = subject.by_organisation_id('org-1')
-      expect(results).to match_array([edition1])
-    end
-
-    it '.by_locale' do
-      edition1 = create(:edition, locale: 'fr')
-      create(:edition, locale: 'de')
-
-      results = subject.by_locale('fr')
-      expect(results).to match_array(edition1)
-    end
-
     describe '.outdated_subpages' do
       let(:content_id) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
       let(:locale) { 'fr' }
 
       it 'filters out the passed paths' do
-        create :edition, base_path: '/path-1', locale: locale, content_id: content_id
-        create :edition, base_path: '/path-1/part-1', locale: locale, content_id: content_id
-        create :edition, base_path: '/path-1/part-2.fr', locale: locale, content_id: content_id
-        create :edition, base_path: '/path-1/part-2', locale: 'en', content_id: content_id
+        create :edition, :multipart, base_path: '/path-1', locale: locale, content_id: content_id
+        create :edition, :multipart, base_path: '/path-1/part-1', locale: locale, content_id: content_id
+        create :edition, :multipart, base_path: '/path-1/part-2.fr', locale: locale, content_id: content_id
+        create :edition, :multipart, base_path: '/path-1/part-2', locale: 'en', content_id: content_id
         expect(Dimensions::Edition.outdated_subpages(content_id, locale, ['/path-1', '/path-1/part-1']).map(&:base_path)).to eq(['/path-1/part-2.fr'])
       end
     end
 
-    it '.by_document_type' do
-      edition1 = create(:edition, document_type: 'guide')
-      create(:edition, document_type: 'local_transaction')
+    it '.live' do
+      edition1 = create :edition, live: true
+      create :edition, live: false
 
-      results = subject.by_document_type('guide')
-      expect(results).to match_array([edition1])
+      expect(subject.live).to match_array([edition1])
+    end
+  end
+
+  describe '.find_latest' do
+    it 'return the most recent editon for a content item' do
+      content_id = SecureRandom.uuid
+      edition1 = create :edition, content_id: content_id, locale: 'en'
+      edition2 = create :edition, content_id: content_id, locale: 'en', replaces: edition1
+
+      warehouse_item_id = "#{content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(edition2)
     end
 
-    it '.latest' do
-      edition1 = create :edition, latest: true
-      create :edition, latest: false
+    it 'return the most recent editon for a content item for locale' do
+      content_id = SecureRandom.uuid
+      edition1 = create :edition, content_id: content_id, locale: 'en'
+      edition2 = create :edition, content_id: content_id, locale: 'en', replaces: edition1
+      create :edition, content_id: content_id, locale: 'cy'
 
-      expect(subject.latest).to match_array([edition1])
+      warehouse_item_id = "#{content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(edition2)
     end
 
-    describe '.existing_latest_editions' do
-      let(:content_id_1) { 'd5348817-0c34-4942-9111-2331e12cb1c5' }
-      let(:content_id_2) { 'aaaaaaaa-0c34-4942-9111-2331e12cb1c5' }
-      let(:base_path_1_1) { '/foo/part1' }
-      let(:base_path_1_2) { '/foo/part2' }
-      let(:base_path_2) { '/bar' }
+    it 'return the most recent editon for content id' do
+      content_id = SecureRandom.uuid
+      edition1 = create :edition, content_id: content_id, locale: 'en'
+      edition2 = create :edition, content_id: content_id, locale: 'en', replaces: edition1
+      create :edition
+      create :edition
 
-      let!(:edition_1_1) do
-        create(
-          :edition,
-          document_type: 'guide',
-          base_path: base_path_1_1,
-          content_id: content_id_1
-        )
-      end
+      warehouse_item_id = "#{content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(edition2)
+    end
 
-      let!(:edition_1_2) do
-        create(
-          :edition,
-          document_type: 'guide',
-          base_path: base_path_1_2,
-          content_id: content_id_1
-        )
-      end
+    it 'return nil for no edition for locale' do
+      create :edition, locale: 'cy'
+      content_id = SecureRandom.uuid
 
-      let!(:edition_2) do
-        create(
-          :edition,
-          document_type: 'guide',
-          base_path: '/bar',
-          content_id: content_id_2
-        )
-      end
+      warehouse_item_id = "#{content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(nil)
+    end
 
-      it "includes editions with the same content id as the new thing, even if the base path has changed" do
-        new_paths = ['/baz']
-        existing = Dimensions::Edition.existing_latest_editions(content_id_2, 'en', new_paths)
-        expect(existing).to eq([edition_2])
-      end
+    it 'return nil for no edition for content_id' do
+      create :edition
+      other_content_id = SecureRandom.uuid
 
-      it "includes editions with a different content id that clash with a new base path" do
-        new_content_id = 'bbbbbbbb-0c34-4942-9111-2331e12cb1c5'
-        new_paths = ['/bar']
-        existing = Dimensions::Edition.existing_latest_editions(new_content_id, 'en', new_paths)
-
-        expect(existing).to eq([edition_2])
-      end
-
-      it "excludes editions with a different locale" do
-        translation = create(
-          :edition,
-          document_type: 'guide',
-          base_path: '/bar.fr',
-          content_id: content_id_2,
-          locale: 'fr'
-        )
-
-        existing = Dimensions::Edition.existing_latest_editions(content_id_2, 'en', [base_path_2])
-
-        expect(existing).to include(edition_2)
-        expect(existing).not_to include(translation)
-      end
-
-      context "when the new document has one part the same and one part different" do
-        let(:new_paths) { [base_path_1_1, '/foo/new-part'] }
-        let(:existing) { Dimensions::Edition.existing_latest_editions(content_id_1, 'en', new_paths) }
-
-        it 'includes all parts that currently map to the content id' do
-          expect(existing).to include(edition_1_1)
-          expect(existing).to include(edition_1_2)
-        end
-
-        it "doesn't include editions with completely different content id and base path" do
-          expect(existing).not_to include(edition_2)
-        end
-      end
+      warehouse_item_id = "#{other_content_id}:en"
+      latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
+      expect(latest_edition).to eq(nil)
     end
   end
 
   describe '#promote!' do
-    let(:edition) { build :edition, latest: false }
-    let(:warehouse_item_id) { 'warehouse-item-id' }
-    let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
+    context 'for published edition' do
+      let(:edition) { build :edition, live: false }
+      let(:warehouse_item_id) { 'warehouse-item-id' }
+      let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
 
-    before do
-      edition.promote!(old_edition)
+      before do
+        edition.promote!(old_edition)
+      end
+
+      it 'set the live attribute to true' do
+        expect(edition.live).to be true
+      end
+
+      it 'sets the live attribute to false for the old version' do
+        expect(old_edition.live).to be false
+      end
+
+      it 'copies the warehouse_item_id from the old edition' do
+        expect(edition.reload.warehouse_item_id).to eq(warehouse_item_id)
+      end
     end
 
-    it 'set the latest attribute to true' do
-      expect(edition.latest).to be true
-    end
+    context 'for unpublished edition' do
+      let(:edition) { build :edition, live: false, document_type: 'gone' }
+      let(:warehouse_item_id) { 'warehouse-item-id' }
+      let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
 
-    it 'sets the latest attribute to false for the old version' do
-      expect(old_edition.latest).to be false
-    end
+      before do
+        edition.promote!(old_edition)
+      end
 
-    it 'copies the warehouse_item_id from the old edition' do
-      expect(edition.reload.warehouse_item_id).to eq(warehouse_item_id)
+      it 'set the live attribute to true' do
+        expect(edition.live).to be false
+      end
+
+      it 'sets the live attribute to false for the old version' do
+        expect(old_edition.live).to be false
+      end
+
+      it 'copies the warehouse_item_id from the old edition' do
+        expect(edition.warehouse_item_id).to eq(warehouse_item_id)
+      end
     end
   end
 
@@ -225,31 +192,31 @@ RSpec.describe Dimensions::Edition, type: :model do
     end
   end
 
-  describe 'Unique constraint on `warehouse_item_id` and `latest`' do
-    it 'prevent duplicating `warehouse_item_id` for latest items' do
-      create :edition, warehouse_item_id: 'value', latest: true
+  describe 'Unique constraint on `warehouse_item_id` and `live`' do
+    it 'prevent duplicating `warehouse_item_id` for live items' do
+      create :edition, warehouse_item_id: 'value', live: true
 
-      expect(-> { create :edition, warehouse_item_id: 'value', latest: true }).to raise_error(ActiveRecord::RecordNotUnique)
+      expect(-> { create :edition, warehouse_item_id: 'value', live: true }).to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it 'does not prevent duplicating `warehouse_item_id` for old items' do
-      create :edition, warehouse_item_id: 'value', latest: true
+      create :edition, warehouse_item_id: 'value', live: true
 
-      expect(-> { create :edition, warehouse_item_id: 'value', latest: false }).to_not raise_error
+      expect(-> { create :edition, warehouse_item_id: 'value', live: false }).to_not raise_error
     end
   end
 
-  describe 'Unique constraint on `base_path` and `latest`' do
-    it 'prevent duplicating `base_path` for latest items' do
-      create :edition, base_path: 'value', latest: true
+  describe 'Unique constraint on `base_path` and `live`' do
+    it 'prevent duplicating `base_path` for live items' do
+      create :edition, base_path: 'value', live: true
 
-      expect(-> { create :edition, base_path: 'value', latest: true }).to raise_error(ActiveRecord::RecordNotUnique)
+      expect(-> { create :edition, base_path: 'value', live: true }).to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it 'does not prevent duplicating `base_path` for old items' do
-      create :edition, base_path: 'value', latest: true
+      create :edition, base_path: 'value', live: true
 
-      expect(-> { create :edition, base_path: 'value', latest: false }).to_not raise_error
+      expect(-> { create :edition, base_path: 'value', live: false }).to_not raise_error
     end
   end
 end

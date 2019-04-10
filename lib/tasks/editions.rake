@@ -15,4 +15,14 @@ namespace :editions do
 
     puts "Done!"
   end
+
+  desc "Update live attribute for unpublished editions"
+  task unset_live_for_unpublished_editions: :environment do
+    live_unpublished_editions = Dimensions::Edition.live.where(document_type: %w(gone vanish redirect))
+    puts "Updating live #{live_unpublished_editions.count} editions"
+
+    live_unpublished_editions.update_all(live: false)
+
+    puts "Done!"
+  end
 end

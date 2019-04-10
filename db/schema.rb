@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_12_141439) do
+ActiveRecord::Schema.define(version: 2019_04_02_143148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_141439) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "latest"
+    t.boolean "live"
     t.string "document_type", null: false
     t.datetime "first_published_at"
     t.datetime "public_updated_at"
@@ -89,17 +89,17 @@ ActiveRecord::Schema.define(version: 2019_03_12_141439) do
     t.bigint "publishing_api_event_id"
     t.string "acronym"
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
-    t.index ["content_id", "latest"], name: "index_dimensions_editions_on_content_id_and_latest"
+    t.index ["content_id", "live"], name: "index_dimensions_editions_on_content_id_and_live"
     t.index ["document_type"], name: "index_dimensions_editions_on_document_type"
-    t.index ["latest", "base_path"], name: "index_dimensions_editions_on_latest_and_base_path", unique: true, where: "(latest = true)"
-    t.index ["latest", "document_type"], name: "index_dimensions_editions_on_latest_and_document_type"
-    t.index ["latest", "organisation_id", "primary_organisation_title"], name: "index_dimensions_editions_on_latest_org_id_org_title"
-    t.index ["latest", "warehouse_item_id"], name: "index_dimensions_editions_on_latest_and_warehouse_item_id", unique: true, where: "(latest = true)"
-    t.index ["latest"], name: "index_dimensions_editions_on_latest"
+    t.index ["live", "base_path"], name: "index_dimensions_editions_on_live_and_base_path", unique: true, where: "(live = true)"
+    t.index ["live", "document_type"], name: "index_dimensions_editions_on_live_and_document_type"
+    t.index ["live", "organisation_id", "primary_organisation_title"], name: "index_dimensions_editions_on_latest_org_id_org_title"
+    t.index ["live", "warehouse_item_id"], name: "index_dimensions_editions_on_live_and_warehouse_item_id", unique: true, where: "(live = true)"
+    t.index ["live"], name: "index_dimensions_editions_on_live"
     t.index ["organisation_id"], name: "index_dimensions_editions_organisation_id"
     t.index ["publishing_api_event_id"], name: "index_dimensions_editions_on_publishing_api_event_id"
     t.index ["warehouse_item_id", "base_path", "title", "document_type"], name: "index_for_content_query"
-    t.index ["warehouse_item_id", "latest"], name: "index_dimensions_editions_warehouse_item_id_latest"
+    t.index ["warehouse_item_id", "live"], name: "index_dimensions_editions_warehouse_item_id_latest"
     t.index ["warehouse_item_id"], name: "index_dimensions_editions_warehouse_item_id"
   end
 
@@ -221,7 +221,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_141439) do
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -266,7 +266,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_141439) do
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -311,7 +311,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_141439) do
       (aggregations.feedex)::bigint AS feedex,
       (aggregations.useful_yes)::bigint AS useful_yes,
       (aggregations.useful_no)::bigint AS useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -379,7 +379,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_141439) do
       (aggregations.feedex)::bigint AS feedex,
       (aggregations.useful_yes)::bigint AS useful_yes,
       (aggregations.useful_no)::bigint AS useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -447,7 +447,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_141439) do
       (aggregations.feedex)::bigint AS feedex,
       (aggregations.useful_yes)::bigint AS useful_yes,
       (aggregations.useful_no)::bigint AS useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)

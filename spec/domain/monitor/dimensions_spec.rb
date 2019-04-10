@@ -15,11 +15,11 @@ RSpec.describe Monitor::Dimensions do
     subject.run
   end
 
-  it 'sends StatsD counter of `latest` base_paths' do
-    expect(GovukStatsd).to receive(:count).with("monitor.dimensions.latest_base_paths", 1)
+  it 'sends StatsD counter of `live` base_paths' do
+    expect(GovukStatsd).to receive(:count).with("monitor.dimensions.live_base_paths", 1)
 
-    create :edition, base_path: '/foo', latest: true
-    create :edition, base_path: '/bar', latest: false
+    create :edition, base_path: '/foo', live: true
+    create :edition, base_path: '/bar', live: false
 
     subject.run
   end
@@ -27,20 +27,20 @@ RSpec.describe Monitor::Dimensions do
   it 'sends StatsD counter of content_items' do
     expect(GovukStatsd).to receive(:count).with("monitor.dimensions.content_items", 1)
 
-    create :edition, content_id: 'id1', base_path: '/foo'
-    create :edition, content_id: 'id1', base_path: '/bar'
+    edition1 = create :edition, content_id: 'id1', base_path: '/foo'
+    create :edition, content_id: 'id1', base_path: '/bar', replaces: edition1
 
     subject.run
   end
 
-  it 'sends StatsD counter of `latest` content_items' do
-    expect(GovukStatsd).to receive(:count).with("monitor.dimensions.latest_content_items", 1)
+  it 'sends StatsD counter of `live` content_items' do
+    expect(GovukStatsd).to receive(:count).with("monitor.dimensions.live_content_items", 1)
 
-    create :edition, content_id: 'id1', base_path: '/foo', latest: true
-    create :edition, content_id: 'id1', base_path: '/bar', latest: true
-    create :edition, content_id: 'id1', base_path: '/other', latest: false
+    edition1 = create :edition, content_id: 'id1', base_path: '/foo'
+    create :edition, content_id: 'id1', base_path: '/bar', replaces: edition1
+    create :edition, content_id: 'id2', base_path: '/other', live: false
     subject.run
   end
 
-  it_behaves_like 'traps and logs errors in run', Dimensions::Edition, :latest
+  it_behaves_like 'traps and logs errors in run', Dimensions::Edition, :live
 end

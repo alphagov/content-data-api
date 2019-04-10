@@ -3,8 +3,8 @@ RSpec.describe 'Master process spec' do
   let(:yesterday) { Date.yesterday.to_s }
 
   let!(:an_edition) { create :edition }
-  let!(:outdated_edition) { create :edition, content_id: 'id1', base_path: '/path-1', latest: false }
-  let!(:edition) { create :edition, content_id: 'id1', base_path: '/path-1', latest: true }
+  let!(:outdated_edition) { create :edition, content_id: 'id1', base_path: '/path-1', live: false }
+  let!(:edition) { create :edition, content_id: 'id1', base_path: '/path-1', live: true }
 
   it 'orchestrates all ETL processes' do
     stub_google_analytics_response
@@ -23,20 +23,20 @@ RSpec.describe 'Master process spec' do
     validate_search_views!
   end
 
-  def latest_version
-    Dimensions::Edition.find_by(latest: true, content_id: 'id1')
+  def live_version
+    Dimensions::Edition.find_by(live: true, content_id: 'id1')
   end
 
   def latest_metric
     Facts::Metric
       .joins(:dimensions_edition)
-      .where(dimensions_editions: { latest: true, content_id: 'id1' })
+      .where(dimensions_editions: { live: true, content_id: 'id1' })
       .first
   end
 
   def validate_facts_metrics!
     expect(Facts::Metric.count).to eq(2)
-    expect(Facts::Metric.pluck(:dimensions_edition_id)).to match_array([an_edition.id, latest_version.id])
+    expect(Facts::Metric.pluck(:dimensions_edition_id)).to match_array([an_edition.id, live_version.id])
     expect(Facts::Metric.pluck(:dimensions_date_id).uniq).to match_array(yesterday.to_date)
   end
 
@@ -58,10 +58,10 @@ RSpec.describe 'Master process spec' do
   def validate_aggregations!
     expect(Aggregations::MonthlyMetric.count).to eq(2)
 
-    aggregation = Aggregations::MonthlyMetric.find_by(dimensions_edition_id: latest_version.id)
+    aggregation = Aggregations::MonthlyMetric.find_by(dimensions_edition_id: live_version.id)
     expect(aggregation).to have_attributes(
       dimensions_month_id: Date.yesterday.strftime('%Y-%m'),
-      dimensions_edition_id: latest_version.id,
+      dimensions_edition_id: live_version.id,
       pviews: 11,
       upviews: 12,
     )
