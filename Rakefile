@@ -7,7 +7,7 @@ Rails.application.load_tasks
 
 namespace :lint do
   task :ruby do
-    sh "bundle exec rubocop app config lib spec"
+    sh "bundle exec rubocop --parallel app config lib spec"
   end
 end
 
