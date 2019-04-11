@@ -1,7 +1,9 @@
+require_dependency 'concerns/trace_and_recoverable'
+
 module Etl
   module Master
     class MetricsProcessor
-      include Concerns::Traceable
+      include Concerns::TraceAndRecoverable
 
       def self.process(*args)
         new(*args).process
@@ -12,7 +14,7 @@ module Etl
       end
 
       def process
-        time(process: :metrics) do
+        time_and_trap(process: :metrics) do
           create_metrics
         end
       end
@@ -36,8 +38,6 @@ module Etl
           end
           Facts::Metric.import(values, validate: false)
         end
-      rescue StandardError => e
-        GovukError.notify(e)
       end
     end
   end

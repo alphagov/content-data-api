@@ -7,7 +7,7 @@ RSpec.describe Etl::Master::MetricsProcessor do
     create :edition, live: true
     item = create(:edition, live: true, content_id: 'cid1')
 
-    subject.process
+    expect(subject.process).to be true
 
     expect(Facts::Metric.count).to eq(2)
     expect(Facts::Metric.find_by(dimensions_edition: item)).to have_attributes(
@@ -20,8 +20,14 @@ RSpec.describe Etl::Master::MetricsProcessor do
     create(:edition, live: true, content_id: 'cid1')
     create(:edition, live: false, content_id: 'cid1')
 
-    subject.process
+    expect(subject.process).to be true
 
     expect(Facts::Metric.count).to eq(1)
+  end
+
+  it 'reports failure' do
+    allow(subject).to receive(:create_metrics).and_raise
+
+    expect(subject.process).to be false
   end
 end
