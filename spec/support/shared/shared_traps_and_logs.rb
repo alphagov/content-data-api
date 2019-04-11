@@ -6,7 +6,7 @@ RSpec.shared_examples 'traps and logs errors in process' do |object, method|
   end
 
   it 'traps and logs the error to Sentry' do
-    expect { subject.process(date: date) }.not_to raise_error
+    expect(subject.process(date: date)).to be false
     expect(GovukError).to have_received(:notify).with(error)
   end
 end
@@ -19,7 +19,7 @@ RSpec.shared_examples 'traps and logs errors in run' do |object, method|
   end
 
   it 'traps and logs the error to Sentry' do
-    expect { subject.run }.not_to raise_error
+    expect(subject.run).to be false
     expect(GovukError).to have_received(:notify).with(error)
   end
 end
