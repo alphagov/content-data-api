@@ -10,12 +10,12 @@ RSpec.describe Etl::Master::MasterProcessor do
   end
 
   before do
-    allow(Etl::GA::ViewsAndNavigationProcessor).to receive(:process)
-    allow(Etl::GA::UserFeedbackProcessor).to receive(:process)
-    allow(Etl::GA::InternalSearchProcessor).to receive(:process)
-    allow(Etl::Feedex::Processor).to receive(:process)
-    allow(Etl::Master::MetricsProcessor).to receive(:process)
-    allow(Monitor::Etl).to receive(:run)
+    allow(Etl::GA::ViewsAndNavigationProcessor).to receive(:process).and_return(true)
+    allow(Etl::GA::UserFeedbackProcessor).to receive(:process).and_return(true)
+    allow(Etl::GA::InternalSearchProcessor).to receive(:process).and_return(true)
+    allow(Etl::Feedex::Processor).to receive(:process).and_return(true)
+    allow(Etl::Master::MetricsProcessor).to receive(:process).and_return(true)
+    allow(Monitor::Etl).to receive(:run).and_return(true)
 
     allow(Etl::Aggregations::Monthly).to receive(:process)
     allow(Etl::Aggregations::Search).to receive(:process)
@@ -54,6 +54,12 @@ RSpec.describe Etl::Master::MasterProcessor do
     expect(Etl::Feedex::Processor).to receive(:process).with(date: Date.new(2018, 2, 19))
 
     subject.process
+  end
+
+  it 'handles processor failures' do
+    allow(Etl::GA::ViewsAndNavigationProcessor).to receive(:process).and_return(false)
+
+    expect(subject.process).to be false
   end
 
   describe 'Aggregations' do
@@ -110,6 +116,12 @@ RSpec.describe Etl::Master::MasterProcessor do
         expect(Monitor::Aggregations).to receive(:run)
 
         subject.process
+      end
+
+      it 'handles failures' do
+        allow(Monitor::Aggregations).to receive(:run).and_return(false)
+
+        expect(subject.process).to be false
       end
     end
 

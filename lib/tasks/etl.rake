@@ -1,7 +1,9 @@
 namespace :etl do
   desc 'Run ETL master process'
   task master: :environment do
-    Etl::Master::MasterProcessor.process
+    unless Etl::Master::MasterProcessor.process
+      abort('Etl::Master::MasterProcessor failed')
+    end
   end
 
   desc 'Run Etl::Aggregations::Monthly for range of dates'
@@ -28,7 +30,9 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       console_log "repopulating GA pviews for #{date}"
-      Etl::GA::ViewsAndNavigationProcessor.process(date: date)
+      unless Etl::GA::ViewsAndNavigationProcessor.process(date: date)
+        abort('Etl::GA::ViewsAndNavigationProcessor failed')
+      end
       console_log "finished repopulating GA pviews for #{date}"
     end
   end
@@ -39,7 +43,9 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       console_log "repopulating searches for #{date}"
-      Etl::GA::InternalSearchProcessor.process(date: date)
+      unless Etl::GA::InternalSearchProcessor.process(date: date)
+        abort('Etl::GA::InternalSearchProcessor failed')
+      end
       console_log "finished repopulating searches for #{date}"
     end
   end
@@ -50,7 +56,9 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       console_log "repopulating useful scores for #{date}"
-      Etl::GA::UserFeedbackProcessor.process(date: date)
+      unless Etl::GA::UserFeedbackProcessor.process(date: date)
+        abort('Etl::GA::UserFeedbackProcessor failed')
+      end
       console_log "finished repopulating useful scores for #{date}"
     end
   end
@@ -61,7 +69,9 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       console_log "repopulating feedex for #{date}"
-      Etl::Feedex::Processor.process(date: date)
+      unless Etl::Feedex::Processor.process(date: date)
+        abort('Etl::Feedex::Processor failed')
+      end
       console_log "finished repopulating feedex for #{date}"
     end
   end
@@ -76,7 +86,9 @@ namespace :etl do
         console_log "Deleting existing metrics for #{date}"
         Facts::Metric.where(dimensions_date_id: date).delete_all
         console_log "Running Etl::Master process for #{date}"
-        Etl::Master::MasterProcessor.process(date: date)
+        unless Etl::Master::MasterProcessor.process(date: date)
+          abort('Etl::Master::MasterProcessor failed')
+        end
         console_log "finished running Etl::Master for #{date}"
       end
     end

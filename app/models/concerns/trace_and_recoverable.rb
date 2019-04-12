@@ -10,8 +10,12 @@ module Concerns::TraceAndRecoverable
 
       begin
         time(process: process, &block)
+
+        true
       rescue StandardError => e
         GovukError.notify(e)
+
+        false
       end
     end
 
@@ -20,8 +24,12 @@ module Concerns::TraceAndRecoverable
 
       begin
         yield
+
+        true
       rescue StandardError => e
         GovukError.notify(e)
+
+        false
       end
     end
   end
