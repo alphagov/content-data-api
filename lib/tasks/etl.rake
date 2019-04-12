@@ -8,10 +8,14 @@ namespace :etl do
   task :repopulate_aggregations_month, %i[from to] => [:environment] do |_t, args|
     from = args[:from].to_date
     to = args[:to].to_date
-    (from..to).each do |date|
-      console_log "repopulating Monthly Aggregation for #{date}"
+    months = (from..to).map { |d| [d.year, d.month] }.uniq
+
+    months.each do |month|
+      date = Date.new(*month, 1)
+      string_date = date.strftime('%Y-%m')
+      console_log "repopulating Monthly Aggregation for #{string_date}"
       Etl::Aggregations::Monthly.process(date: date)
-      console_log "finished repopulating Monthly Aggregation for #{date}"
+      console_log "finished repopulating Monthly Aggregation for #{string_date}"
     end
   end
 
