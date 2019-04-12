@@ -12,11 +12,11 @@ RSpec.describe 'etl.rake', type: task do
     it 'calls Etl::Aggregations::Monthly with each date' do
       processor = class_double(Etl::Aggregations::Monthly, process: true).as_stubbed_const
 
-      Rake::Task['etl:repopulate_aggregations_month'].invoke('2018-11-01', '2018-11-03')
+      Rake::Task['etl:repopulate_aggregations_month'].invoke('2018-11-01', '2019-01-03')
 
       expect(processor).to have_received(:process).with(date: Date.new(2018, 11, 1))
-      expect(processor).to have_received(:process).with(date: Date.new(2018, 11, 2))
-      expect(processor).to have_received(:process).with(date: Date.new(2018, 11, 3))
+      expect(processor).to have_received(:process).with(date: Date.new(2018, 12, 1))
+      expect(processor).to have_received(:process).with(date: Date.new(2019, 1, 1))
     end
   end
 
