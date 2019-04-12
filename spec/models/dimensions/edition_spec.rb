@@ -109,10 +109,6 @@ RSpec.describe Dimensions::Edition, type: :model do
       it 'sets the live attribute to false for the old version' do
         expect(old_edition.live).to be false
       end
-
-      it 'copies the warehouse_item_id from the old edition' do
-        expect(edition.reload.warehouse_item_id).to eq(warehouse_item_id)
-      end
     end
 
     context 'for unpublished edition' do
@@ -130,10 +126,6 @@ RSpec.describe Dimensions::Edition, type: :model do
 
       it 'sets the live attribute to false for the old version' do
         expect(old_edition.live).to be false
-      end
-
-      it 'copies the warehouse_item_id from the old edition' do
-        expect(edition.warehouse_item_id).to eq(warehouse_item_id)
       end
     end
   end

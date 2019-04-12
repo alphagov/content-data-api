@@ -23,6 +23,9 @@ FactoryBot.define do
 
     to_create do |new_edition, evaluator|
       if evaluator.replaces
+        new_edition.content_id = evaluator.replaces.content_id
+        new_edition.locale = evaluator.replaces.locale
+        new_edition.warehouse_item_id = evaluator.replaces.warehouse_item_id
         new_edition.promote! evaluator.replaces
       else
         new_edition.save!
