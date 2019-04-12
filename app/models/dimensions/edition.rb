@@ -35,15 +35,8 @@ class Dimensions::Edition < ApplicationRecord
   end
 
   def promote!(old_edition)
-    if old_edition
-      old_edition.deprecate!
-      assign_attributes warehouse_item_id: old_edition.warehouse_item_id
-    end
+    old_edition.update!(live: false) if old_edition
     update!(live: true) unless unpublished?
-  end
-
-  def deprecate!
-    update!(live: false)
   end
 
   def unpublished?
