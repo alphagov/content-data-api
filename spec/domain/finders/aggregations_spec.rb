@@ -13,7 +13,7 @@ RSpec.describe Finders::Aggregations do
     expect(result.fetch(:pviews)).to eq(5)
   end
 
-  it 'filters by base_path' do
+  it 'filters by_warehouse_item_id' do
     edition = create :edition, base_path: '/path/1', date: '2018-01-01'
     create :metric, edition: edition, date: '2018-01-01', pviews: 2
     create :metric, edition: edition, date: '2018-01-02', pviews: 3
@@ -21,16 +21,10 @@ RSpec.describe Finders::Aggregations do
     edition2 = create :edition, base_path: '/path/2', date: '2018-01-01'
     create :metric, edition: edition2, date: '2018-01-02', pviews: 3
 
-    result = Finders::Aggregations.new.by_base_path('/path/1').run
-    expect(result.fetch(:pviews)).to eq(5)
-  end
+    result = Finders::Aggregations.new
+      .by_warehouse_item_id(edition.warehouse_item_id)
+      .run
 
-  it 'repects base_path with locales' do
-    edition = create :edition, base_path: '/path.cy', date: '2018-01-01', locale: 'cy'
-    create :metric, edition: edition, date: '2018-01-01', pviews: 2
-    create :metric, edition: edition, date: '2018-01-02', pviews: 3
-
-    result = Finders::Aggregations.new.by_base_path('/path.cy').run
     expect(result.fetch(:pviews)).to eq(5)
   end
 
