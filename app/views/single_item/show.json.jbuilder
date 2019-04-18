@@ -1,5 +1,5 @@
 json.metadata do
-  json.merge! @metadata
+  json.merge! @live_edition.metadata
 end
 
 json.time_period do

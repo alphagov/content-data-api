@@ -5,7 +5,8 @@ class SingleItemController < Api::BaseController
     @from = from
     @to = to
     @base_path = format_base_path_param
-    @metadata = find_metadata
+
+    @live_edition = find_live_edition
     @time_series_metrics = find_time_series
     @edition_metrics = find_editions
     @aggregations = find_aggregations
@@ -13,11 +14,11 @@ class SingleItemController < Api::BaseController
 
 private
 
-  def find_metadata
-    metadata = Finders::Metadata.run(@base_path)
-    raise Api::NotFoundError.new("#{api_request.base_path} not found") if metadata.nil?
+  def find_live_edition
+    live_edition = Dimensions::Edition.live_by_base_path(@base_path).first
+    raise Api::NotFoundError.new("#{api_request.base_path} not found") if live_edition.nil?
 
-    metadata
+    live_edition
   end
 
   def find_time_series
