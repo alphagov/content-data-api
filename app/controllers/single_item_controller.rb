@@ -24,7 +24,7 @@ private
   def find_time_series
     Finders::FindSeries.new
       .between(from: from, to: to)
-      .by_base_path(@base_path)
+      .by_warehouse_item_id(@live_edition.warehouse_item_id)
       .run
   end
 

@@ -23,10 +23,10 @@ RSpec.describe Finders::FindSeries do
     end
   end
 
-  context "by_base_path" do
+  context "by_warehouse_item_id" do
     it "returns a series of metrics for a base path" do
-      edition1 = create :edition, date: '2018-1-12', base_path: '/path1'
-      edition2 = create :edition, date: '2018-1-12', base_path: '/path2'
+      edition1 = create :edition, date: '2018-1-12'
+      edition2 = create :edition, date: '2018-1-12'
 
       create :metric, edition: edition1, date: '2018-1-12', pviews: 1
       create :metric, edition: edition1, date: '2018-1-13', pviews: 2
@@ -34,7 +34,9 @@ RSpec.describe Finders::FindSeries do
       create :metric, edition: edition2, date: '2018-1-13', pviews: 4
       create :metric, edition: edition2, date: '2018-1-14', pviews: 5
 
-      series = described_class.new.by_base_path('/path1').run
+      series = described_class.new
+        .by_warehouse_item_id(edition1.warehouse_item_id)
+        .run
 
       pageviews = series.find { |s| s.metric_name == 'pviews' }
 
@@ -67,22 +69,6 @@ RSpec.describe Finders::FindSeries do
         include(date: "2018-01-13", value: 2),
         include(date: "2018-01-14", value: 1),
         include(date: "2018-01-14", value: 2),
-      )
-    end
-
-    it 'return the content items for non english locale' do
-      edition1 = create :edition, base_path: '/path1', date: '2018-1-12', facts: { words: 1 }, locale: 'en'
-      edition2 = create :edition, base_path: '/path1.cy', date: '2018-1-12', facts: { words: 2 }, locale: 'cy'
-
-      create :metric, edition: edition1, date: '2018-1-12'
-      create :metric, edition: edition2, date: '2018-1-13'
-
-      series = described_class.new.by_base_path('/path1.cy').run
-
-      words = series.find { |s| s.metric_name == 'words' }
-
-      expect(words.time_series).to contain_exactly(
-        include(date: "2018-01-13", value: 2),
       )
     end
   end
