@@ -14,24 +14,12 @@ RSpec.describe Finders::FindSeries do
       create :metric, edition: edition, date: '2018-5-14', pviews: 2
       create :metric, edition: edition, date: '2018-5-24', pviews: 3
 
-      series = described_class.new.by_metrics(%w(pviews)).between(from: '2018-5-13', to: '2018-5-14').run
+      series = described_class.new.between(from: '2018-5-13', to: '2018-5-14').run
 
-      expect(series.first.time_series.length).to eq(2)
-      expect(series.first.time_series).to eq([
-        { date: '2018-05-13', value: 1 },
-        { date: '2018-05-14', value: 2 },
-      ])
-    end
-  end
-
-  context "by_metric" do
-    it "returns a series of metrics filtered by the passed in metric" do
-      create :metric, date: '2018-05-13', pviews: 1
-
-      series = described_class.new.by_metrics(%w(pviews)).run
-      expect(series.first.time_series).to eq([
-        { date: '2018-05-13', value: 1 },
-      ])
+      expect(series.first.time_series).to contain_exactly(
+        include(date: '2018-05-13'),
+        include(date: '2018-05-14'),
+      )
     end
   end
 
@@ -46,13 +34,15 @@ RSpec.describe Finders::FindSeries do
       create :metric, edition: edition2, date: '2018-1-13', pviews: 4
       create :metric, edition: edition2, date: '2018-1-14', pviews: 5
 
-      result = described_class.new.by_metrics(%w(pviews)).by_base_path('/path1').run
+      series = described_class.new.by_base_path('/path1').run
 
-      expect(result.first.time_series).to eq([
-        { date: "2018-01-12", value: 1 },
-        { date: "2018-01-13", value: 2 },
-        { date: "2018-01-14", value: 3 },
-      ])
+      pageviews = series.find { |s| s.metric_name == 'pviews' }
+
+      expect(pageviews.time_series).to contain_exactly(
+        include(date: "2018-01-12", value: 1),
+        include(date: "2018-01-13", value: 2),
+        include(date: "2018-01-14", value: 3)
+      )
     end
   end
 
@@ -67,14 +57,17 @@ RSpec.describe Finders::FindSeries do
       create :metric, edition: edition2, date: '2018-1-13'
       create :metric, edition: edition2, date: '2018-1-14'
 
-      result = described_class.new.by_metrics(%w(words)).run
-      expect(result.first.time_series).to eq([
-        { date: "2018-01-12", value: 1 },
-        { date: "2018-01-13", value: 1 },
-        { date: "2018-01-13", value: 2 },
-        { date: "2018-01-14", value: 1 },
-        { date: "2018-01-14", value: 2 }
-      ])
+      series = described_class.new.run
+
+      words = series.find { |s| s.metric_name == 'words' }
+
+      expect(words.time_series).to contain_exactly(
+        include(date: "2018-01-12", value: 1),
+        include(date: "2018-01-13", value: 1),
+        include(date: "2018-01-13", value: 2),
+        include(date: "2018-01-14", value: 1),
+        include(date: "2018-01-14", value: 2),
+      )
     end
 
     it 'return the content items for non english locale' do
@@ -84,10 +77,13 @@ RSpec.describe Finders::FindSeries do
       create :metric, edition: edition1, date: '2018-1-12'
       create :metric, edition: edition2, date: '2018-1-13'
 
-      result = described_class.new.by_metrics(%w(words)).by_base_path('/path1.cy').run
-      expect(result.first.time_series).to eq([
-        { date: "2018-01-13", value: 2 },
-      ])
+      series = described_class.new.by_base_path('/path1.cy').run
+
+      words = series.find { |s| s.metric_name == 'words' }
+
+      expect(words.time_series).to contain_exactly(
+        include(date: "2018-01-13", value: 2),
+      )
     end
   end
 end

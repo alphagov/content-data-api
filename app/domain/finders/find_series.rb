@@ -12,12 +12,6 @@ class Finders::FindSeries
     self
   end
 
-  def by_metrics(metrics)
-    @metric_names = metrics
-
-    self
-  end
-
   def editions
     slice_editions
   end
@@ -31,7 +25,7 @@ class Finders::FindSeries
       .joins(dimensions_edition: :facts_edition).merge(editions)
       .joins(:dimensions_date).merge(dates)
 
-    metric_names = @metric_names || Metric.find_all_names
+    metric_names = Metric.find_all_names
     metric_names.map { |metric_name| Finders::Series.new(metric_name, metrics) }
   end
 
