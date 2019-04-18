@@ -16,7 +16,7 @@ json.time_series_metrics @time_series_metrics do |series|
   end
 end
 
-json.edition_metrics @edition_metrics do |metric|
-  json.name metric[:name]
-  json.value metric[:value]
+json.edition_metrics @edition_metrics do |metric_name|
+  json.name metric_name
+  json.value @live_edition.facts_edition.attributes[metric_name]
 end
