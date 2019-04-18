@@ -35,6 +35,10 @@ This is a Ruby on Rails application that stores over time performance metrics an
 
 - [GOV.UK Publishing API](https://github.com/alphagov/publishing-api)
 
+### Shared resources
+
+We have a [number of shared resources][shared-resources] we share with other GOV.UK applications. These are documented [here][shared-resources]
+
 ## Running the application
 
 See the [getting started guide](https://docs.publishing.service.gov.uk/getting-started.html) for instructions about setting up and running your development VM.
@@ -69,3 +73,4 @@ If you are a GOV.UK developer using the development VM, you can [run the replica
 [api-doc]: /doc/api
 [data-warehouse-what-why]: doc/data-warehouse-what-and-why.md
 [data-warehouse-schema]: doc/data-warehouse-schema.md
+[shared-resources]: doc/shared-resources.md
