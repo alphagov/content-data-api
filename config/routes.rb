@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     Healthchecks::MonthlyAggregations,
     Healthchecks::DailyMetricsCheck,
     Healthchecks::DatabaseConnection,
+    Healthchecks::SidekiqRetrySize,
     Healthchecks::EtlGoogleAnalytics.build(:pviews),
     Healthchecks::EtlGoogleAnalytics.build(:upviews),
     Healthchecks::EtlGoogleAnalytics.build(:searches),
