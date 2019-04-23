@@ -126,6 +126,7 @@ RSpec.describe '/single_page', type: :request do
           )
         )
       }
+
       expect(body).to include(expected)
       expect(response).to have_http_status(:ok)
     end

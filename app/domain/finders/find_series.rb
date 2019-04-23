@@ -6,14 +6,8 @@ class Finders::FindSeries
     self
   end
 
-  def by_base_path(base_path)
-    @base_path = base_path
-
-    self
-  end
-
-  def by_metrics(metrics)
-    @metric_names = metrics
+  def by_warehouse_item_id(warehouse_item_id)
+    @warehouse_item_id = warehouse_item_id
 
     self
   end
@@ -31,7 +25,7 @@ class Finders::FindSeries
       .joins(dimensions_edition: :facts_edition).merge(editions)
       .joins(:dimensions_date).merge(dates)
 
-    metric_names = @metric_names || Metric.find_all_names
+    metric_names = Metric.find_all_names
     metric_names.map { |metric_name| Finders::Series.new(metric_name, metrics) }
   end
 
@@ -45,7 +39,7 @@ private
 
   def slice_editions
     editions = Dimensions::Edition.all
-    editions = editions.by_base_path(@base_path) unless @base_path.blank?
+    editions = editions.where(warehouse_item_id: @warehouse_item_id) unless @warehouse_item_id.blank?
     editions
   end
 end
