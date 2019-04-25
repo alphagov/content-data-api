@@ -14,9 +14,20 @@ module Streams
 
       Monitor::Messages.run(routing_key)
 
-      ActiveRecord::Base.transaction do
-        message.handler.process
+      begin
+        ActiveRecord::Base.transaction do
+          message.handler.process
+        end
+      rescue StandardError => e
+        GovukError.notify(e)
+        logger.error(e.message)
       end
+    end
+
+  private
+
+    def logger
+      Logger.new(STDERR)
     end
   end
 end
