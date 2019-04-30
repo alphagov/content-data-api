@@ -130,7 +130,7 @@ GEM
       rubocop (~> 0.64)
       rubocop-rspec (~> 1.28)
       scss_lint
-    govuk_app_config (1.15.1)
+    govuk_app_config (1.16.0)
       aws-xray-sdk (~> 0.10.0)
       logstasher (~> 1.2.2)
       sentry-raven (~> 2.7.1)
@@ -223,7 +223,7 @@ GEM
       rack (>= 1.2, < 3)
     odyssey (0.2.0)
       require_all
-    oj (3.7.11)
+    oj (3.7.12)
     omniauth (1.9.0)
       hashie (>= 3.4.6, < 3.7.0)
       rack (>= 1.6.2, < 3)
