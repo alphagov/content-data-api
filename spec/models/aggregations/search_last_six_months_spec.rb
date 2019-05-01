@@ -52,9 +52,10 @@ RSpec.describe Aggregations::SearchLastSixMonths, type: :model do
 
 
   it 'does not include metrics older than 6 months ago' do
+    six_months_ago = Date.yesterday - 6.months
     edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
-    create :metric, edition: edition1, date: 6.months.ago, upviews: 10
-    create :metric, edition: edition1, date: 6.months.ago - 1.day, upviews: 100
+    create :metric, edition: edition1, date: six_months_ago + 1.day, upviews: 10
+    create :metric, edition: edition1, date: six_months_ago, upviews: 100
 
     recalculate_aggregations!
 
