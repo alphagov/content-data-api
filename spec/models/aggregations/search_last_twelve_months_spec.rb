@@ -51,9 +51,10 @@ RSpec.describe Aggregations::SearchLastTwelveMonths, type: :model do
   end
 
   it 'does not include metrics older than 12 months ago' do
+    tweleve_months_ago = Date.yesterday - 12.months
     edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
-    create :metric, edition: edition1, date: 12.months.ago, upviews: 10
-    create :metric, edition: edition1, date: 12.months.ago - 1.day, upviews: 100
+    create :metric, edition: edition1, date: tweleve_months_ago + 1.day, upviews: 10
+    create :metric, edition: edition1, date: tweleve_months_ago, upviews: 100
 
     recalculate_aggregations!
 

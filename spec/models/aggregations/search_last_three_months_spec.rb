@@ -51,9 +51,10 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
   end
 
   it 'does not include metrics older than 3 months ago' do
+    three_months_ago = Date.yesterday - 3.months
     edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
-    create :metric, edition: edition1, date: 3.months.ago, upviews: 10
-    create :metric, edition: edition1, date: 3.months.ago - 1.day, upviews: 100
+    create :metric, edition: edition1, date: three_months_ago + 1.day, upviews: 10
+    create :metric, edition: edition1, date: three_months_ago, upviews: 100
 
     recalculate_aggregations!
 
