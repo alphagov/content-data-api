@@ -1,4 +1,4 @@
-RSpec.shared_examples 'BaseMessage#historically_political?' do
+RSpec.shared_examples 'BasePayload#historically_political?' do
   describe '#historically_political?' do
     let(:payload) { build(:message).payload }
     let(:message) { described_class.new(payload, "routing_key") }
@@ -35,7 +35,7 @@ RSpec.shared_examples 'BaseMessage#historically_political?' do
   end
 end
 
-RSpec.shared_examples 'BaseMessage#withdrawn_notice?' do
+RSpec.shared_examples 'BasePayload#withdrawn_notice?' do
   describe '#withdrawn_notice?' do
     let(:payload) { build(:message).payload }
     let(:message) { described_class.new(payload, "routing_key") }
@@ -53,7 +53,7 @@ RSpec.shared_examples 'BaseMessage#withdrawn_notice?' do
   end
 end
 
-RSpec.shared_examples 'BaseMessage#invalid?' do
+RSpec.shared_examples 'BasePayload#invalid?' do
   describe '#valid?' do
     let(:payload) { build(:message).payload }
     let(:message) { described_class.new(payload, "routing_key") }
@@ -80,7 +80,7 @@ RSpec.shared_examples 'BaseMessage#invalid?' do
   end
 end
 
-RSpec.shared_examples 'BaseMessage#organisation_ids' do
+RSpec.shared_examples 'BasePayload#organisation_ids' do
   describe '#organisation_ids' do
     let(:payload) { build(:message).payload }
     let(:message) { described_class.new(payload, "routing_key") }

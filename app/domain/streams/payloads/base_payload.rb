@@ -1,4 +1,4 @@
-class Streams::Messages::BaseMessage
+class Streams::Payloads::BasePayload
   attr_reader :payload
 
   def initialize(payload, routing_key)

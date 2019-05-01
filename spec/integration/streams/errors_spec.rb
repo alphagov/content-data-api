@@ -11,7 +11,7 @@ RSpec.describe Streams::Consumer do
 
   context 'when an error happens' do
     before {
-      expect_any_instance_of(Streams::Messages::SingleItemMessage).to receive(:valid?).and_raise(StandardError.new)
+      expect_any_instance_of(Streams::Payloads::SingleItemPayload).to receive(:valid?).and_raise(StandardError.new)
     }
 
     it "logs the error" do
@@ -29,7 +29,7 @@ RSpec.describe Streams::Consumer do
 
   context "when message has missing mandatory fields" do
     before {
-      allow_any_instance_of(Streams::Messages::SingleItemMessage).to receive(:valid?).and_raise(StandardError)
+      allow_any_instance_of(Streams::Payloads::SingleItemPayload).to receive(:valid?).and_raise(StandardError)
     }
 
     context "missing field is base_path" do

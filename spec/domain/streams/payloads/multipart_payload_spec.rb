@@ -1,12 +1,12 @@
-RSpec.describe Streams::Messages::MultipartMessage do
+RSpec.describe Streams::Payloads::MultipartPayload do
   include PublishingEventProcessingSpecHelper
 
   subject { described_class }
 
-  include_examples 'BaseMessage#invalid?'
-  include_examples 'BaseMessage#organisation_ids'
-  include_examples 'BaseMessage#historically_political?'
-  include_examples 'BaseMessage#withdrawn_notice?'
+  include_examples 'BasePayload#invalid?'
+  include_examples 'BasePayload#organisation_ids'
+  include_examples 'BasePayload#historically_political?'
+  include_examples 'BasePayload#withdrawn_notice?'
 
   describe ".is_multipart?" do
     it "returns true if message is for multipart item" do

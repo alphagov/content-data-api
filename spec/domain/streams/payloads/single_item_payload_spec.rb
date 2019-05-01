@@ -1,12 +1,12 @@
-RSpec.describe Streams::Messages::SingleItemMessage do
+RSpec.describe Streams::Payloads::SingleItemPayload do
   include PublishingEventProcessingSpecHelper
 
   subject { described_class }
 
-  include_examples 'BaseMessage#invalid?'
-  include_examples 'BaseMessage#organisation_ids'
-  include_examples 'BaseMessage#historically_political?'
-  include_examples 'BaseMessage#withdrawn_notice?'
+  include_examples 'BasePayload#invalid?'
+  include_examples 'BasePayload#organisation_ids'
+  include_examples 'BasePayload#historically_political?'
+  include_examples 'BasePayload#withdrawn_notice?'
 
   describe '#edition_attributes' do
     let(:message) do
