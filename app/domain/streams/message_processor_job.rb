@@ -7,15 +7,14 @@ module Streams
     def perform(payload, routing_key)
       message = Streams::Messages::Factory.build(payload, routing_key)
 
-      if message.invalid?
+      if message.valid?
+        Monitor::Messages.run(routing_key)
+
+        ActiveRecord::Base.transaction do
+          message.handler.process
+        end
+      else
         Monitor::Messages.increment_discarded
-        return
-      end
-
-      Monitor::Messages.run(routing_key)
-
-      ActiveRecord::Base.transaction do
-        message.handler.process
       end
     end
   end

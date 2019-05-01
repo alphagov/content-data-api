@@ -54,28 +54,28 @@ RSpec.shared_examples 'BaseMessage#withdrawn_notice?' do
 end
 
 RSpec.shared_examples 'BaseMessage#invalid?' do
-  describe '#invalid?' do
+  describe '#valid?' do
     let(:payload) { build(:message).payload }
     let(:message) { described_class.new(payload, "routing_key") }
-    subject { message.invalid? }
+    subject { message.valid? }
 
     context 'with normal payload' do
-      it { is_expected.to eq false }
+      it { is_expected.to eq true }
     end
 
     context 'when schema name is placeholder' do
       before { payload['schema_name'] = 'placeholder' }
-      it { is_expected.to eq true }
+      it { is_expected.to eq false }
     end
 
     context 'when base path is nil' do
       before { payload.delete('base_path') }
-      it { is_expected.to eq true }
+      it { is_expected.to eq false }
     end
 
     context 'when schema name is nil' do
       before { payload.delete('schema_name') }
-      it { is_expected.to eq true }
+      it { is_expected.to eq false }
     end
   end
 end

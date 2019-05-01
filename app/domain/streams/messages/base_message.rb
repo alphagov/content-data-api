@@ -34,8 +34,8 @@ class Streams::Messages::BaseMessage
     }
   end
 
-  def invalid?
-    mandatory_fields_nil? || placeholder_schema?
+  def valid?
+    !mandatory_fields_nil? && !placeholder_schema?
   end
 
   def withdrawn_notice?
