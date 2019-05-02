@@ -1,6 +1,4 @@
-require 'sidekiq/testing'
 require 'govuk_message_queue_consumer/test_helpers'
-require 'gds_api/test_helpers/content_store'
 
 RSpec.describe Streams::Consumer do
   let(:subject) { described_class.new }

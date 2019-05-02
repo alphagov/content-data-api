@@ -1,10 +1,48 @@
 RSpec.describe Streams::Consumer do
   subject { described_class.new }
-  it 'increments `discard` in statsd when error is raised' do
-    message = build(:message)
-    allow(Streams::MessageProcessorJob).to receive(:perform_later).and_raise(StandardError)
-    expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded")
 
-    subject.process(message)
+  context 'with valid payload' do
+    let(:message) { build(:message) }
+
+    it 'acknowledges the message' do
+      subject.process(message)
+      expect(message).to be_acked
+    end
+
+    it 'increments routing_key in statsd' do
+      expect(GovukStatsd).to receive(:increment).with("monitor.messages.major")
+      subject.process(message)
+    end
+  end
+
+  context 'with invalid payload' do
+    let(:message) { build(:message, schema_name: 'placeholder') }
+
+    it 'discards the message' do
+      subject.process(message)
+      expect(message).to be_discarded
+    end
+
+    it 'increments `discard` in statsd' do
+      expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded")
+      subject.process(message)
+    end
+  end
+
+  context 'with a transaction error' do
+    let(:message) { build(:message) }
+    before do
+      allow(ActiveRecord::Base).to receive(:transaction).and_raise(StandardError)
+    end
+
+    it 'increments `discard` in statsd when error is raised' do
+      subject.process(message)
+      expect(message).to be_discarded
+    end
+
+    it 'increments `discard` in statsd when error is raised' do
+      expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded")
+      subject.process(message)
+    end
   end
 end
