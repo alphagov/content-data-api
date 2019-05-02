@@ -1,4 +1,3 @@
-require 'sidekiq/testing'
 RSpec.describe 'Import edition metrics' do
   subject { Streams::Consumer.new }
 
