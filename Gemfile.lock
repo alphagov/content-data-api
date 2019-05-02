@@ -65,7 +65,7 @@ GEM
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
     builder (3.2.3)
-    bunny (2.14.1)
+    bunny (2.14.2)
       amq-protocol (~> 2.3, >= 2.3.0)
     byebug (11.0.1)
     case_transform (0.2)
@@ -136,7 +136,7 @@ GEM
       sentry-raven (~> 2.7.1)
       statsd-ruby (~> 1.4.0)
       unicorn (~> 5.4.0)
-    govuk_message_queue_consumer (3.3.0)
+    govuk_message_queue_consumer (3.4.0)
       bunny (~> 2.11)
     govuk_schemas (3.2.0)
       json-schema (~> 2.8.0)
@@ -447,7 +447,7 @@ DEPENDENCIES
   google-api-client (~> 0.29)
   govuk-lint (= 3.11.0)
   govuk_app_config
-  govuk_message_queue_consumer (~> 3.3)
+  govuk_message_queue_consumer (~> 3.4)
   govuk_schemas (= 3.2.0)
   govuk_sidekiq (~> 3)
   httparty
