@@ -1,35 +1,22 @@
 RSpec.describe Monitor::Messages do
-  before do
-    allow(GovukStatsd).to receive(:increment)
+  describe '.increment discarded' do
+    it 'increments the appropiate Statsd key' do
+      expect(GovukStatsd).to receive(:increment).with('monitor.messages.discarded.reason')
+      Monitor::Messages.increment_discarded('reason')
+    end
   end
 
-  it 'increments major if routing key ends .major' do
-    expect(GovukStatsd).to receive(:increment).with("monitor.messages.major")
-    Monitor::Messages.run('news_story.major')
+  describe '.increment retried' do
+    it 'increments the appropiate Statsd key' do
+      expect(GovukStatsd).to receive(:increment).with('monitor.messages.retried.reason')
+      Monitor::Messages.increment_retried('reason')
+    end
   end
 
-  it 'increments minor if routing key ends .minor' do
-    expect(GovukStatsd).to receive(:increment).with("monitor.messages.minor")
-    Monitor::Messages.run('news_story.minor')
-  end
-
-  it 'increments links if routing key ends .links' do
-    expect(GovukStatsd).to receive(:increment).with("monitor.messages.links")
-    Monitor::Messages.run('news_story.links')
-  end
-
-  it 'increments republish if routing key ends .republish' do
-    expect(GovukStatsd).to receive(:increment).with("monitor.messages.republish")
-    Monitor::Messages.run('news_story.republish')
-  end
-
-  it 'increments unpublish if routing key ends .unpublish' do
-    expect(GovukStatsd).to receive(:increment).with("monitor.messages.unpublish")
-    Monitor::Messages.run('news_story.unpublish')
-  end
-
-  it '.increment_discarded increments discarded' do
-    expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded")
-    Monitor::Messages.increment_discarded
+  describe '.increment acknowledged' do
+    it 'increments the appropiate Statsd key' do
+      expect(GovukStatsd).to receive(:increment).with('monitor.messages.acknowledged.event_type')
+      Monitor::Messages.increment_acknowledged('document_type.event_type')
+    end
   end
 end

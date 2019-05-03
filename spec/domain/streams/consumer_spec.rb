@@ -10,7 +10,7 @@ RSpec.describe Streams::Consumer do
     end
 
     it 'increments routing_key in statsd' do
-      expect(GovukStatsd).to receive(:increment).with("monitor.messages.major")
+      expect(GovukStatsd).to receive(:increment).with("monitor.messages.acknowledged.major")
       subject.process(message)
     end
   end
@@ -24,7 +24,7 @@ RSpec.describe Streams::Consumer do
     end
 
     it 'increments `discard` in statsd' do
-      expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded")
+      expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded.invalid")
       subject.process(message)
     end
   end
@@ -41,7 +41,7 @@ RSpec.describe Streams::Consumer do
     end
 
     it 'increments `discard` in statsd when error is raised' do
-      expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded")
+      expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded.error")
       subject.process(message)
     end
   end
