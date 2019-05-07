@@ -145,7 +145,8 @@ RSpec.describe Dimensions::Edition, type: :model do
 
   describe '#metadata' do
     let(:edition) do
-      create :edition,
+      create(
+        :edition,
         title: 'The Title',
         base_path: '/the/base/path',
         content_id: 'the-content-id',
@@ -156,6 +157,7 @@ RSpec.describe Dimensions::Edition, type: :model do
         primary_organisation_title: 'The ministry',
         withdrawn: false,
         historical: false
+      )
     end
 
     it 'returns the correct attributes' do

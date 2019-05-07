@@ -8,16 +8,16 @@ module Concerns::Traceable
     def time(process:)
       raise ArgumentError "No block was given to Traceable#time" unless block_given?
 
-      started = Time.now
+      started = Time.now.in_time_zone
       logger.info "Process: '#{process}' started at #{started.to_formatted_s(:db)}"
       yield
-      ended = Time.now
+      ended = Time.now.in_time_zone
       duration = format_duration(started, ended)
       logger.info "Process: '#{process}' ended at #{ended.to_formatted_s(:db)}, duration: #{duration}"
-    rescue StandardError => ex
-      logger.error(ex.message)
-      logger.error(ex.backtrace.inspect)
-      raise ex
+    rescue StandardError => e
+      logger.error(e.message)
+      logger.error(e.backtrace.inspect)
+      raise e
     end
 
     def log(process:, message:)

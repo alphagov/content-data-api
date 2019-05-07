@@ -1,7 +1,7 @@
 class Etl::Edition::Content::Parsers::BodyContent
   def parse(json)
     body = json.dig("details", "body")
-    return unless body.present?
+    return if body.blank?
 
     if body.is_a?(Array)
       body_by_content_type = body.map(&:values).to_h

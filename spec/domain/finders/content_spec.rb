@@ -37,16 +37,16 @@ RSpec.describe Finders::Content do
 
   it 'returns the metadata for the past 30 days' do
     edition1 = create :edition,
-      base_path: '/path1',
-      organisation_id: primary_org_id,
-      title: 'title-01',
-      document_type: 'document-type-01'
+                      base_path: '/path1',
+                      organisation_id: primary_org_id,
+                      title: 'title-01',
+                      document_type: 'document-type-01'
 
     edition2 = create :edition,
-      base_path: '/path2',
-      organisation_id: primary_org_id,
-      title: 'title-02',
-      document_type: 'document-type-02'
+                      base_path: '/path2',
+                      organisation_id: primary_org_id,
+                      title: 'title-02',
+                      document_type: 'document-type-02'
 
     create :metric, edition: edition1, date: 15.days.ago
     create :metric, edition: edition2, date: 10.days.ago
@@ -199,19 +199,19 @@ RSpec.describe Finders::Content do
   describe 'Pagination' do
     before do
       4.times do |n|
-        edition = create :edition,
-          base_path: "/path/#{n}",
-          organisation_id: primary_org_id,
-          warehouse_item_id: "item-#{n}"
+        edition = create(:edition,
+                         base_path: "/path/#{n}",
+                         organisation_id: primary_org_id,
+                         warehouse_item_id: "item-#{n}")
         create :metric, edition: edition, date: 15.days.ago, upviews: (100 - n)
       end
 
       # not live edition - should not affect total results
-      old_edition = create :edition,
-        base_path: '/path/0',
-        organisation_id: primary_org_id,
-        live: false,
-        warehouse_item_id: 'item-0'
+      old_edition = create(:edition,
+                           base_path: '/path/0',
+                           organisation_id: primary_org_id,
+                           live: false,
+                           warehouse_item_id: 'item-0')
       create :metric, edition: old_edition, date: 15.days.ago
 
       recalculate_aggregations!

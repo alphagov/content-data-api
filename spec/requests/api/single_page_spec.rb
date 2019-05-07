@@ -3,7 +3,8 @@ require 'securerandom'
 RSpec.describe '/single_page', type: :request do
   let!(:base_path) { '/base_path' }
   let!(:item) do
-    create :edition,
+    create(
+      :edition,
       live: true,
       title: 'the title',
       base_path: base_path,
@@ -18,6 +19,7 @@ RSpec.describe '/single_page', type: :request do
       facts: {
         'words': 30
       }
+    )
   end
 
   before do
