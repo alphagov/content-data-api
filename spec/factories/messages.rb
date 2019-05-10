@@ -11,9 +11,10 @@ FactoryBot.define do
       attributes { {} }
       content_id { SecureRandom.uuid }
       locale { 'en' }
+      redelivered? { false }
     end
 
-    delivery_info { OpenStruct.new(routing_key: routing_key) }
+    delivery_info { OpenStruct.new(routing_key: routing_key, redelivered?: redelivered?) }
 
     payload do
       GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|

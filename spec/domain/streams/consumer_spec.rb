@@ -1,5 +1,9 @@
+require 'govuk_message_queue_consumer/test_helpers'
+
 RSpec.describe Streams::Consumer do
   subject { described_class.new }
+
+  it_behaves_like 'a message queue processor'
 
   context 'with valid payload' do
     let(:message) { build(:message) }
@@ -12,6 +16,20 @@ RSpec.describe Streams::Consumer do
     it 'increments routing_key in statsd' do
       expect(GovukStatsd).to receive(:increment).with("monitor.messages.acknowledged.major")
       subject.process(message)
+    end
+
+    context 'and message is redelivered' do
+      let(:message) { build(:message, redelivered?: true) }
+
+      it 'acknowledges the message' do
+        subject.process(message)
+        expect(message).to be_acked
+      end
+
+      it 'increments `acknowledged` in statsd' do
+        expect(GovukStatsd).to receive(:increment).with("monitor.messages.acknowledged.major")
+        subject.process(message)
+      end
     end
   end
 
@@ -30,19 +48,40 @@ RSpec.describe Streams::Consumer do
   end
 
   context 'with a transaction error' do
-    let(:message) { build(:message) }
-    before do
-      allow(ActiveRecord::Base).to receive(:transaction).and_raise(StandardError)
+    context 'and message has not been redelivered' do
+      let(:message) { build(:message) }
+
+      before do
+        allow(ActiveRecord::Base).to receive(:transaction).and_raise(StandardError)
+      end
+
+      it 'retries the message' do
+        subject.process(message)
+        expect(message).to be_retried
+      end
+
+      it 'increments `retried` in statsd when error is raised' do
+        expect(GovukStatsd).to receive(:increment).with("monitor.messages.retried.error")
+        subject.process(message)
+      end
     end
 
-    it 'increments `discard` in statsd when error is raised' do
-      subject.process(message)
-      expect(message).to be_discarded
-    end
+    context 'and message is redelivered' do
+      let(:message) { build(:message, redelivered?: true) }
 
-    it 'increments `discard` in statsd when error is raised' do
-      expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded.error")
-      subject.process(message)
+      before do
+        allow(ActiveRecord::Base).to receive(:transaction).and_raise(StandardError)
+      end
+
+      it 'discards the message' do
+        subject.process(message)
+        expect(message).to be_discarded
+      end
+
+      it 'increments `discard` in statsd when error is raised' do
+        expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded.error")
+        subject.process(message)
+      end
     end
   end
 end

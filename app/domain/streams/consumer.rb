@@ -15,8 +15,14 @@ module Streams
       end
     rescue StandardError => e
       GovukError.notify(e)
-      message.discard
-      Monitor::Messages.increment_discarded('error')
+      if message.delivery_info.redelivered?
+        message.discard
+        Monitor::Messages.increment_discarded('error')
+      else
+        sleep(1)
+        message.retry
+        Monitor::Messages.increment_retried('error')
+      end
     end
   end
 end
