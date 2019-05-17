@@ -14,10 +14,10 @@ module Concerns::Traceable
       ended = Time.now
       duration = format_duration(started, ended)
       logger.info "Process: '#{process}' ended at #{ended.to_formatted_s(:db)}, duration: #{duration}"
-    rescue StandardError => ex
-      logger.error(ex.message)
-      logger.error(ex.backtrace.inspect)
-      raise ex
+    rescue StandardError => e
+      logger.error(e.message)
+      logger.error(e.backtrace.inspect)
+      raise e
     end
 
     def log(process:, message:)
