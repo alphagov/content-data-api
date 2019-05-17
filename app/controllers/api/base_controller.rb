@@ -20,8 +20,8 @@ class Api::BaseController < ApplicationController
     unless api_request.valid?
       error_response(
         "validation-error",
-          title: "One or more parameters is invalid",
-          invalid_params: api_request.errors.to_hash
+        title: "One or more parameters is invalid",
+        invalid_params: api_request.errors.to_hash
       )
     end
   end

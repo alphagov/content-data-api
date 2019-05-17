@@ -4,20 +4,20 @@ RSpec.describe '/single_page', type: :request do
   let!(:base_path) { '/base_path' }
   let!(:item) do
     create :edition,
-      live: true,
-      title: 'the title',
-      base_path: base_path,
-      content_id: 'the-content-id',
-      document_type: 'guide',
-      publishing_app: 'whitehall',
-      first_published_at: '2018-07-17T10:35:59.000Z',
-      public_updated_at: '2018-07-17T10:35:57.000Z',
-      primary_organisation_title: 'The ministry',
-      withdrawn: false,
-      historical: false,
-      facts: {
-        'words': 30
-      }
+           live: true,
+           title: 'the title',
+           base_path: base_path,
+           content_id: 'the-content-id',
+           document_type: 'guide',
+           publishing_app: 'whitehall',
+           first_published_at: '2018-07-17T10:35:59.000Z',
+           public_updated_at: '2018-07-17T10:35:57.000Z',
+           primary_organisation_title: 'The ministry',
+           withdrawn: false,
+           historical: false,
+           facts: {
+             'words': 30
+           }
   end
 
   before do

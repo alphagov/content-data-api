@@ -146,16 +146,16 @@ RSpec.describe Dimensions::Edition, type: :model do
   describe '#metadata' do
     let(:edition) do
       create :edition,
-        title: 'The Title',
-        base_path: '/the/base/path',
-        content_id: 'the-content-id',
-        first_published_at: '2018-01-01',
-        public_updated_at: '2018-05-20',
-        publishing_app: 'publisher',
-        document_type: 'guide',
-        primary_organisation_title: 'The ministry',
-        withdrawn: false,
-        historical: false
+             title: 'The Title',
+             base_path: '/the/base/path',
+             content_id: 'the-content-id',
+             first_published_at: '2018-01-01',
+             public_updated_at: '2018-05-20',
+             publishing_app: 'publisher',
+             document_type: 'guide',
+             primary_organisation_title: 'The ministry',
+             withdrawn: false,
+             historical: false
     end
 
     it 'returns the correct attributes' do
