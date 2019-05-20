@@ -3,7 +3,7 @@ RSpec.describe 'rake publishing_api:*', type: task do
 
   it 'starts listener for PublishingAPI events' do
     expect(GovukMessageQueueConsumer::Consumer).to receive(:new).with(
-      queue_name: 'content_performance_manager',
+      queue_name: 'content_data_api',
       processor: an_instance_of(Streams::Consumer),
     ).and_return(consumer)
 
@@ -12,7 +12,7 @@ RSpec.describe 'rake publishing_api:*', type: task do
 
   it 'starts listener for PublishingAPI bulk preload events' do
     expect(GovukMessageQueueConsumer::Consumer).to receive(:new).with(
-      queue_name: 'content_performance_manager_govuk_importer',
+      queue_name: 'content_data_api_govuk_importer',
       processor: an_instance_of(Streams::Consumer),
     ).and_return(consumer)
 
