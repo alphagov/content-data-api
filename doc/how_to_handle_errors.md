@@ -23,7 +23,7 @@ The main idea is to have only actionable errors in Sentry because otherwise, the
 3. Share with the team in the weekly Dev session.
 4. Mark the error as resolved.
 
-[1]: https://sentry.io/govuk/app-content-performance-manager/?query=is%3Aunresolved
+[1]: https://sentry.io/govuk/app-content-data-api/?query=is%3Aunresolved
 [2]: https://docs.publishing.service.gov.uk/manual/errors.html#header
 [3]: https://docs.publishing.service.gov.uk/manual/errors.html#classifying-errors
 

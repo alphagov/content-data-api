@@ -16,8 +16,8 @@ Data is combined from multiple sources, including the [publishing platform](http
 
 ## Live examples
 
-- [List all metrics](https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics)
-- [Last month of data for all organisations](https://content-performance-manager.publishing.service.gov.uk/content?date_range=last-month&search_term=&document_type=all&organisation_id=all)
+- [List all metrics](https://content-data-api.publishing.service.gov.uk/api/v1/metrics)
+- [Last month of data for all organisations](https://content-data-api.publishing.service.gov.uk/content?date_range=last-month&search_term=&document_type=all&organisation_id=all)
 
 ## Nomenclature
 
@@ -41,10 +41,10 @@ See the [getting started guide](https://docs.publishing.service.gov.uk/getting-s
 
 ```bash
 cd /var/govuk/govuk-puppet/development-vm
-bowl content-performance-manager
+bowl content-data-api
  ```
 
-The application can be accessed from http://content-performance-manager.dev.gov.uk, and will be installed on port 3206 on your Dev environment.
+The application can be accessed from http://content-data-api.dev.gov.uk, and will be installed on port 3235 on your Dev environment.
 
 ### Running the test suite
 

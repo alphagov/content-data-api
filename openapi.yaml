@@ -8,13 +8,13 @@ info:
     [JSON](https://en.wikipedia.org/wiki/JSON).
   version: 1.0.0
 servers:
-  - url: 'https://content-performance-manager.publishing.service.gov.uk/api/v1'
+  - url: 'https://content-data-api.publishing.service.gov.uk/api/v1'
     description: Production
-  - url: 'https://content-performance-manager.staging.publishing.service.gov.uk/api/v1'
+  - url: 'https://content-data-api.staging.publishing.service.gov.uk/api/v1'
     description: Staging
-  - url: 'https://content-performance-manager.integration.publishing.service.gov.uk/api/v1'
+  - url: 'https://content-data-api.integration.publishing.service.gov.uk/api/v1'
     description: Integration
-  - url: 'http://content-performance-manager.dev.gov.uk/api/v1'
+  - url: 'http://content-data-api.dev.gov.uk/api/v1'
     description: Development
 paths:
   '/organisations/':
@@ -61,7 +61,7 @@ paths:
           lang: shell
           source: >-
             curl
-            'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/'
+            'https://content-data-api.publishing.service.gov.uk/api/v1/metrics/'
   '/metrics/{base_path}':
     get:
       summary: Get summarised metrics for a content item.
@@ -125,7 +125,7 @@ paths:
           lang: shell
           source: >-
             curl
-            'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-27&to=2018-02-27&metrics[]=upviews&metrics[]=pviews'
+            'https://content-data-api.publishing.service.gov.uk/api/v1/metrics/vat-rates?from=2018-02-27&to=2018-02-27&metrics[]=upviews&metrics[]=pviews'
   '/metrics/{base_path}/time-series':
     get:
       summary: Get metric values for a single content item over a date range.
@@ -191,7 +191,7 @@ paths:
           lang: shell
           source: >-
             curl
-            'https://content-performance-manager.publishing.service.gov.uk/api/v1/metrics/vat-rates/time-series?from=2018-02-27&to=2018-02-27&metrics[]=upviews&metrics[]=pviews'
+            'https://content-data-api.publishing.service.gov.uk/api/v1/metrics/vat-rates/time-series?from=2018-02-27&to=2018-02-27&metrics[]=upviews&metrics[]=pviews'
 components:
   securitySchemes:
     bearerAuth:
