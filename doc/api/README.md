@@ -111,7 +111,7 @@ This will push to the `gh-pages` branch and therefore deploy to GitHub Pages.
 
 [forked-widdershins]: https://github.com/alphagov/widdershins
 [widdershins]: https://github.com/Mermade/widdershins
-[openapi]: https://github.com/alphagov/content-performance-manager/blob/master/openapi.yaml
+[openapi]: https://github.com/alphagov/content-data-api/blob/master/openapi.yaml
 [content-store]: https://github.com/alphagov/content-store
 [templates-dir]: https://github.com/alphagov/govuk-content-api-docs/tree/master/templates
 [source-dir]: https://github.com/alphagov/govuk-content-api-docs/tree/master/source

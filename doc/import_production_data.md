@@ -41,11 +41,11 @@ using the experimental [`govuk data`][govuk-data-docs] tool.
 To see what data is available, run:
 
 ```
-govuk data list content-performance-manager
+govuk data list content-data-api
 ```
 
 To load the default extract, run:
 
 ```
-govuk data load content-performance-manager
+govuk data load content-data-api
 ```

@@ -22,5 +22,5 @@ Use of Google Tag Manager (GTM) for CPM and the Audit Tool.
 
 Accepted
   
-[1]: https://github.com/alphagov/content-performance-manager/pull/322
+[1]: https://github.com/alphagov/content-data-api/pull/322
 [2]: https://gov-uk.atlassian.net/wiki/spaces/AC/pages/164954113/Google+Tag+Manager+GTM
