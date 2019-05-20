@@ -149,6 +149,7 @@ RSpec.describe Dimensions::Edition, type: :model do
              title: 'The Title',
              base_path: '/the/base/path',
              content_id: 'the-content-id',
+             locale: 'en',
              first_published_at: '2018-01-01',
              public_updated_at: '2018-05-20',
              publishing_app: 'publisher',
@@ -162,6 +163,7 @@ RSpec.describe Dimensions::Edition, type: :model do
       expect(edition.reload.metadata).to eq(
         base_path: '/the/base/path',
         content_id: 'the-content-id',
+        locale: 'en',
         title: 'The Title',
         first_published_at: Time.new(2018, 1, 1).strftime("%Y-%m-%d"),
         public_updated_at: Time.new(2018, 5, 20).strftime("%Y-%m-%d"),

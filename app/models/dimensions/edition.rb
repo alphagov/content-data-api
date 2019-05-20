@@ -64,6 +64,7 @@ class Dimensions::Edition < ApplicationRecord
       title: title,
       base_path: base_path,
       content_id: content_id,
+      locale: locale,
       first_published_at: first_published_at,
       public_updated_at: public_updated_at,
       publishing_app: publishing_app,
