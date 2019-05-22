@@ -1,6 +1,11 @@
 RSpec.describe 'rake publishing_api:*', type: task do
   let(:consumer) { double('message_consumer', run: nil) }
 
+  before(:all) do
+    ENV['RABBITMQ_QUEUE'] = 'content_data_api'
+    ENV['RABBITMQ_QUEUE_BULK'] = 'content_data_api_govuk_importer'
+  end
+
   it 'starts listener for PublishingAPI events' do
     expect(GovukMessageQueueConsumer::Consumer).to receive(:new).with(
       queue_name: 'content_data_api',

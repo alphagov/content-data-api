@@ -5,7 +5,7 @@ namespace :publishing_api do
   task consumer: :environment do
     begin
       GovukMessageQueueConsumer::Consumer.new(
-        queue_name: 'content_data_api',
+        queue_name: ENV['RABBITMQ_QUEUE'],
         processor: Streams::Consumer.new,
       ).run
     rescue SignalException
@@ -17,7 +17,7 @@ namespace :publishing_api do
   task bulk_import_consumer: :environment do
     begin
       GovukMessageQueueConsumer::Consumer.new(
-        queue_name: 'content_data_api_govuk_importer',
+        queue_name: ENV['RABBITMQ_QUEUE_BULK'],
         processor: Streams::Consumer.new,
       ).run
     rescue SignalException
