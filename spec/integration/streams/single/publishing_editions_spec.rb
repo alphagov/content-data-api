@@ -17,7 +17,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'publishes new edition for new content item' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major')
+      .with('monitor.messages.ack.successfully_processed')
 
     message = build :message
     subject.process(message)
@@ -36,7 +36,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'publishes multiple editions for a content item' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major').twice
+      .with('monitor.messages.ack.successfully_processed').twice
 
     message1 = build :message
     subject.process(message1)
@@ -66,7 +66,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'republishes same edition for content item' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major').twice
+      .with('monitor.messages.ack.successfully_processed').twice
 
     message = build :message
     subject.process(message)
@@ -88,7 +88,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'sends an old publishing message' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major').twice
+      .with('monitor.messages.ack.successfully_processed').twice
 
     message = build :message, attributes: { 'payload_version' => 2 }
     subject.process(message)
@@ -114,7 +114,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'unpublishes edition for content item' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major').twice
+      .with('monitor.messages.ack.successfully_processed').twice
 
     message = build :message
     subject.process(message)
@@ -145,7 +145,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'twice unpublishes edition for content item' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major').exactly(3).times
+      .with('monitor.messages.ack.successfully_processed').exactly(3).times
 
     message = build :message
     subject.process(message)
@@ -181,7 +181,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'publishes redirect edition for content item' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major').twice
+      .with('monitor.messages.ack.successfully_processed').twice
 
     message = build :message
     subject.process(message)
@@ -212,7 +212,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'publishes edition with new base_path for content item' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major').twice
+      .with('monitor.messages.ack.successfully_processed').twice
 
     message1 = build :message
     subject.process(message1)
@@ -242,7 +242,7 @@ RSpec.describe 'PublishingAPI message queue' do
 
   it 'publishes new content item using base path of previously unpublished content item' do
     expect(GovukStatsd).to receive(:increment)
-      .with('monitor.messages.acknowledged.major').exactly(3).times
+      .with('monitor.messages.ack.successfully_processed').exactly(3).times
 
     message1 = build :message
     subject.process(message1)

@@ -8,10 +8,10 @@ module Streams
         ActiveRecord::Base.transaction { payload.handler.process }
 
         message.ack
-        Monitor::Messages.increment_acknowledged(routing_key)
+        Monitor::Messages.increment_acknowledged('successfully_processed')
       else
         message.ack
-        Monitor::Messages.increment_discarded('invalid')
+        Monitor::Messages.increment_acknowledged('invalid_payload')
       end
     rescue StandardError => e
       GovukError.notify(e)

@@ -14,7 +14,7 @@ RSpec.describe Streams::Consumer do
     end
 
     it 'increments routing_key in statsd' do
-      expect(GovukStatsd).to receive(:increment).with("monitor.messages.acknowledged.major")
+      expect(GovukStatsd).to receive(:increment).with("monitor.messages.ack.successfully_processed")
       subject.process(message)
     end
 
@@ -27,7 +27,7 @@ RSpec.describe Streams::Consumer do
       end
 
       it 'increments `acknowledged` in statsd' do
-        expect(GovukStatsd).to receive(:increment).with("monitor.messages.acknowledged.major")
+        expect(GovukStatsd).to receive(:increment).with("monitor.messages.ack.successfully_processed")
         subject.process(message)
       end
     end
@@ -41,8 +41,8 @@ RSpec.describe Streams::Consumer do
       expect(message).to be_acked
     end
 
-    it 'increments `discard` in statsd' do
-      expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded.invalid")
+    it 'increments `ack` in statsd' do
+      expect(GovukStatsd).to receive(:increment).with("monitor.messages.ack.invalid_payload")
       subject.process(message)
     end
   end
@@ -60,8 +60,8 @@ RSpec.describe Streams::Consumer do
         expect(message).to be_retried
       end
 
-      it 'increments `retried` in statsd when error is raised' do
-        expect(GovukStatsd).to receive(:increment).with("monitor.messages.retried.error")
+      it 'increments `requeue` in statsd when error is raised' do
+        expect(GovukStatsd).to receive(:increment).with("monitor.messages.requeue.error")
         subject.process(message)
       end
     end
@@ -78,8 +78,8 @@ RSpec.describe Streams::Consumer do
         expect(message).to be_discarded
       end
 
-      it 'increments `discard` in statsd when error is raised' do
-        expect(GovukStatsd).to receive(:increment).with("monitor.messages.discarded.error")
+      it 'increments `reject` in statsd when error is raised' do
+        expect(GovukStatsd).to receive(:increment).with("monitor.messages.reject.error")
         subject.process(message)
       end
     end
