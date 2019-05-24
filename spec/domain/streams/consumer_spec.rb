@@ -38,7 +38,7 @@ RSpec.describe Streams::Consumer do
 
     it 'discards the message' do
       subject.process(message)
-      expect(message).to be_discarded
+      expect(message).to be_acked
     end
 
     it 'increments `discard` in statsd' do

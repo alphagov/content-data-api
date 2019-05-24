@@ -10,7 +10,7 @@ module Streams
         message.ack
         Monitor::Messages.increment_acknowledged(routing_key)
       else
-        message.discard
+        message.ack
         Monitor::Messages.increment_discarded('invalid')
       end
     rescue StandardError => e
