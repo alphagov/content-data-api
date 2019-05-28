@@ -34,7 +34,7 @@ private
     useful_yes = result[:useful_yes].to_i
     useful_no = result[:useful_no].to_i
 
-    (useful_yes + useful_no).zero? ? 0 : useful_yes / (useful_yes + useful_no).to_f
+    (useful_yes + useful_no).zero? ? nil : useful_yes / (useful_yes + useful_no).to_f
   end
 
   def build_response(metrics)
