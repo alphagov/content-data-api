@@ -72,7 +72,7 @@ RSpec.describe Finders::Aggregations do
 
       result = Finders::Aggregations.new.run
 
-      expect(result.fetch(:satisfaction)).to be_zero
+      expect(result.fetch(:satisfaction)).to eq(nil)
     end
   end
 
