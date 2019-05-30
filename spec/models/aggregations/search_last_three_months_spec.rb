@@ -30,7 +30,7 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
 
     create :metric, edition: edition1, date: 1.months.ago
     create :metric, edition: edition1, date: 2.months.ago
-    create :metric, edition: edition2, date: 3.months.ago
+    create :metric, edition: edition2, date: 3.months.ago + 1.day
 
     recalculate_aggregations!
 
