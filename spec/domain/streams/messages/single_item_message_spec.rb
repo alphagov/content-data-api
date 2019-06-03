@@ -4,6 +4,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
   subject { described_class }
 
   include_examples 'BaseMessage#invalid?'
+  include_examples 'BaseMessage#organisation_ids'
   include_examples 'BaseMessage#historically_political?'
   include_examples 'BaseMessage#withdrawn_notice?'
 

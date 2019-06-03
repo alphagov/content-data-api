@@ -71,6 +71,7 @@ RSpec.describe Streams::GrowDimension do
           primary_organisation_id
           primary_organisation_title
           primary_organisation_withdrawn
+          organisation_ids
           schema_name
           title
           phase
@@ -84,10 +85,13 @@ RSpec.describe Streams::GrowDimension do
 
       it 'returns true' do
         attributes_that_should_grow_dimension.each do |sym|
+          new_value = {
+            organisation_ids: %w[new_value]
+          }.fetch(sym, 'new value')
           expect(subject.should_grow?(
                    old_edition: edition,
                    attrs: {
-                     sym => 'new value',
+                     sym => new_value,
                      publishing_api_payload_version: '5'
                    }
                  )).to eq(true), "#{sym} should grow the dimension"

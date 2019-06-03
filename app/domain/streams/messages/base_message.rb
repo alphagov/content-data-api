@@ -19,6 +19,7 @@ class Streams::Messages::BaseMessage
       primary_organisation_id: primary_organisation['content_id'],
       primary_organisation_title: primary_organisation['title'],
       primary_organisation_withdrawn: primary_organisation['withdrawn'],
+      organisation_ids: organisation_ids,
       public_updated_at: parse_time('public_updated_at'),
       schema_name: @payload.fetch('schema_name'),
       phase: @payload.fetch('phase', nil),
@@ -51,6 +52,16 @@ class Streams::Messages::BaseMessage
 
   def locale
     @payload['locale']
+  end
+
+  def organisation_ids
+    if @payload.fetch('publishing_app', nil) == 'publisher'
+      @payload.fetch('expanded_links', {})
+        .fetch('organisations', [])
+        .map { |org| org['content_id'] }
+    else
+      []
+    end
   end
 
 private
