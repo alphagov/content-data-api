@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_03_083643) do
+ActiveRecord::Schema.define(version: 2019_06_03_111746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -250,6 +250,7 @@ ActiveRecord::Schema.define(version: 2019_06_03_083643) do
   add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_month_gin_title", using: :gin
   add_index "aggregations_search_last_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_month_gin_base_path", using: :gin
   add_index "aggregations_search_last_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_month_document_type"
+  add_index "aggregations_search_last_months", ["primary_organisation_id", "upviews", "warehouse_item_id"], name: "search_last_months_organisation_id"
   add_index "aggregations_search_last_months", ["upviews", "warehouse_item_id"], name: "search_last_month_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
   add_index "aggregations_search_last_months", ["warehouse_item_id"], name: "aggregations_search_last_months_pk", unique: true
 
@@ -294,6 +295,7 @@ ActiveRecord::Schema.define(version: 2019_06_03_083643) do
   add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_thirty_days_gin_title", using: :gin
   add_index "aggregations_search_last_thirty_days", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_thirty_days_gin_base_path", using: :gin
   add_index "aggregations_search_last_thirty_days", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_thirty_days_document_type"
+  add_index "aggregations_search_last_thirty_days", ["primary_organisation_id", "upviews", "warehouse_item_id"], name: "search_last_thirty_days_organisation_id"
   add_index "aggregations_search_last_thirty_days", ["upviews", "warehouse_item_id"], name: "search_last_thirty_days_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
   add_index "aggregations_search_last_thirty_days", ["warehouse_item_id"], name: "aggregations_search_last_thirty_days_pk", unique: true
 
@@ -361,6 +363,7 @@ ActiveRecord::Schema.define(version: 2019_06_03_083643) do
   add_index "aggregations_search_last_three_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_three_months_gin_title", using: :gin
   add_index "aggregations_search_last_three_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_three_months_gin_base_path", using: :gin
   add_index "aggregations_search_last_three_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_three_months_document_type"
+  add_index "aggregations_search_last_three_months", ["primary_organisation_id", "upviews", "warehouse_item_id"], name: "search_last_three_months_organisation_id"
   add_index "aggregations_search_last_three_months", ["upviews", "warehouse_item_id"], name: "search_last_three_months_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
   add_index "aggregations_search_last_three_months", ["warehouse_item_id"], name: "aggregations_search_last_three_months_pk", unique: true
 
@@ -428,6 +431,7 @@ ActiveRecord::Schema.define(version: 2019_06_03_083643) do
   add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_twelve_months_gin_title", using: :gin
   add_index "aggregations_search_last_twelve_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_twelve_months_gin_base_path", using: :gin
   add_index "aggregations_search_last_twelve_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_twelve_months_document_type"
+  add_index "aggregations_search_last_twelve_months", ["primary_organisation_id", "upviews", "warehouse_item_id"], name: "search_last_twelve_months_organisation_id"
   add_index "aggregations_search_last_twelve_months", ["upviews", "warehouse_item_id"], name: "search_last_twelve_months_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
   add_index "aggregations_search_last_twelve_months", ["warehouse_item_id"], name: "aggregations_search_last_twelve_months_pk", unique: true
 
@@ -495,6 +499,7 @@ ActiveRecord::Schema.define(version: 2019_06_03_083643) do
   add_index "aggregations_search_last_six_months", "to_tsvector('english'::regconfig, (title)::text)", name: "aggregations_search_last_six_months_gin_title", using: :gin
   add_index "aggregations_search_last_six_months", "to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text))", name: "aggregations_search_last_six_months_gin_base_path", using: :gin
   add_index "aggregations_search_last_six_months", ["document_type", "upviews", "warehouse_item_id"], name: "search_last_six_months_document_type"
+  add_index "aggregations_search_last_six_months", ["primary_organisation_id", "upviews", "warehouse_item_id"], name: "search_last_six_months_organisation_id"
   add_index "aggregations_search_last_six_months", ["upviews", "warehouse_item_id"], name: "search_last_six_months_upviews", order: { upviews: "DESC NULLS LAST", warehouse_item_id: :desc }
   add_index "aggregations_search_last_six_months", ["warehouse_item_id"], name: "aggregations_search_last_six_months_pk", unique: true
 
