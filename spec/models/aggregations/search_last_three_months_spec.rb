@@ -5,6 +5,7 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
 
   it_behaves_like 'a materialized view', described_class.table_name
   include_examples 'calculates satisfaction', Date.yesterday
+  include_examples 'includes edition attributes', Date.yesterday
 
   it 'aggregates metrics for the last three months' do
     edition1 = create :edition, base_path: '/path1', date: 2.months.ago

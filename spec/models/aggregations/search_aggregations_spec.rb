@@ -5,6 +5,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
 
   it_behaves_like 'a materialized view', described_class.table_name
   include_examples 'calculates satisfaction', Date.today.last_month.end_of_month
+  include_examples 'includes edition attributes', Date.today.last_month.end_of_month
 
   let(:from) { Date.today.last_month.beginning_of_month }
   let(:to) { Date.today.last_month.end_of_month }
