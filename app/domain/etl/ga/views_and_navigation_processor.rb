@@ -60,7 +60,7 @@ private
                page_time,
                dimensions_editions.id
         FROM events_gas, dimensions_editions
-        WHERE page_path = base_path
+        WHERE page_path = LOWER(base_path)
               AND events_gas.date = '#{date_to_s}'
       ) AS s
       WHERE dimensions_edition_id = s.id AND dimensions_date_id = '#{date_to_s}'
