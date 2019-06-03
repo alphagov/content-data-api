@@ -1,7 +1,10 @@
 json.results @content_items do |content_item|
   json.base_path content_item[:base_path]
   json.title content_item[:title]
-  json.organisation_id content_item[:organisation_id]
+  # TODO: Remove this once the Content Data Admin is using the
+  # primary_organisation_id value
+  json.organisation_id content_item[:primary_organisation_id]
+  json.primary_organisation_id content_item[:primary_organisation_id]
   json.document_type content_item[:document_type]
   json.pviews content_item[:pviews]
   json.upviews content_item[:upviews]

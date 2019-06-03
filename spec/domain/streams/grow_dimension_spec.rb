@@ -68,7 +68,7 @@ RSpec.describe Streams::GrowDimension do
           base_path
           document_text
           document_type
-          organisation_id
+          primary_organisation_id
           primary_organisation_title
           primary_organisation_withdrawn
           schema_name

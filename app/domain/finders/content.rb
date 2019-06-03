@@ -1,9 +1,5 @@
 class Finders::Content
   def self.call(filter:)
-    raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
-
-    filter.assert_valid_keys :search_term, :date_range, :organisation_id, :document_type, :page, :page_size, :sort_attribute, :sort_direction
-
     new(filter).call
   end
 
@@ -23,6 +19,14 @@ private
   NONE = 'none'.freeze
 
   def initialize(filter)
+    raise ArgumentError unless
+      filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
+
+    filter.assert_valid_keys(
+      :search_term, :date_range, :organisation_id, :document_type, :page,
+      :page_size, :sort_attribute, :sort_direction
+    )
+
     @filter = filter
 
     @page = filter[:page] || 1
@@ -67,12 +71,12 @@ private
   end
 
   def find_by_organisation(scope)
-    organisation_id = @filter.fetch(:organisation_id)
+    primary_organisation_id = @filter.fetch(:organisation_id)
 
-    if organisation_id == NONE
-      scope = scope.where('organisation_id IS NULL')
-    elsif organisation_id != ALL
-      scope = scope.where(organisation_id: organisation_id)
+    if primary_organisation_id == NONE
+      scope = scope.where('primary_organisation_id IS NULL')
+    elsif primary_organisation_id != ALL
+      scope = scope.where(primary_organisation_id: primary_organisation_id)
     end
     scope
   end
@@ -106,14 +110,17 @@ private
   end
 
   def aggregates
-    %w(base_path title organisation_id document_type upviews pviews useful_yes useful_no satisfaction searches feedex pdf_count words reading_time)
+    %w(base_path title primary_organisation_id document_type upviews pviews useful_yes useful_no satisfaction searches feedex pdf_count words reading_time)
   end
 
   def array_to_hash(array)
     {
       base_path: array[:base_path],
       title: array[:title],
-      organisation_id: array[:organisation_id],
+      # TODO: Remove this once the Content Data Admin is using the
+      # primary_organisation_id value.
+      organisation_id: array[:primary_organisation_id],
+      primary_organisation_id: array[:primary_organisation_id],
       document_type: array[:document_type],
       upviews: array[:upviews],
       pviews: array[:pviews],

@@ -16,7 +16,7 @@ class Streams::Messages::BaseMessage
       locale: locale,
       document_text: document_text,
       first_published_at: parse_time('first_published_at'),
-      organisation_id: primary_organisation['content_id'],
+      primary_organisation_id: primary_organisation['content_id'],
       primary_organisation_title: primary_organisation['title'],
       primary_organisation_withdrawn: primary_organisation['withdrawn'],
       public_updated_at: parse_time('public_updated_at'),

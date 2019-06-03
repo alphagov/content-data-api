@@ -10,7 +10,7 @@ FactoryBot.define do
     schema_name { 'detailed_guide' }
     document_type { 'detailed_guide' }
     warehouse_item_id { "#{content_id}:#{locale}" }
-    organisation_id { '17d84dc6-e5b5-4065-a8b5-8783bd934938' }
+    primary_organisation_id { '17d84dc6-e5b5-4065-a8b5-8783bd934938' }
     withdrawn { false }
     historical { false }
     association :publishing_api_event
