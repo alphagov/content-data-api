@@ -1,9 +1,5 @@
 class Finders::Content
   def self.call(filter:)
-    raise ArgumentError unless filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
-
-    filter.assert_valid_keys :search_term, :date_range, :organisation_id, :document_type, :page, :page_size, :sort_attribute, :sort_direction
-
     new(filter).call
   end
 
@@ -23,6 +19,14 @@ private
   NONE = 'none'.freeze
 
   def initialize(filter)
+    raise ArgumentError unless
+      filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
+
+    filter.assert_valid_keys(
+      :search_term, :date_range, :organisation_id, :document_type, :page,
+      :page_size, :sort_attribute, :sort_direction
+    )
+
     @filter = filter
 
     @page = filter[:page] || 1
