@@ -71,12 +71,16 @@ private
   end
 
   def find_by_organisation(scope)
-    primary_organisation_id = @filter.fetch(:organisation_id)
+    organisation_id = @filter.fetch(:organisation_id)
 
-    if primary_organisation_id == NONE
+    if organisation_id == NONE
       scope = scope.where('primary_organisation_id IS NULL')
-    elsif primary_organisation_id != ALL
-      scope = scope.where(primary_organisation_id: primary_organisation_id)
+    elsif organisation_id != ALL && organisation_id.present?
+      scope = scope.where(
+        'primary_organisation_id = ? OR ? = ANY (organisation_ids)',
+        organisation_id,
+        organisation_id
+      )
     end
     scope
   end
