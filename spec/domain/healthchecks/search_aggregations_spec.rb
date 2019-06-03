@@ -8,7 +8,7 @@ RSpec.describe Healthchecks::SearchAggregations do
 
   describe 'status' do
     let!(:primary_org_id) { '96cad973-92dc-41ea-a0ff-c377908fee74' }
-    let!(:edition) { create :edition, organisation_id: primary_org_id }
+    let!(:edition) { create :edition, primary_organisation_id: primary_org_id }
 
     context 'When there are search views for the last thirty days' do
       before do

@@ -18,8 +18,8 @@ RSpec.describe Finders::Content do
   end
 
   it 'returns the aggregations for the past 30 days' do
-    edition1 = create :edition, base_path: '/path1', date: 2.months.ago, organisation_id: primary_org_id
-    edition2 = create :edition, base_path: '/path2', date: 2.months.ago, organisation_id: primary_org_id
+    edition1 = create :edition, base_path: '/path1', date: 2.months.ago, primary_organisation_id: primary_org_id
+    edition2 = create :edition, base_path: '/path2', date: 2.months.ago, primary_organisation_id: primary_org_id
 
     create :metric, edition: edition1, date: 15.days.ago, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
     create :metric, edition: edition1, date: 10.days.ago, upviews: 20, useful_yes: 5, useful_no: 1, searches: 1
@@ -38,13 +38,13 @@ RSpec.describe Finders::Content do
   it 'returns the metadata for the past 30 days' do
     edition1 = create :edition,
                       base_path: '/path1',
-                      organisation_id: primary_org_id,
+                      primary_organisation_id: primary_org_id,
                       title: 'title-01',
                       document_type: 'document-type-01'
 
     edition2 = create :edition,
                       base_path: '/path2',
-                      organisation_id: primary_org_id,
+                      primary_organisation_id: primary_org_id,
                       title: 'title-02',
                       document_type: 'document-type-02'
 
@@ -62,8 +62,8 @@ RSpec.describe Finders::Content do
 
   context 'Newly created editions before ETL process' do
     it 'returns total_results for editions with facts metrics' do
-      edition1 = create :edition, base_path: '/path1', date: 10.days.ago, organisation_id: primary_org_id
-      create :edition, base_path: '/path2', date: 10.days.ago, organisation_id: primary_org_id
+      edition1 = create :edition, base_path: '/path1', date: 10.days.ago, primary_organisation_id: primary_org_id
+      create :edition, base_path: '/path2', date: 10.days.ago, primary_organisation_id: primary_org_id
 
       create :metric, edition: edition1, date: 10.days.ago, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
 
@@ -77,8 +77,8 @@ RSpec.describe Finders::Content do
 
   describe 'Other date ranges' do
     let(:this_month_date) { Date.today }
-    let(:edition1) { create :edition, base_path: '/path1', date: 2.months.ago, organisation_id: primary_org_id }
-    let(:edition2) { create :edition, base_path: '/path2', date: 2.months.ago, organisation_id: primary_org_id }
+    let(:edition1) { create :edition, base_path: '/path1', date: 2.months.ago, primary_organisation_id: primary_org_id }
+    let(:edition2) { create :edition, base_path: '/path2', date: 2.months.ago, primary_organisation_id: primary_org_id }
 
     it 'returns aggregations for last month' do
       last_month_date = (Date.today - 1.month)
@@ -161,7 +161,7 @@ RSpec.describe Finders::Content do
 
   describe 'Filter by all organisations' do
     let(:edition1) { create :edition, date: 15.days.ago }
-    let(:edition2) { create :edition, date: 15.days.ago, organisation_id: nil }
+    let(:edition2) { create :edition, date: 15.days.ago, primary_organisation_id: nil }
 
     before do
       create :metric, edition: edition1, upviews: 20, date: 15.days.ago
@@ -179,11 +179,11 @@ RSpec.describe Finders::Content do
   end
 
   describe 'Filter by null organisations' do
-    let(:edition1) { create :edition, date: 15.days.ago, organisation_id: nil }
+    let(:edition1) { create :edition, date: 15.days.ago, primary_organisation_id: nil }
 
     before do
       create :metric, edition: edition1, date: 15.days.ago
-      edition2 = create :edition, date: 15.days.ago, organisation_id: primary_org_id
+      edition2 = create :edition, date: 15.days.ago, primary_organisation_id: primary_org_id
       create :metric, edition: edition2, date: 15.days.ago
       recalculate_aggregations!
     end
@@ -201,7 +201,7 @@ RSpec.describe Finders::Content do
       4.times do |n|
         edition = create :edition,
                          base_path: "/path/#{n}",
-                         organisation_id: primary_org_id,
+                         primary_organisation_id: primary_org_id,
                          warehouse_item_id: "item-#{n}"
         create :metric, edition: edition, date: 15.days.ago, upviews: (100 - n)
       end
@@ -209,7 +209,7 @@ RSpec.describe Finders::Content do
       # not live edition - should not affect total results
       old_edition = create :edition,
                            base_path: '/path/0',
-                           organisation_id: primary_org_id,
+                           primary_organisation_id: primary_org_id,
                            live: false,
                            warehouse_item_id: 'item-0'
       create :metric, edition: old_edition, date: 15.days.ago
@@ -247,9 +247,9 @@ RSpec.describe Finders::Content do
   describe 'Order' do
     context 'when there are NULLS' do
       before do
-        edition1 = create :edition, title: 'first', organisation_id: primary_org_id
-        edition2 = create :edition, title: 'second', organisation_id: primary_org_id
-        edition3 = create :edition, title: 'null', organisation_id: primary_org_id
+        edition1 = create :edition, title: 'first', primary_organisation_id: primary_org_id
+        edition2 = create :edition, title: 'second', primary_organisation_id: primary_org_id
+        edition3 = create :edition, title: 'null', primary_organisation_id: primary_org_id
 
         create :metric, edition: edition1, date: 15.days.ago, useful_yes: 1, useful_no: 0 # satisfaction = 1.0
         create :metric, edition: edition2, date: 15.days.ago, useful_yes: 0, useful_no: 1 # satisfaction = 0.0
@@ -274,9 +274,9 @@ RSpec.describe Finders::Content do
 
     context 'when values do not repeat' do
       before do
-        edition1 = create :edition, title: 'last', organisation_id: primary_org_id
-        edition2 = create :edition, title: 'middle', organisation_id: primary_org_id
-        edition3 = create :edition, title: 'first', organisation_id: primary_org_id
+        edition1 = create :edition, title: 'last', primary_organisation_id: primary_org_id
+        edition2 = create :edition, title: 'middle', primary_organisation_id: primary_org_id
+        edition3 = create :edition, title: 'first', primary_organisation_id: primary_org_id
 
         create :metric, edition: edition1, date: 15.days.ago, upviews: 1, feedex: 3
         create :metric, edition: edition2, date: 15.days.ago, upviews: 2, feedex: 2
@@ -308,8 +308,8 @@ RSpec.describe Finders::Content do
 
     context 'when values repeat' do
       before do
-        edition1 = create :edition, title: 'first', warehouse_item_id: 'w1', organisation_id: primary_org_id
-        edition2 = create :edition, title: 'second', warehouse_item_id: 'w2', organisation_id: primary_org_id
+        edition1 = create :edition, title: 'first', warehouse_item_id: 'w1', primary_organisation_id: primary_org_id
+        edition2 = create :edition, title: 'second', warehouse_item_id: 'w2', primary_organisation_id: primary_org_id
 
         create :metric, edition: edition1, date: 15.days.ago, upviews: 1
         create :metric, edition: edition2, date: 15.days.ago, upviews: 1
@@ -334,7 +334,7 @@ RSpec.describe Finders::Content do
 
   describe 'when no useful_yes/no.. responses' do
     before do
-      edition = create :edition, organisation_id: primary_org_id
+      edition = create :edition, primary_organisation_id: primary_org_id
       create :metric, edition: edition, date: 15.days.ago, useful_yes: 0, useful_no: 0
 
       recalculate_aggregations!
@@ -377,8 +377,8 @@ RSpec.describe Finders::Content do
 
   describe 'Filter by title / url' do
     it 'returns the editions matching a title' do
-      edition1 = create :edition, title: 'this is a big title', date: 2.months.ago, organisation_id: primary_org_id
-      edition2 = create :edition, title: 'this is a small title', date: 2.months.ago, organisation_id: primary_org_id
+      edition1 = create :edition, title: 'this is a big title', date: 2.months.ago, primary_organisation_id: primary_org_id
+      edition2 = create :edition, title: 'this is a small title', date: 2.months.ago, primary_organisation_id: primary_org_id
 
       create :metric, edition: edition1, date: 15.days.ago
       create :metric, edition: edition2, date: 14.days.ago
@@ -391,8 +391,8 @@ RSpec.describe Finders::Content do
     end
 
     it 'returns the editions matching a base_path' do
-      edition1 = create :edition, base_path: '/this/is/a/big/base-path', date: 2.months.ago, organisation_id: primary_org_id
-      edition2 = create :edition, base_path: '/this/is/a/small/base-path', date: 2.months.ago, organisation_id: primary_org_id
+      edition1 = create :edition, base_path: '/this/is/a/big/base-path', date: 2.months.ago, primary_organisation_id: primary_org_id
+      edition2 = create :edition, base_path: '/this/is/a/small/base-path', date: 2.months.ago, primary_organisation_id: primary_org_id
 
       create :metric, edition: edition1, date: 15.days.ago
       create :metric, edition: edition2, date: 14.days.ago
@@ -406,7 +406,7 @@ RSpec.describe Finders::Content do
 
     describe 'search by base_path with full URLs' do
       before do
-        edition1 = create :edition, base_path: '/base-path', date: 2.months.ago, organisation_id: primary_org_id
+        edition1 = create :edition, base_path: '/base-path', date: 2.months.ago, primary_organisation_id: primary_org_id
 
         create :metric, edition: edition1, date: 15.days.ago
         recalculate_aggregations!
