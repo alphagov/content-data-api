@@ -10,7 +10,9 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
     before { allow(Etl::GA::InternalSearchService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it "updates the facts with GA metrics" do
-      edition1 = create :edition, date: '2018-02-20', base_path: "/path1"
+      edition1 = create :edition, date: '2018-02-20', base_path: "/Path1"
+      #We have some mixed case paths so we need them to match the lowercase ones in GA
+
       fact1 = create :metric, edition: edition1, date: '2018-02-20'
       edition2 = create :edition, base_path: "/path2", date: '2018-02-20'
       fact2 = create :metric, edition: edition2, date: '2018-02-20'
