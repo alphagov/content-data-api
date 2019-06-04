@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_03_111746) do
+ActiveRecord::Schema.define(version: 2019_06_04_105034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 2019_06_03_111746) do
     t.boolean "historical", null: false
     t.bigint "publishing_api_event_id"
     t.string "acronym"
+    t.index "lower((base_path)::text)", name: "index_lower_base_path"
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
     t.index ["content_id", "live"], name: "index_dimensions_editions_on_content_id_and_live"
     t.index ["document_type"], name: "index_dimensions_editions_on_document_type"
