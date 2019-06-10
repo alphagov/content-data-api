@@ -178,7 +178,7 @@ RSpec.describe Finders::Content do
     end
   end
 
-  describe 'Filter by null organisations' do
+  describe 'Filter by no organisations' do
     let(:edition1) { create :edition, date: 15.days.ago, primary_organisation_id: nil }
 
     before do
@@ -189,10 +189,72 @@ RSpec.describe Finders::Content do
     end
 
     it 'returns content from editions which have no organisation' do
-      response = described_class.call(filter: filter.merge(organisation_id: nil))
+      response = described_class.call(filter: filter.merge(organisation_id: 'none'))
       expect(response[:results]).to contain_exactly(
         hash_including(base_path: edition1.base_path)
       )
+    end
+  end
+
+  describe 'Filter by null organisations' do
+    let(:edition1) { create :edition, date: 15.days.ago, primary_organisation_id: nil }
+    let(:edition2) { create :edition, date: 15.days.ago, primary_organisation_id: primary_org_id }
+
+    before do
+      create :metric, edition: edition1, date: 15.days.ago
+      create :metric, edition: edition2, date: 15.days.ago
+      recalculate_aggregations!
+    end
+
+    it 'returns content from editions which have no organisation' do
+      response = described_class.call(filter: filter.merge(organisation_id: nil))
+      expect(response[:results]).to contain_exactly(
+        hash_including(base_path: edition1.base_path),
+        hash_including(base_path: edition2.base_path)
+      )
+    end
+  end
+
+  describe 'Filter by organisation' do
+    let(:primary_org_id) { nil }
+    let(:org_ids) { [] }
+
+    before do
+      @edition = create(
+        :edition,
+        date: 15.days.ago,
+        primary_organisation_id: primary_org_id,
+        organisation_ids: org_ids
+      )
+      create :metric, edition: @edition, date: 15.days.ago
+      recalculate_aggregations!
+    end
+
+    context 'when edition has matching primary org' do
+      let(:primary_org_id) { SecureRandom.uuid }
+      it 'returns the edition' do
+        response = described_class.call(filter: filter.merge(organisation_id: primary_org_id))
+        expect(response[:results]).to contain_exactly(
+          hash_including(base_path: @edition.base_path)
+        )
+      end
+    end
+
+    context 'when edition has a matching associated org' do
+      let(:org_ids) { [SecureRandom.uuid] }
+      it 'returns the edition' do
+        response = described_class.call(filter: filter.merge(organisation_id: org_ids[0]))
+        expect(response[:results]).to contain_exactly(
+          hash_including(base_path: @edition.base_path)
+        )
+      end
+    end
+
+    context 'when edition has neither matching primary nor associated orgs' do
+      it 'returns no editions' do
+        response = described_class.call(filter: filter.merge(organisation_id: SecureRandom.uuid))
+        expect(response[:results]).to eq([])
+      end
     end
   end
 

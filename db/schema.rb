@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 2019_06_04_105034) do
     t.boolean "historical", null: false
     t.bigint "publishing_api_event_id"
     t.string "acronym"
+    t.string "organisation_ids", default: [], array: true
     t.index "lower((base_path)::text)", name: "index_lower_base_path"
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
     t.index ["content_id", "live"], name: "index_dimensions_editions_on_content_id_and_live"
@@ -216,13 +217,14 @@ ActiveRecord::Schema.define(version: 2019_06_04_105034) do
       dimensions_editions.document_type,
       dimensions_editions.base_path,
       dimensions_editions.primary_organisation_id,
+      dimensions_editions.organisation_ids,
       dimensions_editions.id AS dimensions_edition_id,
       aggregations.upviews,
       aggregations.pviews,
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -261,13 +263,14 @@ ActiveRecord::Schema.define(version: 2019_06_04_105034) do
       dimensions_editions.document_type,
       dimensions_editions.base_path,
       dimensions_editions.primary_organisation_id,
+      dimensions_editions.organisation_ids,
       dimensions_editions.id AS dimensions_edition_id,
       aggregations.upviews,
       aggregations.pviews,
       aggregations.feedex,
       aggregations.useful_yes,
       aggregations.useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = 0) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -306,13 +309,14 @@ ActiveRecord::Schema.define(version: 2019_06_04_105034) do
       dimensions_editions.document_type,
       dimensions_editions.base_path,
       dimensions_editions.primary_organisation_id,
+      dimensions_editions.organisation_ids,
       dimensions_editions.id AS dimensions_edition_id,
       (aggregations.upviews)::bigint AS upviews,
       (aggregations.pviews)::bigint AS pviews,
       (aggregations.feedex)::bigint AS feedex,
       (aggregations.useful_yes)::bigint AS useful_yes,
       (aggregations.useful_no)::bigint AS useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -374,13 +378,14 @@ ActiveRecord::Schema.define(version: 2019_06_04_105034) do
       dimensions_editions.document_type,
       dimensions_editions.base_path,
       dimensions_editions.primary_organisation_id,
+      dimensions_editions.organisation_ids,
       dimensions_editions.id AS dimensions_edition_id,
       (aggregations.upviews)::bigint AS upviews,
       (aggregations.pviews)::bigint AS pviews,
       (aggregations.feedex)::bigint AS feedex,
       (aggregations.useful_yes)::bigint AS useful_yes,
       (aggregations.useful_no)::bigint AS useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)
@@ -442,13 +447,14 @@ ActiveRecord::Schema.define(version: 2019_06_04_105034) do
       dimensions_editions.document_type,
       dimensions_editions.base_path,
       dimensions_editions.primary_organisation_id,
+      dimensions_editions.organisation_ids,
       dimensions_editions.id AS dimensions_edition_id,
       (aggregations.upviews)::bigint AS upviews,
       (aggregations.pviews)::bigint AS pviews,
       (aggregations.feedex)::bigint AS feedex,
       (aggregations.useful_yes)::bigint AS useful_yes,
       (aggregations.useful_no)::bigint AS useful_no,
-      ('now'::text)::date AS updated_at,
+      CURRENT_DATE AS updated_at,
           CASE
               WHEN ((aggregations.useful_yes + aggregations.useful_no) = (0)::numeric) THEN NULL::double precision
               ELSE ((aggregations.useful_yes)::double precision / ((aggregations.useful_yes + aggregations.useful_no))::double precision)

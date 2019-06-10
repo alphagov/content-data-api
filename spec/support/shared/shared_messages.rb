@@ -79,3 +79,40 @@ RSpec.shared_examples 'BaseMessage#invalid?' do
     end
   end
 end
+
+RSpec.shared_examples 'BaseMessage#organisation_ids' do
+  describe '#organisation_ids' do
+    let(:payload) { build(:message).payload }
+    let(:message) { described_class.new(payload, "routing_key") }
+
+    before { payload['publishing_app'] = 'publisher' }
+
+    subject { message.organisation_ids }
+
+    context 'when has other organisations' do
+      before do
+        payload['expanded_links'] = {
+          'organisations' => [
+            { 'content_id' => 'org_a' },
+            { 'content_id' => 'org_b' }
+          ]
+        }
+      end
+
+      it { is_expected.to eq(%w(org_a org_b)) }
+    end
+
+    context 'when has no other organisations' do
+      before do
+        payload['expanded_links'] = { 'organisations' => [] }
+      end
+
+      it { is_expected.to eq([]) }
+    end
+
+    context 'when publishing app is not publisher' do
+      before { payload['publishing_app'] = 'whitehall' }
+      it { is_expected.to eq([]) }
+    end
+  end
+end

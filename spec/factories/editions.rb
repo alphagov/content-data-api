@@ -11,6 +11,7 @@ FactoryBot.define do
     document_type { 'detailed_guide' }
     warehouse_item_id { "#{content_id}:#{locale}" }
     primary_organisation_id { '17d84dc6-e5b5-4065-a8b5-8783bd934938' }
+    organisation_ids { [] }
     withdrawn { false }
     historical { false }
     association :publishing_api_event
