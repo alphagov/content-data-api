@@ -94,7 +94,7 @@ GEM
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
     ffi (1.10.0)
-    gds-api-adapters (59.4.0)
+    gds-api-adapters (59.5.0)
       addressable
       link_header
       null_logger
@@ -439,7 +439,7 @@ DEPENDENCIES
   byebug
   database_cleaner
   factory_bot_rails
-  gds-api-adapters (~> 59.4.0)
+  gds-api-adapters (~> 59.5.0)
   gds-sso
   google-api-client (~> 0.30)
   govuk-lint
