@@ -177,6 +177,23 @@ RSpec.describe Dimensions::Edition, type: :model do
     end
   end
 
+  describe '#children' do
+    let(:parent) { create :edition, title: 'parent', base_path: '/parent' }
+    let!(:child) { create :edition, title: 'child', base_path: '/child', parent: parent }
+
+    it 'should return the parent' do
+      expect(child.parent).to eq(parent)
+    end
+
+    it 'returns nil if no parent' do
+      expect(parent.reload.parent).to be_nil
+    end
+
+    it 'returns the children' do
+      expect(parent.reload.children.to_a).to eq([child])
+    end
+  end
+
   describe '#parent_content_id' do
     it 'returns content_id of parent manual for a manual_section' do
       create :edition, content_id: 'the-parent', base_path: '/prefix-path/the-parent-path', document_type: 'manual'
