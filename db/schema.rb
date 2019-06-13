@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_12_150721) do
+ActiveRecord::Schema.define(version: 2019_06_13_082656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 2019_06_12_150721) do
     t.string "acronym"
     t.string "organisation_ids", default: [], array: true
     t.integer "parent_id"
+    t.integer "sibling_order"
     t.index "lower((base_path)::text)", name: "index_lower_base_path"
     t.index ["base_path"], name: "index_dimensions_editions_on_base_path"
     t.index ["content_id", "live"], name: "index_dimensions_editions_on_content_id_and_live"
