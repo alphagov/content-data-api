@@ -177,20 +177,31 @@ RSpec.describe Dimensions::Edition, type: :model do
     end
   end
 
-  describe '#children' do
-    let(:parent) { create :edition, title: 'parent', base_path: '/parent' }
+  describe 'parent/child relationships' do
+    let(:child_sort_order) { %w[warehouse_item_id_1 warehouse_item_id_2] }
+    let(:parent) { create :edition, title: 'parent', base_path: '/parent', child_sort_order: child_sort_order }
     let!(:child) { create :edition, title: 'child', base_path: '/child', parent: parent }
 
-    it 'should return the parent' do
-      expect(child.parent).to eq(parent)
+    describe '#parent' do
+      it 'should return the parent' do
+        expect(child.parent).to eq(parent)
+      end
+
+      it 'returns nil if no parent' do
+        expect(parent.reload.parent).to be_nil
+      end
     end
 
-    it 'returns nil if no parent' do
-      expect(parent.reload.parent).to be_nil
+    describe '#children' do
+      it 'returns the children' do
+        expect(parent.reload.children.to_a).to eq([child])
+      end
     end
 
-    it 'returns the children' do
-      expect(parent.reload.children.to_a).to eq([child])
+    describe '#child_sort_order' do
+      it 'persists and retrieves child_sort_order' do
+        expect(parent.reload.child_sort_order).to eq(child_sort_order)
+      end
     end
   end
 
