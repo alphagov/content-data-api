@@ -24,7 +24,8 @@ module Streams
           base_path: base_path_for_part(part, index),
           title: title_for(part),
           document_text: document_text_for_part(part['slug']),
-          warehouse_item_id: warehouse_item_id_for_part(part, index)
+          warehouse_item_id: warehouse_item_id_for_part(part, index),
+          sibling_order: index
         )
       end
     end

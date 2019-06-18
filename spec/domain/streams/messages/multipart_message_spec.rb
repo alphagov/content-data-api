@@ -39,6 +39,7 @@ RSpec.describe Streams::Messages::MultipartMessage do
           common_attributes.merge(
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}",
             document_text: 'Here 1',
+            sibling_order: 0,
             title: 'the-title: Part 1',
             base_path: '/base-path'
           ),
@@ -46,18 +47,21 @@ RSpec.describe Streams::Messages::MultipartMessage do
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part2",
             document_text: 'be 2',
             title: 'the-title: Part 2',
+            sibling_order: 1,
             base_path: '/base-path/part2'
           ),
           common_attributes.merge(
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part3",
             document_text: 'some 3',
             title: 'the-title: Part 3',
+            sibling_order: 2,
             base_path: '/base-path/part3'
           ),
           common_attributes.merge(
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part4",
             document_text: 'content 4.',
             title: 'the-title: Part 4',
+            sibling_order: 3,
             base_path: '/base-path/part4'
           )
         ])
@@ -84,18 +88,21 @@ RSpec.describe Streams::Messages::MultipartMessage do
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}",
             document_text: 'summary content',
             title: 'the-title: Summary',
+            sibling_order: 0,
             base_path: '/base-path'
           ),
           common_attributes.merge(
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part1",
             document_text: 'Here 1',
             title: 'the-title: Part 1',
+            sibling_order: 1,
             base_path: '/base-path/part1'
           ),
           common_attributes.merge(
             warehouse_item_id: "#{message.payload['content_id']}:#{message.payload['locale']}:part2",
             document_text: 'be 2',
             title: 'the-title: Part 2',
+            sibling_order: 2,
             base_path: '/base-path/part2'
           )
         ])
