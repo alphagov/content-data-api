@@ -42,4 +42,14 @@ namespace :editions do
 
     puts "Done!"
   end
+
+  desc "Update live attribute for coming soon editions"
+  task unset_live_for_coming_soon_editions: :environment do
+    live_coming_soon_editions = Dimensions::Edition.live.where(document_type: 'coming_soon')
+    puts "Updating #{live_coming_soon_editions.count} live editions"
+
+    live_coming_soon_editions.update_all(live: false)
+
+    puts "Done!"
+  end
 end
