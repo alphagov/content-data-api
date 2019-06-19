@@ -6,7 +6,7 @@ class Streams::Messages::BaseMessage
     @routing_key = routing_key
   end
 
-  def build_attributes(base_path:, title:, document_text:, warehouse_item_id:)
+  def build_attributes(base_path:, title:, document_text:, warehouse_item_id:, sibling_order: nil)
     {
       content_id: content_id,
       base_path: base_path,
@@ -25,6 +25,7 @@ class Streams::Messages::BaseMessage
       phase: @payload.fetch('phase', nil),
       publishing_app: @payload.fetch('publishing_app', nil),
       rendering_app: @payload.fetch('rendering_app', nil),
+      sibling_order: sibling_order,
       analytics_identifier: @payload.fetch('analytics_identifier', nil),
       update_type: @payload.fetch('update_type', nil),
       live: false,
