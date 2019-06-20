@@ -103,16 +103,16 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       end
     end
 
-    context 'when link keys are missing' do
-      let(:links) { {} }
+    it 'extracts a list of child warehouse ids' do
+      expected = [
+        'child-1-id:en',
+        'child-2-id:en'
+      ]
+      expect(instance.edition_attributes[:child_sort_order]).to eq(expected)
+    end
 
-      it 'returns null for parent' do
-        expect(instance.edition_attributes[:parent_warehouse_id]).to be_nil
-      end
-
-      it 'returns an empty array for child_sort_order' do
-        expect(instance.edition_attributes[:child_sort_order]).to eq([])
-      end
+    it 'sets the parent warehouse id under temp key' do
+      expect(instance.edition_attributes[:parent_warehouse_id]).to eq('parent-id:en')
     end
   end
 end
