@@ -2,6 +2,8 @@ json.metadata do
   json.merge! @live_edition.metadata
 end
 
+json.number_of_related_content @live_edition.related_content_count
+
 json.time_period do
   json.from @from
   json.to @to

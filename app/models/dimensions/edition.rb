@@ -77,4 +77,11 @@ class Dimensions::Edition < ApplicationRecord
       parent_content_id: parent_content_id
     }
   end
+
+  def related_content_count
+    child_count = children.count
+    return child_count unless child_count.zero?
+
+    parent.try(:related_content_count) || 0
+  end
 end

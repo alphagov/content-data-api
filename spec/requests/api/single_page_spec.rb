@@ -68,6 +68,33 @@ RSpec.describe '/single_page', type: :request do
       expect(response).to have_http_status(:ok)
     end
 
+    describe 'number of related items' do
+      before do
+        day1 = create :dimensions_date, date: Date.new(2018, 1, 1)
+        (1..4).each do |n|
+          edition = create :edition, base_path: "/child-#{n}", parent: item
+          create :metric, dimensions_edition: edition, dimensions_date: day1
+        end
+      end
+
+      it 'returns the count of children for the parent' do
+        get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
+
+        body = JSON.parse(response.body)
+
+        expect(body).to include('number_of_related_content' => 4)
+      end
+
+
+      it 'returns the count of siblings + parent for the child' do
+        get "/single_page/child-1", params: { from: '2018-01-01', to: '2018-01-31' }
+
+        body = JSON.parse(response.body)
+
+        expect(body).to include('number_of_related_content' => 4)
+      end
+    end
+
     it 'returns the time period' do
       get "/single_page/#{base_path}", params: { from: '2018-01-01', to: '2018-01-31' }
 
