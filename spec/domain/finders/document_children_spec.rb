@@ -290,4 +290,3 @@ end
 def records_to_hash(records)
   records.to_a.map { |e| e.serializable_hash.deep_symbolize_keys }
 end
-
