@@ -21,6 +21,8 @@ class Dimensions::Edition < ApplicationRecord
       .where.not(base_path: exclude_paths)
   end
 
+  delegate :document_id, to: :parent, prefix: true, allow_nil: true
+
   def self.find_latest(warehouse_item_id)
     query = <<~SQL
       SELECT a.*
@@ -69,6 +71,7 @@ class Dimensions::Edition < ApplicationRecord
       primary_organisation_title: primary_organisation_title,
       withdrawn: withdrawn,
       historical: historical,
+      parent_document_id: parent_document_id,
     }
   end
 end
