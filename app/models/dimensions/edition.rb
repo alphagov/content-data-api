@@ -52,15 +52,6 @@ class Dimensions::Edition < ApplicationRecord
     dirty
   end
 
-  def parent_content_id
-    return '' unless document_type == 'manual_section'
-
-    _, segment1, segment2 = base_path.split('/')
-    parent_path = "/#{segment1}/#{segment2}"
-    parent = Dimensions::Edition.find_by(base_path: parent_path)
-    parent.content_id
-  end
-
   def metadata
     {
       title: title,
@@ -74,7 +65,6 @@ class Dimensions::Edition < ApplicationRecord
       primary_organisation_title: primary_organisation_title,
       withdrawn: withdrawn,
       historical: historical,
-      parent_content_id: parent_content_id
     }
   end
 end
