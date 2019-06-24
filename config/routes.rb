@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     get '/v1/healthcheck', to: "healthcheck#index"
     get '/v1/organisations', to: 'organisations#index'
     get '/v1/document_types', to: 'document_types#index'
+    get '/v1/documents/:document_id/children', to: 'documents#children'
   end
 
   get '/content', to: 'content#show', defaults: { format: :json }

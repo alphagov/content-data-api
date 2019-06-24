@@ -1,6 +1,9 @@
 class Api::NotFoundError < StandardError
 end
 
+class Api::ParentNotFoundError < StandardError
+end
+
 class Api::BaseController < ApplicationController
   before_action :set_cache_headers
 
@@ -14,6 +17,10 @@ class Api::BaseController < ApplicationController
 
   rescue_from(Api::NotFoundError) do
     not_found_response
+  end
+
+  rescue_from(Api::ParentNotFoundError) do
+    parent_not_found_response
   end
 
   def validate_params!
@@ -63,6 +70,14 @@ private
       type: "https://content-performance-api.publishing.service.gov.uk/errors.html#base-path-not-found",
       title: 'The base path you are looking for cannot be found',
       invalid_params: %w[base_path]
+    }
+    render json: response_hash, status: 404, content_type: "application/problem+json"
+  end
+
+  def parent_not_found_response
+    response_hash = {
+      title: 'The parent document you are looking for cannot be found',
+      invalid_params: %w[document_id]
     }
     render json: response_hash, status: 404, content_type: "application/problem+json"
   end
