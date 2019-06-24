@@ -52,6 +52,10 @@ class Dimensions::Edition < ApplicationRecord
     dirty
   end
 
+  def document_id
+    "#{content_id}:#{locale}"
+  end
+
   def metadata
     {
       title: title,

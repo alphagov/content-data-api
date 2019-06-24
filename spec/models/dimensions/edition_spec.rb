@@ -204,6 +204,13 @@ RSpec.describe Dimensions::Edition, type: :model do
     end
   end
 
+  describe 'document_id' do
+    it 'returns a fomatted document_id' do
+      edition = create :edition, content_id: '1234', locale: 'en'
+      expect(edition.document_id).to eq('1234:en')
+    end
+  end
+
   describe 'Unique constraint on `warehouse_item_id` and `live`' do
     it 'prevent duplicating `warehouse_item_id` for live items' do
       create :edition, warehouse_item_id: 'value', live: true
