@@ -2,6 +2,7 @@ FactoryBot.define do
   factory :edition, class: Dimensions::Edition do
     live { true }
     locale { 'en' }
+    parent { nil }
     sequence(:content_id) { SecureRandom.uuid }
     sequence(:title) { |i| "title - #{i}" }
     sequence(:base_path) { |i| "/base-path-#{i}" }
@@ -15,6 +16,7 @@ FactoryBot.define do
     withdrawn { false }
     historical { false }
     association :publishing_api_event
+    sibling_order { nil }
 
     transient do
       date { Time.zone.today }

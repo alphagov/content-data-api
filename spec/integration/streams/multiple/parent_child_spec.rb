@@ -11,7 +11,7 @@ RSpec.describe 'multi-part parent/child relationships' do
   end
   let(:subject) { Streams::Consumer.new }
 
-  it 'returns the children sorted by sort order' do
+  it 'returns the children' do
     subject.process(message)
     parent = Dimensions::Edition.find_latest("#{content_id}:fr")
     expected = [
@@ -19,7 +19,7 @@ RSpec.describe 'multi-part parent/child relationships' do
      ["#{content_id}:fr:part3", 2],
      ["#{content_id}:fr:part4", 3]
     ]
-    expect(parent.children.pluck(:warehouse_item_id, :sibling_order)).to eq(expected)
+    expect(parent.children.pluck(:warehouse_item_id, :sibling_order)).to include(*expected)
   end
 
   it 'resets the parent of existing unchanged items' do
@@ -33,7 +33,7 @@ RSpec.describe 'multi-part parent/child relationships' do
       ["#{content_id}:fr:part3", 2],
       ["#{content_id}:fr:part4", 3]
     ]
-    expect(parent.children.pluck(:warehouse_item_id, :sibling_order)).to eq(expected)
+    expect(parent.children.pluck(:warehouse_item_id, :sibling_order)).to include(*expected)
   end
 
   it 'does not reset the parent of old items' do
