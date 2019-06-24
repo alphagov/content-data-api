@@ -12,19 +12,10 @@ class Streams::Handlers::MultipartHandler < Streams::Handlers::BaseHandler
   def process
     base_paths = attr_list.map { |hsh| hsh[:base_path] }
     deprecate_redundant_paths(base_paths)
-    current_editions = update_editions(attr_list.map(&method(:find_old_edition)))
-    set_parent_relationships(current_editions)
+    update_editions(attr_list.map(&method(:find_old_edition)))
   end
 
 private
-
-  def set_parent_relationships(editions)
-    parent = editions.first
-    children = editions.drop(1)
-    children.each do |child|
-      child.update_attributes(parent: parent)
-    end
-  end
 
   def find_old_edition(hash)
     old_edition = Dimensions::Edition.find_latest(hash[:warehouse_item_id])

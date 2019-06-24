@@ -4,7 +4,7 @@ class Streams::Handlers::BaseHandler
     items_to_grow = items_with_old_editions.select do |item|
       Streams::GrowDimension.should_grow? old_edition: item[:old_edition], attrs: item[:attrs]
     end
-    items_to_grow.map do |item|
+    items_to_grow.each do |item|
       update_edition(item[:attrs], item[:old_edition], publishing_api_event)
     end
   end

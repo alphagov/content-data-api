@@ -100,7 +100,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Edition.count).to eq(5)
+    expect(Dimensions::Edition.count).to eq(6)
     expect(Dimensions::Edition.live.count).to eq(5)
   end
 
@@ -113,7 +113,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Edition.count).to eq(4)
+    expect(Dimensions::Edition.count).to eq(5)
     expect(Dimensions::Edition.live.count).to eq(3)
   end
 
@@ -126,7 +126,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     subject.process(message)
 
-    expect(Dimensions::Edition.count).to eq(5)
+    expect(Dimensions::Edition.count).to eq(6)
     expect(Dimensions::Edition.live.count).to eq(4)
   end
 
