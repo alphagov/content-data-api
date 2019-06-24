@@ -6,7 +6,7 @@ RSpec.describe '/api/v1/documents/:document_id/children', type: :request do
   let(:locale) { 'en' }
   let(:time_period) { 'past-30-days' }
 
-  describe "documents show" do
+  describe "documents children" do
     it "describes a documents with no children" do
       _, parent_response = setup_edition_and_metrics(content_id, locale, 10)
 
@@ -40,6 +40,40 @@ RSpec.describe '/api/v1/documents/:document_id/children', type: :request do
       )
 
       expect(response).to have_http_status(404)
+    end
+  end
+
+  context 'with invalid params' do
+    it 'returns an error for badly formatted dates' do
+      get "/api/v1/documents/#{content_id}:#{locale}/children", params: { time_period: 'invalid' }
+
+      expect(response.status).to eq(400)
+
+      json = JSON.parse(response.body)
+
+      expected_error_response = {
+        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error',
+        'title' => 'One or more parameters is invalid',
+        'invalid_params' => { 'time_period' => ['this is not a valid time period'] }
+      }
+
+      expect(json).to eq(expected_error_response)
+    end
+
+    it 'returns an error for invalid sort' do
+      get "/api/v1/documents/#{content_id}:#{locale}/children", params: { time_period: 'past-30-days', sort: 'invalid' }
+
+      expect(response.status).to eq(400)
+
+      json = JSON.parse(response.body)
+
+      expected_error_response = {
+        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error',
+        'title' => 'One or more parameters is invalid',
+        'invalid_params' => { 'sort' => ['this is not a valid sort key'] }
+      }
+
+      expect(json).to eq(expected_error_response)
     end
   end
 end
