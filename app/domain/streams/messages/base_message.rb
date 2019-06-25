@@ -7,6 +7,11 @@ class Streams::Messages::BaseMessage
   end
 
   def build_attributes(base_path:, title:, document_text:, warehouse_item_id:, sibling_order: nil)
+    parser = Streams::ParentChild::Parser.new
+    parent_child_attrs = {
+      parent_warehouse_id: parser.get_parent_id(payload),
+      child_sort_order: parser.get_children_ids(payload)
+    }.compact
     {
       content_id: content_id,
       base_path: base_path,
@@ -32,7 +37,7 @@ class Streams::Messages::BaseMessage
       warehouse_item_id: warehouse_item_id,
       withdrawn: withdrawn_notice?,
       historical: historically_political?,
-    }
+    }.merge(parent_child_attrs)
   end
 
   def invalid?

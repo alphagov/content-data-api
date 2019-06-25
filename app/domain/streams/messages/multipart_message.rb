@@ -19,7 +19,7 @@ module Streams
     end
 
     def edition_attributes
-      parts.map.with_index do |part, index|
+      attrs = parts.map.with_index do |part, index|
         build_attributes(
           base_path: base_path_for_part(part, index),
           title: title_for(part),
@@ -28,6 +28,11 @@ module Streams
           sibling_order: index
         )
       end
+      parent = attrs.first
+      children = attrs.drop(1)
+      parent[:child_sort_order] = children.map { |h| h[:warehouse_item_id] }
+      children.each { |h| h[:parent_warehouse_id] = parent[:warehouse_item_id] }
+      attrs
     end
 
   private

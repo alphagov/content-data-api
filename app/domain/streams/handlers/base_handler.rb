@@ -4,7 +4,7 @@ class Streams::Handlers::BaseHandler
     items_to_grow = items_with_old_editions.select do |item|
       Streams::GrowDimension.should_grow? old_edition: item[:old_edition], attrs: item[:attrs]
     end
-    items_to_grow.map do |item|
+    items_to_grow.each do |item|
       update_edition(item[:attrs], item[:old_edition], publishing_api_event)
     end
   end
@@ -12,10 +12,12 @@ class Streams::Handlers::BaseHandler
 private
 
   def update_edition(new_edition_attr, old_edition, publishing_api_event)
-    attributes = new_edition_attr.merge(publishing_api_event: publishing_api_event)
+    parent_warehouse_id = new_edition_attr[:parent_warehouse_id]
+    attributes = new_edition_attr.except(:parent_warehouse_id).merge(publishing_api_event: publishing_api_event)
     new_edition = Dimensions::Edition.new(attributes)
     new_edition.facts_edition = Etl::Edition::Processor.process(old_edition, new_edition)
     new_edition.promote!(old_edition)
+    Streams::ParentChild::LinksProcessor.update_parent_and_sort_siblings(new_edition, parent_warehouse_id)
     new_edition
   end
 end
