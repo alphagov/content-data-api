@@ -1,4 +1,6 @@
 class Api::DocumentsController < Api::BaseController
+  before_action :validate_params!
+
   def children
     @document_id = params[:document_id]
 
@@ -22,5 +24,15 @@ private
     raise Api::ParentNotFoundError.new("#{params[:document_id]} not found") if parent.nil?
 
     parent
+  end
+
+  def validate_params!
+    unless api_request.valid?
+      error_response(
+        "validation-error",
+        title: "One or more parameters is invalid",
+        invalid_params: api_request.errors.to_hash
+      )
+    end
   end
 end
