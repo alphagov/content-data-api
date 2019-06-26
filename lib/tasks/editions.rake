@@ -33,6 +33,25 @@ namespace :editions do
     puts "Done!"
   end
 
+  desc "Update existing live editions"
+  task update_existing: :environment do
+    editions = Dimensions::Edition.all.live
+    puts "Updating #{editions.count} editions"
+
+    ActiveRecord::Base.transaction do
+      Dimensions::Edition.find_each(batch_size: 1000).each_with_index do |edition, index|
+        payload = edition.publishing_api_event.payload
+        routing_key = edition.publishing_api_event.routing_key
+        message = Streams::Messages::Factory.build(payload, routing_key)
+        message.handler.reprocess
+
+        puts "Updated editions #{index}" if (index % 5000).zero?
+      end
+    end
+
+    puts "Done!"
+  end
+
   desc "Update live attribute for unpublished editions"
   task unset_live_for_unpublished_editions: :environment do
     live_unpublished_editions = Dimensions::Edition.live.where(document_type: %w(gone vanish redirect))
