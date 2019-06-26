@@ -61,7 +61,8 @@ RSpec.describe '/single_page', type: :request do
           "public_updated_at" => '2018-07-17T10:35:57.000Z',
           "primary_organisation_title" => 'The ministry',
           "withdrawn" => false,
-          "historical" => false
+          "historical" => false,
+          "parent_document_id" => nil
         }
       }
       expect(body['metadata']).to include(expected['metadata'])

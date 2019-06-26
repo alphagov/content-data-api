@@ -172,7 +172,7 @@ RSpec.describe Dimensions::Edition, type: :model do
         primary_organisation_title: 'The ministry',
         withdrawn: false,
         historical: false,
-        parent_content_id: ''
+        parent_document_id: nil,
       )
     end
   end
@@ -205,12 +205,25 @@ RSpec.describe Dimensions::Edition, type: :model do
     end
   end
 
-  describe '#parent_content_id' do
-    it 'returns content_id of parent manual for a manual_section' do
-      create :edition, content_id: 'the-parent', base_path: '/prefix-path/the-parent-path', document_type: 'manual'
-      child = create :edition, base_path: '/prefix-path/the-parent-path/child-path', document_type: 'manual_section'
+  describe 'document_id' do
+    it 'returns a fomatted document_id' do
+      edition = create :edition, content_id: '1234', locale: 'en'
+      expect(edition.document_id).to eq('1234:en')
+    end
+  end
 
-      expect(child.parent_content_id).to eq('the-parent')
+  describe 'parent_document_id' do
+    it 'returns a fomatted document_id for parent' do
+      parent = create :edition, content_id: '1234', locale: 'en'
+      child = create :edition, parent: parent
+
+      expect(child.parent_document_id).to eq('1234:en')
+    end
+
+    it 'returns a nil when there is no parent' do
+      parent = create :edition, content_id: '1234', locale: 'en'
+
+      expect(parent.parent_document_id).to eq(nil)
     end
   end
 

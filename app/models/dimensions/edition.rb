@@ -21,6 +21,8 @@ class Dimensions::Edition < ApplicationRecord
       .where.not(base_path: exclude_paths)
   end
 
+  delegate :document_id, to: :parent, prefix: true, allow_nil: true
+
   def self.find_latest(warehouse_item_id)
     query = <<~SQL
       SELECT a.*
@@ -52,13 +54,8 @@ class Dimensions::Edition < ApplicationRecord
     dirty
   end
 
-  def parent_content_id
-    return '' unless document_type == 'manual_section'
-
-    _, segment1, segment2 = base_path.split('/')
-    parent_path = "/#{segment1}/#{segment2}"
-    parent = Dimensions::Edition.find_by(base_path: parent_path)
-    parent.content_id
+  def document_id
+    "#{content_id}:#{locale}"
   end
 
   def metadata
@@ -74,7 +71,7 @@ class Dimensions::Edition < ApplicationRecord
       primary_organisation_title: primary_organisation_title,
       withdrawn: withdrawn,
       historical: historical,
-      parent_content_id: parent_content_id
+      parent_document_id: parent_document_id,
     }
   end
 
