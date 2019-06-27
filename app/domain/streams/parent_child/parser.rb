@@ -1,6 +1,8 @@
 class Streams::ParentChild::Parser
   PARSERS = [
-    ::Streams::ParentChild::ParentChildLinksParser
+    ::Streams::ParentChild::ParentChildLinksParser,
+    ::Streams::ParentChild::ManualSectionManualParser,
+    ::Streams::ParentChild::ManualSectionsParser
   ].freeze
 
   def get_parent_id(payload)
@@ -19,10 +21,6 @@ class Streams::ParentChild::Parser
 
   def initialize
     register_parsers
-  end
-
-  def create_parser(document_type)
-    parsers[document_type]
   end
 
 private

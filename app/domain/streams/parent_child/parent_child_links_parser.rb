@@ -1,4 +1,4 @@
-class Streams::ParentChild::ParentChildLinksParser
+class Streams::ParentChild::ParentChildLinksParser < Streams::ParentChild::BaseParser
   DOCUMENT_TYPES = %w[
       guidance
       form
@@ -34,9 +34,5 @@ class Streams::ParentChild::ParentChildLinksParser
     return nil if parent_array.blank?
 
     to_warehouse_id(parent_array.first['content_id'], parent_array.first['locale'])
-  end
-
-  def self.to_warehouse_id(content_id, locale)
-    "#{content_id}:#{locale}"
   end
 end
