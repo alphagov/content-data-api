@@ -39,7 +39,7 @@ namespace :editions do
     puts "Updating #{editions.count} editions"
 
     ActiveRecord::Base.transaction do
-      Dimensions::Edition.find_each(batch_size: 1000).each_with_index do |edition, index|
+      editions.find_each(batch_size: 1000).each_with_index do |edition, index|
         payload = edition.publishing_api_event.payload
         routing_key = edition.publishing_api_event.routing_key
         message = Streams::Messages::Factory.build(payload, routing_key)
