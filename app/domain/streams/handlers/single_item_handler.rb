@@ -18,6 +18,11 @@ class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
     update_editions [attrs: attrs, old_edition: find_old_edition(attrs[:warehouse_item_id], attrs[:locale])]
   end
 
+  def reprocess
+    existing_edition = find_old_edition(attrs[:warehouse_item_id], attrs[:locale])
+    update_existing_edition(attrs, existing_edition)
+  end
+
 private
 
   def find_old_edition(warehouse_item_id, locale)

@@ -15,6 +15,12 @@ class Streams::Handlers::MultipartHandler < Streams::Handlers::BaseHandler
     update_editions(attr_list.map(&method(:find_old_edition)))
   end
 
+  def reprocess
+    attr_list.map(&method(:find_old_edition)).each do |h|
+      update_existing_edition(h[:attrs], h[:old_edition])
+    end
+  end
+
 private
 
   def find_old_edition(hash)
