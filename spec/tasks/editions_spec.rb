@@ -29,7 +29,7 @@ RSpec.describe 'rake editions:*', type: task do
 
       Rake::Task['editions:update_existing'].invoke
 
-      expect(Dimensions::Edition.all).to match_array(old_editions)
+      expect(Dimensions::Edition.live.all).to match_array(old_editions)
     end
 
     it 'updates edition relationship information for publication edition' do
@@ -68,7 +68,7 @@ RSpec.describe 'rake editions:*', type: task do
 
       Rake::Task['editions:update_existing'].invoke
 
-      expect(Dimensions::Edition.all).to match_array(old_editions)
+      expect(Dimensions::Edition.live.all).to match_array(old_editions)
     end
   end
 end
