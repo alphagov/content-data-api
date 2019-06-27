@@ -17,7 +17,7 @@ class Streams::Handlers::MultipartHandler < Streams::Handlers::BaseHandler
 
   def reprocess
     attr_list.map(&method(:find_old_edition)).each do |h|
-      update_existing_edition(h[:attrs], h[:old_edition])
+      update_existing_edition(h[:attrs].except(:live), h[:old_edition])
     end
   end
 
