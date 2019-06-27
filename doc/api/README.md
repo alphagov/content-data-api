@@ -33,7 +33,7 @@ When the API is live, we will follow the [GDS API technical and data standards](
 - provide notices for deprecated endpoints
 
 This is a middleman powered microsite for the API documentation. It
-it is hosted by Github Pages and will eventually be available at https://content-performance-api.publishing.service.gov.uk.
+it is hosted by Github Pages and will eventually be available at https://content-data-api.publishing.service.gov.uk.
 
 This documentation is built from source files in this repository and an
 [OpenAPI specification file](https://github.com/OAI/OpenAPI-Specification), which is used to generate the reference section.

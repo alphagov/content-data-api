@@ -6,7 +6,7 @@ The main idea is to have only actionable errors in Sentry because otherwise, the
 
 ## If you are a new developer to the team
 
-1. Subscribe to the Sentry team: #govuk-data-informed-team, which will enable notifications for Content Data Admin and Content Performance Manager.
+1. Subscribe to the Sentry team: #govuk-data-informed-team, which will enable notifications for Content Data Admin and Content Data API.
                                  
 ## If you find an Error in Sentry (Production)
 

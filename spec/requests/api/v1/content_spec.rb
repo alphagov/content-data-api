@@ -399,7 +399,7 @@ RSpec.describe '/content' do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error',
+        'type' => 'https://content-data-api.publishing.service.gov.uk/errors.html#validation-error',
         'title' => 'One or more parameters is invalid',
         'invalid_params' => { 'date_range' => ['this is not a valid date range'] }
       }
@@ -415,7 +415,7 @@ RSpec.describe '/content' do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error',
+        'type' => 'https://content-data-api.publishing.service.gov.uk/errors.html#validation-error',
         'title' => 'One or more parameters is invalid',
         'invalid_params' => { 'organisation_id' => ['this is not a valid organisation id'] }
       }
