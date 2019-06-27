@@ -230,7 +230,7 @@ RSpec.describe '/single_page', type: :request do
             "Dates should use the format YYYY-MM-DD"
           ]
         },
-        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error'
+        'type' => 'https://content-data-api.publishing.service.gov.uk/errors.html#validation-error'
       }
       expect(body).to eq(expected)
       expect(response).to have_http_status(400)
@@ -251,7 +251,7 @@ RSpec.describe '/single_page', type: :request do
             "Dates should use the format YYYY-MM-DD"
           ]
         },
-        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error'
+        'type' => 'https://content-data-api.publishing.service.gov.uk/errors.html#validation-error'
       }
       expect(body).to eq(expected)
       expect(response).to have_http_status(400)
@@ -276,7 +276,7 @@ RSpec.describe '/single_page', type: :request do
             "Dates should use the format YYYY-MM-DD"
           ]
         },
-        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error'
+        'type' => 'https://content-data-api.publishing.service.gov.uk/errors.html#validation-error'
       }
       expect(body).to eq(expected)
       expect(response).to have_http_status(400)

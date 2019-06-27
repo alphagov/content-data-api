@@ -1,4 +1,4 @@
-# Content Performance Manager
+# Content Data API
 
 A data warehouse that stores content and content metrics, to help content owners measure and improve content on GOV.UK.
 

@@ -61,13 +61,13 @@ private
     # Type is an arbitrary URI identifying the error type
     # https://tools.ietf.org/html/rfc7807#section-3.1 recommends using
     # human-readable documentation for this, so point to our API docs.
-    error_hash[:type] = "https://content-performance-api.publishing.service.gov.uk/errors.html##{type}"
+    error_hash[:type] = "https://content-data-api.publishing.service.gov.uk/errors.html##{type}"
     render json: error_hash, status: :bad_request, content_type: "application/problem+json"
   end
 
   def not_found_response
     response_hash = {
-      type: "https://content-performance-api.publishing.service.gov.uk/errors.html#base-path-not-found",
+      type: "https://content-data-api.publishing.service.gov.uk/errors.html#base-path-not-found",
       title: 'The base path you are looking for cannot be found',
       invalid_params: %w[base_path]
     }

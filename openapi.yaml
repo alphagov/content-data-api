@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: GOV.UK Content Performance API
+  title: GOV.UK Content Data API
   description: |
-    GOV.UK Content Performance API provides metrics about GOV.UK content.
+    GOV.UK Content Data API provides metrics about GOV.UK content.
 
     This API accepts HTTP requests and responds with
     [JSON](https://en.wikipedia.org/wiki/JSON).
@@ -316,7 +316,7 @@ components:
             - can't be blank
             - Dates should use the format YYYY-MM-DD
         type: >-
-          https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error
+          https://content-data-api.publishing.service.gov.uk/errors.html#validation-error
     MetricsExample:
       summary: An list of available metrics.
       value:

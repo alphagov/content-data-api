@@ -52,7 +52,7 @@ RSpec.describe '/api/v1/documents/:document_id/children', type: :request do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error',
+        'type' => 'https://content-data-api.publishing.service.gov.uk/errors.html#validation-error',
         'title' => 'One or more parameters is invalid',
         'invalid_params' => { 'time_period' => ['this is not a valid time period'] }
       }
@@ -68,7 +68,7 @@ RSpec.describe '/api/v1/documents/:document_id/children', type: :request do
       json = JSON.parse(response.body)
 
       expected_error_response = {
-        'type' => 'https://content-performance-api.publishing.service.gov.uk/errors.html#validation-error',
+        'type' => 'https://content-data-api.publishing.service.gov.uk/errors.html#validation-error',
         'title' => 'One or more parameters is invalid',
         'invalid_params' => { 'sort' => ['this is not a valid sort key'] }
       }
