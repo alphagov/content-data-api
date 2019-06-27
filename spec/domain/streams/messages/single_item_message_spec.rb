@@ -62,17 +62,8 @@ RSpec.describe Streams::Messages::SingleItemMessage do
     end
   end
 
-  describe "extracts parent/child from links > parent/children" do
+  describe "documents with links > parent/children" do
     let(:message) { build :message }
-    let(:links) do
-      {
-        'children' => [
-          { 'content_id' => 'child-1-id', 'locale' => 'en' },
-          { 'content_id' => 'child-2-id', 'locale' => 'en' },
-        ],
-        'parent' => [{ 'content_id' => 'parent-id', 'locale' => 'en' }]
-      }
-    end
 
     before do
       message.payload['links'] = links
@@ -80,7 +71,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       message.payload['document_type'] = 'guidance'
     end
 
-    context 'when parent and child links exist' do
+    context 'when parent/child links exist' do
       let(:links) do
         {
           'children' => [
@@ -90,6 +81,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
           'parent' => [{ 'content_id' => 'parent-id', 'locale' => 'en' }]
         }
       end
+
       it 'extracts a list of child warehouse ids' do
         expected = [
           'child-1-id:en',
@@ -103,29 +95,22 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       end
     end
 
-    it 'extracts a list of child warehouse ids' do
-      expected = [
-        'child-1-id:en',
-        'child-2-id:en'
-      ]
-      expect(instance.edition_attributes[:child_sort_order]).to eq(expected)
-    end
 
-    it 'sets the parent warehouse id under temp key' do
-      expect(instance.edition_attributes[:parent_warehouse_id]).to eq('parent-id:en')
+    context 'when parent/children keys are missing' do
+      let(:links) { {} }
+
+      it 'returns null for parent' do
+        expect(instance.edition_attributes[:parent_warehouse_id]).to be_nil
+      end
+
+      it 'returns an empty array for child_sort_order' do
+        expect(instance.edition_attributes[:child_sort_order]).to eq([])
+      end
     end
   end
 
   describe "for a manual" do
     let(:message) { build :message }
-    let(:links) do
-      {
-        'sections' => [
-          { 'content_id' => 'child-1-id', 'locale' => 'en' },
-          { 'content_id' => 'child-2-id', 'locale' => 'en' },
-        ]
-      }
-    end
 
     before do
       message.payload['links'] = links
@@ -133,18 +118,36 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       message.payload['document_type'] = 'manual'
     end
 
-    it 'extracts a list of child warehouse ids from links > sections' do
-      expected = [
-        'child-1-id:en',
-        'child-2-id:en'
-      ]
-      expect(instance.edition_attributes[:child_sort_order]).to eq(expected)
+    context 'when sections exist in links' do
+      let(:links) do
+        {
+          'sections' => [
+            { 'content_id' => 'child-1-id', 'locale' => 'en' },
+            { 'content_id' => 'child-2-id', 'locale' => 'en' },
+          ]
+        }
+      end
+
+      it 'extracts a list of child warehouse ids from links > sections' do
+        expected = [
+          'child-1-id:en',
+          'child-2-id:en'
+        ]
+        expect(instance.edition_attributes[:child_sort_order]).to eq(expected)
+      end
+    end
+
+    context 'when sections key is missing' do
+      let(:links) { {} }
+
+      it 'returns an empty array for child_sort_order' do
+        expect(instance.edition_attributes[:child_sort_order]).to eq([])
+      end
     end
   end
 
   describe "for a manual section" do
     let(:message) { build :message }
-    let(:links) { { 'manual' => [{ 'content_id' => 'parent-id', 'locale' => 'en' }] } }
 
     before do
       message.payload['links'] = links
@@ -152,8 +155,21 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       message.payload['document_type'] = 'manual_section'
     end
 
-    it 'sets the parent warehouse id under temp key' do
-      expect(instance.edition_attributes[:parent_warehouse_id]).to eq('parent-id:en')
+    context 'when manual exists in links' do
+      let(:links) { { 'manual' => [{ 'content_id' => 'parent-id', 'locale' => 'en' }] } }
+
+
+      it 'sets the parent warehouse id under temp key' do
+        expect(instance.edition_attributes[:parent_warehouse_id]).to eq('parent-id:en')
+      end
+    end
+
+    context 'when manual key is missing' do
+      let(:links) { {} }
+
+      it 'returns null for parent' do
+        expect(instance.edition_attributes[:parent_warehouse_id]).to be_nil
+      end
     end
   end
 end

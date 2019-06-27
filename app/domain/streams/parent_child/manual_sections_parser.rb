@@ -5,4 +5,8 @@ class Streams::ParentChild::ManualSectionsParser < Streams::ParentChild::BasePar
     sections = payload.dig('links', 'sections') || []
     sections.map { |h| to_warehouse_id(h['content_id'], h['locale']) }
   end
+
+  def self.get_parent_id(_)
+    nil
+  end
 end
