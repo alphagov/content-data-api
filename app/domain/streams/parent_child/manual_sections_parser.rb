@@ -2,7 +2,7 @@ class Streams::ParentChild::ManualSectionsParser < Streams::ParentChild::BasePar
   DOCUMENT_TYPES = %w[manual].freeze
 
   def self.get_children_ids(payload)
-    sections = payload.dig('links', 'sections') || []
+    sections = payload.dig('expanded_links', 'sections') || []
     sections.map { |h| to_warehouse_id(h['content_id'], h['locale']) }
   end
 
