@@ -14,7 +14,7 @@ module Healthchecks
     end
 
     def status
-      if addition_of_metric_values.positive?
+      if number_of_metric_values.positive?
         :ok
       else
         :critical
@@ -27,7 +27,7 @@ module Healthchecks
 
   private
 
-    def addition_of_metric_values
+    def number_of_metric_values
       Facts::Metric.for_yesterday.where("#{metric} > 0").count
     end
   end
