@@ -1,5 +1,5 @@
-RSpec.describe Healthchecks::EtlGoogleAnalytics do
-  its(:name) { is_expected.to eq(:etl_google_analytics_pviews) }
+RSpec.describe Healthchecks::EtlMetricValues do
+  its(:name) { is_expected.to eq(:etl_metric_values_pviews) }
 
   include_examples 'Healthcheck enabled/disabled within time range'
 
