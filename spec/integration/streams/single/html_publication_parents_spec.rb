@@ -43,9 +43,9 @@ RSpec.describe 'setting parents for html_publications' do
   subject { Streams::Consumer.new }
 
   before do
-    parent_message.payload['links'] = links_for_parent
-    attachment_1_message.payload['links'] = links_for_child
-    attachment_2_message.payload['links'] = links_for_child
+    parent_message.payload['expanded_links'] = links_for_parent
+    attachment_1_message.payload['expanded_links'] = links_for_child
+    attachment_2_message.payload['expanded_links'] = links_for_child
   end
 
   context 'when the parent arrives first' do

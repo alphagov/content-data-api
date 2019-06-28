@@ -42,9 +42,9 @@ RSpec.describe 'setting parents for manuals' do
   subject { Streams::Consumer.new }
 
   before do
-    manual_message.payload['links'] = links_for_parent
-    section_1_message.payload['links'] = links_for_child
-    section_2_message.payload['links'] = links_for_child
+    manual_message.payload['expanded_links'] = links_for_parent
+    section_1_message.payload['expanded_links'] = links_for_child
+    section_2_message.payload['expanded_links'] = links_for_child
   end
 
   context 'when the manual arrives first' do

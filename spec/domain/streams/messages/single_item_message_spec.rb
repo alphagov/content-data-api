@@ -66,7 +66,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
     let(:message) { build :message }
 
     before do
-      message.payload['links'] = links
+      message.payload['expanded_links'] = links
       message.payload['schema_name'] = 'publication'
       message.payload['document_type'] = 'guidance'
     end
@@ -113,7 +113,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
     let(:message) { build :message }
 
     before do
-      message.payload['links'] = links
+      message.payload['expanded_links'] = links
       message.payload['schema_name'] = 'manual'
       message.payload['document_type'] = 'manual'
     end
@@ -150,7 +150,7 @@ RSpec.describe Streams::Messages::SingleItemMessage do
     let(:message) { build :message }
 
     before do
-      message.payload['links'] = links
+      message.payload['expanded_links'] = links
       message.payload['schema_name'] = 'manual_section'
       message.payload['document_type'] = 'manual_section'
     end
