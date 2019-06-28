@@ -4,9 +4,9 @@ class Api::DocumentsController < Api::BaseController
   def children
     @document_id = params[:document_id]
 
-    parent = find_parent_edition!
+    @parent = find_parent_edition!
 
-    @documents = Finders::DocumentChildren.call(parent, api_request.to_filter)
+    @documents = Finders::DocumentChildren.call(@parent, api_request.to_filter)
   end
 
 private

@@ -1,3 +1,4 @@
+json.parent_base_path @parent.base_path
 json.documents @documents do |document|
   json.base_path document.base_path
   json.title document.title

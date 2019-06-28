@@ -8,13 +8,13 @@ RSpec.describe '/api/v1/documents/:document_id/children', type: :request do
 
   describe "documents children" do
     it "describes a documents with no children" do
-      _, parent_response = setup_edition_and_metrics(content_id, locale, 10)
+      parent, parent_response = setup_edition_and_metrics(content_id, locale, 10)
 
       get "/api/v1/documents/#{content_id}:#{locale}/children?time_period=#{time_period}"
 
       json = JSON.parse(response.body)
 
-      expect(json).to include("documents" => [parent_response])
+      expect(json).to include("parent_base_path" => parent.base_path, "documents" => [parent_response])
     end
 
     it "describes a documents with children" do
@@ -26,7 +26,7 @@ RSpec.describe '/api/v1/documents/:document_id/children', type: :request do
 
       json = JSON.parse(response.body)
 
-      expect(json).to include("documents" => [parent_response, child1_response, child2_response])
+      expect(json).to include("parent_base_path" => parent.base_path, "documents" => [parent_response, child1_response, child2_response])
     end
 
     it "describes the children documents when parent does not exist" do
