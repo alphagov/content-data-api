@@ -1,5 +1,5 @@
 module Healthchecks
-  class EtlGoogleAnalytics
+  class EtlMetricValues
     include ActiveModel::Model
     include Concerns::Deactivable
 
@@ -10,7 +10,7 @@ module Healthchecks
     end
 
     def name
-      "etl_google_analytics_#{metric}".to_sym
+      "etl_metric_values_#{metric}".to_sym
     end
 
     def status
