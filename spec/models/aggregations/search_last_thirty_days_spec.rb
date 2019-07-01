@@ -21,7 +21,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
   end
 
   it 'aggregates by warehouse_item_id' do
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     edition2 = create :edition, warehouse_item_id: 'warehouse_item_id2', date: 2.months.ago
 
     create :metric, edition: edition1, date: 15.days.ago
@@ -47,7 +47,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
   end
 
   it 'does not include metrics older than 30 days ago' do
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     create :metric, edition: edition1, date: 30.days.ago, upviews: 10
     create :metric, edition: edition1, date: 31.days.ago, upviews: 100
 
@@ -57,7 +57,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
   end
 
   it 'does not include metrics newer than yesterday' do
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     create :metric, edition: edition1, date: Date.today, upviews: 100
     create :metric, edition: edition1, date: Date.yesterday, upviews: 10
 

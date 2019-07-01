@@ -53,7 +53,7 @@ RSpec.describe Aggregations::SearchLastTwelveMonths, type: :model do
 
   it 'does not include metrics older than 12 months ago' do
     tweleve_months_ago = Date.yesterday - 12.months
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     create :metric, edition: edition1, date: tweleve_months_ago + 1.day, upviews: 10
     create :metric, edition: edition1, date: tweleve_months_ago, upviews: 100
 
@@ -63,7 +63,7 @@ RSpec.describe Aggregations::SearchLastTwelveMonths, type: :model do
   end
 
   it 'includes metrics for yesterday' do
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     create :metric, edition: edition1, date: Date.yesterday, upviews: 10
 
     recalculate_aggregations!
@@ -72,7 +72,7 @@ RSpec.describe Aggregations::SearchLastTwelveMonths, type: :model do
   end
 
   it 'does not count metrics twice' do
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     start_date = Date.yesterday
     end_date = 12.months.ago
 

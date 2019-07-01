@@ -145,7 +145,7 @@ RSpec.describe Finders::DocumentChildren do
     context 'when time period is past 3 months' do
       let(:time_period) { 'past-3-months' }
       it 'returns the aggregations for past 3 months' do
-        date = (Date.today - 2.month)
+        date = (Date.today - 2.months)
         child = create :edition, date: 2.months.ago, parent: parent
 
         create :metric, edition: parent, date: date, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
@@ -163,7 +163,7 @@ RSpec.describe Finders::DocumentChildren do
     context 'when time period is past 6 months' do
       let(:time_period) { 'past-6-months' }
       it 'returns the aggregations for past 6 months' do
-        date = (Date.today - 5.month)
+        date = (Date.today - 5.months)
         child = create :edition, date: 6.months.ago, parent: parent
 
         create :metric, edition: parent, date: date, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
@@ -181,7 +181,7 @@ RSpec.describe Finders::DocumentChildren do
     context 'when time period is past year' do
       let(:time_period) { 'past-year' }
       it 'returns the aggregations for past year' do
-        date = (Date.today - 12.month)
+        date = (Date.today - 12.months)
         child = create :edition, date: 12.months.ago, parent: parent
 
         create :metric, edition: parent, date: date, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
