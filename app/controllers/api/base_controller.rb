@@ -71,7 +71,7 @@ private
       title: 'The base path you are looking for cannot be found',
       invalid_params: %w[base_path]
     }
-    render json: response_hash, status: 404, content_type: "application/problem+json"
+    render json: response_hash, status: :not_found, content_type: "application/problem+json"
   end
 
   def parent_not_found_response
@@ -79,6 +79,6 @@ private
       title: 'The parent document you are looking for cannot be found',
       invalid_params: %w[document_id]
     }
-    render json: response_hash, status: 404, content_type: "application/problem+json"
+    render json: response_hash, status: :not_found, content_type: "application/problem+json"
   end
 end
