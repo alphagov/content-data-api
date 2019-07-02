@@ -1,5 +1,5 @@
 RSpec.describe Dimensions::Edition, type: :model do
-  let(:now) { Time.new(2018, 2, 21, 12, 31, 2) }
+  let(:now) { Time.utc(2018, 2, 21, 12, 31, 2) }
 
   it { is_expected.to validate_presence_of(:content_id) }
   it { is_expected.to validate_presence_of(:base_path) }
@@ -165,8 +165,8 @@ RSpec.describe Dimensions::Edition, type: :model do
         content_id: 'the-content-id',
         locale: 'en',
         title: 'The Title',
-        first_published_at: Time.new(2018, 1, 1).strftime("%Y-%m-%d"),
-        public_updated_at: Time.new(2018, 5, 20).strftime("%Y-%m-%d"),
+        first_published_at: Time.utc(2018, 1, 1).strftime("%Y-%m-%d"),
+        public_updated_at: Time.utc(2018, 5, 20).strftime("%Y-%m-%d"),
         publishing_app: 'publisher',
         document_type: 'guide',
         primary_organisation_title: 'The ministry',

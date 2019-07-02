@@ -8,7 +8,7 @@ RSpec.shared_examples 'Healthcheck enabled/disabled within time range' do
   end
 
   describe '#enabled?' do
-    let(:today) { Time.new(2018, 1, 15, 16, 0, 0) }
+    let(:today) { Time.utc(2018, 1, 15, 16, 0, 0) }
 
     around do |example|
       Timecop.freeze(today) { example.run }
@@ -21,13 +21,13 @@ RSpec.shared_examples 'Healthcheck enabled/disabled within time range' do
       end
 
       context 'within time range' do
-        let(:today) { Time.new(2018, 1, 15, 9, 1, 0) }
+        let(:today) { Time.utc(2018, 1, 15, 9, 1, 0) }
 
         it { is_expected.to be_enabled }
       end
 
       context 'out of time range' do
-        let(:today) { Time.new(2018, 1, 15, 1, 0, 0) }
+        let(:today) { Time.utc(2018, 1, 15, 1, 0, 0) }
 
         it { is_expected.to_not be_enabled }
       end
@@ -38,7 +38,7 @@ RSpec.shared_examples 'Healthcheck enabled/disabled within time range' do
         ENV.delete 'ETL_HEALTHCHECK_ENABLED'
       end
 
-      let(:today) { Time.new(2018, 1, 15, 20, 0, 0) }
+      let(:today) { Time.utc(2018, 1, 15, 20, 0, 0) }
 
       it { is_expected.to_not be_enabled }
     end
@@ -49,7 +49,7 @@ RSpec.shared_examples 'Healthcheck enabled/disabled within time range' do
         ENV['ETL_HEALTHCHECK_ENABLED_FROM_HOUR'] = '9'
       end
 
-      let(:today) { Time.new(2018, 1, 15, 1, 0, 0) }
+      let(:today) { Time.utc(2018, 1, 15, 1, 0, 0) }
 
       it { is_expected.to_not be_enabled }
     end
