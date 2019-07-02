@@ -52,7 +52,7 @@ private
     # Set cache headers to expire the page at 1am when we fetch new data.
     expiry_time = Time.zone.tomorrow.at_beginning_of_day.change(hour: 1)
     current_time = Time.zone.now
-    cache_time = (expiry_time - current_time) % 24.hour
+    cache_time = (expiry_time - current_time) % 24.hours
 
     expires_in cache_time, public: true
   end
