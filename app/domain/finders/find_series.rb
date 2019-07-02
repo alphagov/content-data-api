@@ -39,7 +39,7 @@ private
 
   def slice_editions
     editions = Dimensions::Edition.all
-    editions = editions.where(warehouse_item_id: @warehouse_item_id) unless @warehouse_item_id.blank?
+    editions = editions.where(warehouse_item_id: @warehouse_item_id) if @warehouse_item_id.present?
     editions
   end
 end
