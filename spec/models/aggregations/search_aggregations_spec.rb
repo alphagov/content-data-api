@@ -44,7 +44,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
 
   describe 'Boundaries' do
     it 'does not include metrics before last month' do
-      edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+      edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
       create :metric, edition: edition1, date: (from - 1.day)
 
       recalculate_aggregations!
@@ -53,7 +53,7 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
     end
 
     it 'does not include metrics after last month' do
-      edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+      edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
       create :metric, edition: edition1, date: (to + 1.day)
 
       recalculate_aggregations!

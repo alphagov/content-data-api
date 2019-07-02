@@ -98,7 +98,7 @@ RSpec.describe Finders::Content do
     end
 
     it 'returns aggregations for past 3 months' do
-      two_months_ago_date = (Date.today - 2.month)
+      two_months_ago_date = (Date.today - 2.months)
       create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition1, date: two_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
       create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
@@ -115,7 +115,7 @@ RSpec.describe Finders::Content do
     end
 
     it 'returns aggregations for past 6 months' do
-      five_months_ago_date = (Date.today - 5.month)
+      five_months_ago_date = (Date.today - 5.months)
       create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition1, date: five_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
       create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
@@ -132,7 +132,7 @@ RSpec.describe Finders::Content do
     end
 
     it 'returns aggregations for past year' do
-      eleven_months_ago_date = (Date.today - 11.month)
+      eleven_months_ago_date = (Date.today - 11.months)
       create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
       create :metric, edition: edition1, date: eleven_months_ago_date, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
       create :metric, edition: edition2, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
