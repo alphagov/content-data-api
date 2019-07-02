@@ -29,7 +29,7 @@ private
 
   def update_parent_and_sort(children)
     children.each do |child|
-      child.update_attributes(parent: @edition, sibling_order: sort_order_for(child.warehouse_item_id))
+      child.update(parent: @edition, sibling_order: sort_order_for(child.warehouse_item_id))
     end
   end
 
