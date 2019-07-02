@@ -10,3 +10,7 @@ Metrics/BlockLength:
     - "config/routes.rb"
     - "config/environments/*.rb"
     - "app/domain/audits/filter.rb"
+
+Rails/Presence:
+  Exclude:
+    - "app/domain/streams/messages/single_item_message.rb"
