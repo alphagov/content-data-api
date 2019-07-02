@@ -9,7 +9,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
 
   it 'aggregates metrics for the last 30 days' do
     edition1 = create :edition, base_path: '/path1', date: 2.months.ago
-    create :metric, edition: edition1, date: Date.today, upviews: 1, useful_yes: 1, useful_no: 1, searches: 1
+    create :metric, edition: edition1, date: Time.zone.today, upviews: 1, useful_yes: 1, useful_no: 1, searches: 1
     create :metric, edition: edition1, date: Date.yesterday, upviews: 5, useful_yes: 1, useful_no: 1, searches: 8
     create :metric, edition: edition1, date: 15.days.ago, upviews: 10, useful_yes: 74, useful_no: 24, searches: 9
     create :metric, edition: edition1, date: 31.days.ago, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
@@ -58,7 +58,7 @@ RSpec.describe Aggregations::SearchLastThirtyDays, type: :model do
 
   it 'does not include metrics newer than yesterday' do
     edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
-    create :metric, edition: edition1, date: Date.today, upviews: 100
+    create :metric, edition: edition1, date: Time.zone.today, upviews: 100
     create :metric, edition: edition1, date: Date.yesterday, upviews: 10
 
     recalculate_aggregations!

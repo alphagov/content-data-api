@@ -129,19 +129,19 @@ RSpec.describe Etl::Master::MasterProcessor do
       it 'does not add ETL stats if not the day before' do
         expect(Monitor::Etl).to_not receive(:run)
 
-        subject.process(date: Date.today)
+        subject.process(date: Time.zone.today)
       end
 
       it 'does not add Dimension stats if not the day before' do
         expect(Monitor::Dimensions).to_not receive(:run)
 
-        subject.process(date: Date.today)
+        subject.process(date: Time.zone.today)
       end
 
       it 'does not add Facts stats if not the day before' do
         expect(Monitor::Facts).to_not receive(:run)
 
-        subject.process(date: Date.today)
+        subject.process(date: Time.zone.today)
       end
     end
   end

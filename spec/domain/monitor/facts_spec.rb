@@ -19,7 +19,7 @@ RSpec.describe Monitor::Facts do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_metrics", 1)
 
     create :metric, date: Date.yesterday
-    create :metric, date: Date.today
+    create :metric, date: Time.zone.today
 
     subject.run
   end
@@ -28,7 +28,7 @@ RSpec.describe Monitor::Facts do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.all_editions", 2)
 
     create :edition, date: Date.yesterday, base_path: '/foo'
-    create :edition, date: Date.today, base_path: '/bar'
+    create :edition, date: Time.zone.today, base_path: '/bar'
 
     subject.run
   end
@@ -37,7 +37,7 @@ RSpec.describe Monitor::Facts do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_editions", 1)
 
     create :edition, date: Date.yesterday, base_path: '/foo'
-    create :edition, date: Date.today, base_path: '/bar'
+    create :edition, date: Time.zone.today, base_path: '/bar'
 
     subject.run
   end

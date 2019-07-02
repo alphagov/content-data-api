@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :monthly_metric, class: 'Aggregations::MonthlyMetric' do
     transient do
-      month { Dimensions::Month.build(Date.today).id }
+      month { Dimensions::Month.build(Time.zone.today).id }
       edition { create :edition }
     end
 

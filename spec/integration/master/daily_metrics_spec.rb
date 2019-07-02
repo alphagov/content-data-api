@@ -1,5 +1,5 @@
 RSpec.describe 'Master process spec' do
-  let(:today) { Date.today.to_s }
+  let(:today) { Time.zone.today.to_s }
   let(:yesterday) { Date.yesterday.to_s }
 
   let!(:an_edition) { create :edition }

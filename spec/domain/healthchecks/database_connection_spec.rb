@@ -5,7 +5,7 @@ RSpec.describe Healthchecks::DatabaseConnection do
 
   describe '#status' do
     context 'when the connection is valid' do
-      before { Dimensions::Date.create_with(Date.today) }
+      before { Dimensions::Date.create_with(Time.zone.today) }
 
       its(:status) { is_expected.to eq(:ok) }
       its(:message) { is_expected.to be_blank }

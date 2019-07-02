@@ -4,11 +4,11 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
   subject { described_class }
 
   it_behaves_like 'a materialized view', described_class.table_name
-  include_examples 'calculates satisfaction', Date.today.last_month.end_of_month
-  include_examples 'includes edition attributes', Date.today.last_month.end_of_month
+  include_examples 'calculates satisfaction', Time.zone.today.last_month.end_of_month
+  include_examples 'includes edition attributes', Time.zone.today.last_month.end_of_month
 
-  let(:from) { Date.today.last_month.beginning_of_month }
-  let(:to) { Date.today.last_month.end_of_month }
+  let(:from) { Time.zone.today.last_month.beginning_of_month }
+  let(:to) { Time.zone.today.last_month.end_of_month }
 
   it 'aggregates metrics for the last month' do
     edition1 = create :edition, base_path: '/path1', date: '2018-01-10'

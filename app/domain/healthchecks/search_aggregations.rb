@@ -28,7 +28,7 @@ module Healthchecks
     end
 
     def searches
-      @searches ||= klass_name.where(updated_at: Date.today).count
+      @searches ||= klass_name.where(updated_at: Time.zone.today).count
     end
   end
 end
