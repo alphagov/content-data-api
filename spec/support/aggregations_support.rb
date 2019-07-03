@@ -7,7 +7,7 @@ module AggregationsSupport
 private
 
   def refresh_last_year_of_monthly_aggregations
-    Etl::Aggregations::Monthly.process(date: Date.today)
+    Etl::Aggregations::Monthly.process(date: Time.zone.today)
 
     13.times { |index| Etl::Aggregations::Monthly.process(date: index.month.ago) }
   end

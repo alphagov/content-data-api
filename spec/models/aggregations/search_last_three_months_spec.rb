@@ -26,10 +26,10 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
   end
 
   it 'aggregates by warehouse_item_id' do
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     edition2 = create :edition, warehouse_item_id: 'warehouse_item_id2', date: 2.months.ago
 
-    create :metric, edition: edition1, date: 1.months.ago
+    create :metric, edition: edition1, date: 1.month.ago
     create :metric, edition: edition1, date: 2.months.ago
     create :metric, edition: edition2, date: 3.months.ago + 1.day
 
@@ -53,7 +53,7 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
 
   it 'does not include metrics older than 3 months ago' do
     three_months_ago = Date.yesterday - 3.months
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     create :metric, edition: edition1, date: three_months_ago + 1.day, upviews: 10
     create :metric, edition: edition1, date: three_months_ago, upviews: 100
 
@@ -63,7 +63,7 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
   end
 
   it 'includes metrics for yesterday' do
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     create :metric, edition: edition1, date: Date.yesterday, upviews: 10
 
     recalculate_aggregations!
@@ -72,7 +72,7 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
   end
 
   it 'does not count metrics twice' do
-    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.months.ago
+    edition1 = create :edition, warehouse_item_id: 'warehouse_item_id1', date: 1.month.ago
     start_date = Date.yesterday
     end_date = 3.months.ago
 

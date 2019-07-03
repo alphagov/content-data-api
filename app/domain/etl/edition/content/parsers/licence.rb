@@ -1,7 +1,7 @@
 class Etl::Edition::Content::Parsers::Licence
   def parse(json)
     body = json.dig("details", "licence_overview")
-    return unless body.present?
+    return if body.blank?
 
     if body.is_a?(Array)
       body_by_content_type = body.map(&:values).to_h

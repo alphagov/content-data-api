@@ -52,7 +52,7 @@ private
     # Set cache headers to expire the page at 1am when we fetch new data.
     expiry_time = Time.zone.tomorrow.at_beginning_of_day.change(hour: 1)
     current_time = Time.zone.now
-    cache_time = (expiry_time - current_time) % 24.hour
+    cache_time = (expiry_time - current_time) % 24.hours
 
     expires_in cache_time, public: true
   end
@@ -71,7 +71,7 @@ private
       title: 'The base path you are looking for cannot be found',
       invalid_params: %w[base_path]
     }
-    render json: response_hash, status: 404, content_type: "application/problem+json"
+    render json: response_hash, status: :not_found, content_type: "application/problem+json"
   end
 
   def parent_not_found_response
@@ -79,6 +79,6 @@ private
       title: 'The parent document you are looking for cannot be found',
       invalid_params: %w[document_id]
     }
-    render json: response_hash, status: 404, content_type: "application/problem+json"
+    render json: response_hash, status: :not_found, content_type: "application/problem+json"
   end
 end

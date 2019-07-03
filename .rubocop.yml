@@ -10,3 +10,24 @@ Metrics/BlockLength:
     - "config/routes.rb"
     - "config/environments/*.rb"
     - "app/domain/audits/filter.rb"
+
+Rails/Presence:
+  Exclude:
+    - "app/domain/streams/messages/single_item_message.rb"
+
+Rails/ApplicationRecord:
+  Exclude:
+    - "app/models/aggregations/materialized_view.rb"
+
+Rails/ApplicationJob:
+  Exclude:
+    - "app/domain/streams/message_processor_job.rb"
+
+Rails/HasManyOrHasOneDependent:
+  Exclude:
+    - "app/models/events/publishing_api.rb"
+    - "app/models/dimensions/edition.rb"
+
+Rails/DynamicFindBy:
+  Exclude:
+    - "app/domain/finders/content.rb" # false positives

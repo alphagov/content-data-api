@@ -11,7 +11,7 @@ RSpec.describe Healthchecks::EtlMetricValues do
     before do
       edition = create :edition
       create :metric, edition: edition, date: yesterday, pviews: 0
-      create :metric, edition: edition, date: Date.today, pviews: 10
+      create :metric, edition: edition, date: Time.zone.today, pviews: 10
     end
 
     its(:status) { is_expected.to eq(:critical) }
@@ -22,7 +22,7 @@ RSpec.describe Healthchecks::EtlMetricValues do
     before do
       edition = create :edition
       create :metric, edition: edition, date: yesterday, pviews: 10
-      create :metric, edition: edition, date: Date.today, pviews: 10
+      create :metric, edition: edition, date: Time.zone.today, pviews: 10
     end
 
     its(:status) { is_expected.to eq(:ok) }

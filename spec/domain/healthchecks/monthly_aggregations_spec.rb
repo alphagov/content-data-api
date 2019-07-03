@@ -10,7 +10,7 @@ RSpec.describe Healthchecks::MonthlyAggregations do
   describe '#status' do
     context 'When there are monthly aggregations' do
       before do
-        date = Date.today
+        date = Time.zone.today
         edition = create :edition
         create :monthly_metric, edition: edition, month: Dimensions::Month.build(date).id
       end
