@@ -22,3 +22,8 @@ Rails/ApplicationRecord:
 Rails/ApplicationJob:
   Exclude:
     - "app/domain/streams/message_processor_job.rb"
+
+Rails/HasManyOrHasOneDependent:
+  Exclude:
+    - "app/models/events/publishing_api.rb"
+    - "app/models/dimensions/edition.rb"
