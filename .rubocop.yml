@@ -27,3 +27,7 @@ Rails/HasManyOrHasOneDependent:
   Exclude:
     - "app/models/events/publishing_api.rb"
     - "app/models/dimensions/edition.rb"
+
+Rails/DynamicFindBy:
+  Exclude:
+    - "app/domain/finders/content.rb" # false positives
