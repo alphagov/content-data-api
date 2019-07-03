@@ -37,7 +37,7 @@ RSpec.describe 'Master process spec' do
   def validate_facts_metrics!
     expect(Facts::Metric.count).to eq(2)
     expect(Facts::Metric.pluck(:dimensions_edition_id)).to match_array([an_edition.id, live_version.id])
-    expect(Facts::Metric.pluck(:dimensions_date_id).uniq).to match_array(yesterday.to_date)
+    expect(Facts::Metric.distinct.pluck(:dimensions_date_id)).to match_array(yesterday.to_date)
   end
 
   def validate_google_analytics!
