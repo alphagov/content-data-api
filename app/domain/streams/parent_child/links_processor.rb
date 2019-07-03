@@ -24,7 +24,7 @@ private
   end
 
   def get_parent
-    Dimensions::Edition.where(warehouse_item_id: parent_warehouse_id).first
+    Dimensions::Edition.where(warehouse_item_id: parent_warehouse_id, live: true).first
   end
 
   def update_parent_and_sort(children)
