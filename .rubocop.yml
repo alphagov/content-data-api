@@ -14,3 +14,11 @@ Metrics/BlockLength:
 Rails/Presence:
   Exclude:
     - "app/domain/streams/messages/single_item_message.rb"
+
+Rails/ApplicationRecord:
+  Exclude:
+    - "app/models/aggregations/materialized_view.rb"
+
+Rails/ApplicationJob:
+  Exclude:
+    - "app/domain/streams/message_processor_job.rb"
