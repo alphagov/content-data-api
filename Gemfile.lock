@@ -137,7 +137,7 @@ GEM
       sentry-raven (>= 2.7.1, < 2.10.0)
       statsd-ruby (~> 1.4.0)
       unicorn (>= 5.4, < 5.6)
-    govuk_message_queue_consumer (3.4.0)
+    govuk_message_queue_consumer (3.5.0)
       bunny (~> 2.11)
     govuk_schemas (3.3.0)
       json-schema (~> 2.8.0)
@@ -447,7 +447,7 @@ DEPENDENCIES
   google-api-client (~> 0.30)
   govuk-lint
   govuk_app_config
-  govuk_message_queue_consumer (~> 3.4)
+  govuk_message_queue_consumer (~> 3.5)
   govuk_schemas (= 3.3.0)
   govuk_sidekiq (~> 3)
   httparty
