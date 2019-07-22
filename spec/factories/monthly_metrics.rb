@@ -8,7 +8,7 @@ FactoryBot.define do
     dimensions_month do
       y, m = *month.split('-').map(&:to_i)
 
-      Dimensions::Month.find_or_create(Date.new(y, m, 1))
+      Dimensions::Month.for_date(Date.new(y, m, 1))
     end
 
     dimensions_edition { edition }

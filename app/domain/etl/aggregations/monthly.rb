@@ -22,7 +22,7 @@ private
   attr_reader :date, :month
 
   def create_month
-    @month = Dimensions::Month.find_or_create(date)
+    @month = Dimensions::Month.for_date(date)
   end
 
   def delete_month
