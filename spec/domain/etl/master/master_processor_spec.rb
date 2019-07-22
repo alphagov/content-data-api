@@ -21,15 +21,16 @@ RSpec.describe Etl::Master::MasterProcessor do
     allow(Etl::Aggregations::Search).to receive(:process)
   end
 
-  describe 'runs only once per day' do
-    it 'raises `DuplicateDateError` if there are already metrics for the day' do
+  describe 're-running the same day' do
+    it 'deletes existing metrics if they already exist for that day' do
       date = create(:dimensions_date, date: Date.yesterday)
-      create(:metric, dimensions_date: date)
+      existing_metric = create(:metric, dimensions_date: date)
 
-      expect { subject.process }.to raise_error(Etl::Master::MasterProcessor::DuplicateDateError)
+      expect { subject.process }.not_to raise_error
+      expect(Facts::Metric.where(id: existing_metric.id).count).to eq(0)
     end
 
-    it 'does not raise `DuplicateDateError` otherwise' do
+    it 'does not raise errors otherwise' do
       create(:dimensions_date, date: Date.yesterday)
 
       expect { subject.process }.to_not raise_error

@@ -14,7 +14,7 @@ class Etl::Master::MasterProcessor
   end
 
   def process
-    raise DuplicateDateError if already_run?
+    delete_existing_metrics if already_run?
 
     processor_failures = 0
     monitor_failures = 0
@@ -62,6 +62,7 @@ private
     date != Date.yesterday
   end
 
-  class DuplicateDateError < StandardError;
+  def delete_existing_metrics
+    Facts::Metric.where(dimensions_date_id: @date).delete_all
   end
 end
