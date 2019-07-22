@@ -18,7 +18,7 @@ RSpec.describe Dimensions::Month, type: :model do
   it { is_expected.to validate_numericality_of(:quarter).only_integer }
   it { is_expected.to validate_inclusion_of(:quarter).in_range(1..4) }
 
-  describe '.find_or_create' do
+  describe '.for_date' do
     subject { described_class }
 
     context 'when month does exist' do
