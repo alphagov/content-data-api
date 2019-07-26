@@ -39,7 +39,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'govuk-lint'
-  gem 'govuk_schemas', '3.3.0'
+  gem 'govuk_schemas', '4.0.0'
   gem 'listen'
   gem 'pry-byebug'
   gem 'pry-rails'
