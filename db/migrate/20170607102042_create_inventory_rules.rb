@@ -8,8 +8,8 @@ class CreateInventoryRules < ActiveRecord::Migration[5.1]
     end
 
     add_index :inventory_rules,
-      %i(subtheme_id link_type target_content_id),
-      unique: true,
-      name: "index_subtheme_link_type_content_id"
+              %i(subtheme_id link_type target_content_id),
+              unique: true,
+              name: "index_subtheme_link_type_content_id"
   end
 end
