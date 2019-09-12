@@ -33,6 +33,6 @@ class Dimensions::Month < ApplicationRecord
   end
 
   def self.format_id(date)
-    format('%04d-%02d', date.year, date.month)
+    format(Date::DATE_FORMATS[:month_edition], date.year, date.month)
   end
 end
