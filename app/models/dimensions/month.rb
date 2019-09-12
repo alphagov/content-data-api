@@ -8,7 +8,7 @@ class Dimensions::Month < ApplicationRecord
   validates :month_name_abbreviated, presence: true, inclusion: { in: ::Date::ABBR_MONTHNAMES }
 
   def self.current
-    for_date(Time.zone.today)
+    find_existing_or_create(Time.zone.today)
   end
 
   def self.create_with(date)
@@ -17,7 +17,7 @@ class Dimensions::Month < ApplicationRecord
     month_dimension
   end
 
-  def self.for_date(date)
+  def self.find_existing_or_create(date)
     find_by(id: format_id(date)) || create_with(date)
   end
 

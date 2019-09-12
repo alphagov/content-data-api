@@ -4,7 +4,7 @@ class Etl::Edition::Processor
   end
 
   def initialize(old_edition, new_edition, date = Time.zone.today)
-    @dimensions_date = Dimensions::Date.for_date(date)
+    @dimensions_date = Dimensions::Date.find_existing_or_create(date)
     @old_edition = old_edition
     @new_edition = new_edition
   end
