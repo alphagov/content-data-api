@@ -31,7 +31,11 @@ class Dimensions::Date < ApplicationRecord
   end
 
   def self.find_existing_or_create(date)
-    find_by(date: date) || create_with(date)
+    begin
+      find_by(date: date) || create_with(date)
+    rescue ActiveRecord::RecordNotUnique
+      find_by(date: date)
+    end
   end
 
   def self.exists?(date)
