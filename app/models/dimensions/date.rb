@@ -30,7 +30,7 @@ class Dimensions::Date < ApplicationRecord
     date_dimension
   end
 
-  def self.find_or_create(date)
+  def self.find_existing_or_create(date)
     begin
       find_by(date: date) || create_with(date)
     rescue ActiveRecord::RecordNotUnique

@@ -18,28 +18,28 @@ RSpec.describe Dimensions::Month, type: :model do
   it { is_expected.to validate_numericality_of(:quarter).only_integer }
   it { is_expected.to validate_inclusion_of(:quarter).in_range(1..4) }
 
-  describe '.find_or_create' do
+  describe '.find_existing_or_create' do
     subject { described_class }
 
     context 'when month does exist' do
       before { subject.current.save }
 
       it 'returns the month if it exists' do
-        expect(-> { subject.find_or_create(Time.zone.today) }).to change(Dimensions::Month, :count).by(0)
+        expect(-> { subject.find_existing_or_create(Time.zone.today) }).to change(Dimensions::Month, :count).by(0)
       end
 
       it 'returns the month' do
-        expect(subject.find_or_create(Time.zone.today)).to eq(Dimensions::Month.current)
+        expect(subject.find_existing_or_create(Time.zone.today)).to eq(Dimensions::Month.current)
       end
     end
 
     context 'when month does not exist' do
       it 'creates the month' do
-        expect(-> { subject.find_or_create(Time.zone.today) }).to change(Dimensions::Month, :count).by(1)
+        expect(-> { subject.find_existing_or_create(Time.zone.today) }).to change(Dimensions::Month, :count).by(1)
       end
 
       it 'returns the month' do
-        expect(subject.find_or_create(Time.zone.today)).to eq(Dimensions::Month.current)
+        expect(subject.find_existing_or_create(Time.zone.today)).to eq(Dimensions::Month.current)
       end
     end
   end
@@ -49,7 +49,7 @@ RSpec.describe Dimensions::Month, type: :model do
 
     it 'returns current month' do
       Timecop.freeze(2018, 10, 12) do
-        current_month = Dimensions::Month.find_or_create(Time.zone.today)
+        current_month = Dimensions::Month.find_existing_or_create(Time.zone.today)
 
         expect(subject.current).to eq(current_month)
       end
