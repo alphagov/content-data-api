@@ -5,15 +5,15 @@ class PopulateWarehouseItemId < ActiveRecord::Migration[5.2]
   def change
     multipart_types = %w[travel_advice guide]
 
-    say 'populating warehouse_item_id from content_id:locale:base_path for guide, travel_advice'
+    say "populating warehouse_item_id from content_id:locale:base_path for guide, travel_advice"
     Dimensions::Item.where(document_type: multipart_types)
       .update_all(multipart_column_update)
 
-    say 'populating warehouse_item_id from content_id:locale for single item types'
+    say "populating warehouse_item_id from content_id:locale for single item types"
     Dimensions::Item.where.not(document_type: multipart_types)
       .update_all(single_item_column_update)
 
-    say 'populating item id for the content with no locale'
+    say "populating item id for the content with no locale"
     Dimensions::Item.where(warehouse_item_id: nil)
       .update_all(update_for_the_ones_with_no_locale)
   end

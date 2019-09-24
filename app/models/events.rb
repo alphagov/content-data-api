@@ -1,5 +1,5 @@
 module Events
   def self.table_name_prefix
-    'events_'
+    "events_"
   end
 end

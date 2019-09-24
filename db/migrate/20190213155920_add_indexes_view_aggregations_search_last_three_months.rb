@@ -9,8 +9,8 @@ class AddIndexesViewAggregationsSearchLastThreeMonths < ActiveRecord::Migration[
   end
 
   def down
-    execute 'drop index aggregations_search_last_three_months_gin_base_path'
-    execute 'drop index aggregations_search_last_three_months_gin_title'
+    execute "drop index aggregations_search_last_three_months_gin_base_path"
+    execute "drop index aggregations_search_last_three_months_gin_title"
 
     remove_index :aggregations_search_last_three_months, name: :search_last_three_months_gin_base_path_upviews
     remove_index :aggregations_search_last_three_months, name: :search_last_three_months_gin_base_path_organisation_id

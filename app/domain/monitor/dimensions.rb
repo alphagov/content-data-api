@@ -16,29 +16,29 @@ class Monitor::Dimensions
 private
 
   def statsd_for_live_base_paths!
-    path = path_for('live_base_paths')
+    path = path_for("live_base_paths")
     count = Dimensions::Edition.live.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_all_base_paths!
-    path = path_for('base_paths')
+    path = path_for("base_paths")
     count = Dimensions::Edition.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_live_content_items!
-    path = path_for('live_content_items')
-    count = Dimensions::Edition.live.count('distinct content_id')
+    path = path_for("live_content_items")
+    count = Dimensions::Edition.live.count("distinct content_id")
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_all_content_items!
-    path = path_for('content_items')
-    count = Dimensions::Edition.count('distinct content_id')
+    path = path_for("content_items")
+    count = Dimensions::Edition.count("distinct content_id")
 
     GovukStatsd.count(path, count)
   end

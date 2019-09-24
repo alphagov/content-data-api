@@ -4,7 +4,7 @@ class UpdateAggregationsSearchLastSixMonthsToVersion9 < ActiveRecord::Migration[
       :aggregations_search_last_six_months,
       version: 9,
       revert_to_version: 8,
-      materialized: true
+      materialized: true,
     )
   end
 end

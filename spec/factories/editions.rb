@@ -1,17 +1,17 @@
 FactoryBot.define do
   factory :edition, class: Dimensions::Edition do
     live { true }
-    locale { 'en' }
+    locale { "en" }
     parent { nil }
     sequence(:content_id) { SecureRandom.uuid }
     sequence(:title) { |i| "title - #{i}" }
     sequence(:base_path) { |i| "/base-path-#{i}" }
     sequence(:description) { |i| "description - #{i}" }
     sequence(:publishing_api_payload_version)
-    schema_name { 'detailed_guide' }
-    document_type { 'detailed_guide' }
+    schema_name { "detailed_guide" }
+    document_type { "detailed_guide" }
     warehouse_item_id { "#{content_id}:#{locale}" }
-    primary_organisation_id { '17d84dc6-e5b5-4065-a8b5-8783bd934938' }
+    primary_organisation_id { "17d84dc6-e5b5-4065-a8b5-8783bd934938" }
     organisation_ids { [] }
     withdrawn { false }
     historical { false }

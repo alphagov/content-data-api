@@ -16,20 +16,20 @@ class Metric
   end
 
   def self.edition_metrics
-    source['edition'].map { |attributes| Metric.new(attributes) }
+    source["edition"].map { |attributes| Metric.new(attributes) }
   end
 
   def self.daily_metrics
-    source['daily'].map { |attributes| Metric.new(attributes) }
+    source["daily"].map { |attributes| Metric.new(attributes) }
   end
 
   def self.ga_metrics
-    ga_source = source['daily'].select { |value| value['source'] == 'Google Analytics' }
+    ga_source = source["daily"].select { |value| value["source"] == "Google Analytics" }
     ga_source.map { |attributes| Metric.new(attributes) }
   end
 
   def self.source
-    @source ||= YAML.load_file(Rails.root.join('config', 'metrics.yml'))
+    @source ||= YAML.load_file(Rails.root.join("config", "metrics.yml"))
   end
 
   def <=>(other)

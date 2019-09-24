@@ -14,7 +14,7 @@ class RestoreOrganisationRelatedViewIndexes < ActiveRecord::Migration[5.2]
       add_index(
         "aggregations_search_#{period}".to_sym,
         fields,
-        name: "search_#{period}_organisation_id".to_sym
+        name: "search_#{period}_organisation_id".to_sym,
       )
     end
   end
@@ -23,7 +23,7 @@ class RestoreOrganisationRelatedViewIndexes < ActiveRecord::Migration[5.2]
     PERIODS.each do |period|
       remove_index(
         "aggregations_search_#{period}".to_sym,
-        name: "search_#{period}_organisation_id".to_sym
+        name: "search_#{period}_organisation_id".to_sym,
       )
     end
   end

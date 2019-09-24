@@ -4,7 +4,7 @@ class UpdateAggregationsSearchLastThirtyDaysToVersion10 < ActiveRecord::Migratio
       :aggregations_search_last_thirty_days,
       version: 10,
       revert_to_version: 9,
-      materialized: true
+      materialized: true,
     )
   end
 end

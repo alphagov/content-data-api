@@ -6,7 +6,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       description: "Digital Service Standard",
       links: { children: [
         { title: "Design", description: "Naming your service" },
-        { title: "Technology", description: "Security and Maintenance" }
+        { title: "Technology", description: "Security and Maintenance" },
         ] } }
 
     expected = "Service Manual Digital Service Standard Design Naming your service Technology Security and Maintenance"

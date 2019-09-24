@@ -1,13 +1,13 @@
 class Facts::Edition < ApplicationRecord
-  belongs_to :dimensions_date, class_name: 'Dimensions::Date'
-  belongs_to :dimensions_edition, class_name: 'Dimensions::Edition'
+  belongs_to :dimensions_date, class_name: "Dimensions::Date"
+  belongs_to :dimensions_edition, class_name: "Dimensions::Edition"
 
   validates :dimensions_date, presence: true
   validates :dimensions_edition, presence: true
 
   scope :between, ->(from, to) do
     joins(:dimensions_date)
-      .where('dimensions_dates.date BETWEEN ? AND ?', from, to)
+      .where("dimensions_dates.date BETWEEN ? AND ?", from, to)
   end
 
   def clone_for!(new_dim_edition, new_date)

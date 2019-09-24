@@ -48,8 +48,8 @@ RSpec.describe Etl::Edition::Content::Parser do
     {
       schema_name: schema_name,
       details: {
-        body: body
-      }
+        body: body,
+      },
     }
   end
 end

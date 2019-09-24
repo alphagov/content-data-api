@@ -8,9 +8,9 @@ module GoogleAnalyticsRequests
       dimensions: dimensions,
       metrics: metrics.map do |metric|
         Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
-          values: Array(metric)
+          values: Array(metric),
         )
-      end
+      end,
     )
   end
 end

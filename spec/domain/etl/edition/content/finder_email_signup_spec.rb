@@ -15,7 +15,7 @@ RSpec.describe Etl::Edition::Content::Parser do
         details: { email_signup_choice:
           [
             { radio_button_name: "Yes" },
-            { radio_button_name: "No" }
+            { radio_button_name: "No" },
           ] } }
       expect(subject.extract_content(json.deep_stringify_keys)).to eq("Yes No Use buttons")
     end

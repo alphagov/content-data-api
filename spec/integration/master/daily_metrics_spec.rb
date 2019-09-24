@@ -1,12 +1,12 @@
-RSpec.describe 'Master process spec' do
+RSpec.describe "Master process spec" do
   let(:today) { Time.zone.today.to_s }
   let(:yesterday) { Date.yesterday.to_s }
 
   let!(:an_edition) { create :edition }
-  let!(:outdated_edition) { create :edition, content_id: 'id1', base_path: '/path-1', live: false }
-  let!(:edition) { create :edition, content_id: 'id1', base_path: '/path-1', live: true }
+  let!(:outdated_edition) { create :edition, content_id: "id1", base_path: "/path-1", live: false }
+  let!(:edition) { create :edition, content_id: "id1", base_path: "/path-1", live: true }
 
-  it 'orchestrates all ETL processes' do
+  it "orchestrates all ETL processes" do
     stub_google_analytics_response
     stub_google_analytics_user_feedback_response
     stub_google_analytics_internal_search_response
@@ -24,13 +24,13 @@ RSpec.describe 'Master process spec' do
   end
 
   def live_version
-    Dimensions::Edition.find_by(live: true, content_id: 'id1')
+    Dimensions::Edition.find_by(live: true, content_id: "id1")
   end
 
   def latest_metric
     Facts::Metric
       .joins(:dimensions_edition)
-      .where(dimensions_editions: { live: true, content_id: 'id1' })
+      .where(dimensions_editions: { live: true, content_id: "id1" })
       .first
   end
 
@@ -51,7 +51,7 @@ RSpec.describe 'Master process spec' do
     expect(latest_metric).to have_attributes(
       useful_yes: 1,
       useful_no: 1,
-      satisfaction: 0.5
+      satisfaction: 0.5,
     )
   end
 
@@ -60,7 +60,7 @@ RSpec.describe 'Master process spec' do
 
     aggregation = Aggregations::MonthlyMetric.find_by(dimensions_edition_id: live_version.id)
     expect(aggregation).to have_attributes(
-      dimensions_month_id: Date.yesterday.strftime('%Y-%m'),
+      dimensions_month_id: Date.yesterday.strftime("%Y-%m"),
       dimensions_edition_id: live_version.id,
       pviews: 11,
       upviews: 12,
@@ -86,20 +86,20 @@ RSpec.describe 'Master process spec' do
     allow(Etl::GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(
       [
         {
-          'page_path' => '/path-1',
-          'pviews' => 11,
-          'upviews' => 12,
-          'date' => yesterday,
-          'process_name' => 'views',
+          "page_path" => "/path-1",
+          "pviews" => 11,
+          "upviews" => 12,
+          "date" => yesterday,
+          "process_name" => "views",
         },
         {
-          'page_path' => '/path2',
-          'pviews' => 2,
-          'upviews' => 2,
-          'date' => yesterday,
-          'process_name' => 'views',
+          "page_path" => "/path2",
+          "pviews" => 2,
+          "upviews" => 2,
+          "date" => yesterday,
+          "process_name" => "views",
         },
-      ]
+      ],
     )
   end
 
@@ -107,20 +107,20 @@ RSpec.describe 'Master process spec' do
     allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(
       [
         {
-          'page_path' => '/path-1',
-          'useful_no' => 1,
-          'useful_yes' => 12,
-          'date' => yesterday,
-          'process_name' => 'user_feedback',
+          "page_path" => "/path-1",
+          "useful_no" => 1,
+          "useful_yes" => 12,
+          "date" => yesterday,
+          "process_name" => "user_feedback",
         },
         {
-          'page_path' => '/path2',
-          'useful_no' => 122,
-          'useful_yes' => 1,
-          'date' => yesterday,
-          'process_name' => 'user_feedback',
+          "page_path" => "/path2",
+          "useful_no" => 122,
+          "useful_yes" => 1,
+          "date" => yesterday,
+          "process_name" => "user_feedback",
         },
-      ]
+      ],
     )
   end
 
@@ -128,18 +128,18 @@ RSpec.describe 'Master process spec' do
     allow(Etl::GA::InternalSearchService).to receive(:find_in_batches).and_yield(
       [
         {
-          'page_path' => '/path1',
-          'searches' => 1,
-          'date' => yesterday,
-          'process_name' => 'searches'
+          "page_path" => "/path1",
+          "searches" => 1,
+          "date" => yesterday,
+          "process_name" => "searches",
         },
         {
-          'page_path' => '/path2',
-          'searches' => 2,
-          'date' => yesterday,
-          'process_name' => 'searches'
+          "page_path" => "/path2",
+          "searches" => 2,
+          "date" => yesterday,
+          "process_name" => "searches",
         },
-      ]
+      ],
     )
   end
 
@@ -151,21 +151,21 @@ RSpec.describe 'Master process spec' do
     response = {
       'results': [{
         'date': yesterday,
-        'path': '/path-1',
-        'count': 21
+        'path': "/path-1",
+        'count': 21,
       }, {
         'date': yesterday,
-        'path': '/path2',
-        'count': 1
+        'path': "/path2",
+        'count': 1,
       }, {
         'date': yesterday,
-        'path': '/path3',
-        'count': 1
+        'path': "/path3",
+        'count': 1,
       }],
       'total_count': 3,
       'current_page': 1,
       'pages': 1,
-      'page_size': 3
+      'page_size': 3,
     }.to_json
 
     stub_request(:get, "http://support-api.dev.gov.uk/feedback-by-day/#{yesterday}?page=1&per_page=10000").

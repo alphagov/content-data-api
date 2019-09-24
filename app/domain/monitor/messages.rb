@@ -8,7 +8,7 @@ class Monitor::Messages
   end
 
   def self.increment_discarded
-    GovukStatsd.increment('monitor.messages.discarded')
+    GovukStatsd.increment("monitor.messages.discarded")
   end
 
 private
@@ -18,7 +18,7 @@ private
   end
 
   def monitoring_code(routing_key)
-    routing_key_type = routing_key.split('.').last
+    routing_key_type = routing_key.split(".").last
     "monitor.messages.#{routing_key_type}"
   end
 end

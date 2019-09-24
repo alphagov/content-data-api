@@ -15,13 +15,13 @@ RSpec.describe Etl::GA::InternalSearchService do
       allow(google_client).to receive(:fetch_all) do
         [
           build_report_data(
-            build_report_row(dimensions: %w(/foo), metrics: %w(1))
+            build_report_row(dimensions: %w(/foo), metrics: %w(1)),
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/bar), metrics: %w(2))
+            build_report_row(dimensions: %w(/bar), metrics: %w(2)),
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/cool), metrics: %w(3))
+            build_report_row(dimensions: %w(/cool), metrics: %w(3)),
           ),
         ]
       end
@@ -31,23 +31,23 @@ RSpec.describe Etl::GA::InternalSearchService do
       it "yields successive report data" do
         arg1 = [
           a_hash_including(
-            'page_path' => '/foo',
-            'searches' => 1,
-            'date' => '2018-02-20',
+            "page_path" => "/foo",
+            "searches" => 1,
+            "date" => "2018-02-20",
           ),
           a_hash_including(
-            'page_path' => '/bar',
-            'searches' => 2,
-            'date' => '2018-02-20',
-          )
+            "page_path" => "/bar",
+            "searches" => 2,
+            "date" => "2018-02-20",
+          ),
         ]
 
         arg2 = [
           a_hash_including(
-            'page_path' => '/cool',
-            'searches' => 3,
-            'date' => '2018-02-20',
-          )
+            "page_path" => "/cool",
+            "searches" => 3,
+            "date" => "2018-02-20",
+          ),
         ]
 
         expect { |probe| subject.find_in_batches(date: date, batch_size: 2, &probe) }

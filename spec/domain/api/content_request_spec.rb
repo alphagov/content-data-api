@@ -1,31 +1,31 @@
 RSpec.describe Api::ContentRequest do
-  let(:params) { { date_range: 'past-30-days', organisation_id: 'all' } }
+  let(:params) { { date_range: "past-30-days", organisation_id: "all" } }
 
-  describe '#to_filter' do
-    it 'returns a hash with the parameters' do
+  describe "#to_filter" do
+    it "returns a hash with the parameters" do
       request = Api::ContentRequest.new(
-        document_type: 'guide',
-        organisation_id: 'the-id',
-        search_term: 'a title or url',
-        page: '1',
-        page_size: '20',
-        date_range: 'past-30-days',
-        sort: 'feedex:asc'
+        document_type: "guide",
+        organisation_id: "the-id",
+        search_term: "a title or url",
+        page: "1",
+        page_size: "20",
+        date_range: "past-30-days",
+        sort: "feedex:asc",
       )
 
       expect(request.to_filter).to eq(
-        document_type: 'guide',
-        organisation_id: 'the-id',
-        search_term: 'a title or url',
+        document_type: "guide",
+        organisation_id: "the-id",
+        search_term: "a title or url",
         page: 1,
         page_size: 20,
-        date_range: 'past-30-days',
-        sort_attribute: 'feedex',
-        sort_direction: 'asc'
+        date_range: "past-30-days",
+        sort_attribute: "feedex",
+        sort_direction: "asc",
       )
     end
 
-    it 'includes missing parameters' do
+    it "includes missing parameters" do
       request = Api::ContentRequest.new(
         document_type: nil,
         organisation_id: nil,
@@ -39,7 +39,7 @@ RSpec.describe Api::ContentRequest do
         page_size: nil,
         date_range: nil,
         sort_attribute: nil,
-        sort_direction: nil
+        sort_direction: nil,
       )
     end
 
@@ -55,41 +55,41 @@ RSpec.describe Api::ContentRequest do
       end
     end
 
-    it 'allows a valid sort attribute with asc direction' do
-      request = Api::ContentRequest.new(params.merge(sort: 'feedex:asc'))
+    it "allows a valid sort attribute with asc direction" do
+      request = Api::ContentRequest.new(params.merge(sort: "feedex:asc"))
 
-      expect(request.to_filter).to include(sort_attribute: 'feedex', sort_direction: 'asc')
+      expect(request.to_filter).to include(sort_attribute: "feedex", sort_direction: "asc")
     end
 
-    it 'allows a valid sort attribute with desc direction' do
-      request = Api::ContentRequest.new(params.merge(sort: 'feedex:desc'))
+    it "allows a valid sort attribute with desc direction" do
+      request = Api::ContentRequest.new(params.merge(sort: "feedex:desc"))
 
-      expect(request.to_filter).to include(sort_attribute: 'feedex', sort_direction: 'desc')
+      expect(request.to_filter).to include(sort_attribute: "feedex", sort_direction: "desc")
     end
 
-    describe '#sort_attribute' do
-      it 'validates value' do
-        request = Api::ContentRequest.new(params.merge(sort: 'invalid'))
+    describe "#sort_attribute" do
+      it "validates value" do
+        request = Api::ContentRequest.new(params.merge(sort: "invalid"))
         request.valid?
         expect(request.errors[:sort]).to include("this is not a valid sort attribute")
       end
 
-      it 'validates presence' do
-        request = Api::ContentRequest.new(params.merge(sort: ':desc'))
+      it "validates presence" do
+        request = Api::ContentRequest.new(params.merge(sort: ":desc"))
         request.valid?
         expect(request.errors[:sort]).to include("this is not a valid sort attribute")
       end
     end
 
-    describe '#sort_direction' do
-      it 'validates value' do
-        request = Api::ContentRequest.new(params.merge(sort: 'feedex:invalid'))
+    describe "#sort_direction" do
+      it "validates value" do
+        request = Api::ContentRequest.new(params.merge(sort: "feedex:invalid"))
         request.valid?
         expect(request.errors[:sort]).to include("this is not a valid sort direction")
       end
 
-      it 'validates presence' do
-        request = Api::ContentRequest.new(params.merge(sort: 'feedex:'))
+      it "validates presence" do
+        request = Api::ContentRequest.new(params.merge(sort: "feedex:"))
         request.valid?
         expect(request.errors[:sort]).to include("this is not a valid sort direction")
       end

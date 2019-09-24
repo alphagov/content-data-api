@@ -10,8 +10,8 @@ class Etl::GA::UserFeedbackService
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_labels))
-      .map { |h| h['date'] = date.strftime('%F'); h }
-      .group_by { |h| h['page_path'] }
+      .map { |h| h["date"] = date.strftime("%F"); h }
+      .group_by { |h| h["page_path"] }
       .map { |h| format_data(h) }
       .each_slice(batch_size) { |slice| yield slice }
   end
@@ -25,7 +25,7 @@ private
   def append_labels(values)
     page_path, event_action, value = *values
     {
-      'page_path' => page_path,
+      "page_path" => page_path,
       event_action.to_s => value,
     }
   end
@@ -49,8 +49,8 @@ private
         .batch_get_reports(
           Google::Apis::AnalyticsreportingV4::GetReportsRequest.new(
             report_requests: [build_request(date: date).merge(page_token: page_token)],
-            use_resource_quotas: true
-          )
+            use_resource_quotas: true,
+          ),
         )
         .reports
         .first
@@ -63,15 +63,15 @@ private
         { start_date: date.to_s("%Y-%m-%d"), end_date: date.to_s("%Y-%m-%d") },
       ],
       dimensions: [
-        { name: 'ga:pagePath' },
-        { name: 'ga:eventAction' }
+        { name: "ga:pagePath" },
+        { name: "ga:eventAction" },
       ],
       hide_totals: true,
       hide_value_ranges: true,
       metrics: [
-        { expression: 'ga:uniqueDimensionCombinations' },
+        { expression: "ga:uniqueDimensionCombinations" },
       ],
-      filters_expression: 'ga:eventAction==ffNoClick,ga:eventAction==ffYesClick',
+      filters_expression: "ga:eventAction==ffNoClick,ga:eventAction==ffYesClick",
       page_size: 10_000,
       view_id: ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"],
     }
@@ -79,16 +79,16 @@ private
 
   def format_data(hash)
     key, value = *hash
-    no_action = value.find { |v| v['ffNoClick'] }
-    yes_action = value.find { |v| v['ffYesClick'] }
-    yes = yes_action ? yes_action['ffYesClick'] : 0
-    no = no_action ? no_action['ffNoClick'] : 0
+    no_action = value.find { |v| v["ffNoClick"] }
+    yes_action = value.find { |v| v["ffYesClick"] }
+    yes = yes_action ? yes_action["ffYesClick"] : 0
+    no = no_action ? no_action["ffNoClick"] : 0
     {
       "page_path" => key,
       "useful_yes" => yes,
       "useful_no" => no,
-      "date" => value.first['date'],
-      'process_name' => 'user_feedback'
+      "date" => value.first["date"],
+      "process_name" => "user_feedback",
     }
   end
 end

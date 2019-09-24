@@ -6,11 +6,11 @@ RSpec.describe Etl::Edition::Content::Parser do
       description: "Go abroad",
       links: { children: [
         { title: "Driving Abroad" },
-        { title: "Forced Marriage" }
+        { title: "Forced Marriage" },
         ],
         related_topics: [
           { title: "Pets" },
-          { title: "Help" }
+          { title: "Help" },
           ] } }
     expected = "Travel Abroad Go abroad Driving Abroad Forced Marriage Pets Help"
     expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)

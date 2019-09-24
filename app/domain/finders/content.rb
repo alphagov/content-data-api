@@ -8,15 +8,15 @@ class Finders::Content
       results: results.map(&method(:array_to_hash)),
       page: @page,
       total_pages: results.total_pages,
-      total_results: total_results
+      total_results: total_results,
     }
   end
 
 private
 
   DEFAULT_PAGE_SIZE = 100
-  ALL = 'all'.freeze
-  NONE = 'none'.freeze
+  ALL = "all".freeze
+  NONE = "none".freeze
 
   def initialize(filter)
     raise ArgumentError unless
@@ -32,8 +32,8 @@ private
     @page = filter[:page] || 1
     @page_size = filter[:page_size] || DEFAULT_PAGE_SIZE
     @date_range = filter.fetch(:date_range)
-    @sort_attribute = filter.fetch(:sort_attribute) || 'upviews'
-    @sort_direction = filter.fetch(:sort_direction) || 'desc'
+    @sort_attribute = filter.fetch(:sort_attribute) || "upviews"
+    @sort_direction = filter.fetch(:sort_direction) || "desc"
   end
 
   def view
@@ -57,7 +57,7 @@ private
       to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :search_term_without_slash)
     SQL
 
-    scope.where(sql, search_term: search_term, search_term_without_slash: search_term.tr('/', ' '))
+    scope.where(sql, search_term: search_term, search_term_without_slash: search_term.tr("/", " "))
   end
 
   def find_by_document_type(scope)
@@ -66,7 +66,7 @@ private
     if document_type == ALL
       scope
     else
-      scope.where('document_type = ?', document_type)
+      scope.where("document_type = ?", document_type)
     end
   end
 
@@ -74,12 +74,12 @@ private
     organisation_id = @filter.fetch(:organisation_id)
 
     if organisation_id == NONE
-      scope = scope.where('primary_organisation_id IS NULL')
+      scope = scope.where("primary_organisation_id IS NULL")
     elsif organisation_id != ALL && organisation_id.present?
       scope = scope.where(
-        'primary_organisation_id = ? OR ? = ANY (organisation_ids)',
+        "primary_organisation_id = ? OR ? = ANY (organisation_ids)",
         organisation_id,
-        organisation_id
+        organisation_id,
       )
     end
     scope
@@ -102,8 +102,8 @@ private
     domain = /(www\.)?gov\.uk/
 
     search_term.
-      gsub(protocol, '').
-      gsub(domain, '')
+      gsub(protocol, "").
+      gsub(domain, "")
   end
 
   def sanitized_order(column, direction)

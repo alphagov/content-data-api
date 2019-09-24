@@ -1,5 +1,5 @@
 class AddUniqueIndexToLastThirtyDays < ActiveRecord::Migration[5.2]
   def change
-    add_index :aggregations_search_last_thirty_days, %i(dimensions_edition_id warehouse_item_id), unique: true, name: 'index_on_search_last_thirty_days_unique'
+    add_index :aggregations_search_last_thirty_days, %i(dimensions_edition_id warehouse_item_id), unique: true, name: "index_on_search_last_thirty_days_unique"
   end
 end

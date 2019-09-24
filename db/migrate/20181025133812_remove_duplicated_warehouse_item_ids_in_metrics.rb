@@ -11,10 +11,10 @@ private
 
   def clean_up_duplicated_metrics!
     edition_ids = Dimensions::Edition.
-      select('warehouse_item_id, count(id), max(id) as id').
+      select("warehouse_item_id, count(id), max(id) as id").
       where(latest: true).
       group(:warehouse_item_id).
-      having('count(id) > 1').
+      having("count(id) > 1").
       map(&:id)
 
     total = edition_ids.count

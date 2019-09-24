@@ -1,13 +1,13 @@
 class Etl::Edition::Content::Parsers::ServiceManualStandard
   def parse(json)
     html = []
-    html << json.dig('title')
-    html << json.dig('details', 'body')
-    children = json.dig('links', 'children')
+    html << json.dig("title")
+    html << json.dig("details", "body")
+    children = json.dig("links", "children")
     unless children.nil?
       children.each do |child|
-        html << child['title']
-        html << child['description']
+        html << child["title"]
+        html << child["description"]
       end
     end
     html.join(" ")

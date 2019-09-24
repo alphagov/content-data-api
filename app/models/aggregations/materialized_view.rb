@@ -1,7 +1,7 @@
 class Aggregations::MaterializedView < ActiveRecord::Base
   self.abstract_class = true
 
-  self.primary_key = 'warehouse_item_id'
+  self.primary_key = "warehouse_item_id"
 
   def self.prepare
     increase_work_mem_for_current_transaction

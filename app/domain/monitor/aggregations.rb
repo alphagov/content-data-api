@@ -15,14 +15,14 @@ class Monitor::Aggregations
 private
 
   def statsd_for_all_monthly_aggregations!
-    path = path_for('all')
+    path = path_for("all")
     count = ::Aggregations::MonthlyMetric.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_current_month!
-    path = path_for('current')
+    path = path_for("current")
     count = Aggregations::MonthlyMetric
               .where(dimensions_month: Dimensions::Month.current)
               .count

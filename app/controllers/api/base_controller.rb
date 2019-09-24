@@ -11,7 +11,7 @@ class Api::BaseController < ApplicationController
     error_response(
       "unknown-parameter",
       title: "One or more parameter names are invalid",
-      invalid_params: pme.params
+      invalid_params: pme.params,
     )
   end
 
@@ -28,7 +28,7 @@ class Api::BaseController < ApplicationController
       error_response(
         "validation-error",
         title: "One or more parameters is invalid",
-        invalid_params: api_request.errors.to_hash
+        invalid_params: api_request.errors.to_hash,
       )
     end
   end
@@ -68,16 +68,16 @@ private
   def not_found_response
     response_hash = {
       type: "https://content-data-api.publishing.service.gov.uk/errors.html#base-path-not-found",
-      title: 'The base path you are looking for cannot be found',
-      invalid_params: %w[base_path]
+      title: "The base path you are looking for cannot be found",
+      invalid_params: %w[base_path],
     }
     render json: response_hash, status: :not_found, content_type: "application/problem+json"
   end
 
   def parent_not_found_response
     response_hash = {
-      title: 'The parent document you are looking for cannot be found',
-      invalid_params: %w[document_id]
+      title: "The parent document you are looking for cannot be found",
+      invalid_params: %w[document_id],
     }
     render json: response_hash, status: :not_found, content_type: "application/problem+json"
   end

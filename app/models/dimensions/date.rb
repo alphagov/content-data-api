@@ -1,7 +1,7 @@
 class Dimensions::Date < ApplicationRecord
-  self.primary_key = 'date'
+  self.primary_key = "date"
 
-  scope :between, ->(from, to) { where('date BETWEEN ? AND ?', from, to) }
+  scope :between, ->(from, to) { where("date BETWEEN ? AND ?", from, to) }
 
   def self.build(date)
     new(
@@ -11,16 +11,16 @@ class Dimensions::Date < ApplicationRecord
       year: date.year,
       quarter: ((date.month - 1) / 3) + 1,
       month: date.month,
-      month_name: date.strftime('%B'),
-      month_name_abbreviated: date.strftime('%b'),
+      month_name: date.strftime("%B"),
+      month_name_abbreviated: date.strftime("%b"),
       week: date.cweek,
       day_of_year: date.yday,
       day_of_quarter: (date - date.beginning_of_quarter).to_i + 1,
       day_of_month: date.mday,
-      day_of_week: date.strftime('%u').to_i,
-      day_name: date.strftime('%A'),
-      day_name_abbreviated: date.strftime('%a'),
-      weekday_weekend: date.saturday? || date.sunday? ? 'Weekend' : 'Weekday',
+      day_of_week: date.strftime("%u").to_i,
+      day_name: date.strftime("%A"),
+      day_name_abbreviated: date.strftime("%a"),
+      weekday_weekend: date.saturday? || date.sunday? ? "Weekend" : "Weekday",
       )
   end
 

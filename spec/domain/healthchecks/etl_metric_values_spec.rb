@@ -1,13 +1,13 @@
 RSpec.describe Healthchecks::EtlMetricValues do
   its(:name) { is_expected.to eq(:etl_metric_values_pviews) }
 
-  include_examples 'Healthcheck enabled/disabled within time range'
+  include_examples "Healthcheck enabled/disabled within time range"
 
   subject { described_class.build(:pviews) }
 
   let(:yesterday) { Date.yesterday }
 
-  context 'when there are no pviews for yesterday' do
+  context "when there are no pviews for yesterday" do
     before do
       edition = create :edition
       create :metric, edition: edition, date: yesterday, pviews: 0
@@ -15,10 +15,10 @@ RSpec.describe Healthchecks::EtlMetricValues do
     end
 
     its(:status) { is_expected.to eq(:critical) }
-    its(:message) { is_expected.to eq('ETL :: no pviews for yesterday') }
+    its(:message) { is_expected.to eq("ETL :: no pviews for yesterday") }
   end
 
-  context 'when there are pviews for yesterday' do
+  context "when there are pviews for yesterday" do
     before do
       edition = create :edition
       create :metric, edition: edition, date: yesterday, pviews: 10

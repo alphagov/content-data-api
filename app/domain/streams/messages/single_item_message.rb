@@ -9,9 +9,9 @@ module Streams
         base_path: base_path,
         title: title,
         document_text: document_text,
-        warehouse_item_id: "#{content_id}:#{locale}"
+        warehouse_item_id: "#{content_id}:#{locale}",
       ).merge(
-        acronym: acronym
+        acronym: acronym,
       )
     end
 
@@ -19,18 +19,18 @@ module Streams
       Streams::Handlers::SingleItemHandler.new(
         edition_attributes,
         @payload,
-        @routing_key
+        @routing_key,
       )
     end
 
   private
 
     def base_path
-      @payload.fetch('base_path')
+      @payload.fetch("base_path")
     end
 
     def title
-      @payload['title']
+      @payload["title"]
     end
 
     def document_text
@@ -38,7 +38,7 @@ module Streams
     end
 
     def acronym
-      acronym = @payload.dig('details', 'acronym')
+      acronym = @payload.dig("details", "acronym")
       acronym.blank? ? nil : acronym
     end
   end

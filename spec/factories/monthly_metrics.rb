@@ -1,12 +1,12 @@
 FactoryBot.define do
-  factory :monthly_metric, class: 'Aggregations::MonthlyMetric' do
+  factory :monthly_metric, class: "Aggregations::MonthlyMetric" do
     transient do
       month { Dimensions::Month.build(Time.zone.today).id }
       edition { create :edition }
     end
 
     dimensions_month do
-      y, m = *month.split('-').map(&:to_i)
+      y, m = *month.split("-").map(&:to_i)
 
       Dimensions::Month.find_existing_or_create(Date.new(y, m, 1))
     end

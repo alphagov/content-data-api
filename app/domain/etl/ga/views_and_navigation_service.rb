@@ -13,7 +13,7 @@ class Etl::GA::ViewsAndNavigationService
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_data_labels))
       .reject(&method(:long_query_string?))
-      .map { |h| h['date'] = date.strftime('%F'); h }
+      .map { |h| h["date"] = date.strftime("%F"); h }
       .each_slice(batch_size) { |slice| yield slice }
   end
 
@@ -27,19 +27,19 @@ private
     page_path, pviews, upviews, entrances, exits, bounces, page_time = *values
 
     {
-      'page_path' => page_path,
-      'pviews' => pviews,
-      'upviews' => upviews,
-      'process_name' => 'views',
-      'entrances' => entrances,
-      'exits' => exits,
-      'bounces' => bounces,
-      'page_time' => page_time
+      "page_path" => page_path,
+      "pviews" => pviews,
+      "upviews" => upviews,
+      "process_name" => "views",
+      "entrances" => entrances,
+      "exits" => exits,
+      "bounces" => bounces,
+      "page_time" => page_time,
     }
   end
 
   def long_query_string?(data)
-    data['page_path'].length > PAGE_PATH_LENGTH_LIMIT && !URI.parse(data['page_path']).query.nil?
+    data["page_path"].length > PAGE_PATH_LENGTH_LIMIT && !URI.parse(data["page_path"]).query.nil?
   end
 
   def extract_dimensions_and_metrics(row)
@@ -60,8 +60,8 @@ private
       service
         .batch_get_reports(
           Google::Apis::AnalyticsreportingV4::GetReportsRequest.new(
-            report_requests: [build_request(date: date).merge(page_token: page_token)]
-          )
+            report_requests: [build_request(date: date).merge(page_token: page_token)],
+          ),
         )
         .reports
         .first
@@ -74,18 +74,18 @@ private
         { start_date: date.to_s("%Y-%m-%d"), end_date: date.to_s("%Y-%m-%d") },
       ],
       dimensions: [
-        { name: 'ga:pagePath' },
+        { name: "ga:pagePath" },
       ],
       hide_totals: true,
       hide_value_ranges: true,
       metrics: [
-        { expression: 'ga:pageviews' },
-        { expression: 'ga:uniquePageviews' },
-        { expression: 'ga:entrances' },
-        { expression: 'ga:exits' },
-        { expression: 'ga:avgTimeOnPage' },
-        { expression: 'ga:bounces' },
-        { expression: 'ga:timeOnPage' },
+        { expression: "ga:pageviews" },
+        { expression: "ga:uniquePageviews" },
+        { expression: "ga:entrances" },
+        { expression: "ga:exits" },
+        { expression: "ga:avgTimeOnPage" },
+        { expression: "ga:bounces" },
+        { expression: "ga:timeOnPage" },
       ],
       page_size: 10_000,
       view_id: ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"],

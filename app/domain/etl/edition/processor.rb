@@ -23,7 +23,7 @@ private
       doc_count: Etl::Edition::Metadata::NumberOfWordFiles.parse(new_edition.publishing_api_event.payload),
       dimensions_date: dimensions_date,
       dimensions_edition: new_edition,
-      **quality_metrics
+      **quality_metrics,
     )
   end
 
@@ -32,11 +32,11 @@ private
 
     result = Odyssey.flesch_kincaid_re(new_edition.document_text, true)
     {
-      readability: result.fetch('score'),
-      chars: result.fetch('string_length'),
-      sentences: result.fetch('sentence_count'),
-      words: result.fetch('word_count'),
-      reading_time: Etl::Edition::Content::ReadingTime.calculate(result.fetch('word_count')),
+      readability: result.fetch("score"),
+      chars: result.fetch("string_length"),
+      sentences: result.fetch("sentence_count"),
+      words: result.fetch("word_count"),
+      reading_time: Etl::Edition::Content::ReadingTime.calculate(result.fetch("word_count")),
     }
   end
 end

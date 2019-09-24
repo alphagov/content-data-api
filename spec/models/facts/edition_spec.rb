@@ -14,14 +14,14 @@ RSpec.describe Facts::Edition do
     }
   end
 
-  it 'clones correctly with the quality metrics populated' do
+  it "clones correctly with the quality metrics populated" do
     existing_facts_edition = edition.reload.facts_edition
     cloned_edition = existing_facts_edition.clone_for!(new_dimensions_edition, new_date)
     expect(cloned_edition).to have_attributes(
       quality_metrics.merge(
         dimensions_edition: new_dimensions_edition,
-        dimensions_date: new_date
-      )
+        dimensions_date: new_date,
+      ),
     )
     expect(cloned_edition).to be_persisted
   end

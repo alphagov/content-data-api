@@ -21,7 +21,7 @@ class CreateAggregationsMonthlyMetrics < ActiveRecord::Migration[5.2]
       t.timestamps
 
       t.index %w[dimensions_month_id]
-      t.index %w[dimensions_edition_id dimensions_month_id], name: 'index_editions_months_unique', unique: true
+      t.index %w[dimensions_edition_id dimensions_month_id], name: "index_editions_months_unique", unique: true
     end
   end
 end

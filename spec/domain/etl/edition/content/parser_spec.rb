@@ -5,9 +5,9 @@ RSpec.describe Etl::Edition::Content::Parser do
     context "when valid schema" do
       describe "extraction fails with a StandardError" do
         it "logs the error with Sentry" do
-          json = { schema_name: 'place',
-            details: { introduction: 'Introduction',
-              more_information: 'Enter your postcode' } }.deep_stringify_keys
+          json = { schema_name: "place",
+            details: { introduction: "Introduction",
+              more_information: "Enter your postcode" } }.deep_stringify_keys
 
           allow(Nokogiri::HTML).to receive(:parse).and_raise(StandardError)
 
@@ -17,7 +17,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       end
     end
 
-    it 'returns nil if json is empty' do
+    it "returns nil if json is empty" do
       content = subject.extract_content({})
       expect(content).to be_nil
     end
@@ -25,10 +25,10 @@ RSpec.describe Etl::Edition::Content::Parser do
     context "when invalid schema" do
       describe "has no schema_name and no base_path" do
         it "raises an InvalidSchemaError and returns nil" do
-          subject.extract_content(document_type: 'answer')
+          subject.extract_content(document_type: "answer")
           expect(GovukError).to receive(:notify).
             with(Etl::Edition::Content::Parser::InvalidSchemaError.new("Schema does not exist: "), extra: { base_path: "" })
-          expect(subject.extract_content(document_type: 'answer')).to be_nil
+          expect(subject.extract_content(document_type: "answer")).to be_nil
         end
       end
 

@@ -1,12 +1,12 @@
 RSpec.describe Etl::GA::Client do
-  describe 'Connecting to the Google Analytics API' do
+  describe "Connecting to the Google Analytics API" do
     let(:json_key) { { client_email: "test@test.com", private_key: "key" } }
 
     before do
-      @google_private_key = ENV['GOOGLE_PRIVATE_KEY']
-      ENV['GOOGLE_PRIVATE_KEY'] = "key"
-      @google_client_email = ENV['GOOGLE_CLIENT_EMAIL']
-      ENV['GOOGLE_CLIENT_EMAIL'] = "test@test.com"
+      @google_private_key = ENV["GOOGLE_PRIVATE_KEY"]
+      ENV["GOOGLE_PRIVATE_KEY"] = "key"
+      @google_client_email = ENV["GOOGLE_CLIENT_EMAIL"]
+      ENV["GOOGLE_CLIENT_EMAIL"] = "test@test.com"
       allow(OpenSSL::PKey::RSA).to receive(:new).and_return("key")
     end
 
