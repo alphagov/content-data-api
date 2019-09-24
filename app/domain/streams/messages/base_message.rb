@@ -10,29 +10,29 @@ class Streams::Messages::BaseMessage
     parser = Streams::ParentChild::Parser.new
     parent_child_attrs = {
       parent_warehouse_id: parser.get_parent_id(payload),
-      child_sort_order: parser.get_children_ids(payload)
+      child_sort_order: parser.get_children_ids(payload),
     }.compact
     {
       content_id: content_id,
       base_path: base_path,
       title: title,
-      publishing_api_payload_version: @payload.fetch('payload_version'),
-      document_type: @payload.fetch('document_type'),
+      publishing_api_payload_version: @payload.fetch("payload_version"),
+      document_type: @payload.fetch("document_type"),
       locale: locale,
       document_text: document_text,
-      first_published_at: parse_time('first_published_at'),
-      primary_organisation_id: primary_organisation['content_id'],
-      primary_organisation_title: primary_organisation['title'],
-      primary_organisation_withdrawn: primary_organisation['withdrawn'],
+      first_published_at: parse_time("first_published_at"),
+      primary_organisation_id: primary_organisation["content_id"],
+      primary_organisation_title: primary_organisation["title"],
+      primary_organisation_withdrawn: primary_organisation["withdrawn"],
       organisation_ids: organisation_ids,
-      public_updated_at: parse_time('public_updated_at'),
-      schema_name: @payload.fetch('schema_name'),
-      phase: @payload.fetch('phase', nil),
-      publishing_app: @payload.fetch('publishing_app', nil),
-      rendering_app: @payload.fetch('rendering_app', nil),
+      public_updated_at: parse_time("public_updated_at"),
+      schema_name: @payload.fetch("schema_name"),
+      phase: @payload.fetch("phase", nil),
+      publishing_app: @payload.fetch("publishing_app", nil),
+      rendering_app: @payload.fetch("rendering_app", nil),
       sibling_order: sibling_order,
-      analytics_identifier: @payload.fetch('analytics_identifier', nil),
-      update_type: @payload.fetch('update_type', nil),
+      analytics_identifier: @payload.fetch("analytics_identifier", nil),
+      update_type: @payload.fetch("update_type", nil),
       live: false,
       warehouse_item_id: warehouse_item_id,
       withdrawn: withdrawn_notice?,
@@ -45,7 +45,7 @@ class Streams::Messages::BaseMessage
   end
 
   def withdrawn_notice?
-    @payload.dig('withdrawn_notice', "explanation").present?
+    @payload.dig("withdrawn_notice", "explanation").present?
   end
 
   def historically_political?
@@ -57,14 +57,14 @@ class Streams::Messages::BaseMessage
   end
 
   def locale
-    @payload['locale']
+    @payload["locale"]
   end
 
   def organisation_ids
-    if @payload.fetch('publishing_app', nil) == 'publisher'
-      @payload.fetch('expanded_links', {})
-        .fetch('organisations', [])
-        .map { |org| org['content_id'] }
+    if @payload.fetch("publishing_app", nil) == "publisher"
+      @payload.fetch("expanded_links", {})
+        .fetch("organisations", [])
+        .map { |org| org["content_id"] }
     else
       []
     end
@@ -77,24 +77,24 @@ private
   end
 
   def primary_organisation
-    primary_org = @payload.dig('expanded_links', 'primary_publishing_organisation') || []
+    primary_org = @payload.dig("expanded_links", "primary_publishing_organisation") || []
     primary_org.any? ? primary_org[0] : {}
   end
 
   def political?
-    @payload.dig('details', 'political') || false
+    @payload.dig("details", "political") || false
   end
 
   def historical?
-    @payload.dig('details', 'government').present? && !@payload.dig('details', 'government', 'current')
+    @payload.dig("details", "government").present? && !@payload.dig("details", "government", "current")
   end
 
   def mandatory_fields_nil?
-    mandatory_fields = @payload.values_at('base_path', 'schema_name')
+    mandatory_fields = @payload.values_at("base_path", "schema_name")
     mandatory_fields.any?(&:nil?)
   end
 
   def placeholder_schema?
-    @payload['schema_name'].include?('placeholder')
+    @payload["schema_name"].include?("placeholder")
   end
 end

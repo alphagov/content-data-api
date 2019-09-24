@@ -4,6 +4,6 @@ class AddFullTextIndexBasePath < ActiveRecord::Migration[5.2]
   end
 
   def down
-    execute 'drop index dimensions_editions_base_path'
+    execute "drop index dimensions_editions_base_path"
   end
 end

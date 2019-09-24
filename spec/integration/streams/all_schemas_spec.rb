@@ -1,6 +1,6 @@
-require 'govuk_message_queue_consumer/test_helpers'
+require "govuk_message_queue_consumer/test_helpers"
 
-RSpec.describe 'Process all schemas' do
+RSpec.describe "Process all schemas" do
   let(:subject) { Streams::Consumer.new }
 
   SchemasIterator.each_schema do |schema_name, schema|
@@ -16,7 +16,7 @@ RSpec.describe 'Process all schemas' do
     end
   end
 
-  it 'knows how to parse all GOV.UK schemas' do
+  it "knows how to parse all GOV.UK schemas" do
     expect(known_schemas).to match_array(GovukSchemas::Schema.schema_names)
   end
 

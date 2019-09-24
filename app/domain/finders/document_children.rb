@@ -17,8 +17,8 @@ private
   def initialize(parent_edition, filters)
     @parent_edition = parent_edition
     @time_period = filters.fetch(:time_period)
-    @sort_key = filters.fetch(:sort_key) || 'sibling_order'
-    @sort_dir = filters.fetch(:sort_direction) || 'asc'
+    @sort_key = filters.fetch(:sort_key) || "sibling_order"
+    @sort_dir = filters.fetch(:sort_direction) || "asc"
   end
 
   def filter_editions
@@ -46,7 +46,7 @@ private
     raise "Order atrribute of #{column} not permitted." unless avaliable_columns.include?(column.to_s)
     raise "Order direction of #{direction} not permitted." unless %w[ASC DESC].include?(direction.upcase)
 
-    if column == 'sibling_order'
+    if column == "sibling_order"
       "#{column} #{direction} NULLS FIRST, title #{direction}"
     else
       "#{column} #{direction} NULLS LAST, sibling_order ASC NULLS FIRST"

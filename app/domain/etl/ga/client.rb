@@ -1,5 +1,5 @@
-require 'google/apis/analyticsreporting_v4'
-require 'googleauth'
+require "google/apis/analyticsreporting_v4"
+require "googleauth"
 
 class Etl::GA::Client
   include Google::Apis::AnalyticsreportingV4

@@ -1,11 +1,11 @@
-require 'sidekiq/testing'
-RSpec.describe 'Import edition metrics' do
+require "sidekiq/testing"
+RSpec.describe "Import edition metrics" do
   subject { Streams::Consumer.new }
 
-  it 'stores content edition metrics' do
-    message = build(:message, schema_name: 'publication', base_path: '/new-path')
-    message.payload['details']['body'] = 'This is good content.'
-    message.payload['details']['documents'] = [
+  it "stores content edition metrics" do
+    message = build(:message, schema_name: "publication", base_path: "/new-path")
+    message.payload["details"]["body"] = "This is good content."
+    message.payload["details"]["documents"] = [
       '<div class=\"attachment-details\">\n<a href=\"link.pdf\">1</a>\n\n\n\n</div>',
       '<div class=\"attachment-details\">\n<a href=\"link.docx\">1</a>\n\n\n\n</div>',
     ]
@@ -19,7 +19,7 @@ RSpec.describe 'Import edition metrics' do
       readability: 97,
       chars: 21,
       sentences: 1,
-      words: 4
+      words: 4,
     )
   end
 

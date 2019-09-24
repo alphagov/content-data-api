@@ -1,6 +1,6 @@
 class Facts::Metric < ApplicationRecord
-  belongs_to :dimensions_date, class_name: 'Dimensions::Date'
-  belongs_to :dimensions_edition, class_name: 'Dimensions::Edition'
+  belongs_to :dimensions_date, class_name: "Dimensions::Date"
+  belongs_to :dimensions_edition, class_name: "Dimensions::Edition"
 
   has_one :facts_edition, through: :dimensions_edition
 

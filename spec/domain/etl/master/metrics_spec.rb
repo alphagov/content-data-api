@@ -3,9 +3,9 @@ RSpec.describe Etl::Master::MetricsProcessor do
 
   subject { described_class.new(date: date) }
 
-  it 'creates a Metrics fact per content item' do
+  it "creates a Metrics fact per content item" do
     create :edition, live: true
-    item = create(:edition, live: true, content_id: 'cid1')
+    item = create(:edition, live: true, content_id: "cid1")
 
     expect(subject.process).to be true
 
@@ -16,16 +16,16 @@ RSpec.describe Etl::Master::MetricsProcessor do
     )
   end
 
-  it 'only create a Metrics Fact entry for Content Items with live = `true`' do
-    create(:edition, live: true, content_id: 'cid1')
-    create(:edition, live: false, content_id: 'cid1')
+  it "only create a Metrics Fact entry for Content Items with live = `true`" do
+    create(:edition, live: true, content_id: "cid1")
+    create(:edition, live: false, content_id: "cid1")
 
     expect(subject.process).to be true
 
     expect(Facts::Metric.count).to eq(1)
   end
 
-  it 'reports failure' do
+  it "reports failure" do
     allow(subject).to receive(:create_metrics).and_raise
 
     expect(subject.process).to be false

@@ -11,10 +11,10 @@ private
 
   def clean_up_duplicated_metrics!
     edition_ids = Dimensions::Edition.
-      select('base_path, count(id), max(id) as id').
+      select("base_path, count(id), max(id) as id").
       where(latest: true).
       group(:base_path).
-      having('count(id) > 1').
+      having("count(id) > 1").
       map(&:id)
 
     total = edition_ids.count

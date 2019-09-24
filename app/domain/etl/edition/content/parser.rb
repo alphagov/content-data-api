@@ -54,7 +54,7 @@ private
       ::Etl::Edition::Content::Parsers::TravelAdvice,
       ::Etl::Edition::Content::Parsers::TravelAdviceIndex,
       ::Etl::Edition::Content::Parsers::Unpublished,
-      ::Etl::Edition::Content::Parsers::NoContent
+      ::Etl::Edition::Content::Parsers::NoContent,
     ].each(&method(:register_parser))
   end
 

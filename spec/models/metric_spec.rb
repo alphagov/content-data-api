@@ -22,7 +22,7 @@ RSpec.describe Metric do
       upviews
     ).freeze
 
-  describe '.find_all' do
+  describe ".find_all" do
     it "returns a list of all metrics" do
       metrics = Metric.find_all
 
@@ -32,17 +32,17 @@ RSpec.describe Metric do
     end
   end
 
-  describe '.find_all_names' do
+  describe ".find_all_names" do
     it "returns a list of all metrics" do
       metric_names = Metric.find_all_names
 
       expect(metric_names.length).to eq(16)
       a_metric = metric_names.first
-      expect(a_metric).to eq('chars')
+      expect(a_metric).to eq("chars")
     end
   end
 
-  describe '.is_edition_metric?' do
+  describe ".is_edition_metric?" do
     EDITION_METRICS.each do |metric|
       it "returns true for #{metric}" do
         expect(Metric.is_edition_metric?(metric)).to be_truthy
@@ -56,8 +56,8 @@ RSpec.describe Metric do
     end
   end
 
-  describe '.edition_metrics' do
-    it 'return the edition metrics' do
+  describe ".edition_metrics" do
+    it "return the edition metrics" do
       metrics = Metric.edition_metrics
       expect(metrics.map(&:name)).to match_array(EDITION_METRICS)
     end

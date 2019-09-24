@@ -1,5 +1,5 @@
 module Facts
   def self.table_name_prefix
-    'facts_'
+    "facts_"
   end
 end

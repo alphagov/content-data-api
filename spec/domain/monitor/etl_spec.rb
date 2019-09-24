@@ -3,7 +3,7 @@ RSpec.describe Monitor::Etl do
     Timecop.freeze(Date.new(2018, 1, 15)) { example.run }
   end
 
-  let(:yesterday) { '2018-01-14' }
+  let(:yesterday) { "2018-01-14" }
 
   before { allow(GovukStatsd).to receive(:count) }
 
@@ -26,5 +26,5 @@ RSpec.describe Monitor::Etl do
     end
   end
 
-  it_behaves_like 'traps and logs errors in run', Metric, :edition_metrics
+  it_behaves_like "traps and logs errors in run", Metric, :edition_metrics
 end

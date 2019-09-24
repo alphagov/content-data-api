@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Dimensions::Month, type: :model do
   it { is_expected.to validate_presence_of(:month_number) }
@@ -18,36 +18,36 @@ RSpec.describe Dimensions::Month, type: :model do
   it { is_expected.to validate_numericality_of(:quarter).only_integer }
   it { is_expected.to validate_inclusion_of(:quarter).in_range(1..4) }
 
-  describe '.find_existing_or_create' do
+  describe ".find_existing_or_create" do
     subject { described_class }
 
-    context 'when month does exist' do
+    context "when month does exist" do
       before { subject.current.save }
 
-      it 'returns the month if it exists' do
+      it "returns the month if it exists" do
         expect(-> { subject.find_existing_or_create(Time.zone.today) }).to change(Dimensions::Month, :count).by(0)
       end
 
-      it 'returns the month' do
+      it "returns the month" do
         expect(subject.find_existing_or_create(Time.zone.today)).to eq(Dimensions::Month.current)
       end
     end
 
-    context 'when month does not exist' do
-      it 'creates the month' do
+    context "when month does not exist" do
+      it "creates the month" do
         expect(-> { subject.find_existing_or_create(Time.zone.today) }).to change(Dimensions::Month, :count).by(1)
       end
 
-      it 'returns the month' do
+      it "returns the month" do
         expect(subject.find_existing_or_create(Time.zone.today)).to eq(Dimensions::Month.current)
       end
     end
   end
 
-  describe '.current' do
+  describe ".current" do
     subject { described_class }
 
-    it 'returns current month' do
+    it "returns current month" do
       Timecop.freeze(2018, 10, 12) do
         current_month = Dimensions::Month.find_existing_or_create(Time.zone.today)
 
@@ -56,26 +56,26 @@ RSpec.describe Dimensions::Month, type: :model do
     end
   end
 
-  describe '.build' do
+  describe ".build" do
     subject { described_class }
 
-    it 'builds a month dimension' do
+    it "builds a month dimension" do
       date = subject.build(Date.new(2018, 12, 1))
 
       expect(date).to have_attributes(
-        id: '2018-12',
+        id: "2018-12",
         month_number: 12,
-        month_name: 'December',
-        month_name_abbreviated: 'Dec',
+        month_name: "December",
+        month_name_abbreviated: "Dec",
         quarter: 4,
         year: 2018,
       )
     end
 
-    it 'uses two digits to build the month' do
+    it "uses two digits to build the month" do
       date = subject.build(Date.new(2018, 12, 1))
 
-      expect(date).to have_attributes(id: '2018-12')
+      expect(date).to have_attributes(id: "2018-12")
     end
   end
 end

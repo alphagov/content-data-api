@@ -1,9 +1,9 @@
-require 'support/schemas_iterator'
+require "support/schemas_iterator"
 
-RSpec.describe 'Process parser', type: :integration do
+RSpec.describe "Process parser", type: :integration do
   include SchemasIterator
 
-  context 'with a list of content schemas' do
+  context "with a list of content schemas" do
     SchemasIterator.each_schema do |schema_name, schema|
       it "extracts the content for: #{schema_name}" do
         payload = SchemasIterator.payload_for(schema_name, schema)

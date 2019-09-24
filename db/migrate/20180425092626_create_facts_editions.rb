@@ -20,7 +20,7 @@ class CreateFactsEditions < ActiveRecord::Migration[5.1]
       t.integer :sentence_count, default: 0
       t.integer :word_count, default: 0
       t.json :raw_json
-      t.string :status, default: 'live'
+      t.string :status, default: "live"
       t.string :description
       t.datetime :first_published_at
       t.datetime :public_updated_at
@@ -30,6 +30,6 @@ class CreateFactsEditions < ActiveRecord::Migration[5.1]
 
     add_foreign_key :facts_editions, :dimensions_dates, foreign_key: :dimensions_date_id, primary_key: :date
     add_foreign_key :facts_editions, :dimensions_items, foreign_key: :dimensions_item_id, primary_key: :id
-    add_index :facts_editions, :dimensions_item_id, unique: true, name: 'index_facts_editions_on_dimension_ids'
+    add_index :facts_editions, :dimensions_item_id, unique: true, name: "index_facts_editions_on_dimension_ids"
   end
 end

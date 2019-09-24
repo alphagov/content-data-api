@@ -1,5 +1,5 @@
 if defined?(Guard)
-  require 'guard/compat/plugin'
+  require "guard/compat/plugin"
 
   module Guard
     class Lint < Plugin

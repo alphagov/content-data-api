@@ -26,7 +26,7 @@ private
       error_response(
         "validation-error",
         title: "One or more parameters is invalid",
-        invalid_params: api_request.errors.to_hash
+        invalid_params: api_request.errors.to_hash,
       )
     end
   end

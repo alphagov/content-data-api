@@ -17,7 +17,7 @@ module Healthchecks
   private
 
     def aggregations
-      @aggregations ||= Aggregations::MonthlyMetric.where('created_at > ?', Time.zone.today).count
+      @aggregations ||= Aggregations::MonthlyMetric.where("created_at > ?", Time.zone.today).count
     end
   end
 end

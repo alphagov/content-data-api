@@ -17,28 +17,28 @@ class Monitor::Facts
 private
 
   def statsd_for_all_metrics!
-    path = path_for('all_metrics')
+    path = path_for("all_metrics")
     count = Facts::Metric.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_yesterday_metrics!
-    path = path_for('daily_metrics')
+    path = path_for("daily_metrics")
     count = Facts::Metric.for_yesterday.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_total_editions!
-    path = path_for('all_editions')
+    path = path_for("all_editions")
     count = Facts::Edition.count
 
     GovukStatsd.count(path, count)
   end
 
   def statsd_for_yesterday_editions!
-    path = path_for('daily_editions')
+    path = path_for("daily_editions")
     count = Facts::Edition.where(dimensions_date: Dimensions::Date.find_existing_or_create(Date.yesterday)).count
 
     GovukStatsd.count(path, count)

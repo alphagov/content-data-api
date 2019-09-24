@@ -1,5 +1,5 @@
 namespace :data_migrations do
-  desc 'Sets all metrics with no useful yes/no responses to have null for satisfaction'
+  desc "Sets all metrics with no useful yes/no responses to have null for satisfaction"
   task :satisfaction_defaults_to_null, %i[from to] => [:environment] do |_t, args|
     BATCH_SIZE = 25_000
     from = args[:from].to_date

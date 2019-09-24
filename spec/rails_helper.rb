@@ -1,11 +1,11 @@
 # Run code coverage reporting on Jenkins
 if ENV["TEST_COVERAGE"] == "true"
-  require 'simplecov'
-  SimpleCov.start 'rails'
+  require "simplecov"
+  SimpleCov.start "rails"
 end
 
 ENV["RAILS_ENV"] ||= "test"
-require File.expand_path('../config/environment', __dir__)
+require File.expand_path("../config/environment", __dir__)
 
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
@@ -21,8 +21,8 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
   config.include FactoryBot::Syntax::Methods
   config.shared_context_metadata_behavior = :apply_to_host_groups
-  config.fixture_path = Rails.root.join('spec', 'fixtures')
-  config.example_status_persistence_file_path = Rails.root.join('tmp', 'examples.txt')
+  config.fixture_path = Rails.root.join("spec", "fixtures")
+  config.example_status_persistence_file_path = Rails.root.join("tmp", "examples.txt")
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
   config.use_transactional_fixtures = false
@@ -55,4 +55,4 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
+Dir["./spec/support/**/*.rb"].sort.each { |f| require f }

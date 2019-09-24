@@ -24,15 +24,15 @@ class Streams::ParentChild::ParentChildLinksParser < Streams::ParentChild::BaseP
     ].freeze
 
   def self.get_children_ids(payload)
-    children = payload.dig('expanded_links', 'children') || []
+    children = payload.dig("expanded_links", "children") || []
 
-    children.map { |h| to_warehouse_id(h['content_id'], h['locale']) }
+    children.map { |h| to_warehouse_id(h["content_id"], h["locale"]) }
   end
 
   def self.get_parent_id(payload)
-    parent_array = payload.dig('expanded_links', 'parent')
+    parent_array = payload.dig("expanded_links", "parent")
     return nil if parent_array.blank?
 
-    to_warehouse_id(parent_array.first['content_id'], parent_array.first['locale'])
+    to_warehouse_id(parent_array.first["content_id"], parent_array.first["locale"])
   end
 end

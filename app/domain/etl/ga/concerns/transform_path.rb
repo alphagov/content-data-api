@@ -1,4 +1,4 @@
-require 'active_support/concern'
+require "active_support/concern"
 
 module Etl::GA::Concerns::TransformPath
   extend ActiveSupport::Concern
@@ -15,7 +15,7 @@ module Etl::GA::Concerns::TransformPath
 private
 
   def transform_event_attributes(event)
-    sanitised_page_path = event.page_path.remove '/https://www.gov.uk'
+    sanitised_page_path = event.page_path.remove "/https://www.gov.uk"
     duplicate_event = Events::GA.find_by(page_path: sanitised_page_path)
     attributes = { page_path: sanitised_page_path }
 

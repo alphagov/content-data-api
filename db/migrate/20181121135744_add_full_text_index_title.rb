@@ -4,6 +4,6 @@ class AddFullTextIndexTitle < ActiveRecord::Migration[5.2]
   end
 
   def down
-    execute 'drop index dimensions_editions_title'
+    execute "drop index dimensions_editions_title"
   end
 end

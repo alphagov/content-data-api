@@ -1,7 +1,7 @@
-RSpec.describe '/api/v1/metrics/', type: :request do
+RSpec.describe "/api/v1/metrics/", type: :request do
   before { create(:user) }
 
-  include_examples 'API response', '/api/v1/metrics'
+  include_examples "API response", "/api/v1/metrics"
 
   describe "metrics index" do
     it "describes the available metrics" do

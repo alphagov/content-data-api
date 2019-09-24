@@ -6,7 +6,7 @@ FactoryBot.define do
 
     sequence(:uid) { |i| "user-#{i}" }
     sequence(:name) { |i| "Test User #{i}" }
-    email { 'user@example.com' }
+    email { "user@example.com" }
     permissions { %w[signin] }
     organisation_slug { "government-digital-service" }
   end

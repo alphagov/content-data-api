@@ -1,5 +1,5 @@
 class Finders::AllOrganisations
-  def self.run(locale: 'en')
+  def self.run(locale: "en")
     new.run(locale)
   end
 
@@ -14,14 +14,14 @@ private
     Organisation.new(
       id: org[:content_id],
       name: org[:title],
-      acronym: org[:acronym]
+      acronym: org[:acronym],
     )
   end
 
   def find_all(locale)
     Dimensions::Edition.live
       .select(:content_id, :title, :locale, :acronym)
-      .where(document_type: 'organisation', locale: locale)
+      .where(document_type: "organisation", locale: locale)
       .order(:title)
   end
 end

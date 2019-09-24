@@ -1,18 +1,18 @@
-require_relative 'boot'
+require_relative "boot"
 
-require 'rails'
-require 'action_controller/railtie'
-require 'action_view/railtie'
-require 'active_job/railtie'
-require 'active_model/railtie'
-require 'active_record/railtie'
-require 'sprockets/railtie'
+require "rails"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "active_job/railtie"
+require "active_model/railtie"
+require "active_record/railtie"
+require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-require_relative 'raven'
+require_relative "raven"
 
 module ContentPerformanceManager
   class Application < Rails::Application

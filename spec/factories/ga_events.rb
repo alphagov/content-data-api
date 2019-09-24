@@ -3,18 +3,18 @@ FactoryBot.define do
     trait :with_views do
       pviews { 10 }
       upviews { 5 }
-      process_name { 'views' }
+      process_name { "views" }
     end
 
     trait :with_user_feedback do
       useful_yes { 3 }
       useful_no { 6 }
-      process_name { 'user_feedback' }
+      process_name { "user_feedback" }
     end
 
     trait :with_searches do
       searches { 100 }
-      process_name { 'searches' }
+      process_name { "searches" }
     end
 
     sequence(:page_path) { |i| "/path/#{i}" }

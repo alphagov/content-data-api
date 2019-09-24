@@ -1,5 +1,5 @@
 module Dimensions
   def self.table_name_prefix
-    'dimensions_'
+    "dimensions_"
   end
 end

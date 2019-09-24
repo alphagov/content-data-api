@@ -1,4 +1,4 @@
-require 'govuk_message_queue_consumer/test_helpers/mock_message'
+require "govuk_message_queue_consumer/test_helpers/mock_message"
 
 RSpec.describe "Process sub-pages for multipart content types" do
   include PublishingEventProcessingSpecHelper
@@ -21,16 +21,16 @@ RSpec.describe "Process sub-pages for multipart content types" do
     }.to change(Events::PublishingApi, :count).by(1)
   end
 
-  context 'for a guide' do
-    let(:content_id) { '3079e1a9-4b07-4012-af68-8b86f918fae9' }
+  context "for a guide" do
+    let(:content_id) { "3079e1a9-4b07-4012-af68-8b86f918fae9" }
 
     it "separates the parts of multipart content types with different uuids" do
       message = build(:message,
                       :with_parts,
                       attributes: {
-                        'content_id' => content_id,
-                        'locale' => 'en',
-                        'title' => 'Main Title'
+                        "content_id" => content_id,
+                        "locale" => "en",
+                        "title" => "Main Title",
                       })
       subject.process(message)
 
@@ -45,16 +45,16 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
   end
 
-  context 'for travel advice' do
-    let(:content_id) { 'fefbf6af-8510-432d-8126-c1bf11fadec1' }
+  context "for travel advice" do
+    let(:content_id) { "fefbf6af-8510-432d-8126-c1bf11fadec1" }
     it "separates the parts of multipart content types with different uuids" do
       message = build(:message,
                       :travel_advice,
-                      base_path: '/travel/advice',
+                      base_path: "/travel/advice",
                       content_id: content_id,
-                      locale: 'fr',
+                      locale: "fr",
                       attributes: {
-                        'title' => 'The Title'
+                        "title" => "The Title",
                       })
       subject.process(message)
       parts = Dimensions::Edition.pluck(:base_path, :title, :warehouse_item_id).to_set
@@ -91,9 +91,9 @@ RSpec.describe "Process sub-pages for multipart content types" do
       "body" => [
         {
           "content_type" => "text/govspeak",
-          "content" => "New thing"
-        }
-      ]
+          "content" => "New thing",
+        },
+      ],
     }
 
     message.payload["payload_version"] = message.payload["payload_version"] + 1
@@ -150,10 +150,10 @@ RSpec.describe "Process sub-pages for multipart content types" do
     end
   end
 
-  shared_examples 'when unchanged' do
-    it 'does not grow the dimension' do
+  shared_examples "when unchanged" do
+    it "does not grow the dimension" do
       message2 = build :message, payload: message.payload.dup
-      message2.payload['payload_version'] = message.payload['payload_version'] + 1
+      message2.payload["payload_version"] = message.payload["payload_version"] + 1
 
       expect { subject.process(message2) }.not_to change(Dimensions::Edition, :count)
     end
@@ -163,30 +163,30 @@ RSpec.describe "Process sub-pages for multipart content types" do
     let(:message) do
       build :message, :travel_advice,
             attributes: message_attributes(
-              'base_path' => '/travel-advice',
-              'content_id' => '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-              'document_type' => 'travel_advice'
+              "base_path" => "/travel-advice",
+              "content_id" => "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+              "document_type" => "travel_advice",
             ),
-            summary: 'Summary content'
+            summary: "Summary content"
     end
 
     before do
       create :edition,
-             base_path: '/travel-advice/part3',
-             content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-             locale: 'fr',
+             base_path: "/travel-advice/part3",
+             content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+             locale: "fr",
              publishing_api_payload_version: 0
       allow(GovukError).to receive(:notify)
       subject.process(message)
     end
 
-    it_behaves_like 'when unchanged'
+    it_behaves_like "when unchanged"
 
     it "extracts the Summary" do
       item = Dimensions::Edition.where(base_path: "/travel-advice", live: true).first
       expect(item).to have_attributes(expected_edition_attributes(
-                                        base_path: '/travel-advice',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        base_path: "/travel-advice",
+                                        content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
                                         document_text: "Summary content",
                                         document_type: "travel_advice",
                                         schema_name: "travel_advice",
@@ -194,12 +194,12 @@ RSpec.describe "Process sub-pages for multipart content types" do
       ))
     end
 
-    it 'extracts /travel-advice/part1' do
+    it "extracts /travel-advice/part1" do
       item = Dimensions::Edition.where(base_path: "/travel-advice/part1", live: true).first
 
       expect(item).to have_attributes(expected_edition_attributes(
-                                        base_path: '/travel-advice/part1',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        base_path: "/travel-advice/part1",
+                                        content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
                                         document_text: "Here 1",
                                         document_type: "travel_advice",
                                         schema_name: "travel_advice",
@@ -207,11 +207,11 @@ RSpec.describe "Process sub-pages for multipart content types" do
       ))
     end
 
-    it 'extracts /travel-advice/part2' do
+    it "extracts /travel-advice/part2" do
       item = Dimensions::Edition.where(base_path: "/travel-advice/part2", live: true).first
       expect(item).to have_attributes(expected_edition_attributes(
-                                        base_path: '/travel-advice/part2',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
+                                        base_path: "/travel-advice/part2",
+                                        content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
                                         document_text: "be 2",
                                         document_type: "travel_advice",
                                         schema_name: "travel_advice",
@@ -219,98 +219,98 @@ RSpec.describe "Process sub-pages for multipart content types" do
       ))
     end
 
-    it 'deprecates any other items' do
+    it "deprecates any other items" do
       query = Dimensions::Edition.where(base_path: "/travel-advice/part3")
       expect(query.count).to eq(1)
       expect(query.first.live).to eq(false)
     end
 
-    it 'does not log any errors' do
+    it "does not log any errors" do
       expect(GovukError).not_to have_received(:notify)
     end
   end
 
-  context 'when the content is a `guide`' do
+  context "when the content is a `guide`" do
     let(:message) do
       build(:message,
             :with_parts,
-            base_path: '/guide',
+            base_path: "/guide",
             attributes: message_attributes(
-              'base_path' => '/guide',
-              'content_id' => '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-              'document_type' => 'guide'
+              "base_path" => "/guide",
+              "content_id" => "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+              "document_type" => "guide",
             ))
     end
 
     before do
       create :edition,
-             base_path: '/guide/part5',
-             content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-             locale: 'fr',
+             base_path: "/guide/part5",
+             content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+             locale: "fr",
              publishing_api_payload_version: 0,
-             title: 'the-title: Part 5'
+             title: "the-title: Part 5"
       allow(GovukError).to receive(:notify)
       subject.process(message)
     end
 
-    it_behaves_like 'when unchanged'
+    it_behaves_like "when unchanged"
 
 
-    it 'extracts part 1 on the base path' do
+    it "extracts part 1 on the base path" do
       item = Dimensions::Edition.where(base_path: "/guide", live: true).first
       expect(item).to have_attributes(expected_edition_attributes(
-                                        base_path: '/guide',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: 'Here 1',
-                                        document_type: 'guide',
-                                        schema_name: 'guide',
-                                        title: 'the-title: Part 1',
+                                        base_path: "/guide",
+                                        content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+                                        document_text: "Here 1",
+                                        document_type: "guide",
+                                        schema_name: "guide",
+                                        title: "the-title: Part 1",
       ))
     end
 
-    it 'extracts part 2 under the base path' do
-      item = Dimensions::Edition.where(base_path: '/guide/part2', live: true).first
+    it "extracts part 2 under the base path" do
+      item = Dimensions::Edition.where(base_path: "/guide/part2", live: true).first
       expect(item).to have_attributes(expected_edition_attributes(
-                                        base_path: '/guide/part2',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: 'be 2',
-                                        document_type: 'guide',
-                                        schema_name: 'guide',
-                                        title: 'the-title: Part 2',
+                                        base_path: "/guide/part2",
+                                        content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+                                        document_text: "be 2",
+                                        document_type: "guide",
+                                        schema_name: "guide",
+                                        title: "the-title: Part 2",
       ))
     end
 
-    it 'extracts part 3 under the base path' do
-      item = Dimensions::Edition.where(base_path: '/guide/part3', live: true).first
+    it "extracts part 3 under the base path" do
+      item = Dimensions::Edition.where(base_path: "/guide/part3", live: true).first
       expect(item).to have_attributes(expected_edition_attributes(
-                                        base_path: '/guide/part3',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: 'some 3',
-                                        document_type: 'guide',
-                                        schema_name: 'guide',
-                                        title: 'the-title: Part 3',
+                                        base_path: "/guide/part3",
+                                        content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+                                        document_text: "some 3",
+                                        document_type: "guide",
+                                        schema_name: "guide",
+                                        title: "the-title: Part 3",
       ))
     end
 
-    it 'extracts part 4 under the base path' do
-      item = Dimensions::Edition.where(base_path: '/guide/part4', live: true).first
+    it "extracts part 4 under the base path" do
+      item = Dimensions::Edition.where(base_path: "/guide/part4", live: true).first
       expect(item).to have_attributes(expected_edition_attributes(
-                                        base_path: '/guide/part4',
-                                        content_id: '12123d8e-1a8b-42fd-ba93-c953ad20bc8a',
-                                        document_text: 'content 4.',
-                                        document_type: 'guide',
-                                        schema_name: 'guide',
-                                        title: 'the-title: Part 4',
+                                        base_path: "/guide/part4",
+                                        content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+                                        document_text: "content 4.",
+                                        document_type: "guide",
+                                        schema_name: "guide",
+                                        title: "the-title: Part 4",
       ))
     end
 
-    it 'deprecates any other items' do
+    it "deprecates any other items" do
       query = Dimensions::Edition.where(base_path: "/guide/part5")
       expect(query.count).to eq(1)
       expect(query.first.live).to eq(false)
     end
 
-    it 'does not log any errors' do
+    it "does not log any errors" do
       expect(GovukError).not_to have_received(:notify)
     end
   end

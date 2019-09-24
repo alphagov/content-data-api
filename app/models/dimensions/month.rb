@@ -25,8 +25,8 @@ class Dimensions::Month < ApplicationRecord
     new(
       id: format_id(date),
       month_number: date.month,
-      month_name: date.strftime('%B'),
-      month_name_abbreviated: date.strftime('%b'),
+      month_name: date.strftime("%B"),
+      month_name_abbreviated: date.strftime("%b"),
       year: date.year,
       quarter: ((date.month - 1) / 3) + 1,
     )

@@ -1,42 +1,42 @@
-require 'govuk_message_queue_consumer/test_helpers/mock_message'
+require "govuk_message_queue_consumer/test_helpers/mock_message"
 
 FactoryBot.define do
   factory :message, class: GovukMessageQueueConsumer::MockMessage do
     transient do
       sequence(:payload_version) { |i| 10 + i }
-      schema_name { 'detailed_guide' }
-      document_type { 'detailed_guide' }
-      base_path { '/base-path' }
-      routing_key { 'news_story.major' }
+      schema_name { "detailed_guide" }
+      document_type { "detailed_guide" }
+      base_path { "/base-path" }
+      routing_key { "news_story.major" }
       attributes { {} }
       content_id { SecureRandom.uuid }
-      locale { 'en' }
+      locale { "en" }
     end
 
     delivery_info { OpenStruct.new(routing_key: routing_key) }
 
     payload do
       GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
-        result['base_path'] = base_path
-        result['payload_version'] = payload_version
-        result['content_id'] = content_id
-        result['locale'] = locale
-        result.delete('withdrawn_notice')
+        result["base_path"] = base_path
+        result["payload_version"] = payload_version
+        result["content_id"] = content_id
+        result["locale"] = locale
+        result.delete("withdrawn_notice")
         result.merge! attributes
       end
     end
 
     trait :with_parts do
-      schema_name { 'guide' }
-      document_type { 'guide' }
+      schema_name { "guide" }
+      document_type { "guide" }
       payload do
         GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
-          result['base_path'] = base_path
-          result['payload_version'] = payload_version
-          result['content_id'] = content_id
-          result['locale'] = locale
-          result.delete('withdrawn_notice')
-          result['details']['parts'] =
+          result["base_path"] = base_path
+          result["payload_version"] = payload_version
+          result["content_id"] = content_id
+          result["locale"] = locale
+          result.delete("withdrawn_notice")
+          result["details"]["parts"] =
             [
               {
                 "title" => "Part 1",
@@ -44,13 +44,13 @@ FactoryBot.define do
                 "body" => [
                   {
                     "content_type" => "text/govspeak",
-                    "content" => "Here 1"
+                    "content" => "Here 1",
                   },
                   {
                     "content_type" => "text/html",
-                    "content" => "Here 1"
-                  }
-                ]
+                    "content" => "Here 1",
+                  },
+                ],
               },
               {
                 "title" => "Part 2",
@@ -58,13 +58,13 @@ FactoryBot.define do
                 "body" => [
                   {
                     "content_type" => "text/govspeak",
-                    "content" => "be 2"
+                    "content" => "be 2",
                   },
                   {
                     "content_type" => "text/html",
-                    "content" => "be 2"
-                  }
-                ]
+                    "content" => "be 2",
+                  },
+                ],
               },
               {
                 "title" => "Part 3",
@@ -72,13 +72,13 @@ FactoryBot.define do
                 "body" => [
                   {
                     "content_type" => "text/govspeak",
-                    "content" => "some 3"
+                    "content" => "some 3",
                   },
                   {
                     "content_type" => "text/html",
-                    "content" => "some 3"
-                  }
-                ]
+                    "content" => "some 3",
+                  },
+                ],
               },
               {
                 "title" => "Part 4",
@@ -90,10 +90,10 @@ FactoryBot.define do
                   },
                   {
                     "content_type" => "text/html",
-                    "content" => "content 4."
-                  }
-                ]
-              }
+                    "content" => "content 4.",
+                  },
+                ],
+              },
             ]
           result.merge! attributes
         end
@@ -105,23 +105,23 @@ FactoryBot.define do
     end
 
     trait :travel_advice do
-      schema_name { 'travel_advice' }
-      document_type { 'travel_advice' }
+      schema_name { "travel_advice" }
+      document_type { "travel_advice" }
       transient do
-        summary { 'summary content' }
+        summary { "summary content" }
       end
       payload do
         GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
-          result['base_path'] = base_path
-          result['payload_version'] = payload_version
-          result['content_id'] = content_id
-          result['locale'] = locale
-          result.delete('withdrawn_notice')
-          result['details']['summary'] = [
+          result["base_path"] = base_path
+          result["payload_version"] = payload_version
+          result["content_id"] = content_id
+          result["locale"] = locale
+          result.delete("withdrawn_notice")
+          result["details"]["summary"] = [
             "content_type" => "text/html",
-            "content" => summary
+            "content" => summary,
           ]
-          result['details']['parts'] =
+          result["details"]["parts"] =
             [
               {
                 "title" => "Part 1",
@@ -129,9 +129,9 @@ FactoryBot.define do
                 "body" => [
                   {
                     "content_type" => "text/html",
-                    "content" => "Here 1"
-                  }
-                ]
+                    "content" => "Here 1",
+                  },
+                ],
               },
               {
                 "title" => "Part 2",
@@ -139,10 +139,10 @@ FactoryBot.define do
                 "body" => [
                   {
                     "content_type" => "text/html",
-                    "content" => "be 2"
-                  }
-                ]
-              }
+                    "content" => "be 2",
+                  },
+                ],
+              },
             ]
           result.merge! attributes
         end
@@ -153,23 +153,23 @@ FactoryBot.define do
   factory :gone_message, parent: :message do
     payload do
       {
-        'document_type' => 'gone',
-        'schema_name' => 'gone',
-        'base_path' => base_path,
-        'locale' => locale,
-        'publishing_app' => 'whitehall',
-        'details' => {
-          'explanation' => '',
-          'alternative_path' => ''
+        "document_type" => "gone",
+        "schema_name" => "gone",
+        "base_path" => base_path,
+        "locale" => locale,
+        "publishing_app" => "whitehall",
+        "details" => {
+          "explanation" => "",
+          "alternative_path" => "",
         },
-        'routes' => [
+        "routes" => [
           {
-            'path' => content_id,
-            'type' => 'exact'
-          }
+            "path" => content_id,
+            "type" => "exact",
+          },
         ],
-        'content_id' => content_id,
-        'payload_version' => payload_version
+        "content_id" => content_id,
+        "payload_version" => payload_version,
       }
     end
   end
@@ -177,23 +177,23 @@ FactoryBot.define do
   factory :redirect_message, parent: :message do
     payload do
       {
-        'document_type' => 'redirect',
-        'schema_name' => 'redirect',
-        'base_path' => base_path,
-        'locale' => locale,
-        'publishing_app' => 'whitehall',
-        'details' => {
-          'explanation' => '',
-          'alternative_path' => ''
+        "document_type" => "redirect",
+        "schema_name" => "redirect",
+        "base_path" => base_path,
+        "locale" => locale,
+        "publishing_app" => "whitehall",
+        "details" => {
+          "explanation" => "",
+          "alternative_path" => "",
         },
-        'routes' => [
+        "routes" => [
           {
-            'path' => content_id,
-            'type' => 'exact'
-          }
+            "path" => content_id,
+            "type" => "exact",
+          },
         ],
-        'content_id' => content_id,
-        'payload_version' => payload_version
+        "content_id" => content_id,
+        "payload_version" => payload_version,
       }
     end
   end

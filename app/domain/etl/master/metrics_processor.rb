@@ -1,4 +1,4 @@
-require_dependency 'concerns/trace_and_recoverable'
+require_dependency "concerns/trace_and_recoverable"
 
 module Etl
   module Master
@@ -24,9 +24,9 @@ module Etl
       attr_reader :date
 
       def create_metrics
-        log process: :metrics, message: 'about to get the Dimensions::Date'
+        log process: :metrics, message: "about to get the Dimensions::Date"
         dimensions_date = Dimensions::Date.find_existing_or_create(date)
-        log process: :metrics, message: 'got the Dimensions::Date'
+        log process: :metrics, message: "got the Dimensions::Date"
         Dimensions::Edition.live.find_in_batches(batch_size: 50000)
           .with_index do |batch, index|
           log process: :metrics, message: "processing #{batch.length} items in batch #{index}"

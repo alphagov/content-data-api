@@ -1,18 +1,18 @@
-require 'json'
+require "json"
 
 
 class Dimensions::Edition < ApplicationRecord
-  has_one :facts_edition, class_name: "Facts::Edition", foreign_key: :dimensions_edition_id, inverse_of: 'dimensions_edition'
-  belongs_to :publishing_api_event, class_name: "Events::PublishingApi", foreign_key: :publishing_api_event_id, inverse_of: 'dimensions_editions'
-  belongs_to :parent, class_name: 'Dimensions::Edition', optional: true
-  has_many :children, -> { where(live: true) }, class_name: 'Dimensions::Edition', foreign_key: 'parent_id', inverse_of: 'parent'
+  has_one :facts_edition, class_name: "Facts::Edition", foreign_key: :dimensions_edition_id, inverse_of: "dimensions_edition"
+  belongs_to :publishing_api_event, class_name: "Events::PublishingApi", foreign_key: :publishing_api_event_id, inverse_of: "dimensions_editions"
+  belongs_to :parent, class_name: "Dimensions::Edition", optional: true
+  has_many :children, -> { where(live: true) }, class_name: "Dimensions::Edition", foreign_key: "parent_id", inverse_of: "parent"
   validates :content_id, presence: true
   validates :base_path, presence: true
   validates :schema_name, presence: true
   validates :publishing_api_payload_version, presence: true
   validates :warehouse_item_id, presence: true
 
-  scope :by_base_path, ->(base_path) { where('base_path like (?)', base_path) }
+  scope :by_base_path, ->(base_path) { where("base_path like (?)", base_path) }
   scope :live, -> { where(live: true) }
   scope :live_by_content_id, ->(content_id, locale) { where(content_id: content_id, locale: locale, live: true) }
   scope :live_by_base_path, ->(base_paths) { where(base_path: base_paths, live: true) }

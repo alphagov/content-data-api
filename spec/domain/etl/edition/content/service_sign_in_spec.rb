@@ -9,7 +9,7 @@ RSpec.describe Etl::Edition::Content::Parser do
             { text: "Use Gateway", hint_text: "You have a user ID" },
             { text: "Use Verify", hint_text: "You have an account" },
           ] },
-        create_new_account: { title: "Create", body: "Click here" }
+        create_new_account: { title: "Create", body: "Click here" },
       } }
     expected = "Proof Use Gateway You have a user ID Use Verify You have an account Create Click here"
     expect(subject.extract_content(json.deep_stringify_keys)).to eq(expected)

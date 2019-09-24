@@ -4,7 +4,7 @@ class UpdateAggregationsSearchLastTwelveMonthsToVersion10 < ActiveRecord::Migrat
       :aggregations_search_last_twelve_months,
       version: 10,
       revert_to_version: 9,
-      materialized: true
+      materialized: true,
     )
   end
 end

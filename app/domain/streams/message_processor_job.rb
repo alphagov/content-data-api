@@ -1,4 +1,4 @@
-require_dependency('streams/messages/factory')
+require_dependency("streams/messages/factory")
 
 module Streams
   class MessageProcessorJob < ActiveJob::Base

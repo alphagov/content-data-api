@@ -16,7 +16,7 @@ RSpec.describe Etl::Edition::Content::Parser do
           { name: "Design",
             description: "thinking" },
           { name: "Performance",
-            description: "analysis" }
+            description: "analysis" },
         ] } }
     expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs Design thinking Performance analysis")
   end

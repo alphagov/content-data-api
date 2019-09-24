@@ -6,7 +6,7 @@ class Finders::AllDocumentTypes
   def run
     ActiveRecord::Base.connection
       .execute(query)
-      .field_values('document_type')
+      .field_values("document_type")
       .reject { |dt| DocumentType::IGNORED_TYPES.include? dt }
       .map { |dt| DocumentType.new(id: dt, name: dt.humanize) }
   end

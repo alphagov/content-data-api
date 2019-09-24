@@ -1,3 +1,3 @@
-require 'active_model_serializers'
+require "active_model_serializers"
 
 ActiveModel::Serializer.config.adapter = :json

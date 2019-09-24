@@ -1,5 +1,5 @@
 module Aggregations
   def self.table_name_prefix
-    'aggregations_'
+    "aggregations_"
   end
 end

@@ -1,7 +1,7 @@
 class Api::ContentRequest
   VAILD_SORT_ATTRIBUTES = (Metric.daily_metrics.map(&:name) + %w[title document_type]).freeze
   VALID_SORT_DIRECTIONS = %w[asc desc].freeze
-  VALID_TIME_PERIODS = ['past-30-days', 'last-month', 'past-3-months', 'past-6-months', 'past-year'].freeze
+  VALID_TIME_PERIODS = ["past-30-days", "last-month", "past-3-months", "past-6-months", "past-year"].freeze
   include ActiveModel::Validations
 
   attr_reader :organisation_id, :document_type, :page, :page_size, :date_range, :search_term
@@ -31,38 +31,38 @@ class Api::ContentRequest
       page: page,
       page_size: page_size,
       sort_attribute: @sort_attribute,
-      sort_direction: @sort_direction
+      sort_direction: @sort_direction,
     }
   end
 
 private
 
   def parse_sort_parameter(sort_param)
-    sort_param.present? ? sort_param.split(':', 2) : [nil, nil]
+    sort_param.present? ? sort_param.split(":", 2) : [nil, nil]
   end
 
   def valid_sort_attribute
     return true if @sort_attribute.in?(VAILD_SORT_ATTRIBUTES) || @sort_attribute.nil?
 
-    errors.add('sort', 'this is not a valid sort attribute')
+    errors.add("sort", "this is not a valid sort attribute")
   end
 
   def valid_sort_direction
     return true if @sort_direction.in?(VALID_SORT_DIRECTIONS) || @sort_direction.nil?
 
-    errors.add('sort', 'this is not a valid sort direction')
+    errors.add("sort", "this is not a valid sort direction")
   end
 
   def valid_date_range
     return true if date_range.in?(VALID_TIME_PERIODS) || date_range.blank?
 
-    errors.add('date_range', 'this is not a valid date range')
+    errors.add("date_range", "this is not a valid date range")
   end
 
   def valid_organisation_id
     return true if %w[all none].include? organisation_id
     return true if UUID.validate organisation_id
 
-    errors.add('organisation_id', 'this is not a valid organisation id')
+    errors.add("organisation_id", "this is not a valid organisation id")
   end
 end
