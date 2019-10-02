@@ -96,10 +96,6 @@ RSpec.describe "etl.rake", type: task do
       Rake::Task["etl:rerun_master"].invoke("2018-10-31", "2018-11-02")
     end
 
-    it "deletes the existing metrics" do
-      expect(Facts::Metric.pluck(:dimensions_date_id)).to eq([Date.new(2018, 10, 30), Date.new(2018, 11, 3)])
-    end
-
     it "calls Etl::Master::MasterProcessor.process with each date" do
       [Date.new(2018, 10, 31), Date.new(2018, 11, 1), Date.new(2018, 11, 2)].each do |date|
         expect(processor).to have_received(:process).once.with(date: date)
