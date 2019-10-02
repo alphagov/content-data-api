@@ -80,21 +80,17 @@ namespace :etl do
     end
   end
 
-  desc "Delete existing metrics and Run Etl Master process across a range of dates"
+  desc "Run ETL Master process across a range of dates"
   task :rerun_master, %i[from to] => [:environment] do |_t, args|
     from = args[:from].to_date
     to = args[:to].to_date
     date_range = (from..to)
     date_range.each do |date|
-      ActiveRecord::Base.transaction do
-        console_log "Deleting existing metrics for #{date}"
-        Facts::Metric.where(dimensions_date_id: date).delete_all
-        console_log "Running Etl::Master process for #{date}"
-        unless Etl::Master::MasterProcessor.process(date: date)
-          abort("Etl::Master::MasterProcessor failed")
-        end
-        console_log "finished running Etl::Master for #{date}"
+      console_log "Running Etl::Master process for #{date}"
+      unless Etl::Master::MasterProcessor.process(date: date)
+        abort("Etl::Master::MasterProcessor failed")
       end
+      console_log "finished running Etl::Master for #{date}"
     end
 
     extract_month_ends(date_range).each do |date|
