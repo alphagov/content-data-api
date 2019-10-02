@@ -1,5 +1,5 @@
 namespace :etl do
-  desc "Run ETL master process"
+  desc "Run ETL master process for yesterday"
   task master: :environment do
     unless Etl::Master::MasterProcessor.process
       abort("Etl::Master::MasterProcessor failed")
