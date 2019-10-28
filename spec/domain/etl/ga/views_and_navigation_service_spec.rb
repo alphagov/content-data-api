@@ -99,11 +99,46 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
           .to yield_with_args(arg)
       end
     end
+
+    context "when report data has page path with an invalid URI" do
+      it "should ignore page" do
+        allow(google_client).to receive(:fetch_all) do
+          [
+            build_report_data(
+              build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1 1 1)),
+            ),
+            build_report_data(
+              build_report_row(dimensions: [path_with_invalid_uri], metrics: %w(1 1 1 1 1 1 1 1)),
+            ),
+          ]
+        end
+
+        arg = [
+          a_hash_including(
+            "page_path" => "/foo",
+            "pviews" => 1,
+            "upviews" => 1,
+            "entrances" => 1,
+            "exits" => 1,
+            "bounces" => 1,
+            "page_time" => 1,
+            "date" => "2018-02-20",
+          ),
+        ]
+
+        expect { |probe| subject.find_in_batches(date: date, batch_size: 1, &probe) }
+          .to yield_with_args(arg)
+      end
+    end
   end
 
 private
 
   def path_with_long_query
     "/foo?q=".concat("a" * 1600)
+  end
+
+  def path_with_invalid_uri
+    "/foo#}&sector_business_area[]=accommodation"
   end
 end

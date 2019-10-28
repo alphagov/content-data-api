@@ -12,7 +12,7 @@ class Etl::GA::ViewsAndNavigationService
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_data_labels))
-      .reject(&method(:long_query_string?))
+      .reject(&method(:invalid_record?))
       .map { |h| h["date"] = date.strftime("%F"); h }
       .each_slice(batch_size) { |slice| yield slice }
   end
@@ -38,8 +38,10 @@ private
     }
   end
 
-  def long_query_string?(data)
-    data["page_path"].length > PAGE_PATH_LENGTH_LIMIT && !URI.parse(data["page_path"]).query.nil?
+  def invalid_record?(data)
+    URI.parse(data["page_path"]).query.present? && data["page_path"].length > PAGE_PATH_LENGTH_LIMIT
+  rescue URI::InvalidURIError
+    true
   end
 
   def extract_dimensions_and_metrics(row)
