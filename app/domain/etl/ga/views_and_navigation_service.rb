@@ -39,7 +39,7 @@ private
   end
 
   def long_query_string?(data)
-    data["page_path"].length > PAGE_PATH_LENGTH_LIMIT && !URI.parse(data["page_path"]).query.nil?
+    data["page_path"].length > PAGE_PATH_LENGTH_LIMIT && URI.parse(data["page_path"]).query.present?
   end
 
   def extract_dimensions_and_metrics(row)
