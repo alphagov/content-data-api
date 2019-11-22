@@ -12,6 +12,7 @@ class Etl::Edition::Content::Parsers::NoContent
       facet_group
       facet_value
       generic
+      government
       homepage
       knowledge_alpha
       organisations_homepage
