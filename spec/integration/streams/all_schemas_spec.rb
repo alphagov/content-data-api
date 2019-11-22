@@ -17,7 +17,7 @@ RSpec.describe "Process all schemas" do
   end
 
   it "knows how to parse all GOV.UK schemas" do
-    expect(known_schemas).to match_array(GovukSchemas::Schema.schema_names)
+    expect(known_schemas).to include(*GovukSchemas::Schema.schema_names)
   end
 
 private
