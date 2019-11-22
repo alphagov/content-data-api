@@ -45,6 +45,7 @@ private
       generic
       generic_with_external_related_links
       gone
+      government
       guide
       help_page
       hmrc_manual
