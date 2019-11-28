@@ -86,7 +86,14 @@ private
   end
 
   def historical?
-    @payload.dig("details", "government").present? && !@payload.dig("details", "government", "current")
+    government_current = @payload.dig(
+      "expanded_links", "government", 0, "details", "current"
+    )
+
+    # Treat no government as not historical
+    return false if government_current.nil?
+
+    !government_current
   end
 
   def mandatory_fields_nil?
