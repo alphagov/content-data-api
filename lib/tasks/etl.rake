@@ -22,7 +22,7 @@ namespace :etl do
   end
 
   desc "Run Etl::Aggregations::Search"
-  task :repopulate_aggregations_search do
+  task repopulate_aggregations_search: :environment do
     console_log "repopulating Search Aggregations"
     Etl::Aggregations::Search.process
     console_log "finished repopulating Search Aggregations"

@@ -29,7 +29,7 @@ class Metric
   end
 
   def self.source
-    @source ||= YAML.load_file(Rails.root.join("config", "metrics.yml"))
+    @source ||= YAML.load_file(Rails.root.join("config/metrics.yml"))
   end
 
   def <=>(other)
