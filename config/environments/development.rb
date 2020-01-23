@@ -58,4 +58,6 @@ Rails.application.configure do
       end
     end
   end
+
+  config.hosts << "content-data-api.dev.gov.uk"
 end
