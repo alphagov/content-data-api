@@ -92,7 +92,7 @@ GEM
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
     ffi (1.11.3)
-    gds-api-adapters (63.4.0)
+    gds-api-adapters (63.5.0)
       addressable
       link_header
       null_logger
@@ -424,7 +424,7 @@ DEPENDENCIES
   byebug
   database_cleaner
   factory_bot_rails
-  gds-api-adapters (~> 63.4.0)
+  gds-api-adapters (~> 63.5.0)
   gds-sso
   google-api-client (~> 0.37)
   govuk_app_config
