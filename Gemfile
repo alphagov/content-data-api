@@ -38,7 +38,7 @@ group :development, :test do
   gem 'byebug'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
-  gem 'rubocop-govuk', '~> 2'
+  gem 'rubocop-govuk', '~> 3'
   gem 'govuk_schemas', '4.0.0'
   gem 'listen'
   gem 'pry-byebug'
