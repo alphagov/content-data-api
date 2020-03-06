@@ -21,5 +21,9 @@ RSpec.describe Finders::SelectView do
     it "returns last year view if date range is `past-year`" do
       expect(described_class.new("past-year").run).to eq(model_name: Aggregations::SearchLastTwelveMonths, table_name: "last_twelve_months")
     end
+
+    it "returns a specific month if the date range is a valid specified month" do
+      expect(described_class.new("november-2019").run).to eq(model_name: Aggregations::MonthlyMetric, table_name: "aggregations_monthly_metrics")
+    end
   end
 end

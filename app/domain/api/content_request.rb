@@ -1,8 +1,9 @@
 class Api::ContentRequest
   VAILD_SORT_ATTRIBUTES = (Metric.daily_metrics.map(&:name) + %w[title document_type]).freeze
   VALID_SORT_DIRECTIONS = %w[asc desc].freeze
-  VALID_TIME_PERIODS = ["past-30-days", "last-month", "past-3-months", "past-6-months", "past-year"].freeze
+  VALID_TIME_PERIODS = SpecificMonths::VALID_SPECIFIC_MONTHS + ["past-30-days", "last-month", "past-3-months", "past-6-months", "past-year"].freeze
   include ActiveModel::Validations
+  include SpecificMonths
 
   attr_reader :organisation_id, :document_type, :page, :page_size, :date_range, :search_term
   validate :valid_organisation_id
