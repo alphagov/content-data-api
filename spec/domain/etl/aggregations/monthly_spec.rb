@@ -7,12 +7,12 @@ RSpec.describe Etl::Aggregations::Monthly do
   let(:edition2) { create :edition, base_path: "/path2", live: true, date: "2018-02-20" }
 
   it "calculates monthly aggregations for a given date" do
-    create :metric, edition: edition1, date: "2018-02-20", pviews: 20, upviews: 10
-    create :metric, edition: edition1, date: "2018-02-21", pviews: 40, upviews: 20
-    create :metric, edition: edition1, date: "2018-02-22", pviews: 60, upviews: 30
+    create :metric, edition: edition1, date: "2018-02-20", pviews: 20, upviews: 10, useful_yes: 50, useful_no: 50
+    create :metric, edition: edition1, date: "2018-02-21", pviews: 40, upviews: 20, useful_yes: 50, useful_no: 50
+    create :metric, edition: edition1, date: "2018-02-22", pviews: 60, upviews: 30, useful_yes: 50, useful_no: 50
 
-    create :metric, edition: edition2, date: "2018-02-20", pviews: 100, upviews: 10
-    create :metric, edition: edition2, date: "2018-02-21", pviews: 200, upviews: 20
+    create :metric, edition: edition2, date: "2018-02-20", pviews: 100, upviews: 10, useful_yes: 50, useful_no: 50
+    create :metric, edition: edition2, date: "2018-02-21", pviews: 200, upviews: 20, useful_yes: 50, useful_no: 50
 
     subject.process(date: date)
 
@@ -25,11 +25,13 @@ RSpec.describe Etl::Aggregations::Monthly do
       dimensions_edition_id: edition1.id,
       pviews: 120,
       upviews: 60,
+      satisfaction: 0.5,
     )
     expect(results.second).to have_attributes(
       dimensions_edition_id: edition2.id,
       pviews: 300,
       upviews: 30,
+      satisfaction: 0.5,
     )
   end
 
@@ -65,7 +67,7 @@ RSpec.describe Etl::Aggregations::Monthly do
     )
   end
 
-  Metric.daily_metrics.map(&:name).each do |metric_name|
+  Metric.daily_metrics.reject { |metric| metric.name == "satisfaction" }.map(&:name).each do |metric_name|
     it "Calculates aggregations for metric: `#{metric_name}`" do
       create :metric, edition: edition1, date: "2018-02-21", metric_name => 10
       create :metric, edition: edition1, date: "2018-02-22", metric_name => 20

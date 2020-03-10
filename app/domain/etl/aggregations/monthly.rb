@@ -65,7 +65,10 @@ private
         sum(entrances),
         sum(searches),
         sum(feedex),
-        sum(satisfaction),
+        CASE
+          WHEN ((sum(useful_yes) + sum(useful_no)) = 0) THEN NULL::double precision
+          ELSE (sum(useful_yes)::double precision / ((sum(useful_yes) + sum(useful_no)))::double precision)
+        END AS satisfaction,
         sum(useful_yes),
         sum(useful_no),
         sum(exits),
