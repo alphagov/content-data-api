@@ -1,4 +1,6 @@
 class Finders::Content
+  include SpecificMonths
+
   def self.call(filter:)
     new(filter).call
   end
@@ -42,11 +44,22 @@ private
 
   def apply_filter
     scope = view[:model_name].all
+    scope = find_by_month(scope) if SpecificMonths::VALID_SPECIFIC_MONTHS.include?(@date_range)
     scope = find_by_search_term(scope) if @filter[:search_term].present?
     scope = find_by_document_type(scope) if @filter[:document_type].present?
     scope = find_by_organisation(scope)
 
     scope
+  end
+
+  def find_by_month(scope)
+    month, year = @date_range.split("-")
+    month_num = Date::MONTHNAMES.index(month.capitalize)
+    month_id = "%s-%02d" % [year, month_num]
+
+    scope = scope.where("#{view[:table_name]}.dimensions_month_id = '#{month_id}'")
+    scope = scope.joins("JOIN dimensions_editions ON #{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
+    scope.joins("JOIN facts_editions ON #{view[:table_name]}.dimensions_edition_id = facts_editions.dimensions_edition_id")
   end
 
   def find_by_search_term(scope)

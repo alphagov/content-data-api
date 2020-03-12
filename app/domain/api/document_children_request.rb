@@ -1,8 +1,9 @@
 class Api::DocumentChildrenRequest
   VAILD_SORT_KEYS = (Metric.daily_metrics.map(&:name) + %w[title document_type sibling_order]).freeze
   VALID_SORT_DIRECTIONS = %w[asc desc].freeze
-  VALID_TIME_PERIODS = ["past-30-days", "last-month", "past-3-months", "past-6-months", "past-year"].freeze
+  VALID_TIME_PERIODS = SpecificMonths::VALID_SPECIFIC_MONTHS + ["past-30-days", "last-month", "past-3-months", "past-6-months", "past-year"].freeze
   include ActiveModel::Validations
+  include SpecificMonths
 
   validate :valid_time_period
   validate :valid_sort_key

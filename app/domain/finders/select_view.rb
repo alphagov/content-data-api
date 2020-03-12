@@ -1,4 +1,5 @@
 class Finders::SelectView
+  include SpecificMonths
   attr_reader :date_range
 
   def initialize(date_range)
@@ -14,6 +15,8 @@ class Finders::SelectView
 private
 
   def model_name
+    return ::Aggregations::MonthlyMetric if specified_month
+
     aggregations = {
       "last-month" => ::Aggregations::SearchLastMonth,
       "past-3-months" => ::Aggregations::SearchLastThreeMonths,
@@ -24,6 +27,8 @@ private
   end
 
   def table_name
+    return "aggregations_monthly_metrics" if specified_month
+
     table_names = {
       "last-month" => "last_months",
       "past-3-months" => "last_three_months",
@@ -34,7 +39,11 @@ private
   end
 
   def valid_date_range?
-    ["past-30-days", "last-month", "past-3-months", "past-6-months", "past-year"].include?(date_range)
+    specified_month || ["past-30-days", "last-month", "past-3-months", "past-6-months", "past-year"].include?(date_range)
+  end
+
+  def specified_month
+    @specified_month ||= SpecificMonths::VALID_SPECIFIC_MONTHS.include?(date_range)
   end
 
   class InvalidDateRangeError < StandardError
