@@ -329,7 +329,7 @@ GEM
       rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
-    rubocop-govuk (3.2.0)
+    rubocop-govuk (3.3.0)
       rubocop (= 0.80.1)
       rubocop-rails (~> 2)
       rubocop-rspec (~> 1.28)
@@ -450,7 +450,7 @@ DEPENDENCIES
   rails-erd
   rspec-its
   rspec-rails
-  rubocop-govuk (~> 3.2)
+  rubocop-govuk (~> 3.3)
   ruby-progressbar
   scenic
   shoulda-matchers
