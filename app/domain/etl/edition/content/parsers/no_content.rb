@@ -15,6 +15,7 @@ class Etl::Edition::Content::Parsers::NoContent
       government
       homepage
       knowledge_alpha
+      ministers_index
       organisations_homepage
       person
       placeholder_corporate_information_page
