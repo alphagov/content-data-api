@@ -58,6 +58,7 @@ private
       mainstream_browse_page
       manual
       manual_section
+      ministers_index
       need
       news_article
       organisation
