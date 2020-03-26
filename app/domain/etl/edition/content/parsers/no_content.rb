@@ -5,6 +5,7 @@ class Etl::Edition::Content::Parsers::NoContent
 
   def schemas
     %w[
+      coronavirus_landing_page
       coming_soon
       completed_transaction
       external_content
