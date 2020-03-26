@@ -31,6 +31,7 @@ private
       completed_transaction
       consultation
       contact
+      coronavirus_landing_page
       corporate_information_page
       detailed_guide
       document_collection

@@ -9,6 +9,7 @@ RSpec.describe Etl::Edition::Content::Parser do
     no_content_schemas = %w[
       coming_soon
       completed_transaction
+      coronavirus_landing_page
       external_content
       facet
       facet_group
