@@ -15,17 +15,17 @@ namespace :etl do
     months.each do |month|
       date = Date.new(*month, 1)
       string_date = date.strftime("%Y-%m")
-      console_log "repopulating Monthly Aggregation for #{string_date}"
+      puts "repopulating Monthly Aggregation for #{string_date}"
       Etl::Aggregations::Monthly.process(date: date)
-      console_log "finished repopulating Monthly Aggregation for #{string_date}"
+      puts "finished repopulating Monthly Aggregation for #{string_date}"
     end
   end
 
   desc "Run Etl::Aggregations::Search"
   task repopulate_aggregations_search: :environment do
-    console_log "repopulating Search Aggregations"
+    puts "repopulating Search Aggregations"
     Etl::Aggregations::Search.process
-    console_log "finished repopulating Search Aggregations"
+    puts "finished repopulating Search Aggregations"
   end
 
   desc "Run Etl::GA::ViewsAndNavigationProcessor for range of dates"
@@ -33,11 +33,11 @@ namespace :etl do
     from = args[:from].to_date
     to = args[:to].to_date
     (from..to).each do |date|
-      console_log "repopulating GA pviews for #{date}"
+      puts "repopulating GA pviews for #{date}"
       unless Etl::GA::ViewsAndNavigationProcessor.process(date: date)
         abort("Etl::GA::ViewsAndNavigationProcessor failed")
       end
-      console_log "finished repopulating GA pviews for #{date}"
+      puts "finished repopulating GA pviews for #{date}"
     end
   end
 
@@ -46,11 +46,11 @@ namespace :etl do
     from = args[:from].to_date
     to = args[:to].to_date
     (from..to).each do |date|
-      console_log "repopulating searches for #{date}"
+      puts "repopulating searches for #{date}"
       unless Etl::GA::InternalSearchProcessor.process(date: date)
         abort("Etl::GA::InternalSearchProcessor failed")
       end
-      console_log "finished repopulating searches for #{date}"
+      puts "finished repopulating searches for #{date}"
     end
   end
 
@@ -59,11 +59,11 @@ namespace :etl do
     from = args[:from].to_date
     to = args[:to].to_date
     (from..to).each do |date|
-      console_log "repopulating useful scores for #{date}"
+      puts "repopulating useful scores for #{date}"
       unless Etl::GA::UserFeedbackProcessor.process(date: date)
         abort("Etl::GA::UserFeedbackProcessor failed")
       end
-      console_log "finished repopulating useful scores for #{date}"
+      puts "finished repopulating useful scores for #{date}"
     end
   end
 
@@ -72,11 +72,11 @@ namespace :etl do
     from = args[:from].to_date
     to = args[:to].to_date
     (from..to).each do |date|
-      console_log "repopulating feedex for #{date}"
+      puts "repopulating feedex for #{date}"
       unless Etl::Feedex::Processor.process(date: date)
         abort("Etl::Feedex::Processor failed")
       end
-      console_log "finished repopulating feedex for #{date}"
+      puts "finished repopulating feedex for #{date}"
     end
   end
 
@@ -86,15 +86,16 @@ namespace :etl do
     to = args[:to].to_date
     date_range = (from..to)
     date_range.each do |date|
-      console_log "Running Etl::Master process for #{date}"
+      puts "Running Etl::Master process for #{date}"
       unless Etl::Master::MasterProcessor.process(date: date)
         abort("Etl::Master::MasterProcessor failed")
       end
-      console_log "finished running Etl::Master for #{date}"
+      puts "finished running Etl::Master for #{date}"
     end
 
-    extract_month_ends(date_range).each do |date|
-      console_log "Running monthly and search aggregations for #{date}"
+    month_ends = date_range.map(&:end_of_month).uniq
+    month_ends.each do |date|
+      puts "Running monthly and search aggregations for #{date}"
       Etl::Master::MasterProcessor.process_aggregations(date: date)
     end
   end
@@ -103,13 +104,5 @@ namespace :etl do
   task :ga, [:date] => [:environment] do |_t, args|
     date = args[:date]
     GA.process(date: date.to_date)
-  end
-
-  def extract_month_ends(date_range)
-    date_range.map(&:end_of_month).uniq
-  end
-
-  def console_log(str)
-    puts str unless Rails.env.test?
   end
 end

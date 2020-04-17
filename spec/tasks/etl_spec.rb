@@ -1,4 +1,8 @@
 RSpec.describe "etl.rake", type: task do
+  before do
+    allow($stdout).to receive(:puts)
+  end
+
   describe "rake etl:master"
   it "calls Etl::Master::MasterProcessor.process" do
     processor = class_double(Etl::Master::MasterProcessor, process: true).as_stubbed_const
