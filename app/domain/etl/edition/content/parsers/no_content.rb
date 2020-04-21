@@ -24,7 +24,6 @@ class Etl::Edition::Content::Parsers::NoContent
       placeholder_organisation
       placeholder_policy_area
       placeholder_topical_event
-      placeholder_working_group
       placeholder_world_location
       placeholder_worldwide_organisation
       placeholder_person
