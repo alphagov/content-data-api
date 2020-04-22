@@ -5,11 +5,9 @@ require_relative "config/application"
 
 Rails.application.load_tasks
 
-namespace :lint do
-  task ruby: :environment do
-    sh "bundle exec rubocop --parallel app config lib spec"
-  end
+desc "Lint ruby files"
+task lint: :environment do
+  sh "bundle exec rubocop --parallel app config lib spec"
 end
 
-task lint: ["lint:ruby"]
 task default: %i[spec lint]

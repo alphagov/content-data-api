@@ -8,7 +8,6 @@ inherit_mode:
     - Exclude
 
 AllCops:
-  TargetRubyVersion: 2.3
   Exclude:
     - "db/migrate/201*.rb"
     - "db/schema.rb"
