@@ -51,7 +51,6 @@ RSpec.describe Aggregations::SearchLastSixMonths, type: :model do
     expect(subject.first).to have_attributes(dimensions_edition_id: edition2.id)
   end
 
-
   it "does not include metrics older than 6 months ago" do
     six_months_ago = Date.yesterday - 6.months
     edition1 = create :edition, warehouse_item_id: "warehouse_item_id1", date: 1.month.ago

@@ -492,7 +492,6 @@ RSpec.describe Finders::Content do
 
       subject { described_class.call(filter: filter.merge(search_term: search_term))[:results] }
 
-
       context "when search terms include the protocol (http)" do
         let(:search_term) { "http://base-path" }
 

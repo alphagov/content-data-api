@@ -11,7 +11,6 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
   let(:date) { Date.new(2018, 2, 20) }
 
-
   context "When the base_path matches the GA path" do
     before { allow(Etl::GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(ga_response) }
 

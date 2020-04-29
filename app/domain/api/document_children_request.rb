@@ -9,7 +9,6 @@ class Api::DocumentChildrenRequest
   validate :valid_sort_key
   validate :valid_sort_direction
 
-
   def initialize(params)
     @time_period = params[:time_period]
     @sort_key, @sort_direction = parse_sort_parameter(params[:sort])

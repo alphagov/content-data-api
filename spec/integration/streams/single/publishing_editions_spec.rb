@@ -98,7 +98,6 @@ RSpec.describe "PublishingAPI message queue" do
     old_message = build :message, content_id: content_id, attributes: { "payload_version" => 1 }
     subject.process(old_message)
 
-
     expect(Dimensions::Edition.all).to contain_exactly(
       have_attributes(
         warehouse_item_id: "#{content_id}:en",
@@ -177,7 +176,6 @@ RSpec.describe "PublishingAPI message queue" do
     expect(gone_message1).to be_acked
     expect(gone_message2).to be_acked
   end
-
 
   it "publishes redirect edition for content item" do
     expect(GovukStatsd).to receive(:increment)

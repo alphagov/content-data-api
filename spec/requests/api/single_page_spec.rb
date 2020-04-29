@@ -86,7 +86,6 @@ RSpec.describe "/single_page", type: :request do
         expect(body).to include("number_of_related_content" => 4)
       end
 
-
       it "returns the count of siblings + parent for the child" do
         get "/single_page/child-1", params: { from: "2018-01-01", to: "2018-01-31" }
 

@@ -111,7 +111,6 @@ RSpec.describe Dimensions::Date, type: :model do
     end
   end
 
-
   describe ".find_existing_or_create" do
     let(:date) { ::Date.new(2017, 12, 21) }
 
