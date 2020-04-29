@@ -1,6 +1,5 @@
 require "json"
 
-
 class Dimensions::Edition < ApplicationRecord
   has_one :facts_edition, class_name: "Facts::Edition", foreign_key: :dimensions_edition_id, inverse_of: "dimensions_edition"
   belongs_to :publishing_api_event, class_name: "Events::PublishingApi", foreign_key: :publishing_api_event_id, inverse_of: "dimensions_editions"

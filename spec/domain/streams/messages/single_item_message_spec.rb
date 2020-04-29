@@ -95,7 +95,6 @@ RSpec.describe Streams::Messages::SingleItemMessage do
       end
     end
 
-
     context "when parent/children keys are missing" do
       let(:links) { {} }
 
@@ -157,7 +156,6 @@ RSpec.describe Streams::Messages::SingleItemMessage do
 
     context "when manual exists in links" do
       let(:links) { { "manual" => [{ "content_id" => "parent-id", "locale" => "en" }] } }
-
 
       it "sets the parent warehouse id under temp key" do
         expect(instance.edition_attributes[:parent_warehouse_id]).to eq("parent-id:en")

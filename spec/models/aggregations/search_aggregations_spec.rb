@@ -41,7 +41,6 @@ RSpec.describe Aggregations::SearchLastMonth, type: :model do
     expect(subject.pluck(:dimensions_edition_id)).to match_array([edition1.id, edition2.id])
   end
 
-
   describe "Boundaries" do
     it "does not include metrics before last month" do
       edition1 = create :edition, warehouse_item_id: "warehouse_item_id1", date: 1.month.ago

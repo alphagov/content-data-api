@@ -255,7 +255,6 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     it_behaves_like "when unchanged"
 
-
     it "extracts part 1 on the base path" do
       item = Dimensions::Edition.where(base_path: "/guide", live: true).first
       expect(item).to have_attributes(expected_edition_attributes(
