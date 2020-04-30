@@ -3,15 +3,15 @@ RSpec.describe Etl::Edition::Content::Parser do
 
   it "returns description if json does not have any child_taxons" do
     json = { schema_name: "taxon",
-      description: "Blogs",
-      links: {} }
+             description: "Blogs",
+             links: {} }
     expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs")
   end
 
   it "returns content json if schema_name is 'taxon'" do
     json = { schema_name: "taxon",
-      description: "Blogs",
-      links: { child_taxons: [
+             description: "Blogs",
+             links: { child_taxons: [
         { title: "One", description: "first" },
         { title: "Two", description: "second" },
       ] } }

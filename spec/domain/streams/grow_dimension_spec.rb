@@ -41,7 +41,7 @@ RSpec.describe Streams::GrowDimension do
                  document_text: edition.document_text,
                  publishing_api_payload_version: "5",
                },
-      )).to eq(false)
+             )).to eq(false)
     end
 
     context "when attributes we ignore have changed" do

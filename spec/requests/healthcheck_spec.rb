@@ -3,10 +3,10 @@ RSpec.describe "/healthcheck" do
     get "/healthcheck"
     json = JSON.parse(response.body)
 
-    expect(json["checks"]).to include("database_status").
-      and(include("etl_metric_values_pviews")).
-      and(include("etl_metric_values_upviews")).
-      and(include("etl_metric_values_feedex"))
+    expect(json["checks"]).to include("database_status")
+      .and(include("etl_metric_values_pviews"))
+      .and(include("etl_metric_values_upviews"))
+      .and(include("etl_metric_values_feedex"))
   end
 
   it "is not cacheable" do

@@ -191,7 +191,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
                                         document_type: "travel_advice",
                                         schema_name: "travel_advice",
                                         title: "the-title: Summary",
-      ))
+                                      ))
     end
 
     it "extracts /travel-advice/part1" do
@@ -204,7 +204,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
                                         document_type: "travel_advice",
                                         schema_name: "travel_advice",
                                         title: "the-title: Part 1",
-      ))
+                                      ))
     end
 
     it "extracts /travel-advice/part2" do
@@ -216,7 +216,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
                                         document_type: "travel_advice",
                                         schema_name: "travel_advice",
                                         title: "the-title: Part 2",
-      ))
+                                      ))
     end
 
     it "deprecates any other items" do
@@ -264,7 +264,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
                                         document_type: "guide",
                                         schema_name: "guide",
                                         title: "the-title: Part 1",
-      ))
+                                      ))
     end
 
     it "extracts part 2 under the base path" do
@@ -276,7 +276,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
                                         document_type: "guide",
                                         schema_name: "guide",
                                         title: "the-title: Part 2",
-      ))
+                                      ))
     end
 
     it "extracts part 3 under the base path" do
@@ -288,7 +288,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
                                         document_type: "guide",
                                         schema_name: "guide",
                                         title: "the-title: Part 3",
-      ))
+                                      ))
     end
 
     it "extracts part 4 under the base path" do
@@ -300,7 +300,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
                                         document_type: "guide",
                                         schema_name: "guide",
                                         title: "the-title: Part 4",
-      ))
+                                      ))
     end
 
     it "deprecates any other items" do

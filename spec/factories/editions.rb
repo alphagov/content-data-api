@@ -37,7 +37,7 @@ FactoryBot.define do
       FactoryBot.create :facts_edition, evaluator.facts.merge(
         dimensions_date: dim_date,
         dimensions_edition: new_edition,
-        )
+      )
       new_edition
     end
 

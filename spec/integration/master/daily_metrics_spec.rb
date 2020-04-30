@@ -168,7 +168,7 @@ RSpec.describe "Master process spec" do
       'page_size': 3,
     }.to_json
 
-    stub_request(:get, "http://support-api.dev.gov.uk/feedback-by-day/#{yesterday}?page=1&per_page=10000").
-      to_return(status: 200, body: response, headers: {})
+    stub_request(:get, "http://support-api.dev.gov.uk/feedback-by-day/#{yesterday}?page=1&per_page=10000")
+      .to_return(status: 200, body: response, headers: {})
   end
 end

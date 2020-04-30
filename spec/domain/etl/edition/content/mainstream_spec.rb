@@ -3,12 +3,12 @@ RSpec.describe Etl::Edition::Content::Parser do
 
   it "returns content json if schema_name is 'mainstream_browse_page'" do
     json = { schema_name: "mainstream_browse_page", title: "Travel Abroad",
-      description: "Go abroad",
-      links: { children: [
+             description: "Go abroad",
+             links: { children: [
         { title: "Driving Abroad" },
         { title: "Forced Marriage" },
         ],
-        related_topics: [
+                      related_topics: [
           { title: "Pets" },
           { title: "Help" },
           ] } }

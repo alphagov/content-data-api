@@ -15,16 +15,16 @@ RSpec.describe Etl::GA::UserFeedbackService do
       allow(google_client).to receive(:fetch_all) do
         [
           build_report_data(
-            build_report_row(dimensions: %w(/foo ffNoClick), metrics: %w(10)),
+            build_report_row(dimensions: %w[/foo ffNoClick], metrics: %w[10]),
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/foo ffYesClick), metrics: %w(7)),
+            build_report_row(dimensions: %w[/foo ffYesClick], metrics: %w[7]),
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/bar ffYesClick), metrics: %w(3)),
+            build_report_row(dimensions: %w[/bar ffYesClick], metrics: %w[3]),
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/bar ffNoClick), metrics: %w(13)),
+            build_report_row(dimensions: %w[/bar ffNoClick], metrics: %w[13]),
           ),
         ]
       end
@@ -56,10 +56,10 @@ RSpec.describe Etl::GA::UserFeedbackService do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
-              build_report_row(dimensions: %w(/foo ffNoClick), metrics: %w(10)),
+              build_report_row(dimensions: %w[/foo ffNoClick], metrics: %w[10]),
             ),
             build_report_data(
-              build_report_row(dimensions: %w(/bar ffYesClick), metrics: %w(3)),
+              build_report_row(dimensions: %w[/bar ffYesClick], metrics: %w[3]),
             ),
           ]
         end

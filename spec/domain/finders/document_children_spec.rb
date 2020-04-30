@@ -220,7 +220,7 @@ RSpec.describe Finders::DocumentChildren do
           response = records_to_hash(subject.call(parent, filters))
 
           titles = response.map { |result| result.fetch(:title) }
-          expect(titles).to eq(%w(A B C))
+          expect(titles).to eq(%w[A B C])
         end
       end
 
@@ -231,7 +231,7 @@ RSpec.describe Finders::DocumentChildren do
           response = records_to_hash(subject.call(parent, filters))
 
           titles = response.map { |result| result.fetch(:title) }
-          expect(titles).to eq(%w(A B C))
+          expect(titles).to eq(%w[A B C])
         end
       end
     end
@@ -246,7 +246,7 @@ RSpec.describe Finders::DocumentChildren do
           response = records_to_hash(subject.call(parent, filters))
 
           titles = response.map { |result| result.fetch(:title) }
-          expect(titles).to eq(%w(B A C))
+          expect(titles).to eq(%w[B A C])
         end
       end
 
@@ -257,7 +257,7 @@ RSpec.describe Finders::DocumentChildren do
           response = records_to_hash(subject.call(parent, filters))
 
           titles = response.map { |result| result.fetch(:title) }
-          expect(titles).to eq(%w(C A B))
+          expect(titles).to eq(%w[C A B])
         end
       end
     end
@@ -270,7 +270,7 @@ RSpec.describe Finders::DocumentChildren do
         it "orders NULL last when in ascending direction" do
           response = records_to_hash(subject.call(parent, filters))
           titles = response.map { |result| result.fetch(:title) }
-          expect(titles).to eq(%w(B A C))
+          expect(titles).to eq(%w[B A C])
         end
       end
 
@@ -280,7 +280,7 @@ RSpec.describe Finders::DocumentChildren do
           response = records_to_hash(subject.call(parent, filters))
 
           titles = response.map { |result| result.fetch(:title) }
-          expect(titles).to eq(%w(A B C))
+          expect(titles).to eq(%w[A B C])
         end
       end
     end

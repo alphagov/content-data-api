@@ -77,7 +77,7 @@ RSpec.describe Etl::Edition::Content::Parser do
 
   it "does not fail with unicode characters" do
     json = build_raw_json(
-      body: %{\u003cdiv class="govspeak"\u003e\u003cp\u003eLorem ipsum dolor sit amet.},
+      body: %(\u003cdiv class="govspeak"\u003e\u003cp\u003eLorem ipsum dolor sit amet.),
       schema_name: "case_study",
     )
     expect(subject.extract_content(json.deep_stringify_keys)).to eq("Lorem ipsum dolor sit amet.")

@@ -3,13 +3,13 @@ RSpec.describe Etl::Edition::Content::Parser do
 
   it "returns nil if json does not have children array" do
     json = { schema_name: "travel_advice_index",
-      links: {} }
+             links: {} }
     expect(subject.extract_content(json.deep_stringify_keys)).to eq(nil)
   end
 
   it "returns content json" do
     json = { schema_name: "travel_advice_index",
-      links: { children: [
+             links: { children: [
         { country: { name: "Portugal" } },
         { country: { name: "Brazil" } },
       ] } }

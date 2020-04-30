@@ -51,7 +51,7 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
     end
 
     it "returns the correct number of metrics" do
-      names_to_exclude = %w(id bounces date page_path updated_at created_at process_name page_time)
+      names_to_exclude = %w[id bounces date page_path updated_at created_at process_name page_time]
       event_attributes = event2.attribute_names.reject { |name| names_to_exclude.include?(name) }
 
       subject.format_events_with_invalid_prefix

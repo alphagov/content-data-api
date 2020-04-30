@@ -21,6 +21,6 @@ module Streams
       ROUTING_KEYS.any? { |suffix| routing_key.ends_with?(suffix) }
     end
 
-    ROUTING_KEYS = %w(links major minor unpublish bulk.data-warehouse).freeze
+    ROUTING_KEYS = %w[links major minor unpublish bulk.data-warehouse].freeze
   end
 end

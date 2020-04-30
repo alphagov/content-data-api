@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root to: "items#index"
 
-  resources :items, only: %w(index show), param: :content_id
+  resources :items, only: %w[index show], param: :content_id
 
   namespace :api, defaults: { format: :json } do
     get "/v1/metrics/", to: "metrics#index"

@@ -26,7 +26,7 @@ RSpec.shared_examples "includes edition attributes" do |date|
       title: "title",
       document_type: "guide",
       primary_organisation_id: "org_a",
-      organisation_ids: %w(org_b org_c),
+      organisation_ids: %w[org_b org_c],
       date: 2.months.ago,
     )
     create :metric, edition: edition1, date: date, useful_yes: 1, useful_no: 1
@@ -38,7 +38,7 @@ RSpec.shared_examples "includes edition attributes" do |date|
       title: "title",
       document_type: "guide",
       primary_organisation_id: "org_a",
-      organisation_ids: %w(org_b org_c),
+      organisation_ids: %w[org_b org_c],
     )
   end
 end
