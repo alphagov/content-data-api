@@ -10,7 +10,7 @@ class Etl::GA::UserFeedbackService
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_labels))
-      .map { |h| h["date"] = date.strftime("%F"); h }
+      .map { |hash| set_date(hash, date) }
       .group_by { |h| h["page_path"] }
       .map { |h| format_data(h) }
       .each_slice(batch_size) { |slice| yield slice }
@@ -21,6 +21,11 @@ class Etl::GA::UserFeedbackService
   end
 
 private
+
+  def set_date(hash, date)
+    hash["date"] = date.strftime("%F")
+    hash
+  end
 
   def append_labels(values)
     page_path, event_action, value = *values
