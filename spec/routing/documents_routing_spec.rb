@@ -5,6 +5,6 @@ RSpec.describe "documents endpoint routing" do
       action: "children",
       format: :json,
       document_id: "1234",
-     )
+    )
   end
 end

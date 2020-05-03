@@ -11,7 +11,7 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
 
     it "updates the facts with GA metrics" do
       edition1 = create :edition, date: "2018-02-20", base_path: "/Path1"
-      #We have some mixed case paths so we need them to match the lowercase ones in GA
+      # We have some mixed case paths so we need them to match the lowercase ones in GA
 
       fact1 = create :metric, edition: edition1, date: "2018-02-20"
       edition2 = create :edition, base_path: "/path2", date: "2018-02-20"

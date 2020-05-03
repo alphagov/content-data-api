@@ -36,7 +36,7 @@ RSpec.describe "/api/v1/documents/:document_id/children", type: :request do
 
       expect(json).to include(
         "title" => "The parent document you are looking for cannot be found",
-        "invalid_params" => %w(document_id),
+        "invalid_params" => %w[document_id],
       )
 
       expect(response).to have_http_status(404)

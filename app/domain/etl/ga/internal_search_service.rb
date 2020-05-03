@@ -10,7 +10,7 @@ class Etl::GA::InternalSearchService
       .flat_map(&method(:extract_rows))
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_labels))
-      .map { |h| h["date"] = date.strftime("%F"); h }
+      .map { |hash| set_date(hash, date) }
       .each_slice(batch_size) { |slice| yield slice }
   end
 
@@ -19,6 +19,11 @@ class Etl::GA::InternalSearchService
   end
 
 private
+
+  def set_date(hash, date)
+    hash["date"] = date.strftime("%F")
+    hash
+  end
 
   def append_labels(values)
     page_path, searches = *values

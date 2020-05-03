@@ -3,15 +3,15 @@ RSpec.describe Etl::Edition::Content::Parser do
 
   it "returns description if json does not have 'groups' key" do
     json = { schema_name: "service_manual_topic",
-      description: "Blogs",
-      details: {} }
+             description: "Blogs",
+             details: {} }
     expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs")
   end
 
   it "returns content json" do
     json = { schema_name: "service_manual_topic",
-      description: "Blogs",
-      details: { groups:
+             description: "Blogs",
+             details: { groups:
         [
           { name: "Design",
             description: "thinking" },

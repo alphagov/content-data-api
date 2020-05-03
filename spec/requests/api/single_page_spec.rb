@@ -170,8 +170,8 @@ RSpec.describe "/single_page", type: :request do
           a_hash_including(
             "name" => "upviews",
             "total" => 30,
-            ),
           ),
+        ),
       }
       expect(body).to include(expected)
       expect(response).to have_http_status(:ok)

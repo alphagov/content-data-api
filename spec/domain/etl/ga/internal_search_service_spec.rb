@@ -15,13 +15,13 @@ RSpec.describe Etl::GA::InternalSearchService do
       allow(google_client).to receive(:fetch_all) do
         [
           build_report_data(
-            build_report_row(dimensions: %w(/foo), metrics: %w(1)),
+            build_report_row(dimensions: %w[/foo], metrics: %w[1]),
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/bar), metrics: %w(2)),
+            build_report_row(dimensions: %w[/bar], metrics: %w[2]),
           ),
           build_report_data(
-            build_report_row(dimensions: %w(/cool), metrics: %w(3)),
+            build_report_row(dimensions: %w[/cool], metrics: %w[3]),
           ),
         ]
       end

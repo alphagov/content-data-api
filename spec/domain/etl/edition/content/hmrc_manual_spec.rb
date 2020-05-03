@@ -3,9 +3,9 @@ RSpec.describe Etl::Edition::Content::Parser do
 
   it "returns content json if schema_name is 'hmrc_manual'" do
     json = { schema_name: "hmrc_manual",
-      title: "HMRC Manual",
-      description: "Manual of items",
-      details: {
+             title: "HMRC Manual",
+             description: "Manual of items",
+             details: {
         child_section_groups: [{
           child_sections: [
             { section_id: "ARG6757", title: "Section 1" },

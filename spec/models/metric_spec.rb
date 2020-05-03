@@ -1,6 +1,6 @@
 RSpec.describe Metric do
   EDITION_METRICS =
-    %w(
+    %w[
       pdf_count
       doc_count
       readability
@@ -8,10 +8,10 @@ RSpec.describe Metric do
       chars
       words
       reading_time
-    ).freeze
+    ].freeze
 
   DAILY_METRICS =
-    %w(
+    %w[
       entrances
       exits
       feedex
@@ -20,7 +20,7 @@ RSpec.describe Metric do
       searches
       pviews
       upviews
-    ).freeze
+    ].freeze
 
   describe ".find_all" do
     it "returns a list of all metrics" do

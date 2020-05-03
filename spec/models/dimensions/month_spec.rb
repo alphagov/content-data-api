@@ -6,10 +6,10 @@ RSpec.describe Dimensions::Month, type: :model do
   it { is_expected.to validate_inclusion_of(:month_number).in_range(1..12) }
 
   it { is_expected.to validate_presence_of(:month_name) }
-  it { is_expected.to validate_inclusion_of(:month_name).in_array(%w(January February March April May June July August September October November December)) }
+  it { is_expected.to validate_inclusion_of(:month_name).in_array(%w[January February March April May June July August September October November December]) }
 
   it { is_expected.to validate_presence_of(:month_name_abbreviated) }
-  it { is_expected.to validate_inclusion_of(:month_name_abbreviated).in_array(%w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)) }
+  it { is_expected.to validate_inclusion_of(:month_name_abbreviated).in_array(%w[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec]) }
 
   it { is_expected.to validate_presence_of(:year) }
   it { is_expected.to validate_numericality_of(:year).only_integer }

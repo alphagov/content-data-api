@@ -13,7 +13,7 @@ class Etl::GA::ViewsAndNavigationService
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_data_labels))
       .reject(&method(:invalid_record?))
-      .map { |h| h["date"] = date.strftime("%F"); h }
+      .map { |hash| set_date(hash, date) }
       .each_slice(batch_size) { |slice| yield slice }
   end
 
@@ -22,6 +22,11 @@ class Etl::GA::ViewsAndNavigationService
   end
 
 private
+
+  def set_date(hash, date)
+    hash["date"] = date.strftime("%F")
+    hash
+  end
 
   def append_data_labels(values)
     page_path, pviews, upviews, entrances, exits, bounces, page_time = *values

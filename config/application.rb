@@ -23,7 +23,7 @@ module ContentPerformanceManager
     # -- all .rb files in that directory are automatically loaded.
     config.active_job.queue_adapter = :sidekiq
 
-    additional_paths = %W(#{config.root}/lib #{config.root}/app/domain)
+    additional_paths = %W[#{config.root}/lib #{config.root}/app/domain]
 
     config.autoload_paths += additional_paths
     config.eager_load_paths += additional_paths

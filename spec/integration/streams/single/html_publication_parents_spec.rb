@@ -29,7 +29,7 @@ RSpec.describe "setting parents for html_publications" do
   end
   let(:links_for_parent) do
     {
-      "children" =>  [attachment_1_message, attachment_2_message].map do |message|
+      "children" => [attachment_1_message, attachment_2_message].map do |message|
         { "content_id" => message.payload["content_id"], "locale" => message.payload["locale"] }
       end,
     }

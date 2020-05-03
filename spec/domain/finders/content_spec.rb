@@ -339,14 +339,14 @@ RSpec.describe Finders::Content do
         response = described_class.call(filter: filter.merge(sort_attribute: "satisfaction", sort_direction: "asc"))
 
         titles = response.fetch(:results).map { |result| result.fetch(:title) }
-        expect(titles).to eq(%w(second first null))
+        expect(titles).to eq(%w[second first null])
       end
 
       it "orders NULL last when in descending direction" do
         response = described_class.call(filter: filter.merge(sort_attribute: "satisfaction", sort_direction: "desc"))
 
         titles = response.fetch(:results).map { |result| result.fetch(:title) }
-        expect(titles).to eq(%w(first second null))
+        expect(titles).to eq(%w[first second null])
       end
     end
 
@@ -366,21 +366,21 @@ RSpec.describe Finders::Content do
         response = described_class.call(filter: filter)
 
         titles = response.fetch(:results).map { |result| result.fetch(:title) }
-        expect(titles).to eq(%w(first middle last))
+        expect(titles).to eq(%w[first middle last])
       end
 
       it "order by other attribute" do
         response = described_class.call(filter: filter.merge(sort_attribute: "feedex"))
 
         titles = response.fetch(:results).map { |result| result.fetch(:title) }
-        expect(titles).to eq(%w(last middle first))
+        expect(titles).to eq(%w[last middle first])
       end
 
       it "order in ascending" do
         response = described_class.call(filter: filter.merge(sort_direction: "asc"))
 
         titles = response.fetch(:results).map { |result| result.fetch(:title) }
-        expect(titles).to eq(%w(last middle first))
+        expect(titles).to eq(%w[last middle first])
       end
     end
 
@@ -398,14 +398,14 @@ RSpec.describe Finders::Content do
         response = described_class.call(filter: filter.merge(sort_attribute: "upviews"))
 
         titles = response.fetch(:results).map { |result| result.fetch(:title) }
-        expect(titles).to eq(%w(second first))
+        expect(titles).to eq(%w[second first])
       end
 
       it "respects the sort direction when sorting by `warehouse_item_id`" do
         response = described_class.call(filter: filter.merge(sort_attribute: "upviews", sort_direction: "asc"))
 
         titles = response.fetch(:results).map { |result| result.fetch(:title) }
-        expect(titles).to eq(%w(first second))
+        expect(titles).to eq(%w[first second])
       end
     end
   end

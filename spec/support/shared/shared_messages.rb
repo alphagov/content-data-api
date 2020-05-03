@@ -99,7 +99,7 @@ RSpec.shared_examples "BaseMessage#organisation_ids" do
         }
       end
 
-      it { is_expected.to eq(%w(org_a org_b)) }
+      it { is_expected.to eq(%w[org_a org_b]) }
     end
 
     context "when has no other organisations" do

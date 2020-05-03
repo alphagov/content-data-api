@@ -1,6 +1,6 @@
 class Finders::DocumentChildren
-  EDITION_COLUMNS = %w(base_path title primary_organisation_id document_type sibling_order).freeze
-  AGGREGATION_COLUMNS = %w(upviews pviews useful_yes useful_no satisfaction searches feedex).freeze
+  EDITION_COLUMNS = %w[base_path title primary_organisation_id document_type sibling_order].freeze
+  AGGREGATION_COLUMNS = %w[upviews pviews useful_yes useful_no satisfaction searches feedex].freeze
 
   def self.call(*args)
     new(*args).results

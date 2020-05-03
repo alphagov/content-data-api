@@ -114,9 +114,9 @@ private
     protocol = /http(s)?:\/\//
     domain = /(www\.)?gov\.uk/
 
-    search_term.
-      gsub(protocol, "").
-      gsub(domain, "")
+    search_term
+      .gsub(protocol, "")
+      .gsub(domain, "")
   end
 
   def sanitized_order(column, direction)
@@ -127,7 +127,7 @@ private
   end
 
   def aggregates
-    %w(base_path title primary_organisation_id document_type upviews pviews useful_yes useful_no satisfaction searches feedex pdf_count words reading_time)
+    %w[base_path title primary_organisation_id document_type upviews pviews useful_yes useful_no satisfaction searches feedex pdf_count words reading_time]
   end
 
   def array_to_hash(array)

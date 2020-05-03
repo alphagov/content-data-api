@@ -21,7 +21,7 @@ class Dimensions::Date < ApplicationRecord
       day_name: date.strftime("%A"),
       day_name_abbreviated: date.strftime("%a"),
       weekday_weekend: date.saturday? || date.sunday? ? "Weekend" : "Weekday",
-      )
+    )
   end
 
   def self.create_with(date)
@@ -31,11 +31,9 @@ class Dimensions::Date < ApplicationRecord
   end
 
   def self.find_existing_or_create(date)
-    begin
-      find_by(date: date) || create_with(date)
-    rescue ActiveRecord::RecordNotUnique
-      find_by(date: date)
-    end
+    find_by(date: date) || create_with(date)
+  rescue ActiveRecord::RecordNotUnique
+    find_by(date: date)
   end
 
   def self.exists?(date)
@@ -104,5 +102,5 @@ class Dimensions::Date < ApplicationRecord
 
   validates :weekday_weekend,
             presence: true,
-            inclusion: { in: %w(Weekday Weekend) }
+            inclusion: { in: %w[Weekday Weekend] }
 end

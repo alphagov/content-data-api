@@ -5,7 +5,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
   subject { described_class }
 
   let!(:edition1) { create :edition, base_path: "/Path1", live: true, date: "2018-02-20" }
-  #We have some mixed case paths so we need them to match the lowercase ones in GA
+  # We have some mixed case paths so we need them to match the lowercase ones in GA
 
   let!(:edition2) { create :edition, base_path: "/path2", live: true, date: "2018-02-20" }
 
@@ -16,7 +16,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
     it "update the facts with the GA metrics" do
       fact1 = create :metric, edition: edition1,
-        date: "2018-02-20"
+                              date: "2018-02-20"
       fact2 = create :metric, edition: edition2, date: "2018-02-20"
 
       described_class.process(date: date)

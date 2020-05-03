@@ -34,7 +34,7 @@ class Dimensions::Edition < ApplicationRecord
       ) AS b ON a.warehouse_item_id = b.warehouse_item_id
       AND a.publishing_api_event_id = b.publishing_api_event_id
     SQL
-    self.find_by_sql([query, warehouse_item_id]).first
+    find_by_sql([query, warehouse_item_id]).first
   end
 
   def promote!(old_edition)
@@ -43,7 +43,7 @@ class Dimensions::Edition < ApplicationRecord
   end
 
   def unpublished?
-    %w(gone vanish redirect).include?(document_type)
+    %w[gone vanish redirect].include?(document_type)
   end
 
   def change_from?(attributes)

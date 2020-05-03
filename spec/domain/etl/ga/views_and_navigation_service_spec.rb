@@ -16,13 +16,13 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
-              build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1 1 1)),
+              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1 1 1 1 1 1]),
             ),
             build_report_data(
-              build_report_row(dimensions: %w(/bar), metrics: %w(2 2 2 2 2 2 2 2)),
+              build_report_row(dimensions: %w[/bar], metrics: %w[2 2 2 2 2 2 2 2]),
             ),
             build_report_data(
-              build_report_row(dimensions: %w(/cool), metrics: %w(3 3 3 3 3 3 3 3)),
+              build_report_row(dimensions: %w[/cool], metrics: %w[3 3 3 3 3 3 3 3]),
             ),
           ]
         end
@@ -74,10 +74,10 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
-              build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1 1 1)),
+              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1 1 1 1 1 1]),
             ),
             build_report_data(
-              build_report_row(dimensions: [path_with_long_query], metrics: %w(1 1 1 1 1 1 1 1)),
+              build_report_row(dimensions: [path_with_long_query], metrics: %w[1 1 1 1 1 1 1 1]),
             ),
           ]
         end
@@ -105,10 +105,10 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
-              build_report_row(dimensions: %w(/foo), metrics: %w(1 1 1 1 1 1 1 1)),
+              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1 1 1 1 1 1]),
             ),
             build_report_data(
-              build_report_row(dimensions: [path_with_invalid_uri], metrics: %w(1 1 1 1 1 1 1 1)),
+              build_report_row(dimensions: [path_with_invalid_uri], metrics: %w[1 1 1 1 1 1 1 1]),
             ),
           ]
         end

@@ -10,7 +10,7 @@ module Etl::Edition::Metadata::NumberOfFiles
   def self.extract_documents(content_item_details)
     return nil unless content_item_details.is_a?(Hash)
 
-    document_keys = %w(documents final_outcome_documents body)
+    document_keys = %w[documents final_outcome_documents body]
     document = document_keys.map { |key| content_item_details.dig("details", key) }
 
     Nokogiri::HTML(document.join(""))

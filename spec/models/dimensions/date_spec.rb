@@ -20,10 +20,10 @@ RSpec.describe Dimensions::Date, type: :model do
   it do
     is_expected.to validate_inclusion_of(:month_name)
       .in_array(
-        %w(
+        %w[
                         January February March April May June July August
                         September October November December
-                       ),
+                       ],
       )
   end
 
@@ -31,7 +31,7 @@ RSpec.describe Dimensions::Date, type: :model do
   it do
     is_expected.to validate_inclusion_of(:month_name_abbreviated)
       .in_array(
-        %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec),
+        %w[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec],
       )
   end
 
@@ -59,23 +59,23 @@ RSpec.describe Dimensions::Date, type: :model do
   it do
     is_expected.to validate_inclusion_of(:day_name)
       .in_array(
-        %w(
+        %w[
                         Monday Tuesday Wednesday Thursday Friday
                         Saturday Sunday
-                       ),
+                       ],
       )
   end
 
   it { is_expected.to validate_presence_of(:day_name_abbreviated) }
   it do
     is_expected.to validate_inclusion_of(:day_name_abbreviated)
-      .in_array(%w(Mon Tue Wed Thu Fri Sat Sun))
+      .in_array(%w[Mon Tue Wed Thu Fri Sat Sun])
   end
 
   it { is_expected.to validate_presence_of(:weekday_weekend) }
   it do
     is_expected.to validate_inclusion_of(:weekday_weekend)
-      .in_array(%w(Weekday Weekend))
+      .in_array(%w[Weekday Weekend])
   end
 
   describe ".build" do

@@ -11,7 +11,7 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
 
     it "update the facts with the GA metrics" do
       edition1 = create :edition, base_path: "/Path1", date: "2018-02-20"
-      #We have some mixed case paths so we need them to match the lowercase ones in GA
+      # We have some mixed case paths so we need them to match the lowercase ones in GA
 
       fact1 =  create :metric, edition: edition1, date: "2018-02-20", useful_no: 1, useful_yes: 2
       edition2 = create :edition, base_path: "/path2", date: "2018-02-20"
