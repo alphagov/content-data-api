@@ -12,9 +12,9 @@ RSpec.describe Etl::Edition::Content::Parser do
     json = { schema_name: "taxon",
              description: "Blogs",
              links: { child_taxons: [
-        { title: "One", description: "first" },
-        { title: "Two", description: "second" },
-      ] } }
+               { title: "One", description: "first" },
+               { title: "Two", description: "second" },
+             ] } }
     expect(subject.extract_content(json.deep_stringify_keys)).to eq("Blogs One first Two second")
   end
 end

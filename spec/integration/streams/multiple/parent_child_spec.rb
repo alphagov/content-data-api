@@ -15,9 +15,9 @@ RSpec.describe "multi-part parent/child relationships" do
     subject.process(message)
     parent = Dimensions::Edition.find_latest("#{content_id}:fr")
     expected = [
-     ["#{content_id}:fr:part2", 1],
-     ["#{content_id}:fr:part3", 2],
-     ["#{content_id}:fr:part4", 3],
+      ["#{content_id}:fr:part2", 1],
+      ["#{content_id}:fr:part3", 2],
+      ["#{content_id}:fr:part4", 3],
     ]
     expect(parent.children.pluck(:warehouse_item_id, :sibling_order)).to include(*expected)
   end

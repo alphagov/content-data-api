@@ -8,7 +8,7 @@ RSpec.describe Etl::Edition::Content::Parser do
                 contents: [{ text: "Enter vehicle" }, contents: [{ text: "A" }, { text: "B" }, { text: "C" }]] },
               { title: "Step 2",
                 contents: [{ text: "Adjust seat" }, contents: [{ text: "Z" }, { text: "Y" }, { text: "X" }]] }]
-      } } }
+    } } }
 
     expected = "Learn to drive a car: step by step It's easy Step 1 Enter vehicle A B C Step 2 Adjust seat Z Y X"
     expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)
