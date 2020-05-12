@@ -46,7 +46,7 @@ group :development, :test do
   gem "rails-controller-testing"
   gem "rspec-its"
   gem "rspec-rails"
-  gem "rubocop-govuk", "~> 3.8"
+  gem "rubocop-govuk", "~> 3.9"
   gem "shoulda-matchers"
   gem "simplecov", require: false
   gem "spring"
