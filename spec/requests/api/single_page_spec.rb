@@ -116,9 +116,9 @@ RSpec.describe "/single_page", type: :request do
       body = JSON.parse(response.body)
 
       metric_names = Metric.daily_metrics.map(&:name)
-      expected_metrics = metric_names.map { |metric_name|
+      expected_metrics = metric_names.map do |metric_name|
         a_hash_including("name" => metric_name)
-      }
+      end
       expected = {
         "time_series_metrics" => a_collection_including(*expected_metrics),
       }
@@ -132,9 +132,9 @@ RSpec.describe "/single_page", type: :request do
       body = JSON.parse(response.body)
 
       metric_names = Metric.edition_metrics.map(&:name)
-      expected_metrics = metric_names.map { |metric_name|
+      expected_metrics = metric_names.map do |metric_name|
         a_hash_including("name" => metric_name)
-      }
+      end
       expected = {
         "edition_metrics" => a_collection_including(*expected_metrics),
       }

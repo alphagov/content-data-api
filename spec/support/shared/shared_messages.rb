@@ -5,10 +5,10 @@ RSpec.shared_examples "BaseMessage#historically_political?" do
     subject { message.historically_political? }
 
     context "when payload has current goverment as false and has political as true" do
-      before {
+      before do
         payload["details"]["political"] = true
         payload["expanded_links"]["government"] = [{ "details" => { "current" => false } }]
-      }
+      end
       it { is_expected.to eq true }
     end
 

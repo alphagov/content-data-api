@@ -15,10 +15,10 @@ class Dimensions::Edition < ApplicationRecord
   scope :live, -> { where(live: true) }
   scope :live_by_content_id, ->(content_id, locale) { where(content_id: content_id, locale: locale, live: true) }
   scope :live_by_base_path, ->(base_paths) { where(base_path: base_paths, live: true) }
-  scope :outdated_subpages, ->(content_id, locale, exclude_paths) do
+  scope :outdated_subpages, lambda { |content_id, locale, exclude_paths|
     live_by_content_id(content_id, locale)
       .where.not(base_path: exclude_paths)
-  end
+  }
 
   delegate :document_id, to: :parent, prefix: true, allow_nil: true
 

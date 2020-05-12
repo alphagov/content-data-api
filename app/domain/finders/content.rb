@@ -22,7 +22,7 @@ private
 
   def initialize(filter)
     raise ArgumentError unless
-      filter.has_key?(:organisation_id) && filter.has_key?(:date_range)
+      filter.key?(:organisation_id) && filter.key?(:date_range)
 
     filter.assert_valid_keys(
       :search_term, :date_range, :organisation_id, :document_type, :page,
@@ -55,7 +55,7 @@ private
   def find_by_month(scope)
     month, year = @date_range.split("-")
     month_num = Date::MONTHNAMES.index(month.capitalize)
-    month_id = "%s-%02d" % [year, month_num]
+    month_id = format("%s-%02d", year, month_num)
 
     scope = scope.where("#{view[:table_name]}.dimensions_month_id = '#{month_id}'")
     scope = scope.joins("JOIN dimensions_editions ON #{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")
