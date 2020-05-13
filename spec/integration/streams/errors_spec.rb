@@ -10,9 +10,9 @@ RSpec.describe Streams::Consumer do
   let!(:message) { build :message }
 
   context "when an error happens" do
-    before {
+    before do
       expect_any_instance_of(Streams::Messages::SingleItemMessage).to receive(:invalid?).and_raise(StandardError.new)
-    }
+    end
 
     it "logs the error" do
       expect(GovukError).to receive(:notify).with(instance_of(StandardError))
@@ -28,9 +28,9 @@ RSpec.describe Streams::Consumer do
   end
 
   context "when message has missing mandatory fields" do
-    before {
+    before do
       allow_any_instance_of(Streams::Messages::SingleItemMessage).to receive(:invalid?).and_raise(StandardError)
-    }
+    end
 
     context "missing field is base_path" do
       it "discards the message" do

@@ -5,10 +5,10 @@ class Facts::Edition < ApplicationRecord
   validates :dimensions_date, presence: true
   validates :dimensions_edition, presence: true
 
-  scope :between, ->(from, to) do
+  scope :between, lambda { |from, to|
     joins(:dimensions_date)
       .where("dimensions_dates.date BETWEEN ? AND ?", from, to)
-  end
+  }
 
   def clone_for!(new_dim_edition, new_date)
     new_facts_edition = dup
