@@ -205,7 +205,8 @@ RSpec.describe "/single_page", type: :request do
             "name" => "upviews",
             "time_series" => a_collection_including(
               { "date" => "2018-01-01", "value" => 10 },
-              "date" => "2018-01-02", "value" => 20,
+              "date" => "2018-01-02",
+              "value" => 20,
             ),
           ),
         ),

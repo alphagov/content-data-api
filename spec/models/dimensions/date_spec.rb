@@ -21,8 +21,18 @@ RSpec.describe Dimensions::Date, type: :model do
     is_expected.to validate_inclusion_of(:month_name)
       .in_array(
         %w[
-          January February March April May June July August
-          September October November December
+          January
+          February
+          March
+          April
+          May
+          June
+          July
+          August
+          September
+          October
+          November
+          December
         ],
       )
   end
@@ -60,8 +70,13 @@ RSpec.describe Dimensions::Date, type: :model do
     is_expected.to validate_inclusion_of(:day_name)
       .in_array(
         %w[
-          Monday Tuesday Wednesday Thursday Friday
-          Saturday Sunday
+          Monday
+          Tuesday
+          Wednesday
+          Thursday
+          Friday
+          Saturday
+          Sunday
         ],
       )
   end

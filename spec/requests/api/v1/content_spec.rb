@@ -58,12 +58,12 @@ RSpec.describe "/content" do
         create :metric, date: 1.month.ago.beginning_of_month, edition: edition1, pviews: 10
         create :metric, date: 2.months.ago, edition: edition1, pviews: 100
         create :metric, date: 5.months.ago, edition: edition1, pviews: 1000
-        create :metric, date: 11.months.ago, edition: edition1, pviews: 10000
+        create :metric, date: 11.months.ago, edition: edition1, pviews: 10_000
 
         create :metric, date: 1.month.ago.beginning_of_month, edition: edition2, pviews: 20
         create :metric, date: 2.months.ago, edition: edition2, pviews: 200
         create :metric, date: 5.months.ago, edition: edition2, pviews: 2000
-        create :metric, date: 11.months.ago, edition: edition2, pviews: 20000
+        create :metric, date: 11.months.ago, edition: edition2, pviews: 20_000
 
         recalculate_aggregations!
       end

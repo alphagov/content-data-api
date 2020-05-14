@@ -25,8 +25,14 @@ private
       filter.key?(:organisation_id) && filter.key?(:date_range)
 
     filter.assert_valid_keys(
-      :search_term, :date_range, :organisation_id, :document_type, :page,
-      :page_size, :sort_attribute, :sort_direction
+      :search_term,
+      :date_range,
+      :organisation_id,
+      :document_type,
+      :page,
+      :page_size,
+      :sort_attribute,
+      :sort_direction,
     )
 
     @filter = filter
@@ -55,7 +61,7 @@ private
   def find_by_month(scope)
     month, year = @date_range.split("-")
     month_num = Date::MONTHNAMES.index(month.capitalize)
-    month_id = format("%s-%02d", year, month_num)
+    month_id = sprintf("%s-%02d", year, month_num)
 
     scope = scope.where("#{view[:table_name]}.dimensions_month_id = '#{month_id}'")
     scope = scope.joins("JOIN dimensions_editions ON #{view[:table_name]}.dimensions_edition_id = dimensions_editions.id")

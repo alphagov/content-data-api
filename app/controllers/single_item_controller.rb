@@ -16,7 +16,7 @@ private
 
   def find_live_edition
     live_edition = Dimensions::Edition.live_by_base_path(@base_path).first
-    raise Api::NotFoundError.new("#{api_request.base_path} not found") if live_edition.nil?
+    raise Api::NotFoundError, "#{api_request.base_path} not found" if live_edition.nil?
 
     live_edition
   end

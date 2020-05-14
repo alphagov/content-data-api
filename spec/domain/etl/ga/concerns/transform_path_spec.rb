@@ -36,18 +36,20 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
     end
 
     before(:each) do
-      create(:ga_event,
-             :with_views,
-             page_path: "/topics",
-             bounces: 1000,
-             upviews: 100,
-             pviews: 200,
-             useful_no: 300,
-             useful_yes: 400,
-             searches: 500,
-             entrances: 600,
-             exits: 700,
-             page_time: 1000)
+      create(
+        :ga_event,
+        :with_views,
+        page_path: "/topics",
+        bounces: 1000,
+        upviews: 100,
+        pviews: 200,
+        useful_no: 300,
+        useful_yes: 400,
+        searches: 500,
+        entrances: 600,
+        exits: 700,
+        page_time: 1000,
+      )
     end
 
     it "returns the correct number of metrics" do

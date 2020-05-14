@@ -46,7 +46,8 @@ RSpec.describe Etl::Edition::Content::Parser do
 
       describe "has an unknown schema_name and a base_path" do
         it "raises InvalidSchemaError with the schema and the base_path" do
-          json = { base_path: "/unknown/base_path", schema_name: "unknown",
+          json = { base_path: "/unknown/base_path",
+                   schema_name: "unknown",
                    links: {} }
           subject.extract_content(json.deep_stringify_keys)
           expect(GovukError).to receive(:notify)

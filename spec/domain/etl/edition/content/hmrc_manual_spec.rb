@@ -11,11 +11,13 @@ RSpec.describe Etl::Edition::Content::Parser do
                    { section_id: "ARG6757", title: "Section 1" },
                    { section_id: "THP8972", title: "Section 2" },
                  ],
-               }, {
-                 child_sections: [
-                   { section_id: "UP4591", title: "Section 15" },
-                 ], title: "Update"
-               }],
+               },
+                                      {
+                                        child_sections: [
+                                          { section_id: "UP4591", title: "Section 15" },
+                                        ],
+                                        title: "Update",
+                                      }],
              } }
     expected = "HMRC Manual Manual of items ARG6757 Section 1 THP8972 Section 2 Update UP4591 Section 15"
     expect(subject.extract_content(json.deep_stringify_keys)).to eql(expected)

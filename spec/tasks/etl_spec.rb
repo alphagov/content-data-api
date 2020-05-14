@@ -84,9 +84,11 @@ RSpec.describe "etl.rake", type: task do
 
   describe "rake etl:rerun_master" do
     let!(:processor) do
-      class_double(Etl::Master::MasterProcessor,
-                   process: true,
-                   process_aggregations: true).as_stubbed_const
+      class_double(
+        Etl::Master::MasterProcessor,
+        process: true,
+        process_aggregations: true,
+      ).as_stubbed_const
     end
 
     before do
