@@ -34,10 +34,11 @@ FactoryBot.define do
         new_edition.save!
       end
       dim_date = FactoryBot.create :dimensions_date, date: evaluator.date
-      FactoryBot.create :facts_edition, evaluator.facts.merge(
-        dimensions_date: dim_date,
-        dimensions_edition: new_edition,
-      )
+      FactoryBot.create :facts_edition,
+                        evaluator.facts.merge(
+                          dimensions_date: dim_date,
+                          dimensions_edition: new_edition,
+                        )
       new_edition
     end
 

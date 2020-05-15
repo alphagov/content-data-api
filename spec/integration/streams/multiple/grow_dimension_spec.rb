@@ -25,13 +25,15 @@ RSpec.describe "Process sub-pages for multipart content types" do
     let(:content_id) { "3079e1a9-4b07-4012-af68-8b86f918fae9" }
 
     it "separates the parts of multipart content types with different uuids" do
-      message = build(:message,
-                      :with_parts,
-                      attributes: {
-                        "content_id" => content_id,
-                        "locale" => "en",
-                        "title" => "Main Title",
-                      })
+      message = build(
+        :message,
+        :with_parts,
+        attributes: {
+          "content_id" => content_id,
+          "locale" => "en",
+          "title" => "Main Title",
+        },
+      )
       subject.process(message)
 
       parts = Dimensions::Edition.pluck(:base_path, :title, :warehouse_item_id).to_set
@@ -48,14 +50,16 @@ RSpec.describe "Process sub-pages for multipart content types" do
   context "for travel advice" do
     let(:content_id) { "fefbf6af-8510-432d-8126-c1bf11fadec1" }
     it "separates the parts of multipart content types with different uuids" do
-      message = build(:message,
-                      :travel_advice,
-                      base_path: "/travel/advice",
-                      content_id: content_id,
-                      locale: "fr",
-                      attributes: {
-                        "title" => "The Title",
-                      })
+      message = build(
+        :message,
+        :travel_advice,
+        base_path: "/travel/advice",
+        content_id: content_id,
+        locale: "fr",
+        attributes: {
+          "title" => "The Title",
+        },
+      )
       subject.process(message)
       parts = Dimensions::Edition.pluck(:base_path, :title, :warehouse_item_id).to_set
 
@@ -161,7 +165,8 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
   context "when the content is `travel_advice`" do
     let(:message) do
-      build :message, :travel_advice,
+      build :message,
+            :travel_advice,
             attributes: message_attributes(
               "base_path" => "/travel-advice",
               "content_id" => "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
@@ -232,14 +237,16 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
   context "when the content is a `guide`" do
     let(:message) do
-      build(:message,
-            :with_parts,
-            base_path: "/guide",
-            attributes: message_attributes(
-              "base_path" => "/guide",
-              "content_id" => "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
-              "document_type" => "guide",
-            ))
+      build(
+        :message,
+        :with_parts,
+        base_path: "/guide",
+        attributes: message_attributes(
+          "base_path" => "/guide",
+          "content_id" => "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
+          "document_type" => "guide",
+        ),
+      )
     end
 
     before do

@@ -2,7 +2,8 @@ RSpec.describe Etl::Edition::Content::Parser do
   subject { described_class }
 
   it "returns content json if schema_name is 'mainstream_browse_page'" do
-    json = { schema_name: "mainstream_browse_page", title: "Travel Abroad",
+    json = { schema_name: "mainstream_browse_page",
+             title: "Travel Abroad",
              description: "Go abroad",
              links: { children: [
                { title: "Driving Abroad" },

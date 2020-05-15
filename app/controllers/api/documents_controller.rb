@@ -21,7 +21,7 @@ private
 
   def find_parent_edition!
     parent = Dimensions::Edition.live.where(warehouse_item_id: @document_id).first
-    raise Api::ParentNotFoundError.new("#{params[:document_id]} not found") if parent.nil?
+    raise Api::ParentNotFoundError, "#{params[:document_id]} not found" if parent.nil?
 
     parent
   end

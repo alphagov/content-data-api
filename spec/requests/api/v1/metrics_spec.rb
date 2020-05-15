@@ -11,9 +11,11 @@ RSpec.describe "/api/v1/metrics/", type: :request do
 
       expect(json.count).to eq(::Metric.find_all.length)
 
-      expect(json).to include("name" => "pviews",
-                              "description" => "Number of pageviews",
-                              "source" => "Google Analytics")
+      expect(json).to include(
+        "name" => "pviews",
+        "description" => "Number of pageviews",
+        "source" => "Google Analytics",
+      )
     end
   end
 end

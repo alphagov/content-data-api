@@ -153,15 +153,17 @@ RSpec.describe "Master process spec" do
         'date': yesterday,
         'path': "/path-1",
         'count': 21,
-      }, {
-        'date': yesterday,
-        'path': "/path2",
-        'count': 1,
-      }, {
-        'date': yesterday,
-        'path': "/path3",
-        'count': 1,
-      }],
+      },
+                  {
+                    'date': yesterday,
+                    'path': "/path2",
+                    'count': 1,
+                  },
+                  {
+                    'date': yesterday,
+                    'path': "/path3",
+                    'count': 1,
+                  }],
       'total_count': 3,
       'current_page': 1,
       'pages': 1,

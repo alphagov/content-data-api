@@ -15,8 +15,9 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
     before { allow(Etl::GA::ViewsAndNavigationService).to receive(:find_in_batches).and_yield(ga_response) }
 
     it "update the facts with the GA metrics" do
-      fact1 = create :metric, edition: edition1,
-                              date: "2018-02-20"
+      fact1 = create :metric,
+                     edition: edition1,
+                     date: "2018-02-20"
       fact2 = create :metric, edition: edition2, date: "2018-02-20"
 
       described_class.process(date: date)
