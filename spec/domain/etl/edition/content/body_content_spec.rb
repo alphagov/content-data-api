@@ -12,6 +12,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       document_collection
       fatality_notice
       help_page
+      history
       hmrc_manual_section
       html_publication
       manual

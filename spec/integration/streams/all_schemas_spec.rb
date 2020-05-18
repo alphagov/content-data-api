@@ -49,6 +49,7 @@ private
       government
       guide
       help_page
+      history
       hmrc_manual
       hmrc_manual_section
       homepage
