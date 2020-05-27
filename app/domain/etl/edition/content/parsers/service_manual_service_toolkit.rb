@@ -7,11 +7,11 @@ class Etl::Edition::Content::Parsers::ServiceManualServiceToolkit
         html << item["title"]
         html << item["description"]
         links = item.dig("links")
-        unless links.nil?
-          links.each do |link|
-            html << link["title"]
-            html << link["description"]
-          end
+        next if links.nil?
+
+        links.each do |link|
+          html << link["title"]
+          html << link["description"]
         end
       end
       html.join(" ")

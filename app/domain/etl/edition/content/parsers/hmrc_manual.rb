@@ -8,11 +8,11 @@ class Etl::Edition::Content::Parsers::HmrcManual
       groups.each do |group|
         html << group["title"] unless group["title"].nil?
         sections = group["child_sections"]
-        unless sections.nil?
-          sections.each do |section|
-            html << section["section_id"]
-            html << section["title"]
-          end
+        next if sections.nil?
+
+        sections.each do |section|
+          html << section["section_id"]
+          html << section["title"]
         end
       end
     end
