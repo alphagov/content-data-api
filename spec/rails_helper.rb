@@ -13,7 +13,7 @@ require "rspec/rails"
 require "support/authentication"
 require "rake"
 require "webmock/rspec"
-require "gds_api/test_helpers/publishing_api_v2"
+require "gds_api/test_helpers/publishing_api"
 require "pry"
 require "database_cleaner"
 
