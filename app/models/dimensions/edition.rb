@@ -2,7 +2,7 @@ require "json"
 
 class Dimensions::Edition < ApplicationRecord
   has_one :facts_edition, class_name: "Facts::Edition", foreign_key: :dimensions_edition_id, inverse_of: "dimensions_edition"
-  belongs_to :publishing_api_event, class_name: "Events::PublishingApi", foreign_key: :publishing_api_event_id, inverse_of: "dimensions_editions"
+  belongs_to :publishing_api_event, class_name: "Events::PublishingApi", inverse_of: "dimensions_editions"
   belongs_to :parent, class_name: "Dimensions::Edition", optional: true
   has_many :children, -> { where(live: true) }, class_name: "Dimensions::Edition", foreign_key: "parent_id", inverse_of: "parent"
   validates :content_id, presence: true
