@@ -1,4 +1,4 @@
-class Aggregations::MaterializedView < ActiveRecord::Base
+class Aggregations::MaterializedView < ApplicationRecord
   self.abstract_class = true
 
   self.primary_key = "warehouse_item_id"

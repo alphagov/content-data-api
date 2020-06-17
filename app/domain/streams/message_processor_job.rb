@@ -1,7 +1,7 @@
 require_dependency("streams/messages/factory")
 
 module Streams
-  class MessageProcessorJob < ActiveJob::Base
+  class MessageProcessorJob
     retry_on ActiveRecord::RecordNotUnique, wait: 5.seconds, attempts: 3
 
     def perform(payload, routing_key)
