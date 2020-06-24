@@ -39,7 +39,7 @@ module Streams
 
     def acronym
       acronym = @payload.dig("details", "acronym")
-      acronym.blank? ? nil : acronym
+      acronym.presence
     end
   end
 end
