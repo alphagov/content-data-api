@@ -16,16 +16,13 @@ require_relative "raven"
 module ContentPerformanceManager
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.1
+    config.load_defaults 6.0
+    config.autoloader = :classic
 
     # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Application configuration can go into files in config/initializers
+    # -- all .rb files in that directory are automatically loaded after loading
+    # the framework and any gems in your application.
     config.active_job.queue_adapter = :sidekiq
-
-    additional_paths = %W[#{config.root}/lib #{config.root}/app/domain]
-
-    config.autoload_paths += additional_paths
-    config.eager_load_paths += additional_paths
   end
 end

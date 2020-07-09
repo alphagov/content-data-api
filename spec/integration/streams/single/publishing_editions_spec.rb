@@ -11,6 +11,13 @@ def expect_messages_to_have_publishing_api_events(messages)
 end
 
 RSpec.describe "PublishingAPI message queue" do
+  # FIXME: Rails 6 inconsistently overrides ActiveJob queue_adapter setting
+  # with TestAdapter #37270
+  # See https://github.com/rails/rails/issues/37270
+  around do |example|
+    perform_enqueued_jobs { example.run }
+  end
+
   include PublishingEventProcessingSpecHelper
 
   let(:subject) { Streams::Consumer.new }
