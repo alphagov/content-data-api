@@ -430,31 +430,31 @@ DEPENDENCIES
   byebug
   database_cleaner
   factory_bot_rails
-  gds-api-adapters (~> 67.0.1)
+  gds-api-adapters
   gds-sso
-  google-api-client (~> 0.42)
+  google-api-client
   govuk_app_config
-  govuk_message_queue_consumer (~> 3.5)
-  govuk_schemas (= 4.1.1)
-  govuk_sidekiq (~> 4)
+  govuk_message_queue_consumer
+  govuk_schemas
+  govuk_sidekiq
   httparty
   jbuilder
   kaminari
   listen
-  nokogiri (~> 1.10)
+  nokogiri
   odyssey
   pg
   plek
   pry-byebug
   pry-rails
-  rack (>= 2.0.6)
+  rack
   rack-proxy
-  rails (~> 5.2)
+  rails (= 5.2.4.3)
   rails-controller-testing
   rails-erd
   rspec-its
   rspec-rails
-  rubocop-govuk (~> 3.17)
+  rubocop-govuk
   ruby-progressbar
   scenic
   shoulda-matchers
@@ -471,4 +471,4 @@ RUBY VERSION
    ruby 2.6.6
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
