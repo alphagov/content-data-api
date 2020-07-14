@@ -3,7 +3,7 @@ require_dependency "concerns/trace_and_recoverable"
 module Etl
   module Master
     class MetricsProcessor
-      include Concerns::TraceAndRecoverable
+      include TraceAndRecoverable
 
       def self.process(*args)
         new(*args).process

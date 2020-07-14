@@ -1,5 +1,5 @@
 class Etl::Aggregations::Monthly
-  include Concerns::Traceable
+  include Traceable
 
   def self.process(*args)
     new(*args).process

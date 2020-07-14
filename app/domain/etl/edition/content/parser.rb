@@ -35,7 +35,7 @@ private
       ::Etl::Edition::Content::Parsers::Finder,
       ::Etl::Edition::Content::Parsers::FinderEmailSignup,
       ::Etl::Edition::Content::Parsers::GenericWithLinks,
-      ::Etl::Edition::Content::Parsers::HmrcManual,
+      ::Etl::Edition::Content::Parsers::HMRCManual,
       ::Etl::Edition::Content::Parsers::Licence,
       ::Etl::Edition::Content::Parsers::LocalTransaction,
       ::Etl::Edition::Content::Parsers::Mainstream,

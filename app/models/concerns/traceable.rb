@@ -1,6 +1,6 @@
 require "active_support/concern"
 
-module Concerns::Traceable
+module Traceable
   extend ActiveSupport::Concern
 
   include ActionView::Helpers::DateHelper

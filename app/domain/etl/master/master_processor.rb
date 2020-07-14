@@ -1,5 +1,5 @@
 class Etl::Master::MasterProcessor
-  include Concerns::Traceable
+  include Traceable
 
   def self.process(*args)
     new(*args).process

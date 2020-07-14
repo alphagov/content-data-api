@@ -1,4 +1,4 @@
-class Etl::Edition::Content::Parsers::HmrcManual
+class Etl::Edition::Content::Parsers::HMRCManual
   def parse(json)
     html = []
     html << json.dig("title") unless json.dig("title").nil?
