@@ -25,7 +25,7 @@ private
     parent_warehouse_id = attributes[:parent_warehouse_id]
     attributes = attributes.except(:parent_warehouse_id)
 
-    existing_edition.update(attributes)
+    existing_edition.update!(attributes)
 
     Streams::ParentChild::LinksProcessor
       .update_parent_and_sort_siblings(existing_edition, parent_warehouse_id)
