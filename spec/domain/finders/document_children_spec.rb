@@ -112,7 +112,7 @@ RSpec.describe Finders::DocumentChildren do
       recalculate_aggregations!
 
       new_parent = create :edition, title: "new", date: 10.days.ago, replaces: parent
-      child.update(parent: new_parent)
+      child.update!(parent: new_parent)
 
       response = records_to_hash(subject.call(new_parent, filters))
 

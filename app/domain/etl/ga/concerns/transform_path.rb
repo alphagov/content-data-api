@@ -8,7 +8,7 @@ module Etl::GA::Concerns::TransformPath
     log(process: :ga, message: "Transforming #{events_with_prefix.count} events with page_path starting https://gov.uk")
     events_with_prefix.find_each do |event|
       transformed_attributes = transform_event_attributes(event)
-      event.update(transformed_attributes)
+      event.update!(transformed_attributes)
     end
   end
 
@@ -25,7 +25,7 @@ private
         attributes[metric.to_sym] = event.send(metric) + duplicate_event.send(metric)
       end
 
-      duplicate_event.destroy
+      duplicate_event.destroy!
     end
 
     attributes

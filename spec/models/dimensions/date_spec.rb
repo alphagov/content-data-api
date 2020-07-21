@@ -151,7 +151,7 @@ RSpec.describe Dimensions::Date, type: :model do
       it "should return the existing dimension" do
         dimensions_date = Dimensions::Date.build(date)
         allow(Dimensions::Date).to receive(:create) {
-          dimensions_date.save
+          dimensions_date.save!
           raise ActiveRecord::RecordNotUnique
         }
         expect(Dimensions::Date.find_existing_or_create(date)).to eq(dimensions_date)

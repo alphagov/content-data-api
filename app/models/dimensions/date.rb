@@ -26,7 +26,7 @@ class Dimensions::Date < ApplicationRecord
 
   def self.create_with(date)
     date_dimension = build(date)
-    date_dimension.save
+    date_dimension.save!
     date_dimension
   end
 
