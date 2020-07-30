@@ -8,15 +8,15 @@ RSpec.describe Healthchecks::DailyMetricsCheck do
       it "returns status :ok" do
         expect(subject.status).to eq(:ok)
       end
-
-      it "returns a detailed message" do
-        expect(subject.message).to eq("ETL :: no daily metrics for yesterday")
-      end
     end
 
     context "When there are no metrics" do
-      it "returns status :ok" do
+      it "returns status :critical" do
         expect(subject.status).to eq(:critical)
+      end
+
+      it "returns a detailed message" do
+        expect(subject.message).to eq("ETL :: no daily metrics for yesterday")
       end
     end
   end
