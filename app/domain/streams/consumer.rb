@@ -9,7 +9,7 @@ module Streams
 
       message.ack
     rescue StandardError => e
-      GovukError.notify(e)
+      GovukError.notify(e, extra: { payload: message.payload })
       message.discard
     end
 
