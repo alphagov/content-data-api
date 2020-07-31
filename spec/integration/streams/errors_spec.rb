@@ -15,7 +15,7 @@ RSpec.describe Streams::Consumer do
     end
 
     it "logs the error" do
-      expect(GovukError).to receive(:notify).with(instance_of(StandardError))
+      expect(GovukError).to receive(:notify).with(instance_of(StandardError), hash_including(:extra))
 
       expect { subject.process(message) }.to_not raise_error
     end

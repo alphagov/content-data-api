@@ -11,7 +11,7 @@ module Healthchecks
     end
 
     def message
-      "ETL :: no daily metrics for yesterday"
+      "ETL :: no daily metrics for yesterday" if status == :critical
     end
 
   private
