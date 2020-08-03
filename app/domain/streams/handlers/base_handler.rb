@@ -16,7 +16,11 @@ private
     attributes = new_edition_attr.except(:parent_warehouse_id).merge(publishing_api_event: publishing_api_event)
     new_edition = Dimensions::Edition.new(attributes)
     new_edition.facts_edition = Etl::Edition::Processor.process(old_edition, new_edition)
-    new_edition.promote!(old_edition)
+    begin
+      new_edition.promote!(old_edition)
+    rescue ActiveRecord::RecordNotUnique => e
+      GovukError.notify(e, extra: { old_edition_id: old_edition.id, new_edition_id: new_edition.id })
+    end
     Streams::ParentChild::LinksProcessor.update_parent_and_sort_siblings(new_edition, parent_warehouse_id)
     new_edition
   end
