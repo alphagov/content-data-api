@@ -6,7 +6,7 @@ ruby File.read(".ruby-version").chomp
 gem "gds-api-adapters", "~> 67.0.1"
 gem "gds-sso"
 gem "govuk_app_config"
-gem "govuk_sidekiq", "~> 3"
+gem "govuk_sidekiq", "~> 4"
 gem "plek"
 
 # Third party gems
