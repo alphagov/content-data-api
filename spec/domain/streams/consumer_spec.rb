@@ -7,14 +7,10 @@ RSpec.describe Streams::Consumer do
     subject.process(message)
   end
 
-  it "sends payload information to GovukError" do
+  it "sends an error to GovukError" do
     error = StandardError.new
     allow(Streams::MessageProcessorJob).to receive(:perform_later).and_raise(error)
-    expect(GovukError).to receive(:notify).with(error, extra: { payload: hash_including(
-      "content_id" => an_instance_of(String),
-      "base_path" => an_instance_of(String),
-      # there are many more properties, but these are the only ones we need for debugging
-    ) })
+    expect(GovukError).to receive(:notify).with(error)
 
     subject.process(build(:message))
   end
