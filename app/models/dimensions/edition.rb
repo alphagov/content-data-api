@@ -40,7 +40,12 @@ class Dimensions::Edition < ApplicationRecord
 
   def promote!(old_edition)
     old_edition.update!(live: false) if old_edition
-    update!(live: true) unless unpublished?
+    begin
+      update!(live: true) unless unpublished?
+    rescue PG::UniqueViolation, ActiveRecord::RecordNotUnique => e
+      GovukError.notify(e, extra: { old_edition_id: old_edition.id, new_edition_id: id })
+      raise e
+    end
   end
 
   def unpublished?
