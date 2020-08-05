@@ -98,15 +98,13 @@ RSpec.describe Dimensions::Edition, type: :model do
       let(:warehouse_item_id) { "warehouse-item-id" }
       let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
 
-      before do
-        edition.promote!(old_edition)
-      end
-
       it "set the live attribute to true" do
+        edition.promote!(old_edition)
         expect(edition.live).to be true
       end
 
       it "sets the live attribute to false for the old version" do
+        edition.promote!(old_edition)
         expect(old_edition.live).to be false
       end
     end
@@ -116,15 +114,13 @@ RSpec.describe Dimensions::Edition, type: :model do
       let(:warehouse_item_id) { "warehouse-item-id" }
       let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
 
-      before do
-        edition.promote!(old_edition)
-      end
-
       it "set the live attribute to true" do
+        edition.promote!(old_edition)
         expect(edition.live).to be false
       end
 
       it "sets the live attribute to false for the old version" do
+        edition.promote!(old_edition)
         expect(old_edition.live).to be false
       end
     end
