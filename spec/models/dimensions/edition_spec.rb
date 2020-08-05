@@ -94,9 +94,9 @@ RSpec.describe Dimensions::Edition, type: :model do
 
   describe "#promote!" do
     context "for published edition" do
-      let(:edition) { build :edition, live: false }
+      let(:edition) { build :edition, id: 1, live: false }
       let(:warehouse_item_id) { "warehouse-item-id" }
-      let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
+      let(:old_edition) { build :edition, id: 2, warehouse_item_id: warehouse_item_id }
 
       it "set the live attribute to true" do
         edition.promote!(old_edition)
@@ -106,6 +106,16 @@ RSpec.describe Dimensions::Edition, type: :model do
       it "sets the live attribute to false for the old version" do
         edition.promote!(old_edition)
         expect(old_edition.live).to be false
+      end
+
+      it "raises an exception if it encounters an issue, and sends payload information to GovukError" do
+        exception = PG::UniqueViolation.new("ERROR: duplicate key value violates unique constraint")
+        allow(edition).to receive(:update!).and_raise(exception)
+        expect(GovukError).to receive(:notify).with(exception, extra: {
+          old_edition_id: old_edition.id,
+          new_edition_id: edition.id,
+        })
+        expect { edition.promote!(old_edition) }.to raise_exception(exception)
       end
     end
 
