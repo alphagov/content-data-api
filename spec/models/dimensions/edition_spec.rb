@@ -249,11 +249,5 @@ RSpec.describe Dimensions::Edition, type: :model do
 
       expect(-> { create :edition, base_path: "value", live: false }).to_not raise_error
     end
-
-    it "does not prevent duplicating `base_path` for unpublished items" do
-      create :edition, base_path: "value", live: true
-
-      expect(-> { create :edition, base_path: "value", live: false }).to_not raise_error
-    end
   end
 end
