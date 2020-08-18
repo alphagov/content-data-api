@@ -130,7 +130,7 @@ GEM
       unicorn (>= 5.4, < 5.6)
     govuk_message_queue_consumer (3.5.0)
       bunny (~> 2.11)
-    govuk_schemas (4.0.0)
+    govuk_schemas (4.1.1)
       json-schema (~> 2.8.0)
     govuk_sidekiq (4.0.0)
       gds-api-adapters (>= 19.1.0)
@@ -435,7 +435,7 @@ DEPENDENCIES
   google-api-client (~> 0.42)
   govuk_app_config
   govuk_message_queue_consumer (~> 3.5)
-  govuk_schemas (= 4.0.0)
+  govuk_schemas (= 4.1.1)
   govuk_sidekiq (~> 4)
   httparty
   jbuilder
