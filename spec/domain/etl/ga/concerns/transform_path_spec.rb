@@ -1,7 +1,7 @@
 RSpec.describe Etl::GA::Concerns::TransformPath do
   class Dummy
     include Etl::GA::Concerns::TransformPath
-    include Concerns::Traceable
+    include Traceable
   end
 
   it "events that have gov.uk prefix get formatted to remove prefix" do

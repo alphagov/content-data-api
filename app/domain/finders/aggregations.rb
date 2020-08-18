@@ -20,7 +20,7 @@ class Finders::Aggregations
     metrics = metrics
       .joins(dimensions_edition: :facts_edition).merge(editions)
       .joins(:dimensions_date).merge(dates)
-      .pluck(*aggregations).first
+      .pick(*aggregations)
 
     result = build_response(metrics)
     result[:satisfaction] = calculate_satisfaction_score(result)

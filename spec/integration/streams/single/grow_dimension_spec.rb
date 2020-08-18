@@ -1,6 +1,13 @@
 require "govuk_message_queue_consumer/test_helpers"
 
 RSpec.describe Streams::Consumer do
+  # FIXME: Rails 6 inconsistently overrides ActiveJob queue_adapter setting
+  # with TestAdapter #37270
+  # See https://github.com/rails/rails/issues/37270
+  around do |example|
+    perform_enqueued_jobs { example.run }
+  end
+
   include PublishingEventProcessingSpecHelper
 
   let(:subject) { described_class.new }

@@ -9,4 +9,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym "MAIB"
   inflect.acronym "RAIB"
   inflect.acronym "UTAAC"
+  inflect.acronym "GA"
 end

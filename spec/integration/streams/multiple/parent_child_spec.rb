@@ -1,4 +1,11 @@
 RSpec.describe "multi-part parent/child relationships" do
+  # FIXME: Rails 6 inconsistently overrides ActiveJob queue_adapter setting
+  # with TestAdapter #37270
+  # See https://github.com/rails/rails/issues/37270
+  around do |example|
+    perform_enqueued_jobs { example.run }
+  end
+
   let(:content_id) { "8a5f749e-262c-4e4b-9d29-5da2b6349df7" }
   let(:message) do
     build :message,

@@ -1,8 +1,8 @@
 require "active_support/concern"
 
-module Concerns::TraceAndRecoverable
+module TraceAndRecoverable
   extend ActiveSupport::Concern
-  include Concerns::Traceable
+  include Traceable
 
   included do
     def time_and_trap(process:, &block)

@@ -1,5 +1,3 @@
-require_relative "../../app/domain/streams/consumer"
-
 namespace :publishing_api do
   desc "Run worker to publishing API from rabbitmq"
   task consumer: :environment do

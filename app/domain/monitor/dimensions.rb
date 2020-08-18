@@ -1,5 +1,5 @@
 class Monitor::Dimensions
-  include Concerns::TraceAndRecoverable
+  include TraceAndRecoverable
   def self.run(*args)
     new(*args).run
   end

@@ -1,5 +1,5 @@
 class Etl::Feedex::Processor
-  include Concerns::TraceAndRecoverable
+  include TraceAndRecoverable
 
   def self.process(*args)
     new(*args).process
