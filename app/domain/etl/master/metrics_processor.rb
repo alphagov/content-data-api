@@ -5,8 +5,8 @@ module Etl
     class MetricsProcessor
       include TraceAndRecoverable
 
-      def self.process(*args)
-        new(*args).process
+      def self.process(*args, **kwargs)
+        new(*args, **kwargs).process
       end
 
       def initialize(date:)
