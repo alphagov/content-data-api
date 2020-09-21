@@ -1,8 +1,8 @@
 class Etl::Aggregations::Monthly
   include Traceable
 
-  def self.process(*args)
-    new(*args).process
+  def self.process(*args, **kwargs)
+    new(*args, **kwargs).process
   end
 
   def initialize(date: Date.yesterday)

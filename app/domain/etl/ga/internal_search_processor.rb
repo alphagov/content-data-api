@@ -3,8 +3,8 @@ class Etl::GA::InternalSearchProcessor
   include TraceAndRecoverable
   include Etl::GA::Concerns::TransformPath
 
-  def self.process(*args)
-    new(*args).process
+  def self.process(*args, **kwargs)
+    new(*args, **kwargs).process
   end
 
   def initialize(date:)

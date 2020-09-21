@@ -40,7 +40,7 @@ RSpec.describe Etl::GA::Client do
 
       it "uses the given scope" do
         options = { scope: "https://scope.com/analytics" }
-        auth = Etl::GA::Client.new.build(options)
+        auth = Etl::GA::Client.new.build(**options)
 
         expect(auth.authorization.scope).to include("https://scope.com/analytics")
       end

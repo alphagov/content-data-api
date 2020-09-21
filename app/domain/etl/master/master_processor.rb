@@ -1,12 +1,12 @@
 class Etl::Master::MasterProcessor
   include Traceable
 
-  def self.process(*args)
-    new(*args).process
+  def self.process(*args, **kwargs)
+    new(*args, **kwargs).process
   end
 
-  def self.process_aggregations(*args)
-    new(*args).process_aggregations
+  def self.process_aggregations(*args, **kwargs)
+    new(*args, **kwargs).process_aggregations
   end
 
   def initialize(date: Date.yesterday)

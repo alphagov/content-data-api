@@ -1,8 +1,8 @@
 class Etl::GA::ViewsAndNavigationService
   PAGE_PATH_LENGTH_LIMIT = 1500
 
-  def self.find_in_batches(*args, &block)
-    new.find_in_batches(*args, &block)
+  def self.find_in_batches(*args, **kwargs, &block)
+    new.find_in_batches(*args, **kwargs, &block)
   end
 
   def find_in_batches(date:, batch_size: 10_000)
