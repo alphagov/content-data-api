@@ -1,8 +1,6 @@
-# Run code coverage reporting on Jenkins
-if ENV["TEST_COVERAGE"] == "true"
-  require "simplecov"
-  SimpleCov.start "rails"
-end
+# Must go at top of file
+require "simplecov"
+SimpleCov.start "rails"
 
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../config/environment", __dir__)
