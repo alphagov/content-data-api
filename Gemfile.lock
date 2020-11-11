@@ -138,7 +138,7 @@ GEM
       multi_json (~> 1.11)
       os (>= 0.9, < 2.0)
       signet (~> 0.14)
-    govuk_app_config (2.6.0)
+    govuk_app_config (2.7.0)
       logstasher (>= 1.2.2, < 1.4.0)
       sentry-raven (~> 3.1.1)
       statsd-ruby (~> 1.4.0)
@@ -409,7 +409,7 @@ GEM
     thor (1.0.1)
     thread_safe (0.3.6)
     timecop (0.9.1)
-    tzinfo (1.2.7)
+    tzinfo (1.2.8)
       thread_safe (~> 0.1)
     uber (0.1.0)
     unf (0.1.4)
@@ -437,7 +437,7 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.4.0)
+    zeitwerk (2.4.1)
 
 PLATFORMS
   ruby
