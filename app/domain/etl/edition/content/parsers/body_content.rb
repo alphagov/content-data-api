@@ -21,6 +21,7 @@ class Etl::Edition::Content::Parsers::BodyContent
       detailed_guide
       document_collection
       fatality_notice
+      get_involved
       help_page
       history
       hmrc_manual_section
