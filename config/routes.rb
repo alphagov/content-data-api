@@ -19,7 +19,6 @@ Rails.application.routes.draw do
         GovukHealthcheck::SidekiqRedis,
         Healthchecks::MonthlyAggregations,
         Healthchecks::DailyMetricsCheck,
-        Healthchecks::DatabaseConnection,
         Healthchecks::SidekiqRetrySize,
         Healthchecks::EtlMetricValues.build(:pviews),
         Healthchecks::EtlMetricValues.build(:upviews),

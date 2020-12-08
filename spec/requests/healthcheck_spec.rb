@@ -3,8 +3,7 @@ RSpec.describe "/healthcheck" do
     get "/healthcheck"
     json = JSON.parse(response.body)
 
-    expect(json["checks"]).to include("database_status")
-      .and(include("etl_metric_values_pviews"))
+    expect(json["checks"]).to include("etl_metric_values_pviews")
       .and(include("etl_metric_values_upviews"))
       .and(include("etl_metric_values_feedex"))
   end
