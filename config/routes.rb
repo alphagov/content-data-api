@@ -15,9 +15,10 @@ Rails.application.routes.draw do
   get "/single_page/(*base_path)", to: "single_item#show", defaults: { format: :json }, format: false
   get "/healthcheck",
       to: GovukHealthcheck.rack_response(
+        GovukHealthcheck::ActiveRecord,
+        GovukHealthcheck::SidekiqRedis,
         Healthchecks::MonthlyAggregations,
         Healthchecks::DailyMetricsCheck,
-        Healthchecks::DatabaseConnection,
         Healthchecks::SidekiqRetrySize,
         Healthchecks::EtlMetricValues.build(:pviews),
         Healthchecks::EtlMetricValues.build(:upviews),
