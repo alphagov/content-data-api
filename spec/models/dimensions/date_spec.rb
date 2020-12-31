@@ -51,7 +51,7 @@ RSpec.describe Dimensions::Date, type: :model do
 
   it { is_expected.to validate_presence_of(:day_of_year) }
   it { is_expected.to validate_numericality_of(:day_of_year).only_integer }
-  it { is_expected.to validate_inclusion_of(:day_of_year).in_range(1..365) }
+  it { is_expected.to validate_inclusion_of(:day_of_year).in_range(1..366) }
 
   it { is_expected.to validate_presence_of(:day_of_quarter) }
   it { is_expected.to validate_numericality_of(:day_of_quarter).only_integer }
