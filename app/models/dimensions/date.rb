@@ -75,7 +75,7 @@ class Dimensions::Date < ApplicationRecord
   validates :day_of_year,
             presence: true,
             numericality: { only_integer: true },
-            inclusion: { in: (1..365) }
+            inclusion: { in: (1..366) }
 
   validates :day_of_quarter,
             presence: true,
