@@ -65,7 +65,7 @@ RSpec.shared_examples "BaseMessage#invalid?" do
 
     context "when schema name is placeholder" do
       before { payload["schema_name"] = "placeholder" }
-      it { is_expected.to eq true }
+      it { is_expected.to eq false }
     end
 
     context "when base path is nil" do

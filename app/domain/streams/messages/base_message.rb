@@ -41,7 +41,7 @@ class Streams::Messages::BaseMessage
   end
 
   def invalid?
-    mandatory_fields_nil? || placeholder_schema?
+    mandatory_fields_nil?
   end
 
   def withdrawn_notice?
@@ -99,9 +99,5 @@ private
   def mandatory_fields_nil?
     mandatory_fields = @payload.values_at("base_path", "schema_name")
     mandatory_fields.any?(&:nil?)
-  end
-
-  def placeholder_schema?
-    @payload["schema_name"].include?("placeholder")
   end
 end
