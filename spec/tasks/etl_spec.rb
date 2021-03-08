@@ -3,13 +3,13 @@ RSpec.describe "etl.rake", type: task do
     allow($stdout).to receive(:puts)
   end
 
-  describe "rake etl:master"
-  it "calls Etl::Master::MasterProcessor.process" do
-    processor = class_double(Etl::Master::MasterProcessor, process: true).as_stubbed_const
+  describe "rake etl:main"
+  it "calls Etl::Main::MainProcessor.process" do
+    processor = class_double(Etl::Main::MainProcessor, process: true).as_stubbed_const
 
     expect(processor).to receive(:process)
 
-    Rake::Task["etl:master"].invoke
+    Rake::Task["etl:main"].invoke
   end
 
   describe "rake etl:repopulate_aggregations_month" do
@@ -82,10 +82,10 @@ RSpec.describe "etl.rake", type: task do
     end
   end
 
-  describe "rake etl:rerun_master" do
+  describe "rake etl:rerun_main" do
     let!(:processor) do
       class_double(
-        Etl::Master::MasterProcessor,
+        Etl::Main::MainProcessor,
         process: true,
         process_aggregations: true,
       ).as_stubbed_const
@@ -98,11 +98,11 @@ RSpec.describe "etl.rake", type: task do
       create :metric, edition: edition, date: "2018-11-01"
       create :metric, edition: edition, date: "2018-11-02"
       create :metric, edition: edition, date: "2018-11-03"
-      Rake::Task["etl:rerun_master"].reenable
-      Rake::Task["etl:rerun_master"].invoke("2018-10-31", "2018-11-02")
+      Rake::Task["etl:rerun_main"].reenable
+      Rake::Task["etl:rerun_main"].invoke("2018-10-31", "2018-11-02")
     end
 
-    it "calls Etl::Master::MasterProcessor.process with each date" do
+    it "calls Etl::Main::MainProcessor.process with each date" do
       [Date.new(2018, 10, 31), Date.new(2018, 11, 1), Date.new(2018, 11, 2)].each do |date|
         expect(processor).to have_received(:process).once.with(date: date)
       end

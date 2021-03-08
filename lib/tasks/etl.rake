@@ -1,10 +1,13 @@
 namespace :etl do
-  desc "Run ETL master process for yesterday"
-  task master: :environment do
-    unless Etl::Master::MasterProcessor.process
-      abort("Etl::Master::MasterProcessor failed")
+  desc "Run ETL main process for yesterday"
+  task main: :environment do
+    unless Etl::Main::MainProcessor.process
+      abort("Etl::Main::MainProcessor failed")
     end
   end
+
+  desc "delete after main task is deployed"
+  task master: :main # delete after main task is deployed
 
   desc "Run Etl::Aggregations::Monthly for range of dates"
   task :repopulate_aggregations_month, %i[from to] => [:environment] do |_t, args|
@@ -80,23 +83,23 @@ namespace :etl do
     end
   end
 
-  desc "Run ETL Master process across a range of dates"
-  task :rerun_master, %i[from to] => [:environment] do |_t, args|
+  desc "Run ETL Main process across a range of dates"
+  task :rerun_main, %i[from to] => [:environment] do |_t, args|
     from = args[:from].to_date
     to = args[:to].to_date
     date_range = (from..to)
     date_range.each do |date|
-      puts "Running Etl::Master process for #{date}"
-      unless Etl::Master::MasterProcessor.process(date: date)
-        abort("Etl::Master::MasterProcessor failed")
+      puts "Running Etl::Main process for #{date}"
+      unless Etl::Main::MainProcessor.process(date: date)
+        abort("Etl::Main::MainProcessor failed")
       end
-      puts "finished running Etl::Master for #{date}"
+      puts "finished running Etl::Main for #{date}"
     end
 
     month_ends = date_range.map(&:end_of_month).uniq
     month_ends.each do |date|
       puts "Running monthly and search aggregations for #{date}"
-      Etl::Master::MasterProcessor.process_aggregations(date: date)
+      Etl::Main::MainProcessor.process_aggregations(date: date)
     end
   end
 
