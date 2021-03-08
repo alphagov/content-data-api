@@ -1,4 +1,4 @@
-class Etl::Master::MasterProcessor
+class Etl::Main::MainProcessor
   include Traceable
 
   def self.process(*args, **kwargs)
@@ -19,9 +19,9 @@ class Etl::Master::MasterProcessor
     processor_failures = 0
     monitor_failures = 0
 
-    time(process: :master) do
+    time(process: :main) do
       processor_failures = [
-        Etl::Master::MetricsProcessor.process(date: date),
+        Etl::Main::MetricsProcessor.process(date: date),
         Etl::GA::ViewsAndNavigationProcessor.process(date: date),
         Etl::GA::UserFeedbackProcessor.process(date: date),
         Etl::GA::InternalSearchProcessor.process(date: date),

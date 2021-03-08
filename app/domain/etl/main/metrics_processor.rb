@@ -1,7 +1,7 @@
 require_dependency "concerns/trace_and_recoverable"
 
 module Etl
-  module Master
+  module Main
     class MetricsProcessor
       include TraceAndRecoverable
 

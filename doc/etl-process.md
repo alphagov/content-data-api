@@ -6,7 +6,7 @@ Monthly aggregations of the daily score are then pre-calculated and stored in a 
 
 These processes run as Rake task daily in the early morning from Jenkins. They are referred to as ETL processors in the codebase as they follow a Extract, Transform and Load (ETL) design pattern.
 
-The process begins with the MasterProcessor which co-ordinates:
+The process begins with the MainProcessor which co-ordinates:
 - setting up the Facts metric table
 - running the sub-processors for each of the data sources to collect daily metrics
 - the re-aggregation of the monthly metrics
@@ -14,7 +14,7 @@ The process begins with the MasterProcessor which co-ordinates:
 
 ## Setting up the Facts metrics table
 
-Before collecting data source the MasterProcessor:
+Before collecting data source the MainProcessor:
 - Adds empty rows the Facts metrics table (where we store daily metrics) for each edition we would like metrics about. The editions we collect metrics for are those currently live on GOV.UK.
 - Makes sure there is an Date dimension for the day collecting metrics.
 

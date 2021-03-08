@@ -1,6 +1,6 @@
 require "gds-api-adapters"
 
-RSpec.describe Etl::Master::MasterProcessor do
+RSpec.describe Etl::Main::MainProcessor do
   subject { described_class }
 
   let(:date) { Date.new(2018, 2, 20) }
@@ -14,7 +14,7 @@ RSpec.describe Etl::Master::MasterProcessor do
     allow(Etl::GA::UserFeedbackProcessor).to receive(:process).and_return(true)
     allow(Etl::GA::InternalSearchProcessor).to receive(:process).and_return(true)
     allow(Etl::Feedex::Processor).to receive(:process).and_return(true)
-    allow(Etl::Master::MetricsProcessor).to receive(:process).and_return(true)
+    allow(Etl::Main::MetricsProcessor).to receive(:process).and_return(true)
     allow(Monitor::Etl).to receive(:run).and_return(true)
 
     allow(Etl::Aggregations::Monthly).to receive(:process)
@@ -40,7 +40,7 @@ RSpec.describe Etl::Master::MasterProcessor do
   it "creates a Metrics fact per content item" do
     subject.process
 
-    expect(Etl::Master::MetricsProcessor).to have_received(:process).with(date: Date.new(2018, 2, 19))
+    expect(Etl::Main::MetricsProcessor).to have_received(:process).with(date: Date.new(2018, 2, 19))
   end
 
   it "update GA metrics in the Facts table" do
@@ -151,7 +151,7 @@ RSpec.describe Etl::Master::MasterProcessor do
     another_date = Date.new(2017, 12, 30)
     subject.process(date: another_date)
 
-    expect(Etl::Master::MetricsProcessor).to have_received(:process).with(date: another_date)
+    expect(Etl::Main::MetricsProcessor).to have_received(:process).with(date: another_date)
     expect(Etl::GA::ViewsAndNavigationProcessor).to have_received(:process).with(date: another_date)
     expect(Etl::Feedex::Processor).to have_received(:process).with(date: another_date)
   end
