@@ -1,6 +1,6 @@
 # Content Data API
 
-A data warehouse that stores content and content metrics, to help content owners measure and improve content on GOV.UK.
+A data warehouse that stores content and content metrics, and exposes this information via an API, to help content owners measure and improve content on GOV.UK.
 
 This repository contains:
 - Extract, transform, load (ETL) processes for populating the data warehouse
@@ -29,29 +29,19 @@ Data is combined from multiple sources, including the [publishing platform](http
 
 ## Technical documentation
 
-This is a Ruby on Rails application that stores over time performance metrics and content changes and exposes this information via an API. It is built on a PostgreSQL 9.6 database.
+This is a Ruby on Rails app, and should follow [our Rails app conventions](https://docs.publishing.service.gov.uk/manual/conventions-for-rails-applications.html).
 
-### Dependencies
+You can use the [GOV.UK Docker environment](https://github.com/alphagov/govuk-docker) to run the application and its tests with all the necessary dependencies. Follow [the usage instructions](https://github.com/alphagov/govuk-docker#usage) to get started.
 
-- [GOV.UK Publishing API](https://github.com/alphagov/publishing-api)
-
-## Running the application
-
-See the [getting started guide](https://docs.publishing.service.gov.uk/getting-started.html) for instructions about setting up and running your development VM.
-
-```bash
-cd /var/govuk/govuk-puppet/development-vm
-bowl content-data-api
- ```
-
-The application can be accessed from http://content-data-api.dev.gov.uk, and will be installed on port 3235 on your Dev environment.
+**Use GOV.UK Docker to run any commands that follow.**
 
 ### Running the test suite
 
 To run the test suite:
- ```bash
- $ bundle exec rake
- ```
+
+```bash
+bundle exec rake
+```
 
 ## Populating data
 
