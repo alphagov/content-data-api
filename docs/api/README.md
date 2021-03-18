@@ -73,7 +73,7 @@ Read [the changelog for the gem][gem-changelog] for the latest changes.
 
 ## Running documentation locally
 
-All commands should be run from `doc/api`.
+All commands should be run from `docs/api`.
 
 ### Preview changes
 

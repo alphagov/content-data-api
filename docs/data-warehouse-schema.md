@@ -47,7 +47,7 @@ The schema is generated using [Rails ERD][rails-erd] running the following
 command:
 
 ```bash
-$ bundle exec erd --filetype=png --connected --title 'Schema' --filename doc/images/schema
+$ bundle exec erd --filetype=png --connected --title 'Schema' --filename docs/images/schema
 ```
 
 *Developer note*: The schema might not be an exact representation of the latest

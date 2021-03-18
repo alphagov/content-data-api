@@ -45,17 +45,17 @@ bundle exec rake
 
 ## Populating data
 
-If you are a GOV.UK developer using the development VM, you can [run the replication script to populate the database](doc/import_production_data.md).
+If you are a GOV.UK developer using the development VM, you can [run the replication script to populate the database](docs/import_production_data.md).
 
 ### Run ETL processes locally
 
-- To run the ETL process locally, you need to  [set up Google Analytics credentials in development](doc/google_analytics_setup.md).
+- To run the ETL process locally, you need to  [set up Google Analytics credentials in development](docs/google_analytics_setup.md).
 
 ## Licence
 
 [MIT License](LICENCE)
 
 [GOV.UK replication scripts]: https://docs.publishing.service.gov.uk/manual/replicate-app-data-locally.html
-[api-doc]: /doc/api
-[data-warehouse-what-why]: doc/data-warehouse-what-and-why.md
-[data-warehouse-schema]: doc/data-warehouse-schema.md
+[api-doc]: ./docs/api
+[data-warehouse-what-why]: ./docs/data-warehouse-what-and-why.md
+[data-warehouse-schema]: ./docs/data-warehouse-schema.md
