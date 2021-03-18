@@ -7,7 +7,7 @@ This repository contains:
 - An internal tool for exploring the data (AKA the sandbox)
 - [An API that exposes metrics and content changes][api-doc]
 
-Data is combined from multiple sources, including the [publishing platform](https://github.com/alphagov/publishing-api), user analytics, [user feedback](https://github.com/alphagov/feedback).
+Data is combined from multiple sources, including [Publishing API](https://github.com/alphagov/publishing-api), [Feedback](https://github.com/alphagov/feedback) and Google Analytics.
 
 ## Introduction ##
 
