@@ -2,17 +2,7 @@
 
 A data warehouse that stores content and content metrics, and exposes this information via an API, to help content owners measure and improve content on GOV.UK.
 
-This repository contains:
-- Extract, transform, load (ETL) processes for populating the data warehouse
-- An internal tool for exploring the data (AKA the sandbox)
-- [An API that exposes metrics and content changes][api-doc]
-
 Data is combined from multiple sources, including [Publishing API](https://github.com/alphagov/publishing-api), [Feedback](https://github.com/alphagov/feedback) and Google Analytics.
-
-## Introduction ##
-
-- [What is a data warehouse and its role in GOV.UK][data-warehouse-what-why]
-- [Database schema: star schema][data-warehouse-schema]
 
 ## Live examples
 
@@ -21,11 +11,11 @@ Data is combined from multiple sources, including [Publishing API](https://githu
 
 ## Nomenclature
 
-- **Data warehouse**: the database where we store all the metrics.
-- **ETL**: [extract, transform, load](https://en.wikipedia.org/wiki/Extract,_transform,_load) - how we get data into the data warehouse.
-- **Fact**: a record containing measurements/metrics
-- **Dimension**: a characteristic that provides context for a fact (such as the time it was extracted, or the content item it belongs to)
-- **Star schema**: The way we structure data in the data warehouse using fact and dimension tables
+- [Data warehouse](./docs/data-warehouse-what-and-why.md) - The database where we store all the metrics
+- Fact - A record containing measurements/metrics
+- Dimension - A characteristic that provides context for a fact (such as the time it was extracted, or the content item it belongs to)
+- [Star schema](./docs/data-warehouse-schema.md) - The way we structure data in the data warehouse using fact and dimension tables
+- ETL ([extract, transform, load](https://en.wikipedia.org/wiki/Extract,_transform,_load)) - How we get data into the data warehouse
 
 ## Technical documentation
 
@@ -43,19 +33,14 @@ To run the test suite:
 bundle exec rake
 ```
 
-## Populating data
+## Further documentation
 
-If you are a GOV.UK developer using the development VM, you can [run the replication script to populate the database](docs/import_production_data.md).
-
-### Run ETL processes locally
-
-- To run the ETL process locally, you need to  [set up Google Analytics credentials in development](docs/google_analytics_setup.md).
+- [Internal API documentation](./docs/api)
+- [Importing production data](docs/import_production_data.md)
+- [Running the ETL process locally](docs/google_analytics_setup.md)
 
 ## Licence
 
 [MIT License](LICENCE)
 
 [GOV.UK replication scripts]: https://docs.publishing.service.gov.uk/manual/replicate-app-data-locally.html
-[api-doc]: ./docs/api
-[data-warehouse-what-why]: ./docs/data-warehouse-what-and-why.md
-[data-warehouse-schema]: ./docs/data-warehouse-schema.md
