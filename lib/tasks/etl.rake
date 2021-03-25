@@ -6,9 +6,6 @@ namespace :etl do
     end
   end
 
-  desc "delete after main task is deployed"
-  task master: :main # delete after main task is deployed
-
   desc "Run Etl::Aggregations::Monthly for range of dates"
   task :repopulate_aggregations_month, %i[from to] => [:environment] do |_t, args|
     from = args[:from].to_date
