@@ -253,4 +253,4 @@ between content and performance.
 [figure-4-predictions]: images/fig-04-predictions.png
 [ga-tech-debug-trello]: https://trello.com/c/mMXm3KQ2/38-google-analytics-integration-is-very-fragile
 [performance-platform]: http://alphagov.github.io/performanceplatform-documentation/
-[api]: doc/api
+[api]: ./api

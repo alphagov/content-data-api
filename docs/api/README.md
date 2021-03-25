@@ -73,7 +73,7 @@ Read [the changelog for the gem][gem-changelog] for the latest changes.
 
 ## Running documentation locally
 
-All commands should be run from `doc/api`.
+All commands should be run from `docs/api`.
 
 ### Preview changes
 
@@ -91,9 +91,7 @@ Type the following to start the server:
 make server API_SPEC=../../openapi.yaml
 ```
 
-You should now be able to view a live preview at http://localhost:4567. For
-GOV.UK developers, if you are running this inside of your VM then you can view
-the live preview at dev.gov.uk:4567
+You should now be able to view a live preview at http://localhost:4567.
 
 ## Publishing changes
 
