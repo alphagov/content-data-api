@@ -38,6 +38,7 @@ group :development, :test do
   gem "database_cleaner"
   gem "factory_bot_rails"
   gem "govuk_schemas"
+  gem "govuk_test"
   gem "listen"
   gem "pry-byebug"
   gem "pry-rails"
