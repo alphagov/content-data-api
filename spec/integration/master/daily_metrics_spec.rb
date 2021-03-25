@@ -1,4 +1,4 @@
-RSpec.describe "Master process spec" do
+RSpec.describe "Main process spec" do
   let(:today) { Time.zone.today.to_s }
   let(:yesterday) { Date.yesterday.to_s }
 
@@ -13,7 +13,7 @@ RSpec.describe "Master process spec" do
     stub_feedex_response
     stub_monitoring
 
-    Etl::Master::MasterProcessor.process
+    Etl::Main::MainProcessor.process
 
     validate_facts_metrics!
     validate_google_analytics!

@@ -1,4 +1,4 @@
-RSpec.describe Etl::Master::MetricsProcessor do
+RSpec.describe Etl::Main::MetricsProcessor do
   let(:date) { Date.new(2018, 3, 15) }
 
   subject { described_class.new(date: date) }
