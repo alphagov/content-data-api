@@ -13,6 +13,14 @@ Rails.application.routes.draw do
 
   get "/content", to: "content#show", defaults: { format: :json }
   get "/single_page/(*base_path)", to: "single_item#show", defaults: { format: :json }, format: false
+  get "/healthcheck/metrics",
+      to: GovukHealthcheck.rack_response(
+        Healthchecks::DailyMetricsCheck,
+        Healthchecks::EtlMetricValues.build(:pviews),
+        Healthchecks::EtlMetricValues.build(:upviews),
+        Healthchecks::EtlMetricValues.build(:searches),
+        Healthchecks::EtlMetricValues.build(:feedex),
+      )
   get "/healthcheck/search",
       to: GovukHealthcheck.rack_response(
         Healthchecks::MonthlyAggregations,
