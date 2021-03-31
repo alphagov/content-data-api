@@ -17,6 +17,5 @@ Rails.application.routes.draw do
       to: GovukHealthcheck.rack_response(
         GovukHealthcheck::ActiveRecord,
         GovukHealthcheck::SidekiqRedis,
-        Healthchecks::SidekiqRetrySize,
       )
 end
