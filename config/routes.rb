@@ -34,17 +34,5 @@ Rails.application.routes.draw do
       to: GovukHealthcheck.rack_response(
         GovukHealthcheck::ActiveRecord,
         GovukHealthcheck::SidekiqRedis,
-        Healthchecks::MonthlyAggregations,
-        Healthchecks::DailyMetricsCheck,
-        Healthchecks::SidekiqRetrySize,
-        Healthchecks::EtlMetricValues.build(:pviews),
-        Healthchecks::EtlMetricValues.build(:upviews),
-        Healthchecks::EtlMetricValues.build(:searches),
-        Healthchecks::EtlMetricValues.build(:feedex),
-        Healthchecks::SearchAggregations.build(:last_month),
-        Healthchecks::SearchAggregations.build(:last_six_months),
-        Healthchecks::SearchAggregations.build(:last_thirty_days),
-        Healthchecks::SearchAggregations.build(:last_three_months),
-        Healthchecks::SearchAggregations.build(:last_twelve_months),
       )
 end
