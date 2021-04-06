@@ -80,6 +80,7 @@ private
       service_manual_topic
       service_sign_in
       simple_smart_answer
+      smart_answer
       special_route
       specialist_document
       speech
