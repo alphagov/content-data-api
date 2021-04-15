@@ -1,3 +1,3 @@
-Raven.configure do |config|
+GovukError.configure do |config|
   config.excluded_exceptions << "ApplicationJob::RetryableError"
 end

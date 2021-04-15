@@ -11,7 +11,7 @@ require "active_record/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-require_relative "raven"
+require_relative "sentry"
 
 module ContentPerformanceManager
   class Application < Rails::Application
