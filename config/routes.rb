@@ -30,11 +30,6 @@ Rails.application.routes.draw do
         Healthchecks::SearchAggregations.build(:last_three_months),
         Healthchecks::SearchAggregations.build(:last_twelve_months),
       )
-  get "/healthcheck",
-      to: GovukHealthcheck.rack_response(
-        GovukHealthcheck::ActiveRecord,
-        GovukHealthcheck::SidekiqRedis,
-      )
 
   get "/healthcheck/live", to: proc { [200, {}, %w[OK]] }
   get "/healthcheck/ready", to: GovukHealthcheck.rack_response(
