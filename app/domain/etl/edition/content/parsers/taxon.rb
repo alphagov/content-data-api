@@ -1,7 +1,7 @@
 class Etl::Edition::Content::Parsers::Taxon
   def parse(json)
     html = []
-    html << json.dig("description")
+    html << json["description"]
     children = json.dig("links", "child_taxons")
     unless children.nil?
       children.each do |child|

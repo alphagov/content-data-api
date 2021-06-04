@@ -1,7 +1,7 @@
 class Etl::Edition::Content::Parsers::ServiceManualTopic
   def parse(json)
     html = []
-    html << json.dig("description")
+    html << json["description"]
     groups = json.dig("details", "groups")
     unless groups.nil?
       groups.each do |group|

@@ -1,8 +1,8 @@
 class Etl::Edition::Content::Parsers::Mainstream
   def parse(json)
     html = []
-    html << json.dig("title") unless json.dig("title").nil?
-    html << json.dig("description") unless json.dig("description").nil?
+    html << json["title"] unless json["title"].nil?
+    html << json["description"] unless json["description"].nil?
 
     children = json.dig("links", "children")
     if children.present?

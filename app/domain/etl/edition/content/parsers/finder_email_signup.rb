@@ -7,7 +7,7 @@ class Etl::Edition::Content::Parsers::FinderEmailSignup
         html << choice["radio_button_name"]
       end
     end
-    html << json.dig("description")
+    html << json["description"]
     html.join(" ")
   end
 
