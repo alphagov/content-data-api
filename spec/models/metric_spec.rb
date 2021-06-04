@@ -1,27 +1,27 @@
+EDITION_METRICS =
+  %w[
+    pdf_count
+    doc_count
+    readability
+    sentences
+    chars
+    words
+    reading_time
+  ].freeze
+
+DAILY_METRICS =
+  %w[
+    entrances
+    exits
+    feedex
+    useful_no
+    useful_yes
+    searches
+    pviews
+    upviews
+  ].freeze
+
 RSpec.describe Metric do
-  EDITION_METRICS =
-    %w[
-      pdf_count
-      doc_count
-      readability
-      sentences
-      chars
-      words
-      reading_time
-    ].freeze
-
-  DAILY_METRICS =
-    %w[
-      entrances
-      exits
-      feedex
-      useful_no
-      useful_yes
-      searches
-      pviews
-      upviews
-    ].freeze
-
   describe ".find_all" do
     it "returns a list of all metrics" do
       metrics = Metric.find_all
