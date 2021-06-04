@@ -24,8 +24,7 @@ private
   def filter_editions
     scope = @parent_edition.children
     scope = scope.or(Dimensions::Edition.where(id: @parent_edition.id))
-    scope = scope.joins(join_query)
-    scope
+    scope.joins(join_query)
   end
 
   def join_query
