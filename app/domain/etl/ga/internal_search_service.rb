@@ -3,7 +3,7 @@ class Etl::GA::InternalSearchService
     new.find_in_batches(*args, **kwargs, &block)
   end
 
-  def find_in_batches(date:, batch_size: 10_000)
+  def find_in_batches(date:, batch_size: 10_000, &block)
     fetch_data(date: date)
       .lazy
       .map(&:to_h)
@@ -11,7 +11,7 @@ class Etl::GA::InternalSearchService
       .map(&method(:extract_dimensions_and_metrics))
       .map(&method(:append_labels))
       .map { |hash| set_date(hash, date) }
-      .each_slice(batch_size) { |slice| yield slice }
+      .each_slice(batch_size, &block)
   end
 
   def client
