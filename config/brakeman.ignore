@@ -1,26 +1,126 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Command Injection",
-      "warning_code": 14,
-      "fingerprint": "6bb72563651a196605533cf18c0ba1bcb6acc357b2a6c60650491d6de7a17c11",
-      "check_name": "Execute",
-      "message": "Possible command injection",
-      "file": "lib/guard/lint.rb",
-      "line": 13,
-      "link": "https://brakemanscanner.org/docs/warning_types/command_injection/",
-      "code": "system(\"#{\"bundle exec govuk-lint-ruby\"} #{files.join(\" \")}\")",
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "412ff9036816bcf66b884fd927c1416c07c6cc25a7623eb2ea8617e6259d757e",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/finders/content.rb",
+      "line": 67,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "scope.where(\"#{view[:table_name]}.dimensions_month_id = '#{sprintf(\"%s-%02d\", year, Date::MONTHNAMES.index(month.capitalize))}'\").joins(\"JOIN dimensions_editions ON #{view[:table_name]}.dimensions_edition_id = dimensions_editions.id\")",
       "render_path": null,
       "location": {
         "type": "method",
-        "class": "Guard::Lint",
-        "method": "run_on_modifications"
+        "class": "Finders::Content",
+        "method": "find_by_month"
       },
-      "user_input": "files.join(\" \")",
+      "user_input": "view[:table_name]",
+      "confidence": "Weak",
+      "note": "month_id is an integer, view[...] is a hard-coded string; not user input."
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "45c97e3fbe33b7415c7e1b81d39f828f114131304aa46d3bc96efb8157ee3ccb",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/healthchecks/etl_metric_values.rb",
+      "line": 31,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Facts::Metric.for_yesterday.where(\"#{metric} > 0\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Healthchecks::EtlMetricValues",
+        "method": "number_of_metric_values"
+      },
+      "user_input": "metric",
       "confidence": "Medium",
-      "note": "This is used by 'guard', it's not part of the running app"
+      "note": "this is called with hard-coded strings, not user input"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "45d945270b639559e090ecf3f23f1a255f05480392560fe7b4639b9bc14da3ba",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/finders/content.rb",
+      "line": 68,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "scope.where(\"#{view[:table_name]}.dimensions_month_id = '#{sprintf(\"%s-%02d\", year, Date::MONTHNAMES.index(month.capitalize))}'\").joins(\"JOIN dimensions_editions ON #{view[:table_name]}.dimensions_edition_id = dimensions_editions.id\").joins(\"JOIN facts_editions ON #{view[:table_name]}.dimensions_edition_id = facts_editions.dimensions_edition_id\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Finders::Content",
+        "method": "find_by_month"
+      },
+      "user_input": "view[:table_name]",
+      "confidence": "Weak",
+      "note": "same as line 67"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "6bda99b671f8fb839ceebdbf40c86a186f45d5591265ec7cdf47486f97ec3f5d",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/finders/aggregations.rb",
+      "line": 47,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "Arel.sql(\"SUM(#{name})\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Finders::Aggregations",
+        "method": "aggregations"
+      },
+      "user_input": "name",
+      "confidence": "Medium",
+      "note": "these names come from a config file, not user input"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "c78d8ced30a8d107f9d1e33d980957eafcd971e04b770d773869d74a3718122d",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/finders/content.rb",
+      "line": 66,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "scope.where(\"#{view[:table_name]}.dimensions_month_id = '#{sprintf(\"%s-%02d\", year, Date::MONTHNAMES.index(month.capitalize))}'\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Finders::Content",
+        "method": "find_by_month"
+      },
+      "user_input": "view[:table_name]",
+      "confidence": "Weak",
+      "note": "same as line 67"
+    },
+    {
+      "warning_type": "SQL Injection",
+      "warning_code": 0,
+      "fingerprint": "da742e3eff1c5c6b7066558117c9fadfd19c0a570bf9c550229f372088eef74e",
+      "check_name": "SQL",
+      "message": "Possible SQL injection",
+      "file": "app/domain/monitor/etl.rb",
+      "line": 20,
+      "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
+      "code": "sum(\"facts_editions.#{edition_metric}\")",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Monitor::Etl",
+        "method": "statsd_for_edition_metrics!"
+      },
+      "user_input": "edition_metric",
+      "confidence": "Medium",
+      "note": "This value comes from a config file, not user input."
     }
   ],
-  "updated": "2018-08-08 09:18:42 +0000",
-  "brakeman_version": "4.3.1"
+  "updated": "2021-06-15 08:47:38 +0000",
+  "brakeman_version": "5.0.4"
 }
