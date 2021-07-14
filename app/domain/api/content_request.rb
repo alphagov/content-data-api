@@ -6,6 +6,7 @@ class Api::ContentRequest
   include SpecificMonths
 
   attr_reader :organisation_id, :document_type, :page, :page_size, :date_range, :search_term
+
   validate :valid_organisation_id
   validate :valid_date_range
   validate :valid_sort_attribute

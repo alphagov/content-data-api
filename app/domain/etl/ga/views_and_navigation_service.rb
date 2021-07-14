@@ -5,7 +5,7 @@ class Etl::GA::ViewsAndNavigationService
     new.find_in_batches(*args, **kwargs, &block)
   end
 
-  def find_in_batches(date:, batch_size: 10_000)
+  def find_in_batches(date:, batch_size: 10_000, &block)
     fetch_data(date: date)
       .lazy
       .map(&:to_h)
@@ -14,7 +14,7 @@ class Etl::GA::ViewsAndNavigationService
       .map(&method(:append_data_labels))
       .reject(&method(:invalid_record?))
       .map { |hash| set_date(hash, date) }
-      .each_slice(batch_size) { |slice| yield slice }
+      .each_slice(batch_size, &block)
   end
 
   def client

@@ -6,7 +6,7 @@ class Etl::Edition::Content::Parsers::ServiceManualServiceToolkit
       items.each do |item|
         html << item["title"]
         html << item["description"]
-        links = item.dig("links")
+        links = item["links"]
         next if links.nil?
 
         links.each do |link|

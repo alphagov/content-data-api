@@ -1,8 +1,8 @@
 class Etl::Edition::Content::Parsers::HMRCManual
   def parse(json)
     html = []
-    html << json.dig("title") unless json.dig("title").nil?
-    html << json.dig("description") unless json.dig("description").nil?
+    html << json["title"] unless json["title"].nil?
+    html << json["description"] unless json["description"].nil?
     groups = json.dig("details", "child_section_groups")
     unless groups.nil?
       groups.each do |group|

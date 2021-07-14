@@ -1,7 +1,7 @@
 class Etl::Edition::Content::Parsers::Finder
   def parse(json)
     html = []
-    html << json.dig("title") unless json.dig("title").nil?
+    html << json["title"] unless json["title"].nil?
     children = json.dig("links", "children")
     unless children.nil?
       children.each do |child|

@@ -53,9 +53,7 @@ private
     scope = find_by_month(scope) if SpecificMonths::VALID_SPECIFIC_MONTHS.include?(@date_range)
     scope = find_by_search_term(scope) if @filter[:search_term].present?
     scope = find_by_document_type(scope) if @filter[:document_type].present?
-    scope = find_by_organisation(scope)
-
-    scope
+    find_by_organisation(scope)
   end
 
   def find_by_month(scope)

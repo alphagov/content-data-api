@@ -1,7 +1,7 @@
 class Etl::Edition::Content::Parsers::ServiceManualStandard
   def parse(json)
     html = []
-    html << json.dig("title")
+    html << json["title"]
     html << json.dig("details", "body")
     children = json.dig("links", "children")
     unless children.nil?

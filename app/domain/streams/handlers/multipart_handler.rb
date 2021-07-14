@@ -1,5 +1,6 @@
 class Streams::Handlers::MultipartHandler < Streams::Handlers::BaseHandler
   def initialize(attr_list, content_id, locale, payload, routing_key)
+    super()
     @attr_list = attr_list
     @content_id = content_id
     @locale = locale

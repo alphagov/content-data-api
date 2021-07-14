@@ -3,7 +3,7 @@ class Etl::GA::UserFeedbackService
     new.find_in_batches(*args, **kwargs, &block)
   end
 
-  def find_in_batches(date:, batch_size: 10_000)
+  def find_in_batches(date:, batch_size: 10_000, &block)
     fetch_data(date: date)
       .lazy
       .map(&:to_h)
@@ -13,7 +13,7 @@ class Etl::GA::UserFeedbackService
       .map { |hash| set_date(hash, date) }
       .group_by { |h| h["page_path"] }
       .map { |h| format_data(h) }
-      .each_slice(batch_size) { |slice| yield slice }
+      .each_slice(batch_size, &block)
   end
 
   def client

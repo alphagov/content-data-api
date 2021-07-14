@@ -1,9 +1,5 @@
 module Streams
   class Messages::SingleItemMessage < Messages::BaseMessage
-    def initialize(payload, routing_key)
-      super(payload, routing_key)
-    end
-
     def edition_attributes
       build_attributes(
         base_path: base_path,

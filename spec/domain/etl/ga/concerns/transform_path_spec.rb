@@ -1,22 +1,22 @@
-RSpec.describe Etl::GA::Concerns::TransformPath do
-  class Dummy
-    include Etl::GA::Concerns::TransformPath
-    include Traceable
-  end
+class EtlSpecDummy
+  include Etl::GA::Concerns::TransformPath
+  include Traceable
+end
 
+RSpec.describe Etl::GA::Concerns::TransformPath do
   it "events that have gov.uk prefix get formatted to remove prefix" do
     create(:ga_event, page_path: "/https://www.gov.uk/topics", process_name: "views")
     events_with_prefix = Events::GA.where("page_path ~ '^\/https:\/\/www.gov.uk'")
     expect(events_with_prefix.count).to eq 1
 
-    Dummy.new.format_events_with_invalid_prefix
+    EtlSpecDummy.new.format_events_with_invalid_prefix
 
     events_with_prefix = Events::GA.where("page_path ~ '^\/https:\/\/www.gov.uk'")
     expect(events_with_prefix.count).to eq 0
   end
 
   context "when an event exists with the same page_path after formatting" do
-    subject { Dummy.new }
+    subject { EtlSpecDummy.new }
 
     let!(:event2) do
       create(

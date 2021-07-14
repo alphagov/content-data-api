@@ -7,6 +7,7 @@ class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
   end
 
   def initialize(attrs, payload, routing_key)
+    super()
     @attrs = attrs
     @payload = payload
     @routing_key = routing_key

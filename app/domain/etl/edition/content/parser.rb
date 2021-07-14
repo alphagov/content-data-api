@@ -10,8 +10,8 @@ class Etl::Edition::Content::Parser
   def extract_content(json, subpage_path: nil)
     return nil if json.blank?
 
-    schema = json.dig("schema_name")
-    base_path = json.dig("base_path")
+    schema = json["schema_name"]
+    base_path = json["base_path"]
     parser = for_schema(schema)
     if parser.blank?
       GovukError.notify(InvalidSchemaError.new("Schema does not exist: #{schema}"), extra: { base_path: base_path.to_s })
