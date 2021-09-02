@@ -149,14 +149,14 @@ RSpec.describe Finders::Content do
     end
 
     it "returns aggregations for a specific month" do
-      august2020 = Date.new(2020, 8, 1)
+      august2021 = Date.new(2021, 8, 1)
       create :metric, edition: edition1, date: this_month_date, upviews: 15, useful_yes: 1, useful_no: 4, searches: 10
-      create :metric, edition: edition1, date: august2020, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
-      create :metric, edition: edition2, date: august2020, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
+      create :metric, edition: edition1, date: august2021, upviews: 20, useful_yes: 4, useful_no: 1, searches: 1
+      create :metric, edition: edition2, date: august2021, upviews: 10, useful_yes: 4, useful_no: 1, searches: 11
 
       recalculate_aggregations!
 
-      response = described_class.call(filter: filter.merge(date_range: "august-2020"))
+      response = described_class.call(filter: filter.merge(date_range: "august-2021"))
 
       expect(response[:results]).to contain_exactly(
         hash_including(upviews: 20, searches: 1, satisfaction: 0.8),
