@@ -44,7 +44,7 @@ private
   end
 
   def invalid_record?(data)
-    URI.parse(data["page_path"]).query.present? && data["page_path"].length > PAGE_PATH_LENGTH_LIMIT
+    URI.parse(data["page_path"]) && data["page_path"].length > PAGE_PATH_LENGTH_LIMIT
   rescue URI::InvalidURIError
     true
   end
