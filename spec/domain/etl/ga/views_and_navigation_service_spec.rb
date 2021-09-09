@@ -79,6 +79,9 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
             build_report_data(
               build_report_row(dimensions: [path_with_long_query], metrics: %w[1 1 1 1 1 1 1 1]),
             ),
+            build_report_data(
+              build_report_row(dimensions: [long_path], metrics: %w[1 1 1 1 1 1 1 1]),
+            ),
           ]
         end
 
@@ -136,6 +139,10 @@ private
 
   def path_with_long_query
     "/foo?q=".concat("a" * 1600)
+  end
+
+  def long_path
+    "/foo".concat("o" * described_class::PAGE_PATH_LENGTH_LIMIT)
   end
 
   def path_with_invalid_uri
