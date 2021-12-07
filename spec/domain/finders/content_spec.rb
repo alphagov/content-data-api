@@ -27,11 +27,10 @@ RSpec.describe Finders::Content do
     create :metric, edition: edition2, date: 11.days.ago, upviews: 10, useful_yes: 5, useful_no: 1, searches: 11
 
     recalculate_aggregations!
-
     response = described_class.call(filter: filter)
     expect(response[:results]).to contain_exactly(
-      hash_including(upviews: 35, searches: 11, satisfaction: 0.565217391304348),
-      hash_including(upviews: 25, searches: 21, satisfaction: 0.393939393939394),
+      hash_including(upviews: 35, searches: 11, satisfaction: a_value_within(0.000000000000001).of(0.565217391304348)),
+      hash_including(upviews: 25, searches: 21, satisfaction: a_value_within(0.000000000000001).of(0.393939393939394)),
     )
   end
 
