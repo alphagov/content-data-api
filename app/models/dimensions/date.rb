@@ -6,8 +6,8 @@ class Dimensions::Date < ApplicationRecord
   def self.build(date)
     new(
       date: date,
-      date_name: date.to_s(:govuk_date),
-      date_name_abbreviated: date.to_s(:govuk_date_short),
+      date_name: date.to_fs(:govuk_date),
+      date_name_abbreviated: date.to_fs(:govuk_date_short),
       year: date.year,
       quarter: ((date.month - 1) / 3) + 1,
       month: date.month,

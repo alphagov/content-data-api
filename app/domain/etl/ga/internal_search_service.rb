@@ -63,7 +63,7 @@ private
   def build_request(date:)
     {
       date_ranges: [
-        { start_date: date.to_s("%Y-%m-%d"), end_date: date.to_s("%Y-%m-%d") },
+        { start_date: date.to_fs("%Y-%m-%d"), end_date: date.to_fs("%Y-%m-%d") },
       ],
       dimensions: [
         { name: "ga:searchStartPage" },
