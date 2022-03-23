@@ -51,7 +51,6 @@ group :development, :test do
   gem "simplecov", require: false
   gem "spring"
   gem "spring-commands-rspec"
-  gem "spring-watcher-listen"
   gem "timecop"
   gem "webmock"
 end

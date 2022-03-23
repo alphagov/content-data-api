@@ -479,12 +479,9 @@ GEM
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)
-    spring (2.1.1)
+    spring (4.0.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
-    spring-watcher-listen (2.0.1)
-      listen (>= 2.7, < 4.0)
-      spring (>= 1.2, < 3.0)
     statsd-ruby (1.5.0)
     strscan (3.0.1)
     systemu (2.6.5)
@@ -569,7 +566,6 @@ DEPENDENCIES
   simplecov
   spring
   spring-commands-rspec
-  spring-watcher-listen
   timecop
   uuid
   web-console
