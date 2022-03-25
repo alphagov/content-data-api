@@ -227,7 +227,7 @@ RSpec.describe Dimensions::Edition, type: :model do
     it "prevent duplicating `warehouse_item_id` for live items" do
       create :edition, warehouse_item_id: "value", live: true
 
-      expect(-> { create :edition, warehouse_item_id: "value", live: true }).to raise_error(ActiveRecord::RecordNotUnique)
+      expect { create :edition, warehouse_item_id: "value", live: true }.to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it "does not prevent duplicating `warehouse_item_id` for old items" do
@@ -241,7 +241,7 @@ RSpec.describe Dimensions::Edition, type: :model do
     it "prevents duplicating `base_path` for live items" do
       create :edition, base_path: "value", live: true
 
-      expect(-> { create :edition, base_path: "value", live: true }).to raise_error(ActiveRecord::RecordNotUnique)
+      expect { create :edition, base_path: "value", live: true }.to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it "does not prevent duplicating `base_path` for old items" do

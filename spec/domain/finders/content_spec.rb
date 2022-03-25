@@ -442,13 +442,13 @@ RSpec.describe Finders::Content do
     it "raises an error if no `organisation_id` attribute" do
       filter.delete :organisation_id
 
-      expect(-> { described_class.call(filter: filter) }).to raise_error(ArgumentError)
+      expect { described_class.call(filter: filter) }.to raise_error(ArgumentError)
     end
 
     it "raises an error if no `date_range` attribute" do
       filter.delete :date_range
 
-      expect(-> { described_class.call(filter: filter) }).to raise_error(ArgumentError)
+      expect { described_class.call(filter: filter) }.to raise_error(ArgumentError)
     end
   end
 

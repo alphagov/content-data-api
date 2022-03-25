@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "6.1.4.6"
+gem "rails", "7.0.2"
 
 # GOV.UK gems and forks
 gem "gds-api-adapters"
@@ -51,7 +51,6 @@ group :development, :test do
   gem "simplecov", require: false
   gem "spring"
   gem "spring-commands-rspec"
-  gem "spring-watcher-listen"
   gem "timecop"
   gem "webmock"
 end
