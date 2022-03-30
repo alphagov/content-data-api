@@ -39,8 +39,8 @@ bundle exec rake
 - [Importing production data](docs/import_production_data.md)
 - [Running the ETL process locally](docs/google_analytics_setup.md)
 
-## Licence
+## License
 
-[MIT License](LICENCE)
+[MIT License](LICENSE)
 
 [GOV.UK replication scripts]: https://docs.publishing.service.gov.uk/manual/replicate-app-data-locally.html
