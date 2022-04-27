@@ -132,7 +132,7 @@ GEM
     faraday (2.2.0)
       faraday-net_http (~> 2.0)
       ruby2_keywords (>= 0.0.4)
-    faraday-net_http (2.0.1)
+    faraday-net_http (2.0.2)
     ffi (1.15.5)
     gds-api-adapters (79.1.2)
       addressable
@@ -140,7 +140,7 @@ GEM
       null_logger
       plek (>= 1.9.0)
       rest-client (~> 2.0)
-    gds-sso (16.0.2)
+    gds-sso (16.1.0)
       multi_json (~> 1.0)
       oauth2 (~> 1.0)
       omniauth (>= 1.2, < 3.0)
@@ -287,9 +287,9 @@ GEM
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
     odyssey (0.3.2)
-    omniauth (2.0.4)
+    omniauth (2.1.0)
       hashie (>= 3.4.6)
-      rack (>= 1.6.2, < 3)
+      rack (>= 2.2.3)
       rack-protection
     omniauth-gds (3.2.0)
       multi_json (~> 1.10)
