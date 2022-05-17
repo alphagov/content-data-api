@@ -90,6 +90,7 @@ private
       take_part
       taxon
       topic
+      topical_event
       topical_event_about_page
       transaction
       travel_advice
