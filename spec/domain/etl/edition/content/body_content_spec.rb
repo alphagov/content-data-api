@@ -27,6 +27,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       speech
       statistical_data_set
       take_part
+      topical_event
       topical_event_about_page
       working_group
       world_location_news_article
