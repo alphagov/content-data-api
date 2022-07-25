@@ -6,9 +6,9 @@ RSpec.describe Etl::Edition::Content::Parser do
              title: "Travel Abroad",
              description: "Go abroad",
              links: { children: [
-               { title: "Driving Abroad" },
-               { title: "Forced Marriage" },
-             ],
+                        { title: "Driving Abroad" },
+                        { title: "Forced Marriage" },
+                      ],
                       related_topics: [
                         { title: "Pets" },
                         { title: "Help" },
