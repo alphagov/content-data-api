@@ -40,6 +40,7 @@ class Etl::Edition::Content::Parsers::BodyContent
       topical_event
       topical_event_about_page
       working_group
+      world_location_news
       world_location_news_article
     ]
   end
