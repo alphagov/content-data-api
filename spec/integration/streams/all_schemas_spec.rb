@@ -99,6 +99,7 @@ private
       vanish
       working_group
       world_location
+      world_location_news
       world_location_news_article
     ]
   end
