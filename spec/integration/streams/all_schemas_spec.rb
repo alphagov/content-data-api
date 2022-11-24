@@ -101,6 +101,7 @@ private
       world_location
       world_location_news
       world_location_news_article
+      worldwide_organisation
     ]
   end
 end
