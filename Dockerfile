@@ -1,21 +1,23 @@
-ARG base_image=ghcr.io/alphagov/govuk-ruby-base:2.7.6
-ARG builder_image=ghcr.io/alphagov/govuk-ruby-builder:2.7.6
+ARG ruby_version=2.7.6
+ARG base_image=ghcr.io/alphagov/govuk-ruby-base:$ruby_version
+ARG builder_image=ghcr.io/alphagov/govuk-ruby-builder:$ruby_version
+
 
 FROM $builder_image AS builder
 
-WORKDIR /app
-COPY Gemfile* .ruby-version /app/
+WORKDIR $APP_HOME
+COPY Gemfile* .ruby-version ./
 RUN bundle install
-COPY . /app
+COPY . .
 
 
 FROM $base_image
 
 ENV GOVUK_APP_NAME=content-data-api
 
-WORKDIR /app
-COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
-COPY --from=builder /app /app/
+WORKDIR $APP_HOME
+COPY --from=builder $BUNDLE_PATH $BUNDLE_PATH
+COPY --from=builder $APP_HOME .
 
 USER app
-CMD ["bundle", "exec", "puma"]
+CMD ["puma"]
