@@ -13,6 +13,7 @@ gem "plek"
 gem "active_model_serializers"
 gem "activerecord-import"
 gem "awesome_print"
+gem "bootsnap", require: false
 gem "google-api-client"
 gem "govuk_message_queue_consumer"
 gem "httparty"
