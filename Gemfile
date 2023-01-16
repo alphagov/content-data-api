@@ -19,7 +19,7 @@ gem "govuk_message_queue_consumer"
 gem "httparty"
 gem "jbuilder"
 gem "kaminari"
-gem "mail", "~> 2.8.0"  # TODO: remove once https://github.com/mikel/mail/issues/1489 is fixed.
+gem "mail"
 gem "nokogiri"
 gem "odyssey"
 gem "pg"
