@@ -539,7 +539,6 @@ DEPENDENCIES
   jbuilder
   kaminari
   listen
-  mail
   nokogiri
   odyssey
   pg
