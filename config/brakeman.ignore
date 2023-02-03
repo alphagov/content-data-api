@@ -7,7 +7,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/domain/finders/content.rb",
-      "line": 67,
+      "line": 65,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "scope.where(\"#{view[:table_name]}.dimensions_month_id = '#{sprintf(\"%s-%02d\", year, Date::MONTHNAMES.index(month.capitalize))}'\").joins(\"JOIN dimensions_editions ON #{view[:table_name]}.dimensions_edition_id = dimensions_editions.id\")",
       "render_path": null,
@@ -19,6 +19,22 @@
       "user_input": "view[:table_name]",
       "confidence": "Weak",
       "note": "month_id is an integer, view[...] is a hard-coded string; not user input."
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 123,
+      "fingerprint": "425dcb3af9624f11f12d777d6f9fe05995719975a155c30012baa6b9dc3487df",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 2.7.6 ends on 2023-03-31",
+      "file": "Gemfile.lock",
+      "line": 327,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Weak",
+      "note": "work is ongoing to upgrade the Ruby version"
     },
     {
       "warning_type": "SQL Injection",
@@ -47,7 +63,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/domain/finders/content.rb",
-      "line": 68,
+      "line": 66,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "scope.where(\"#{view[:table_name]}.dimensions_month_id = '#{sprintf(\"%s-%02d\", year, Date::MONTHNAMES.index(month.capitalize))}'\").joins(\"JOIN dimensions_editions ON #{view[:table_name]}.dimensions_edition_id = dimensions_editions.id\").joins(\"JOIN facts_editions ON #{view[:table_name]}.dimensions_edition_id = facts_editions.dimensions_edition_id\")",
       "render_path": null,
@@ -87,7 +103,7 @@
       "check_name": "SQL",
       "message": "Possible SQL injection",
       "file": "app/domain/finders/content.rb",
-      "line": 66,
+      "line": 64,
       "link": "https://brakemanscanner.org/docs/warning_types/sql_injection/",
       "code": "scope.where(\"#{view[:table_name]}.dimensions_month_id = '#{sprintf(\"%s-%02d\", year, Date::MONTHNAMES.index(month.capitalize))}'\")",
       "render_path": null,
@@ -121,6 +137,6 @@
       "note": "This value comes from a config file, not user input."
     }
   ],
-  "updated": "2021-06-15 08:47:38 +0000",
-  "brakeman_version": "5.0.4"
+  "updated": "2023-02-03 10:57:18 +0000",
+  "brakeman_version": "5.2.1"
 }
