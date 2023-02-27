@@ -21,11 +21,11 @@ class Etl::Main::MainProcessor
 
     time(process: :main) do
       processor_failures = [
-        Etl::Main::MetricsProcessor.process(date: date),
-        Etl::GA::ViewsAndNavigationProcessor.process(date: date),
-        Etl::GA::UserFeedbackProcessor.process(date: date),
-        Etl::GA::InternalSearchProcessor.process(date: date),
-        Etl::Feedex::Processor.process(date: date),
+        Etl::Main::MetricsProcessor.process(date:),
+        Etl::GA::ViewsAndNavigationProcessor.process(date:),
+        Etl::GA::UserFeedbackProcessor.process(date:),
+        Etl::GA::InternalSearchProcessor.process(date:),
+        Etl::Feedex::Processor.process(date:),
       ].count(false)
 
       process_aggregations unless historic_data?
@@ -46,7 +46,7 @@ class Etl::Main::MainProcessor
   end
 
   def process_aggregations
-    Etl::Aggregations::Monthly.process(date: date)
+    Etl::Aggregations::Monthly.process(date:)
     Etl::Aggregations::Search.process
   end
 

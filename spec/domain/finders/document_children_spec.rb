@@ -6,9 +6,9 @@ RSpec.describe Finders::DocumentChildren do
   let(:sort_direction) { nil }
   let(:filters) do
     {
-      time_period: time_period,
-      sort_key: sort_key,
-      sort_direction: sort_direction,
+      time_period:,
+      sort_key:,
+      sort_direction:,
     }
   end
 
@@ -20,7 +20,7 @@ RSpec.describe Finders::DocumentChildren do
 
   it "returns the aggregations for the past 30 days" do
     parent = create :edition, date: 2.months.ago, primary_organisation_id: "1", document_type: "manual"
-    child = create :edition, date: 2.months.ago, parent: parent
+    child = create(:edition, date: 2.months.ago, parent:)
 
     create :metric, edition: parent, date: 15.days.ago, upviews: 15, useful_yes: 1, useful_no: 1, searches: 10
     create :metric, edition: parent, date: 10.days.ago, upviews: 20, useful_yes: 24, useful_no: 74, searches: 1
@@ -55,7 +55,7 @@ RSpec.describe Finders::DocumentChildren do
       primary_organisation_id: "2",
       document_type: "manual_section",
       sibling_order: 1,
-      parent: parent,
+      parent:,
     )
 
     create :metric, edition: parent, date: 15.days.ago
@@ -86,14 +86,14 @@ RSpec.describe Finders::DocumentChildren do
   context "Newly created child edition before ETL process runs" do
     it "returns edition attribute for latest editions" do
       parent = create :edition, title: "parent", date: 2.months.ago
-      old_child = create :edition, title: "old", date: 10.days.ago, parent: parent
+      old_child = create(:edition, title: "old", date: 10.days.ago, parent:)
 
       create :metric, edition: parent, date: 15.days.ago, upviews: 1
       create :metric, edition: old_child, date: 10.days.ago, upviews: 2
 
       recalculate_aggregations!
 
-      create :edition, title: "new", date: 10.days.ago, parent: parent, replaces: old_child
+      create :edition, title: "new", date: 10.days.ago, parent:, replaces: old_child
 
       response = records_to_hash(subject.call(parent, filters))
 
@@ -104,7 +104,7 @@ RSpec.describe Finders::DocumentChildren do
   context "Newly created parent edition before ETL process runs" do
     it "returns edition attribute for latest editions" do
       parent = create :edition, title: "old", date: 2.months.ago
-      child = create :edition, date: 10.days.ago, parent: parent, title: "child"
+      child = create :edition, date: 10.days.ago, parent:, title: "child"
 
       create :metric, edition: parent, date: 15.days.ago, upviews: 1
       create :metric, edition: child, date: 10.days.ago, upviews: 2
@@ -128,7 +128,7 @@ RSpec.describe Finders::DocumentChildren do
       let(:time_period) { "last-month" }
       it "returns the aggregations for last month" do
         last_month_date = (Time.zone.today - 1.month)
-        child = create :edition, date: 2.months.ago, parent: parent
+        child = create(:edition, date: 2.months.ago, parent:)
 
         create :metric, edition: parent, date: last_month_date, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
         create :metric, edition: child, date: last_month_date, upviews: 2, useful_yes: 1, useful_no: 3, searches: 20
@@ -146,10 +146,10 @@ RSpec.describe Finders::DocumentChildren do
       let(:time_period) { "past-3-months" }
       it "returns the aggregations for past 3 months" do
         date = (Time.zone.today - 2.months)
-        child = create :edition, date: 2.months.ago, parent: parent
+        child = create(:edition, date: 2.months.ago, parent:)
 
-        create :metric, edition: parent, date: date, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
-        create :metric, edition: child, date: date, upviews: 2, useful_yes: 1, useful_no: 3, searches: 20
+        create :metric, edition: parent, date:, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
+        create :metric, edition: child, date:, upviews: 2, useful_yes: 1, useful_no: 3, searches: 20
 
         recalculate_aggregations!
 
@@ -164,10 +164,10 @@ RSpec.describe Finders::DocumentChildren do
       let(:time_period) { "past-6-months" }
       it "returns the aggregations for past 6 months" do
         date = (Time.zone.today - 5.months)
-        child = create :edition, date: 6.months.ago, parent: parent
+        child = create(:edition, date: 6.months.ago, parent:)
 
-        create :metric, edition: parent, date: date, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
-        create :metric, edition: child, date: date, upviews: 2, useful_yes: 1, useful_no: 3, searches: 20
+        create :metric, edition: parent, date:, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
+        create :metric, edition: child, date:, upviews: 2, useful_yes: 1, useful_no: 3, searches: 20
 
         recalculate_aggregations!
 
@@ -182,10 +182,10 @@ RSpec.describe Finders::DocumentChildren do
       let(:time_period) { "past-year" }
       it "returns the aggregations for past year" do
         date = (Time.zone.today - 12.months)
-        child = create :edition, date: 12.months.ago, parent: parent
+        child = create(:edition, date: 12.months.ago, parent:)
 
-        create :metric, edition: parent, date: date, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
-        create :metric, edition: child, date: date, upviews: 2, useful_yes: 1, useful_no: 3, searches: 20
+        create :metric, edition: parent, date:, upviews: 1, useful_yes: 3, useful_no: 1, searches: 10
+        create :metric, edition: child, date:, upviews: 2, useful_yes: 1, useful_no: 3, searches: 20
 
         recalculate_aggregations!
 
@@ -201,8 +201,8 @@ RSpec.describe Finders::DocumentChildren do
     let(:parent) { create :edition, title: "A" }
 
     before do
-      edition1 = create :edition, title: "B", sibling_order: 1, parent: parent
-      edition2 = create :edition, title: "C", sibling_order: 2, parent: parent
+      edition1 = create(:edition, title: "B", sibling_order: 1, parent:)
+      edition2 = create(:edition, title: "C", sibling_order: 2, parent:)
 
       create :metric, edition: parent, date: 15.days.ago, upviews: 1, feedex: 2, useful_yes: 1, useful_no: 0
       create :metric, edition: edition1, date: 15.days.ago, upviews: 1, feedex: 1, useful_yes: 0, useful_no: 1

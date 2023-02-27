@@ -16,7 +16,7 @@ namespace :etl do
       date = Date.new(*month, 1)
       string_date = date.strftime("%Y-%m")
       puts "repopulating Monthly Aggregation for #{string_date}"
-      Etl::Aggregations::Monthly.process(date: date)
+      Etl::Aggregations::Monthly.process(date:)
       puts "finished repopulating Monthly Aggregation for #{string_date}"
     end
   end
@@ -34,7 +34,7 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       puts "repopulating GA pviews for #{date}"
-      unless Etl::GA::ViewsAndNavigationProcessor.process(date: date)
+      unless Etl::GA::ViewsAndNavigationProcessor.process(date:)
         abort("Etl::GA::ViewsAndNavigationProcessor failed")
       end
       puts "finished repopulating GA pviews for #{date}"
@@ -47,7 +47,7 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       puts "repopulating searches for #{date}"
-      unless Etl::GA::InternalSearchProcessor.process(date: date)
+      unless Etl::GA::InternalSearchProcessor.process(date:)
         abort("Etl::GA::InternalSearchProcessor failed")
       end
       puts "finished repopulating searches for #{date}"
@@ -60,7 +60,7 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       puts "repopulating useful scores for #{date}"
-      unless Etl::GA::UserFeedbackProcessor.process(date: date)
+      unless Etl::GA::UserFeedbackProcessor.process(date:)
         abort("Etl::GA::UserFeedbackProcessor failed")
       end
       puts "finished repopulating useful scores for #{date}"
@@ -73,7 +73,7 @@ namespace :etl do
     to = args[:to].to_date
     (from..to).each do |date|
       puts "repopulating feedex for #{date}"
-      unless Etl::Feedex::Processor.process(date: date)
+      unless Etl::Feedex::Processor.process(date:)
         abort("Etl::Feedex::Processor failed")
       end
       puts "finished repopulating feedex for #{date}"
@@ -87,7 +87,7 @@ namespace :etl do
     date_range = (from..to)
     date_range.each do |date|
       puts "Running Etl::Main process for #{date}"
-      unless Etl::Main::MainProcessor.process(date: date)
+      unless Etl::Main::MainProcessor.process(date:)
         abort("Etl::Main::MainProcessor failed")
       end
       puts "finished running Etl::Main for #{date}"
@@ -96,7 +96,7 @@ namespace :etl do
     month_ends = date_range.map(&:end_of_month).uniq
     month_ends.each do |date|
       puts "Running monthly and search aggregations for #{date}"
-      Etl::Main::MainProcessor.process_aggregations(date: date)
+      Etl::Main::MainProcessor.process_aggregations(date:)
     end
   end
 

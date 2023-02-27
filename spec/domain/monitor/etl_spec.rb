@@ -21,7 +21,7 @@ RSpec.describe Monitor::Etl do
       expect(GovukStatsd).to receive(:count).with("monitor.etl.edition.#{metric_name}", 10)
 
       edition = create :edition, date: yesterday, facts: { metric_name => 10 }
-      create :metric, edition: edition, date: yesterday
+      create :metric, edition:, date: yesterday
       subject.run
     end
   end

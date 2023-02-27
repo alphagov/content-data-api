@@ -9,7 +9,7 @@ class Finders::SelectView
   def run
     return GovukError.notify(InvalidDateRangeError.new("Invalid date range: #{date_range}")) unless valid_date_range?
 
-    { model_name: model_name, table_name: table_name }
+    { model_name:, table_name: }
   end
 
 private

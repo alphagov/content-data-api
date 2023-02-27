@@ -93,24 +93,24 @@ RSpec.describe "etl.rake", type: task do
 
     before do
       edition = create :edition, date: "2018-10-03"
-      create :metric, edition: edition, date: "2018-10-30"
-      create :metric, edition: edition, date: "2018-10-31"
-      create :metric, edition: edition, date: "2018-11-01"
-      create :metric, edition: edition, date: "2018-11-02"
-      create :metric, edition: edition, date: "2018-11-03"
+      create :metric, edition:, date: "2018-10-30"
+      create :metric, edition:, date: "2018-10-31"
+      create :metric, edition:, date: "2018-11-01"
+      create :metric, edition:, date: "2018-11-02"
+      create :metric, edition:, date: "2018-11-03"
       Rake::Task["etl:rerun_main"].reenable
       Rake::Task["etl:rerun_main"].invoke("2018-10-31", "2018-11-02")
     end
 
     it "calls Etl::Main::MainProcessor.process with each date" do
       [Date.new(2018, 10, 31), Date.new(2018, 11, 1), Date.new(2018, 11, 2)].each do |date|
-        expect(processor).to have_received(:process).once.with(date: date)
+        expect(processor).to have_received(:process).once.with(date:)
       end
     end
 
     it "runs the aggregations process for each month in the range" do
       [Date.new(2018, 10, 31), Date.new(2018, 11, 30)].each do |date|
-        expect(processor).to have_received(:process_aggregations).once.with(date: date)
+        expect(processor).to have_received(:process_aggregations).once.with(date:)
       end
     end
   end

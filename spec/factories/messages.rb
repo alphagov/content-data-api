@@ -13,7 +13,7 @@ FactoryBot.define do
       locale { "en" }
     end
 
-    delivery_info { OpenStruct.new(routing_key: routing_key) }
+    delivery_info { OpenStruct.new(routing_key:) }
 
     payload do
       GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|

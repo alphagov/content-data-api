@@ -13,7 +13,7 @@ private
 
   def update_edition(new_edition_attr, old_edition, publishing_api_event)
     parent_warehouse_id = new_edition_attr[:parent_warehouse_id]
-    attributes = new_edition_attr.except(:parent_warehouse_id).merge(publishing_api_event: publishing_api_event)
+    attributes = new_edition_attr.except(:parent_warehouse_id).merge(publishing_api_event:)
     new_edition = Dimensions::Edition.new(attributes)
     new_edition.facts_edition = Etl::Edition::Processor.process(old_edition, new_edition)
     new_edition.promote!(old_edition)

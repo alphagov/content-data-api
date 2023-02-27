@@ -12,7 +12,7 @@ RSpec.describe Etl::Feedex::Processor do
       edition2 = create :edition, base_path: "/path2", date: "2018-02-20"
       fact2 = create :metric, edition: edition2, date: "2018-02-20"
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact1.reload).to have_attributes(feedex: 21)
       expect(fact2.reload).to have_attributes(feedex: 11)
@@ -29,18 +29,18 @@ RSpec.describe Etl::Feedex::Processor do
 
     it "does not update metrics for other items" do
       edition = create :edition, base_path: "/non-matching-path"
-      fact = create :metric, edition: edition, date: "2018-02-20", feedex: 9
+      fact = create :metric, edition:, date: "2018-02-20", feedex: 9
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact.reload).to have_attributes(feedex: 9)
     end
 
     it "deletes the events that matches the base_path of an item" do
       edition = create :edition, base_path: "/path1", date: "2018-02-20"
-      create :metric, edition: edition, date: "2018-02-20", feedex: 1
+      create :metric, edition:, date: "2018-02-20", feedex: 1
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(Events::Feedex.where(page_path: "/path1").count).to eq(0)
     end
@@ -55,18 +55,18 @@ RSpec.describe Etl::Feedex::Processor do
 
     it "only updates metrics for the current day" do
       edition = create :edition, base_path: "/path1"
-      fact1 = create :metric, edition: edition, date: "2018-02-20"
+      fact1 = create :metric, edition:, date: "2018-02-20"
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact1.reload).to have_attributes(feedex: 21)
     end
 
     it "only deletes the events for the current day that matches" do
       edition = create :edition, base_path: "/path1"
-      create :metric, edition: edition, date: "2018-02-20"
+      create :metric, edition:, date: "2018-02-20"
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(Events::Feedex.count).to eq(3)
     end
@@ -76,7 +76,7 @@ RSpec.describe Etl::Feedex::Processor do
     before do
       allow_any_instance_of(Etl::Feedex::Service).to receive(:find_in_batches).and_raise(error)
       allow(GovukError).to receive(:notify)
-      described_class.process(date: date)
+      described_class.process(date:)
     end
 
     shared_examples "all errors" do

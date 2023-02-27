@@ -7,7 +7,7 @@ module SchemasIterator
   end
 
   def self.payload_for(schema_name, schema)
-    all_payloads[schema_name] ||= GovukSchemas::RandomExample.new(schema: schema).payload
+    all_payloads[schema_name] ||= GovukSchemas::RandomExample.new(schema:).payload
   end
 
   def self.all_payloads

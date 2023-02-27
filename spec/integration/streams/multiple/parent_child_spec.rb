@@ -44,7 +44,7 @@ RSpec.describe "multi-part parent/child relationships" do
   end
 
   it "does not reset the parent of old items" do
-    old_edition = create :edition, content_id: content_id, locale: "fr", warehouse_item_id: "#{content_id}:fr:part5"
+    old_edition = create :edition, content_id:, locale: "fr", warehouse_item_id: "#{content_id}:fr:part5"
     subject.process(message)
     message.payload["details"]["parts"][0]["title"] = "New title"
     parent = Dimensions::Edition.find_latest("#{content_id}:fr")

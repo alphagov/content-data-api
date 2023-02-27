@@ -10,8 +10,8 @@ RSpec.describe Healthchecks::EtlMetricValues do
   context "when there are no pviews for yesterday" do
     before do
       edition = create :edition
-      create :metric, edition: edition, date: yesterday, pviews: 0
-      create :metric, edition: edition, date: Time.zone.today, pviews: 10
+      create :metric, edition:, date: yesterday, pviews: 0
+      create :metric, edition:, date: Time.zone.today, pviews: 10
     end
 
     its(:status) { is_expected.to eq(:critical) }
@@ -21,8 +21,8 @@ RSpec.describe Healthchecks::EtlMetricValues do
   context "when there are pviews for yesterday" do
     before do
       edition = create :edition
-      create :metric, edition: edition, date: yesterday, pviews: 10
-      create :metric, edition: edition, date: Time.zone.today, pviews: 10
+      create :metric, edition:, date: yesterday, pviews: 10
+      create :metric, edition:, date: Time.zone.today, pviews: 10
     end
 
     its(:status) { is_expected.to eq(:ok) }

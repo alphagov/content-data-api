@@ -23,7 +23,7 @@ private
 
   def extract_events
     batch = 1
-    Etl::GA::ViewsAndNavigationService.find_in_batches(date: date) do |events|
+    Etl::GA::ViewsAndNavigationService.find_in_batches(date:) do |events|
       log process: :ga, message: "Processing #{events.length} events in batch #{batch}"
       Events::GA.import(events, batch_size: 10_000)
       batch += 1

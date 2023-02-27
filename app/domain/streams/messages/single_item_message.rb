@@ -2,12 +2,12 @@ module Streams
   class Messages::SingleItemMessage < Messages::BaseMessage
     def edition_attributes
       build_attributes(
-        base_path: base_path,
-        title: title,
-        document_text: document_text,
+        base_path:,
+        title:,
+        document_text:,
         warehouse_item_id: "#{content_id}:#{locale}",
       ).merge(
-        acronym: acronym,
+        acronym:,
       )
     end
 

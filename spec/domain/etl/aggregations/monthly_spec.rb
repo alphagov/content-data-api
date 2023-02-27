@@ -14,7 +14,7 @@ RSpec.describe Etl::Aggregations::Monthly do
     create :metric, edition: edition2, date: "2018-02-20", pviews: 100, upviews: 10, useful_yes: 50, useful_no: 50
     create :metric, edition: edition2, date: "2018-02-21", pviews: 200, upviews: 20, useful_yes: 50, useful_no: 50
 
-    subject.process(date: date)
+    subject.process(date:)
 
     results = Aggregations::MonthlyMetric.all.order(pviews: :asc)
 
@@ -54,7 +54,7 @@ RSpec.describe Etl::Aggregations::Monthly do
     create :metric, edition: edition1, date: "2018-02-21", pviews: 40, upviews: 20
     create :metric, edition: edition1, date: "2018-03-01", pviews: 60, upviews: 30
 
-    subject.process(date: date)
+    subject.process(date:)
 
     results = Aggregations::MonthlyMetric.all
 
@@ -72,7 +72,7 @@ RSpec.describe Etl::Aggregations::Monthly do
       create :metric, edition: edition1, date: "2018-02-21", metric_name => 10
       create :metric, edition: edition1, date: "2018-02-22", metric_name => 20
 
-      subject.process(date: date)
+      subject.process(date:)
 
       expect(Aggregations::MonthlyMetric.first).to have_attributes(metric_name => 30)
     end
@@ -82,8 +82,8 @@ RSpec.describe Etl::Aggregations::Monthly do
     it "is idempotent" do
       create :metric, edition: edition1, date: "2018-02-21", pviews: 40, upviews: 20
 
-      subject.process(date: date)
-      subject.process(date: date)
+      subject.process(date:)
+      subject.process(date:)
 
       results = Aggregations::MonthlyMetric.all
 
@@ -94,12 +94,12 @@ RSpec.describe Etl::Aggregations::Monthly do
       last_month = (date - 30.days)
 
       create :metric, edition: edition1, date: "2018-02-21", pviews: 40, upviews: 20
-      subject.process(date: date)
+      subject.process(date:)
 
       create :metric, edition: edition1, date: "2018-01-21", pviews: 40, upviews: 20
       subject.process(date: last_month)
 
-      subject.process(date: date)
+      subject.process(date:)
       subject.process(date: last_month)
 
       expect(Aggregations::MonthlyMetric.where(dimensions_month_id: "2018-01").count).to eq(1)

@@ -20,7 +20,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
                      date: "2018-02-20"
       fact2 = create :metric, edition: edition2, date: "2018-02-20"
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact1.reload).to have_attributes(pviews: 1, upviews: 1, entrances: 10, exits: 5, bounces: 31, page_time: 20)
       expect(fact2.reload).to have_attributes(pviews: 2, upviews: 2, entrances: 20, exits: 10, bounces: 50, page_time: 23)
@@ -37,9 +37,9 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
     it "does not update metrics for other items" do
       edition = create :edition, base_path: "/non-matching-path", date: "2018-02-20"
-      fact = create :metric, edition: edition, date: "2018-02-20", pviews: 99, upviews: 90
+      fact = create :metric, edition:, date: "2018-02-20", pviews: 99, upviews: 90
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact.reload).to have_attributes(pviews: 99, upviews: 90)
     end
@@ -47,7 +47,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
     it "deletes events after updating facts metrics" do
       create(:ga_event, :with_user_feedback, date: date - 1, page_path: "/path1")
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(Events::GA.count).to eq(0)
     end
@@ -61,7 +61,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
       it "only updates metrics for the current day" do
         fact1 = create :metric, edition: edition1, date: "2018-02-20"
 
-        described_class.process(date: date)
+        described_class.process(date:)
 
         expect(fact1.reload).to have_attributes(pviews: 1, upviews: 1)
       end

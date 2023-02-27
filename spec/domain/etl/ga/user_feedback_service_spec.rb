@@ -48,7 +48,7 @@ RSpec.describe Etl::GA::UserFeedbackService do
             "date" => "2018-02-20",
           ),
         ]
-        expect { |probe| subject.find_in_batches(date: date, batch_size: 1, &probe) }
+        expect { |probe| subject.find_in_batches(date:, batch_size: 1, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
 
@@ -79,7 +79,7 @@ RSpec.describe Etl::GA::UserFeedbackService do
             "date" => "2018-02-20",
           ),
         ]
-        expect { |probe| subject.find_in_batches(date: date, batch_size: 1, &probe) }
+        expect { |probe| subject.find_in_batches(date:, batch_size: 1, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
     end

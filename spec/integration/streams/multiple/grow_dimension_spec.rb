@@ -61,7 +61,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
         :message,
         :travel_advice,
         base_path: "/travel/advice",
-        content_id: content_id,
+        content_id:,
         locale: "fr",
         attributes: {
           "title" => "The Title",

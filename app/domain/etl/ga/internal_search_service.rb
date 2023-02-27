@@ -4,7 +4,7 @@ class Etl::GA::InternalSearchService
   end
 
   def find_in_batches(date:, batch_size: 10_000, &block)
-    fetch_data(date: date)
+    fetch_data(date:)
       .lazy
       .map(&:to_h)
       .flat_map(&method(:extract_rows))
@@ -52,7 +52,7 @@ private
       service
         .batch_get_reports(
           Google::Apis::AnalyticsreportingV4::GetReportsRequest.new(
-            report_requests: [build_request(date: date).merge(page_token: page_token)],
+            report_requests: [build_request(date:).merge(page_token:)],
           ),
         )
         .reports

@@ -6,8 +6,8 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
   let(:old_edition) do
     create(
       :edition,
-      content_id: content_id,
-      base_path: base_path,
+      content_id:,
+      base_path:,
       locale: "en",
       live: true,
     )
@@ -26,7 +26,7 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
     context "with a single english edition" do
       it "finds the old english edition when no attributes change" do
         expect(subject).to receive(:update_editions).with(
-          [attrs: attrs, old_edition: old_edition],
+          [attrs:, old_edition:],
         )
 
         subject.process
@@ -39,7 +39,7 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
 
       it "finds the old welsh edition when no attributes change" do
         expect(subject).to receive(:update_editions).with(
-          [attrs: attrs, old_edition: old_edition],
+          [attrs:, old_edition:],
         )
 
         subject.process
@@ -51,8 +51,8 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
     context "in the case of a redirect or gone with no locale" do
       let(:attrs) do
         {
-          content_id: content_id,
-          base_path: base_path,
+          content_id:,
+          base_path:,
         }
       end
 

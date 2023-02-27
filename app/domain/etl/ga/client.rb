@@ -11,7 +11,7 @@ class Etl::GA::Client
 
   def build(scope: AUTH_ANALYTICS_READONLY)
     @client ||= AnalyticsReportingService.new
-    @client.authorization ||= ServiceAccountCredentials.make_creds(scope: scope)
+    @client.authorization ||= ServiceAccountCredentials.make_creds(scope:)
 
     @client.client_options.read_timeout_sec = 300
     @client.client_options.open_timeout_sec = 300

@@ -9,7 +9,7 @@ RSpec.describe "Process all schemas" do
         expect(GovukError).not_to receive(:notify)
 
         payload = SchemasIterator.payload_for(schema_name, schema)
-        message = build(:message, payload: payload, routing_key: "#{schema_name}.#{update_type}")
+        message = build(:message, payload:, routing_key: "#{schema_name}.#{update_type}")
 
         subject.process(message)
       end

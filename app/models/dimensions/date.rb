@@ -4,8 +4,8 @@ class Dimensions::Date < ApplicationRecord
   scope :between, ->(from, to) { where("date BETWEEN ? AND ?", from, to) }
 
   def self.build(date)
-    new(
-      date: date,
+    new({
+      date:,
       date_name: date.to_fs(:govuk_date),
       date_name_abbreviated: date.to_fs(:govuk_date_short),
       year: date.year,
@@ -21,7 +21,7 @@ class Dimensions::Date < ApplicationRecord
       day_name: date.strftime("%A"),
       day_name_abbreviated: date.strftime("%a"),
       weekday_weekend: date.saturday? || date.sunday? ? "Weekend" : "Weekday",
-    )
+    })
   end
 
   def self.create_with(date)
@@ -31,13 +31,13 @@ class Dimensions::Date < ApplicationRecord
   end
 
   def self.find_existing_or_create(date)
-    find_by(date: date) || create_with(date)
+    find_by(date:) || create_with(date)
   rescue ActiveRecord::RecordNotUnique
-    find_by(date: date)
+    find_by(date:)
   end
 
   def self.exists?(date)
-    Dimensions::Date.where(date: date).exists?
+    Dimensions::Date.where(date:).exists?
   end
 
   validates :date, presence: true

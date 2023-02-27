@@ -6,8 +6,8 @@ RSpec.describe Finders::Aggregations do
 
   it "return aggregated values for daily metrics" do
     edition = create :edition, base_path: "/path/1", date: "2018-01-01"
-    create :metric, edition: edition, date: "2018-01-01", pviews: 2
-    create :metric, edition: edition, date: "2018-01-02", pviews: 3
+    create :metric, edition:, date: "2018-01-01", pviews: 2
+    create :metric, edition:, date: "2018-01-02", pviews: 3
 
     result = Finders::Aggregations.new.run
     expect(result.fetch(:pviews)).to eq(5)
@@ -15,8 +15,8 @@ RSpec.describe Finders::Aggregations do
 
   it "filters by_warehouse_item_id" do
     edition = create :edition, base_path: "/path/1", date: "2018-01-01"
-    create :metric, edition: edition, date: "2018-01-01", pviews: 2
-    create :metric, edition: edition, date: "2018-01-02", pviews: 3
+    create :metric, edition:, date: "2018-01-01", pviews: 2
+    create :metric, edition:, date: "2018-01-02", pviews: 3
 
     edition2 = create :edition, base_path: "/path/2", date: "2018-01-01"
     create :metric, edition: edition2, date: "2018-01-02", pviews: 3
@@ -30,10 +30,10 @@ RSpec.describe Finders::Aggregations do
 
   it "filters by from and to" do
     edition = create :edition, base_path: "/path/1", date: "2018-01-01"
-    create :metric, edition: edition, date: "2018-01-01", pviews: 2
-    create :metric, edition: edition, date: "2018-01-02", pviews: 3
-    create :metric, edition: edition, date: "2018-01-03", pviews: 4
-    create :metric, edition: edition, date: "2018-01-04", pviews: 5
+    create :metric, edition:, date: "2018-01-01", pviews: 2
+    create :metric, edition:, date: "2018-01-02", pviews: 3
+    create :metric, edition:, date: "2018-01-03", pviews: 4
+    create :metric, edition:, date: "2018-01-04", pviews: 5
 
     result = Finders::Aggregations.new.between(
       from: "2018-01-02",
@@ -57,8 +57,8 @@ RSpec.describe Finders::Aggregations do
   describe "Satisfaction score" do
     it "recalculate the `satisfaction-score` aggregation" do
       edition = create :edition, base_path: "/path/1", date: "2018-01-02"
-      create :metric, edition: edition, date: "2018-01-02", useful_yes: 2, useful_no: 0
-      create :metric, edition: edition, date: "2018-01-03", useful_yes: 1, useful_no: 2
+      create :metric, edition:, date: "2018-01-02", useful_yes: 2, useful_no: 0
+      create :metric, edition:, date: "2018-01-03", useful_yes: 1, useful_no: 2
 
       result = Finders::Aggregations.new.run
 
@@ -67,8 +67,8 @@ RSpec.describe Finders::Aggregations do
 
     it "return 0 if no responses" do
       edition = create :edition, base_path: "/path/1", date: "2018-01-01"
-      create :metric, edition: edition, date: "2018-01-01", useful_yes: 0, useful_no: 0
-      create :metric, edition: edition, date: "2018-01-02", useful_yes: 0, useful_no: 0
+      create :metric, edition:, date: "2018-01-01", useful_yes: 0, useful_no: 0
+      create :metric, edition:, date: "2018-01-02", useful_yes: 0, useful_no: 0
 
       result = Finders::Aggregations.new.run
 

@@ -23,10 +23,10 @@ RSpec.describe Dimensions::Edition, type: :model do
       let(:locale) { "fr" }
 
       it "filters out the passed paths" do
-        create :edition, :multipart, base_path: "/path-1", locale: locale, content_id: content_id
-        create :edition, :multipart, base_path: "/path-1/part-1", locale: locale, content_id: content_id
-        create :edition, :multipart, base_path: "/path-1/part-2.fr", locale: locale, content_id: content_id
-        create :edition, :multipart, base_path: "/path-1/part-2", locale: "en", content_id: content_id
+        create(:edition, :multipart, base_path: "/path-1", locale:, content_id:)
+        create(:edition, :multipart, base_path: "/path-1/part-1", locale:, content_id:)
+        create(:edition, :multipart, base_path: "/path-1/part-2.fr", locale:, content_id:)
+        create(:edition, :multipart, base_path: "/path-1/part-2", locale: "en", content_id:)
         expect(Dimensions::Edition.outdated_subpages(content_id, locale, ["/path-1", "/path-1/part-1"]).map(&:base_path)).to eq(["/path-1/part-2.fr"])
       end
     end
@@ -42,8 +42,8 @@ RSpec.describe Dimensions::Edition, type: :model do
   describe ".find_latest" do
     it "returns the most recent editon for a content item" do
       content_id = SecureRandom.uuid
-      edition1 = create :edition, content_id: content_id, locale: "en"
-      edition2 = create :edition, content_id: content_id, locale: "en", replaces: edition1
+      edition1 = create :edition, content_id:, locale: "en"
+      edition2 = create :edition, content_id:, locale: "en", replaces: edition1
 
       warehouse_item_id = "#{content_id}:en"
       latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
@@ -52,9 +52,9 @@ RSpec.describe Dimensions::Edition, type: :model do
 
     it "returns the most recent editon for a content item for locale" do
       content_id = SecureRandom.uuid
-      edition1 = create :edition, content_id: content_id, locale: "en"
-      edition2 = create :edition, content_id: content_id, locale: "en", replaces: edition1
-      create :edition, content_id: content_id, locale: "cy"
+      edition1 = create :edition, content_id:, locale: "en"
+      edition2 = create :edition, content_id:, locale: "en", replaces: edition1
+      create :edition, content_id:, locale: "cy"
 
       warehouse_item_id = "#{content_id}:en"
       latest_edition = Dimensions::Edition.find_latest(warehouse_item_id)
@@ -63,8 +63,8 @@ RSpec.describe Dimensions::Edition, type: :model do
 
     it "returns the most recent editon for content id" do
       content_id = SecureRandom.uuid
-      edition1 = create :edition, content_id: content_id, locale: "en"
-      edition2 = create :edition, content_id: content_id, locale: "en", replaces: edition1
+      edition1 = create :edition, content_id:, locale: "en"
+      edition2 = create :edition, content_id:, locale: "en", replaces: edition1
       create :edition
       create :edition
 
@@ -96,7 +96,7 @@ RSpec.describe Dimensions::Edition, type: :model do
     context "for published edition" do
       let(:edition) { build :edition, live: false }
       let(:warehouse_item_id) { "warehouse-item-id" }
-      let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
+      let(:old_edition) { build :edition, warehouse_item_id: }
 
       it "sets the live attribute to true" do
         edition.promote!(old_edition)
@@ -112,7 +112,7 @@ RSpec.describe Dimensions::Edition, type: :model do
     context "for unpublished edition" do
       let(:edition) { build :edition, live: false, document_type: "gone" }
       let(:warehouse_item_id) { "warehouse-item-id" }
-      let(:old_edition) { build :edition, warehouse_item_id: warehouse_item_id }
+      let(:old_edition) { build :edition, warehouse_item_id: }
 
       it "sets the live attribute to false" do
         edition.promote!(old_edition)
@@ -175,8 +175,8 @@ RSpec.describe Dimensions::Edition, type: :model do
 
   describe "parent/child relationships" do
     let(:child_sort_order) { %w[warehouse_item_id_1 warehouse_item_id_2] }
-    let(:parent) { create :edition, title: "parent", base_path: "/parent", child_sort_order: child_sort_order }
-    let!(:child) { create :edition, title: "child", base_path: "/child", parent: parent }
+    let(:parent) { create :edition, title: "parent", base_path: "/parent", child_sort_order: }
+    let!(:child) { create :edition, title: "child", base_path: "/child", parent: }
 
     describe "#parent" do
       it "should return the parent" do
@@ -211,7 +211,7 @@ RSpec.describe Dimensions::Edition, type: :model do
   describe "parent_document_id" do
     it "returns a fomatted document_id for parent" do
       parent = create :edition, content_id: "1234", locale: "en"
-      child = create :edition, parent: parent
+      child = create :edition, { parent: }
 
       expect(child.parent_document_id).to eq("1234:en")
     end

@@ -6,7 +6,7 @@ module Healthchecks
     attr_accessor :metric
 
     def self.build(metric)
-      new(metric: metric)
+      new(metric:)
     end
 
     def name

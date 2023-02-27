@@ -50,7 +50,7 @@ RSpec.describe Etl::GA::InternalSearchService do
           ),
         ]
 
-        expect { |probe| subject.find_in_batches(date: date, batch_size: 2, &probe) }
+        expect { |probe| subject.find_in_batches(date:, batch_size: 2, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
     end

@@ -26,7 +26,7 @@ private
 
   def find_old_edition(hash)
     old_edition = Dimensions::Edition.find_latest(hash[:warehouse_item_id])
-    { attrs: hash, old_edition: old_edition }
+    { attrs: hash, old_edition: }
   end
 
   def deprecate_redundant_paths(current_base_paths)

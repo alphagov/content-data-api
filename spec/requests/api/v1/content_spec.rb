@@ -7,7 +7,7 @@ RSpec.describe "/content" do
 
   describe "content item attributes" do
     it "contains the expected metrics" do
-      edition1 = create :edition, date: 1.month.ago, primary_organisation_id: primary_organisation_id, base_path: "/path-01", facts: { pdf_count: 10, words: 300, reading_time: 2 }
+      edition1 = create :edition, date: 1.month.ago, primary_organisation_id:, base_path: "/path-01", facts: { pdf_count: 10, words: 300, reading_time: 2 }
       create :metric, date: 1.day.ago, edition: edition1, pviews: 1, upviews: 1, feedex: 1, useful_no: 1, useful_yes: 1, searches: 1
       recalculate_aggregations!
 
@@ -48,8 +48,8 @@ RSpec.describe "/content" do
   end
 
   describe "time periods" do
-    let(:edition1) { create :edition, date: 1.month.ago, primary_organisation_id: primary_organisation_id, base_path: "/path-01" }
-    let(:edition2) { create :edition, date: 3.months.ago, primary_organisation_id: primary_organisation_id, base_path: "/path-02" }
+    let(:edition1) { create :edition, date: 1.month.ago, primary_organisation_id:, base_path: "/path-01" }
+    let(:edition2) { create :edition, date: 3.months.ago, primary_organisation_id:, base_path: "/path-02" }
     let(:beginning_of_this_month) { Date.yesterday.beginning_of_month }
     let(:beginning_of_last_month) { Date.yesterday.beginning_of_month - 1.month }
 
@@ -167,10 +167,10 @@ RSpec.describe "/content" do
 
   describe "Filter by document type" do
     before do
-      edition1 = create :edition, date: 1.month.ago, document_type: "a-document-type", primary_organisation_id: primary_organisation_id
+      edition1 = create(:edition, date: 1.month.ago, document_type: "a-document-type", primary_organisation_id:)
       create :metric, date: 15.days.ago, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
 
-      edition2 = create :edition, date: 1.month.ago, primary_organisation_id: primary_organisation_id
+      edition2 = create(:edition, date: 1.month.ago, primary_organisation_id:)
       create :metric, date: 10.days.ago, edition: edition2, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
 
       recalculate_aggregations!
@@ -194,8 +194,8 @@ RSpec.describe "/content" do
 
   describe "Filter by title" do
     before do
-      edition1 = create :edition, date: 1.month.ago, primary_organisation_id: primary_organisation_id, title: "title1"
-      edition2 = create :edition, date: 1.month.ago, primary_organisation_id: primary_organisation_id, title: "title2"
+      edition1 = create :edition, date: 1.month.ago, primary_organisation_id:, title: "title1"
+      edition2 = create :edition, date: 1.month.ago, primary_organisation_id:, title: "title2"
 
       create :metric, date: 15.days.ago, edition: edition1
       create :metric, date: 10.days.ago, edition: edition2
@@ -221,8 +221,8 @@ RSpec.describe "/content" do
 
   describe "Filter by base_path" do
     before do
-      edition1 = create :edition, date: 1.month.ago, primary_organisation_id: primary_organisation_id, base_path: "base_path1"
-      edition2 = create :edition, date: 1.month.ago, primary_organisation_id: primary_organisation_id, base_path: "base_path2"
+      edition1 = create :edition, date: 1.month.ago, primary_organisation_id:, base_path: "base_path1"
+      edition2 = create :edition, date: 1.month.ago, primary_organisation_id:, base_path: "base_path2"
 
       create :metric, date: 15.days.ago, edition: edition1
       create :metric, date: 10.days.ago, edition: edition2
@@ -248,7 +248,7 @@ RSpec.describe "/content" do
 
   describe "Filter by all organisations" do
     let(:another_org_id) { "c97bbc95-967a-4678-848b-6f393171f194" }
-    let(:edition1) { create :edition, primary_organisation_id: primary_organisation_id, date: 15.days.ago }
+    let(:edition1) { create :edition, primary_organisation_id:, date: 15.days.ago }
     let(:edition2) { create :edition, primary_organisation_id: another_org_id, date: 15.days.ago }
 
     subject { get "/content", params: { date_range: "past-30-days", organisation_id: "all" } }
@@ -275,7 +275,7 @@ RSpec.describe "/content" do
 
     before do
       create :metric, edition: edition1, date: 15.days.ago
-      edition2 = create :edition, primary_organisation_id: primary_organisation_id, date: 15.days.ago
+      edition2 = create :edition, primary_organisation_id:, date: 15.days.ago
       create :metric, edition: edition2, date: 15.days.ago
       recalculate_aggregations!
     end
@@ -331,6 +331,7 @@ RSpec.describe "/content" do
 
   describe "Relevant content" do
     subject { get "/content", params: { date_range: "past-30-days", organisation_id: primary_organisation_id } }
+    # params = { date_range: "past-30-days", organisation_id: primary_organisation_id }
 
     before do
       create_edition_and_metric("redirect")
@@ -344,7 +345,6 @@ RSpec.describe "/content" do
 
     it "filters out `gone`, `redirect`, `vanish`, `unpublishing` and `need`" do
       subject
-
       json = JSON.parse(response.body).deep_symbolize_keys
       expect(json[:results].count).to eq(1)
       expect(json[:results].first).to include(document_type: "news_story")
@@ -352,20 +352,20 @@ RSpec.describe "/content" do
   end
 
   def create_edition_and_metric(document_type)
-    edition = create :edition,
-                     document_type: document_type,
+    edition = create(:edition,
+                     document_type:,
                      date: 15.days.ago,
-                     primary_organisation_id: primary_organisation_id
-    create :metric, edition: edition, date: 15.days.ago
+                     primary_organisation_id:)
+    create :metric, edition:, date: 15.days.ago
     edition
   end
 
   describe "Pagination" do
     before do
-      edition1 = create :edition, primary_organisation_id: primary_organisation_id, document_type: "a-document-type", base_path: "/path-01"
+      edition1 = create :edition, primary_organisation_id:, document_type: "a-document-type", base_path: "/path-01"
       create :metric, date: 15.days.ago, edition: edition1, upviews: 100, useful_yes: 50, useful_no: 20, searches: 20
 
-      edition2 = create :edition, primary_organisation_id: primary_organisation_id, base_path: "/path-02"
+      edition2 = create :edition, primary_organisation_id:, base_path: "/path-02"
       create :metric, date: 10.days.ago, edition: edition2, upviews: 10, useful_yes: 10, useful_no: 10, searches: 10
 
       recalculate_aggregations!

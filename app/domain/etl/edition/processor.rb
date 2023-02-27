@@ -21,7 +21,7 @@ private
     Facts::Edition.create!(
       pdf_count: Etl::Edition::Metadata::NumberOfPdfs.parse(new_edition.publishing_api_event.payload),
       doc_count: Etl::Edition::Metadata::NumberOfWordFiles.parse(new_edition.publishing_api_event.payload),
-      dimensions_date: dimensions_date,
+      dimensions_date:,
       dimensions_edition: new_edition,
       **quality_metrics,
     )
