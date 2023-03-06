@@ -15,6 +15,7 @@ class Etl::Edition::Content::Parsers::NoContent
       generic
       government
       homepage
+      how_government_works
       knowledge_alpha
       ministers_index
       organisations_homepage
