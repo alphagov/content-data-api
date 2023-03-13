@@ -16,7 +16,7 @@ class Streams::Handlers::SingleItemHandler < Streams::Handlers::BaseHandler
   attr_reader :attrs, :old_edition
 
   def process
-    update_editions [attrs: attrs, old_edition: find_old_edition(attrs[:warehouse_item_id], attrs[:locale])]
+    update_editions [attrs:, old_edition: find_old_edition(attrs[:warehouse_item_id], attrs[:locale])]
   end
 
   def reprocess

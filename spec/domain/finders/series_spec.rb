@@ -4,12 +4,12 @@ RSpec.describe Finders::Series do
   let!(:day3) { Date.new(2018, 1, 15) }
   let!(:content_id) { SecureRandom.uuid }
   let!(:base_path) { "/base_path" }
-  let!(:edition) { create :edition, date: day1, content_id: content_id, base_path: base_path, locale: "en" }
+  let!(:edition) { create :edition, date: day1, content_id:, base_path:, locale: "en" }
 
   before do
-    create :metric, edition: edition, date: day3, pviews: 30
-    create :metric, edition: edition, date: day1, pviews: 10
-    create :metric, edition: edition, date: day2, pviews: 20
+    create :metric, edition:, date: day3, pviews: 30
+    create :metric, edition:, date: day1, pviews: 10
+    create :metric, edition:, date: day2, pviews: 20
   end
 
   it "return the time series in order" do

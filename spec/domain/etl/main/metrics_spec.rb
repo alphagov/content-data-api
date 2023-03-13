@@ -1,7 +1,7 @@
 RSpec.describe Etl::Main::MetricsProcessor do
   let(:date) { Date.new(2018, 3, 15) }
 
-  subject { described_class.new(date: date) }
+  subject { described_class.new(date:) }
 
   it "creates a Metrics fact per content item" do
     create :edition, live: true

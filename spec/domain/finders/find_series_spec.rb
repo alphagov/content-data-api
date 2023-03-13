@@ -10,9 +10,9 @@ RSpec.describe Finders::FindSeries do
   context "between" do
     it "returns metrics for a given date range" do
       edition = create :edition, base_path: "/the/path", date: "2018-5-13"
-      create :metric, edition: edition, date: "2018-5-13", pviews: 1
-      create :metric, edition: edition, date: "2018-5-14", pviews: 2
-      create :metric, edition: edition, date: "2018-5-24", pviews: 3
+      create :metric, edition:, date: "2018-5-13", pviews: 1
+      create :metric, edition:, date: "2018-5-14", pviews: 2
+      create :metric, edition:, date: "2018-5-24", pviews: 3
 
       series = described_class.new.between(from: "2018-5-13", to: "2018-5-14").run
 

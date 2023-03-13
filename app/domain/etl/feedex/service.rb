@@ -39,7 +39,7 @@ private
   def convert_results(results)
     results.map do |result|
       {
-        date: date,
+        date:,
         page_path: result["path"],
         feedex_comments: result["count"],
       }

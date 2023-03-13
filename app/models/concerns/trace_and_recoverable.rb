@@ -9,7 +9,7 @@ module TraceAndRecoverable
       raise ArgumentError "No block was given to TraceAndRecoverable#time_and_trap" unless block_given?
 
       begin
-        time(process: process, &block)
+        time(process:, &block)
 
         true
       rescue StandardError => e

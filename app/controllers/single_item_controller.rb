@@ -23,7 +23,7 @@ private
 
   def find_time_series
     Finders::FindSeries.new
-      .between(from: from, to: to)
+      .between(from:, to:)
       .by_warehouse_item_id(@live_edition.warehouse_item_id)
       .run
   end
@@ -34,7 +34,7 @@ private
 
   def find_aggregations
     Finders::Aggregations.new
-      .between(from: from, to: to)
+      .between(from:, to:)
       .by_warehouse_item_id(@live_edition.warehouse_item_id)
       .run
   end

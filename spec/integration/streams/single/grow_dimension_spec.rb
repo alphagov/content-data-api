@@ -61,10 +61,10 @@ RSpec.describe Streams::Consumer do
     it "assigns the same warehouse_item_id to the new edition" do
       content_id = SecureRandom.uuid
 
-      message = build :message, base_path: "/base-path", content_id: content_id, attributes: { "payload_version" => 2 }
+      message = build :message, base_path: "/base-path", content_id:, attributes: { "payload_version" => 2 }
       subject.process(message)
 
-      message2 = build :message, content_id: content_id, payload: message.payload.deep_dup
+      message2 = build :message, content_id:, payload: message.payload.deep_dup
       message2.payload["payload_version"] = 4
       message2.payload["details"]["body"] = "<p>different content</p>"
       subject.process(message2)

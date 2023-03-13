@@ -20,7 +20,7 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
       expect(fact1).to have_attributes(useful_no: 1, useful_yes: 2)
       expect(fact2).to have_attributes(useful_no: 20, useful_yes: 10)
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact1.reload).to have_attributes(useful_no: 1, useful_yes: 1)
       expect(fact1.satisfaction).to be_within(0.1).of(0.5)
@@ -30,7 +30,7 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
 
     it "does not update metrics for other days" do
       edition = create :edition, base_path: "/path1", date: "2018-02-20"
-      fact1 = create :metric, edition: edition, date: "2018-02-20", useful_no: 20, useful_yes: 10
+      fact1 = create :metric, edition:, date: "2018-02-20", useful_no: 20, useful_yes: 10
 
       day_before = date - 1
       described_class.process(date: day_before)
@@ -40,9 +40,9 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
 
     it "does not update metrics for other items" do
       edition = create :edition, base_path: "/non-matching-path"
-      fact = create :metric, edition: edition, date: "2018-02-20", useful_no: 99, useful_yes: 90
+      fact = create :metric, edition:, date: "2018-02-20", useful_no: 99, useful_yes: 90
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact.reload).to have_attributes(useful_no: 99, useful_yes: 90)
     end
@@ -50,7 +50,7 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
     it "deletes events after updating facts metrics" do
       create(:ga_event, :with_user_feedback, date: date - 1, page_path: "/path1")
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(Events::GA.count).to eq(0)
     end
@@ -63,9 +63,9 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
 
       it "only updates metrics for the current day" do
         edition = create :edition, base_path: "/path1", date: "2018-02-20"
-        fact1 = create :metric, edition: edition, date: "2018-02-20"
+        fact1 = create :metric, edition:, date: "2018-02-20"
 
-        described_class.process(date: date)
+        described_class.process(date:)
 
         expect(fact1.reload).to have_attributes(useful_no: 1, useful_yes: 1)
       end
@@ -74,25 +74,25 @@ RSpec.describe Etl::GA::UserFeedbackProcessor do
 
   context "When useful_yes/no values are received from GA" do
     let(:edition) { create :edition, base_path: "/path1", date: "2018-02-20" }
-    let!(:fact) { create :metric, edition: edition, date: "2018-02-20" }
+    let!(:fact) { create :metric, edition:, date: "2018-02-20" }
 
     it "sets `satisfaction = 1.0` with `yes: 1` and `no: 0`" do
       allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 1, useful_no: 0))
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact.reload.satisfaction).to be_within(0.1).of(1.0)
     end
 
     it "sets `satisfaction = 0.0` with `useful_yes:0` and `no: 1`" do
       allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 0, useful_no: 1))
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact.reload.satisfaction).to be_within(0.1).of(0.0)
     end
 
     it "set `satisfaction = nil` with `useful_yes:0` and `no: 0`" do
       allow(Etl::GA::UserFeedbackService).to receive(:find_in_batches).and_yield(ga_response(useful_yes: 0, useful_no: 0))
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact.reload.satisfaction).to be_nil
     end

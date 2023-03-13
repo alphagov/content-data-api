@@ -5,7 +5,7 @@ module GoogleAnalyticsRequests
 
   def build_report_row(dimensions:, metrics:)
     Google::Apis::AnalyticsreportingV4::ReportRow.new(
-      dimensions: dimensions,
+      dimensions:,
       metrics: metrics.map do |metric|
         Google::Apis::AnalyticsreportingV4::DateRangeValues.new(
           values: Array(metric),

@@ -13,7 +13,7 @@ class Dimensions::Edition < ApplicationRecord
 
   scope :by_base_path, ->(base_path) { where("base_path like (?)", base_path) }
   scope :live, -> { where(live: true) }
-  scope :live_by_content_id, ->(content_id, locale) { where(content_id: content_id, locale: locale, live: true) }
+  scope :live_by_content_id, ->(content_id, locale) { where(content_id:, locale:, live: true) }
   scope :live_by_base_path, ->(base_paths) { where(base_path: base_paths, live: true) }
   scope :outdated_subpages,
         lambda { |content_id, locale, exclude_paths|
@@ -60,18 +60,18 @@ class Dimensions::Edition < ApplicationRecord
 
   def metadata
     {
-      title: title,
-      base_path: base_path,
-      content_id: content_id,
-      locale: locale,
-      first_published_at: first_published_at,
-      public_updated_at: public_updated_at,
-      publishing_app: publishing_app,
-      document_type: document_type,
-      primary_organisation_title: primary_organisation_title,
-      withdrawn: withdrawn,
-      historical: historical,
-      parent_document_id: parent_document_id,
+      title:,
+      base_path:,
+      content_id:,
+      locale:,
+      first_published_at:,
+      public_updated_at:,
+      publishing_app:,
+      document_type:,
+      primary_organisation_title:,
+      withdrawn:,
+      historical:,
+      parent_document_id:,
     }
   end
 

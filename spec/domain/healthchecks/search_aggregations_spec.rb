@@ -12,8 +12,8 @@ RSpec.describe Healthchecks::SearchAggregations do
 
     context "When there are search views for the last thirty days" do
       before do
-        create :metric, edition: edition, date: Time.zone.today.last_month.beginning_of_month
-        create :metric, edition: edition, date: Time.zone.today.last_month.end_of_month
+        create :metric, edition:, date: Time.zone.today.last_month.beginning_of_month
+        create :metric, edition:, date: Time.zone.today.last_month.end_of_month
 
         recalculate_aggregations!
       end

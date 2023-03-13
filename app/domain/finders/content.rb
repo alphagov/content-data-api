@@ -10,7 +10,7 @@ class Finders::Content
       results: results.map(&method(:array_to_hash)),
       page: @page,
       total_pages: results.total_pages,
-      total_results: total_results,
+      total_results:,
     }
   end
 
@@ -74,7 +74,7 @@ private
       to_tsvector('english'::regconfig, replace((base_path)::text, '/'::text, ' '::text)) @@ plainto_tsquery('english', :search_term_without_slash)
     SQL
 
-    scope.where(sql, search_term: search_term, search_term_without_slash: search_term.tr("/", " "))
+    scope.where(sql, search_term:, search_term_without_slash: search_term.tr("/", " "))
   end
 
   def find_by_document_type(scope)

@@ -26,12 +26,12 @@ class Api::ContentRequest
 
   def to_filter
     {
-      organisation_id: organisation_id,
-      document_type: document_type,
-      date_range: date_range,
-      search_term: search_term,
-      page: page,
-      page_size: page_size,
+      organisation_id:,
+      document_type:,
+      date_range:,
+      search_term:,
+      page:,
+      page_size:,
       sort_attribute: @sort_attribute,
       sort_direction: @sort_direction,
     }

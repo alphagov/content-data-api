@@ -4,7 +4,7 @@ class Etl::Edition::Content::Parser
   end
 
   def self.extract_content(json, subpage_path: nil)
-    new.extract_content(json, subpage_path: subpage_path)
+    new.extract_content(json, subpage_path:)
   end
 
   def extract_content(json, subpage_path: nil)
@@ -22,7 +22,7 @@ class Etl::Edition::Content::Parser
       parse_html parser.parse(json)
     end
   rescue StandardError => e
-    GovukError.notify(e, extra: { schema: schema, base_path: base_path, json: json })
+    GovukError.notify(e, extra: { schema:, base_path:, json: })
   end
 
 private

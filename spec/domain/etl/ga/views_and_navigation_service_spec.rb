@@ -64,7 +64,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
           ),
         ]
 
-        expect { |probe| subject.find_in_batches(date: date, batch_size: 2, &probe) }
+        expect { |probe| subject.find_in_batches(date:, batch_size: 2, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
     end
@@ -98,7 +98,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
           ),
         ]
 
-        expect { |probe| subject.find_in_batches(date: date, batch_size: 1, &probe) }
+        expect { |probe| subject.find_in_batches(date:, batch_size: 1, &probe) }
           .to yield_with_args(arg)
       end
     end
@@ -129,7 +129,7 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
           ),
         ]
 
-        expect { |probe| subject.find_in_batches(date: date, batch_size: 1, &probe) }
+        expect { |probe| subject.find_in_batches(date:, batch_size: 1, &probe) }
           .to yield_with_args(arg)
       end
     end

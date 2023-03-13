@@ -6,7 +6,7 @@ RSpec.describe "/single_page", type: :request do
     create :edition,
            live: true,
            title: "the title",
-           base_path: base_path,
+           base_path:,
            content_id: "the-content-id",
            locale: "en",
            document_type: "guide",

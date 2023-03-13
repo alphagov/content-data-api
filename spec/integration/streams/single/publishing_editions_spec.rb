@@ -50,7 +50,7 @@ RSpec.describe "PublishingAPI message queue" do
 
     content_id = message1.payload["content_id"]
 
-    message2 = build :message, content_id: content_id
+    message2 = build(:message, content_id:)
     subject.process(message2)
 
     expect(Dimensions::Edition.all).to contain_exactly(
@@ -102,7 +102,7 @@ RSpec.describe "PublishingAPI message queue" do
 
     content_id = message.payload["content_id"]
 
-    old_message = build :message, content_id: content_id, attributes: { "payload_version" => 1 }
+    old_message = build :message, content_id:, attributes: { "payload_version" => 1 }
     subject.process(old_message)
 
     expect(Dimensions::Edition.all).to contain_exactly(
@@ -127,7 +127,7 @@ RSpec.describe "PublishingAPI message queue" do
 
     content_id = message.payload["content_id"]
 
-    gone_message = build :gone_message, content_id: content_id
+    gone_message = build(:gone_message, content_id:)
     subject.process(gone_message)
 
     expect(Dimensions::Edition.all).to contain_exactly(
@@ -158,10 +158,10 @@ RSpec.describe "PublishingAPI message queue" do
 
     content_id = message.payload["content_id"]
 
-    gone_message1 = build :gone_message, content_id: content_id
+    gone_message1 = build(:gone_message, content_id:)
     subject.process(gone_message1)
 
-    gone_message2 = build :gone_message, content_id: content_id
+    gone_message2 = build(:gone_message, content_id:)
     subject.process(gone_message2)
 
     expect(Dimensions::Edition.all).to contain_exactly(
@@ -193,7 +193,7 @@ RSpec.describe "PublishingAPI message queue" do
 
     content_id = message.payload["content_id"]
 
-    redirect_message = build :redirect_message, content_id: content_id
+    redirect_message = build(:redirect_message, content_id:)
     subject.process(redirect_message)
 
     expect(Dimensions::Edition.all).to contain_exactly(
@@ -224,7 +224,7 @@ RSpec.describe "PublishingAPI message queue" do
 
     content_id = message1.payload["content_id"]
 
-    message2 = build :message, content_id: content_id, base_path: "/base-path-2"
+    message2 = build :message, content_id:, base_path: "/base-path-2"
     subject.process(message2)
 
     expect(Dimensions::Edition.all).to contain_exactly(
@@ -254,7 +254,7 @@ RSpec.describe "PublishingAPI message queue" do
 
     content_id = message1.payload["content_id"]
 
-    gone_message = build :gone_message, content_id: content_id
+    gone_message = build(:gone_message, content_id:)
     subject.process(gone_message)
 
     message2 = build :message

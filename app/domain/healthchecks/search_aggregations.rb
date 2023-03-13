@@ -6,7 +6,7 @@ module Healthchecks
     attr_accessor :range
 
     def self.build(range)
-      new(range: range)
+      new(range:)
     end
 
     def name

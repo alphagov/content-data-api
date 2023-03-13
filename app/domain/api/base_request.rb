@@ -1,5 +1,5 @@
 class Api::BaseRequest
-  DATE_REGEX = /\A\d\d\d\d-\d\d-\d\d\Z/.freeze
+  DATE_REGEX = /\A\d\d\d\d-\d\d-\d\d\Z/
 
   private_constant :DATE_REGEX
 

@@ -77,7 +77,7 @@ RSpec.describe Aggregations::SearchLastSixMonths, type: :model do
     end_date = 6.months.ago
 
     (start_date..end_date).each do |date|
-      create :metric, edition: edition1, date: date, upviews: 10
+      create :metric, edition: edition1, date:, upviews: 10
     end
 
     recalculate_aggregations!

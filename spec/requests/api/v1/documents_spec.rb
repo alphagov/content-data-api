@@ -19,8 +19,8 @@ RSpec.describe "/api/v1/documents/:document_id/children", type: :request do
 
     it "describes a documents with children" do
       parent, parent_response = setup_edition_and_metrics(content_id, locale, 10)
-      _, child1_response = setup_edition_and_metrics(SecureRandom.uuid, locale, 11, parent: parent, order: 1)
-      _, child2_response = setup_edition_and_metrics(SecureRandom.uuid, locale, 12, parent: parent, order: 2)
+      _, child1_response = setup_edition_and_metrics(SecureRandom.uuid, locale, 11, parent:, order: 1)
+      _, child2_response = setup_edition_and_metrics(SecureRandom.uuid, locale, 12, parent:, order: 2)
 
       get "/api/v1/documents/#{content_id}:#{locale}/children?time_period=#{time_period}"
 
@@ -79,10 +79,10 @@ RSpec.describe "/api/v1/documents/:document_id/children", type: :request do
 end
 
 def setup_edition_and_metrics(content_id, locale, total_upviews, parent: nil, order: nil)
-  edition = create :edition, content_id: content_id, locale: locale, live: true, parent: parent, sibling_order: order
+  edition = create :edition, content_id:, locale:, live: true, parent:, sibling_order: order
 
-  create :metric, edition: edition, date: Date.yesterday, upviews: 0, pviews: 1, useful_yes: 1, useful_no: 1, searches: 1
-  create :metric, edition: edition, date: 10.days.ago, upviews: total_upviews, pviews: 1, useful_yes: 74, useful_no: 24, searches: 2
+  create :metric, edition:, date: Date.yesterday, upviews: 0, pviews: 1, useful_yes: 1, useful_no: 1, searches: 1
+  create :metric, edition:, date: 10.days.ago, upviews: total_upviews, pviews: 1, useful_yes: 74, useful_no: 24, searches: 2
 
   recalculate_aggregations!
 

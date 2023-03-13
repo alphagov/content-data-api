@@ -158,11 +158,11 @@ RSpec.describe Etl::Main::MainProcessor do
 
   describe ".process_aggregations" do
     before do
-      subject.process_aggregations(date: date)
+      subject.process_aggregations(date:)
     end
 
     it "runs the Aggregations::Monthly process" do
-      expect(Etl::Aggregations::Monthly).to have_received(:process).with(date: date)
+      expect(Etl::Aggregations::Monthly).to have_received(:process).with(date:)
     end
 
     it "runs the Aggregations::Search process" do

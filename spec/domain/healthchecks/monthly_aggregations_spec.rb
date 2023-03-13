@@ -12,7 +12,7 @@ RSpec.describe Healthchecks::MonthlyAggregations do
       before do
         date = Time.zone.today
         edition = create :edition
-        create :monthly_metric, edition: edition, month: Dimensions::Month.build(date).id
+        create :monthly_metric, edition:, month: Dimensions::Month.build(date).id
       end
 
       its(:status) { is_expected.to eq(:ok) }

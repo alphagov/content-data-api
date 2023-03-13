@@ -3,7 +3,7 @@ class ContentController < Api::BaseController
 
   def show
     filter = api_request.to_filter
-    content = Finders::Content.call(filter: filter)
+    content = Finders::Content.call(filter:)
 
     @content_items = content[:results]
     @page = content[:page]

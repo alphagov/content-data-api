@@ -17,7 +17,7 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
       edition2 = create :edition, base_path: "/path2", date: "2018-02-20"
       fact2 = create :metric, edition: edition2, date: "2018-02-20"
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact1.reload).to have_attributes(searches: 1)
       expect(fact2.reload).to have_attributes(searches: 2)
@@ -35,9 +35,9 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
 
     it "does not update metrics for other items" do
       edition = create :edition, base_path: "/non-matching-path", date: "2018-02-20"
-      fact = create :metric, edition: edition, date: "2018-02-20", searches: 99
+      fact = create :metric, edition:, date: "2018-02-20", searches: 99
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(fact.reload).to have_attributes(searches: 99)
     end
@@ -45,7 +45,7 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
     it "deletes events after updating facts metrics" do
       create :ga_event, :with_searches, date: date - 1, page_path: "/path1"
 
-      described_class.process(date: date)
+      described_class.process(date:)
 
       expect(Events::GA.count).to eq(0)
     end
@@ -58,9 +58,9 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
 
       it "only updates metrics for the current day" do
         edition = create :edition, base_path: "/path1", date: "2018-02-20"
-        fact1 = create :metric, edition: edition, date: "2018-02-20"
+        fact1 = create :metric, edition:, date: "2018-02-20"
 
-        described_class.process(date: date)
+        described_class.process(date:)
 
         expect(fact1.reload).to have_attributes(searches: 1)
       end
@@ -68,7 +68,7 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
       it "deletes events after updating facts metrics" do
         expect(Events::GA.count).to eq(2)
 
-        described_class.process(date: date)
+        described_class.process(date:)
 
         expect(Events::GA.count).to eq(0)
       end

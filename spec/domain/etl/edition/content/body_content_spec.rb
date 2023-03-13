@@ -90,9 +90,9 @@ RSpec.describe Etl::Edition::Content::Parser do
 
   def build_raw_json(body:, schema_name:)
     {
-      schema_name: schema_name,
+      schema_name:,
       details: {
-        body: body,
+        body:,
       },
     }
   end

@@ -27,7 +27,7 @@ RSpec.describe Finders::Content do
     create :metric, edition: edition2, date: 11.days.ago, upviews: 10, useful_yes: 5, useful_no: 1, searches: 11
 
     recalculate_aggregations!
-    response = described_class.call(filter: filter)
+    response = described_class.call(filter:)
     expect(response[:results]).to contain_exactly(
       hash_including(upviews: 35, searches: 11, satisfaction: a_value_within(0.000000000000001).of(0.565217391304348)),
       hash_including(upviews: 25, searches: 21, satisfaction: a_value_within(0.000000000000001).of(0.393939393939394)),
@@ -52,7 +52,7 @@ RSpec.describe Finders::Content do
 
     recalculate_aggregations!
 
-    response = described_class.call(filter: filter)
+    response = described_class.call(filter:)
     expect(response[:results]).to contain_exactly(
       hash_including(base_path: "/path1"),
       hash_including(base_path: "/path2"),
@@ -68,7 +68,7 @@ RSpec.describe Finders::Content do
 
       recalculate_aggregations!
 
-      response = described_class.call(filter: filter)
+      response = described_class.call(filter:)
 
       expect(response[:total_results]).to eq(1)
     end
@@ -280,7 +280,7 @@ RSpec.describe Finders::Content do
                          base_path: "/path/#{n}",
                          primary_organisation_id: primary_org_id,
                          warehouse_item_id: "item-#{n}"
-        create :metric, edition: edition, date: 15.days.ago, upviews: (100 - n)
+        create :metric, edition:, date: 15.days.ago, upviews: (100 - n)
       end
 
       # not live edition - should not affect total results
@@ -362,7 +362,7 @@ RSpec.describe Finders::Content do
       end
 
       it "defaults order by descending unique pageviews" do
-        response = described_class.call(filter: filter)
+        response = described_class.call(filter:)
 
         titles = response.fetch(:results).map { |result| result.fetch(:title) }
         expect(titles).to eq(%w[first middle last])
@@ -412,13 +412,13 @@ RSpec.describe Finders::Content do
   describe "when no useful_yes/no.. responses" do
     before do
       edition = create :edition, primary_organisation_id: primary_org_id
-      create :metric, edition: edition, date: 15.days.ago, useful_yes: 0, useful_no: 0
+      create :metric, edition:, date: 15.days.ago, useful_yes: 0, useful_no: 0
 
       recalculate_aggregations!
     end
 
     it "returns the nil for the satisfaction" do
-      results = described_class.call(filter: filter)
+      results = described_class.call(filter:)
       expect(results[:results].first).to include(
         satisfaction: nil,
       )
@@ -433,7 +433,7 @@ RSpec.describe Finders::Content do
     end
 
     it "returns a empty array" do
-      results = described_class.call(filter: filter)
+      results = described_class.call(filter:)
       expect(results[:results]).to be_empty
     end
   end
@@ -442,13 +442,13 @@ RSpec.describe Finders::Content do
     it "raises an error if no `organisation_id` attribute" do
       filter.delete :organisation_id
 
-      expect { described_class.call(filter: filter) }.to raise_error(ArgumentError)
+      expect { described_class.call(filter:) }.to raise_error(ArgumentError)
     end
 
     it "raises an error if no `date_range` attribute" do
       filter.delete :date_range
 
-      expect { described_class.call(filter: filter) }.to raise_error(ArgumentError)
+      expect { described_class.call(filter:) }.to raise_error(ArgumentError)
     end
   end
 
@@ -489,7 +489,7 @@ RSpec.describe Finders::Content do
         recalculate_aggregations!
       end
 
-      subject { described_class.call(filter: filter.merge(search_term: search_term))[:results] }
+      subject { described_class.call(filter: filter.merge(search_term:))[:results] }
 
       context "when search terms include the protocol (http)" do
         let(:search_term) { "http://base-path" }

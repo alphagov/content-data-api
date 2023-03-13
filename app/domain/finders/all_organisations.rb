@@ -21,7 +21,7 @@ private
   def find_all(locale)
     Dimensions::Edition.live
       .select(:content_id, :title, :locale, :acronym)
-      .where(document_type: "organisation", locale: locale)
+      .where(document_type: "organisation", locale:)
       .order(:title)
   end
 end
