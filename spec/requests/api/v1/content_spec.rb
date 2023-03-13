@@ -331,7 +331,6 @@ RSpec.describe "/content" do
 
   describe "Relevant content" do
     subject { get "/content", params: { date_range: "past-30-days", organisation_id: primary_organisation_id } }
-    # params = { date_range: "past-30-days", organisation_id: primary_organisation_id }
 
     before do
       create_edition_and_metric("redirect")
