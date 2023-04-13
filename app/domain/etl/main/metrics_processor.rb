@@ -27,7 +27,7 @@ module Etl
         log process: :metrics, message: "about to get the Dimensions::Date"
         dimensions_date = Dimensions::Date.find_existing_or_create(date)
         log process: :metrics, message: "got the Dimensions::Date"
-        Dimensions::Edition.live.find_in_batches(batch_size: 50_000)
+        Dimensions::Edition.live.find_in_batches(batch_size: 10_000)
           .with_index do |batch, index|
           log process: :metrics, message: "processing #{batch.length} items in batch #{index}"
           values = batch.pluck(:id).map do |value|
