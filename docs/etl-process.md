@@ -1,10 +1,11 @@
 # Collecting user metrics
 
-This is a general overview of how we collect and store user metrics. 
+This is a general overview of how we collect and store user metrics.
+
 Metrics are collected on a daily basis from a variety of data sources.
 Monthly aggregations of the daily score are then pre-calculated and stored in a separate table.
 
-These processes run as Rake task daily in the early morning from Jenkins. They are referred to as ETL processors in the codebase as they follow a Extract, Transform and Load (ETL) design pattern.
+These processes are implemented as a Rake task which runs daily via a Kubernetes CronJob. They are referred to as ETL processors in the codebase as they follow a Extract, Transform and Load (ETL) design pattern.
 
 The process begins with the MainProcessor which co-ordinates:
 - setting up the Facts metric table
