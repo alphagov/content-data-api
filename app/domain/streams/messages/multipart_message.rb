@@ -36,11 +36,14 @@ module Streams
     def parts
       message_parts = @payload.dig("details", "parts").dup
       if doc_type == "travel_advice"
-        message_parts.prepend(
-          "slug" => base_path,
-          "title" => "Summary",
-          "body" => [@payload.dig("details", "summary").find { |x| x["content_type"] == "text/html" }],
-        )
+        summary = @payload.dig("details", "summary")&.find { |x| x["content_type"] == "text/html" }
+        unless summary.nil?
+          message_parts.prepend(
+            "slug" => base_path,
+            "title" => "Summary",
+            "body" => [summary],
+          )
+        end
       end
       message_parts
     end
