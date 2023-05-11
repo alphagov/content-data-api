@@ -117,10 +117,12 @@ FactoryBot.define do
           result["content_id"] = content_id
           result["locale"] = locale
           result.delete("withdrawn_notice")
-          result["details"]["summary"] = [
-            "content_type" => "text/html",
-            "content" => summary,
-          ]
+          unless summary.nil?
+            result["details"]["summary"] = [
+              "content_type" => "text/html",
+              "content" => summary,
+            ]
+          end
           result["details"]["parts"] =
             [
               {
