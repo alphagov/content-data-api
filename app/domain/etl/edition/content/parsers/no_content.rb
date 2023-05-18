@@ -8,6 +8,7 @@ class Etl::Edition::Content::Parsers::NoContent
       coronavirus_landing_page
       coming_soon
       completed_transaction
+      embassies_index
       external_content
       facet
       facet_group

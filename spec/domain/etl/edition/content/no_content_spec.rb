@@ -10,6 +10,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       coming_soon
       completed_transaction
       coronavirus_landing_page
+      embassies_index
       external_content
       facet
       facet_group
