@@ -32,6 +32,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       working_group
       world_location_news
       world_location_news_article
+      worldwide_office
       worldwide_organisation
     ].freeze
   end

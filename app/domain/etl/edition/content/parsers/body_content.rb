@@ -42,6 +42,7 @@ class Etl::Edition::Content::Parsers::BodyContent
       working_group
       world_location_news
       world_location_news_article
+      worldwide_office
       worldwide_organisation
     ]
   end
