@@ -71,8 +71,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
       parts = Dimensions::Edition.pluck(:base_path, :title, :warehouse_item_id).to_set
 
       expect(parts).to eq Set[
-        ["/travel/advice", "The Title: Summary", "#{content_id}:fr"],
-        ["/travel/advice/part1", "The Title: Part 1", "#{content_id}:fr:part1"],
+        ["/travel/advice", "The Title: Part 1", "#{content_id}:fr"],
         ["/travel/advice/part2", "The Title: Part 2", "#{content_id}:fr:part2"],
       ]
     end
@@ -178,8 +177,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
               "base_path" => "/travel-advice",
               "content_id" => "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
               "document_type" => "travel_advice",
-            ),
-            summary: "Summary content"
+            )
     end
 
     before do
@@ -194,23 +192,11 @@ RSpec.describe "Process sub-pages for multipart content types" do
 
     it_behaves_like "when unchanged"
 
-    it "extracts the Summary" do
+    it "extracts /travel-advice" do
       item = Dimensions::Edition.where(base_path: "/travel-advice", live: true).first
+
       expect(item).to have_attributes(expected_edition_attributes(
                                         base_path: "/travel-advice",
-                                        content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
-                                        document_text: "Summary content",
-                                        document_type: "travel_advice",
-                                        schema_name: "travel_advice",
-                                        title: "the-title: Summary",
-                                      ))
-    end
-
-    it "extracts /travel-advice/part1" do
-      item = Dimensions::Edition.where(base_path: "/travel-advice/part1", live: true).first
-
-      expect(item).to have_attributes(expected_edition_attributes(
-                                        base_path: "/travel-advice/part1",
                                         content_id: "12123d8e-1a8b-42fd-ba93-c953ad20bc8a",
                                         document_text: "Here 1",
                                         document_type: "travel_advice",
