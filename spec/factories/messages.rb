@@ -107,9 +107,6 @@ FactoryBot.define do
     trait :travel_advice do
       schema_name { "travel_advice" }
       document_type { "travel_advice" }
-      transient do
-        summary { "summary content" }
-      end
       payload do
         GovukSchemas::RandomExample.for_schema(notification_schema: schema_name) do |result|
           result["base_path"] = base_path
@@ -117,12 +114,6 @@ FactoryBot.define do
           result["content_id"] = content_id
           result["locale"] = locale
           result.delete("withdrawn_notice")
-          unless summary.nil?
-            result["details"]["summary"] = [
-              "content_type" => "text/html",
-              "content" => summary,
-            ]
-          end
           result["details"]["parts"] =
             [
               {
