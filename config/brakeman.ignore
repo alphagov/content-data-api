@@ -21,22 +21,6 @@
       "note": "month_id is an integer, view[...] is a hard-coded string; not user input."
     },
     {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 123,
-      "fingerprint": "870fa4a5cfd770898e1b7a159368b4210fe366634512563f9fb1c1cbbfef1d78",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 2.7.6 ends on 2023-03-31",
-      "file": "Gemfile.lock",
-      "line": 327,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "Weak",
-      "note": "work is ongoing to upgrade the Ruby version"
-    },
-    {
       "warning_type": "SQL Injection",
       "warning_code": 0,
       "fingerprint": "45c97e3fbe33b7415c7e1b81d39f828f114131304aa46d3bc96efb8157ee3ccb",
