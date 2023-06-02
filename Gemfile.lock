@@ -261,7 +261,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.2)
     minitest (5.18.0)
-    msgpack (1.6.0)
+    msgpack (1.7.1)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     net-imap (0.3.4)
@@ -438,6 +438,16 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    sass-rails (6.0.0)
+      sassc-rails (~> 2.1, >= 2.1.1)
+    sassc (2.4.0)
+      ffi (~> 1.9)
+    sassc-rails (2.1.2)
+      railties (>= 4.0.0)
+      sassc (>= 2.0)
+      sprockets (> 3.0)
+      sprockets-rails
+      tilt
     scenic (1.7.0)
       activerecord (>= 4.0.0)
       railties (>= 4.0.0)
@@ -477,9 +487,17 @@ GEM
     spring (4.1.1)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
+    sprockets (4.2.0)
+      concurrent-ruby (~> 1.0)
+      rack (>= 2.2.4, < 4)
+    sprockets-rails (3.4.2)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
+      sprockets (>= 3.0.0)
     statsd-ruby (1.5.0)
     systemu (2.6.5)
     thor (1.2.2)
+    tilt (2.1.0)
     timecop (0.9.6)
     timeout (0.3.2)
     trailblazer-option (0.1.2)
@@ -554,6 +572,7 @@ DEPENDENCIES
   rspec-rails
   rubocop-govuk
   ruby-progressbar
+  sass-rails
   scenic
   shoulda-matchers
   simplecov

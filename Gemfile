@@ -25,6 +25,7 @@ gem "pg"
 gem "rack-proxy"
 gem "rails-erd"
 gem "ruby-progressbar"
+gem "sass-rails"
 gem "scenic"
 gem "uuid"
 
