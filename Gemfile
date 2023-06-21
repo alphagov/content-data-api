@@ -27,6 +27,7 @@ gem "rails-erd"
 gem "ruby-progressbar"
 gem "sass-rails"
 gem "scenic"
+gem "sentry-sidekiq"
 gem "uuid"
 
 group :development do
