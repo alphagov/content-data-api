@@ -15,6 +15,7 @@ class Etl::Edition::Content::Parsers::BodyContent
     %w[
       answer
       calendar
+      call_for_evidence
       case_study
       consultation
       corporate_information_page
