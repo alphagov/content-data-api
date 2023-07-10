@@ -657,6 +657,9 @@ GEM
       sentry-ruby (~> 5.9.0)
     sentry-ruby (5.9.0)
       concurrent-ruby (~> 1.0, >= 1.0.2)
+    sentry-sidekiq (5.9.0)
+      sentry-ruby (~> 5.9.0)
+      sidekiq (>= 3.0)
     set (1.0.3)
     shoulda-matchers (5.3.0)
       activesupport (>= 5.2.0)
@@ -771,6 +774,7 @@ DEPENDENCIES
   ruby-progressbar
   sass-rails
   scenic
+  sentry-sidekiq
   shoulda-matchers
   simplecov
   spring
