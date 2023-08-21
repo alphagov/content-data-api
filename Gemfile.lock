@@ -59,7 +59,7 @@ GEM
     activerecord (7.0.7)
       activemodel (= 7.0.7)
       activesupport (= 7.0.7)
-    activerecord-import (1.4.1)
+    activerecord-import (1.5.0)
       activerecord (>= 4.2)
     activestorage (7.0.7)
       actionpack (= 7.0.7)
