@@ -15,6 +15,7 @@ gem "activerecord-import"
 gem "awesome_print"
 gem "bootsnap", require: false
 gem "google-api-client"
+gem "google-cloud-bigquery"
 gem "govuk_message_queue_consumer"
 gem "httparty"
 gem "jbuilder"
