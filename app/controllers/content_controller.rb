@@ -9,6 +9,7 @@ class ContentController < Api::BaseController
     @page = content[:page]
     @total_pages = content[:total_pages]
     @total_results = content[:total_results]
+    foo = "bar"
   end
 
 private
