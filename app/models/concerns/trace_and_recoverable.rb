@@ -14,7 +14,7 @@ module TraceAndRecoverable
         true
       rescue StandardError => e
         GovukError.notify(e)
-
+        puts e
         false
       end
     end

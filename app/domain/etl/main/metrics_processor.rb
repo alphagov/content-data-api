@@ -24,6 +24,7 @@ module Etl
       attr_reader :date
 
       def create_metrics
+        binding.pry
         log process: :metrics, message: "about to get the Dimensions::Date"
         dimensions_date = Dimensions::Date.find_existing_or_create(date)
         log process: :metrics, message: "got the Dimensions::Date"

@@ -14,18 +14,19 @@ class Etl::Main::MainProcessor
   end
 
   def process
+    puts "Etl::Main::MainProcessor.process"
     delete_existing_metrics if already_run?
 
     processor_failures = 0
     monitor_failures = 0
-
+binding.pry
     time(process: :main) do
       processor_failures = [
         Etl::Main::MetricsProcessor.process(date:),
         Etl::GA::ViewsAndNavigationProcessor.process(date:),
         Etl::GA::UserFeedbackProcessor.process(date:),
         Etl::GA::InternalSearchProcessor.process(date:),
-        Etl::Feedex::Processor.process(date:),
+        # Etl::Feedex::Processor.process(date:),
       ].count(false)
 
       process_aggregations unless historic_data?
@@ -42,10 +43,12 @@ class Etl::Main::MainProcessor
       end
     end
 
+    puts (processor_failures + monitor_failures).zero?
     (processor_failures + monitor_failures).zero?
   end
 
   def process_aggregations
+    puts "process_aggregations"
     Etl::Aggregations::Monthly.process(date:)
     Etl::Aggregations::Search.process
   end
@@ -63,6 +66,7 @@ private
   end
 
   def delete_existing_metrics
+    puts "Etl::Main::MainProcessor.delete_existing_metrics"
     Facts::Metric.where(dimensions_date_id: @date).delete_all
   end
 end

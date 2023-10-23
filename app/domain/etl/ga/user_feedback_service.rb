@@ -16,6 +16,14 @@ class Etl::GA::UserFeedbackService
       .each_slice(batch_size, &block)
   end
 
+  def self.get_bigquery_data(date:)
+    new.get_bigquery_data(date:)
+  end
+
+  def get_bigquery_data(date:)
+    @bigquery ||= Etl::GA::Bigquery.build(date:, service: "user_feedback")
+  end
+
   def client
     @client ||= Etl::GA::Client.build
   end
@@ -45,7 +53,17 @@ private
   end
 
   def extract_rows(report)
-    report.fetch(:rows)
+    rows = report.fetch(:rows)
+    # filtered_rows = report.fetch(:rows).select { |row| row[:dimensions].include?("/topic/personal-tax/income-tax") }
+    
+    rows.each do |row|
+      dimensions = row[:dimensions]
+      metrics = row[:metrics]
+    
+      puts "Dimensions: #{dimensions}"
+      puts "Metrics: #{metrics}"
+    end
+    rows
   end
 
   def fetch_data(date:)

@@ -13,6 +13,8 @@ class Etl::GA::UserFeedbackProcessor
 
   def process
     time_and_trap(process: :ga_feedback) do
+      puts "process user feedback metrics"
+      # extract_bigquery_data
       extract_events
       transform_events
       load_metrics
@@ -20,6 +22,10 @@ class Etl::GA::UserFeedbackProcessor
   end
 
 private
+
+  def extract_bigquery_data
+    Etl::GA::UserFeedbackService.get_bigquery_data(date:)
+  end
 
   def extract_events
     batch = 1
@@ -37,7 +43,8 @@ private
   def load_metrics
     conn = ActiveRecord::Base.connection
     date_to_s = date.strftime("%F")
-    conn.execute(load_metrics_query(date_to_s))
+    result = conn.execute(load_metrics_query(date_to_s))
+    puts result
     clean_up_events!
   end
 

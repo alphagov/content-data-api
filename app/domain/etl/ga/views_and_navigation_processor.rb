@@ -13,7 +13,9 @@ class Etl::GA::ViewsAndNavigationProcessor
 
   def process
     time_and_trap(process: :ga_views_navigation) do
-      extract_events
+      puts "process views and navigation metrics"
+      extract_bigquery_events
+      # extract_events
       transform_events
       load_metrics
     end
@@ -21,43 +23,55 @@ class Etl::GA::ViewsAndNavigationProcessor
 
 private
 
+  def extract_bigquery_events
+    puts "extract_bigquery_events"
+    batch = 1
+    Etl::GA::ViewsAndNavigationService.find_bq_in_batches(date:) do |events|
+      log process: :ga, message: "Processing #{events.length} events in batch #{batch}"
+      puts "Processing #{events.length} events in batch #{batch}"
+      # binding.pry
+      Events::GA.import(events, batch_size: 10_000, on_duplicate_key_ignore: true)
+      batch += 1
+    end
+  end
+
   def extract_events
+    puts "extract_events"
     batch = 1
     Etl::GA::ViewsAndNavigationService.find_in_batches(date:) do |events|
+      puts events
       log process: :ga, message: "Processing #{events.length} events in batch #{batch}"
+      puts "Processing #{events.length} events in batch #{batch}"
       Events::GA.import(events, batch_size: 10_000)
       batch += 1
     end
   end
 
   def transform_events
+    puts "transform_events"
     format_events_with_invalid_prefix
   end
 
   def load_metrics
+    puts "load_metrics"
     conn = ActiveRecord::Base.connection
     date_to_s = date.strftime("%F")
-
-    conn.execute(load_metrics_query(date_to_s))
+    binding.pry
+    results = conn.execute(load_metrics_query(date_to_s))
+    puts "load_metrics_query executed"
+    puts results
     clean_up_events!
+    puts "metric events deleted"
   end
 
   def load_metrics_query(date_to_s)
     <<~SQL
       UPDATE facts_metrics
       SET upviews = s.upviews,
-          pviews = s.pviews,
-          entrances = s.entrances,
-          exits = s.exits,
-          bounces = s.bounces,
-          page_time = s.page_time
+          pviews = s.pviews
       FROM (
         SELECT pviews,
                upviews,
-               entrances,
-               exits,
-               bounces,
-               page_time,
                dimensions_editions.id
         FROM events_gas, dimensions_editions
         WHERE page_path = LOWER(base_path)

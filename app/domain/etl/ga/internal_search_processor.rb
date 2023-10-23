@@ -13,6 +13,8 @@ class Etl::GA::InternalSearchProcessor
 
   def process
     time_and_trap(process: :ga_search) do
+      puts "process internal search metrics"
+      # extract_bigquery_data
       extract_events
       transform_events
       load_metrics
@@ -20,6 +22,10 @@ class Etl::GA::InternalSearchProcessor
   end
 
 private
+
+  def extract_bigquery_data
+    Etl::GA::InternalSearchService.get_bigquery_data(date:)
+  end
 
   def extract_events
     batch = 1
@@ -37,11 +43,13 @@ private
   def load_metrics
     conn = ActiveRecord::Base.connection
     date_to_s = date.strftime("%F")
-
-    conn.execute(load_metrics_query(date_to_s))
+    # binding.pry
+    results = conn.execute(load_metrics_query(date_to_s))
+    puts results
     clean_up_events!
   end
-
+  # insert into facts_metrics (dimensions_edition_id, dimensions_date_id) 
+  # values (15625129, "Thu, 02 Nov 2023");
   def load_metrics_query(date_to_s)
     <<~SQL
       UPDATE facts_metrics

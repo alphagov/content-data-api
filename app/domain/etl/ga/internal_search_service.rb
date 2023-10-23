@@ -4,6 +4,7 @@ class Etl::GA::InternalSearchService
   end
 
   def find_in_batches(date:, batch_size: 10_000, &block)
+
     fetch_data(date:)
       .lazy
       .map(&:to_h)
@@ -12,6 +13,14 @@ class Etl::GA::InternalSearchService
       .map(&method(:append_labels))
       .map { |hash| set_date(hash, date) }
       .each_slice(batch_size, &block)
+  end
+
+  def self.get_bigquery_data(date:)
+    new.get_bigquery_data(date:)
+  end
+
+  def get_bigquery_data(date:)
+    @bigquery ||= Etl::GA::Bigquery.build(date:, service: "internal_search")
   end
 
   def client
@@ -44,7 +53,16 @@ private
   end
 
   def extract_rows(report)
-    report.fetch(:rows)
+    rows = report.fetch(:rows)
+    # report.fetch(:rows).select! { |row| row[:dimensions].include?("/topic/personal-tax/income-tax") }
+    rows.each do |row|
+      dimensions = row[:dimensions]
+      metrics = row[:metrics]
+    
+      puts "Dimensions: #{dimensions}"
+      puts "Metrics: #{metrics}"
+    end
+    rows
   end
 
   def fetch_data(date:)

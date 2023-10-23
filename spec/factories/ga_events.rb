@@ -6,6 +6,22 @@ FactoryBot.define do
       process_name { "views" }
     end
 
+    trait :with_entrances do
+      entrances { 10 }
+    end
+
+    trait :with_exits do
+      entrances { 10 }
+    end
+
+    trait :with_bounces do
+      entrances { 10 }
+    end
+
+    trait :with_pagetime do
+      entrances { 29 }
+    end
+
     trait :with_user_feedback do
       useful_yes { 3 }
       useful_no { 6 }
