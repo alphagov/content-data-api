@@ -134,7 +134,17 @@ GEM
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
+    faraday-retry (2.2.0)
+      faraday (~> 2.0)
     ffi (1.15.5)
+    gapic-common (0.20.0)
+      faraday (>= 1.9, < 3.a)
+      faraday-retry (>= 1.0, < 3.a)
+      google-protobuf (~> 3.14)
+      googleapis-common-protos (>= 1.3.12, < 2.a)
+      googleapis-common-protos-types (>= 1.3.1, < 2.a)
+      googleauth (~> 1.0)
+      grpc (~> 1.36)
     gds-api-adapters (91.1.0)
       addressable
       link_header
@@ -152,6 +162,12 @@ GEM
     gems (1.2.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-analytics-data (0.4.0)
+      google-analytics-data-v1beta (>= 0.7, < 2.a)
+      google-cloud-core (~> 1.6)
+    google-analytics-data-v1beta (0.9.0)
+      gapic-common (>= 0.20.0, < 2.a)
+      google-cloud-errors (~> 1.0)
     google-api-client (0.53.0)
       google-apis-core (~> 0.1)
       google-apis-generator (~> 0.1)
@@ -187,6 +203,10 @@ GEM
       faraday (>= 0.17.3, < 3.0)
     google-cloud-errors (1.3.1)
     google-protobuf (3.24.4)
+    googleapis-common-protos (1.4.0)
+      google-protobuf (~> 3.14)
+      googleapis-common-protos-types (~> 1.2)
+      grpc (~> 1.27)
     googleapis-common-protos-types (1.9.0)
       google-protobuf (~> 3.18)
     googleauth (1.1.2)
@@ -222,6 +242,9 @@ GEM
       capybara (>= 3.36)
       puma
       selenium-webdriver (>= 4.0)
+    grpc (1.59.0)
+      google-protobuf (~> 3.24)
+      googleapis-common-protos-types (~> 1.0)
     hashdiff (1.0.1)
     hashie (5.0.0)
     http-accept (1.7.0)
@@ -768,6 +791,7 @@ DEPENDENCIES
   factory_bot_rails
   gds-api-adapters
   gds-sso
+  google-analytics-data
   google-api-client
   google-cloud-bigquery
   govuk_app_config
