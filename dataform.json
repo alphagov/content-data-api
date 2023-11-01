@@ -3,6 +3,6 @@
   "assertionSchema": "dataform_assertions",
   "warehouse": "bigquery",
   "defaultDatabase": "govuk-content-data",
-  "defaultLocation": "EU"
+  "defaultLocation": "europe-west2"
 }
     
