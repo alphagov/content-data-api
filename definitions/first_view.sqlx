@@ -1,16 +1,105 @@
--- This is an example SQLX file to help you learn the basics of Dataform.
--- Visit https://cloud.google.com/dataform/docs/sql-workflows for more information on how to configure your SQL workflow.
-
--- You can delete this file, then commit and push your changes to your repository when you are ready.
-
--- Config blocks allow you to configure, document, and test your data assets.
 config {
-  type: "view", // Creates a view in BigQuery. Try changing to "table" instead.
-  columns: {
-    test: "A description for the test column", // Column descriptions are pushed to BigQuery.
-  }
+    type: "view",
+    description: 'A table that extracts datafields from the GA4 flattened tables over 2 year period and pulls only essential content data app fields into it.',
+    columns: {
+        test: "A description for the test column", // Column descriptions are pushed to BigQuery.
+    }
 }
 
--- The rest of a SQLX file contains your SELECT statement used to create the table.
 
-SELECT 1 as test
+  view AS (
+  SELECT
+    user_pseudo_id,
+    user_id,
+    ga_session_number,
+    cleaned_page_location,
+    ui_text,
+    document_type,
+    unique_session_id,
+    entrances,
+    event_name,
+    engagement_time_msec,
+    FORMAT_DATE('%d-%m-%Y', PARSE_DATE('%Y%m%d', event_date)) AS the_date,
+    page_location
+  FROM
+    `ga4-analytics-352613.flattened_dataset.flattened_daily_ga_data_*`
+  WHERE
+    PARSE_DATE('%Y%m%d', _TABLE_SUFFIX) > DATE_ADD(CURRENT_DATE('Europe/London'), INTERVAL 2 YEAR) )
+  --- page_views
+,
+  CTE2 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(DISTINCT user_pseudo_id) AS unique_page_views,
+    COUNT(event_name) AS page_views,
+    cleaned_page_location
+  FROM
+    CTE1
+  WHERE
+    event_name = 'page_view'
+  GROUP BY
+    cleaned_page_location,
+    user_pseudo_id )
+  --- search
+  ,
+  CTE3 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS searches,
+  FROM
+    CTE1
+  WHERE
+    event_name = 'search'
+  GROUP BY
+    user_pseudo_id )
+  --- useful_yes
+  ,
+  CTE4 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS useful_yes
+  FROM
+    CTE1
+  WHERE
+    event_name = 'form_submit'
+    AND ui_text = 'Yes'
+  GROUP BY
+    user_pseudo_id )
+  --- useful_no
+  ,
+  CTE5 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS useful_no
+  FROM
+    CTE1
+  WHERE
+    event_name = 'form_submit'
+    AND ui_text = 'No'
+  GROUP BY
+    user_pseudo_id )
+  --- session_start
+  ,
+  CTE6 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS session_starts
+  FROM
+    CTE1
+  WHERE
+    event_name = 'session_start'
+  GROUP BY
+    user_pseudo_id )
+  --- user_engagement
+  ,
+  CTE7 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS user_engagement,
+    AVG(engagement_time_msec) AS avg_user_engagement
+  FROM
+    CTE1
+  WHERE
+    event_name = 'user_engagement'
+  GROUP BY
+    user_pseudo_id )
