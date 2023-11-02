@@ -1,64 +1,126 @@
 config {
     type: "table",
+    name: 'GA4 dataform',
     description: 'A table that extracts datafields from the GA4 flattened tables over 2 year period and pulls only essential content data app fields into it.',
     columns: {
         test: "A description for the test column", // Column descriptions are pushed to BigQuery.
     }
 }
-WITH CTE2 AS (
-SELECT user_pseudo_id, COUNT(DISTINCT user_pseudo_id) AS unique_page_views,COUNT(event_name) as page_views FROM `govuk-content-data.ga4.ga4_two_years`
-WHERE event_name = 'page_view'
-GROUP BY cleaned_page_location, user_pseudo_id
-) 
 
-
---- search
-, CTE3 AS (
-SELECT user_pseudo_id,COUNT(user_pseudo_id) AS searches FROM `govuk-content-data.ga4.ga4_two_years`
-WHERE event_name = 'search'
-GROUP BY user_pseudo_id
-) 
-
-
---- useful_yes
-,CTE4 AS (
-SELECT user_pseudo_id, COUNT(user_pseudo_id) AS useful_yes FROM `govuk-content-data.ga4.ga4_two_years`
-WHERE event_name = 'form_submit' AND ui_text = 'Yes'
-GROUP BY user_pseudo_id
-)
-
-
---- useful_no
-,CTE5 AS (
-SELECT user_pseudo_id, COUNT(user_pseudo_id) AS useful_no FROM `govuk-content-data.ga4.ga4_two_years`
-WHERE event_name = 'form_submit' AND ui_text = 'No'
-GROUP BY user_pseudo_id
-)
-
-
---- session_start
-,CTE6 AS (
-SELECT user_pseudo_id, COUNT(user_pseudo_id) AS session_starts FROM `govuk-content-data.ga4.ga4_two_years`
-WHERE event_name = 'session_start'
-GROUP BY user_pseudo_id
-)
-
-
---- user_engagement
-,CTE7 AS (
-SELECT user_pseudo_id, COUNT(user_pseudo_id) AS user_engagement, AVG(engagement_time_msec) AS avg_user_engagement FROM `govuk-content-data.ga4.ga4_two_years`
-WHERE event_name = 'user_engagement'
-GROUP BY user_pseudo_id
-)
-
-
-SELECT p.the_date ,p.user_pseudo_id, p.cleaned_page_location,p.event_name, CTE2.unique_page_views, CTE2.page_views, CTE3.searches, CTE4.useful_yes, CTE5.useful_no,(CTE4.useful_yes/CTE5.useful_no) * 100 AS satisfaction, CTE6.session_starts, CTE7.user_engagement, CTE7.avg_user_engagement,(CTE6.session_starts - CTE7.user_engagement)/ CTE7.user_engagement AS bounce_rate FROM `govuk-content-data.ga4.ga4_two_years` AS p
-LEFT JOIN CTE2 ON p.user_pseudo_id = CTE2.user_pseudo_id
-LEFT JOIN CTE3 ON CTE2.user_pseudo_id = CTE3.user_pseudo_id
-LEFT JOIN CTE4 ON CTE3.user_pseudo_id = CTE4.user_pseudo_id
-LEFT JOIN CTE5 ON CTE4.user_pseudo_id = CTE5.user_pseudo_id
-LEFT JOIN CTE6 ON CTE5.user_pseudo_id = CTE6.user_pseudo_id
-LEFT JOIN CTE7 ON CTE6.user_pseudo_id = CTE7.user_pseudo_id
-
-
-
+WITH
+  CTE2 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(DISTINCT user_pseudo_id) AS unique_page_views,
+    COUNT(event_name) AS page_views
+  FROM
+    `govuk-content-data.ga4.ga4_two_years`
+  WHERE
+    event_name = 'page_view'
+  GROUP BY
+    cleaned_page_location,
+    user_pseudo_id )
+  --- search
+  ,
+  CTE3 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS searches
+  FROM
+    `govuk-content-data.ga4.ga4_two_years`
+  WHERE
+    event_name = 'search'
+  GROUP BY
+    user_pseudo_id )
+  --- useful_yes
+  ,
+  CTE4 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS useful_yes
+  FROM
+    `govuk-content-data.ga4.ga4_two_years`
+  WHERE
+    event_name = 'form_submit'
+    AND ui_text = 'Yes'
+  GROUP BY
+    user_pseudo_id )
+  --- useful_no
+  ,
+  CTE5 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS useful_no
+  FROM
+    `govuk-content-data.ga4.ga4_two_years`
+  WHERE
+    event_name = 'form_submit'
+    AND ui_text = 'No'
+  GROUP BY
+    user_pseudo_id )
+  --- session_start
+  ,
+  CTE6 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS session_starts
+  FROM
+    `govuk-content-data.ga4.ga4_two_years`
+  WHERE
+    event_name = 'session_start'
+  GROUP BY
+    user_pseudo_id )
+  --- user_engagement
+  ,
+  CTE7 AS (
+  SELECT
+    user_pseudo_id,
+    COUNT(user_pseudo_id) AS user_engagement,
+    AVG(engagement_time_msec) AS avg_user_engagement
+  FROM
+    `govuk-content-data.ga4.ga4_two_years`
+  WHERE
+    event_name = 'user_engagement'
+  GROUP BY
+    user_pseudo_id )
+SELECT
+  p.the_date,
+  p.user_pseudo_id,
+  p.cleaned_page_location,
+  p.event_name,
+  CTE2.unique_page_views,
+  CTE2.page_views,
+  CTE3.searches,
+  CTE4.useful_yes,
+  CTE5.useful_no,
+  (CTE4.useful_yes/CTE5.useful_no) * 100 AS satisfaction,
+  CTE6.session_starts,
+  CTE7.user_engagement,
+  CTE7.avg_user_engagement,
+  (CTE6.session_starts - CTE7.user_engagement)/ CTE7.user_engagement AS bounce_rate
+FROM
+  `govuk-content-data.ga4.ga4_two_years` AS p
+LEFT JOIN
+  CTE2
+ON
+  p.user_pseudo_id = CTE2.user_pseudo_id
+LEFT JOIN
+  CTE3
+ON
+  CTE2.user_pseudo_id = CTE3.user_pseudo_id
+LEFT JOIN
+  CTE4
+ON
+  CTE3.user_pseudo_id = CTE4.user_pseudo_id
+LEFT JOIN
+  CTE5
+ON
+  CTE4.user_pseudo_id = CTE5.user_pseudo_id
+LEFT JOIN
+  CTE6
+ON
+  CTE5.user_pseudo_id = CTE6.user_pseudo_id
+LEFT JOIN
+  CTE7
+ON
+  CTE6.user_pseudo_id = CTE7.user_pseudo_id

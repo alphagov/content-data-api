@@ -1,8 +1,0 @@
-config {
-    type: "view",
-    description: 'A table that extracts datafields from the GA4 flattened tables over 2 year period and pulls only essential content data app fields into it.',
-    columns: {
-        test: "A description for the test column", // Column descriptions are pushed to BigQuery.
-    }
-}
-
