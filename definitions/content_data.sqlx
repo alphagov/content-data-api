@@ -93,7 +93,7 @@ SELECT
   CTE3.searches,
   CTE4.useful_yes,
   CTE5.useful_no,
-  (CTE4.useful_yes/CTE5.useful_no) * 100 AS satisfaction,
+  CTE4.useful_yes/CTE5.useful_no * 100 AS satisfaction,
   CTE6.session_starts,
   CTE7.user_engagement,
   CTE7.avg_user_engagement,
@@ -124,3 +124,4 @@ LEFT JOIN
   CTE7
 ON
   CTE6.user_pseudo_id = CTE7.user_pseudo_id
+
