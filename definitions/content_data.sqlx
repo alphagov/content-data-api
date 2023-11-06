@@ -6,11 +6,12 @@ config {
         test: "A description for the test column", // Column descriptions are pushed to BigQuery.
     }
 }
-
+---- page views
 WITH
   CTE2 AS (
   SELECT
     user_pseudo_id,
+    event_name,
     COUNT(DISTINCT user_pseudo_id) AS unique_page_views,
     COUNT(event_name) AS page_views
   FROM
@@ -19,19 +20,26 @@ WITH
     event_name = 'page_view'
   GROUP BY
     cleaned_page_location,
-    user_pseudo_id )
+    user_pseudo_id,
+    event_name,
+    the_date )
+
+
   --- search
   ,
   CTE3 AS (
   SELECT
     user_pseudo_id,
-    COUNT(user_pseudo_id) AS searches,  COUNT(DISTINCT user_pseudo_id) as unique_searches
+    COUNT(user_pseudo_id) AS searches,
+    COUNT(DISTINCT user_pseudo_id) AS unique_searches
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
     event_name = 'search'
   GROUP BY
     user_pseudo_id )
+
+
   --- useful_yes
   ,
   CTE4 AS (
@@ -45,6 +53,8 @@ WITH
     AND ui_text = 'Yes'
   GROUP BY
     user_pseudo_id )
+
+
   --- useful_no
   ,
   CTE5 AS (
@@ -58,6 +68,8 @@ WITH
     AND ui_text = 'No'
   GROUP BY
     user_pseudo_id )
+
+
   --- session_start
   ,
   CTE6 AS (
@@ -70,6 +82,8 @@ WITH
     event_name = 'session_start'
   GROUP BY
     user_pseudo_id )
+
+
   --- user_engagement
   ,
   CTE7 AS (
@@ -82,9 +96,30 @@ WITH
   WHERE
     event_name = 'user_engagement'
   GROUP BY
-    user_pseudo_id )
+    user_pseudo_id),
+
+
+  ---- Exits
+  CTE8 AS (
+  SELECT
+    user_pseudo_id,
+  IF
+    (event_name = 'page_view', COALESCE(FIRST_VALUE(
+        IF
+          (event_name = 'page_view',cleaned_page_location, NULL) IGNORE NULLS) OVER(PARTITION BY user_pseudo_id ORDER BY the_date ASC ROWS BETWEEN 1 FOLLOWING AND UNBOUNDED FOLLOWING), '(exit)' ), NULL ) AS exits
+  FROM
+    `govuk-content-data.ga4.ga4_two_years`
+  WHERE
+    event_name = 'page_view'
+  GROUP BY
+    user_pseudo_id,
+    cleaned_page_location,
+    event_name,
+    the_date)
 SELECT
   p.the_date,
+  p.entrances,
+  CTE8.exits,
   p.user_pseudo_id,
   p.cleaned_page_location,
   p.event_name,
@@ -125,4 +160,7 @@ LEFT JOIN
   CTE7
 ON
   CTE6.user_pseudo_id = CTE7.user_pseudo_id
-
+LEFT JOIN
+  CTE8
+ON
+  CTE7.user_pseudo_id = CTE8.user_pseudo_id
