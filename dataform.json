@@ -4,5 +4,6 @@
   "warehouse": "bigquery",
   "defaultDatabase": "govuk-content-data",
   "defaultLocation": "europe-west2"
+  
 }
     
