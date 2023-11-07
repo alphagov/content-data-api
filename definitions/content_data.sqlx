@@ -5,10 +5,7 @@ config {
     columns: {
         test: "A description for the test column", // Column descriptions are pushed to BigQuery.
     },
-    
-     
 
-    
 }
 
   ---- page views
@@ -88,11 +85,8 @@ WITH
     event_name = 'user_engagement'
   GROUP BY
     user_pseudo_id)
-
-
-
 SELECT
-  p.the_date,
+  FORMAT_DATE('%Y-%m-%d', PARSE_DATE('%d-%m-%Y',p.the_date)) AS the_date,
   p.entrances,
   p.bq_entrances,
   p.exits,
@@ -109,7 +103,7 @@ SELECT
   CTE6.session_starts,
   CTE7.user_engagement,
   CTE7.avg_user_engagement,
-  (CTE6.session_starts - CTE7.user_engagement)/ CTE7.user_engagement AS bounce_rate
+  (CTE6.session_starts - CTE7.user_engagement/ CTE7.user_engagement) AS bounce_rate
 FROM
   `govuk-content-data.ga4.ga4_two_years` AS p
 LEFT JOIN
@@ -136,5 +130,3 @@ LEFT JOIN
   CTE7
 ON
   p.user_pseudo_id = CTE7.user_pseudo_id
-
-
