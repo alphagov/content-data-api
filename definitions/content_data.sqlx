@@ -41,13 +41,14 @@ WITH
   CTE3 AS (
   SELECT
     user_pseudo_id,
-    COUNT(user_pseudo_id) AS searches,
-    COUNT(DISTINCT user_pseudo_id) AS unique_searches
+    COUNT(unique_session_id) AS searches,
+    COUNT(DISTINCT unique_session_id) AS unique_searches
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
     event_name = 'search'
   GROUP BY
+  unique_session_id,
     user_pseudo_id )
   --- useful_yes
   ,
