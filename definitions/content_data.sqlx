@@ -110,6 +110,7 @@ SELECT
   p.event_name,
   CTE2.unique_page_views,
   CTE2.page_views,
+  p.search_term,
   CTE3.searches,
   CTE3.unique_searches,
   CTE4.useful_yes,
