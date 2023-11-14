@@ -29,7 +29,7 @@ WITH
   SELECT
     user_pseudo_id,
     COUNT(DISTINCT user_pseudo_id) AS unique_page_views,
-    COUNT(event_name) AS page_views
+    COUNT(user_pseudo_id) AS page_views
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
@@ -146,3 +146,4 @@ LEFT JOIN
   CTE7
 ON
   p.user_pseudo_id = CTE7.user_pseudo_id
+

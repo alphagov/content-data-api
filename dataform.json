@@ -1,9 +1,17 @@
+
 {
   "defaultSchema": "dataform",
   "assertionSchema": "dataform_assertions",
   "warehouse": "bigquery",
   "defaultDatabase": "govuk-content-data",
-  "defaultLocation": "europe-west2"
+  "defaultLocation": "europe-west2",
+  "allowLargeResults": true,
+      "destinationTable": {
+        "projectId":"govuk-content-data",
+        "datasetId":"dataform",
+        "tableId":"GA4 dataform"
+      }
+ 
   
 }
     
