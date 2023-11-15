@@ -28,8 +28,8 @@ WITH
   CTE2 AS (
   SELECT
     user_pseudo_id,
-    COUNT(DISTINCT user_pseudo_id) AS unique_page_views,
-    COUNT(user_pseudo_id) AS page_views
+    COUNT(DISTINCT content_id) AS unique_page_views,
+    COUNT(content_id) AS page_views
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
@@ -41,8 +41,8 @@ WITH
   CTE3 AS (
   SELECT
     user_pseudo_id,
-    COUNT(user_pseudo_id) AS searches,
-    COUNT(DISTINCT user_pseudo_id) AS unique_searches
+    COUNT(content_id) AS searches,
+    COUNT(DISTINCT content_id) AS unique_searches
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
@@ -108,6 +108,7 @@ SELECT
   p.user_pseudo_id,
   p.cleaned_page_location,
   p.event_name,
+  p.ui_text,
   CTE2.unique_page_views,
   CTE2.page_views,
   p.search_term,
