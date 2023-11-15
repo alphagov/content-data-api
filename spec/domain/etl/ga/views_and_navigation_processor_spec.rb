@@ -1,5 +1,5 @@
 require "gds-api-adapters"
-require "traceable"
+# require "traceable"
 
 RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
   subject { described_class }
