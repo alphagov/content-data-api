@@ -29,17 +29,13 @@ private
   end
 
   def append_data_labels(values)
-    page_path, pviews, upviews, entrances, exits, bounces, page_time = *values
+    page_path, pviews, upviews = *values
 
     {
       "page_path" => page_path,
       "pviews" => pviews,
       "upviews" => upviews,
       "process_name" => "views",
-      "entrances" => entrances,
-      "exits" => exits,
-      "bounces" => bounces,
-      "page_time" => page_time,
     }
   end
 
@@ -88,11 +84,6 @@ private
       metrics: [
         { expression: "ga:pageviews" },
         { expression: "ga:uniquePageviews" },
-        { expression: "ga:entrances" },
-        { expression: "ga:exits" },
-        { expression: "ga:avgTimeOnPage" },
-        { expression: "ga:bounces" },
-        { expression: "ga:timeOnPage" },
       ],
       page_size: 10_000,
       view_id: ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"],

@@ -23,15 +23,11 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
         :ga_event,
         :with_views,
         page_path: "/https://www.gov.uk/topics",
-        bounces: 1,
         upviews: 1,
         pviews: 1,
         useful_no: 1,
         useful_yes: 1,
         searches: 1,
-        entrances: 1,
-        exits: 1,
-        page_time: 1,
       )
     end
 
@@ -40,20 +36,16 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
         :ga_event,
         :with_views,
         page_path: "/topics",
-        bounces: 1000,
         upviews: 100,
         pviews: 200,
         useful_no: 300,
         useful_yes: 400,
         searches: 500,
-        entrances: 600,
-        exits: 700,
-        page_time: 1000,
       )
     end
 
     it "returns the correct number of metrics" do
-      names_to_exclude = %w[id bounces date page_path updated_at created_at process_name page_time]
+      names_to_exclude = %w[id bounces date page_path updated_at created_at process_name page_time entrances exits]
       event_attributes = event2.attribute_names.reject { |name| names_to_exclude.include?(name) }
 
       subject.format_events_with_invalid_prefix
@@ -66,13 +58,13 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
     it "explicitly ignores bounces" do
       subject.format_events_with_invalid_prefix
 
-      expect(event2.reload.bounces).to eq(1)
+      expect(event2.reload.bounces).to eq(0)
     end
 
     it "explicitly ignores page_time" do
       subject.format_events_with_invalid_prefix
 
-      expect(event2.reload.page_time).to eq(1)
+      expect(event2.reload.page_time).to eq(0)
     end
 
     it "updates events with their combined upviews" do
@@ -103,18 +95,6 @@ RSpec.describe Etl::GA::Concerns::TransformPath do
       subject.format_events_with_invalid_prefix
 
       expect(event2.reload.searches).to eq 501
-    end
-
-    it "updates events with their combines entrances" do
-      subject.format_events_with_invalid_prefix
-
-      expect(event2.reload.entrances).to eq 601
-    end
-
-    it "updates events with their combines exits" do
-      subject.format_events_with_invalid_prefix
-
-      expect(event2.reload.exits).to eq 701
     end
 
     it "deletes the duplicated event" do

@@ -22,8 +22,8 @@ RSpec.describe Etl::GA::ViewsAndNavigationProcessor do
 
       described_class.process(date:)
 
-      expect(fact1.reload).to have_attributes(pviews: 1, upviews: 1, entrances: 10, exits: 5, bounces: 31, page_time: 20)
-      expect(fact2.reload).to have_attributes(pviews: 2, upviews: 2, entrances: 20, exits: 10, bounces: 50, page_time: 23)
+      expect(fact1.reload).to have_attributes(pviews: 1, upviews: 1)
+      expect(fact2.reload).to have_attributes(pviews: 2, upviews: 2)
     end
 
     it "does not update metrics for other days" do
@@ -80,10 +80,6 @@ private
         "upviews" => 1,
         "date" => "2018-02-20",
         "process_name" => "views",
-        "entrances" => 10,
-        "exits" => 5,
-        "bounces" => 31,
-        "page_time" => 20,
       },
       {
         "page_path" => "/path2",
@@ -91,10 +87,6 @@ private
         "upviews" => 2,
         "date" => "2018-02-20",
         "process_name" => "views",
-        "entrances" => 20,
-        "exits" => 10,
-        "bounces" => 50,
-        "page_time" => 23,
       },
     ]
   end
@@ -107,10 +99,6 @@ private
         "upviews" => 1,
         "date" => "2018-02-20",
         "process_name" => "views",
-        "entrances" => 10,
-        "exits" => 5,
-        "bounces" => 66,
-        "page_time" => 86,
       },
       {
         "page_path" => "/path2",
@@ -118,10 +106,6 @@ private
         "upviews" => 2,
         "date" => "2018-02-20",
         "process_name" => "views",
-        "entrances" => 20,
-        "exits" => 10,
-        "bounces" => 15,
-        "page_time" => 63,
       },
     ]
   end

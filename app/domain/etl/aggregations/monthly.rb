@@ -48,13 +48,11 @@ private
         dimensions_edition_id,
         pviews,
         upviews,
-        entrances,
         searches,
         feedex,
         satisfaction,
         useful_yes,
         useful_no,
-        exits,
         updated_at,
         created_at
       )
@@ -62,7 +60,6 @@ private
         max(dimensions_edition_id),
         sum(pviews),
         sum(upviews),
-        sum(entrances),
         sum(searches),
         sum(feedex),
         CASE
@@ -71,7 +68,6 @@ private
         END AS satisfaction,
         sum(useful_yes),
         sum(useful_no),
-        sum(exits),
         now(),
         now()
       FROM facts_metrics

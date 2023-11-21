@@ -16,13 +16,13 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
-              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1 1 1 1 1 1]),
+              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1 1]),
             ),
             build_report_data(
-              build_report_row(dimensions: %w[/bar], metrics: %w[2 2 2 2 2 2 2 2]),
+              build_report_row(dimensions: %w[/bar], metrics: %w[2 2 2 2]),
             ),
             build_report_data(
-              build_report_row(dimensions: %w[/cool], metrics: %w[3 3 3 3 3 3 3 3]),
+              build_report_row(dimensions: %w[/cool], metrics: %w[3 3 3]),
             ),
           ]
         end
@@ -34,20 +34,12 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
             "page_path" => "/foo",
             "pviews" => 1,
             "upviews" => 1,
-            "entrances" => 1,
-            "exits" => 1,
-            "bounces" => 1,
-            "page_time" => 1,
             "date" => "2018-02-20",
           ),
           a_hash_including(
             "page_path" => "/bar",
             "pviews" => 2,
             "upviews" => 2,
-            "entrances" => 2,
-            "exits" => 2,
-            "bounces" => 2,
-            "page_time" => 2,
             "date" => "2018-02-20",
           ),
         ]
@@ -56,10 +48,6 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
             "page_path" => "/cool",
             "pviews" => 3,
             "upviews" => 3,
-            "entrances" => 3,
-            "exits" => 3,
-            "bounces" => 3,
-            "page_time" => 3,
             "date" => "2018-02-20",
           ),
         ]
@@ -74,13 +62,13 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
-              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1 1 1 1 1 1]),
+              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1]),
             ),
             build_report_data(
-              build_report_row(dimensions: [path_with_long_query], metrics: %w[1 1 1 1 1 1 1 1]),
+              build_report_row(dimensions: [path_with_long_query], metrics: %w[1 1 1 1]),
             ),
             build_report_data(
-              build_report_row(dimensions: [long_path], metrics: %w[1 1 1 1 1 1 1 1]),
+              build_report_row(dimensions: [long_path], metrics: %w[1 1 1 1]),
             ),
           ]
         end
@@ -90,10 +78,6 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
             "page_path" => "/foo",
             "pviews" => 1,
             "upviews" => 1,
-            "entrances" => 1,
-            "exits" => 1,
-            "bounces" => 1,
-            "page_time" => 1,
             "date" => "2018-02-20",
           ),
         ]
@@ -108,10 +92,10 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
         allow(google_client).to receive(:fetch_all) do
           [
             build_report_data(
-              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1 1 1 1 1 1]),
+              build_report_row(dimensions: %w[/foo], metrics: %w[1 1 1 1]),
             ),
             build_report_data(
-              build_report_row(dimensions: [path_with_invalid_uri], metrics: %w[1 1 1 1 1 1 1 1]),
+              build_report_row(dimensions: [path_with_invalid_uri], metrics: %w[1 1 1 1]),
             ),
           ]
         end
@@ -121,10 +105,6 @@ RSpec.describe Etl::GA::ViewsAndNavigationService do
             "page_path" => "/foo",
             "pviews" => 1,
             "upviews" => 1,
-            "entrances" => 1,
-            "exits" => 1,
-            "bounces" => 1,
-            "page_time" => 1,
             "date" => "2018-02-20",
           ),
         ]

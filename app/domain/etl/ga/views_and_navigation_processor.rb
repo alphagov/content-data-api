@@ -46,18 +46,10 @@ private
     <<~SQL
       UPDATE facts_metrics
       SET upviews = s.upviews,
-          pviews = s.pviews,
-          entrances = s.entrances,
-          exits = s.exits,
-          bounces = s.bounces,
-          page_time = s.page_time
+          pviews = s.pviews
       FROM (
         SELECT pviews,
                upviews,
-               entrances,
-               exits,
-               bounces,
-               page_time,
                dimensions_editions.id
         FROM events_gas, dimensions_editions
         WHERE page_path = LOWER(base_path)
