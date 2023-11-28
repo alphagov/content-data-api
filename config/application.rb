@@ -41,5 +41,9 @@ module ContentPerformanceManager
 
     # Support for inversing belongs_to -> has_many Active Record associations.
     config.active_record.has_many_inversing = false
+
+    # See https://github.com/thoughtbot/factory_bot_rails#active-record-configuration
+    # Required because we define a sequence on Dimensions::Date#date, which is a primary key
+    config.factory_bot.reject_primary_key_attributes = false
   end
 end
