@@ -53,4 +53,8 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # See https://github.com/thoughtbot/factory_bot_rails#active-record-configuration
+  # Required because we define a sequence on Dimensions::Date#date, which is a primary key
+  config.factory_bot.reject_primary_key_attributes = false
 end
