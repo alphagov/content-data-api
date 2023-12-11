@@ -1,16 +1,19 @@
 config {
     type: "table",
     name: 'GA4 dataform',
+    assertions: {
+        nonNull: ["user_pseudo_id"]
+    },
     description: 'A table that extracts datafields from the GA4 flattened tables over 2 year period and pulls only essential content data app fields into it.',
     columns: {
         exits: "The number of times that the last event recorded for a session occurred on a page or screen. Also, returns the page path if the logic returns false",
-        page_views: "The number of mobile app screens or web pages your users saw. Repeated views of a single screen or page are counted.",
-        unique_page_views: "The number of mobile app screens or web pages your users saw. Distinct views of a single screen or page are counted.",
+        total_page_views: "The number of mobile app screens or web pages your users saw. Repeated views of a single screen or page are counted.",
+        unique_page_views_user_level: "The number of mobile app screens or web pages your users saw. Distinct views of a single screen or page are counted per user.",
+        unique_page_views_session_level: "The number of mobile app screens or web pages your users saw. Distinct views of a single screen or page are counted per session.",
         bounce_rate: "The percentage of sessions that were not engaged sessions (calculated in BQ AS (total_sessions-total_engaged_sessions)/total_sessions to match the standard GA4 calculation)",
         entrances: "The number of times that the first event recorded for a session occurred on a page or screen.",
         bq_entrances: "The number of times that the first event recorded for a session occurred on a page or screen. Also, returns the page path if the logic returns false",
-        searches: "The number of mobile or web searches your users performed. Repeated searches are counted.",
-        unique_searches: "The number of mobile or web searches your users performed. Distinct searches are counted.",
+        total_searches: "The number of mobile or web searches your users performed. Repeated searches are counted.",
         session_starts: "The number of sessions that began on your website or application. A session is a period of time during which a user interacts with your website or app.",
         user_engagement: "The number of sessions that lasted 10 seconds or longer, or had 1 or more conversion events or 2 or more page or screen views.",
         avg_user_engagement: "The average number of sessions that lasted 10 seconds or longer, or had 1 or more conversion events or 2 or more page or screen views.",
@@ -28,8 +31,15 @@ WITH
   CTE2 AS (
   SELECT
     user_pseudo_id,
-    COUNT(DISTINCT user_pseudo_id) AS unique_page_views,
-    COUNT(user_pseudo_id) AS page_views
+    COUNT(DISTINCT
+    IF
+      (event_name="page_view",user_pseudo_id||cleaned_page_location,NULL)) AS unique_page_views_user_level,
+    COUNT(DISTINCT
+    IF
+      (event_name="page_view",unique_session_id||cleaned_page_location,NULL)) AS unique_page_views_session_level,
+    COUNT(
+    IF
+      (event_name="page_view",user_pseudo_id,NULL)) AS total_page_views
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
@@ -41,8 +51,9 @@ WITH
   CTE3 AS (
   SELECT
     user_pseudo_id,
-    COUNT(user_pseudo_id) AS searches,
-    COUNT(DISTINCT user_pseudo_id) AS unique_searches
+    COUNT(
+    IF
+      (event_name="search",user_pseudo_id,NULL)) AS total_searches,
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
@@ -54,7 +65,10 @@ WITH
   CTE4 AS (
   SELECT
     user_pseudo_id,
-    COUNT(user_pseudo_id) AS useful_yes
+    COUNT(
+    IF
+      (event_name="form_submit"
+        AND ui_text = 'Yes',user_pseudo_id,NULL)) AS useful_yes
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
@@ -67,7 +81,10 @@ WITH
   CTE5 AS (
   SELECT
     user_pseudo_id,
-    COUNT(user_pseudo_id) AS useful_no
+    COUNT(
+    IF
+      (event_name="form_submit"
+        AND ui_text = 'No',user_pseudo_id,NULL)) AS useful_no
   FROM
     `govuk-content-data.ga4.ga4_two_years`
   WHERE
@@ -109,11 +126,11 @@ SELECT
   p.cleaned_page_location,
   p.event_name,
   p.ui_text,
-  CTE2.unique_page_views,
-  CTE2.page_views,
+  CTE2.unique_page_views_user_level,
+  CTE2.unique_page_views_session_level,
+  CTE2.total_page_views,
   p.search_term,
-  CTE3.searches,
-  CTE3.unique_searches,
+  CTE3.total_searches,
   CTE4.useful_yes,
   CTE5.useful_no,
   CTE4.useful_yes/CTE5.useful_no * 100 AS satisfaction,
@@ -147,4 +164,3 @@ LEFT JOIN
   CTE7
 ON
   p.user_pseudo_id = CTE7.user_pseudo_id
-
