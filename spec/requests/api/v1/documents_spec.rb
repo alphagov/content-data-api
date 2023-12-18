@@ -81,7 +81,7 @@ end
 def setup_edition_and_metrics(content_id, locale, total_upviews, parent: nil, order: nil)
   edition = create :edition, content_id:, locale:, live: true, parent:, sibling_order: order
 
-  create :metric, edition:, date: Date.yesterday, upviews: 0, pviews: 1, useful_yes: 1, useful_no: 1, searches: 1
+  create :metric, edition:, date: Time.zone.today - 2, upviews: 0, pviews: 1, useful_yes: 1, useful_no: 1, searches: 1
   create :metric, edition:, date: 10.days.ago, upviews: total_upviews, pviews: 1, useful_yes: 74, useful_no: 24, searches: 2
 
   recalculate_aggregations!

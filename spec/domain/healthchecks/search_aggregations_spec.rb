@@ -28,7 +28,7 @@ RSpec.describe Healthchecks::SearchAggregations do
       end
 
       its(:status) { is_expected.to eq(:critical) }
-      its(:message) { is_expected.to eq("ETL :: no Last month searches updated from yesterday") }
+      its(:message) { is_expected.to eq("ETL :: no Last month searches updated from day before yesterday") }
     end
   end
 end

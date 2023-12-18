@@ -22,13 +22,13 @@ module Healthchecks
     end
 
     def message
-      "ETL :: no #{metric} for yesterday" if status == :critical
+      "ETL :: no #{metric} for day before yesterday" if status == :critical
     end
 
   private
 
     def number_of_metric_values
-      Facts::Metric.for_yesterday.where("#{metric} > 0").count
+      Facts::Metric.for_2_days_ago.where("#{metric} > 0").count
     end
   end
 end

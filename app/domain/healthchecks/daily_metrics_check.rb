@@ -11,13 +11,13 @@ module Healthchecks
     end
 
     def message
-      "ETL :: no daily metrics for yesterday" if status == :critical
+      "ETL :: no daily metrics for day before yesterday" if status == :critical
     end
 
   private
 
     def metrics
-      @metrics ||= Facts::Metric.where(dimensions_date_id: Date.yesterday)
+      @metrics ||= Facts::Metric.where(dimensions_date_id: Time.zone.today - 2)
     end
   end
 end

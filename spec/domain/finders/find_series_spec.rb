@@ -1,7 +1,7 @@
 RSpec.describe Finders::FindSeries do
   context "all" do
     it "returns a series of all metrics" do
-      create :metric, date: Time.zone.today, pviews: 1
+      create :metric, date: Time.zone.today - 1, pviews: 1
 
       expect(described_class.new.run.length).to eq(16)
     end

@@ -9,7 +9,7 @@ class Etl::Main::MainProcessor
     new(*args, **kwargs).process_aggregations
   end
 
-  def initialize(date: Date.yesterday)
+  def initialize(date: Time.zone.today - 2)
     @date = date
   end
 
@@ -59,7 +59,7 @@ private
   attr_reader :date
 
   def historic_data?
-    date != Date.yesterday
+    date != Time.zone.today - 2
   end
 
   def delete_existing_metrics

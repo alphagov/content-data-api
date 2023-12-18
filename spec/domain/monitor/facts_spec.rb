@@ -3,7 +3,7 @@ RSpec.describe Monitor::Facts do
     Timecop.freeze(Date.new(2018, 1, 15)) { example.run }
   end
 
-  let(:yesterday) { "2018-01-14" }
+  let(:two_days_ago) { "2018-01-13" }
 
   before { allow(GovukStatsd).to receive(:count) }
 
@@ -18,8 +18,7 @@ RSpec.describe Monitor::Facts do
   it "sends StatsD counter for `daily` metrics" do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_metrics", 1)
 
-    create :metric, date: Date.yesterday
-    create :metric, date: Time.zone.today
+    create :metric, date: two_days_ago
 
     subject.run
   end
@@ -27,8 +26,7 @@ RSpec.describe Monitor::Facts do
   it "sends StatsD counter for facts editions" do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.all_editions", 2)
 
-    create :edition, date: Date.yesterday, base_path: "/foo"
-    create :edition, date: Time.zone.today, base_path: "/bar"
+    create :edition, date: two_days_ago, base_path: "/foo"
 
     subject.run
   end
@@ -36,8 +34,7 @@ RSpec.describe Monitor::Facts do
   it "sends StatsD counter for `daily` editions" do
     expect(GovukStatsd).to receive(:count).with("monitor.facts.daily_editions", 1)
 
-    create :edition, date: Date.yesterday, base_path: "/foo"
-    create :edition, date: Time.zone.today, base_path: "/bar"
+    create :edition, date: two_days_ago, base_path: "/foo"
 
     subject.run
   end

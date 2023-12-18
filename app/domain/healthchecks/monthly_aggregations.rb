@@ -11,7 +11,7 @@ module Healthchecks
     end
 
     def message
-      "ETL :: no monthly aggregations of metrics for yesterday" if status == :critical
+      "ETL :: no monthly aggregations of metrics for day before yesterday" if status == :critical
     end
 
   private

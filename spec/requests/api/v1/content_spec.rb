@@ -4,11 +4,12 @@ RSpec.describe "/content" do
   before { create :user }
 
   let(:primary_organisation_id) { "e12e3c54-b544-4d94-ba1f-9846144374d2" }
+  let(:two_days_ago) { Time.zone.today - 2 }
 
   describe "content item attributes" do
     it "contains the expected metrics" do
       edition1 = create :edition, date: 1.month.ago, primary_organisation_id:, base_path: "/path-01", facts: { pdf_count: 10, words: 300, reading_time: 2 }
-      create :metric, date: 1.day.ago, edition: edition1, pviews: 1, upviews: 1, feedex: 1, useful_no: 1, useful_yes: 1, searches: 1
+      create :metric, date: 2.days.ago, edition: edition1, pviews: 1, upviews: 1, feedex: 1, useful_no: 1, useful_yes: 1, searches: 1
       recalculate_aggregations!
 
       get "/content", params: { date_range: "past-30-days", organisation_id: "e12e3c54-b544-4d94-ba1f-9846144374d2" }
@@ -31,7 +32,7 @@ RSpec.describe "/content" do
 
     it "contains the expected metadata" do
       edition1 = create :edition, date: 1.month.ago, title: "title", primary_organisation_id: "e12e3c54-b544-4d94-ba1f-9846144374d2", document_type: "guide", base_path: "/path-01"
-      create :metric, date: 1.day.ago, edition: edition1
+      create :metric, date: 2.days.ago, edition: edition1
       recalculate_aggregations!
 
       get "/content", params: { date_range: "past-30-days", organisation_id: "all" }
@@ -50,8 +51,8 @@ RSpec.describe "/content" do
   describe "time periods" do
     let(:edition1) { create :edition, date: 1.month.ago, primary_organisation_id:, base_path: "/path-01" }
     let(:edition2) { create :edition, date: 3.months.ago, primary_organisation_id:, base_path: "/path-02" }
-    let(:beginning_of_this_month) { Date.yesterday.beginning_of_month }
-    let(:beginning_of_last_month) { Date.yesterday.beginning_of_month - 1.month }
+    let(:beginning_of_this_month) { two_days_ago.beginning_of_month }
+    let(:beginning_of_last_month) { two_days_ago.beginning_of_month - 1.month }
 
     context "last month" do
       before do
@@ -85,12 +86,12 @@ RSpec.describe "/content" do
 
     context "other periods" do
       before do
-        create :metric, date: 1.day.ago, edition: edition1, pviews: 1
+        create :metric, date: 2.days.ago, edition: edition1, pviews: 1
         create :metric, date: 2.months.ago, edition: edition1, pviews: 10
         create :metric, date: 5.months.ago, edition: edition1, pviews: 100
         create :metric, date: 11.months.ago, edition: edition1, pviews: 1000
 
-        create :metric, date: 1.day.ago, edition: edition2, pviews: 2
+        create :metric, date: 2.days.ago, edition: edition2, pviews: 2
         create :metric, date: 2.months.ago, edition: edition2, pviews: 20
         create :metric, date: 5.months.ago, edition: edition2, pviews: 200
         create :metric, date: 11.months.ago, edition: edition2, pviews: 2000

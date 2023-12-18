@@ -1,5 +1,5 @@
 namespace :etl do
-  desc "Run ETL main process for yesterday"
+  desc "Run ETL main process for day before yesterday"
   task main: :environment do
     unless Etl::Main::MainProcessor.process
       abort("Etl::Main::MainProcessor failed")

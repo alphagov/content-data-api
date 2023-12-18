@@ -18,7 +18,7 @@ module Healthchecks
     end
 
     def message
-      "ETL :: no #{range.to_s.humanize} searches updated from yesterday" if status == :critical
+      "ETL :: no #{range.to_s.humanize} searches updated from day before yesterday" if status == :critical
     end
 
   private

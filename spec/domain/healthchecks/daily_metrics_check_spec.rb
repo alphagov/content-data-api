@@ -3,7 +3,7 @@ RSpec.describe Healthchecks::DailyMetricsCheck do
 
   describe "#status" do
     context "When there are metrics" do
-      before { create :metric, dimensions_date: Dimensions::Date.build(Date.yesterday) }
+      before { create :metric, dimensions_date: Dimensions::Date.build(Time.zone.today - 2) }
 
       it "returns status :ok" do
         expect(subject.status).to eq(:ok)
@@ -16,7 +16,7 @@ RSpec.describe Healthchecks::DailyMetricsCheck do
       end
 
       it "returns a detailed message" do
-        expect(subject.message).to eq("ETL :: no daily metrics for yesterday")
+        expect(subject.message).to eq("ETL :: no daily metrics for day before yesterday")
       end
     end
   end

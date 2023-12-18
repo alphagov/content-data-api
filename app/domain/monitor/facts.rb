@@ -8,9 +8,9 @@ class Monitor::Facts
   def run
     trap do
       statsd_for_all_metrics!
-      statsd_for_yesterday_metrics!
+      statsd_for_two_days_ago_metrics!
       statsd_for_total_editions!
-      statsd_for_yesterday_editions!
+      statsd_for_two_days_ago_editions!
     end
   end
 
@@ -23,9 +23,9 @@ private
     GovukStatsd.count(path, count)
   end
 
-  def statsd_for_yesterday_metrics!
+  def statsd_for_two_days_ago_metrics!
     path = path_for("daily_metrics")
-    count = Facts::Metric.for_yesterday.count
+    count = Facts::Metric.for_two_days_ago.count
 
     GovukStatsd.count(path, count)
   end
@@ -37,9 +37,9 @@ private
     GovukStatsd.count(path, count)
   end
 
-  def statsd_for_yesterday_editions!
+  def statsd_for_two_days_ago_editions!
     path = path_for("daily_editions")
-    count = Facts::Edition.where(dimensions_date: Dimensions::Date.find_existing_or_create(Date.yesterday)).count
+    count = Facts::Edition.where(dimensions_date: Dimensions::Date.find_existing_or_create(Time.zone.today - 2)).count
 
     GovukStatsd.count(path, count)
   end

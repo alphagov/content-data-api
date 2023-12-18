@@ -23,7 +23,7 @@ RSpec.describe Etl::Main::MainProcessor do
 
   describe "re-running the same day" do
     it "deletes existing metrics if they already exist for that day" do
-      date = create(:dimensions_date, date: Date.yesterday)
+      date = create(:dimensions_date, date: Time.zone.today - 2)
       existing_metric = create(:metric, dimensions_date: date)
 
       expect { subject.process }.not_to raise_error
@@ -31,7 +31,7 @@ RSpec.describe Etl::Main::MainProcessor do
     end
 
     it "does not raise errors otherwise" do
-      create(:dimensions_date, date: Date.yesterday)
+      create(:dimensions_date, date: Time.zone.today - 2)
 
       expect { subject.process }.to_not raise_error
     end
@@ -40,19 +40,19 @@ RSpec.describe Etl::Main::MainProcessor do
   it "creates a Metrics fact per content item" do
     subject.process
 
-    expect(Etl::Main::MetricsProcessor).to have_received(:process).with(date: Date.new(2018, 2, 19))
+    expect(Etl::Main::MetricsProcessor).to have_received(:process).with(date: Date.new(2018, 2, 18))
   end
 
   it "update GA metrics in the Facts table" do
-    expect(Etl::GA::ViewsAndNavigationProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
-    expect(Etl::GA::UserFeedbackProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
-    expect(Etl::GA::InternalSearchProcessor).to receive(:process).with(date: Date.new(2018, 2, 19))
+    expect(Etl::GA::ViewsAndNavigationProcessor).to receive(:process).with(date: Date.new(2018, 2, 18))
+    expect(Etl::GA::UserFeedbackProcessor).to receive(:process).with(date: Date.new(2018, 2, 18))
+    expect(Etl::GA::InternalSearchProcessor).to receive(:process).with(date: Date.new(2018, 2, 18))
 
     subject.process
   end
 
   it "update Feedex metrics in the Facts table" do
-    expect(Etl::Feedex::Processor).to receive(:process).with(date: Date.new(2018, 2, 19))
+    expect(Etl::Feedex::Processor).to receive(:process).with(date: Date.new(2018, 2, 18))
 
     subject.process
   end
@@ -64,9 +64,9 @@ RSpec.describe Etl::Main::MainProcessor do
   end
 
   describe "Aggregations" do
-    context "when the day before" do
+    context "when two days before" do
       it "calculate the monthly aggregations" do
-        expect(Etl::Aggregations::Monthly).to receive(:process).with(date: Date.new(2018, 2, 19))
+        expect(Etl::Aggregations::Monthly).to receive(:process).with(date: Date.new(2018, 2, 18))
 
         subject.process
       end
@@ -78,23 +78,23 @@ RSpec.describe Etl::Main::MainProcessor do
       end
     end
 
-    context "when not the day before" do
+    context "when not two days before" do
       it "does not calculate the monthly aggregations" do
-        expect(Etl::Aggregations::Monthly).to_not receive(:process).with(date: Date.new(2018, 2, 18))
+        expect(Etl::Aggregations::Monthly).to_not receive(:process).with(date: Date.new(2018, 2, 17))
 
-        subject.process(date: Date.new(2018, 2, 18))
+        subject.process(date: Date.new(2018, 2, 17))
       end
 
       it "does not calculate the monthly aggregations" do
         expect(Etl::Aggregations::Search).to_not receive(:process)
 
-        subject.process(date: Date.new(2018, 2, 18))
+        subject.process(date: Date.new(2018, 2, 17))
       end
     end
   end
 
   describe "Monitoring" do
-    context "the day before" do
+    context "two days before" do
       it "monitors ETL processes" do
         expect(Monitor::Etl).to receive(:run)
 
@@ -126,20 +126,20 @@ RSpec.describe Etl::Main::MainProcessor do
       end
     end
 
-    context "not the day before" do
-      it "does not add ETL stats if not the day before" do
+    context "not two days before" do
+      it "does not add ETL stats if not two days before" do
         expect(Monitor::Etl).to_not receive(:run)
 
         subject.process(date: Time.zone.today)
       end
 
-      it "does not add Dimension stats if not the day before" do
+      it "does not add Dimension stats if not two days before" do
         expect(Monitor::Dimensions).to_not receive(:run)
 
         subject.process(date: Time.zone.today)
       end
 
-      it "does not add Facts stats if not the day before" do
+      it "does not add Facts stats if not two days before" do
         expect(Monitor::Facts).to_not receive(:run)
 
         subject.process(date: Time.zone.today)

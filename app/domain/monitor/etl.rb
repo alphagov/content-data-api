@@ -42,7 +42,7 @@ private
   end
 
   def metrics
-    @metrics ||= Facts::Metric.for_yesterday
+    @metrics ||= Facts::Metric.for_2_days_ago
   end
 
   def editions

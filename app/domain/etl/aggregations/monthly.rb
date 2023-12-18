@@ -5,7 +5,7 @@ class Etl::Aggregations::Monthly
     new(*args, **kwargs).process
   end
 
-  def initialize(date: Date.yesterday)
+  def initialize(date: Time.zone.today - 2)
     @date = date
   end
 

@@ -3,13 +3,15 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
 
   subject { described_class }
 
+  let(:two_days_ago) { Time.zone.today - 2 }
+
   it_behaves_like "a materialized view", described_class.table_name
-  include_examples "calculates satisfaction", Date.yesterday
-  include_examples "includes edition attributes", Date.yesterday
+  include_examples "calculates satisfaction", Time.zone.today - 2
+  include_examples "includes edition attributes", Time.zone.today - 2
 
   it "aggregates metrics for the last three months" do
     edition1 = create :edition, base_path: "/path1", date: 2.months.ago
-    create :metric, edition: edition1, date: Date.yesterday, upviews: 5, useful_yes: 1, useful_no: 1, searches: 8
+    create :metric, edition: edition1, date: two_days_ago, upviews: 5, useful_yes: 1, useful_no: 1, searches: 8
     create :metric, edition: edition1, date: 2.months.ago, upviews: 10, useful_yes: 74, useful_no: 24, searches: 9
     create :metric, edition: edition1, date: 4.months.ago, upviews: 15, useful_yes: 8, useful_no: 9, searches: 10
 
@@ -52,9 +54,9 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
   end
 
   it "does not include metrics older than 3 months ago" do
-    three_months_ago = Date.yesterday - 3.months
+    three_months_ago = two_days_ago - 3.months
     edition1 = create :edition, warehouse_item_id: "warehouse_item_id1", date: 1.month.ago
-    create :metric, edition: edition1, date: three_months_ago + 1.day, upviews: 10
+    create :metric, edition: edition1, date: three_months_ago + 2.day, upviews: 10
     create :metric, edition: edition1, date: three_months_ago, upviews: 100
 
     recalculate_aggregations!
@@ -62,9 +64,9 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
     expect(subject.sum(:upviews)).to eq(10)
   end
 
-  it "includes metrics for yesterday" do
+  it "includes metrics for day before yesterday" do
     edition1 = create :edition, warehouse_item_id: "warehouse_item_id1", date: 1.month.ago
-    create :metric, edition: edition1, date: Date.yesterday, upviews: 10
+    create :metric, edition: edition1, date: two_days_ago, upviews: 10
 
     recalculate_aggregations!
 
@@ -73,7 +75,7 @@ RSpec.describe Aggregations::SearchLastThreeMonths, type: :model do
 
   it "does not count metrics twice" do
     edition1 = create :edition, warehouse_item_id: "warehouse_item_id1", date: 1.month.ago
-    start_date = Date.yesterday
+    start_date = two_days_ago
     end_date = 3.months.ago
 
     (start_date..end_date).each do |date|
