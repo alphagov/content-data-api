@@ -20,7 +20,7 @@ RSpec.describe "rake editions:*", type: task do
 
       old_editions = Dimensions::Edition.all.to_a
 
-      Dimensions::Edition.all.each do |edition|
+      Dimensions::Edition.all.find_each do |edition|
         edition.parent = nil
         edition.sibling_order = nil
         edition.child_sort_order = nil
@@ -59,7 +59,7 @@ RSpec.describe "rake editions:*", type: task do
 
       old_editions = Dimensions::Edition.all.to_a
 
-      Dimensions::Edition.all.each do |edition|
+      Dimensions::Edition.all.find_each do |edition|
         edition.parent = nil
         edition.sibling_order = nil
         edition.child_sort_order = nil
