@@ -27,14 +27,6 @@ daily:
     description: "Number of times a user searches for something else on GOV.UK from the page"
     source: 'Google Analytics'
 
-  - name: 'entrances'
-    description: "Number of session that began with this page"
-    source: 'Google Analytics'
-
-  - name: 'exits'
-    description: "Number of session that ended with this page"
-    source: 'Google Analytics'
-
 edition:
   - name: 'pdf_count'
     description: "Number of .pdf attachments"

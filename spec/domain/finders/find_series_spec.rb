@@ -3,7 +3,7 @@ RSpec.describe Finders::FindSeries do
     it "returns a series of all metrics" do
       create :metric, date: Time.zone.today, pviews: 1
 
-      expect(described_class.new.run.length).to eq(16)
+      expect(described_class.new.run.length).to eq(14)
     end
   end
 
