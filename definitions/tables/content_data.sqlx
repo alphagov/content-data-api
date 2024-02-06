@@ -4,7 +4,7 @@ config {
     uniqueKey: ["unique_session_ID"],
     name: "GA4 dataform",
     bigquery: {
-      partitionBy: "the_date"
+      partitionBy: "DATE(the_date)"
     },
     description: 'A table that extracts datafields from GA4 over a 2 year period and pulls only essential content data app fields into it.',
     columns: {
