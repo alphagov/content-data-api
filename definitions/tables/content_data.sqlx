@@ -3,9 +3,7 @@ config {
     type: "incremental",
     uniqueKey: ["unique_session_ID"],
     name: "GA4 dataform",
-    bigquery: {
-      partitionBy: "DATE(the_date)"
-    },
+   
     description: 'A table that extracts datafields from GA4 over a 2 year period and pulls only essential content data app fields into it.',
     columns: {
         exits: "The number of times that the last event recorded for a session occurred on a page or screen. Also, returns the page path if the logic returns false",
