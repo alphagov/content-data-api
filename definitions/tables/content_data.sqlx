@@ -1,12 +1,16 @@
 config {
-    type: "table",
-    name: 'GA4 dataform',
+
+    type: "incremental",
+    uniqueKey: ["unique_session_ID"],
+    name: "GA4 dataform",
+    bigquery: {
+      partitionBy: "date(event_timestamp)"
+    },
     description: 'A table that extracts datafields from GA4 over a 2 year period and pulls only essential content data app fields into it.',
     columns: {
         exits: "The number of times that the last event recorded for a session occurred on a page or screen. Also, returns the page path if the logic returns false",
         total_page_views: "The number of mobile app screens or web pages your users saw. Repeated views of a single screen or page are counted.",
         unique_page_views: "The number of mobile app screens or web pages your users saw. Distinct views of a single screen or page are counted per session.",
-        bounce_rate: "The percentage of sessions that were not engaged sessions (calculated in BQ AS (total_sessions-total_engaged_sessions)/total_sessions to match the standard GA4 calculation)",
         entrances: "The number of times that the first event recorded for a session occurred on a page or screen.",
         total_searches: "The number of mobile or web searches your users performed. Repeated searches are counted.",
         unique_search_sessions:"The number of mobile or web searches your users performed. Distinct searches per session are counted.",
@@ -14,8 +18,7 @@ config {
         session_starts: "The number of sessions that began on your website or application. A session is a period of time during which a user interacts with your website or app.",
         session_engaged: "The number of sessions that lasted 10 seconds or longer, or had 1 or more conversion events or 2 or more page or screen views.",
         useful_no: "The number of user reponses that indicated that the website was not helpful in the feedback section.",
-        useful_yes: "The number of user reponses that indicated that the website was helpful in the feedback section.",
-        satisfaction: "User satisfaction rates calculated by dividing (useful_yes/useful_no * 100)"
+        useful_yes: "The number of user reponses that indicated that the website was helpful in the feedback section."
 
     },
 
@@ -23,6 +26,7 @@ config {
 
  SELECT
   the_date
+  ,event_timestamp
   ,cleaned_page_location
   ,COUNT(DISTINCT CASE WHEN event_name = 'page_view' THEN unique_session_ID END) AS unique_page_views
   ,COUNT(CASE WHEN event_name = 'page_view' THEN unique_session_ID END) AS total_page_views
@@ -38,6 +42,8 @@ config {
 
 
   
-FROM
-  `govuk-content-data.ga4.ga4_two_years` 
-GROUP BY cleaned_page_location, the_date
+FROM ${ref("ga4_two_years")}
+  ${when(incremental (), `where the_date >= FORMAT_DATE('%Y%m%d',date_sub(current_date(), interval 1 day))`)}
+
+GROUP BY cleaned_page_location, the_date, event_timestamp
+

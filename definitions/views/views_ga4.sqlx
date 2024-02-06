@@ -1,0 +1,8 @@
+config {
+
+    type:"view"
+   
+}
+
+SELECT *
+FROM ${ref("ga4_two_years")}

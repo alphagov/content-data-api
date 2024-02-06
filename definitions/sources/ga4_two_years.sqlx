@@ -1,0 +1,7 @@
+config {
+    type:"declaration",
+    schema:"ga4",
+    name: "ga4_two_years",
+  database: "govuk-content-data"
+  
+}
