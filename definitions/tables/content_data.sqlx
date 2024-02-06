@@ -26,7 +26,6 @@ config {
 
  SELECT
   the_date
-  ,event_timestamp
   ,cleaned_page_location
   ,COUNT(DISTINCT CASE WHEN event_name = 'page_view' THEN unique_session_ID END) AS unique_page_views
   ,COUNT(CASE WHEN event_name = 'page_view' THEN unique_session_ID END) AS total_page_views
