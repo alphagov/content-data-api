@@ -39,7 +39,7 @@ config {
 
 
   
-FROM ${ref("ga4_two_years")}
+FROM ${ref("views_ga4")}
   ${when(incremental (), `where the_date >= FORMAT_DATE('%Y%m%d',date_sub(current_date(), interval 1 day))`)}
 
 GROUP BY cleaned_page_location, the_date
