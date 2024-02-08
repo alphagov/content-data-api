@@ -37,7 +37,7 @@ private
     query = <<~SQL
       WITH CTE1 AS (
         SELECT *
-        FROM `govuk-content-data.dataform.GA4 dataform`
+        FROM `govuk-content-data.ga4.GA4 dataform`
         WHERE the_date = @date
       )
       SELECT
