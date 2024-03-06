@@ -35,7 +35,6 @@ bundle exec rake
 
 ## Further documentation
 
-- [Internal API documentation](./docs/api)
 - [Importing production data](docs/import_production_data.md)
 - [Running the ETL process locally](docs/google_analytics_setup.md)
 
