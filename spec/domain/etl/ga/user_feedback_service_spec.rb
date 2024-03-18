@@ -1,85 +1,46 @@
-require "google/apis/analyticsreporting_v4"
-
 RSpec.describe Etl::GA::UserFeedbackService do
-  include GoogleAnalyticsRequests
-
   subject { Etl::GA::UserFeedbackService }
 
-  let(:google_client) { instance_double(Google::Apis::AnalyticsreportingV4::AnalyticsReportingService) }
-  before { expect(Etl::GA::Client).to receive(:build).and_return(google_client) }
+  let(:google_client) { instance_double(Google::Cloud::Bigquery::Project) }
+  let(:results) { instance_double(Google::Cloud::Bigquery::Data) }
+
+  before do
+    allow(Etl::GA::Bigquery).to receive(:build).and_return(google_client)
+    allow(google_client).to receive(:query).and_return(results)
+
+    allow(results).to receive(:all).and_return([
+      { "page_path" => "/foo", "useful_yes" => 1, "useful_no" => 1, "date" => "2024-02-20" },
+      { "page_path" => "/bar", "useful_yes" => 2, "useful_no" => 2, "date" => "2024-02-20" },
+      { "page_path" => "/cool", "useful_yes" => 3, "useful_no" => 3, "date" => "2024-02-20" },
+    ])
+  end
 
   describe "#find_in_batches" do
-    let(:date) { Date.new(2018, 2, 20) }
-
-    before do
-      allow(google_client).to receive(:fetch_all) do
-        [
-          build_report_data(
-            build_report_row(dimensions: %w[/foo ffNoClick], metrics: %w[10]),
-          ),
-          build_report_data(
-            build_report_row(dimensions: %w[/foo ffYesClick], metrics: %w[7]),
-          ),
-          build_report_data(
-            build_report_row(dimensions: %w[/bar ffYesClick], metrics: %w[3]),
-          ),
-          build_report_data(
-            build_report_row(dimensions: %w[/bar ffNoClick], metrics: %w[13]),
-          ),
-        ]
-      end
-    end
+    let(:date) { Date.new(2024, 2, 20) }
 
     context "when #find_in_batches is called with a block" do
       it "yield successive report data if all actions are present" do
         arg1 = [
-          a_hash_including(
-            "page_path" => "/foo",
-            "useful_yes" => 7,
-            "useful_no" => 10,
-            "date" => "2018-02-20",
-          ),
+          a_hash_including("page_path" => "/foo", "useful_yes" => 1, "useful_no" => 1, "date" => "2024-02-20"),
+          a_hash_including("page_path" => "/bar", "useful_yes" => 2, "useful_no" => 2, "date" => "2024-02-20"),
         ]
         arg2 = [
-          a_hash_including(
-            "page_path" => "/bar",
-            "useful_yes" => 3,
-            "useful_no" => 13,
-            "date" => "2018-02-20",
-          ),
+          a_hash_including("page_path" => "/cool", "useful_yes" => 3, "useful_no" => 3, "date" => "2024-02-20"),
         ]
-        expect { |probe| subject.find_in_batches(date:, batch_size: 1, &probe) }
+
+        expect { |probe| subject.find_in_batches(date:, batch_size: 2, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
 
-      it "yields successive report data if some actions are missing defaulting to 0" do
-        allow(google_client).to receive(:fetch_all) do
-          [
-            build_report_data(
-              build_report_row(dimensions: %w[/foo ffNoClick], metrics: %w[10]),
-            ),
-            build_report_data(
-              build_report_row(dimensions: %w[/bar ffYesClick], metrics: %w[3]),
-            ),
-          ]
-        end
+      it "includes process name" do
         arg1 = [
-          a_hash_including(
-            "page_path" => "/foo",
-            "useful_yes" => 0,
-            "useful_no" => 10,
-            "date" => "2018-02-20",
-          ),
+          a_hash_including("process_name" => "user_feedback"),
+          a_hash_including("process_name" => "user_feedback"),
         ]
         arg2 = [
-          a_hash_including(
-            "page_path" => "/bar",
-            "useful_yes" => 3,
-            "useful_no" => 0,
-            "date" => "2018-02-20",
-          ),
+          a_hash_including("process_name" => "user_feedback"),
         ]
-        expect { |probe| subject.find_in_batches(date:, batch_size: 1, &probe) }
+        expect { |probe| subject.find_in_batches(date:, batch_size: 2, &probe) }
           .to yield_successive_args(arg1, arg2)
       end
     end
