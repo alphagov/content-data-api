@@ -3,9 +3,7 @@ config {
     type: "incremental",
     uniqueKey: ["unique_session_ID"],
     name: "GA4 dataform",
-    bigquery: {
-        partitionBy: "DATE(the_date)"
-    },
+   
     assertions:{
         nonNull:["the_date"]
 
