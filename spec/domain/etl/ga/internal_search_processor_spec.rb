@@ -75,6 +75,61 @@ RSpec.describe Etl::GA::InternalSearchProcessor do
     end
   end
 
+  context "When the GA path contains the gov.uk prefix" do
+    before { allow(Etl::GA::InternalSearchService).to receive(:find_in_batches).and_yield(ga_response_with_govuk_prefix) }
+
+    context "when an event does not already exist with the same page_path" do
+      it "updates the fact with the GA metrics" do
+        edition1 = create :edition, date: "2018-02-20", base_path: "/Path1"
+        fact1 = create :metric, edition: edition1, date: "2018-02-20"
+
+        described_class.process(date:)
+
+        expect(fact1.reload).to have_attributes(searches: 1)
+      end
+    end
+
+    context "when an event already exists with the same page_path" do
+      before do
+        create(:ga_event, :with_views, date: "2018-02-20", page_path: "/path1")
+      end
+
+      it "updates the fact with the aggregated GA metrics" do
+        edition1 = create :edition, date: "2018-02-20", base_path: "/Path1"
+        fact1 = create :metric, edition: edition1, date: "2018-02-20"
+
+        described_class.process(date:)
+
+        expect(fact1.reload).to have_attributes(searches: 1)
+      end
+
+      it "does not update metrics for other days" do
+        edition1 = create :edition, date: "2018-02-20", base_path: "/Path1"
+        fact1 = create :metric, edition: edition1, date: "2018-02-20", searches: 1
+
+        day_before = date - 1
+        described_class.process(date: day_before)
+
+        expect(fact1.reload).to have_attributes(searches: 1)
+      end
+
+      it "does not update metrics for other items" do
+        edition = create :edition, base_path: "/non-matching-path", date: "2018-02-20"
+        fact = create :metric, edition:, date: "2018-02-20", searches: 1
+
+        described_class.process(date:)
+
+        expect(fact.reload).to have_attributes(searches: 1)
+      end
+
+      it "deletes events after updating facts metrics" do
+        described_class.process(date:)
+
+        expect(Events::GA.count).to eq(0)
+      end
+    end
+  end
+
   it_behaves_like "traps and logs errors in process", Etl::GA::InternalSearchService, :find_in_batches
 
 private
