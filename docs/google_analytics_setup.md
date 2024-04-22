@@ -6,27 +6,6 @@ Create the file `config/local_env.yml` if it does not already exist. This file w
 
 N.B. This file has been added to `.gitignore`, so you don't need to worry about accidentally checking it in.
 
-## UA analytics
-
-Add an entry to `config/local_env.yml` for each of the following:
-
-* `GOOGLE_PRIVATE_KEY`
-* `GOOGLE_CLIENT_EMAIL`
-* `GOOGLE_ANALYTICS_GOVUK_VIEW_ID`
-
-You can copy the credentials from the [google developers console](https://console.developers.google.com/apis/credentials) or from the AWS Secrets Manager under `content-data-api/google-analytics`.
-
-e.g.
-```bash
-GOOGLE_ANALYTICS_GOVUK_VIEW_ID: "1234567"
-```
-
-This will make "1234567" available as `ENV["GOOGLE_ANALYTICS_GOVUK_VIEW_ID"]`
-
-`GOOGLE_ANALYTICS_GOVUK_VIEW_ID` is the view id on Google Analytics for `www.gov.uk`
-
-See "Option Three" in [Rails Environment Variables](http://railsapps.github.io/rails-environment-variables.html) for more information.
-
 ## GA4 analytics
 
 Add an entry to `config/local_env.yml` for each of the following:
