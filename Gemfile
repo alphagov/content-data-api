@@ -14,7 +14,6 @@ gem "active_model_serializers"
 gem "activerecord-import"
 gem "awesome_print"
 gem "bootsnap", require: false
-gem "google-apis-analyticsreporting_v4"
 gem "google-cloud-bigquery"
 gem "govuk_message_queue_consumer"
 gem "httparty"
