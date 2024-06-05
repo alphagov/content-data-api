@@ -18,7 +18,7 @@ class Etl::Feedex::Processor
 
 private
 
-  BATCH_SIZE = 10_000
+  BATCH_SIZE = 5_000
 
   def extract_events
     batch = 1
