@@ -99,10 +99,4 @@ namespace :etl do
       Etl::Main::MainProcessor.process_aggregations(date:)
     end
   end
-
-  desc "Populate GA metrics for a date"
-  task :ga, [:date] => [:environment] do |_t, args|
-    date = args[:date]
-    GA.process(date: date.to_date)
-  end
 end
