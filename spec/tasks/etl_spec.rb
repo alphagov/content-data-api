@@ -92,12 +92,6 @@ RSpec.describe "etl.rake", type: task do
     end
 
     before do
-      edition = create :edition, date: "2018-10-03"
-      create :metric, edition:, date: "2018-10-30"
-      create :metric, edition:, date: "2018-10-31"
-      create :metric, edition:, date: "2018-11-01"
-      create :metric, edition:, date: "2018-11-02"
-      create :metric, edition:, date: "2018-11-03"
       Rake::Task["etl:rerun_main"].reenable
     end
 
