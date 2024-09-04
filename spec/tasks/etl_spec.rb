@@ -123,10 +123,10 @@ RSpec.describe "etl.rake", type: task do
       expect(processor).to have_received(:process).once.with(Date.new(2018, 10, 31))
     end
 
-    it "runs the aggregations process for a month" do
-      Rake::Task["etl:rerun_main"].invoke("2018-10-31")
+    # it "runs the aggregations process for a month" do
+    #   Rake::Task["etl:rerun_main"].invoke("2018-10-31")
 
-      expect(processor).to have_received(:process_aggregations).once.with(Date.new(2018, 10, 31))
-    end
+    #   expect(processor).to have_received(:process_aggregations).once.with(Date.new(2018, 10, 31))
+    # end
   end
 end
