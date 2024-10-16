@@ -16,6 +16,7 @@ class Etl::Edition::Content::Parsers::NoContent
       field_of_operation
       generic
       government
+      historic_appointments
       homepage
       how_government_works
       knowledge_alpha
