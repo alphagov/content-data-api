@@ -42,6 +42,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       role_appointment
       smart_answer
       special_route
+      substitute
       topic
       vanish
       world_location
