@@ -19,6 +19,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       homepage
       how_government_works
       knowledge_alpha
+      landing_page
       ministers_index
       organisations_homepage
       person
