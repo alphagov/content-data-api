@@ -45,6 +45,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       substitute
       topic
       vanish
+      world_index
       world_location
     ]
     no_content_schemas.each do |schema|

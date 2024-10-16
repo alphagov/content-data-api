@@ -43,6 +43,7 @@ class Etl::Edition::Content::Parsers::NoContent
       substitute
       topic
       vanish
+      world_index
       world_location
     ]
   end
