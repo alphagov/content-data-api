@@ -13,6 +13,7 @@ class Etl::Edition::Content::Parsers::NoContent
       facet
       facet_group
       facet_value
+      field_of_operation
       generic
       government
       homepage

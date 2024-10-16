@@ -15,6 +15,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       facet
       facet_group
       facet_value
+      field_of_operation
       generic
       government
       homepage
