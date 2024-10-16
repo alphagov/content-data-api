@@ -24,23 +24,23 @@ RSpec.describe Etl::Edition::Content::Parser do
       ministers_index
       organisations_homepage
       person
+      placeholder
       placeholder_corporate_information_page
       placeholder_ministerial_role
       placeholder_organisation
+      placeholder_person
       placeholder_policy_area
       placeholder_topical_event
       placeholder_world_location
       placeholder_worldwide_organisation
-      placeholder_person
-      placeholder
       policy
       redirect
       role
       role_appointment
       special_route
       topic
-      world_location
       vanish
+      world_location
     ]
     no_content_schemas.each do |schema|
       json = build_raw_json(schema_name: schema, body: "<p>Body for #{schema}</p>")
