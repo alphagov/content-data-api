@@ -16,6 +16,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       facet_group
       facet_value
       generic
+      government
       homepage
       how_government_works
       knowledge_alpha
