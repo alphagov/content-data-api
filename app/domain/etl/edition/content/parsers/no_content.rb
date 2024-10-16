@@ -38,6 +38,7 @@ class Etl::Edition::Content::Parsers::NoContent
       redirect
       role
       role_appointment
+      smart_answer
       special_route
       topic
       vanish

@@ -40,6 +40,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       redirect
       role
       role_appointment
+      smart_answer
       special_route
       topic
       vanish
