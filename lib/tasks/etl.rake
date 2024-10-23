@@ -80,12 +80,13 @@ namespace :etl do
     end
   end
 
-  desc "Run ETL Main process across a range of dates"
+  desc "Run ETL Main process across a range of dates or a single date"
   task :rerun_main, %i[from to] => [:environment] do |_t, args|
     from = args[:from].to_date
-    to = args[:to].to_date
+    to = args[:to]&.to_date
     date_range = (from..to)
-    date_range.each do |date|
+
+    date_range.compact.each do |date|
       puts "Running Etl::Main process for #{date}"
       unless Etl::Main::MainProcessor.process(date:)
         abort("Etl::Main::MainProcessor failed")
