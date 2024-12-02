@@ -22,6 +22,7 @@ class Etl::Edition::Content::Parsers::BodyContent
       detailed_guide
       document_collection
       fatality_notice
+      fields_of_operation
       get_involved
       help_page
       history
