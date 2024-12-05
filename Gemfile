@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "7.2.2"
+gem "rails", "8.0.0"
 
 # GOV.UK gems and forks
 gem "gds-api-adapters"
