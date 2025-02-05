@@ -114,4 +114,35 @@ RSpec.describe "etl.rake", type: task do
       end
     end
   end
+
+  describe "rake etl:rerun_main_list" do
+    let!(:processor) do
+      class_double(
+        Etl::Main::MainProcessor,
+        process: true,
+        process_aggregations: true,
+      ).as_stubbed_const
+    end
+
+    before do
+      edition = create :edition, date: "2018-10-03"
+      create :metric, edition:, date: "2018-10-30"
+      create :metric, edition:, date: "2018-10-31"
+      create :metric, edition:, date: "2018-11-03"
+      Rake::Task["etl:rerun_main_list"].reenable
+      Rake::Task["etl:rerun_main_list"].invoke("2018-10-30", "2018-10-31", "2018-11-03")
+    end
+
+    it "calls Etl::Main::MainProcessor.process with each date" do
+      [Date.new(2018, 10, 30), Date.new(2018, 10, 31), Date.new(2018, 11, 3)].each do |date|
+        expect(processor).to have_received(:process).once.with(date:)
+      end
+    end
+
+    it "runs the aggregations process for each month in the range" do
+      [Date.new(2018, 10, 31), Date.new(2018, 11, 30)].each do |date|
+        expect(processor).to have_received(:process_aggregations).once.with(date:)
+      end
+    end
+  end
 end
