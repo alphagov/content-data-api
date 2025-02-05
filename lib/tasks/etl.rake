@@ -100,4 +100,23 @@ namespace :etl do
       Etl::Main::MainProcessor.process_aggregations(date:)
     end
   end
+
+  desc "Run ETL Main process for a list of dates"
+  task rerun_main_list: :environment do |_t, args|
+    dates = args.extras.map(&:to_date)
+
+    dates.compact.each do |date|
+      puts "Running Etl::Main process for #{date}"
+      unless Etl::Main::MainProcessor.process(date:)
+        abort("Etl::Main::MainProcessor failed")
+      end
+      puts "finished running Etl::Main for #{date}"
+    end
+
+    month_ends = dates.map(&:end_of_month).uniq
+    month_ends.each do |date|
+      puts "Running monthly and search aggregations for #{date}"
+      Etl::Main::MainProcessor.process_aggregations(date:)
+    end
+  end
 end
