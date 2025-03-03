@@ -7,7 +7,9 @@ module SchemasIterator
   end
 
   def self.payload_for(schema_name, schema)
-    all_payloads[schema_name] ||= GovukSchemas::RandomExample.new(schema:).payload
+    all_payloads[schema_name] ||= GovukSchemas::RandomExample.new(schema:).payload do |payload|
+      payload.merge("base_path" => "/#{schema_name}/#{SecureRandom.uuid}")
+    end
   end
 
   def self.all_payloads
