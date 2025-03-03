@@ -22,6 +22,7 @@ class Etl::Edition::Content::Parsers::NoContent
       how_government_works
       knowledge_alpha
       landing_page
+      link_collection
       ministers_index
       organisations_homepage
       person
