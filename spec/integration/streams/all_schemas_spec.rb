@@ -4,6 +4,10 @@ RSpec.describe "Process all schemas" do
   let(:subject) { Streams::Consumer.new }
 
   SchemasIterator.each_schema do |schema_name, schema|
+    it "has a parser for #{schema_name}" do
+      expect(Etl::Edition::Content::Parser.new.send(:for_schema, schema_name)).not_to be_nil
+    end
+
     %w[major minor links republish unpublish].each do |update_type|
       it "handles event for: `#{schema_name}` with no errors for a `#{update_type}` update" do
         expect(GovukError).not_to receive(:notify)

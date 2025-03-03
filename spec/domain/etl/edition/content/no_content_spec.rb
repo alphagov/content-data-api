@@ -9,6 +9,9 @@ RSpec.describe Etl::Edition::Content::Parser do
     no_content_schemas = %w[
       coming_soon
       completed_transaction
+      content_block_email_address
+      content_block_pension
+      content_block_postal_address
       coronavirus_landing_page
       embassies_index
       external_content
@@ -18,8 +21,8 @@ RSpec.describe Etl::Edition::Content::Parser do
       field_of_operation
       generic
       government
-      historic_appointments
       historic_appointment
+      historic_appointments
       homepage
       how_government_works
       knowledge_alpha

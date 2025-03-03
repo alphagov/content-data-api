@@ -7,6 +7,9 @@ class Etl::Edition::Content::Parsers::NoContent
     %w[
       coming_soon
       completed_transaction
+      content_block_email_address
+      content_block_pension
+      content_block_postal_address
       coronavirus_landing_page
       embassies_index
       external_content
@@ -16,8 +19,8 @@ class Etl::Edition::Content::Parsers::NoContent
       field_of_operation
       generic
       government
-      historic_appointments
       historic_appointment
+      historic_appointments
       homepage
       how_government_works
       knowledge_alpha
