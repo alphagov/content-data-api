@@ -24,6 +24,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       how_government_works
       knowledge_alpha
       landing_page
+      link_collection
       ministers_index
       organisations_homepage
       person
