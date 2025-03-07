@@ -41,6 +41,8 @@ class Dimensions::Edition < ApplicationRecord
   def promote!(old_edition)
     old_edition.update!(live: false) if old_edition
     update!(live: true) unless unpublished?
+  rescue ActiveRecord::RecordNotUnique
+    logger.info("Duplicate live edition detected for base_path: #{base_path}, skipping promotion.")
   end
 
   def unpublished?
