@@ -7,6 +7,7 @@ class Etl::Edition::Content::Parsers::NoContent
     %w[
       coming_soon
       completed_transaction
+      content_block_contact
       content_block_email_address
       content_block_pension
       content_block_postal_address
