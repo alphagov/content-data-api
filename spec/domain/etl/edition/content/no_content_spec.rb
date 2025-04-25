@@ -9,6 +9,7 @@ RSpec.describe Etl::Edition::Content::Parser do
     no_content_schemas = %w[
       coming_soon
       completed_transaction
+      content_block_contact
       content_block_email_address
       content_block_pension
       content_block_postal_address
