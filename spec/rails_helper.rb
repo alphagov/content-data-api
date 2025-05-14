@@ -19,7 +19,7 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
   config.include FactoryBot::Syntax::Methods
   config.shared_context_metadata_behavior = :apply_to_host_groups
-  config.fixture_path = Rails.root.join("spec/fixtures")
+  config.fixture_paths = Rails.root.join("spec/fixtures")
   config.example_status_persistence_file_path = Rails.root.join("tmp/examples.txt")
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
