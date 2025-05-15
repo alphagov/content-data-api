@@ -49,7 +49,7 @@ RSpec.describe "Process sub-pages for multipart content types" do
         ["/base-path", "Main Title: Part 1", "#{content_id}:en"],
         ["/base-path/part2", "Main Title: Part 2", "#{content_id}:en:part2"],
         ["/base-path/part3", "Main Title: Part 3", "#{content_id}:en:part3"],
-        ["/base-path/part4", "Main Title: Part 4", "#{content_id}:en:part4"]
+        ["/base-path/part4", "Main Title: Part 4", "#{content_id}:en:part4"],
       ]
     end
   end
