@@ -6,7 +6,7 @@ RSpec.describe "Process all schemas" do
   SchemasIterator.each_schema do |schema_name, schema|
     it "has a parser for #{schema_name}" do
       # Included as a temporary measure to ignore content block schemas that are in process of deletion
-      schemas_to_be_deleted = %w[content_block_email_address]
+      schemas_to_be_deleted = %w[content_block_email_address content_block_postal_address]
 
       unless schemas_to_be_deleted.include?(schema_name)
         expect(Etl::Edition::Content::Parser.new.send(:for_schema, schema_name)).not_to be_nil
