@@ -8,9 +8,7 @@ class Etl::Edition::Content::Parsers::NoContent
       coming_soon
       completed_transaction
       content_block_contact
-      content_block_email_address
       content_block_pension
-      content_block_postal_address
       coronavirus_landing_page
       embassies_index
       external_content
