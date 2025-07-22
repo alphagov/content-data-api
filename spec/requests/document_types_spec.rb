@@ -13,6 +13,7 @@ RSpec.describe "/document_types" do
     create :edition, document_type: "vanish"
     create :edition, document_type: "unpublishing"
     create :edition, document_type: "need"
+    create :edition, document_type: "substitute"
 
     get "/api/v1/document_types"
     json = JSON.parse(response.body).deep_symbolize_keys
