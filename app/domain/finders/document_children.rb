@@ -36,7 +36,7 @@ private
   end
 
   def columns
-    AGGREGATION_COLUMNS + (EDITION_COLUMNS.map { |c| "dimensions_editions.#{c}" })
+    AGGREGATION_COLUMNS + EDITION_COLUMNS.map { |c| "dimensions_editions.#{c}" }
   end
 
   def sanitized_order(column, direction)
