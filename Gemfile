@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "7.2.2.1"
+gem "rails", "7.2.2.2"
 
 # GOV.UK gems and forks
 gem "gds-api-adapters"
@@ -14,6 +14,7 @@ gem "active_model_serializers"
 gem "activerecord-import"
 gem "awesome_print"
 gem "bootsnap", require: false
+gem "csv"
 gem "google-cloud-bigquery"
 gem "govuk_message_queue_consumer"
 gem "httparty"
