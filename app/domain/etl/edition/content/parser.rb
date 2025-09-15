@@ -46,7 +46,6 @@ private
       ::Etl::Edition::Content::Parsers::ServiceManualStandard,
       ::Etl::Edition::Content::Parsers::ServiceManualServiceToolkit,
       ::Etl::Edition::Content::Parsers::ServiceManualTopic,
-      ::Etl::Edition::Content::Parsers::ServiceSignIn,
       ::Etl::Edition::Content::Parsers::StatisticsAnnouncement,
       ::Etl::Edition::Content::Parsers::StepByStep,
       ::Etl::Edition::Content::Parsers::Taxon,
