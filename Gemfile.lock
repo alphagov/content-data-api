@@ -768,8 +768,8 @@ GEM
       sentry-ruby (~> 5.28.1)
       sidekiq (>= 3.0)
     set (1.1.2)
-    shoulda-matchers (6.5.0)
-      activesupport (>= 5.2.0)
+    shoulda-matchers (7.0.1)
+      activesupport (>= 7.1)
     sidekiq (7.3.9)
       base64
       connection_pool (>= 2.3.0)
