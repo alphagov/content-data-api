@@ -74,12 +74,18 @@ RSpec.describe Etl::Edition::Content::Parser do
             {
               "content_type": "text/html",
               "content": "<h2>Body for #{schema}</h2>",
+              "rendered_by": "publishing-api",
+              "govspeak_version": "0.0.1",
             },
           ],
         },
-      }
+      }.deep_stringify_keys
 
-      expect(subject.extract_content(body_multi_html_content.deep_stringify_keys)).to eq("Body for #{schema}")
+      parsed = Etl::Edition::Content::Parsers::BodyContent.new.parse(body_multi_html_content)
+      expect(parsed).to eq("<h2>Body for #{schema}</h2>")
+
+      extracted = subject.extract_content(body_multi_html_content)
+      expect(extracted).to eq("Body for #{schema}")
     end
   end
 
