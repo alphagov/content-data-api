@@ -4,11 +4,13 @@ class Etl::Edition::Content::Parsers::BodyContent
     return if body.blank?
 
     if body.is_a?(Array)
-      body_by_content_type = body.map(&:values).to_h
-      body = body_by_content_type.fetch("text/html", nil)
-    end
+      html_content = body.find { |content_hash| content_hash["content_type"] == "text/html" }
+      return if html_content.blank?
 
-    body
+      html_content["content"]
+    else
+      body
+    end
   end
 
   def schemas
