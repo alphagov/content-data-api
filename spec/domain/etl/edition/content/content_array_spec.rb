@@ -11,7 +11,7 @@ RSpec.describe Etl::Edition::Content::Parsers::ContentArray do
     expect(result).to eq(content)
   end
 
-  it "returns content provided as array" do
+  it "returns HTML content when provided with an array" do
     content = [
       {
         "content_type" => "text/govspeak",
