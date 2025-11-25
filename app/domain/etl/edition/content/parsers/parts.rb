@@ -7,14 +7,7 @@ module Etl::Edition::Content::Parsers
       current_part = parts.find { |part| part["slug"] == subpage_path }
       return if current_part.nil?
 
-      body = current_part["body"]
-
-      if body.is_a?(Array)
-        body_by_content_type = body.map(&:values).to_h
-        body = body_by_content_type.fetch("text/html", nil)
-      end
-
-      body
+      ContentArray.new.parse(current_part["body"])
     end
 
     def schemas
