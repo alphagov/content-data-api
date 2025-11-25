@@ -1,16 +1,6 @@
 class Etl::Edition::Content::Parsers::BodyContent
   def parse(json)
-    body = json.dig("details", "body")
-    return if body.blank?
-
-    if body.is_a?(Array)
-      html_content = body.find { |content_hash| content_hash["content_type"] == "text/html" }
-      return if html_content.blank?
-
-      html_content["content"]
-    else
-      body
-    end
+    ::Etl::Edition::Content::Parsers::ContentArray.new.parse(json.dig("details", "body"))
   end
 
   def schemas
