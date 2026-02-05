@@ -261,7 +261,7 @@ GEM
       ostruct
     govuk_schemas (6.2.2)
       json-schema (>= 2.8, < 6.2)
-    govuk_sidekiq (10.0.0)
+    govuk_sidekiq (10.1.0)
       gds-api-adapters (>= 19.1.0)
       govuk_app_config (>= 1.1)
       redis-client (>= 0.22.2)
@@ -336,7 +336,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0924)
+    mime-types-data (3.2026.0203)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (6.0.1)
@@ -665,7 +665,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    redis-client (0.26.1)
+    redis-client (0.26.4)
       connection_pool
     regexp_parser (2.11.2)
     reline (0.6.3)
@@ -776,12 +776,12 @@ GEM
     set (1.1.2)
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
-    sidekiq (7.3.9)
+    sidekiq (7.3.10)
       base64
-      connection_pool (>= 2.3.0)
+      connection_pool (>= 2.3.0, < 3)
       logger
-      rack (>= 2.2.4)
-      redis-client (>= 0.22.2)
+      rack (>= 2.2.4, < 3.3)
+      redis-client (>= 0.23.0, < 1)
     signet (0.21.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
