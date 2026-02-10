@@ -12,6 +12,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       content_block_contact
       content_block_pension
       content_block_tax
+      content_block_time_period
       coronavirus_landing_page
       embassies_index
       external_content
