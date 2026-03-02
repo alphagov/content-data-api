@@ -79,7 +79,7 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-    addressable (2.8.8)
+    addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
     amq-protocol (2.3.4)
     ast (2.4.3)
@@ -162,7 +162,7 @@ GEM
     ffi (1.17.3-x86_64-darwin)
     ffi (1.17.3-x86_64-linux-gnu)
     ffi (1.17.3-x86_64-linux-musl)
-    gds-api-adapters (102.0.0)
+    gds-api-adapters (103.0.0)
       addressable
       link_header
       null_logger
@@ -337,7 +337,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.0203)
+    mime-types-data (3.2026.0224)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (6.0.1)
