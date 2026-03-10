@@ -30,6 +30,31 @@ RSpec.describe "Import edition metrics" do
     )
   end
 
+  it "gets document metrics from the attachments array" do
+    message = build(:message, schema_name: "publication", base_path: "/new-path")
+    message.payload["details"]["body"] = "This is good content."
+    message.payload["details"]["attachments"] = [
+      {
+        "filename" => "link.pdf",
+      },
+      {
+        "filename" => "link.docx",
+      },
+    ]
+
+    subject.process(message)
+
+    edition = Dimensions::Edition.first
+    expect(edition.facts_edition).to have_attributes(
+      pdf_count: 1,
+      doc_count: 1,
+      readability: 97,
+      chars: 21,
+      sentences: 1,
+      words: 4,
+    )
+  end
+
   let(:existing_quality_metrics) do
     {
       words: 3,

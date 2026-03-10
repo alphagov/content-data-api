@@ -6,16 +6,35 @@ class Etl::Edition::Metadata::FileCounter
   end
 
   def pdf_count
-    filter_html_links(%w[pdf])
+    count_files(%w[pdf])
   end
 
   def doc_count
-    filter_html_links(%w[doc docx docm])
+    count_files(%w[doc docx docm])
   end
 
 private
 
-  def filter_html_links(extensions)
+  def count_files(extensions)
+    count_matching_attachments(extensions).to_i.nonzero? || count_matching_html_links(extensions)
+  end
+
+  def count_matching_attachments(extensions)
+    return 0 unless attachments
+
+    file_extensions = extensions.map { |ext| ".#{ext}".downcase }
+    filenames_from_attachments.select { |filename| File.extname(filename).in?(file_extensions) }.count
+  end
+
+  def filenames_from_attachments
+    attachments.map { |attachment| attachment["filename"]&.downcase }.compact
+  end
+
+  def attachments
+    @attachments ||= @body.dig("details", "attachments")
+  end
+
+  def count_matching_html_links(extensions)
     # Sample: \.(doc|docx|docm)$
     regex = /\.(#{extensions.join('|')})$/i
 

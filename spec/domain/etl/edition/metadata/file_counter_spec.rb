@@ -45,7 +45,69 @@ module Performance
           end
         end
       end
-      
+
+      context "when attachments are present in the response" do
+        matching_extensions.each do |extension|
+          it "counts #{extension} attachments by filename" do
+            response = build_response("attachments" => [
+              { "filename" => "document.#{extension}" },
+              { "filename" => "report.#{extension}" },
+            ])
+            expect(described_class.new(response).public_send(counter_method)).to eq(2)
+          end
+
+          it "prefers structured attachments over html parsing" do
+            response = build_response(
+              "attachments" => [{ "filename" => "document.#{extension}" }],
+              "body" => attachment_container("attachment-details", "link.#{extension}", "link2.#{extension}"),
+            )
+            expect(described_class.new(response).public_send(counter_method)).to eq(1)
+          end
+
+          it "ignores attachments without filename key" do
+            response = build_response("attachments" => [
+              { "title" => "document" },
+              { "filename" => "report.#{extension}" },
+            ])
+            expect(described_class.new(response).public_send(counter_method)).to eq(1)
+          end
+
+          it "attempts to parse the body if there are no attachments" do
+            response = build_response(
+              "attachments" => [],
+              "body" => attachment_container("attachment-details", "link.#{extension}", "link2.#{extension}"),
+            )
+            expect(described_class.new(response).public_send(counter_method)).to eq(2)
+          end
+        end
+
+        it "returns 0 for non-matching files" do
+          response = build_response("attachments" => [
+            { "filename" => "document.#{non_matching}" },
+          ])
+          expect(described_class.new(response).public_send(counter_method)).to eq(0)
+        end
+
+        it "returns 0 when the extension has no dot" do
+          response = build_response("attachments" => [
+            { "filename" => "document#{no_dot}" },
+          ])
+          expect(described_class.new(response).public_send(counter_method)).to eq(0)
+        end
+
+        it "returns 0 for partial extension matches" do
+          response = build_response("attachments" => [
+            { "filename" => "document.#{near_miss}" },
+          ])
+          expect(described_class.new(response).public_send(counter_method)).to eq(0)
+        end
+
+        it "returns 0 for empty attachments array" do
+          response = build_response("attachments" => [])
+          expect(described_class.new(response).pdf_count).to eq(0)
+        end
+      end
+
       it "returns 0 when details is an empty hash" do
         expect(described_class.new(build_response({})).public_send(counter_method)).to eq(0)
       end
