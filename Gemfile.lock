@@ -79,7 +79,7 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-    addressable (2.8.8)
+    addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
     amq-protocol (2.3.4)
     ast (2.4.3)
@@ -259,8 +259,8 @@ GEM
     govuk_message_queue_consumer (6.0.0)
       bunny (~> 2.17)
       ostruct
-    govuk_schemas (6.2.2)
-      json-schema (>= 2.8, < 6.2)
+    govuk_schemas (6.2.3)
+      json-schema (>= 2.8, < 6.3)
     govuk_sidekiq (10.1.0)
       gds-api-adapters (>= 19.1.0)
       govuk_app_config (>= 1.1)
@@ -292,7 +292,7 @@ GEM
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     json (2.18.1)
-    json-schema (6.1.0)
+    json-schema (6.2.0)
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
     jsonapi-renderer (0.2.2)
@@ -600,7 +600,7 @@ GEM
     psych (5.3.1)
       date
       stringio
-    public_suffix (7.0.2)
+    public_suffix (7.0.5)
     puma (7.2.0)
       nio4r (~> 2.0)
     racc (1.8.1)
