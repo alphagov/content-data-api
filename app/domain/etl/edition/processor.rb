@@ -19,12 +19,16 @@ private
 
   def create_new_edition
     Facts::Edition.create!(
-      pdf_count: Etl::Edition::Metadata::NumberOfPdfs.parse(new_edition.publishing_api_event.payload),
-      doc_count: Etl::Edition::Metadata::NumberOfWordFiles.parse(new_edition.publishing_api_event.payload),
+      pdf_count: file_counter.pdf_count,
+      doc_count: file_counter.doc_count,
       dimensions_date:,
       dimensions_edition: new_edition,
       **quality_metrics,
     )
+  end
+
+  def file_counter
+    @file_counter ||= Etl::Edition::Metadata::FileCounter.new(new_edition.publishing_api_event.payload)
   end
 
   def quality_metrics
