@@ -1,0 +1,63 @@
+#!/usr/bin/env ruby
+
+require "yaml"
+require "securerandom"
+
+dates = ARGV[0]
+current_config = `kubectl config current-context`.split("-").last.strip
+
+puts "Ensure you have credentials in your #{current_config} environment before continuing.\n"
+puts "This will run the following command in #{current_config.upcase}:"
+puts "  rake etl:rerun_main_list[#{dates}]"
+puts "\nPress enter to continue, or Ctrl-C to abort."
+
+STDIN.gets
+
+cronjob_resource_yaml = `kubectl -n apps get cronjob/content-data-api-etl -o yaml`
+
+cronjob = YAML.load(cronjob_resource_yaml)
+
+job_spec = cronjob["spec"]["jobTemplate"]["spec"]["template"]["spec"]
+
+job_spec.delete("metadata")
+
+job_spec["containers"][0]["args"] = [
+  "etl:rerun_main_list[#{dates}]"
+]
+
+job_spec["containers"][0]["resources"] = {
+  "limits" => {
+    "cpu" => "1",
+    "memory" => "2Gi",
+  },
+  "requests" => {
+    "cpu" => "100m",
+    "memory" => "2Gi",
+  },
+}
+
+job_name = "adhoc-etl-rerun-#{SecureRandom.hex(8)}"
+
+job = {
+  "apiVersion" => "batch/v1",
+  "kind" => "Job",
+  "metadata" => {
+    "name" => job_name,
+  },
+  "spec" => {
+    "backoffLimit" => 0,
+    "template" => {
+      "spec" => job_spec,
+    },
+  },
+}
+
+job_yaml = YAML.dump(job)
+
+File.write("/tmp/#{job_name}.yaml", job_yaml)
+
+`kubectl -n apps apply -f /tmp/#{job_name}.yaml`
+
+puts "Job #{job_name} created."
+puts "Run this command to follow logs:"
+puts "  kubectl -n apps logs -f job.batch/#{job_name}"
