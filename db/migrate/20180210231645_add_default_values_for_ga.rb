@@ -1,4 +1,4 @@
-class AddDefaultValuesForGa < ActiveRecord::Migration[5.1]
+class AddDefaultValuesForGA < ActiveRecord::Migration[5.1]
   class Facts::Metric < ApplicationRecord
   end
 

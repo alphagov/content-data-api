@@ -2,18 +2,17 @@
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
 #
-# Note that this schema.rb definition is the authoritative source for your
-# database schema. If you need to create the application database on another
-# system, you should be using db:schema:load, not running all the migrations
-# from scratch. The latter is a flawed and unsustainable approach (the more migrations
-# you'll amass, the slower it'll run and the greater likelihood for issues).
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
-
+ActiveRecord::Schema[8.0].define(version: 2019_06_13_112120) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "aggregations_monthly_metrics", force: :cascade do |t|
     t.string "dimensions_month_id", null: false
@@ -29,8 +28,8 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
     t.integer "bounces"
     t.integer "page_time"
     t.float "satisfaction"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["created_at"], name: "index_aggregations_monthly_metrics_on_created_at"
     t.index ["dimensions_edition_id", "dimensions_month_id"], name: "index_editions_months_unique", unique: true
     t.index ["dimensions_edition_id"], name: "index_aggregations_monthly_metrics_on_dimensions_edition_id"
@@ -53,8 +52,8 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
     t.string "day_name", null: false
     t.string "day_name_abbreviated", null: false
     t.string "weekday_weekend", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["date_name"], name: "index_dimensions_dates_on_date_name"
   end
 
@@ -63,12 +62,12 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
     t.string "title"
     t.string "base_path", null: false
     t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "live"
     t.string "document_type", null: false
-    t.datetime "first_published_at"
-    t.datetime "public_updated_at"
+    t.datetime "first_published_at", precision: nil
+    t.datetime "public_updated_at", precision: nil
     t.string "primary_organisation_title"
     t.string "primary_organisation_id"
     t.boolean "primary_organisation_withdrawn"
@@ -82,7 +81,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
     t.string "phase"
     t.string "previous_version"
     t.string "update_type"
-    t.datetime "last_edited_at"
+    t.datetime "last_edited_at", precision: nil
     t.string "warehouse_item_id", null: false
     t.boolean "withdrawn", null: false
     t.boolean "historical", null: false
@@ -116,8 +115,8 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
     t.integer "month_number", null: false
     t.integer "quarter", null: false
     t.integer "year", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["id"], name: "index_dimensions_months_on_id", unique: true
   end
 
@@ -133,8 +132,8 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
     t.string "page_path"
     t.integer "pviews", default: 0
     t.integer "upviews", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "useful_yes", default: 0
     t.integer "useful_no", default: 0
     t.integer "process_name", null: false
@@ -156,8 +155,8 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
     t.integer "chars"
     t.integer "sentences"
     t.integer "words"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "reading_time"
     t.index ["dimensions_edition_id", "dimensions_date_id"], name: "facts_editions_edition_id_date_id", unique: true
   end
@@ -165,8 +164,8 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
   create_table "facts_metrics", force: :cascade do |t|
     t.date "dimensions_date_id", null: false
     t.bigint "dimensions_edition_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "pviews", default: 0, null: false
     t.integer "upviews", default: 0, null: false
     t.integer "feedex", default: 0, null: false
@@ -190,8 +189,8 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
   create_table "publishing_api_events", force: :cascade do |t|
     t.string "routing_key"
     t.jsonb "payload"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -203,8 +202,8 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
     t.text "permissions"
     t.boolean "remotely_signed_out", default: false
     t.boolean "disabled", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
@@ -248,7 +247,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
              FROM ((aggregations_monthly_metrics
                JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
                JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = aggregations_monthly_metrics.dimensions_edition_id)))
-            WHERE ((dimensions_months.id)::text = to_char((now() - '1 mon'::interval), 'YYYY-MM'::text))
+            WHERE ((dimensions_months.id)::text = to_char((now() - 'P1M'::interval), 'YYYY-MM'::text))
             GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
@@ -294,7 +293,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
              FROM ((facts_metrics
                JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
-            WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '30 days'::interval day)) AND (facts_metrics.dimensions_date_id < ('now'::text)::date))
+            WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - 'P30D'::interval day)) AND (facts_metrics.dimensions_date_id < ('now'::text)::date))
             GROUP BY dimensions_editions_1.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
        JOIN facts_editions ON ((dimensions_editions.id = facts_editions.dimensions_edition_id)))
@@ -348,7 +347,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
                      FROM ((aggregations_monthly_metrics
                        JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
                        JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = aggregations_monthly_metrics.dimensions_edition_id)))
-                    WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - '2 mons'::interval), 'YYYY-MM'::text))
+                    WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - 'P2M'::interval), 'YYYY-MM'::text))
                     GROUP BY dimensions_editions_1.warehouse_item_id
                   UNION
                    SELECT dimensions_editions_1.warehouse_item_id,
@@ -362,7 +361,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
                      FROM ((facts_metrics
                        JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                        JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
-                    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '3 mons'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - '2 mons'::interval), 'YYYY-MM-01'::text))::date))
+                    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - 'P3M'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - 'P2M'::interval), 'YYYY-MM-01'::text))::date))
                     GROUP BY dimensions_editions_1.warehouse_item_id) agg
             GROUP BY agg.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
@@ -417,7 +416,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
                      FROM ((aggregations_monthly_metrics
                        JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
                        JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = aggregations_monthly_metrics.dimensions_edition_id)))
-                    WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - '11 mons'::interval), 'YYYY-MM'::text))
+                    WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - 'P11M'::interval), 'YYYY-MM'::text))
                     GROUP BY dimensions_editions_1.warehouse_item_id
                   UNION
                    SELECT dimensions_editions_1.warehouse_item_id,
@@ -431,7 +430,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
                      FROM ((facts_metrics
                        JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                        JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
-                    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '1 year'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - '11 mons'::interval), 'YYYY-MM-01'::text))::date))
+                    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - 'P1Y'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - 'P11M'::interval), 'YYYY-MM-01'::text))::date))
                     GROUP BY dimensions_editions_1.warehouse_item_id) agg
             GROUP BY agg.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
@@ -486,7 +485,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
                      FROM ((aggregations_monthly_metrics
                        JOIN dimensions_months ON (((dimensions_months.id)::text = (aggregations_monthly_metrics.dimensions_month_id)::text)))
                        JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = aggregations_monthly_metrics.dimensions_edition_id)))
-                    WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - '5 mons'::interval), 'YYYY-MM'::text))
+                    WHERE ((dimensions_months.id)::text >= to_char((('yesterday'::text)::date - 'P5M'::interval), 'YYYY-MM'::text))
                     GROUP BY dimensions_editions_1.warehouse_item_id
                   UNION
                    SELECT dimensions_editions_1.warehouse_item_id,
@@ -500,7 +499,7 @@ ActiveRecord::Schema[6.1].define(version: 2019_06_13_112120) do
                      FROM ((facts_metrics
                        JOIN dimensions_dates ON ((dimensions_dates.date = facts_metrics.dimensions_date_id)))
                        JOIN dimensions_editions dimensions_editions_1 ON ((dimensions_editions_1.id = facts_metrics.dimensions_edition_id)))
-                    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - '6 mons'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - '5 mons'::interval), 'YYYY-MM-01'::text))::date))
+                    WHERE ((facts_metrics.dimensions_date_id > (('yesterday'::text)::date - 'P6M'::interval)) AND (facts_metrics.dimensions_date_id < (to_char((('yesterday'::text)::date - 'P5M'::interval), 'YYYY-MM-01'::text))::date))
                     GROUP BY dimensions_editions_1.warehouse_item_id) agg
             GROUP BY agg.warehouse_item_id) aggregations
        JOIN dimensions_editions ON ((aggregations.dimensions_edition_id = dimensions_editions.id)))
