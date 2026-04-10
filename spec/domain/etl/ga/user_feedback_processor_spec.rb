@@ -1,5 +1,4 @@
 require "gds-api-adapters"
-require "traceable"
 
 RSpec.describe Etl::GA::UserFeedbackProcessor do
   subject { described_class }
