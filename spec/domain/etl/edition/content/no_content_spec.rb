@@ -42,6 +42,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       placeholder_topical_event
       placeholder_world_location
       placeholder_worldwide_organisation
+      plan_for_change_landing_page
       policy
       redirect
       role
