@@ -808,7 +808,7 @@ GEM
       version_gem (>= 1.1.8, < 3)
     sorted_set (1.1.0)
       rbtree
-    spring (4.4.2)
+    spring (4.5.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprockets (4.2.2)
