@@ -26,7 +26,7 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
     context "with a single english edition" do
       it "finds the old english edition when no attributes change" do
         expect(subject).to receive(:update_editions).with(
-          [attrs:, old_edition:],
+          [{ attrs:, old_edition: }],
         )
 
         subject.process
@@ -39,7 +39,7 @@ RSpec.describe Streams::Handlers::SingleItemHandler do
 
       it "finds the old welsh edition when no attributes change" do
         expect(subject).to receive(:update_editions).with(
-          [attrs:, old_edition:],
+          [{ attrs:, old_edition: }],
         )
 
         subject.process
