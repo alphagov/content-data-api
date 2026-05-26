@@ -39,6 +39,7 @@ private
       ::Etl::Edition::Content::Parsers::Licence,
       ::Etl::Edition::Content::Parsers::LocalTransaction,
       ::Etl::Edition::Content::Parsers::Mainstream,
+      ::Etl::Edition::Content::Parsers::Navigation,
       ::Etl::Edition::Content::Parsers::Need,
       ::Etl::Edition::Content::Parsers::Parts,
       ::Etl::Edition::Content::Parsers::Place,
