@@ -119,7 +119,7 @@ GEM
       activesupport
     choice (0.2.0)
     coderay (1.1.3)
-    concurrent-ruby (1.3.6)
+    concurrent-ruby (1.3.7)
     connection_pool (2.5.5)
     crack (1.0.1)
       bigdecimal
@@ -675,7 +675,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    redis-client (0.29.0)
+    redis-client (0.30.0)
       connection_pool
     regexp_parser (2.12.0)
     reline (0.6.3)
@@ -781,8 +781,8 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
-    sentry-sidekiq (6.6.0)
-      sentry-ruby (~> 6.6.0)
+    sentry-sidekiq (6.6.1)
+      sentry-ruby (~> 6.6.1)
       sidekiq (>= 5.0)
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
