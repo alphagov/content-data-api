@@ -283,7 +283,7 @@ GEM
       csv
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
-    i18n (1.15.1)
+    i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     io-console (0.8.2)
     irb (1.18.0)
@@ -782,8 +782,8 @@ GEM
     sentry-sidekiq (6.6.2)
       sentry-ruby (~> 6.6.2)
       sidekiq (>= 5.0)
-    shoulda-matchers (7.0.1)
-      activesupport (>= 7.1)
+    shoulda-matchers (8.0.1)
+      activesupport (>= 7.2)
     sidekiq (7.3.10)
       base64
       connection_pool (>= 2.3.0, < 3)
