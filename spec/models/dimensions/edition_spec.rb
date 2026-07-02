@@ -140,6 +140,36 @@ RSpec.describe Dimensions::Edition, type: :model do
         expect(old_edition.live).to be false
       end
     end
+
+    context "when a different content_id occupies the same base_path" do
+      let(:base_path) { "/government/organisations/example-org" }
+
+      let!(:blocking_edition) do
+        create :edition,
+               base_path: base_path,
+               content_id: SecureRandom.uuid,
+               live: true
+      end
+
+      let(:new_edition) do
+        create :edition,
+               base_path: base_path,
+               content_id: SecureRandom.uuid,
+               live: false
+      end
+
+      it "demotes the blocking edition at the same base_path" do
+        new_edition.promote!(nil)
+
+        expect(blocking_edition.reload.live).to be false
+      end
+
+      it "promotes the new edition to live" do
+        new_edition.promote!(nil)
+
+        expect(new_edition.reload.live).to be true
+      end
+    end
   end
 
   describe "#change_from?" do

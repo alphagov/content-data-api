@@ -40,7 +40,11 @@ class Dimensions::Edition < ApplicationRecord
 
   def promote!(old_edition)
     old_edition.update!(live: false) if old_edition
-    update!(live: true) unless unpublished?
+
+    return if unpublished?
+
+    demote_any_live_editions_on_same_base_path
+    update!(live: true)
   rescue ActiveRecord::RecordNotUnique
     logger.info("Duplicate live edition detected for base_path: #{base_path}, skipping promotion.")
     raise ActiveRecord::Rollback
@@ -83,5 +87,14 @@ class Dimensions::Edition < ApplicationRecord
     return child_count unless child_count.zero?
 
     parent.try(:related_content_count) || 0
+  end
+
+private
+
+  def demote_any_live_editions_on_same_base_path
+    self.class
+        .where(base_path: base_path, live: true)
+        .where.not(id: id)
+        .update_all(live: false)
   end
 end
