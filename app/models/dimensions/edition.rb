@@ -47,7 +47,7 @@ class Dimensions::Edition < ApplicationRecord
   end
 
   def unpublished?
-    %w[gone vanish redirect].include?(document_type)
+    %w[gone vanish redirect substitute].include?(document_type)
   end
 
   def change_from?(attributes)
