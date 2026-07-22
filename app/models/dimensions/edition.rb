@@ -45,9 +45,6 @@ class Dimensions::Edition < ApplicationRecord
 
     demote_any_live_editions_on_same_base_path
     update!(live: true)
-  rescue ActiveRecord::RecordNotUnique
-    logger.info("Duplicate live edition detected for base_path: #{base_path}, skipping promotion.")
-    raise ActiveRecord::Rollback
   end
 
   def unpublished?

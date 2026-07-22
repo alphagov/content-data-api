@@ -170,6 +170,18 @@ RSpec.describe Dimensions::Edition, type: :model do
         expect(new_edition.reload.live).to be true
       end
     end
+
+    context "when RecordNotUnique is raised unexpectedly" do
+      let(:edition) { create :edition, live: false }
+
+      it "lets the exception propagate for job-level retry" do
+        allow(edition).to receive(:update!)
+          .and_raise(ActiveRecord::RecordNotUnique)
+
+        expect { edition.promote!(nil) }
+          .to raise_error(ActiveRecord::RecordNotUnique)
+      end
+    end
   end
 
   describe "#change_from?" do
