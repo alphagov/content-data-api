@@ -138,7 +138,7 @@ GEM
     debug_inspector (1.2.0)
     declarative (0.0.20)
     diff-lcs (1.6.2)
-    domain_name (0.6.20240107)
+    domain_name (0.6.20260902)
     drb (2.2.3)
     erb (6.0.6)
     erubi (1.13.1)
@@ -165,7 +165,7 @@ GEM
     ffi (1.17.3-x86_64-darwin)
     ffi (1.17.3-x86_64-linux-gnu)
     ffi (1.17.3-x86_64-linux-musl)
-    gds-api-adapters (103.4.0)
+    gds-api-adapters (103.4.2)
       addressable
       link_header
       null_logger
