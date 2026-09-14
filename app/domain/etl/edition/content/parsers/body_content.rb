@@ -23,6 +23,7 @@ module Etl::Edition::Content::Parsers
         html_publication
         manual
         manual_section
+        mini_site
         news_article
         organisation
         publication

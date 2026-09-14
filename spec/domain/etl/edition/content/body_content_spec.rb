@@ -19,6 +19,7 @@ RSpec.describe Etl::Edition::Content::Parser do
       html_publication
       manual
       manual_section
+      mini_site
       news_article
       organisation
       publication
