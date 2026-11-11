@@ -908,7 +908,7 @@ DEPENDENCIES
   pry-rails
   rack
   rack-proxy
-  rails (= 8.1.4)
+  rails (~> 8.1.4)
   rails-controller-testing
   rails-erd
   rspec-its
